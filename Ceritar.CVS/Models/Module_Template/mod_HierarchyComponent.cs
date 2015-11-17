@@ -5,12 +5,21 @@ namespace Ceritar.CVS.Models.Module_Template
 {
     internal abstract class mod_HierarchyComponent
     {
-        private String _strName;
+        //Model attributes
+        private String _strNameOnDisk;
 
-        public String Name
+        //Working variables
+
+
+#region "Properties"
+
+        public String NameOnDisk
         {
-            get { return _strName; }
-            set { _strName = value; }
+            get { return _strNameOnDisk; }
+            set { _strNameOnDisk = value; }
         }
+
+#endregion
+
     }
 }

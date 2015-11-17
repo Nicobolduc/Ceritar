@@ -14,7 +14,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
         //Private class members
         private SqlConnection mcMySQLConnection;
-        private Ctrl_User mctrlUser;
+        private ctrl_User mctrlUser;
         private System.Text.RegularExpressions.Regex mcStringCleaner = new System.Text.RegularExpressions.Regex("'", System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant | System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
         private static clsApplication _myUniqueInstance;
@@ -47,7 +47,7 @@ namespace Ceritar.TT3LightDLL.Classes
             get { return mcMySQLConnection; }
         }
 
-        public Ctrl_User cUser
+        public ctrl_User cUser
         {
             get { return this.mctrlUser; }
         }
@@ -117,7 +117,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
         private clsApplication()
         {
-            mctrlUser = new Ctrl_User();
+            mctrlUser = new ctrl_User();
 
             blnOpenMySQLConnection();
         }

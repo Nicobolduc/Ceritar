@@ -4,6 +4,8 @@ namespace Ceritar.CVS.Models.Module_Configuration
 {
     internal class mod_CeritarApplication
     {
+        //Model attributes
+
         public enum AppDomain
         {
             Tranport = 1,
@@ -13,5 +15,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
             Web = 5,
             Interne = 6
         }
+
+        //Working variables
     }
 }

@@ -4,9 +4,9 @@ using Ceritar.CVS.Models.Module_Configuration;
 
 namespace Ceritar.CVS.Controllers
 {
-    public class Ctrl_User
+    public class ctrl_User
     {
-        private Mod_User mcUser = null;
+        private mod_User mcUser = null;
 
 
         #region "Properties"
@@ -16,7 +16,7 @@ namespace Ceritar.CVS.Controllers
             get {
                 if (mcUser == null)
                 {
-                    mcUser = new Mod_User();
+                    mcUser = new mod_User();
                 }
 
                 return mcUser.GetLanguage; 

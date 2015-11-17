@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Ceritar.TT3LightDLL;
+using C1.Win.C1FlexGrid;
+using C1.Win.C1FlexGrid.Classic;
 
 namespace Ceritar.TT3LightDLL.Classes
 {
-    class clsFlexGridController
+    class clsFlexGridWrapper
     {
         //Col 0 is the RowHeader and Row 0 is the Header of cols
         /*
