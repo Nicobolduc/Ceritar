@@ -11,8 +11,11 @@ namespace Ceritar.CVS.Models.Module_Template
 
         public enum FolderType
         {
-            Version = 1,
-            Revision = 2
+            Normal = 1,
+            Executable = 2,
+            TTApp = 3,
+            Script = 4,
+            Other = 5
         }
 
         //Working variables
@@ -40,6 +43,8 @@ namespace Ceritar.CVS.Models.Module_Template
         }
 
 #endregion
+
+
 
     }
 }

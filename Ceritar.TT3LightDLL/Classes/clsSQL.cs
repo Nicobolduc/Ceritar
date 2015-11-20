@@ -63,7 +63,7 @@ namespace Ceritar.TT3LightDLL.Classes
         
         try 
         {
-            mySQLCmd = new SqlCommand(vstrSQL, clsApplication.GetAppController.MySQLConnection);
+            mySQLCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.MySQLConnection);
 
             mySQLReader = mySQLCmd.ExecuteReader();
 
@@ -91,7 +91,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
             try
             {
-                mySQLCmd = new SqlCommand(vstrSQL, clsApplication.GetAppController.MySQLConnection);
+                mySQLCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.MySQLConnection);
 
                 mySQLReader = mySQLCmd.ExecuteReader();
 
@@ -123,9 +123,9 @@ namespace Ceritar.TT3LightDLL.Classes
 
             try
             {
-                strSQL = "SELECT " + vstrField + " AS " + clsApplication.GetAppController.str_FixStringForSQL(vstrField) + " FROM " + vstrTable + " WHERE " + vstrWhere;
+                strSQL = "SELECT " + vstrField + " AS " + clsApp.GetAppController.str_FixStringForSQL(vstrField) + " FROM " + vstrTable + " WHERE " + vstrWhere;
 
-                mySQLCmd = new SqlCommand(strSQL, clsApplication.GetAppController.MySQLConnection);
+                mySQLCmd = new SqlCommand(strSQL, clsApp.GetAppController.MySQLConnection);
 
                 mySQLReader = mySQLCmd.ExecuteReader();
 
@@ -173,10 +173,10 @@ namespace Ceritar.TT3LightDLL.Classes
 
             try
             {
-                mcSQLTransaction = clsApplication.GetAppController.MySQLConnection.BeginTransaction(System.Data.IsolationLevel.Serializable);
+                mcSQLTransaction = clsApp.GetAppController.MySQLConnection.BeginTransaction(System.Data.IsolationLevel.Serializable);
                 mblnTransactionStarted = true;
                 mcSQLCmd.Transaction = mcSQLTransaction;
-                mcSQLCmd.Connection = clsApplication.GetAppController.MySQLConnection;
+                mcSQLCmd.Connection = clsApp.GetAppController.MySQLConnection;
                 mcSQLCmd.CommandType = System.Data.CommandType.Text;
 
                 blnValidReturn = true;
@@ -248,12 +248,12 @@ namespace Ceritar.TT3LightDLL.Classes
                     switch (vintDBType)
                     {
                         case clsSQL.MySQL_FieldTypes.VARCHAR_TYPE:
-                            vstrValue = clsApplication.GetAppController.str_FixStringForSQL(vstrValue);
+                            vstrValue = clsApp.GetAppController.str_FixStringForSQL(vstrValue);
 
                             break;
                         case clsSQL.MySQL_FieldTypes.DATETIME_TYPE:
-                            vstrValue = String.Format(clsApplication.GetAppController.str_GetServerDateTimeFormat, Convert.ToDateTime(vstrValue));
-                            vstrValue = clsApplication.GetAppController.str_FixStringForSQL(vstrValue);
+                            vstrValue = String.Format(clsApp.GetAppController.str_GetServerDateTimeFormat, Convert.ToDateTime(vstrValue));
+                            vstrValue = clsApp.GetAppController.str_FixStringForSQL(vstrValue);
 
                             break;
                         case clsSQL.MySQL_FieldTypes.DECIMAL_TYPE:
@@ -440,7 +440,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
             if (!blnValidReturn)
             {
-                clsApplication.GetAppController.ShowMessage((int) sclsConstants.Error_Message.ERROR_ITEM_USED_MSG);
+                clsApp.GetAppController.ShowMessage((int) sclsConstants.Error_Message.ERROR_ITEM_USED_MSG);
             }
 
             return blnValidReturn;

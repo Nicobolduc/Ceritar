@@ -11,10 +11,10 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private mod_Version _cVersion;
         private mod_User _cCreatedByUser;
         private List<string> _lstModifications;
-        private string _strPath_Release;
-        private string _strPath_Scripts;
+        private string _strLocation_Release;
+        private string _strLocation_Scripts;
         private string _strCreationDate;
-        private int _intVersionNo;
+        private ushort _intRevisionNo;
 
         //Working variables
 
@@ -47,14 +47,14 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
         internal string Path_Release
         {
-            get { return _strPath_Release; }
-            set { _strPath_Release = value; }
+            get { return _strLocation_Release; }
+            set { _strLocation_Release = value; }
         }
 
         internal string Path_Scripts
         {
-            get { return _strPath_Scripts; }
-            set { _strPath_Scripts = value; }
+            get { return _strLocation_Scripts; }
+            set { _strLocation_Scripts = value; }
         }
 
         internal string CreationDate
@@ -63,13 +63,14 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { _strCreationDate = value; }
         }
 
-        internal int VersionNo
+        internal ushort RevisionNo
         {
-            get { return _intVersionNo; }
-            set { _intVersionNo = value; }
+            get { return _intRevisionNo; }
+            set { _intRevisionNo = value; }
         }
 
 #endregion
+
 
     }
 }

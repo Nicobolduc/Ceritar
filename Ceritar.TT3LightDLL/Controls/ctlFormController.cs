@@ -28,9 +28,8 @@ namespace Ceritar.TT3LightDLL.Controls
 
         //Public Events
         public delegate void BeNotifyEventHandler(BeNotifyEventArgs eventArgs);
-        //public event BeNotifyEventHandler BeNotify;
+        public event BeNotifyEventHandler BeNotify;
         public event PropertyChangedEventHandler PropertyChanged;
-        public EventHandler PropertyChanged2;
         public delegate void SetReadRightsEventHandler();
         public event SetReadRightsEventHandler SetReadRights;
         public delegate void LoadDataEventHandler(LoadDataEventArgs eventArgs);
@@ -133,7 +132,7 @@ namespace Ceritar.TT3LightDLL.Controls
 
 #region Functions / Subs
 
-        public void ShowForm(sclsConstants.Form_Mode vintFormMode, ref int rintItem_ID, bool vblnIsModal = false)
+        public void ShowForm(sclsConstants.Form_Mode vintFormMode, int rintItem_ID = 0, bool vblnIsModal = false)
         {
 
             mintFormMode = vintFormMode;
@@ -320,7 +319,7 @@ namespace Ceritar.TT3LightDLL.Controls
                 }
                 else
                 {
-                   Classes.clsApplication.GetAppController.ShowMessage((int) sclsConstants.Error_Message.ERROR_SAVE_MSG);
+                   Classes.clsApp.GetAppController.ShowMessage((int) sclsConstants.Error_Message.ERROR_SAVE_MSG);
                 }
             }
 
@@ -329,7 +328,7 @@ namespace Ceritar.TT3LightDLL.Controls
 
         private void btnCancel_Click(object sender, System.EventArgs e)
         {
-            Classes.clsApplication.GetAppController.EmptyAllFormControls(mfrmParent);
+            Classes.clsApp.GetAppController.EmptyAllFormControls(mfrmParent);
             LoadFormData();
         }
 
@@ -382,6 +381,8 @@ namespace Ceritar.TT3LightDLL.Controls
         //    Next
         //End Sub
 
+
+       
     }
 
 

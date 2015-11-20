@@ -21,7 +21,7 @@ namespace Ceritar.TT3LightDLL.Static_Classes
             {
                 rcboToLoad.DataSource = null;
 
-                mySQLCmd = new SqlCommand(vstrSQL, clsApplication.GetAppController.MySQLConnection);
+                mySQLCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.MySQLConnection);
 
                 mySQLReader = mySQLCmd.ExecuteReader();
 

@@ -35,9 +35,10 @@
     <Reference Include="C1.Win.C1FlexGrid.2">
       <HintPath>..\Libs DLL\C1.Win.C1FlexGrid.2.dll</HintPath>
     </Reference>
-    <Reference Include="C1.Win.C1FlexGrid.Classic.2">
-      <HintPath>..\Libs DLL\C1.Win.C1FlexGrid.Classic.2.dll</HintPath>
+    <Reference Include="Ceritar.CVS">
+      <HintPath>..\Ceritar.CVS\bin\Debug\Ceritar.CVS.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,6 +51,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="frmGenericList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmGenericList.Designer.cs">
+      <DependentUpon>frmGenericList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmVersionRevision.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmVersionRevision.Designer.cs">
+      <DependentUpon>frmVersionRevision.cs</DependentUpon>
+    </Compile>
     <Compile Include="mdiGeneral.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -58,9 +71,17 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="sclsGenList.cs" />
+    <EmbeddedResource Include="frmGenericList.resx">
+      <DependentUpon>frmGenericList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmVersionRevision.resx">
+      <DependentUpon>frmVersionRevision.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="mdiGeneral.resx">
       <DependentUpon>mdiGeneral.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -82,6 +103,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ceritar.TT3LightDLL\Ceritar.TT3LightDLL.csproj">
+      <Project>{0E2AE8B4-BC97-48E8-AE7F-AE9D8BD7BC2C}</Project>
+      <Name>Ceritar.TT3LightDLL</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

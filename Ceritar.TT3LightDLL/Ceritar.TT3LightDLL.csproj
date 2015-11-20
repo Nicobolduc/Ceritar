@@ -33,9 +33,8 @@
     <Reference Include="C1.Win.C1FlexGrid.2">
       <HintPath>..\Libs DLL\C1.Win.C1FlexGrid.2.dll</HintPath>
     </Reference>
-    <Reference Include="C1.Win.C1FlexGrid.Classic.2">
-      <HintPath>..\Libs DLL\C1.Win.C1FlexGrid.Classic.2.dll</HintPath>
-    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Microsoft.VisualBasic.Compatibility" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -47,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\clsApplication.cs" />
+    <Compile Include="Classes\clsApp.cs" />
     <Compile Include="Classes\clsFlexGridWrapper.cs" />
     <Compile Include="Classes\clsSQL.cs" />
     <Compile Include="Controls\ctlFormController.cs">

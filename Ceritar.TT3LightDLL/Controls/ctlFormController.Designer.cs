@@ -113,8 +113,8 @@ namespace Ceritar.TT3LightDLL.Controls
             else
                 EventsSubscribed = true;
 
-            mfrmParent.ResizeBegin += mfrmParent_ResizeBegin;
-            mfrmParent.ResizeEnd += mfrmParent_ResizeEnd;
+            //mfrmParent.ResizeBegin += mfrmParent_ResizeBegin;
+            //mfrmParent.ResizeEnd += mfrmParent_ResizeEnd;
         }
 
         #endregion

@@ -1,74 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using Ceritar.TT3LightDLL;
+using Ceritar.TT3LightDLL.Static_Classes;
 using C1.Win.C1FlexGrid;
-using C1.Win.C1FlexGrid.Classic;
+using System.Windows.Forms;
+using Microsoft.VisualBasic;
+using System.Data.SqlClient;
+using System.Collections.Specialized;
+
 
 namespace Ceritar.TT3LightDLL.Classes
 {
-    class clsFlexGridWrapper
+
+    public class clsFlexGridWrapper
     {
-        //Col 0 is the RowHeader and Row 0 is the Header of cols
-        /*
-	    //Private members
+        //Row 0 is the Header and col 0 is the first small fixed col
+        
+	    //private members
 	    private const short mintDefaultActionCol = 1;
 	    private int mintPreviousCellChangedRow;
-	    private string mstrUndeterminedCheckBoxState = "TO_DEFINE";
 
 	    private bool mblnHasNoActionColumn;
-	    //Private class members
-	    private GridControl withEventsField_mGrdSync;
-	    private GridControl mGrdSync {
-		    get { return withEventsField_mGrdSync; }
-		    set {
-			    if (withEventsField_mGrdSync != null) {
-				    withEventsField_mGrdSync.CellsChanged -= mGrdSync_CellsChanged;
-				    withEventsField_mGrdSync.CheckBoxClick -= mGrdSync_CheckBoxClick;
-				    withEventsField_mGrdSync.CurrentCellAcceptedChanges -= mGrdSync_CurrentCellAcceptedChanges;
-				    withEventsField_mGrdSync.CurrentCellActivating -= mGrdSync_CurrentCellActivating;
-				    withEventsField_mGrdSync.CurrentCellChanged -= GrdSyncController_CurrentCellChanged;
-				    withEventsField_mGrdSync.CurrentCellCloseDropDown -= GrdSyncController_CurrentCellCloseDropDown;
-			    }
-			    withEventsField_mGrdSync = value;
-			    if (withEventsField_mGrdSync != null) {
-				    withEventsField_mGrdSync.CellsChanged += mGrdSync_CellsChanged;
-				    withEventsField_mGrdSync.CheckBoxClick += mGrdSync_CheckBoxClick;
-				    withEventsField_mGrdSync.CurrentCellAcceptedChanges += mGrdSync_CurrentCellAcceptedChanges;
-				    withEventsField_mGrdSync.CurrentCellActivating += mGrdSync_CurrentCellActivating;
-				    withEventsField_mGrdSync.CurrentCellChanged += GrdSyncController_CurrentCellChanged;
-				    withEventsField_mGrdSync.CurrentCellCloseDropDown += GrdSyncController_CurrentCellCloseDropDown;
-			    }
-		    }
-	    }
-	    private Button withEventsField_mbtnAddRow;
-	    private Button mbtnAddRow {
-		    get { return withEventsField_mbtnAddRow; }
-		    set {
-			    if (withEventsField_mbtnAddRow != null) {
-				    withEventsField_mbtnAddRow.Click -= btnAddRow_Click;
-			    }
-			    withEventsField_mbtnAddRow = value;
-			    if (withEventsField_mbtnAddRow != null) {
-				    withEventsField_mbtnAddRow.Click += btnAddRow_Click;
-			    }
-		    }
-	    }
-	    private Button withEventsField_mbtnDeleteRow;
-	    private Button mbtnDeleteRow {
-		    get { return withEventsField_mbtnDeleteRow; }
-		    set {
-			    if (withEventsField_mbtnDeleteRow != null) {
-				    withEventsField_mbtnDeleteRow.Click -= btnDeleteRow_Click;
-			    }
-			    withEventsField_mbtnDeleteRow = value;
-			    if (withEventsField_mbtnDeleteRow != null) {
-				    withEventsField_mbtnDeleteRow.Click += btnDeleteRow_Click;
-			    }
-		    }
-	    }
-	    private object mfrmGridParent;
 
-	    private ColsSizeBehaviorsController mcGridColsSizeBehavior = null;
+	    //Private class members
+	    private C1FlexGrid mGrdFlex;
+
+        private object mfrmGridParent;
+        private Button mbtnAddRow;
+        private Button mbtnDeleteRow;
+
 	    //Public events
 	    public event SetDisplayEventHandler SetDisplay;
 	    public delegate void SetDisplayEventHandler();
@@ -80,161 +40,182 @@ namespace Ceritar.TT3LightDLL.Classes
 	    //Public enums
 	    public enum GridRowActions
 	    {
-		    NO_ACTION = mConstants.Form_Mode.CONSULT_MODE,
-		    INSERT_ACTION = mConstants.Form_Mode.INSERT_MODE,
-		    UPDATE_ACTION = mConstants.Form_Mode.UPDATE_MODE,
-		    DELETE_ACTION = mConstants.Form_Mode.DELETE_MODE
+		    NO_ACTION = sclsConstants.Form_Mode.CONSULT_MODE,
+            INSERT_ACTION = sclsConstants.Form_Mode.INSERT_MODE,
+            UPDATE_ACTION = sclsConstants.Form_Mode.UPDATE_MODE,
+            DELETE_ACTION = sclsConstants.Form_Mode.DELETE_MODE
 	    }
 
 
-	    #region "Properties"
-
-	    public string this[int intRowIndex, int intColIndex] {
-		    get {
-
-			    if (mGrdSync(intRowIndex, intColIndex).CellType == Syncfusion.GridHelperClasses.CustomCellTypes.DateTimePicker.ToString) {
-				    return mGrdSync(intRowIndex, intColIndex).FormattedText;
-			    } else {
-				    return mGrdSync(intRowIndex, intColIndex).CellValue.ToString;
-			    }
-		    }
-		    set { mGrdSync(intRowIndex, intColIndex).CellValue = value; }
-	    }
+        public clsFlexGridWrapper()
+        {
+            SetDisplay += SyncfusionGridController_SetDisplay;
+        }
 
 
-	    public ColsSizeBehaviorsController.colsSizeBehaviors SetColsSizeBehavior {
-		    set {
-			    mcGridColsSizeBehavior = new ColsSizeBehaviorsController();
-			    mcGridColsSizeBehavior.AttachGrid(mGrdSync);
-			    mcGridColsSizeBehavior.ColsSizeBehavior = value;
-		    }
-	    }
+#region "Properties"
 
-	    public int GetSelectedRowsCount {
-		    get { return mGrdSync.Selections.GetSelectedRows(true, true).Count; }
-	    }
+        private C1FlexGrid mGrdSync
+        {
+            get { return mGrdFlex; }
+            set
+            {
+                if (mGrdFlex != null)
+                {
+                    mGrdFlex.CellChanged -= mGrdSync_CellsChanged;
+                    mGrdFlex.CellChecked -= mGrdSync_CheckBoxClick;
+                    mGrdFlex.ComboCloseUp -= GrdSyncController_CurrentCellCloseDropDown;
+                }
+                mGrdFlex = value;
+                if (mGrdFlex != null)
+                {
+                    mGrdFlex.CellChanged += mGrdSync_CellsChanged;
+                    mGrdFlex.CellChecked += mGrdSync_CheckBoxClick;
+                    mGrdFlex.ComboCloseUp += GrdSyncController_CurrentCellCloseDropDown;
+                }
+            }
+        }
 
-	    public int GetSelectedRow {
-		    get {
+        private Button SetBtnAddRow
+        {
+            set
+            {
+                if (mbtnAddRow != null)
+                {
+                    mbtnAddRow.Click -= btnAddRow_Click;
+                }
+                mbtnAddRow = value;
+                if (mbtnAddRow != null)
+                {
+                    mbtnAddRow.Click += btnAddRow_Click;
+                }
+            }
+        }
 
-			    if (mGrdSync.Selections.GetSelectedRows(true, true).Count > 0) {
-				    return mGrdSync.Selections.GetSelectedRows(true, true).Item(0).Top;
-			    } else {
-				    return -1;
-			    }
-		    }
-	    }
+        private Button SetBtnDeleteRow
+        {
+            set
+            {
+                if (mbtnDeleteRow != null)
+                {
+                    mbtnDeleteRow.Click -= btnDeleteRow_Click;
+                }
+                mbtnDeleteRow = value;
+                if (mbtnDeleteRow != null)
+                {
+                    mbtnDeleteRow.Click += btnDeleteRow_Click;
+                }
+            }
+        }
 
-	    public int GetSelectedCol {
-		    get {
+        public string this[int vintRow, int vintCol]
+        {
+            get
+            {
+                string objItem = null;
 
-			    if (mGrdSync.Selections.GetSelectedCols(true, true).Count > 0) {
-				    return mGrdSync.Selections.GetSelectedCols(true, true).Item(0).Left;
-			    } else {
-				    return -1;
-			    }
-		    }
-	    }
+                if ((vintRow <= mGrdFlex.Rows.Count - 1 & vintCol <= mGrdFlex.Cols.Count - 1))
+                {
+                    objItem = mGrdFlex[vintRow, vintCol].ToString();
+                }
+               
+                if (vintRow > 0 & vintCol <= mGrdFlex.Cols.Count & !((mGrdFlex.Cols[vintCol]) == null) & Strings.UCase(mGrdFlex.Cols[vintCol].DataType.Name).Equals("BOOLEAN")) {
 
-	    public int SetSelectedRow {
-		    set {
+                    objItem = (objItem == "True" | objItem == "1" ? "1" : "0");
+                }
+                
+                if (objItem == null)
+                {
+                    objItem = string.Empty;
+                }
+                else
+                {
+                    //Do nothing
+                }
 
-			    if (value <= mGrdSync.RowCount & value > 0) {
-				    mGrdSync.CurrentCell.MoveTo(GridRangeInfo.Row(value), GridSetCurrentCellOptions.SetFocus & GridSetCurrentCellOptions.ScrollInView);
-			    } else {
-				    //Do nothing
-			    }
-		    }
-	    }
-
-	    public int SetSelectedCol {
-		    set {
-
-			    if (value <= mGrdSync.ColCount & value > 0) {
-				    mGrdSync.CurrentCell.MoveTo(GridRangeInfo.Cell(GetSelectedRow, value), GridSetCurrentCellOptions.SetFocus & GridSetCurrentCellOptions.ScrollInView);
-
-
-				    if (vblnShowDropDown) {
-					    mGrdSync.CurrentCell.ShowDropDown();
-				    } else {
-					    mGrdSync.CurrentCell.BeginEdit();
-				    }
-			    } else {
-				    //Do nothing
-			    }
-		    }
-	    }
+                return objItem;
+            }
+            set
+            {
+                if ((vintRow <= mGrdFlex.Rows.Count - 1 & vintCol <= mGrdFlex.Cols.Count - 1))
+                {
+                    if (!((mGrdFlex.Cols[vintCol].DataType == null)))
+                    {
+                        if ((Strings.UCase(mGrdFlex.Cols[vintCol].DataType.Name) == "DATE") | (Strings.UCase(mGrdFlex.Cols[vintCol].DataType.Name) == "DATETIME"))
+                        {
+                            mGrdFlex[vintRow, vintCol] = (value != string.Empty ? value : null);
+                        }
+                        else
+                        {
+                            mGrdFlex[vintRow, vintCol] = value;
+                        }
+                    }
+                    else
+                    {
+                        mGrdFlex[vintRow, vintCol] = value;
+                    }
+                }
+            }
+        }
 
 	    public bool ChangeMade {
 		    set {
-
-			    if (mGrdSync(GetSelectedRow, mintDefaultActionCol).CellValue != GridRowActions.INSERT_ACTION) {
+               
+			    if (mGrdSync[mGrdFlex.Row, mintDefaultActionCol].ToString().Equals(GridRowActions.INSERT_ACTION.ToString())) {
 
 				    if (value == true) {
-					    mfrmGridParent.formController.ChangeMade = true;
 
-					    mGrdSync.RowStyles(GetSelectedRow).BackColor = Color.Yellow;
-					    mGrdSync(GetSelectedRow, mintDefaultActionCol).CellValue = GridRowActions.UPDATE_ACTION;
+                        //mfrmGridParent.formController.ChangeMade = true; TODO
+
+					    mGrdFlex.Rows[mGrdFlex.Row].Style.BackColor = System.Drawing.Color.Yellow;
+                        mGrdFlex[mGrdFlex.Row, mintDefaultActionCol] = GridRowActions.UPDATE_ACTION;
 				    } else {
-					    mfrmGridParent.formController.ChangeMade = false;
+                        //mfrmGridParent.formController.ChangeMade = false;
 
-					    mGrdSync.RowStyles(GetSelectedRow).BackColor = Color.Empty;
-					    mGrdSync(GetSelectedRow, mintDefaultActionCol).CellValue = GridRowActions.NO_ACTION;
+                        mGrdFlex.Rows[mGrdFlex.Row].Style.BackColor = System.Drawing.Color.Empty;
+                        mGrdFlex[mGrdFlex.Row, mintDefaultActionCol] = GridRowActions.NO_ACTION;
 				    }
 			    }
 		    }
-	    }
-
-	    public string GetUndeterminedCheckBoxState {
-		    get { return mstrUndeterminedCheckBoxState; }
 	    }
 
 	    public bool SetNoActionColumn {
 		    set { mblnHasNoActionColumn = value; }
 	    }
-	    #endregion
 
-	    #region "Functions / Subs"
+#endregion
 
-	    public bool bln_Init(ref GridControl rgrdGrid, ref Button rbtnAddRow = null, ref Button rbtnRemoveRow = null)
+
+#region "Functions / Subs"
+
+	    public bool bln_Init(ref C1FlexGrid rgrdGrid, ref Button rbtnAddRow, ref Button rbtnRemoveRow)
 	    {
 		    bool blnValidReturn = true;
 		    DataGridViewCellStyle columnsHeaderStyle = new DataGridViewCellStyle();
 
 		    try {
-			    mfrmGridParent = rgrdGrid.FindParentForm;
+			    mfrmGridParent = rgrdGrid.FindForm();
 
-			    mGrdSync = rgrdGrid;
+			    mGrdFlex = rgrdGrid;
 			    mbtnAddRow = rbtnAddRow;
-			    mbtnDeleteRow = rbtnRemoveRow;
+			    SetBtnDeleteRow = rbtnRemoveRow;
 
-			    mGrdSync.BeginInit();
+			    mGrdFlex.BeginInit();
 
-			    mGrdSync.RowCount = 0;
-			    mGrdSync.ColCount = 0;
+			    mGrdFlex.Rows.Count = 1;
+			    mGrdFlex.Cols.Count = 1;
+                mGrdFlex.Rows.Fixed = 1;
+                mGrdFlex.Cols.Fixed = 1;
+               
+                mGrdFlex.SelectionMode = SelectionModeEnum.Row;
 
-			    mGrdSync.ControllerOptions = GridControllerOptions.ClickCells | GridControllerOptions.ResizeCells | GridControllerOptions.SelectCells;
-			    mGrdSync.CommandStack.Enabled = true;
-			    mGrdSync.ResizeColsBehavior = GridResizeCellsBehavior.ResizeSingle | GridResizeCellsBehavior.OutlineHeaders | GridResizeCellsBehavior.InsideGrid;
-			    mGrdSync.ListBoxSelectionMode = SelectionMode.One;
-			    //mGrdSync.Model.Options.AllowSelection = GridSelectionFlags.Row
-			    mGrdSync.Model.Options.ActivateCurrentCellBehavior = GridCellActivateAction.DblClickOnCell;
-			    mGrdSync.TableStyle.VerticalAlignment = GridVerticalAlignment.Middle;
+                mGrdFlex.AllowResizing = AllowResizingEnum.Columns;
 
-			    mGrdSync.ThemesEnabled = true;
-			    mGrdSync.UnHideColsOnDblClick = false;
-			    mGrdSync.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2010Blue;
-			    mGrdSync.Properties.BackgroundColor = Color.LightGray;
-			    mGrdSync.TableStyle.Font = new GridFontInfo(new Font("Tahoma", 10f));
+                mGrdFlex.BorderStyle = C1.Win.C1FlexGrid.Util.BaseControls.BorderStyleEnum.Fixed3D;
 
-			    mGrdSync.NumberedRowHeaders = false;
-			    mGrdSync.NumberedColHeaders = false;
-			    mGrdSync.DefaultGridBorderStyle = GridBorderStyle.Solid;
-			    mGrdSync.BorderStyle = BorderStyle.Fixed3D;
-
-			    mGrdSync.DefaultRowHeight = 20;
-			    mGrdSync.DefaultColWidth = 70;
-			    mGrdSync.SetColWidth(0, 0, 9);
+                mGrdFlex.Rows.DefaultSize = 20; 
+			    mGrdFlex.Cols.DefaultSize = 70;
+			    mGrdFlex.Cols[0].Width = 9;
 
 			    if (SetDisplay != null) {
 				    SetDisplay();
@@ -242,9 +223,9 @@ namespace Ceritar.TT3LightDLL.Classes
 
 		    } catch (Exception ex) {
 			    blnValidReturn = false;
-			    gcAppCtrl.cErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, Err.Source);
+			    sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
 		    } finally {
-			    mGrdSync.EndInit();
+			    mGrdFlex.EndInit();
 		    }
 
 		    return blnValidReturn;
@@ -253,47 +234,45 @@ namespace Ceritar.TT3LightDLL.Classes
 	    public bool bln_FillData(string vstrSQL)
 	    {
 		    bool blnValidReturn = true;
-		    MySqlCommand sqlCmd = default(MySqlCommand);
-		    MySqlDataReader mySQLReader = null;
-		    DataTable myDataTable = new DataTable();
+		    SqlCommand sqlCmd = default(SqlCommand);
+		    SqlDataReader mySQLReader = null;
+            System.Data.DataTable myDataTable = new System.Data.DataTable();
 		    string strGridCaption = string.Empty;
-		    object[,] dataTableArray = null;
-		    bool blnBrowseOnly = false;
+            //object[,] dataTableArray = null;
+            SqlDataAdapter dataAdapter = new SqlDataAdapter();
 
 		    try {
-			    blnBrowseOnly = mGrdSync.BrowseOnly;
-			    mGrdSync.BrowseOnly = false;
+                //blnBrowseOnly = mGrdFlex.Read;
+                //mGrdFlex.BrowseOnly = false;
 
 			    //Retrieve grid data from database
-			    sqlCmd = new MySqlCommand(vstrSQL, gcAppCtrl.MySQLConnection);
+                sqlCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.MySQLConnection);
 
-			    mySQLReader = sqlCmd.ExecuteReader;
+			    mySQLReader = sqlCmd.ExecuteReader();
 
 			    myDataTable.Load(mySQLReader);
 
-			    dataTableArray = new object[myDataTable.Rows.Count, myDataTable.Columns.Count + 1];
+                //dataTableArray = new object[myDataTable.Rows.Count, myDataTable.Columns.Count + 1];
 
 			    //Set the grid data
 
-			    for (int intTableRowIndex = 0; intTableRowIndex <= myDataTable.Rows.Count - 1; intTableRowIndex++) {
+                //for (int intTableRowIndex = 0; intTableRowIndex <= myDataTable.Rows.Count - 1; intTableRowIndex++) {
 
-				    for (int intTableColIndex = 0; intTableColIndex <= myDataTable.Columns.Count - 1; intTableColIndex++) {
-					    dataTableArray(intTableRowIndex, intTableColIndex) = myDataTable.Rows(intTableRowIndex)(intTableColIndex);
-				    }
-			    }
+                //    for (int intTableColIndex = 0; intTableColIndex <= myDataTable.Columns.Count - 1; intTableColIndex++) {
+                //        dataTableArray[intTableRowIndex, intTableColIndex] = myDataTable.Rows[intTableRowIndex][intTableColIndex];
+                //    }
+                //}
 
 			    //Reset the grid
-			    mGrdSync.Model.Data.Clear();
-			    mGrdSync.Model.ResetVolatileData();
-			    mGrdSync.CellModels.Clear();
-			    mGrdSync.RowCount = 0;
-			    mGrdSync.ColCount = 0;
-			    mGrdSync.BeginUpdate();
+                mGrdFlex.Clear(); //ClearWhatSettings.flexClearData
+			    mGrdFlex.BeginUpdate();
 
-			    mGrdSync.RowCount = myDataTable.Rows.Count;
-			    mGrdSync.ColCount = myDataTable.Columns.Count;
+			    mGrdFlex.Rows.Count = myDataTable.Rows.Count;
+			    mGrdFlex.Cols.Count = myDataTable.Columns.Count;
 
-			    mGrdSync.Model.PopulateValues(GridRangeInfo.Cells(1, 1, myDataTable.Rows.Count, myDataTable.Columns.Count), dataTableArray);
+                dataAdapter.Fill(myDataTable);
+
+                mGrdFlex.DataSource = dataAdapter;
 
 			    mySQLReader.Dispose();
 
@@ -303,22 +282,19 @@ namespace Ceritar.TT3LightDLL.Classes
 				    SetDisplay();
 			    }
 
-
-			    if (mGrdSync.RowCount > 0) {
-				    SetSelectedRow = 1;
+			    if (mGrdFlex.Rows.Count > 0) {
+				    mGrdFlex.Row = 1;
 			    }
 
 		    } catch (Exception ex) {
 			    blnValidReturn = false;
-			    gcAppCtrl.cErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, Err.Source);
+			    sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
 		    } finally {
 			    if ((mySQLReader != null)) {
 				    mySQLReader.Dispose();
 			    }
 
-			    mGrdSync.EndUpdate(true);
-
-			    mGrdSync.BrowseOnly = blnBrowseOnly;
+			    mGrdFlex.EndUpdate();
 		    }
 
 		    return blnValidReturn;
@@ -326,19 +302,13 @@ namespace Ceritar.TT3LightDLL.Classes
 
 	    public void AddRow(int vintPosition = -1)
 	    {
-		    mGrdSync.IgnoreReadOnly = true;
-
-		    mGrdSync.Rows.InsertRange((vintPosition - 1 ? mGrdSync.RowCount + 1 : vintPosition), 1);
-		    mGrdSync(mGrdSync.RowCount, -1) = mGrdSync(1, -1);
-
+		    mGrdFlex.Rows.InsertRange((vintPosition == -1 ? mGrdFlex.Rows.Count + 1 : vintPosition), 1);
 
 		    if (!mblnHasNoActionColumn) {
-			    mGrdSync(mGrdSync.RowCount, mintDefaultActionCol).CellValue = SyncfusionGridController.GridRowActions.INSERT_ACTION;
+			    mGrdFlex[mGrdFlex.Rows.Count, mintDefaultActionCol] = GridRowActions.INSERT_ACTION;
 		    }
 
-		    mGrdSync.RowStyles(mGrdSync.RowCount).BackColor = Color.LightGreen;
-
-		    mGrdSync.IgnoreReadOnly = false;
+            mGrdFlex.Rows[(vintPosition == -1 ? mGrdFlex.Rows.Count + 1 : vintPosition)].Style.BackColor = System.Drawing.Color.LightGreen;
 	    }
 
 	    public bool CellIsEmpty(int vintRow, int vintCol)
@@ -346,20 +316,13 @@ namespace Ceritar.TT3LightDLL.Classes
 		    bool blnIsEmpty = true;
 
 		    try {
-			    switch (false) {
-				    case !Information.IsDBNull(mGrdSync(vintRow, vintCol).CellValue):
-					    break;
-				    case (mGrdSync(vintRow, vintCol).CellValue != null):
-					    break;
-				    case !string.IsNullOrEmpty(Strings.Trim(mGrdSync(vintRow, vintCol).CellValue.ToString)):
-					    break;
-				    default:
-					    blnIsEmpty = false;
-					    break;
-			    }
+                if (!Information.IsDBNull(mGrdFlex[vintRow, vintCol]) & mGrdFlex[vintRow, vintCol] != null & !string.IsNullOrEmpty(Strings.Trim(mGrdFlex[vintRow, vintCol].ToString())))
+                {
+                    blnIsEmpty = false;
+                }
 
 		    } catch (Exception ex) {
-			    gcAppCtrl.cErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, Err.Source);
+			    sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
 		    }
 
 		    return blnIsEmpty;
@@ -370,20 +333,13 @@ namespace Ceritar.TT3LightDLL.Classes
 		    bool blnIsEmpty = true;
 
 		    try {
-			    switch (false) {
-				    case !Information.IsDBNull(mGrdSync(GetSelectedRow, GetSelectedCol).CellValue):
-					    break;
-				    case (mGrdSync(GetSelectedRow, GetSelectedCol).CellValue != null):
-					    break;
-				    case !string.IsNullOrEmpty(Strings.Trim(mGrdSync(GetSelectedRow, GetSelectedCol).CellValue.ToString)):
-					    break;
-				    default:
-					    blnIsEmpty = false;
-					    break;
-			    }
+                if (!Information.IsDBNull(mGrdFlex[mGrdFlex.Row, mGrdFlex.Col]) & mGrdFlex[mGrdFlex.Row, mGrdFlex.Col] != null & !string.IsNullOrEmpty(Strings.Trim(mGrdFlex[mGrdFlex.Row, mGrdFlex.Col].ToString())))
+                {
+                    blnIsEmpty = false;
+                }
 
 		    } catch (Exception ex) {
-			    gcAppCtrl.cErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, Err.Source);
+                sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
 		    }
 
 		    return blnIsEmpty;
@@ -393,7 +349,7 @@ namespace Ceritar.TT3LightDLL.Classes
 	    {
 		    bool blnCellIsChecked = false;
 
-		    blnCellIsChecked = this[vintRowIdx, vintColIdx].ToUpper.Equals("TRUE");
+		    blnCellIsChecked = this[vintRowIdx, vintColIdx].ToUpper().Equals("TRUE");
 
 		    return blnCellIsChecked;
 	    }
@@ -403,164 +359,106 @@ namespace Ceritar.TT3LightDLL.Classes
 		    bool blnValidReturn = true;
 		    string strGridCaption = string.Empty;
 		    string[] lstColumns = null;
-		    GridStyleInfo individualColStyle = default(GridStyleInfo);
+            CellStyle individualColStyle = mGrdFlex.Styles.Add("column");
 
 		    try {
-			    strGridCaption = gcAppCtrl.str_GetCaption(Convert.ToInt32(mGrdSync.Tag), gcAppCtrl.cUser.GetLanguage);
+                strGridCaption = clsApp.GetAppController.str_GetCaption(Convert.ToInt32(mGrdFlex.Tag), clsApp.GetAppController.cUser.GetUserLangage);
 
 			    lstColumns = Strings.Split(strGridCaption.Insert(0, "|"), "|");
 
-			    mGrdSync.ColCount = lstColumns.Count - 1;
+			    mGrdFlex.Cols.Count = lstColumns.Length - 1;
 
-			    //Definition of columns
-
-			    for (int colHeaderCpt = 1; colHeaderCpt <= lstColumns.Count - 1; colHeaderCpt++) {
-				    individualColStyle = new GridStyleInfo();
-				    individualColStyle.HorizontalAlignment = GridHorizontalAlignment.Center;
-
-				    if (lstColumns(colHeaderCpt) == string.Empty) {
-					    mGrdSync.SetColHidden(colHeaderCpt, colHeaderCpt, true);
+			    //Definition of columns         
+                for (int colHeaderCpt = 1; colHeaderCpt <= lstColumns.Length - 1; colHeaderCpt++)
+                {
+				    if (lstColumns[colHeaderCpt] == string.Empty) {
+					    mGrdFlex.Cols[colHeaderCpt].Visible = true;
 
 				    } else {
-					    mGrdSync(0, colHeaderCpt).Text = Microsoft.VisualBasic.Right(lstColumns(colHeaderCpt), lstColumns(colHeaderCpt).Length - 1);
+					    mGrdFlex[0, colHeaderCpt] = mGrdFlex[0, colHeaderCpt].ToString().Substring(1, lstColumns[colHeaderCpt].Length - 1);
 
-					    switch (lstColumns(colHeaderCpt).Chars(0)) {
-						    case Convert.ToChar("<"):
-							    individualColStyle.HorizontalAlignment = GridHorizontalAlignment.Left;
-
-							    break;
-
-						    case Convert.ToChar("^"):
-							    individualColStyle.HorizontalAlignment = GridHorizontalAlignment.Center;
+					    switch (lstColumns[colHeaderCpt].ToCharArray()[0]) {
+						    case '<':
+                                individualColStyle.TextAlign = TextAlignEnum.LeftCenter;
 
 							    break;
-						    case Convert.ToChar(">"):
-							    individualColStyle.HorizontalAlignment = GridHorizontalAlignment.Right;
+
+						    case '^':
+                                individualColStyle.TextAlign = TextAlignEnum.CenterCenter;
+
+							    break;
+						    case '>':
+                                individualColStyle.TextAlign = TextAlignEnum.RightCenter;
 
 							    break;
 					    }
 
-					    //mGrdSync.ChangeCells(GridRangeInfo.Cells(0, colHeaderCpt, mGrdSync.RowCount, colHeaderCpt), individualColStyle)
-					    mGrdSync(0, colHeaderCpt).HorizontalAlignment = individualColStyle.HorizontalAlignment;
-					    mGrdSync.ColStyles(colHeaderCpt) = individualColStyle;
+					    mGrdFlex.Cols[colHeaderCpt].Style = individualColStyle;
 				    }
-
 			    }
-
-			    //Definition of visual styles
-			    //headerStyle = New GridStyleInfo
-
-			    //headerStyle.BackColor = Color.WhiteSmoke
-
-			    //grdSync.ChangeCells(GridRangeInfo.Cells(0, 0, 0, grdSync.ColCount), headerStyle, Syncfusion.Styles.StyleModifyType.ApplyNew)
-			    //grdSync.ChangeCells(GridRangeInfo.Cells(0, 0, grdSync.RowCount, 0), headerStyle)
 
 			    blnValidReturn = true;
 
 		    } catch (Exception ex) {
 			    blnValidReturn = false;
-			    gcAppCtrl.cErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, Err.Source);
+			    sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
 		    }
 
 		    return blnValidReturn;
 	    }
 
-	    public int FindRow(object vValueToFind, int vintColToSearch)
-	    {
-		    int intReturnValue = -1;
-
-
-		    for (int intRowIdx = 1; intRowIdx <= mGrdSync.RowCount; intRowIdx++) {
-
-			    if (mGrdSync(intRowIdx, vintColToSearch).CellValue == vValueToFind) {
-				    return intRowIdx;
-			    } else {
-				    //Continue searching
-			    }
-		    }
-
-		    return intReturnValue;
-	    }
-
-	    public int FindCol(object vValueToFind, int vintRowToSearch)
-	    {
-		    int intReturnValue = -1;
-
-
-		    for (int intColIdx = 1; intColIdx <= mGrdSync.ColCount; intColIdx++) {
-
-			    if (mGrdSync(intColIdx, vintRowToSearch).CellValue == vValueToFind) {
-				    return intColIdx;
-			    } else {
-				    //Continue searching
-			    }
-		    }
-
-		    return intReturnValue;
-	    }
-
-
 	    public void SetSelectedCell(int vintRowIndex, int vintColIndex, bool vblnShowDropDown = false)
 	    {
 
-		    if (vintRowIndex <= mGrdSync.RowCount && vintColIndex <= mGrdSync.ColCount && vintRowIndex > 0 & vintColIndex > 0) {
-			    mGrdSync.CurrentCell.MoveTo(GridRangeInfo.Cell(vintRowIndex, vintColIndex), GridSetCurrentCellOptions.SetFocus & GridSetCurrentCellOptions.ScrollInView);
+            //if (vintRowIndex <= mGrdFlex.RowCount && vintColIndex <= mGrdFlex.ColCount && vintRowIndex > 0 & vintColIndex > 0) {
+            //    mGrdFlex.CurrentCell.MoveTo(GridRangeInfo.Cell(vintRowIndex, vintColIndex), GridSetCurrentCellOptions.SetFocus & GridSetCurrentCellOptions.ScrollInView);
 
 
-			    if (vblnShowDropDown) {
-				    mGrdSync.CurrentCell.ShowDropDown();
-			    } else {
-				    mGrdSync.CurrentCell.BeginEdit();
-			    }
-		    } else {
-			    //Do nothing
-		    }
+            //    if (vblnShowDropDown) {
+            //        mGrdFlex.get
+            //    } else {
+            //        mGrdFlex.CurrentCell.BeginEdit();
+            //    }
+            //} else {
+            //    //Do nothing
+            //}
 	    }
 
-	    public void SetColType_CheckBox(int vintColumnIndex, bool vblnAllowTriStates = false)
+	    public void SetColType_CheckBox(int vintColumnIndex)
 	    {
-		    mGrdSync.IgnoreReadOnly = true;
-
-		    mGrdSync.ColStyles(vintColumnIndex).CellType = "CheckBox";
-		    mGrdSync.ColStyles(vintColumnIndex).CheckBoxOptions = new GridCheckBoxCellInfo(true.ToString(), false.ToString(), mstrUndeterminedCheckBoxState, false);
-		    mGrdSync.ColStyles(vintColumnIndex).TriState = vblnAllowTriStates;
-		    mGrdSync.ColStyles(vintColumnIndex).VerticalAlignment = GridVerticalAlignment.Middle;
-
-		    mGrdSync.IgnoreReadOnly = false;
+		    mGrdFlex.Cols[vintColumnIndex].Style.DataType = typeof(bool);
+            mGrdFlex.Cols[vintColumnIndex].Style.TextAlign = TextAlignEnum.CenterCenter;
 	    }
 
 	    public void SetColType_ComboBox(string vstrSQL, int vintColumnIndex, string vstrValueMember, string vstrDisplayMember, bool vblnAllowEmpty)
 	    {
-		    MySqlCommand mySQLCmd = default(MySqlCommand);
-		    MySqlDataReader mySQLReader = null;
-		    BindingList<KeyValuePair<int, string>> myBindingList = new BindingList<KeyValuePair<int, string>>();
-		    GridStyleInfo style = new GridStyleInfo();
+		    SqlCommand mySQLCmd = default(SqlCommand);
+		    SqlDataReader mySQLReader = null;
+		    ListDictionary  myBindingList = new ListDictionary();
+            CellStyle individualColStyle = mGrdFlex.Styles.Add("ComboBox" + vintColumnIndex);
 
 		    try {
-			    mGrdSync.ColStyles(vintColumnIndex).CellType = "ComboBox";
-			    mGrdSync.ColStyles(vintColumnIndex).DataSource = null;
-			    mGrdSync.ColStyles(vintColumnIndex).ExclusiveChoiceList = true;
+                //mGrdFlex.Cols[vintColumnIndex].Style.DataType = "ComboBox";
 
-			    mySQLCmd = new MySqlCommand(vstrSQL, gcAppCtrl.MySQLConnection);
+			    mySQLCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.MySQLConnection);
 
-			    mySQLReader = mySQLCmd.ExecuteReader;
+			    mySQLReader = mySQLCmd.ExecuteReader();
 
 			    if (vblnAllowEmpty) {
-				    myBindingList.Add(new KeyValuePair<int, string>(0, ""));
+                    myBindingList.Add("", "");
 			    }
-			    //mySQLReader.resultset.fields(0).columnname
-			    while (mySQLReader.Read) {
-				    if (!Information.IsDBNull(mySQLReader(vstrValueMember))) {
-					    myBindingList.Add(new KeyValuePair<int, string>(Convert.ToInt32(mySQLReader(vstrValueMember)), Convert.ToString(mySQLReader(vstrDisplayMember))));
+
+			    while (mySQLReader.Read()) {
+
+				    if (!Information.IsDBNull(mySQLReader[vstrValueMember])) {
+					    myBindingList.Add(Convert.ToInt32(mySQLReader[vstrValueMember]), Convert.ToString(mySQLReader[vstrDisplayMember]));
 				    }
 			    }
 
-			    mGrdSync.ColStyles(vintColumnIndex).DataSource = myBindingList;
-			    mGrdSync.ColStyles(vintColumnIndex).ValueMember = "Key";
-			    mGrdSync.ColStyles(vintColumnIndex).DisplayMember = "Value";
+			    mGrdFlex.Cols[vintColumnIndex].DataMap = myBindingList;
 
 		    } catch (Exception ex) {
-			    gcAppCtrl.cErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, Err.Source + " - " + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);
+			    sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source + " - " + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);
 		    } finally {
 			    if ((mySQLReader != null)) {
 				    mySQLReader.Dispose();
@@ -570,166 +468,97 @@ namespace Ceritar.TT3LightDLL.Classes
 
 	    public void SetColType_DateTimePicker(int vintColumnIndex, bool vblnNullable)
 	    {
-		    DateTimePickerCell.DateTimePickerCellModel dtPickerCell = new DateTimePickerCell.DateTimePickerCellModel(mGrdSync.Model, vblnNullable);
 
 		    try {
-			    if (!mGrdSync.CellModels.ContainsKey(CustomCellTypes.DateTimePicker.ToString)) {
-				    RegisterCellModel.GridCellType(mGrdSync, CustomCellTypes.DateTimePicker);
-			    }
+                CellStyle individualColStyle = mGrdFlex.Styles.Add("DateTime" + vintColumnIndex);
 
-			    //If Not mGrdSync.CellModels.ContainsKey("DateTimePicker") Then
-			    //    mGrdSync.CellModels.Add("DateTimePicker", dtPickerCell)
-			    //End If
+                individualColStyle.DataType = typeof(DateTime);
+                individualColStyle.Format = clsApp.GetAppController.str_GetServerDateFormat;
 
-			    //mGrdSync.ColStyles(vintColumnIndex).CellType = "DateTimePicker"
-			    mGrdSync.ColStyles(vintColumnIndex).CellType = CustomCellTypes.DateTimePicker.ToString();
-			    mGrdSync.ColStyles(vintColumnIndex).CellValueType = typeof(DateTime);
-			    mGrdSync.ColStyles(vintColumnIndex).Format = gcAppCtrl.str_GetUserDateFormat;
+                mGrdFlex.Cols[vintColumnIndex].Style = individualColStyle;
 
-			    mGrdSync.ColWidths(vintColumnIndex) = 85;
-
-			    if (!vblnNullable) {
-				    DateTimeCellRenderer renderer = mGrdSync.CellRenderers(CustomCellTypes.DateTimePicker.ToString()) as DateTimeCellRenderer;
-				    MyDateTimePicker dtPicker = default(MyDateTimePicker);
-
-
-				    foreach (Control contl in renderer.Grid.Controls) {
-
-					    if (contl is MyDateTimePicker) {
-						    dtPicker = contl as MyDateTimePicker;
-						    dtPicker.NoneButtonVisible = false;
-					    }
-				    }
-			    }
+                mGrdFlex.Cols[vintColumnIndex].Width = 85;
 
 		    } catch (Exception ex) {
-			    gcAppCtrl.cErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, Err.Source + " - " + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);
+			    sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source + " - " + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);
 		    }
 	    }
 
-	    public bool bln_ValidateGridEvent()
-	    {
-		    ValidateGridEventArgs validateGridEventArgs = new ValidateGridEventArgs();
-
-		    if (ValidateGridData != null) {
-			    ValidateGridData(validateGridEventArgs);
-		    }
-
-		    return validateGridEventArgs.IsValid;
-	    }
-
-	    public bool bln_SaveGridDataEvent()
-	    {
-		    SaveGridDataEventArgs saveGridDataArgs = new SaveGridDataEventArgs();
-
-		    if (SaveGridData != null) {
-			    SaveGridData(saveGridDataArgs);
-		    }
-
-		    return saveGridDataArgs.SaveSuccessful;
-	    }
-
-	    #endregion
+#endregion
 
 
 	    private void btnAddRow_Click(object sender, EventArgs e)
 	    {
-		    mGrdSync.RowCount += 1;
-
-		    mGrdSync.RowStyles(mGrdSync.RowCount).BackColor = Color.LightGreen;
-		    mGrdSync(mGrdSync.RowCount, mintDefaultActionCol).CellValue = GridRowActions.INSERT_ACTION;
-		    SetSelectedRow = mGrdSync.RowCount;
-
-		    mfrmGridParent.formController.ChangeMade = true;
+            AddRow();
 	    }
 
 	    private void btnDeleteRow_Click(object sender, EventArgs e)
 	    {
-		    int intSelectedRow = GetSelectedRow;
+		    int intSelectedRow = mGrdFlex.Row;
 
-
+           
 		    if (intSelectedRow > 0) {
 
-			    if (mGrdSync(intSelectedRow, mintDefaultActionCol).CellValue == SyncfusionGridController.GridRowActions.INSERT_ACTION) {
-				    mGrdSync.Rows.RemoveRange(intSelectedRow, intSelectedRow);
-				    SetSelectedRow = (intSelectedRow >= 2 ? intSelectedRow - 1 : -1);
+                if (this[intSelectedRow, mintDefaultActionCol] == GridRowActions.INSERT_ACTION.ToString())
+                {
+				    mGrdFlex.Rows.RemoveRange(intSelectedRow, intSelectedRow);
+				    mGrdFlex.Row = (intSelectedRow >= 2 ? intSelectedRow - 1 : -1);
 			    } else {
-				    mGrdSync.RowStyles(intSelectedRow).BackColor = Color.Red;
-				    mGrdSync(intSelectedRow, mintDefaultActionCol).CellValue = GridRowActions.DELETE_ACTION;
+                    mGrdFlex.Rows[intSelectedRow].Style.BackColor = System.Drawing.Color.Red;
+				    mGrdFlex[intSelectedRow, mintDefaultActionCol] = GridRowActions.DELETE_ACTION;
 
-				    mfrmGridParent.formController.ChangeMade = true;
+                    //mfrmGridParent.formController.ChangeMade = true; TODO
 			    }
-
 		    }
 	    }
 
+        public bool bln_ValidateGridEvent()
+        {
+            ValidateGridEventArgs validateGridEventArgs = new ValidateGridEventArgs();
 
-	    private void mGrdSync_CellsChanged(object sender, GridCellsChangedEventArgs e)
-	    {
-		    //If Not mblnHasNoActionColumn AndAlso Not mfrmGridParent.formController.FormIsLoading AndAlso e.Range.Top > 0 AndAlso mGrdSync(e.Range.Top, mintDefaultActionCol).CellValue <> GridRowActions.INSERT_ACTION Then
+            if (ValidateGridData != null)
+            {
+                ValidateGridData(validateGridEventArgs);
+            }
 
-		    //    mGrdSync.BeginUpdate()
+            return validateGridEventArgs.IsValid;
+        }
 
-		    //    If mintPreviousCellChangedRow <> e.Range.Top Then
+        public bool bln_SaveGridDataEvent()
+        {
+            SaveGridDataEventArgs saveGridDataArgs = new SaveGridDataEventArgs();
 
-		    //        mintPreviousCellChangedRow = e.Range.Top
-		    //        mGrdSync.RowStyles(e.Range.Top).BackColor = Color.Yellow
-		    //        mGrdSync(GetSelectedRow, mintDefaultActionCol).CellValue = GridRowActions.UPDATE_ACTION
-		    //    End If
+            if (SaveGridData != null)
+            {
+                SaveGridData(saveGridDataArgs);
+            }
 
-		    //    mGrdSync.EndUpdate()
-		    //End If
-	    }
-
-
-	    private void mGrdSync_CheckBoxClick(object sender, GridCellClickEventArgs e)
-	    {
-		    mfrmGridParent.formController.ChangeMade = true;
-	    }
-
-
-	    private void mGrdSync_CurrentCellAcceptedChanges(object sender, CancelEventArgs e)
-	    {
-
-		    if (!mblnHasNoActionColumn && Conversion.Val(mGrdSync(GetSelectedRow, mintDefaultActionCol).CellValue) != GridRowActions.INSERT_ACTION && !mGrdSync(GetSelectedRow, GetSelectedCol).ReadOnly) {
-			    mGrdSync.RowStyles(GetSelectedRow).BackColor = Color.Yellow;
-			    mGrdSync(GetSelectedRow, mintDefaultActionCol).CellValue = GridRowActions.UPDATE_ACTION;
-		    }
-	    }
-
-
-	    private void mGrdSync_CurrentCellActivating(object sender, Syncfusion.Windows.Forms.Grid.GridCurrentCellActivatingEventArgs e)
-	    {
-
-		    if (mGrdSync(e.RowIndex, e.ColIndex).CellType == CustomCellTypes.DateTimePicker.ToString && mGrdSync(e.RowIndex, e.ColIndex).ReadOnly) {
-			    e.Cancel = true;
-		    }
-	    }
-
-
-	    private void GrdSyncController_CurrentCellChanged(object sender, EventArgs e)
-	    {
-
-		    if (!mblnHasNoActionColumn && Conversion.Val(mGrdSync(GetSelectedRow, mintDefaultActionCol).CellValue) != GridRowActions.INSERT_ACTION && !mGrdSync(GetSelectedRow, GetSelectedCol).ReadOnly) {
-			    mGrdSync.RowStyles(GetSelectedRow).BackColor = Color.Yellow;
-			    mGrdSync(GetSelectedRow, mintDefaultActionCol).CellValue = GridRowActions.UPDATE_ACTION;
-		    }
-	    }
-
-	    private void GrdSyncController_CurrentCellCloseDropDown(object sender, Syncfusion.Windows.Forms.PopupClosedEventArgs e)
-	    {
-		    mGrdSync.CurrentCell.ConfirmChanges();
-	    }
+            return saveGridDataArgs.SaveSuccessful;
+        }
 
 	    private void SyncfusionGridController_SetDisplay()
 	    {
 		    blnSetColsDisplay();
 	    }
-	    public SyncfusionGridController()
-	    {
-		    SetDisplay += SyncfusionGridController_SetDisplay;
-	    }
-        */
+
+        private void GrdSyncController_CurrentCellCloseDropDown(object sender, RowColEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void mGrdSync_CheckBoxClick(object sender, RowColEventArgs e)
+        {
+            //mfrmGridParent.formController.ChangeMade = true;
+        }
+
+        private void mGrdSync_CellsChanged(object sender, RowColEventArgs e)
+        {
+            if (!mblnHasNoActionColumn && mGrdFlex[mGrdFlex.Row, mintDefaultActionCol].ToString().Equals(GridRowActions.INSERT_ACTION.ToString())) //&& !mGrdSync(GetSelectedRow, GetSelectedCol).ReadOnly
+            {
+                mGrdFlex.Rows[mGrdFlex.Row].Style.BackColor = System.Drawing.Color.Yellow;
+                mGrdFlex[mGrdFlex.Row, mintDefaultActionCol] = GridRowActions.UPDATE_ACTION;
+            }
+        }
 }
 
 
@@ -738,6 +567,7 @@ namespace Ceritar.TT3LightDLL.Classes
     public class ValidateGridEventArgs : System.EventArgs
     {
 	    private bool mblnIsValid;
+
 	    public bool IsValid {
 		    get { return mblnIsValid; }
 		    set { mblnIsValid = value; }
@@ -747,6 +577,7 @@ namespace Ceritar.TT3LightDLL.Classes
     public class SaveGridDataEventArgs : System.EventArgs
     {
 	    private bool mblnSaveSuccessful;
+
 	    public bool SaveSuccessful {
 		    get { return mblnSaveSuccessful; }
 		    set { mblnSaveSuccessful = value; }

@@ -44,7 +44,7 @@
     <Compile Include="Models\Module_Template\mod_Folder.cs" />
     <Compile Include="sclsConfigs.cs" />
     <Compile Include="Controllers\ctrl_User.cs" />
-    <Compile Include="Models\Module_ActivesInstallations\mod_AppVersion.cs" />
+    <Compile Include="Models\Module_Configuration\mod_ClientVersionApp.cs" />
     <Compile Include="Models\Module_ActivesInstallations\mod_Revision.cs" />
     <Compile Include="Models\Module_ActivesInstallations\mod_Version.cs" />
     <Compile Include="Models\Module_Configuration\mod_CeritarApplication.cs" />

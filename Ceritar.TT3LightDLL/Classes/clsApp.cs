@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace Ceritar.TT3LightDLL.Classes
 {
 
-    public sealed class clsApplication
+    public sealed class clsApp
     {
 
         //Private class members
@@ -17,26 +17,20 @@ namespace Ceritar.TT3LightDLL.Classes
         private ctrl_User mctrlUser;
         private System.Text.RegularExpressions.Regex mcStringCleaner = new System.Text.RegularExpressions.Regex("'", System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant | System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
-        private static clsApplication _myUniqueInstance;
+        private static clsApp _myUniqueInstance;
 
 
-        public static clsApplication GetAppController
+        public static clsApp GetAppController
         {
             get
             {
                 if (_myUniqueInstance == null)
                 {
-                    _myUniqueInstance = new clsApplication();
+                    _myUniqueInstance = new clsApp();
                 }
 
                 return _myUniqueInstance;
             }
-        }
-
-        ~clsApplication()
-        {
-            mcMySQLConnection.Close();
-            mcMySQLConnection.Dispose();
         }
 
 
@@ -115,7 +109,7 @@ namespace Ceritar.TT3LightDLL.Classes
 #region "Constructors"
 
 
-        private clsApplication()
+        private clsApp()
         {
             mctrlUser = new ctrl_User();
 
@@ -131,19 +125,15 @@ namespace Ceritar.TT3LightDLL.Classes
         {
             bool blnValidReturn = false;
 
-            mcMySQLConnection = new SqlConnection();
-
-            //mcMySQLConnection.ConnectionString = "Persist Security Info=False;server=192.168.1.107;Port=3306;userid=Nicolas;password=nicolas;database=dms_tests"
-            mcMySQLConnection.ConnectionString = "server=127.0.0.1;Port=3306;userid=root;password=root;database=dms_prod";
-            //MultipleActiveResultSets=true
-
-
             try
             {
+                mcMySQLConnection = new SqlConnection(@"Persist Security Info=False;User ID=sa;Password=*8059%Ce;Initial Catalog=Logirack_CVS_Dev;Data Source=localhost\SVR_SQL");
+                
                 mcMySQLConnection.Open();
 
-                blnValidReturn = true;
+                //MultipleActiveResultSets=true        
 
+                blnValidReturn = true;
             }
             catch (SqlException ex)
             {
@@ -153,10 +143,14 @@ namespace Ceritar.TT3LightDLL.Classes
 
                 sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
                 mcMySQLConnection.Dispose();
-
+                
 #if Debug
 			    Application.Exit();
 #endif
+            }
+            finally
+            {
+                //if (mcMySQLConnection != null) mcMySQLConnection.Dispose();
             }
 
             return blnValidReturn;
@@ -389,6 +383,7 @@ namespace Ceritar.TT3LightDLL.Classes
         }
 
 #endregion
+
 
     }
 
