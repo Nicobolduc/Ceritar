@@ -9,18 +9,12 @@ namespace Ceritar.CVS.Models.Module_Configuration
         private string _strFirstname;
         private string _strLastname;
         private string _strEmail;
-        private short _intLanguage = 1;
         private mod_UerGroup _cUserGroup;
 
         //Working variables
 
 
 #region "Properties"
-
-        internal short GetLanguage
-        {
-            get { return _intLanguage; }
-        }
 
         internal string UserCode
         {
@@ -50,12 +44,6 @@ namespace Ceritar.CVS.Models.Module_Configuration
         {
             get { return _strEmail; }
             set { _strEmail = value; }
-        }
-
-        internal short Language
-        {
-            get { return _intLanguage; }
-            set { _intLanguage = value; }
         }
 
 #endregion

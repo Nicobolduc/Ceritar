@@ -49,6 +49,7 @@
     <Compile Include="Classes\clsApp.cs" />
     <Compile Include="Classes\clsFlexGridWrapper.cs" />
     <Compile Include="Classes\clsSQL.cs" />
+    <Compile Include="Classes\clsUser.cs" />
     <Compile Include="Controls\ctlFormController.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -70,12 +71,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Ceritar.CVS\Ceritar.CVS.csproj">
-      <Project>{20988a56-79ca-4aca-bdbb-6c95ea5ae3fc}</Project>
-      <Name>Ceritar.CVS</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Add.png" />

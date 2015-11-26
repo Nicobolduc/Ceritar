@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ceritar.Logirack_CVS", "Ceritar.Logirack_CVS\Ceritar.Logirack_CVS.csproj", "{8D076761-A71A-42A7-94F1-4466388A14BC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{20988A56-79CA-4ACA-BDBB-6C95EA5AE3FC} = {20988A56-79CA-4ACA-BDBB-6C95EA5AE3FC}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ceritar.CVS", "Ceritar.CVS\Ceritar.CVS.csproj", "{20988A56-79CA-4ACA-BDBB-6C95EA5AE3FC}"
 EndProject

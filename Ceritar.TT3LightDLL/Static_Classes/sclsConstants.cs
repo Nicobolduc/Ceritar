@@ -8,7 +8,8 @@ namespace Ceritar.TT3LightDLL.Static_Classes
             ENGLISH_CA = 2
         }
 
-        public enum Form_Mode
+        //Data manipulation language
+        public enum DML_Mode
         {
             CONSULT_MODE = 0,
             INSERT_MODE = 1,
@@ -18,6 +19,7 @@ namespace Ceritar.TT3LightDLL.Static_Classes
 
         public enum Error_Message
         {
+            ERROR_UNHANDLED = 1,
             ERROR_SAVE_MSG = 5,
             ERROR_ITEM_USED_MSG = 19
         }
@@ -27,7 +29,8 @@ namespace Ceritar.TT3LightDLL.Static_Classes
             MANDATORY_VALUE = 6,
             NUMERIC_VALUE = 10,
             UNIQUE_ATTRIBUTE = 17,
-            MANDATORY_GRID = 30
+            MANDATORY_GRID = 30,
+            INVALID_REFERENCE_INTEGRITY = 123
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Ceritar.Logirack_CVS;
+using Ceritar.TT3LightDLL.Static_Classes;
 
 namespace Ceritar.Logirack_CVS
 {
@@ -32,14 +33,14 @@ namespace Ceritar.Logirack_CVS
                
                 switch (vList_ID)
                 {
-                    case GeneralLists_ID.EXPENSE_LIST_ID:
-                        strSQL = strGetExpenseList_SQL();
-                        strListGenTitle = " - Dépenses";
-                        //TODO caption pour ca
-                        frmGenList.mintGridTag = Convert.ToString(GeneralList_GridCapID.EXPENSE_CAP);
-                        frmGenList.SetFormToOpenName = frmExpense.Name;
+                    //case GeneralLists_ID.EXPENSE_LIST_ID:
+                    //    strSQL = strGetExpenseList_SQL();
+                    //    strListGenTitle = " - Dépenses";
+                    //    //TODO caption pour ca
+                    //    frmGenList.mintGridTag = Convert.ToString(GeneralList_GridCapID.EXPENSE_CAP);
+                    //    frmGenList.SetFormToOpenName = frmExpense.Name;
 
-                        break;
+                    //    break;
 
                     default:
                         break;
@@ -52,28 +53,27 @@ namespace Ceritar.Logirack_CVS
                 {
                     frmGenList.mstrGridSQL = strSQL;
                     frmGenList.Text = frmGenList.Text + strListGenTitle;
-                    frmGenList.MdiParent = My.Forms.mdiGeneral;
+                    frmGenList.MdiParent = mdiGeneral.ActiveForm;
 
-                    frmGenList.formController.ShowForm(mConstants.Form_Mode.CONSULT_MODE);
+                    //frmGenList.formController.ShowForm(mConstants.Form_Mode.CONSULT_MODE);
 
-                    if (My.Forms.mdiGeneral.GetGenListChildCount == 0)
-                    {
-                        frmGenList.Location = new Point(0, 0);
-                    }
-                    else
-                    {
-                        frmGenList.Location = new Point(My.Forms.mdiGeneral.GetGenListChildCount * 25, My.Forms.mdiGeneral.GetGenListChildCount * 25);
-                    }
+                    //if (My.Forms.mdiGeneral.GetGenListChildCount == 0)
+                    //{
+                    //    frmGenList.Location = new Point(0, 0);
+                    //}
+                    //else
+                    //{
+                    //    frmGenList.Location = new Point(My.Forms.mdiGeneral.GetGenListChildCount * 25, My.Forms.mdiGeneral.GetGenListChildCount * 25);
+                    //}
 
-                    My.Forms.mdiGeneral.AddGenListHandle((object)frmGenList, frmGenList.Handle.ToInt32);
+                    //My.Forms.mdiGeneral.AddGenListHandle((object)frmGenList, frmGenList.Handle.ToInt32);
                 }
 
             }
             catch (Exception ex)
             {
-                sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
-
         }
 
         #endregion

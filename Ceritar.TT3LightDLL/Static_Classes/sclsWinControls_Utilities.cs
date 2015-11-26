@@ -21,7 +21,7 @@ namespace Ceritar.TT3LightDLL.Static_Classes
             {
                 rcboToLoad.DataSource = null;
 
-                mySQLCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.MySQLConnection);
+                mySQLCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.SQLConnection);
 
                 mySQLReader = mySQLCmd.ExecuteReader();
 
@@ -49,7 +49,7 @@ namespace Ceritar.TT3LightDLL.Static_Classes
             catch (Exception ex)
             {
                 blnValidReturn = false;
-                sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source + " - " + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);
+                sclsErrorsLog.WriteToErrorLog(ex, System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);
             }
             finally
             {

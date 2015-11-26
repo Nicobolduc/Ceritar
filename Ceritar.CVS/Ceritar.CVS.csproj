@@ -41,9 +41,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="clsActionResults.cs" />
+    <Compile Include="Controllers\ctr_CeritarApplication.cs" />
+    <Compile Include="Controllers\Interfaces\ICeritarApp.cs" />
     <Compile Include="Models\Module_Template\mod_Folder.cs" />
+    <Compile Include="Models\mod_IBase.cs" />
     <Compile Include="sclsConfigs.cs" />
-    <Compile Include="Controllers\ctrl_User.cs" />
+    <Compile Include="Controllers\ctr_User.cs" />
     <Compile Include="Models\Module_Configuration\mod_ClientVersionApp.cs" />
     <Compile Include="Models\Module_ActivesInstallations\mod_Revision.cs" />
     <Compile Include="Models\Module_ActivesInstallations\mod_Version.cs" />
@@ -56,7 +59,12 @@
     <Compile Include="Models\Module_Template\mod_Script.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Ceritar.TT3LightDLL\Ceritar.TT3LightDLL.csproj">
+      <Project>{0e2ae8b4-bc97-48e8-ae7f-ae9d8bd7bc2c}</Project>
+      <Name>Ceritar.TT3LightDLL</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

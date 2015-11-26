@@ -29,6 +29,9 @@ namespace Ceritar.TT3LightDLL.Classes
         private Button mbtnAddRow;
         private Button mbtnDeleteRow;
 
+        private CellStyle csNewRow;
+        private CellStyle csRemoveRow;
+
 	    //Public events
 	    public event SetDisplayEventHandler SetDisplay;
 	    public delegate void SetDisplayEventHandler();
@@ -40,10 +43,10 @@ namespace Ceritar.TT3LightDLL.Classes
 	    //Public enums
 	    public enum GridRowActions
 	    {
-		    NO_ACTION = sclsConstants.Form_Mode.CONSULT_MODE,
-            INSERT_ACTION = sclsConstants.Form_Mode.INSERT_MODE,
-            UPDATE_ACTION = sclsConstants.Form_Mode.UPDATE_MODE,
-            DELETE_ACTION = sclsConstants.Form_Mode.DELETE_MODE
+		    NO_ACTION = sclsConstants.DML_Mode.CONSULT_MODE,
+            INSERT_ACTION = sclsConstants.DML_Mode.INSERT_MODE,
+            UPDATE_ACTION = sclsConstants.DML_Mode.UPDATE_MODE,
+            DELETE_ACTION = sclsConstants.DML_Mode.DELETE_MODE
 	    }
 
 
@@ -119,7 +122,7 @@ namespace Ceritar.TT3LightDLL.Classes
                     objItem = mGrdFlex[vintRow, vintCol].ToString();
                 }
                
-                if (vintRow > 0 & vintCol <= mGrdFlex.Cols.Count & !((mGrdFlex.Cols[vintCol]) == null) & Strings.UCase(mGrdFlex.Cols[vintCol].DataType.Name).Equals("BOOLEAN")) {
+                if (vintRow > 0 & vintCol <= mGrdFlex.Cols.Count & !((mGrdFlex.Cols[vintCol]) == null) & mGrdFlex.Cols[vintCol].DataType != null && Strings.UCase(mGrdFlex.Cols[vintCol].DataType.Name).Equals("BOOLEAN")) {
 
                     objItem = (objItem == "True" | objItem == "1" ? "1" : "0");
                 }
@@ -167,12 +170,12 @@ namespace Ceritar.TT3LightDLL.Classes
 
                         //mfrmGridParent.formController.ChangeMade = true; TODO
 
-					    mGrdFlex.Rows[mGrdFlex.Row].Style.BackColor = System.Drawing.Color.Yellow;
+					    mGrdFlex.Rows[mGrdFlex.Row].StyleDisplay.BackColor = System.Drawing.Color.Yellow;
                         mGrdFlex[mGrdFlex.Row, mintDefaultActionCol] = GridRowActions.UPDATE_ACTION;
 				    } else {
                         //mfrmGridParent.formController.ChangeMade = false;
 
-                        mGrdFlex.Rows[mGrdFlex.Row].Style.BackColor = System.Drawing.Color.Empty;
+                        mGrdFlex.Rows[mGrdFlex.Row].StyleDisplay.BackColor = System.Drawing.Color.Empty;
                         mGrdFlex[mGrdFlex.Row, mintDefaultActionCol] = GridRowActions.NO_ACTION;
 				    }
 			    }
@@ -191,16 +194,20 @@ namespace Ceritar.TT3LightDLL.Classes
 	    public bool bln_Init(ref C1FlexGrid rgrdGrid, ref Button rbtnAddRow, ref Button rbtnRemoveRow)
 	    {
 		    bool blnValidReturn = true;
-		    DataGridViewCellStyle columnsHeaderStyle = new DataGridViewCellStyle();
 
 		    try {
 			    mfrmGridParent = rgrdGrid.FindForm();
 
 			    mGrdFlex = rgrdGrid;
-			    mbtnAddRow = rbtnAddRow;
+
+                SetBtnAddRow = rbtnAddRow;
 			    SetBtnDeleteRow = rbtnRemoveRow;
 
 			    mGrdFlex.BeginInit();
+
+                mGrdFlex.DataSource = null;
+
+                mGrdFlex.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 
 			    mGrdFlex.Rows.Count = 1;
 			    mGrdFlex.Cols.Count = 1;
@@ -215,15 +222,24 @@ namespace Ceritar.TT3LightDLL.Classes
 
                 mGrdFlex.Rows.DefaultSize = 20; 
 			    mGrdFlex.Cols.DefaultSize = 70;
-			    mGrdFlex.Cols[0].Width = 9;
+			    mGrdFlex.Cols[0].Width = 5;
+
+                mGrdFlex.EditOptions = EditFlags.ExitOnLeftRightKeys;
+                mGrdFlex.FocusRect = FocusRectEnum.Inset;
 
 			    if (SetDisplay != null) {
 				    SetDisplay();
 			    }
 
+                csNewRow = mGrdFlex.Styles["NewRow"];
+                csNewRow.BackColor = System.Drawing.Color.LightGreen;
+
+                csRemoveRow = mGrdFlex.Styles["RemoveRow"];
+                csRemoveRow.BackColor = System.Drawing.Color.Red;
+
 		    } catch (Exception ex) {
 			    blnValidReturn = false;
-			    sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+			    sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
 		    } finally {
 			    mGrdFlex.EndInit();
 		    }
@@ -246,7 +262,7 @@ namespace Ceritar.TT3LightDLL.Classes
                 //mGrdFlex.BrowseOnly = false;
 
 			    //Retrieve grid data from database
-                sqlCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.MySQLConnection);
+                sqlCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.SQLConnection);
 
 			    mySQLReader = sqlCmd.ExecuteReader();
 
@@ -264,12 +280,12 @@ namespace Ceritar.TT3LightDLL.Classes
                 //}
 
 			    //Reset the grid
-                mGrdFlex.Clear(); //ClearWhatSettings.flexClearData
+               // mGrdFlex.Clear(); //ClearWhatSettings.flexClearData
 			    mGrdFlex.BeginUpdate();
 
-			    mGrdFlex.Rows.Count = myDataTable.Rows.Count;
 			    mGrdFlex.Cols.Count = myDataTable.Columns.Count;
 
+                dataAdapter.SelectCommand = sqlCmd;
                 dataAdapter.Fill(myDataTable);
 
                 mGrdFlex.DataSource = dataAdapter;
@@ -282,13 +298,13 @@ namespace Ceritar.TT3LightDLL.Classes
 				    SetDisplay();
 			    }
 
-			    if (mGrdFlex.Rows.Count > 0) {
+			    if (mGrdFlex.Rows.Count > 1) {
 				    mGrdFlex.Row = 1;
 			    }
 
 		    } catch (Exception ex) {
 			    blnValidReturn = false;
-			    sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+			    sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
 		    } finally {
 			    if ((mySQLReader != null)) {
 				    mySQLReader.Dispose();
@@ -298,17 +314,6 @@ namespace Ceritar.TT3LightDLL.Classes
 		    }
 
 		    return blnValidReturn;
-	    }
-
-	    public void AddRow(int vintPosition = -1)
-	    {
-		    mGrdFlex.Rows.InsertRange((vintPosition == -1 ? mGrdFlex.Rows.Count + 1 : vintPosition), 1);
-
-		    if (!mblnHasNoActionColumn) {
-			    mGrdFlex[mGrdFlex.Rows.Count, mintDefaultActionCol] = GridRowActions.INSERT_ACTION;
-		    }
-
-            mGrdFlex.Rows[(vintPosition == -1 ? mGrdFlex.Rows.Count + 1 : vintPosition)].Style.BackColor = System.Drawing.Color.LightGreen;
 	    }
 
 	    public bool CellIsEmpty(int vintRow, int vintCol)
@@ -322,7 +327,7 @@ namespace Ceritar.TT3LightDLL.Classes
                 }
 
 		    } catch (Exception ex) {
-			    sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+			    sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
 		    }
 
 		    return blnIsEmpty;
@@ -339,7 +344,7 @@ namespace Ceritar.TT3LightDLL.Classes
                 }
 
 		    } catch (Exception ex) {
-                sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
 		    }
 
 		    return blnIsEmpty;
@@ -362,20 +367,20 @@ namespace Ceritar.TT3LightDLL.Classes
             CellStyle individualColStyle = mGrdFlex.Styles.Add("column");
 
 		    try {
-                strGridCaption = clsApp.GetAppController.str_GetCaption(Convert.ToInt32(mGrdFlex.Tag), clsApp.GetAppController.cUser.GetUserLangage);
+                strGridCaption = clsApp.GetAppController.str_GetCaption(Convert.ToInt32(mGrdFlex.Tag), clsApp.GetAppController.cUser.GetUserLanguage);
 
-			    lstColumns = Strings.Split(strGridCaption.Insert(0, "|"), "|");
-
-			    mGrdFlex.Cols.Count = lstColumns.Length - 1;
+			    lstColumns = Strings.Split(strGridCaption, "|");            
+                
+			    mGrdFlex.Cols.Count = lstColumns.Length;
 
 			    //Definition of columns         
                 for (int colHeaderCpt = 1; colHeaderCpt <= lstColumns.Length - 1; colHeaderCpt++)
                 {
 				    if (lstColumns[colHeaderCpt] == string.Empty) {
-					    mGrdFlex.Cols[colHeaderCpt].Visible = true;
-
+					    mGrdFlex.Cols[colHeaderCpt].Visible = false;
+                        
 				    } else {
-					    mGrdFlex[0, colHeaderCpt] = mGrdFlex[0, colHeaderCpt].ToString().Substring(1, lstColumns[colHeaderCpt].Length - 1);
+                        mGrdFlex[0, colHeaderCpt] = (string)lstColumns[colHeaderCpt].Substring(1, lstColumns[colHeaderCpt].Length - 1);
 
 					    switch (lstColumns[colHeaderCpt].ToCharArray()[0]) {
 						    case '<':
@@ -401,7 +406,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
 		    } catch (Exception ex) {
 			    blnValidReturn = false;
-			    sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+			    sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
 		    }
 
 		    return blnValidReturn;
@@ -440,7 +445,7 @@ namespace Ceritar.TT3LightDLL.Classes
 		    try {
                 //mGrdFlex.Cols[vintColumnIndex].Style.DataType = "ComboBox";
 
-			    mySQLCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.MySQLConnection);
+			    mySQLCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.SQLConnection);
 
 			    mySQLReader = mySQLCmd.ExecuteReader();
 
@@ -458,7 +463,7 @@ namespace Ceritar.TT3LightDLL.Classes
 			    mGrdFlex.Cols[vintColumnIndex].DataMap = myBindingList;
 
 		    } catch (Exception ex) {
-			    sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source + " - " + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);
+			    sclsErrorsLog.WriteToErrorLog(ex, ex.Source + " - " + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);
 		    } finally {
 			    if ((mySQLReader != null)) {
 				    mySQLReader.Dispose();
@@ -480,9 +485,26 @@ namespace Ceritar.TT3LightDLL.Classes
                 mGrdFlex.Cols[vintColumnIndex].Width = 85;
 
 		    } catch (Exception ex) {
-			    sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source + " - " + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);
+			    sclsErrorsLog.WriteToErrorLog(ex, ex.Source + " - " + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);
 		    }
 	    }
+
+        public void AddRow(int vintPosition = -1)
+        {
+            CellRange crRow;
+
+            mGrdFlex.Rows.InsertRange((vintPosition == -1 ? mGrdFlex.Rows.Count : vintPosition), 1);
+
+            if (!mblnHasNoActionColumn)
+            {
+                mGrdFlex[mGrdFlex.Rows.Count - 1, mintDefaultActionCol] = GridRowActions.INSERT_ACTION;
+            }
+
+            mGrdFlex.Row = (vintPosition == -1 ? mGrdFlex.Rows.Count - 1 : vintPosition);
+
+            crRow = mGrdFlex.GetCellRange((vintPosition == -1 ? mGrdFlex.Rows.Count - 1 : vintPosition), 0, (vintPosition == -1 ? mGrdFlex.Rows.Count - 1 : vintPosition), mGrdFlex.Cols.Count - 1);
+            crRow.Style = csNewRow;
+        }
 
 #endregion
 
@@ -494,18 +516,20 @@ namespace Ceritar.TT3LightDLL.Classes
 
 	    private void btnDeleteRow_Click(object sender, EventArgs e)
 	    {
+            CellRange crRow;
 		    int intSelectedRow = mGrdFlex.Row;
-
            
 		    if (intSelectedRow > 0) {
-
+                
                 if (this[intSelectedRow, mintDefaultActionCol] == GridRowActions.INSERT_ACTION.ToString())
                 {
-				    mGrdFlex.Rows.RemoveRange(intSelectedRow, intSelectedRow);
+                    mGrdFlex.RemoveItem(intSelectedRow);
 				    mGrdFlex.Row = (intSelectedRow >= 2 ? intSelectedRow - 1 : -1);
 			    } else {
-                    mGrdFlex.Rows[intSelectedRow].Style.BackColor = System.Drawing.Color.Red;
 				    mGrdFlex[intSelectedRow, mintDefaultActionCol] = GridRowActions.DELETE_ACTION;
+
+                    crRow = mGrdFlex.GetCellRange(intSelectedRow, 0, intSelectedRow, mGrdFlex.Cols.Count - 1);
+                    crRow.Style = csRemoveRow;
 
                     //mfrmGridParent.formController.ChangeMade = true; TODO
 			    }

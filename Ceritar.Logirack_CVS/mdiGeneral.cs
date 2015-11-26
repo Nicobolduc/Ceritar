@@ -20,12 +20,10 @@ namespace Ceritar.Logirack_CVS
         }
 
         private void fileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        }
+        {        }
 
         private void installationsActivesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        }
+        {        }
 
         private void versionToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -33,14 +31,14 @@ namespace Ceritar.Logirack_CVS
 
             frmVersionAndRevision.MdiParent = this;
             
-            frmVersionAndRevision.ctrlForm.ShowForm(sclsConstants.Form_Mode.UPDATE_MODE, 0, false);
+            frmVersionAndRevision.ctrlForm.ShowForm(sclsConstants.DML_Mode.UPDATE_MODE, 0, false);
         }
 
         private void mdiGeneral_Load(object sender, EventArgs e)
         {
             main();
 
-            lblDatabase.Text =  clsApp.GetAppController.MySQLConnection.Database;
+            lblDatabase.Text =  clsApp.GetAppController.SQLConnection.Database;
             lblCurrentUser.Text = " Nicolas";
         }
 
@@ -50,7 +48,15 @@ namespace Ceritar.Logirack_CVS
 
         private void mdiGeneral_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (clsApp.GetAppController.MySQLConnection != null) clsApp.GetAppController.MySQLConnection.Dispose();
+            if (clsApp.GetAppController.SQLConnection != null) clsApp.GetAppController.SQLConnection.Dispose();
+        }
+
+        private void applicationCeritarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmCeritarApp frmCerApp = new frmCeritarApp();
+
+            frmCerApp.MdiParent = this;
+            frmCerApp.formController.ShowForm(sclsConstants.DML_Mode.INSERT_MODE);
         }
     }
 }

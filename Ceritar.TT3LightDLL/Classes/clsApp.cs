@@ -1,5 +1,4 @@
-﻿using Ceritar.CVS.Controllers;
-using Ceritar.TT3LightDLL.Classes;
+﻿using Ceritar.TT3LightDLL.Classes;
 using Ceritar.TT3LightDLL.Static_Classes;
 using System;
 using System.Windows.Forms;
@@ -14,7 +13,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
         //Private class members
         private SqlConnection mcMySQLConnection;
-        private ctrl_User mctrlUser;
+        private clsUser mctrlUser;
         private System.Text.RegularExpressions.Regex mcStringCleaner = new System.Text.RegularExpressions.Regex("'", System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant | System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
         private static clsApp _myUniqueInstance;
@@ -36,12 +35,12 @@ namespace Ceritar.TT3LightDLL.Classes
 
 #region "Properties"
 
-        public SqlConnection MySQLConnection
+        public SqlConnection SQLConnection
         {
             get { return mcMySQLConnection; }
         }
 
-        public ctrl_User cUser
+        public clsUser cUser
         {
             get { return this.mctrlUser; }
         }
@@ -50,7 +49,7 @@ namespace Ceritar.TT3LightDLL.Classes
         {
             get
             {
-                switch (mctrlUser.GetUserLangage)
+                switch (mctrlUser.GetUserLanguage)
                 {
                     case (short)sclsConstants.Language.FRENCH_QC:
                         // Return "dd-MM-yyyy"
@@ -72,7 +71,7 @@ namespace Ceritar.TT3LightDLL.Classes
         {
             get
             {
-                switch (mctrlUser.GetUserLangage)
+                switch (mctrlUser.GetUserLanguage)
                 {
                     case (short)sclsConstants.Language.FRENCH_QC:
                         //Return "dd-MM-yyyy HH:mm:ss"
@@ -111,7 +110,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
         private clsApp()
         {
-            mctrlUser = new ctrl_User();
+            mctrlUser = new clsUser();
 
             blnOpenMySQLConnection();
         }
@@ -141,7 +140,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
                 MessageBox.Show("La connexion au serveur a échouée.");
 
-                sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
                 mcMySQLConnection.Dispose();
                 
 #if Debug
@@ -170,7 +169,7 @@ namespace Ceritar.TT3LightDLL.Classes
             catch (Exception ex)
             {
                 blnValidReturn = false;
-                sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
 
             return blnValidReturn;
@@ -182,12 +181,12 @@ namespace Ceritar.TT3LightDLL.Classes
 
             try
             {
-                strCaption = clsSQL.str_ADOSingleLookUp("ApC_Text", "AppCaption", "ApC_No = " + intCaptionID.ToString() + " AND ApL_ID = " + intLanguage);
+                strCaption = clsSQL.str_ADOSingleLookUp("ApC_Text", "AppCaption", "ApC_No = " + intCaptionID.ToString() + " AND ApL_NRI = " + intLanguage);
 
             }
             catch (Exception ex)
             {
-                sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
 
             return strCaption;
@@ -220,7 +219,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
             try
             {
-                strMessage = _myUniqueInstance.str_GetCaption(vintCaption_ID, mctrlUser.GetUserLangage);
+                strMessage = _myUniqueInstance.str_GetCaption(vintCaption_ID, mctrlUser.GetUserLanguage);
 
                 if ((vlstMsgParam != null))
                 {
@@ -246,7 +245,7 @@ namespace Ceritar.TT3LightDLL.Classes
             }
             catch (Exception ex)
             {
-                sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
         }
 
@@ -311,7 +310,7 @@ namespace Ceritar.TT3LightDLL.Classes
             }
             catch (Exception ex)
             {
-                sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
         }
 
@@ -378,7 +377,7 @@ namespace Ceritar.TT3LightDLL.Classes
             }
             catch (Exception ex)
             {
-                sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
         }
 

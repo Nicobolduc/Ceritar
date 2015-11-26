@@ -51,6 +51,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="frmCeritarApp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCeritarApp.Designer.cs">
+      <DependentUpon>frmCeritarApp.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmGenericList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -71,7 +77,15 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="sclsGenList.cs" />
+    <EmbeddedResource Include="frmCeritarApp.resx">
+      <DependentUpon>frmCeritarApp.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmGenericList.resx">
       <DependentUpon>frmGenericList.cs</DependentUpon>
     </EmbeddedResource>
@@ -84,13 +98,9 @@
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -109,6 +119,9 @@
       <Project>{0E2AE8B4-BC97-48E8-AE7F-AE9D8BD7BC2C}</Project>
       <Name>Ceritar.TT3LightDLL</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeleteRow.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -37,6 +37,7 @@
             this.lblCurrentUser = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblDatabase = new System.Windows.Forms.ToolStripStatusLabel();
+            this.applicationCeritarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMain.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.SuspendLayout();
@@ -78,6 +79,8 @@
             // 
             // configurationToolStripMenuItem
             // 
+            this.configurationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.applicationCeritarToolStripMenuItem});
             this.configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
             this.configurationToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
             this.configurationToolStripMenuItem.Text = "Configuration";
@@ -115,6 +118,13 @@
             this.lblDatabase.Size = new System.Drawing.Size(54, 17);
             this.lblDatabase.Text = "database";
             // 
+            // applicationCeritarToolStripMenuItem
+            // 
+            this.applicationCeritarToolStripMenuItem.Name = "applicationCeritarToolStripMenuItem";
+            this.applicationCeritarToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.applicationCeritarToolStripMenuItem.Text = "Application Ceritar";
+            this.applicationCeritarToolStripMenuItem.Click += new System.EventHandler(this.applicationCeritarToolStripMenuItem_Click);
+            // 
             // mdiGeneral
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -147,5 +157,6 @@
         private System.Windows.Forms.ToolStripStatusLabel lblCurrentUser;
         private System.Windows.Forms.ToolStripStatusLabel lblDatabase;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
+        private System.Windows.Forms.ToolStripMenuItem applicationCeritarToolStripMenuItem;
     }
 }

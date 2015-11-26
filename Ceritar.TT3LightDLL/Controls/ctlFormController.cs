@@ -19,7 +19,7 @@ namespace Ceritar.TT3LightDLL.Controls
         }
 
         private int mintItem_ID;
-        private sclsConstants.Form_Mode mintFormMode;
+        private sclsConstants.DML_Mode mintFormMode;
         private bool mblnChangeMade;
         private bool mblnFormIsLoading;
         private bool mblnShowButtonQuitOnly;
@@ -56,7 +56,7 @@ namespace Ceritar.TT3LightDLL.Controls
         }
 
         [Browsable(false)]
-        public sclsConstants.Form_Mode FormMode
+        public sclsConstants.DML_Mode FormMode
         {
             get
             {
@@ -132,7 +132,7 @@ namespace Ceritar.TT3LightDLL.Controls
 
 #region Functions / Subs
 
-        public void ShowForm(sclsConstants.Form_Mode vintFormMode, int rintItem_ID = 0, bool vblnIsModal = false)
+        public void ShowForm(sclsConstants.DML_Mode vintFormMode, int rintItem_ID = 0, bool vblnIsModal = false)
         {
 
             mintFormMode = vintFormMode;
@@ -152,7 +152,7 @@ namespace Ceritar.TT3LightDLL.Controls
                 {
                     if (!vblnIsModal)
                     {
-                        mfrmParent.MdiParent = mfrmParent.MdiParent;
+                        //mfrmParent.MdiParent = MdiClient;
                         
                         mfrmParent.Show();
                     }
@@ -176,7 +176,7 @@ namespace Ceritar.TT3LightDLL.Controls
             }
             catch (Exception ex)
             {
-                sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
             finally
             {
@@ -189,19 +189,19 @@ namespace Ceritar.TT3LightDLL.Controls
 
             switch (mintFormMode)
             {
-                case sclsConstants.Form_Mode.INSERT_MODE:
+                case sclsConstants.DML_Mode.INSERT_MODE:
                     btnApply.Text = "Enregistrer";
                     imgFormMode.Image = Ceritar.TT3LightDLL.Properties.Resources.Add;
 
                     break;
 
-                case sclsConstants.Form_Mode.UPDATE_MODE:
+                case sclsConstants.DML_Mode.UPDATE_MODE:
                     btnApply.Text = "Appliquer";
                     imgFormMode.Image = Ceritar.TT3LightDLL.Properties.Resources.Update;
 
                     break;
 
-                case sclsConstants.Form_Mode.CONSULT_MODE:
+                case sclsConstants.DML_Mode.CONSULT_MODE:
                     btnApply.Enabled = false;
                     btnCancel.Enabled = false;
                     btnQuit.Enabled = true;
@@ -211,7 +211,7 @@ namespace Ceritar.TT3LightDLL.Controls
 
                     break;
 
-                case sclsConstants.Form_Mode.DELETE_MODE:
+                case sclsConstants.DML_Mode.DELETE_MODE:
                     btnApply.Enabled = true;
                     btnCancel.Enabled = false;
                     btnQuit.Enabled = true;
@@ -222,7 +222,7 @@ namespace Ceritar.TT3LightDLL.Controls
                     break;
             }
 
-            if ((mintFormMode == sclsConstants.Form_Mode.INSERT_MODE) || (mintFormMode == sclsConstants.Form_Mode.UPDATE_MODE))
+            if ((mintFormMode == sclsConstants.DML_Mode.INSERT_MODE) || (mintFormMode == sclsConstants.DML_Mode.UPDATE_MODE))
             {
                 if (mblnChangeMade)
                 {
@@ -300,18 +300,18 @@ namespace Ceritar.TT3LightDLL.Controls
 
                     switch (mintFormMode)
                     {
-                        case sclsConstants.Form_Mode.INSERT_MODE:
-                            FormMode = sclsConstants.Form_Mode.UPDATE_MODE;
+                        case sclsConstants.DML_Mode.INSERT_MODE:
+                            FormMode = sclsConstants.DML_Mode.UPDATE_MODE;
                             LoadFormData();
 
                             break;
 
-                        case sclsConstants.Form_Mode.UPDATE_MODE:
+                        case sclsConstants.DML_Mode.UPDATE_MODE:
                             LoadFormData();
 
                             break;
 
-                        case sclsConstants.Form_Mode.DELETE_MODE:
+                        case sclsConstants.DML_Mode.DELETE_MODE:
                             mfrmParent.Close();
 
                             break;

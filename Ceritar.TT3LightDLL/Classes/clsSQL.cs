@@ -13,8 +13,8 @@ namespace Ceritar.TT3LightDLL.Classes
         //Private members
         private bool mblnTransactionStarted;
         private SqlCommand mcSQLCmd;
-
         private SqlTransaction mcSQLTransaction;
+        private sclsConstants.DML_Mode _intDMLCommand;
 
         private System.Collections.Specialized.StringDictionary mColFields;
 
@@ -26,8 +26,10 @@ namespace Ceritar.TT3LightDLL.Classes
             DECIMAL_TYPE = 2,
             VARCHAR_TYPE = 3,
             DATETIME_TYPE = 4,
-            ID_TYPE = 5
+            NRI_TYPE = 5
         }
+
+
 
 
 #region "Properties"
@@ -35,6 +37,12 @@ namespace Ceritar.TT3LightDLL.Classes
         public bool blnTransactionStarted
         {
             get { return mblnTransactionStarted; }
+        }
+
+        public sclsConstants.DML_Mode DLMCommand
+        {
+            get { return _intDMLCommand; }
+            set { _intDMLCommand = value; }
         }
 
 #endregion
@@ -63,14 +71,14 @@ namespace Ceritar.TT3LightDLL.Classes
         
         try 
         {
-            mySQLCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.MySQLConnection);
+            mySQLCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.SQLConnection);
 
             mySQLReader = mySQLCmd.ExecuteReader();
 
         }
         catch (Exception ex)
         {
-            sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+            sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
         }
         finally
         {
@@ -91,7 +99,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
             try
             {
-                mySQLCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.MySQLConnection);
+                mySQLCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.SQLConnection);
 
                 mySQLReader = mySQLCmd.ExecuteReader();
 
@@ -101,7 +109,7 @@ namespace Ceritar.TT3LightDLL.Classes
             catch (Exception ex)
             {
                 blnValidReturn = false;
-                sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
             finally
             {
@@ -125,7 +133,7 @@ namespace Ceritar.TT3LightDLL.Classes
             {
                 strSQL = "SELECT " + vstrField + " AS " + clsApp.GetAppController.str_FixStringForSQL(vstrField) + " FROM " + vstrTable + " WHERE " + vstrWhere;
 
-                mySQLCmd = new SqlCommand(strSQL, clsApp.GetAppController.MySQLConnection);
+                mySQLCmd = new SqlCommand(strSQL, clsApp.GetAppController.SQLConnection);
 
                 mySQLReader = mySQLCmd.ExecuteReader();
 
@@ -139,7 +147,7 @@ namespace Ceritar.TT3LightDLL.Classes
             }
             catch (Exception ex)
             {
-                sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
             finally
             {
@@ -173,10 +181,10 @@ namespace Ceritar.TT3LightDLL.Classes
 
             try
             {
-                mcSQLTransaction = clsApp.GetAppController.MySQLConnection.BeginTransaction(System.Data.IsolationLevel.Serializable);
+                mcSQLTransaction = clsApp.GetAppController.SQLConnection.BeginTransaction(System.Data.IsolationLevel.Serializable);
                 mblnTransactionStarted = true;
                 mcSQLCmd.Transaction = mcSQLTransaction;
-                mcSQLCmd.Connection = clsApp.GetAppController.MySQLConnection;
+                mcSQLCmd.Connection = clsApp.GetAppController.SQLConnection;
                 mcSQLCmd.CommandType = System.Data.CommandType.Text;
 
                 blnValidReturn = true;
@@ -184,7 +192,7 @@ namespace Ceritar.TT3LightDLL.Classes
             catch (Exception ex)
             {
                 blnValidReturn = false;
-                sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
 
             return blnValidReturn;
@@ -211,7 +219,7 @@ namespace Ceritar.TT3LightDLL.Classes
             catch (Exception ex)
             {
                 blnValidReturn = false;
-                sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
             finally
             {
@@ -261,7 +269,7 @@ namespace Ceritar.TT3LightDLL.Classes
                             vstrValue = vstrValue.ToString();
 
                             break;
-                        case clsSQL.MySQL_FieldTypes.ID_TYPE:
+                        case clsSQL.MySQL_FieldTypes.NRI_TYPE:
                             if (vstrValue == "0")
                             {
                                 vstrValue = "NULL";
@@ -296,18 +304,20 @@ namespace Ceritar.TT3LightDLL.Classes
             catch (Exception ex)
             {
                 blnValidReturn = false;
-                sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
 
             return blnValidReturn;
         }
 
-        public bool bln_ADOInsert(string vstrTable, ref int rintNewItem_ID)
+        public bool bln_ADOInsert(string vstrTable, out int rintNewItem_ID)
         {
             bool blnValidReturn = false;
             string strSQL = string.Empty;
             string strFields = string.Empty;
             string strValues = string.Empty;
+
+            rintNewItem_ID = 0;
 
             strSQL = " INSERT INTO " + vstrTable + Environment.NewLine;
 
@@ -328,9 +338,9 @@ namespace Ceritar.TT3LightDLL.Classes
 
                 mcSQLCmd.ExecuteNonQuery();
 
-                mcSQLCmd.CommandText = "SELECT LAST_INSERT_ID()";
+                mcSQLCmd.CommandText = "SELECT @@IDENTITY";
 
-                rintNewItem_ID = (Int32) mcSQLCmd.ExecuteScalar();
+                rintNewItem_ID = (int) mcSQLCmd.ExecuteScalar();
 
                 mColFields.Clear();
 
@@ -340,7 +350,7 @@ namespace Ceritar.TT3LightDLL.Classes
             catch (Exception ex)
             {
                 blnValidReturn = false;
-                sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
 
             return blnValidReturn;
@@ -376,7 +386,7 @@ namespace Ceritar.TT3LightDLL.Classes
             catch (Exception ex)
             {
                 blnValidReturn = false;
-                sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
             finally
             {
@@ -407,7 +417,7 @@ namespace Ceritar.TT3LightDLL.Classes
             catch (Exception ex)
             {
                 blnValidReturn = false;
-                sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
 
             return blnValidReturn;
@@ -431,7 +441,7 @@ namespace Ceritar.TT3LightDLL.Classes
             catch (Exception ex)
             {
                 blnValidReturn = false;
-                sclsErrorsLog.WriteToErrorLog(ex.Message, ex.StackTrace, ex.Source);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
             finally
             {
