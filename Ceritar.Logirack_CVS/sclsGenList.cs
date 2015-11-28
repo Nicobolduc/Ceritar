@@ -11,16 +11,16 @@ namespace Ceritar.Logirack_CVS
         //Enums
         public enum GeneralLists_ID
         {
-            EXPENSE_LIST_ID = 1
+            CERITAR_APPLICATION_LIST_NRI = 1
         }
 
         public enum GeneralList_GridCapID
         {
-            EXPENSE_CAP = 1
+            CERITAR_APPLICATION_CAP_NRI = 2
         }
 
 
-        #region "Functions / Subs"
+#region "Functions / Subs"
 
         public static void ShowGenList(GeneralLists_ID vList_ID)
         {
@@ -33,18 +33,17 @@ namespace Ceritar.Logirack_CVS
                
                 switch (vList_ID)
                 {
-                    //case GeneralLists_ID.EXPENSE_LIST_ID:
-                    //    strSQL = strGetExpenseList_SQL();
-                    //    strListGenTitle = " - Dépenses";
-                    //    //TODO caption pour ca
-                    //    frmGenList.mintGridTag = Convert.ToString(GeneralList_GridCapID.EXPENSE_CAP);
-                    //    frmGenList.SetFormToOpenName = frmExpense.Name;
+                    case GeneralLists_ID.CERITAR_APPLICATION_LIST_NRI:
+                        strSQL = strGetList_CeritarApplication_SQL();
+                        strListGenTitle = " - Fiche d'une application de Ceritar";
+                        //TODO caption pour ca
+                        frmGenList.mintGridTag = ((int) GeneralList_GridCapID.CERITAR_APPLICATION_CAP_NRI).ToString();
+                        frmGenList.SetFormToOpenName = typeof(frmCeritarApp).Name;
 
-                    //    break;
+                        break;
 
                     default:
                         break;
-                    //Do nothing
 
                 }
 
@@ -55,7 +54,7 @@ namespace Ceritar.Logirack_CVS
                     frmGenList.Text = frmGenList.Text + strListGenTitle;
                     frmGenList.MdiParent = mdiGeneral.ActiveForm;
 
-                    //frmGenList.formController.ShowForm(mConstants.Form_Mode.CONSULT_MODE);
+                    frmGenList.formController.ShowForm(sclsConstants.DML_Mode.CONSULT_MODE);
 
                     //if (My.Forms.mdiGeneral.GetGenListChildCount == 0)
                     //{
@@ -76,29 +75,32 @@ namespace Ceritar.Logirack_CVS
             }
         }
 
-        #endregion
+#endregion
 
 
-        #region "SQL Queries"
+#region "SQL Queries"
 
-        private static string strGetExpenseList_SQL(string vstrWhere = null)
+        private static string strGetList_CeritarApplication_SQL(string vstrWhere = null)
         {
             string strSQL = string.Empty;
 
-            strSQL = strSQL + "  SELECT Expense.Exp_ID, " + Environment.NewLine;
+            strSQL = strSQL + " SELECT CerApp.CeA_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.CeA_Name, " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.CeA_Desc " + Environment.NewLine;
 
-
+            strSQL = strSQL + " FROM CerApp " + Environment.NewLine;   
 
             if (vstrWhere != string.Empty)
             {
+                strSQL = strSQL + vstrWhere + Environment.NewLine;
             }
 
-            strSQL = strSQL + "  ORDER BY Expense.Exp_Name " + Environment.NewLine;
+            strSQL = strSQL + "  ORDER BY CerApp.CeA_Name " + Environment.NewLine;
 
             return strSQL;
         }
 
-        #endregion
+#endregion
 
     }
 }

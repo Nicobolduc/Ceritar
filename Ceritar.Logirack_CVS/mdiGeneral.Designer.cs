@@ -33,11 +33,11 @@
             this.installationsActivesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.versionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuCerApp = new System.Windows.Forms.ToolStripMenuItem();
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.lblCurrentUser = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblDatabase = new System.Windows.Forms.ToolStripStatusLabel();
-            this.applicationCeritarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMain.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.SuspendLayout();
@@ -80,10 +80,17 @@
             // configurationToolStripMenuItem
             // 
             this.configurationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.applicationCeritarToolStripMenuItem});
+            this.mnuCerApp});
             this.configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
             this.configurationToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
             this.configurationToolStripMenuItem.Text = "Configuration";
+            // 
+            // mnuCerApp
+            // 
+            this.mnuCerApp.Name = "mnuCerApp";
+            this.mnuCerApp.Size = new System.Drawing.Size(173, 22);
+            this.mnuCerApp.Text = "Application Ceritar";
+            this.mnuCerApp.Click += new System.EventHandler(this.mnuCerApp_Click);
             // 
             // statusBar
             // 
@@ -118,13 +125,6 @@
             this.lblDatabase.Size = new System.Drawing.Size(54, 17);
             this.lblDatabase.Text = "database";
             // 
-            // applicationCeritarToolStripMenuItem
-            // 
-            this.applicationCeritarToolStripMenuItem.Name = "applicationCeritarToolStripMenuItem";
-            this.applicationCeritarToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.applicationCeritarToolStripMenuItem.Text = "Application Ceritar";
-            this.applicationCeritarToolStripMenuItem.Click += new System.EventHandler(this.applicationCeritarToolStripMenuItem_Click);
-            // 
             // mdiGeneral
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -135,6 +135,7 @@
             this.IsMdiContainer = true;
             this.Name = "mdiGeneral";
             this.Text = "Logirack CVS";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.mdiGeneral_FormClosing);
             this.Load += new System.EventHandler(this.mdiGeneral_Load);
             this.mnuMain.ResumeLayout(false);
@@ -157,6 +158,6 @@
         private System.Windows.Forms.ToolStripStatusLabel lblCurrentUser;
         private System.Windows.Forms.ToolStripStatusLabel lblDatabase;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
-        private System.Windows.Forms.ToolStripMenuItem applicationCeritarToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mnuCerApp;
     }
 }

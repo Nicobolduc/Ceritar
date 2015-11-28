@@ -91,17 +91,18 @@ namespace Ceritar.TT3LightDLL.Classes
         return mySQLReader;
         }
 
-        public static bool bln_ADOExecute(string vstrSQL)
+        public bool bln_ADOExecute(string vstrSQL)
         {
             bool blnValidReturn = false;
-            SqlCommand mySQLCmd = null;
-            SqlDataReader mySQLReader = null;
+            //SqlCommand mySQLCmd = null;
+            //SqlDataReader mySQLReader = null;
 
             try
             {
-                mySQLCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.SQLConnection);
+                mcSQLCmd.CommandText = vstrSQL; //= new SqlCommand(vstrSQL, clsApp.GetAppController.SQLConnection);
 
-                mySQLReader = mySQLCmd.ExecuteReader();
+                //mySQLReader = mcSQLCmd.ExecuteReader();
+                mcSQLCmd.ExecuteNonQuery();
 
                 blnValidReturn = true;
 
@@ -113,10 +114,10 @@ namespace Ceritar.TT3LightDLL.Classes
             }
             finally
             {
-                if ((mySQLCmd != null))
-                {
-                    mySQLCmd.Dispose();
-                }
+                //if ((mySQLCmd != null))
+                //{
+                //    mySQLCmd.Dispose();
+                //}
             }
 
             return blnValidReturn;
@@ -340,7 +341,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
                 mcSQLCmd.CommandText = "SELECT @@IDENTITY";
 
-                rintNewItem_ID = (int) mcSQLCmd.ExecuteScalar();
+                Int32.TryParse(mcSQLCmd.ExecuteScalar().ToString(), out rintNewItem_ID);
 
                 mColFields.Clear();
 
@@ -427,15 +428,17 @@ namespace Ceritar.TT3LightDLL.Classes
         {
             bool blnValidReturn = false;
             string strSQL = string.Empty;
-            clsSQL cSQL = new clsSQL();
+            //clsSQL cSQL = new clsSQL();
 
             try
             {
-                cSQL.bln_BeginTransaction();
+                //TODO
+                //cSQL.bln_BeginTransaction();
 
-                strSQL = "DELETE FROM " + vstrForeignTableName + " WHERE " + vstrForeignKeyName + " = " + vintForeignKeyValue;
+                //strSQL = "DELETE FROM " + vstrForeignTableName + " WHERE " + vstrForeignKeyName + " = " + vintForeignKeyValue;
 
-                blnValidReturn = bln_ADOExecute(strSQL);
+                //blnValidReturn = cSQL.bln_ADOExecute(strSQL);
+                blnValidReturn = true;
 
             }
             catch (Exception ex)
@@ -445,7 +448,7 @@ namespace Ceritar.TT3LightDLL.Classes
             }
             finally
             {
-                cSQL.bln_EndTransaction(false);
+                //cSQL.bln_EndTransaction(false);
             }
 
             if (!blnValidReturn)

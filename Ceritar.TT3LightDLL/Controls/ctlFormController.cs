@@ -12,12 +12,6 @@ namespace Ceritar.TT3LightDLL.Controls
     {
 
         //Private members
-        public ctlFormController()
-        {
-            InitializeComponent();
-            SubscribeToEvents();
-        }
-
         private int mintItem_ID;
         private sclsConstants.DML_Mode mintFormMode;
         private bool mblnChangeMade;
@@ -38,6 +32,29 @@ namespace Ceritar.TT3LightDLL.Controls
         public event ValidateFormEventHandler ValidateForm;
         public delegate void SaveDataEventHandler(SaveDataEventArgs eventArgs);
         public event SaveDataEventHandler SaveData;
+
+
+        public ctlFormController()
+        {
+            InitializeComponent();
+            SubscribeToEvents();
+
+            this.PropertyChanged += ctlFormController_PropertyChanged;
+        }
+
+        void ctlFormController_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (mblnShowButtonQuitOnly) {
+
+                imgFormMode.Visible = false;
+                btnCancel.Visible = false;
+                btnApply.Visible = false;
+            } else {
+                imgFormMode.Visible = true;
+                btnCancel.Visible = true;
+                btnApply.Visible = true;
+            }
+        }
 
 
 #region Properties
@@ -130,6 +147,13 @@ namespace Ceritar.TT3LightDLL.Controls
 #endregion
 
 
+        //event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+        //{
+        //    add { this.Visible = false; ; }
+        //    remove { this.Visible = false; ; }
+        //}
+
+
 #region Functions / Subs
 
         public void ShowForm(sclsConstants.DML_Mode vintFormMode, int rintItem_ID = 0, bool vblnIsModal = false)
@@ -186,18 +210,17 @@ namespace Ceritar.TT3LightDLL.Controls
 
         private void SetVisualStyle()
         {
-
             switch (mintFormMode)
             {
                 case sclsConstants.DML_Mode.INSERT_MODE:
                     btnApply.Text = "Enregistrer";
-                    imgFormMode.Image = Ceritar.TT3LightDLL.Properties.Resources.Add;
+                    imgFormMode.Image = Ceritar.TT3LightDLL.Properties.Resources.AddItem;
 
                     break;
 
                 case sclsConstants.DML_Mode.UPDATE_MODE:
                     btnApply.Text = "Appliquer";
-                    imgFormMode.Image = Ceritar.TT3LightDLL.Properties.Resources.Update;
+                    imgFormMode.Image = Ceritar.TT3LightDLL.Properties.Resources.ModifyItem;
 
                     break;
 
@@ -207,7 +230,7 @@ namespace Ceritar.TT3LightDLL.Controls
                     btnQuit.Enabled = true;
 
                     btnApply.Text = "Appliquer";
-                    imgFormMode.Image = Ceritar.TT3LightDLL.Properties.Resources.Consult;
+                    imgFormMode.Image = Ceritar.TT3LightDLL.Properties.Resources.ConsultItem;
 
                     break;
 
@@ -217,10 +240,12 @@ namespace Ceritar.TT3LightDLL.Controls
                     btnQuit.Enabled = true;
 
                     btnApply.Text = "Supprimer";
-                    imgFormMode.Image = Ceritar.TT3LightDLL.Properties.Resources.Delete;
-
+                    imgFormMode.Image = Ceritar.TT3LightDLL.Properties.Resources.DeleteItem;
+                    
                     break;
             }
+            imgFormMode.BackgroundImageLayout = ImageLayout.Zoom;
+            imgFormMode.SizeMode = PictureBoxSizeMode.Zoom;
 
             if ((mintFormMode == sclsConstants.DML_Mode.INSERT_MODE) || (mintFormMode == sclsConstants.DML_Mode.UPDATE_MODE))
             {
@@ -382,7 +407,9 @@ namespace Ceritar.TT3LightDLL.Controls
         //End Sub
 
 
-       
+
+
+
     }
 
 

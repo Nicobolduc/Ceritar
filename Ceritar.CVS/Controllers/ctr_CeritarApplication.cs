@@ -17,15 +17,46 @@ namespace Ceritar.CVS.Controllers
             mcView = vView;
         }
 
-        public string strGetListe_Modules(int vintCerApp_NRI)
+        public string strGetDataLoad_SQL(int vintCeA_NRI)
         {
             string strSQL = string.Empty;
 
-            strSQL = strSQL + " SELECT AppModule.ApM_NRI, " + Environment.NewLine;
+            strSQL = strSQL + " SELECT CerApp.CeA_TS, " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.CeA_Name, " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.CeA_Desc, " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.ApD_NRI " + Environment.NewLine;
+
+            strSQL = strSQL + " FROM CerApp " + Environment.NewLine;
+
+            strSQL = strSQL + " WHERE CerApp.CeA_NRI = " + vintCeA_NRI + Environment.NewLine;
+
+            return strSQL;
+        }
+
+        public string strGetListe_Modules_SQL(int vintCerApp_NRI)
+        {
+            string strSQL = string.Empty;
+
+            strSQL = strSQL + " SELECT Action = " + (int)sclsConstants.DML_Mode.NO_MODE + ", " + Environment.NewLine;
+            strSQL = strSQL + "        AppModule.ApM_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        AppModule.ApM_TS, " + Environment.NewLine;
             strSQL = strSQL + "        AppModule.ApM_Desc " + Environment.NewLine;
+
             strSQL = strSQL + " FROM AppModule " + Environment.NewLine;
+
             strSQL = strSQL + " WHERE AppModule.CeA_NRI = " + vintCerApp_NRI + Environment.NewLine;
+
+            return strSQL;
+        }
+
+        public string strGetListe_Domains_SQL()
+        {
+            string strSQL = string.Empty;
+
+            strSQL = strSQL + " SELECT AppDomain.ApD_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        AppDomain.ApD_Code " + Environment.NewLine;
+
+            strSQL = strSQL + " FROM AppDomain " + Environment.NewLine;
 
             return strSQL;
         }
@@ -35,10 +66,12 @@ namespace Ceritar.CVS.Controllers
             try
             {
                 mcCerApp = new Models.Module_Configuration.mod_CeritarApplication();
+                mcCerApp.CeritarApplication_NRI = mcView.GetCerApp_NRI();
                 mcCerApp.Name = mcView.GetName();
                 mcCerApp.Description = mcView.GetDescription();
                 mcCerApp.LstModules = mcView.GetLstModules();
                 mcCerApp.Action = mcView.GetDML_Mode();
+                mcCerApp.Domaine_NRI = mcView.GetDomain_NRI();
 
                 mcActionResult = mcCerApp.Validate();
             }
@@ -53,8 +86,6 @@ namespace Ceritar.CVS.Controllers
         {
             try
             {
-                
-
                 mcActionResult = mcCerApp.Save();
             }
             catch (Exception ex)

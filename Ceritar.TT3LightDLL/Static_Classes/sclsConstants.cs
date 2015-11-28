@@ -11,10 +11,11 @@ namespace Ceritar.TT3LightDLL.Static_Classes
         //Data manipulation language
         public enum DML_Mode
         {
-            CONSULT_MODE = 0,
-            INSERT_MODE = 1,
-            UPDATE_MODE = 2,
-            DELETE_MODE = 3
+            NO_MODE = 0,
+            CONSULT_MODE = 1,
+            INSERT_MODE = 2,
+            UPDATE_MODE = 3,
+            DELETE_MODE = 4
         }
 
         public enum Error_Message

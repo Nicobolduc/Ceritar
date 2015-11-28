@@ -34,12 +34,12 @@ namespace Ceritar.TT3LightDLL.Controls
             this.btnApply = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.imgFormMode = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)this.imgFormMode).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgFormMode)).BeginInit();
             this.SuspendLayout();
-            //
-            //btnQuit
-            //
-            this.btnQuit.Anchor = (System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
+            // 
+            // btnQuit
+            // 
+            this.btnQuit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnQuit.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnQuit.Location = new System.Drawing.Point(246, 5);
             this.btnQuit.Name = "btnQuit";
@@ -47,10 +47,11 @@ namespace Ceritar.TT3LightDLL.Controls
             this.btnQuit.TabIndex = 22;
             this.btnQuit.Text = "Fermer";
             this.btnQuit.UseVisualStyleBackColor = true;
-            //
-            //btnApply
-            //
-            this.btnApply.Anchor = (System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
+            this.btnQuit.Click += new System.EventHandler(this.btnQuit_Click);
+            // 
+            // btnApply
+            // 
+            this.btnApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnApply.Enabled = false;
             this.btnApply.Location = new System.Drawing.Point(84, 5);
             this.btnApply.Name = "btnApply";
@@ -58,10 +59,11 @@ namespace Ceritar.TT3LightDLL.Controls
             this.btnApply.TabIndex = 21;
             this.btnApply.Text = "Enregistrer";
             this.btnApply.UseVisualStyleBackColor = true;
-            //
-            //btnCancel
-            //
-            this.btnCancel.Anchor = (System.Windows.Forms.AnchorStyles)(System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
+            this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.Enabled = false;
             this.btnCancel.Location = new System.Drawing.Point(165, 5);
             this.btnCancel.Name = "btnCancel";
@@ -69,40 +71,36 @@ namespace Ceritar.TT3LightDLL.Controls
             this.btnCancel.TabIndex = 23;
             this.btnCancel.Text = "Annuler";
             this.btnCancel.UseVisualStyleBackColor = true;
-            //
-            //imgFormMode
-            //
-            this.imgFormMode.Image = Ceritar.TT3LightDLL.Properties.Resources.Add; 
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // imgFormMode
+            // 
+            this.imgFormMode.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.imgFormMode.Image = global::Ceritar.TT3LightDLL.Properties.Resources.AddItem;
             this.imgFormMode.Location = new System.Drawing.Point(5, 0);
             this.imgFormMode.Name = "imgFormMode";
             this.imgFormMode.Size = new System.Drawing.Size(36, 33);
-            this.imgFormMode.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.imgFormMode.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.imgFormMode.TabIndex = 24;
             this.imgFormMode.TabStop = false;
-            //
-            //ctlFormControler
-            //
+            // 
+            // ctlFormController
+            // 
             this.Controls.Add(this.imgFormMode);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnQuit);
             this.Controls.Add(this.btnApply);
-            this.Name = "ctlFormControler";
+            this.Name = "ctlFormController";
             this.Size = new System.Drawing.Size(324, 33);
-            ((System.ComponentModel.ISupportInitialize)this.imgFormMode).EndInit();
+            this.LocationChanged += new System.EventHandler(this.ctlFormControler_LocationChanged);
+            this.Move += new System.EventHandler(this.ctlFormControler_Move);
+            ((System.ComponentModel.ISupportInitialize)(this.imgFormMode)).EndInit();
             this.ResumeLayout(false);
 
-            //INSTANT C# NOTE: Converted design-time event handler wireups:
-            btnApply.Click += new System.EventHandler(btnApply_Click);
-            btnCancel.Click += new System.EventHandler(btnCancel_Click);
-            btnQuit.Click += new System.EventHandler(btnQuit_Click);
-            this.LocationChanged += new System.EventHandler(ctlFormControler_LocationChanged);
-            this.Move += new System.EventHandler(ctlFormControler_Move);
-            //this.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(ctlFormControler_PropertyChanged);
         }
         internal System.Windows.Forms.Button btnQuit;
         internal System.Windows.Forms.Button btnApply;
         internal System.Windows.Forms.Button btnCancel;
-        internal System.Windows.Forms.PictureBox imgFormMode;
 
 
         private bool EventsSubscribed = false;
@@ -118,5 +116,7 @@ namespace Ceritar.TT3LightDLL.Controls
         }
 
         #endregion
+
+        private System.Windows.Forms.PictureBox imgFormMode;
     }
 }

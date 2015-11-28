@@ -3,6 +3,7 @@ using Ceritar.TT3LightDLL.Static_Classes;
 using Ceritar.TT3LightDLL.Classes;
 using System.Windows.Forms;
 using System.Reflection;
+using Ceritar.TT3LightDLL.Controls;
 
 namespace Ceritar.Logirack_CVS
 {
@@ -31,7 +32,15 @@ namespace Ceritar.Logirack_CVS
             
 	        mListToOpen = vstrGenList_ID;
 
+            mcGrdList = new clsFlexGridWrapper();
+
+            btnRefresh.Click += btnRefresh_Click;
         }
+
+        //void btnRefresh_Click()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
 #endregion
 
@@ -57,7 +66,7 @@ namespace Ceritar.Logirack_CVS
         private bool blnOpenForm(sclsConstants.DML_Mode vFormMode)
         {
             bool blnValidReturn = true;
-            Form frmToOpen = null;
+            IFormController frmToOpen = null;
             string strFormName = string.Empty;
             int intItem_ID = 0;
 
@@ -65,7 +74,7 @@ namespace Ceritar.Logirack_CVS
             {
                 strFormName = typeof(mdiGeneral).Namespace + "." + mstrFormToOpenName;
 
-                frmToOpen = (Form)System.Reflection.Assembly.GetEntryAssembly().CreateInstance(strFormName, true);
+                frmToOpen = (IFormController) System.Reflection.Assembly.GetEntryAssembly().CreateInstance(strFormName, true);
 
                 if (grdList.Row > 0)
                 {
@@ -76,20 +85,21 @@ namespace Ceritar.Logirack_CVS
                 switch (vFormMode)
                 {
                     case sclsConstants.DML_Mode.INSERT_MODE:
-                        Type delegateType = typeof(frmVersionRevision).GetEvent("ev").EventHandlerType;
-                        MethodInfo invoke = delegateType.GetMethod("Invoke");
-                       
-                        //p.ShowForm(vFormMode, 0, mblnChildFormIsModal);
+
+                        frmToOpen.ShowForm(vFormMode, 0, mblnChildFormIsModal);
                         
                         break;
-                    case sclsConstants.DML_Mode.UPDATE_MODE:
-                        //frmToOpen.formController.ShowForm(vFormMode, intItem_ID, mblnChildFormIsModal);
 
+                    case sclsConstants.DML_Mode.UPDATE_MODE:
+                        frmToOpen.ShowForm(vFormMode, intItem_ID, mblnChildFormIsModal);
+       
                         break;
+
+                    case sclsConstants.DML_Mode.CONSULT_MODE:
                     case sclsConstants.DML_Mode.DELETE_MODE:
                         clsApp.GetAppController.DisableAllFormControls((Form)frmToOpen, null, null);
                         
-                        //frmToOpen.formController.ShowForm(vFormMode, intItem_ID, mblnChildFormIsModal);
+                        frmToOpen.ShowForm(vFormMode, intItem_ID, mblnChildFormIsModal);
 
                         break;
                 }
@@ -156,6 +166,100 @@ namespace Ceritar.Logirack_CVS
             return blnValidReturn;
         }
 
+        private bool pfblnGrdList_Load()
+        {
+            bool blnValidReturn = false;
+
+            blnValidReturn = mcGrdList.bln_FillData(mstrGridSQL);
+
+            return blnValidReturn;
+        }
+
 #endregion
+
+
+        private void formController_LoadData(TT3LightDLL.Controls.LoadDataEventArgs eventArgs)
+        {
+            bool blnValidReturn = false;
+            Button placeHolder = null;
+
+            grdList.Tag = mintGridTag;
+
+            if (!mcGrdList.bln_Init(ref grdList, ref placeHolder, ref placeHolder))
+            { }
+            else if (!pfblnGrdList_Load())
+            { }
+            else
+            {
+                blnValidReturn = true;
+            }
+
+            if (!blnValidReturn)
+            {
+                this.Close();
+            }
+        }
+
+        private void grdList_DoubleClick(object sender, EventArgs e)
+        {
+            if (grdList.Rows.Count > 1 & grdList.RowSel > 0) {
+
+                blnOpenForm(sclsConstants.DML_Mode.UPDATE_MODE);
+            }
+        }
+
+        private void btnConsult_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                blnOpenForm(sclsConstants.DML_Mode.CONSULT_MODE);
+            }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                blnOpenForm(sclsConstants.DML_Mode.INSERT_MODE);
+            }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                blnOpenForm(sclsConstants.DML_Mode.UPDATE_MODE);
+            }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                blnOpenForm(sclsConstants.DML_Mode.DELETE_MODE);
+            }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+        }
+
+        private void btnRefresh_Click() //(object sender, EventArgs e)
+        {
+            pfblnGrdList_Load();
+        }
+
     }
 }

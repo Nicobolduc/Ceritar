@@ -5,6 +5,8 @@ namespace Ceritar.CVS.Controllers.Interfaces
 {
     public interface ICeritarApp
     {
+        int GetCerApp_NRI();
+        int GetDomain_NRI();
         string GetName();
         string GetDescription();
         List<string> GetLstModules();

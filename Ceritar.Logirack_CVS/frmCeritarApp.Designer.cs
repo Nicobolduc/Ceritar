@@ -39,6 +39,8 @@
             this.btnGrdAdd = new System.Windows.Forms.Button();
             this.grdModules = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.cboDomain = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdModules)).BeginInit();
@@ -81,7 +83,7 @@
             this.groupBox1.Controls.Add(this.btnGrdDel);
             this.groupBox1.Controls.Add(this.btnGrdAdd);
             this.groupBox1.Controls.Add(this.grdModules);
-            this.groupBox1.Location = new System.Drawing.Point(5, 64);
+            this.groupBox1.Location = new System.Drawing.Point(5, 91);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(371, 174);
             this.groupBox1.TabIndex = 12;
@@ -91,19 +93,21 @@
             // btnGrdDel
             // 
             this.btnGrdDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnGrdDel.Location = new System.Drawing.Point(337, 55);
+            this.btnGrdDel.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdDel.Image")));
+            this.btnGrdDel.Location = new System.Drawing.Point(333, 60);
             this.btnGrdDel.Name = "btnGrdDel";
-            this.btnGrdDel.Size = new System.Drawing.Size(30, 30);
+            this.btnGrdDel.Size = new System.Drawing.Size(35, 35);
             this.btnGrdDel.TabIndex = 14;
             this.toolTip1.SetToolTip(this.btnGrdDel, "Supprimer la ligne");
             this.btnGrdDel.UseVisualStyleBackColor = true;
             // 
             // btnGrdAdd
             // 
-            this.btnGrdAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnGrdAdd.Location = new System.Drawing.Point(337, 19);
+            this.btnGrdAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnGrdAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdAdd.Image")));
+            this.btnGrdAdd.Location = new System.Drawing.Point(333, 19);
             this.btnGrdAdd.Name = "btnGrdAdd";
-            this.btnGrdAdd.Size = new System.Drawing.Size(30, 30);
+            this.btnGrdAdd.Size = new System.Drawing.Size(35, 35);
             this.btnGrdAdd.TabIndex = 13;
             this.toolTip1.SetToolTip(this.btnGrdAdd, "Ajouter une ligne");
             this.btnGrdAdd.UseVisualStyleBackColor = true;
@@ -118,12 +122,30 @@
             this.grdModules.Name = "grdModules";
             this.grdModules.Rows.Count = 2;
             this.grdModules.Rows.DefaultSize = 18;
-            this.grdModules.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.Row;
+            this.grdModules.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
             this.grdModules.Size = new System.Drawing.Size(327, 149);
             this.grdModules.StyleInfo = resources.GetString("grdModules.StyleInfo");
             this.grdModules.TabIndex = 12;
             this.grdModules.Tag = "1";
+            this.grdModules.DoubleClick += new System.EventHandler(this.grdModules_DoubleClick);
             this.grdModules.Validated += new System.EventHandler(this.grdModules_Validated);
+            // 
+            // cboDomain
+            // 
+            this.cboDomain.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboDomain.FormattingEnabled = true;
+            this.cboDomain.Location = new System.Drawing.Point(70, 64);
+            this.cboDomain.Name = "cboDomain";
+            this.cboDomain.Size = new System.Drawing.Size(153, 21);
+            this.cboDomain.TabIndex = 14;
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(2, 67);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(62, 17);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "Domaine:";
             // 
             // formController
             // 
@@ -132,7 +154,7 @@
             this.formController.FormIsLoading = false;
             this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.CONSULT_MODE;
             this.formController.Item_ID = 0;
-            this.formController.Location = new System.Drawing.Point(5, 241);
+            this.formController.Location = new System.Drawing.Point(5, 276);
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
             this.formController.Size = new System.Drawing.Size(373, 33);
@@ -145,7 +167,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(380, 274);
+            this.ClientSize = new System.Drawing.Size(380, 309);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.cboDomain);
             this.Controls.Add(this.formController);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.txtDescription);
@@ -153,9 +177,12 @@
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.lblNom);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "frmCeritarApp";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Définition d\'une application Ceritar";
+            this.Load += new System.EventHandler(this.frmCeritarApp_Load);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdModules)).EndInit();
             this.ResumeLayout(false);
@@ -175,5 +202,7 @@
         private System.Windows.Forms.ToolTip toolTip1;
         public TT3LightDLL.Controls.ctlFormController formController;
         public C1.Win.C1FlexGrid.C1FlexGrid grdModules;
+        private System.Windows.Forms.ComboBox cboDomain;
+        private System.Windows.Forms.Label label2;
     }
 }

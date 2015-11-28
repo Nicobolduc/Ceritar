@@ -41,7 +41,7 @@ namespace Ceritar.TT3LightDLL.Static_Classes
             strMessageToShow = strMessageToShow + vcException.StackTrace + Environment.NewLine;
 
 
-           //System.Windows.Forms.MessageBox.Show(strMessageToShow, "An error occurred", System.Windows.Forms.MessageBoxButtons.OK);
+            System.Windows.Forms.MessageBox.Show(strMessageToShow, "An error occurred", System.Windows.Forms.MessageBoxButtons.OK);
 #endif
 
         }

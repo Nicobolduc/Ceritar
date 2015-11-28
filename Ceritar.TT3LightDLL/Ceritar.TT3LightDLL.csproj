@@ -56,10 +56,17 @@
     <Compile Include="Controls\ctlFormController.Designer.cs">
       <DependentUpon>ctlFormController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ctlRefresh.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ctlRefresh.Designer.cs">
+      <DependentUpon>ctlRefresh.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\IFormController.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Static_Classes\sclsConstants.cs" />
     <Compile Include="Static_Classes\sclsErrorsLog.cs" />
@@ -67,22 +74,31 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\ctlFormController.resx">
+      <DependentUpon>ctlFormController.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ctlRefresh.resx">
+      <DependentUpon>ctlRefresh.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Add.png" />
+    <None Include="Resources\AddItem.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Update.png" />
+    <None Include="Resources\ModifyItem.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Delete.png" />
+    <None Include="Resources\ConsultItem.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Consult.png" />
+    <None Include="Resources\DeleteItem.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Refresh.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

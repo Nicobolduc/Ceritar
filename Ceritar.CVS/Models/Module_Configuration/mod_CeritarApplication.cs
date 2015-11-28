@@ -11,7 +11,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
         private int _intCeritarApplication_NRI;
         private string _strName;
         private string _strDescription;
-        private AppDomain _domain;
+        private int _domain_NRI;
         private List<string> _lstModules;
 
         public enum AppDomain
@@ -40,6 +40,12 @@ namespace Ceritar.CVS.Models.Module_Configuration
 
 #region "Properties"
 
+        public int CeritarApplication_NRI
+        {
+            get { return _intCeritarApplication_NRI; }
+            set { _intCeritarApplication_NRI = value; }
+        }
+
         internal string Name
         {
             get { return _strName; }
@@ -52,10 +58,10 @@ namespace Ceritar.CVS.Models.Module_Configuration
             set { _strDescription = value; }
         }
 
-        internal AppDomain Domaine
+        internal int Domaine_NRI
         {
-            get { return _domain; }
-            set { _domain = value; }
+            get { return _domain_NRI; }
+            set { _domain_NRI = value; }
         }
 
         internal List<string> LstModules
@@ -101,7 +107,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ErrorCode.MODULES_LIST_MANDATORY);
                         }
-                        else if (_domain == null)
+                        else if (_domain_NRI == null)
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ErrorCode.DOMAIN_MANDATORY);
                         }
@@ -114,9 +120,13 @@ namespace Ceritar.CVS.Models.Module_Configuration
 
                     case sclsConstants.DML_Mode.DELETE_MODE:
 
-                        if (!clsSQL.bln_CheckReferenceIntegrity("CeA", "CeA_NRI", _intCeritarApplication_NRI))
+                        if (!clsSQL.bln_CheckReferenceIntegrity("CerApp", "CeA_NRI", _intCeritarApplication_NRI))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_REFERENCE_INTEGRITY, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
+                        }
+                        else
+                        {
+                            mcActionResults.SetValid();
                         }
 
                         break;
@@ -145,8 +155,12 @@ namespace Ceritar.CVS.Models.Module_Configuration
                     case sclsConstants.DML_Mode.INSERT_MODE:
 
                         if (! pfblnCeA_AddFields())
-                        {} else if (! mcSQL.bln_ADOInsert("CerApp", out _intCeritarApplication_NRI)) 
-                        {} else {
+                        { }
+                        else if (!mcSQL.bln_ADOInsert("CerApp", out _intCeritarApplication_NRI))
+                        { }
+                        else if (!pfblnListModules_Save()) 
+                        { } 
+                        else {
                             blnValidReturn = true;
                         }
  
@@ -154,14 +168,29 @@ namespace Ceritar.CVS.Models.Module_Configuration
 
                     case sclsConstants.DML_Mode.UPDATE_MODE:
 
-                        pfblnCeA_AddFields();
-                        blnValidReturn = mcSQL.bln_ADOUpdate("CerApp", "CeA_NRI = " + _intCeritarApplication_NRI);
+                        if (!pfblnCeA_AddFields())
+                        { }
+                        else if (!mcSQL.bln_ADOUpdate("CerApp", "CerApp.CeA_NRI = " + _intCeritarApplication_NRI))
+                        { }
+                        else if (!pfblnListModules_Save())
+                        { }
+                        else
+                        {
+                            blnValidReturn = true;
+                        }
 
                         break;
 
                     case sclsConstants.DML_Mode.DELETE_MODE:
 
-                        blnValidReturn = mcSQL.bln_ADODelete("CerApp", "CeA_NRI = " + _intCeritarApplication_NRI);
+                        if (!mcSQL.bln_ADODelete("AppModule", "AppModule.CeA_NRI = " + _intCeritarApplication_NRI))
+                        { }
+                        else if (!mcSQL.bln_ADODelete("CerApp", "CerApp.CeA_NRI = " + _intCeritarApplication_NRI))
+                        { }
+                        else
+                        {
+                            blnValidReturn = true;
+                        }
 
                         break;
                 }
@@ -197,7 +226,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
                 { }
                 else if (!mcSQL.bln_AddField("CeA_Desc", _strDescription, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("ApD_NRI", (int)_domain, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("ApD_NRI", _domain_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else {
                     blnValidReturn = true;

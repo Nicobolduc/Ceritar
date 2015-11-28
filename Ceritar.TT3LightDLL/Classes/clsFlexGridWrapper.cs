@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Collections.Generic;
 using Ceritar.TT3LightDLL;
 using Ceritar.TT3LightDLL.Static_Classes;
@@ -14,6 +15,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
     public class clsFlexGridWrapper
     {
+        //Docuumentation available here: //http://helpcentral.componentone.com/nethelp/c1flexgrid/topic132.html
         //Row 0 is the Header and col 0 is the first small fixed col
         
 	    //private members
@@ -23,7 +25,7 @@ namespace Ceritar.TT3LightDLL.Classes
 	    private bool mblnHasNoActionColumn;
 
 	    //Private class members
-	    private C1FlexGrid mGrdFlex;
+        private C1FlexGrid mGrdFlex;
 
         private object mfrmGridParent;
         private Button mbtnAddRow;
@@ -33,7 +35,7 @@ namespace Ceritar.TT3LightDLL.Classes
         private CellStyle csRemoveRow;
 
 	    //Public events
-	    public event SetDisplayEventHandler SetDisplay;
+	    public event SetDisplayEventHandler SetGridDisplay;
 	    public delegate void SetDisplayEventHandler();
 	    public event ValidateGridDataEventHandler ValidateGridData;
 	    public delegate void ValidateGridDataEventHandler(ValidateGridEventArgs eventArgs);
@@ -52,29 +54,29 @@ namespace Ceritar.TT3LightDLL.Classes
 
         public clsFlexGridWrapper()
         {
-            SetDisplay += SyncfusionGridController_SetDisplay;
+            SetGridDisplay += clsFlexGridWrapper_SetDisplay;
         }
 
 
 #region "Properties"
 
-        private C1FlexGrid mGrdSync
+        private C1FlexGrid GrdFlex
         {
             get { return mGrdFlex; }
             set
             {
                 if (mGrdFlex != null)
                 {
-                    mGrdFlex.CellChanged -= mGrdSync_CellsChanged;
-                    mGrdFlex.CellChecked -= mGrdSync_CheckBoxClick;
-                    mGrdFlex.ComboCloseUp -= GrdSyncController_CurrentCellCloseDropDown;
+                    mGrdFlex.CellChanged -= mGrdFlex_CellsChanged;
+                    mGrdFlex.CellChecked -= mGrdFlex_CheckBoxClick;
+                    mGrdFlex.ComboCloseUp -= GrdFlex_CurrentCellCloseDropDown;
                 }
                 mGrdFlex = value;
                 if (mGrdFlex != null)
                 {
-                    mGrdFlex.CellChanged += mGrdSync_CellsChanged;
-                    mGrdFlex.CellChecked += mGrdSync_CheckBoxClick;
-                    mGrdFlex.ComboCloseUp += GrdSyncController_CurrentCellCloseDropDown;
+                    mGrdFlex.CellChanged += mGrdFlex_CellsChanged;
+                    mGrdFlex.CellChecked += mGrdFlex_CheckBoxClick;
+                    mGrdFlex.ComboCloseUp += GrdFlex_CurrentCellCloseDropDown;
                 }
             }
         }
@@ -164,7 +166,7 @@ namespace Ceritar.TT3LightDLL.Classes
 	    public bool ChangeMade {
 		    set {
                
-			    if (mGrdSync[mGrdFlex.Row, mintDefaultActionCol].ToString().Equals(GridRowActions.INSERT_ACTION.ToString())) {
+			    if (mGrdFlex[mGrdFlex.Row, mintDefaultActionCol].ToString().Equals(GridRowActions.INSERT_ACTION.ToString())) {
 
 				    if (value == true) {
 
@@ -182,7 +184,7 @@ namespace Ceritar.TT3LightDLL.Classes
 		    }
 	    }
 
-	    public bool SetNoActionColumn {
+	    public bool HasActionColumn {
 		    set { mblnHasNoActionColumn = value; }
 	    }
 
@@ -215,7 +217,7 @@ namespace Ceritar.TT3LightDLL.Classes
                 mGrdFlex.Cols.Fixed = 1;
                
                 mGrdFlex.SelectionMode = SelectionModeEnum.Row;
-
+                mGrdFlex.AllowEditing = false;
                 mGrdFlex.AllowResizing = AllowResizingEnum.Columns;
 
                 mGrdFlex.BorderStyle = C1.Win.C1FlexGrid.Util.BaseControls.BorderStyleEnum.Fixed3D;
@@ -227,14 +229,14 @@ namespace Ceritar.TT3LightDLL.Classes
                 mGrdFlex.EditOptions = EditFlags.ExitOnLeftRightKeys;
                 mGrdFlex.FocusRect = FocusRectEnum.Inset;
 
-			    if (SetDisplay != null) {
-				    SetDisplay();
+			    if (SetGridDisplay != null) {
+				    SetGridDisplay();
 			    }
 
                 csNewRow = mGrdFlex.Styles["NewRow"];
                 csNewRow.BackColor = System.Drawing.Color.LightGreen;
 
-                csRemoveRow = mGrdFlex.Styles["RemoveRow"];
+                csRemoveRow = mGrdFlex.Styles.Add("RemoveRow");
                 csRemoveRow.BackColor = System.Drawing.Color.Red;
 
 		    } catch (Exception ex) {
@@ -247,55 +249,53 @@ namespace Ceritar.TT3LightDLL.Classes
 		    return blnValidReturn;
 	    }
 
-	    public bool bln_FillData(string vstrSQL)
+        public bool bln_FillData(string vstrSQL) 
 	    {
 		    bool blnValidReturn = true;
 		    SqlCommand sqlCmd = default(SqlCommand);
 		    SqlDataReader mySQLReader = null;
             System.Data.DataTable myDataTable = new System.Data.DataTable();
 		    string strGridCaption = string.Empty;
-            //object[,] dataTableArray = null;
-            SqlDataAdapter dataAdapter = new SqlDataAdapter();
+            string[] dataTableArray = null;
 
 		    try {
-                //blnBrowseOnly = mGrdFlex.Read;
-                //mGrdFlex.BrowseOnly = false;
+                mGrdFlex.BeginUpdate();
 
-			    //Retrieve grid data from database
                 sqlCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.SQLConnection);
 
 			    mySQLReader = sqlCmd.ExecuteReader();
 
 			    myDataTable.Load(mySQLReader);
 
-                //dataTableArray = new object[myDataTable.Rows.Count, myDataTable.Columns.Count + 1];
+                mGrdFlex.Rows.Count = myDataTable.Rows.Count;
 
-			    //Set the grid data
+                dataTableArray = new string[myDataTable.Columns.Count + 1];
 
-                //for (int intTableRowIndex = 0; intTableRowIndex <= myDataTable.Rows.Count - 1; intTableRowIndex++) {
+			    //Add rows to grid with data
+                for (int intTableRowIndex = 0; intTableRowIndex <= myDataTable.Rows.Count - 1; intTableRowIndex++)
+                {
+                    for (int intTableColIndex = 0; intTableColIndex <= myDataTable.Columns.Count - 1; intTableColIndex++)
+                    {
+                        dataTableArray[intTableColIndex + 1] = myDataTable.Rows[intTableRowIndex][intTableColIndex].ToString();
+                    }
 
-                //    for (int intTableColIndex = 0; intTableColIndex <= myDataTable.Columns.Count - 1; intTableColIndex++) {
-                //        dataTableArray[intTableRowIndex, intTableColIndex] = myDataTable.Rows[intTableRowIndex][intTableColIndex];
-                //    }
-                //}
+                    mGrdFlex.AddItem(dataTableArray);
+                }
 
-			    //Reset the grid
-               // mGrdFlex.Clear(); //ClearWhatSettings.flexClearData
-			    mGrdFlex.BeginUpdate();
+                if (mGrdFlex.Cols.Count != myDataTable.Columns.Count)
+                {
+                    blnValidReturn = false;
+                }  
 
-			    mGrdFlex.Cols.Count = myDataTable.Columns.Count;
-
-                dataAdapter.SelectCommand = sqlCmd;
-                dataAdapter.Fill(myDataTable);
-
-                mGrdFlex.DataSource = dataAdapter;
+                //Binded
+                //mGrdFlex.DataSource = myDataTable;
 
 			    mySQLReader.Dispose();
 
 			    blnValidReturn = blnSetColsDisplay();
 
-			    if (SetDisplay != null) {
-				    SetDisplay();
+			    if (SetGridDisplay != null) {
+				    SetGridDisplay();
 			    }
 
 			    if (mGrdFlex.Rows.Count > 1) {
@@ -369,11 +369,11 @@ namespace Ceritar.TT3LightDLL.Classes
 		    try {
                 strGridCaption = clsApp.GetAppController.str_GetCaption(Convert.ToInt32(mGrdFlex.Tag), clsApp.GetAppController.cUser.GetUserLanguage);
 
-			    lstColumns = Strings.Split(strGridCaption, "|");            
+                lstColumns = Strings.Split(strGridCaption.Insert(0, "|"), "|"); //The first fixed col must not be inclued in the caption!
                 
 			    mGrdFlex.Cols.Count = lstColumns.Length;
 
-			    //Definition of columns         
+			    //Definition of headers columns         
                 for (int colHeaderCpt = 1; colHeaderCpt <= lstColumns.Length - 1; colHeaderCpt++)
                 {
 				    if (lstColumns[colHeaderCpt] == string.Empty) {
@@ -392,6 +392,7 @@ namespace Ceritar.TT3LightDLL.Classes
                                 individualColStyle.TextAlign = TextAlignEnum.CenterCenter;
 
 							    break;
+
 						    case '>':
                                 individualColStyle.TextAlign = TextAlignEnum.RightCenter;
 
@@ -410,23 +411,6 @@ namespace Ceritar.TT3LightDLL.Classes
 		    }
 
 		    return blnValidReturn;
-	    }
-
-	    public void SetSelectedCell(int vintRowIndex, int vintColIndex, bool vblnShowDropDown = false)
-	    {
-
-            //if (vintRowIndex <= mGrdFlex.RowCount && vintColIndex <= mGrdFlex.ColCount && vintRowIndex > 0 & vintColIndex > 0) {
-            //    mGrdFlex.CurrentCell.MoveTo(GridRangeInfo.Cell(vintRowIndex, vintColIndex), GridSetCurrentCellOptions.SetFocus & GridSetCurrentCellOptions.ScrollInView);
-
-
-            //    if (vblnShowDropDown) {
-            //        mGrdFlex.get
-            //    } else {
-            //        mGrdFlex.CurrentCell.BeginEdit();
-            //    }
-            //} else {
-            //    //Do nothing
-            //}
 	    }
 
 	    public void SetColType_CheckBox(int vintColumnIndex)
@@ -473,7 +457,6 @@ namespace Ceritar.TT3LightDLL.Classes
 
 	    public void SetColType_DateTimePicker(int vintColumnIndex, bool vblnNullable)
 	    {
-
 		    try {
                 CellStyle individualColStyle = mGrdFlex.Styles.Add("DateTime" + vintColumnIndex);
 
@@ -512,6 +495,10 @@ namespace Ceritar.TT3LightDLL.Classes
 	    private void btnAddRow_Click(object sender, EventArgs e)
 	    {
             AddRow();
+            //System.Data.DataRow cRow = ((DataTable) mGrdFlex.DataSource).NewRow();
+            
+            //((DataTable)mGrdFlex.DataSource).Rows.InsertAt(cRow, mGrdFlex.Rows.Count - 1);
+            //((DataTable)mGrdFlex.DataSource).Rows.Add(0);
 	    }
 
 	    private void btnDeleteRow_Click(object sender, EventArgs e)
@@ -560,24 +547,24 @@ namespace Ceritar.TT3LightDLL.Classes
             return saveGridDataArgs.SaveSuccessful;
         }
 
-	    private void SyncfusionGridController_SetDisplay()
+	    private void clsFlexGridWrapper_SetDisplay()
 	    {
-		    blnSetColsDisplay();
+            blnSetColsDisplay();
 	    }
 
-        private void GrdSyncController_CurrentCellCloseDropDown(object sender, RowColEventArgs e)
+        private void GrdFlex_CurrentCellCloseDropDown(object sender, RowColEventArgs e)
         {
             throw new NotImplementedException();
         }
 
-        private void mGrdSync_CheckBoxClick(object sender, RowColEventArgs e)
+        private void mGrdFlex_CheckBoxClick(object sender, RowColEventArgs e)
         {
             //mfrmGridParent.formController.ChangeMade = true;
         }
 
-        private void mGrdSync_CellsChanged(object sender, RowColEventArgs e)
+        private void mGrdFlex_CellsChanged(object sender, RowColEventArgs e)
         {
-            if (!mblnHasNoActionColumn && mGrdFlex[mGrdFlex.Row, mintDefaultActionCol].ToString().Equals(GridRowActions.INSERT_ACTION.ToString())) //&& !mGrdSync(GetSelectedRow, GetSelectedCol).ReadOnly
+            if (!mblnHasNoActionColumn && mGrdFlex[mGrdFlex.Row, mintDefaultActionCol].ToString().Equals(GridRowActions.INSERT_ACTION.ToString()))
             {
                 mGrdFlex.Rows[mGrdFlex.Row].Style.BackColor = System.Drawing.Color.Yellow;
                 mGrdFlex[mGrdFlex.Row, mintDefaultActionCol] = GridRowActions.UPDATE_ACTION;
