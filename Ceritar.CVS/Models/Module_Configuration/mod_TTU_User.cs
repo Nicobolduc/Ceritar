@@ -1,7 +1,7 @@
 ﻿
 namespace Ceritar.CVS.Models.Module_Configuration
 {
-    internal class mod_User
+    internal class mod_TTU_User
     {
         //Model attributes
         private string _strUserCode;
@@ -9,7 +9,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
         private string _strFirstname;
         private string _strLastname;
         private string _strEmail;
-        private mod_UerGroup _cUserGroup;
+        private mod_TTG_UerGroup _cUserGroup;
 
         //Working variables
 

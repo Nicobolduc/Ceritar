@@ -30,8 +30,6 @@ namespace Ceritar.TT3LightDLL.Classes
         }
 
 
-
-
 #region "Properties"
 
         public bool blnTransactionStarted
@@ -65,43 +63,38 @@ namespace Ceritar.TT3LightDLL.Classes
 
         public static SqlDataReader ADOSelect(string vstrSQL) 
         {
-
-        SqlCommand mySQLCmd = null;
-        SqlDataReader mySQLReader = null;
+            SqlCommand cSQLCmd = null;
+            SqlDataReader cSQLReader = null;
         
-        try 
-        {
-            mySQLCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.SQLConnection);
-
-            mySQLReader = mySQLCmd.ExecuteReader();
-
-        }
-        catch (Exception ex)
-        {
-            sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
-        }
-        finally
-        {
-            if ((mySQLCmd != null))
+            try 
             {
-                mySQLCmd.Dispose();
-            }
-        }
+                cSQLCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.SQLConnection);
 
-        return mySQLReader;
+                cSQLReader = cSQLCmd.ExecuteReader();
+            }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                //if ((cSQLReader != null)) cSQLReader.Dispose();
+            }
+
+            return cSQLReader;
         }
 
         public bool bln_ADOExecute(string vstrSQL)
         {
             bool blnValidReturn = false;
-            //SqlCommand mySQLCmd = null;
-            //SqlDataReader mySQLReader = null;
+            //SqlCommand cSQLCmd = null;
+            //SqlDataReader cSQLReader = null;
 
             try
             {
                 mcSQLCmd.CommandText = vstrSQL; //= new SqlCommand(vstrSQL, clsApp.GetAppController.SQLConnection);
 
-                //mySQLReader = mcSQLCmd.ExecuteReader();
+                //cSQLReader = mcSQLCmd.ExecuteReader();
                 mcSQLCmd.ExecuteNonQuery();
 
                 blnValidReturn = true;
@@ -114,10 +107,7 @@ namespace Ceritar.TT3LightDLL.Classes
             }
             finally
             {
-                //if ((mySQLCmd != null))
-                //{
-                //    mySQLCmd.Dispose();
-                //}
+                //if ((cSQLReader != null)) cSQLReader.Dispose();
             }
 
             return blnValidReturn;
@@ -126,25 +116,22 @@ namespace Ceritar.TT3LightDLL.Classes
         public static string str_ADOSingleLookUp(string vstrField, string vstrTable, string vstrWhere)
         {
             string strReturnValue = string.Empty;
-            SqlCommand mySQLCmd = null;
-            SqlDataReader mySQLReader = null;
+            SqlCommand cSQLCmd = null;
+            SqlDataReader cSQLReader = null;
             string strSQL = string.Empty;
 
             try
             {
                 strSQL = "SELECT " + vstrField + " AS " + clsApp.GetAppController.str_FixStringForSQL(vstrField) + " FROM " + vstrTable + " WHERE " + vstrWhere;
 
-                mySQLCmd = new SqlCommand(strSQL, clsApp.GetAppController.SQLConnection);
+                cSQLCmd = new SqlCommand(strSQL, clsApp.GetAppController.SQLConnection);
 
-                mySQLReader = mySQLCmd.ExecuteReader();
+                cSQLReader = cSQLCmd.ExecuteReader();
 
-                if (mySQLReader.Read())
+                if (cSQLReader.Read())
                 {
-                    strReturnValue = mySQLReader[vstrField].ToString();
+                    strReturnValue = cSQLReader[vstrField].ToString();
                 }
-
-                mySQLCmd.Dispose();
-
             }
             catch (Exception ex)
             {
@@ -152,16 +139,38 @@ namespace Ceritar.TT3LightDLL.Classes
             }
             finally
             {
-                if ((mySQLReader != null))
-                {
-                    mySQLReader.Dispose();
-                }
+                if ((cSQLReader != null)) cSQLReader.Dispose();
             }
 
             return strReturnValue;
         }
 
-        #endregion
+        public static bool bln_ADOValid_TS(string vstrTableName, string vstrNRI_FieldName, int vintItem_NRI, string vstrTS_FieldName, int vintItem_TS)
+        {
+            bool blnValidReturn = false;
+            SqlCommand cSQLCmd = null;
+            SqlDataReader cSQLReader = null;
+
+            try
+            {
+
+                blnValidReturn = true;
+
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                if ((cSQLReader != null)) cSQLReader.Dispose();
+            }
+
+            return blnValidReturn;
+        }
+
+#endregion
 
 
 #region "Functions / Subs"
@@ -370,8 +379,6 @@ namespace Ceritar.TT3LightDLL.Classes
             {
                 foreach (string strKey in mColFields.Keys)
                 {
-                    //mColFields.Item(strKey).ToString()()
-
                     strFields = strFields + Convert.ToString((strFields == string.Empty ? string.Empty : ",")) + strKey.ToString() + "=" + mColFields[strKey].ToString();
                 }
 

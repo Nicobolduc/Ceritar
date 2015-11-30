@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace Ceritar.CVS.Models.Module_ActivesInstallations
 {
-    internal class mod_Revision
+    internal class mod_Rev_Revision
     {
         //Model attributes
-        private mod_HierarchyTemplate _cTemplateSource;
-        private mod_Version _cVersion;
-        private mod_User _cCreatedByUser;
+        private mod_Tpl_HierarchyTemplate _cTemplateSource;
+        private mod_Ver_Version _cVersion;
+        private mod_TTU_User _cCreatedByUser;
         private List<string> _lstModifications;
         private string _strLocation_Release;
         private string _strLocation_Scripts;
@@ -21,19 +21,19 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
 #region "Properties"
 
-        internal mod_HierarchyTemplate TemplateSource
+        internal mod_Tpl_HierarchyTemplate TemplateSource
         {
             get { return _cTemplateSource; }
             set { _cTemplateSource = value; }
         }
 
-        internal mod_Version Version
+        internal mod_Ver_Version Version
         {
             get { return _cVersion; }
             set { _cVersion = value; }
         }
 
-        internal mod_User CreatedByUser
+        internal mod_TTU_User CreatedByUser
         {
             get { return _cCreatedByUser; }
             set { _cCreatedByUser = value; }

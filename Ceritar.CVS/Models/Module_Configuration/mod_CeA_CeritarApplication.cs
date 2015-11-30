@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
 using Ceritar.TT3LightDLL.Static_Classes;
 using Ceritar.TT3LightDLL.Classes;
+using Ceritar.CVS.Controllers;
 using System;
 
 namespace Ceritar.CVS.Models.Module_Configuration
 {
-    internal class mod_CeritarApplication : mod_IBase
+    internal class mod_CeA_CeritarApplication
     {
         //Model attributes
         private int _intCeritarApplication_NRI;
+        private int _intCeritarApplication_TS;
         private string _strName;
         private string _strDescription;
         private int _domain_NRI;
@@ -24,17 +26,9 @@ namespace Ceritar.CVS.Models.Module_Configuration
             Interne = 6
         }
 
-        public enum ErrorCode
-        {
-            NAME_MANDATORY = 1,
-            DESCRIPTION_MANDATORY = 2,
-            DOMAIN_MANDATORY = 3,
-            MODULES_LIST_MANDATORY = 4
-        }
-
-        //Working variables
+        //mod_IBase
         private clsActionResults mcActionResults = new clsActionResults();
-        private sclsConstants.DML_Mode mintAction;
+        private sclsConstants.DML_Mode mintDML_Action;
         private clsSQL mcSQL;
 
 
@@ -44,6 +38,12 @@ namespace Ceritar.CVS.Models.Module_Configuration
         {
             get { return _intCeritarApplication_NRI; }
             set { _intCeritarApplication_NRI = value; }
+        }
+
+        public int CeritarApplication_TS
+        {
+            get { return _intCeritarApplication_TS; }
+            set { _intCeritarApplication_TS = value; }
         }
 
         internal string Name
@@ -70,17 +70,20 @@ namespace Ceritar.CVS.Models.Module_Configuration
             set { _lstModules = value; }
         }
 
-        clsActionResults mod_IBase.ActionResults
+        internal clsActionResults ActionResults
         {
-            get
-            {
-                return mcActionResults;
-            }
+            get { return mcActionResults; }
         }
 
-        internal sclsConstants.DML_Mode Action
+        internal sclsConstants.DML_Mode DML_Action
         {
-            set { mintAction = value; }
+            get { return mintDML_Action; }
+            set { mintDML_Action = value; }
+        }
+
+        internal clsSQL SetcSQL
+        {
+            set { mcSQL = value; }
         }
 
 #endregion
@@ -90,26 +93,30 @@ namespace Ceritar.CVS.Models.Module_Configuration
         {
             try
             {
-                switch (mintAction)
+                switch (mintDML_Action)
                 {
                     case sclsConstants.DML_Mode.INSERT_MODE:
                     case sclsConstants.DML_Mode.UPDATE_MODE:
 
                         if (string.IsNullOrEmpty(_strName))
                         {
-                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ErrorCode.NAME_MANDATORY);
+                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_CeritarApplication.ErrorCode_CeA.NAME_MANDATORY);
                         }
                         else if (string.IsNullOrEmpty(_strDescription))
                         {
-                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ErrorCode.DESCRIPTION_MANDATORY);
+                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_CeritarApplication.ErrorCode_CeA.DESCRIPTION_MANDATORY);
                         }
                         else if (_lstModules == null || _lstModules.Count == 0)
                         {
-                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ErrorCode.MODULES_LIST_MANDATORY);
+                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_CeritarApplication.ErrorCode_CeA.MODULES_LIST_MANDATORY);
                         }
-                        else if (_domain_NRI == null)
+                        else if (_domain_NRI <= 0)
                         {
-                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ErrorCode.DOMAIN_MANDATORY);
+                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_CeritarApplication.ErrorCode_CeA.DOMAIN_MANDATORY);
+                        }
+                        else if(!clsSQL.bln_ADOValid_TS("CerApp", "CeA_NRI", _intCeritarApplication_NRI, "CeA_TS", _intCeritarApplication_TS))
+                        {
+                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_TIMESTAMP, clsActionResults.BaseErrorCode.INVALID_TIMESTAMP);
                         }
                         else
                         {
@@ -141,16 +148,18 @@ namespace Ceritar.CVS.Models.Module_Configuration
             return mcActionResults;
         }
 
-        internal clsActionResults Save()
+        internal bool Save()
         {
             bool blnValidReturn = false;
 
             try
             {
+                mcActionResults.SetValid();
+
                 mcSQL = new clsSQL();
                 mcSQL.bln_BeginTransaction();
 
-                switch (mintAction)
+                switch (mintDML_Action)
                 {
                     case sclsConstants.DML_Mode.INSERT_MODE:
 
@@ -206,12 +215,16 @@ namespace Ceritar.CVS.Models.Module_Configuration
                 {
                     mcActionResults.SetInvalid(sclsConstants.Error_Message.ERROR_SAVE_MSG, clsActionResults.BaseErrorCode.ERROR_SAVE);
                 }
+                else if (blnValidReturn & !mcActionResults.IsValid)
+                {
+                    blnValidReturn = false;
+                }
 
                 mcSQL.bln_EndTransaction(blnValidReturn);
                 mcSQL = null;
             }
 
-            return mcActionResults;
+            return blnValidReturn;
         }
 
         private bool pfblnCeA_AddFields()
@@ -243,6 +256,10 @@ namespace Ceritar.CVS.Models.Module_Configuration
                 {
                     mcActionResults.SetInvalid(sclsConstants.Error_Message.ERROR_SAVE_MSG, clsActionResults.BaseErrorCode.ERROR_SAVE);
                 }
+                else if (blnValidReturn & !mcActionResults.IsValid)
+                {
+                    blnValidReturn = false;
+                }
             }
 
             return blnValidReturn;
@@ -255,13 +272,16 @@ namespace Ceritar.CVS.Models.Module_Configuration
 
             try
             {
-                for (int intIndex = 0; intIndex < _lstModules.Count; intIndex++)
+                blnValidReturn = mcSQL.bln_ADODelete("AppModule", "CeA_NRI = " + _intCeritarApplication_NRI);
+
+                
+                for (int intIndex = 0; intIndex < _lstModules.Count & blnValidReturn; intIndex++)
                 {
                     blnValidReturn = false;
 
                     if (!mcSQL.bln_RefreshFields())
                     { }
-                    else if (!mcSQL.bln_AddField("ApM_Desc", _strDescription, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                    else if (!mcSQL.bln_AddField("ApM_Desc", _lstModules[intIndex], clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                     { }
                     else if (!mcSQL.bln_AddField("CeA_NRI", _intCeritarApplication_NRI, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                     { }
@@ -285,6 +305,10 @@ namespace Ceritar.CVS.Models.Module_Configuration
                 if (!blnValidReturn & mcActionResults.IsValid)
                 {
                     mcActionResults.SetInvalid(sclsConstants.Error_Message.ERROR_SAVE_MSG, clsActionResults.BaseErrorCode.ERROR_SAVE);
+                }
+                else if (blnValidReturn & !mcActionResults.IsValid)
+                {
+                    blnValidReturn = false;
                 }
             }
 

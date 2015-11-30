@@ -27,11 +27,12 @@ namespace Ceritar.TT3LightDLL.Static_Classes
 
         public enum Validation_Message
         {
-            MANDATORY_VALUE = 6,
-            NUMERIC_VALUE = 10,
-            UNIQUE_ATTRIBUTE = 17,
-            MANDATORY_GRID = 30,
-            INVALID_REFERENCE_INTEGRITY = 123
+            MANDATORY_VALUE = 3,
+            NUMERIC_VALUE = 4,
+            UNIQUE_ATTRIBUTE = 5,
+            MANDATORY_GRID = 6,
+            INVALID_REFERENCE_INTEGRITY = 7,
+            INVALID_TIMESTAMP = 10
         }
     }
 }

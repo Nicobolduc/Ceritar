@@ -63,6 +63,12 @@
     <Compile Include="frmGenericList.Designer.cs">
       <DependentUpon>frmGenericList.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmTemplate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTemplate.Designer.cs">
+      <DependentUpon>frmTemplate.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmVersionRevision.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,6 +94,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmGenericList.resx">
       <DependentUpon>frmGenericList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTemplate.resx">
+      <DependentUpon>frmTemplate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmVersionRevision.resx">
       <DependentUpon>frmVersionRevision.cs</DependentUpon>

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Ceritar.CVS.Models.Module_Template
 {
-    internal class mod_Script : mod_HierarchyComponent
+    internal class mod_Script : mod_HiCo_HierarchyComponent
     {
         //Model attributes
         private String _strLocation;
-        private ushort _intSequenceNo;
+        private ushort _intScriptSequenceNo;
 
         //Working variables
 
@@ -20,13 +20,23 @@ namespace Ceritar.CVS.Models.Module_Template
             set { _strLocation = value; }
         }
 
-        internal ushort SequenceNo
+        internal ushort ScriptSequenceNo
         {
-            get { return _intSequenceNo; }
-            set { _intSequenceNo = value; }
+            get { return _intScriptSequenceNo; }
+            set { _intScriptSequenceNo = value; }
         }
 
 #endregion
 
+
+        internal clsActionResults Validate()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal bool Save()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

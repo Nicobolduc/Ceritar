@@ -166,7 +166,7 @@ namespace Ceritar.TT3LightDLL.Controls
             {
                 this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
 
-                mfrmParent = base.FindForm();
+                mfrmParent = this.FindForm(); //TODO Chu rendu ici
 
                 SetVisualStyle();
 

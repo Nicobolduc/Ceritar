@@ -6,50 +6,80 @@ using System;
 
 namespace Ceritar.CVS.Models.Module_Template
 {
-    internal class mod_Folder : mod_HiCo_HierarchyComponent
+    internal class mod_Tpl_HierarchyTemplate
     {
         //Model attributes
-        private FolderType _folderType;
-        private List<mod_HiCo_HierarchyComponent> _lstChildrensComponents;
-        private ushort _intNodeLevel;
+        private int _intTemplate_NRI;
+        private ushort _intTemplate_TS;
+        private string _strTemplateName;
+        private int _templateType;
+        private bool _blnByDefault;
+        private List<mod_HiCo_HierarchyComponent> _lstHierarchyComponents;
 
-        public enum FolderType
+        public enum TemplateType
         {
-            Normal = 1,
-            Executable = 2,
-            TTApp = 3,
-            Script = 4,
-            Other = 5
+            Version = 1,
+            Revision = 2
         }
 
-
-        //Working variables
+        //mod_IBase
+        private clsActionResults mcActionResults = new clsActionResults();
+        private sclsConstants.DML_Mode mintDML_Action;
+        private clsSQL mcSQL;
 
 
 #region "Properties"
 
-        internal FolderType Type
+        internal int Template_NRI
         {
-            get { return _folderType; }
-            set { _folderType = value; }
+            get { return _intTemplate_NRI; }
+            set { _intTemplate_NRI = value; }
         }
 
-        internal List<mod_HiCo_HierarchyComponent> LstChildrensComponents
+        internal ushort Template_TS
         {
-            get { return _lstChildrensComponents; }
-            set { _lstChildrensComponents = value; }
+            get { return _intTemplate_TS; }
+            set { _intTemplate_TS = value; }
         }
 
-        internal mod_HiCo_HierarchyComponent ParentFolder
+        internal string TemplateName
         {
-            get { return ParentComponent; }
-            set { ParentComponent = value; }
+            get { return _strTemplateName; }
+            set { _strTemplateName = value; }
         }
 
-        internal ushort NodeLevel
+        internal int TemplatType
         {
-            get { return _intNodeLevel; }
-            set { _intNodeLevel = value; }
+            get { return _templateType; }
+            set { _templateType = value; }
+        }
+
+        internal bool IsByDefault
+        {
+            get { return _blnByDefault; }
+            set { _blnByDefault = value; }
+        }
+
+        List<mod_HiCo_HierarchyComponent> LstHierarchyComponents
+        {
+            get { return _lstHierarchyComponents; }
+            set { _lstHierarchyComponents = value; }
+        }
+
+        internal clsActionResults ActionResults
+        {
+            get { return mcActionResults; }
+        }
+
+        internal sclsConstants.DML_Mode DML_Action
+        {
+            get { return mintDML_Action; }
+            set { mintDML_Action = value; }
+        }
+
+        internal clsSQL SetcSQL
+        {
+            set { mcSQL = value; }
         }
 
 #endregion
@@ -64,11 +94,19 @@ namespace Ceritar.CVS.Models.Module_Template
                     case sclsConstants.DML_Mode.INSERT_MODE:
                     case sclsConstants.DML_Mode.UPDATE_MODE:
 
-                        if (_folderType == 0)
+                        if (string.IsNullOrEmpty(_strTemplateName))
                         {
-                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Template.ErrorCode_HiCo.FOLDER_TYPE_MANDATORY);
+                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Template.ErrorCode_Tpl.NAME_MANDATORY);
                         }
-                        else if (!clsSQL.bln_ADOValid_TS("HierarchyComp", "HiCo_NRI", _intHierarchyComponent_NRI, "HiCo_TS", _intHierarchyComponent_TS))
+                        else if ((int)_templateType == 0)
+                        {
+                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Template.ErrorCode_Tpl.TEMPLATE_TYPE_MANDATORY);
+                        }
+                        else if (_lstHierarchyComponents == null || _lstHierarchyComponents.Count == 0)
+                        {
+                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Template.ErrorCode_Tpl.HIERARCHY_MANDATORY);
+                        }
+                        else if (!clsSQL.bln_ADOValid_TS("Template", "Tpl_NRI", _intTemplate_NRI, "Tpl_TS", _intTemplate_TS))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_TIMESTAMP, clsActionResults.BaseErrorCode.INVALID_TIMESTAMP);
                         }
@@ -117,9 +155,11 @@ namespace Ceritar.CVS.Models.Module_Template
                 {
                     case sclsConstants.DML_Mode.INSERT_MODE:
 
-                        if (!pfblnHiCo_AddFields())
+                        if (!pfblnTpl_AddFields())
                         { }
-                        else if (!mcSQL.bln_ADOInsert("HierarchyComp", out _intTemplate_NRI))
+                        else if (!mcSQL.bln_ADOInsert("Template", out _intTemplate_NRI))
+                        { }
+                        else if (!pfblnLists_Save())
                         { }
                         else
                         {
@@ -130,9 +170,11 @@ namespace Ceritar.CVS.Models.Module_Template
 
                     case sclsConstants.DML_Mode.UPDATE_MODE:
 
-                        if (!pfblnHiCo_AddFields())
+                        if (!pfblnTpl_AddFields())
                         { }
-                        else if (!mcSQL.bln_ADOUpdate("HierarchyComp", "HierarchyComp.HiCo_NRI = " + _intTemplate_NRI))
+                        else if (!mcSQL.bln_ADOUpdate("Template", "Template.Tpl_NRI = " + _intTemplate_NRI))
+                        { }
+                        else if (!pfblnLists_Save())
                         { }
                         else
                         {
@@ -143,7 +185,9 @@ namespace Ceritar.CVS.Models.Module_Template
 
                     case sclsConstants.DML_Mode.DELETE_MODE:
 
-                        if (!mcSQL.bln_ADODelete("HierarchyComp", "HierarchyComp.HiCo_NRI = " + _intTemplate_NRI))
+                        if (!pfblnLists_Save())
+                        { }
+                        else if (!mcSQL.bln_ADODelete("Template", "Template.Tpl_NRI = " + _intTemplate_NRI))
                         { }
                         else
                         {
@@ -176,7 +220,7 @@ namespace Ceritar.CVS.Models.Module_Template
             return blnValidReturn;
         }
 
-        private bool pfblnHiCo_AddFields()
+        private bool pfblnTpl_AddFields()
         {
             bool blnValidReturn = false;
 
@@ -184,15 +228,11 @@ namespace Ceritar.CVS.Models.Module_Template
             {
                 if (!mcSQL.bln_RefreshFields())
                 { }
-                else if (!mcSQL.bln_AddField("FoT_NRI", (int)_folderType, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (!mcSQL.bln_AddField("Tpl_Name", _strTemplateName, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("HiCo_IsFolder", 1, clsSQL.MySQL_FieldTypes.BIT_TYPE))
+                else if (!mcSQL.bln_AddField("Tpl_ByDefault", _blnByDefault, clsSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("HiCo_NodeLevel", _intNodeLevel, clsSQL.MySQL_FieldTypes.INT_TYPE))
-                { }
-                else if (!mcSQL.bln_AddField("Tpl_NRI", _intTemplate_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
-                { }
-                else if (!mcSQL.bln_AddField("ACg_NRI", _intAppConfig_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("TeT_NRI", (int)_templateType, clsSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else
                 {
@@ -225,9 +265,8 @@ namespace Ceritar.CVS.Models.Module_Template
 
             try
             {
-                foreach (mod_HiCo_HierarchyComponent cHiCo in _lstChildrensComponents)
+                foreach (mod_HiCo_HierarchyComponent cHiCo in _lstHierarchyComponents)
                 {
-                    cHiCo.ParentComponent = this;
                     cHiCo.SetcSQL = mcSQL;
                     cHiCo.Save();
 

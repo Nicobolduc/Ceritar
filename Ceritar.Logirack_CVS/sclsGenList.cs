@@ -11,12 +11,14 @@ namespace Ceritar.Logirack_CVS
         //Enums
         public enum GeneralLists_ID
         {
-            CERITAR_APPLICATION_LIST_NRI = 1
+            CERITAR_APPLICATION_LIST_NRI = 1,
+            TEMPLATE_LIST_NRI = 2
         }
 
         public enum GeneralList_GridCapID
         {
-            CERITAR_APPLICATION_CAP_NRI = 2
+            CERITAR_APPLICATION_CAP_NRI = 2,
+            TEMPLATE_CAP_NRI = 8
         }
 
 
@@ -34,11 +36,20 @@ namespace Ceritar.Logirack_CVS
                 switch (vList_ID)
                 {
                     case GeneralLists_ID.CERITAR_APPLICATION_LIST_NRI:
-                        strSQL = strGetList_CeritarApplication_SQL();
+                        strSQL = strGetList_CeritarApplications_SQL();
                         strListGenTitle = " - Fiche d'une application de Ceritar";
                         //TODO caption pour ca
                         frmGenList.mintGridTag = ((int) GeneralList_GridCapID.CERITAR_APPLICATION_CAP_NRI).ToString();
                         frmGenList.SetFormToOpenName = typeof(frmCeritarApp).Name;
+
+                        break;
+
+                    case GeneralLists_ID.TEMPLATE_LIST_NRI:
+                        strSQL = strGetList_Templates_SQL();
+                        strListGenTitle = " - Gabarits des installations actives";
+                        //TODO caption pour ca
+                        frmGenList.mintGridTag = ((int)GeneralList_GridCapID.TEMPLATE_CAP_NRI).ToString();
+                        frmGenList.SetFormToOpenName = typeof(frmTemplate).Name;
 
                         break;
 
@@ -80,7 +91,7 @@ namespace Ceritar.Logirack_CVS
 
 #region "SQL Queries"
 
-        private static string strGetList_CeritarApplication_SQL(string vstrWhere = null)
+        private static string strGetList_CeritarApplications_SQL(string vstrWhere = null)
         {
             string strSQL = string.Empty;
 
@@ -96,6 +107,25 @@ namespace Ceritar.Logirack_CVS
             }
 
             strSQL = strSQL + "  ORDER BY CerApp.CeA_Name " + Environment.NewLine;
+
+            return strSQL;
+        }
+
+        private static string strGetList_Templates_SQL(string vstrWhere = null)
+        {
+            string strSQL = string.Empty;
+
+            strSQL = strSQL + " SELECT Template.Tpl_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        Template.Tpl_Name " + Environment.NewLine;
+
+            strSQL = strSQL + " FROM Template " + Environment.NewLine;
+
+            if (vstrWhere != string.Empty)
+            {
+                strSQL = strSQL + vstrWhere + Environment.NewLine;
+            }
+
+            strSQL = strSQL + "  ORDER BY Template.Tpl_Name " + Environment.NewLine;
 
             return strSQL;
         }

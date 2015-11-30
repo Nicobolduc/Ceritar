@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Ceritar.CVS
 {
-    public static class sclsConfigs
+    public static class sclsAppConfigs
     {
         private static String _strRoot_DB_UPGRADE_SCRIPTS_Dir;
         private static string _strRoot_INSTALLATIONS_ACTIVES_Dir;

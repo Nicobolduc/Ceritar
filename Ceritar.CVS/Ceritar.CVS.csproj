@@ -42,20 +42,21 @@
   <ItemGroup>
     <Compile Include="clsActionResults.cs" />
     <Compile Include="Controllers\ctr_CeritarApplication.cs" />
+    <Compile Include="Controllers\ctr_Template.cs" />
     <Compile Include="Controllers\Interfaces\ICeritarApp.cs" />
+    <Compile Include="Controllers\Interfaces\ITemplate.cs" />
     <Compile Include="Models\Module_Template\mod_Folder.cs" />
-    <Compile Include="Models\mod_IBase.cs" />
-    <Compile Include="sclsConfigs.cs" />
+    <Compile Include="sclsAppConfigs.cs" />
     <Compile Include="Controllers\ctr_User.cs" />
-    <Compile Include="Models\Module_Configuration\mod_ClientVersionApp.cs" />
-    <Compile Include="Models\Module_ActivesInstallations\mod_Revision.cs" />
-    <Compile Include="Models\Module_ActivesInstallations\mod_Version.cs" />
-    <Compile Include="Models\Module_Configuration\mod_CeritarApplication.cs" />
-    <Compile Include="Models\Module_Configuration\mod_CeritarClient.cs" />
-    <Compile Include="Models\Module_Configuration\mod_UerGroup.cs" />
-    <Compile Include="Models\Module_Configuration\mod_User.cs" />
-    <Compile Include="Models\Module_Template\mod_HierarchyComponent.cs" />
-    <Compile Include="Models\Module_Template\mod_HierarchyTemplate.cs" />
+    <Compile Include="Models\Module_Configuration\mod_CVA_ClientVersionApp.cs" />
+    <Compile Include="Models\Module_ActivesInstallations\mod_Rev_Revision.cs" />
+    <Compile Include="Models\Module_ActivesInstallations\mod_Ver_Version.cs" />
+    <Compile Include="Models\Module_Configuration\mod_CeA_CeritarApplication.cs" />
+    <Compile Include="Models\Module_Configuration\mod_CeC_CeritarClient.cs" />
+    <Compile Include="Models\Module_Configuration\mod_TTG_UerGroup.cs" />
+    <Compile Include="Models\Module_Configuration\mod_TTU_User.cs" />
+    <Compile Include="Models\Module_Template\mod_HiCo_HierarchyComponent.cs" />
+    <Compile Include="Models\Module_Template\mod_Tpl_HierarchyTemplate.cs" />
     <Compile Include="Models\Module_Template\mod_Script.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -34,8 +34,8 @@ namespace Ceritar.Logirack_CVS
         public frmCeritarApp()
         {
             InitializeComponent();
-
-            mcCtrCeritarApp = new ctr_CeritarApplication((Ceritar.CVS.Controllers.Interfaces.ICeritarApp)this);
+            
+            mcCtrCeritarApp = new ctr_CeritarApplication((Ceritar.CVS.Controllers.Interfaces.ICeritarApp) this);
 
             mcGrdModules = new clsFlexGridWrapper();
             mcGrdModules.SetGridDisplay += new clsFlexGridWrapper.SetDisplayEventHandler(mcGrdModules_SetDisplay);
@@ -44,7 +44,7 @@ namespace Ceritar.Logirack_CVS
         }
 
 
-#region "IFormController"
+#region "Interfaces functions"
 
         List<string> CVS.Controllers.Interfaces.ICeritarApp.GetLstModules()
         {
@@ -60,7 +60,7 @@ namespace Ceritar.Logirack_CVS
 
         string CVS.Controllers.Interfaces.ICeritarApp.GetName()
         {
-            return txtDescription.Text;
+            return txtName.Text;
         }
 
         TT3LightDLL.Static_Classes.sclsConstants.DML_Mode CVS.Controllers.Interfaces.ICeritarApp.GetDML_Mode()
@@ -70,7 +70,7 @@ namespace Ceritar.Logirack_CVS
 
         string CVS.Controllers.Interfaces.ICeritarApp.GetDescription()
         {
-            return txtName.Text;
+            return txtDescription.Text;
         }
 
         int CVS.Controllers.Interfaces.ICeritarApp.GetDomain_NRI()
@@ -83,9 +83,14 @@ namespace Ceritar.Logirack_CVS
             return formController.Item_ID;
         }
 
-        void TT3LightDLL.Controls.IFormController.ShowForm(sclsConstants.DML_Mode vintFormMode, int rintItem_ID, bool vblnIsModal)
+        public int GetCerApp_TS()
         {
-            formController.ShowForm(vintFormMode, rintItem_ID, vblnIsModal);
+            return mintCerApp_TS;
+        }
+
+        TT3LightDLL.Controls.ctlFormController TT3LightDLL.Controls.IFormController.GetFormController()
+        {
+            return this.formController;
         }
 
 #endregion
@@ -95,7 +100,15 @@ namespace Ceritar.Logirack_CVS
         {
             bool blnValidReturn = false;
 
-            blnValidReturn = mcGrdModules.bln_FillData(mcCtrCeritarApp.strGetListe_Modules_SQL(formController.Item_ID));
+            try
+            {
+                blnValidReturn = mcGrdModules.bln_FillData(mcCtrCeritarApp.strGetListe_Modules_SQL(formController.Item_ID));
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }        
 
             return blnValidReturn;
         }
@@ -121,10 +134,7 @@ namespace Ceritar.Logirack_CVS
                 blnValidReturn = true;
             }
 
-            if (!blnValidReturn)
-            {
-                this.Close();
-            }
+            if (!blnValidReturn) this.Close();
         }
 
         private void mcGrdModules_SetDisplay()
@@ -135,6 +145,41 @@ namespace Ceritar.Logirack_CVS
         private void formController_ValidateForm(TT3LightDLL.Controls.ValidateFormEventArgs eventArgs)
         {
             mcActionResults = mcCtrCeritarApp.Validate();
+
+            if (!mcActionResults.IsValid)
+            {
+                switch ((ctr_CeritarApplication.ErrorCode_CeA)mcActionResults.GetErrorCode)
+                {
+                    case ctr_CeritarApplication.ErrorCode_CeA.DESCRIPTION_MANDATORY:
+
+                        txtDescription.Focus();
+                        txtDescription.SelectAll();
+                        break;
+
+                    case ctr_CeritarApplication.ErrorCode_CeA.NAME_MANDATORY:
+
+                        txtName.Focus();
+                        txtName.SelectAll();
+                        break;
+
+                    case ctr_CeritarApplication.ErrorCode_CeA.MODULES_LIST_MANDATORY:
+
+                        btnGrdAdd.Focus();
+                        break;
+
+                    case ctr_CeritarApplication.ErrorCode_CeA.DOMAIN_MANDATORY:
+
+                        cboDomain.Focus();
+                        cboDomain.DroppedDown = true;
+                        break;
+                }
+
+                clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
+            }
+            else
+            {
+                //Do nothing
+            }    
 
             eventArgs.IsValid = mcActionResults.IsValid;
         }
@@ -201,24 +246,69 @@ namespace Ceritar.Logirack_CVS
             {
                 case mintGrdMod_ApM_Description_col:
 
-                    grdModules.StartEditing();
+                    if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE | formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
+                    {
+                        grdModules.StartEditing();
+                        formController.ChangeMade = true;
+                    }
+                    else
+                    {
+                        //Do nothing
+                    }
+
                     break;
             }
         }
 
-        private void frmCeritarApp_Load(object sender, EventArgs e)
+        private void btnGrdDel_MouseUp(object sender, MouseEventArgs e)
         {
-
+            if (grdModules.Row > 0)
+            {
+                grdModules.RemoveItem(grdModules.Row);
+            }
         }
+
+        private void grdModules_Validating(object sender, CancelEventArgs e)
+        {
+            if (mcGrdModules[grdModules.Row, mintGrdMod_ApM_Description_col] == "")
+            {
+                e.Cancel = true;
+                clsApp.GetAppController.ShowMessage((int)sclsConstants.Validation_Message.MANDATORY_GRID);
+            }
+        }
+
+        //private void grdModules_AfterRowColChange(object sender, C1.Win.C1FlexGrid.RangeEventArgs e)
+        //{
+        //    if (mcGrdModules[grdModules.Row, mintGrdMod_Action_col] == ((int)sclsConstants.DML_Mode.INSERT_MODE).ToString())
+        //    {
+        //        grdModules.StartEditing(grdModules.Row, mintGrdMod_Action_col);
+        //    }
+        //}
+
     }
 }
+
+
+
+
+
+#region "Properties"
+
+
+#endregion
 
 #region "IFormController"
 
 
 #endregion
 
-#region "Properties"
+#region "Functions"
+
+
+#endregion
+
+
+#region "Interfaces functions"
 
 
 #endregion

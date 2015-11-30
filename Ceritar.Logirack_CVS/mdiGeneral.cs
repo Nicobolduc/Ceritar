@@ -36,7 +36,7 @@ namespace Ceritar.Logirack_CVS
 
             frmVersionAndRevision.MdiParent = this;
             
-            frmVersionAndRevision.ctrlForm.ShowForm(sclsConstants.DML_Mode.UPDATE_MODE, 0, false);
+            frmVersionAndRevision.formController.ShowForm(sclsConstants.DML_Mode.UPDATE_MODE, 0, false);
         }
 
         private void mdiGeneral_Load(object sender, EventArgs e)
@@ -44,7 +44,7 @@ namespace Ceritar.Logirack_CVS
             main();
 
             lblDatabase.Text =  clsApp.GetAppController.SQLConnection.Database;
-            lblCurrentUser.Text = " Nicolas";
+            lblCurrentUser.Text = "Utilisateur: Nicolas";
         }
 
         private void mdiGeneral_FormClosing(object sender, FormClosingEventArgs e)
@@ -55,6 +55,11 @@ namespace Ceritar.Logirack_CVS
         private void mnuCerApp_Click(object sender, EventArgs e)
         {
             sclsGenList.ShowGenList(sclsGenList.GeneralLists_ID.CERITAR_APPLICATION_LIST_NRI);
+        }
+
+        private void gabaritToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            sclsGenList.ShowGenList(sclsGenList.GeneralLists_ID.TEMPLATE_LIST_NRI);
         }
     }
 }

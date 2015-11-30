@@ -6,7 +6,7 @@ namespace Ceritar.CVS.Controllers
 {
     public class ctr_User
     {
-        private mod_User mcUser = null;
+        private mod_TTU_User mcUser = null;
 
 
 #region "Properties"

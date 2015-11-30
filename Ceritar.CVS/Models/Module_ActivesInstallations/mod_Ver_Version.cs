@@ -4,7 +4,7 @@ using Ceritar.CVS.Models.Module_Configuration;
 
 namespace Ceritar.CVS.Models.Module_ActivesInstallations
 {
-    internal class mod_Version
+    internal class mod_Ver_Version
     {
         //Model attributes
         private string _strCompiledBy;
@@ -13,11 +13,11 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private string _strLocation_TTApp;
         private ushort _intVersionNo;
         private string _strCreationDate;
-        private mod_User _cCreatedByUser;
-        private List<mod_Revision> _lstRevisions;
-        private mod_CeritarApplication _cApplication;
-        private mod_HierarchyTemplate _cTemplateSource;
-        private List<mod_CeritarClient> _lstClientsUsing;
+        private mod_TTU_User _cCreatedByUser;
+        private List<mod_Rev_Revision> _lstRevisions;
+        private mod_CeA_CeritarApplication _cApplication;
+        private mod_Tpl_HierarchyTemplate _cTemplateSource;
+        private List<mod_CeC_CeritarClient> _lstClientsUsing;
 
 
         //Working variables
@@ -62,31 +62,31 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
         }
 
-        internal mod_User CreatedByUser
+        internal mod_TTU_User CreatedByUser
         {
             get { return _cCreatedByUser; }
             set { _cCreatedByUser = value; }
         }
 
-        internal List<mod_Revision> LstRevisions
+        internal List<mod_Rev_Revision> LstRevisions
         {
             get { return _lstRevisions; }
             set { _lstRevisions = value; }
         }
 
-        internal mod_CeritarApplication Application
+        internal mod_CeA_CeritarApplication Application
         {
             get { return _cApplication; }
             set { _cApplication = value; }
         }
 
-        internal mod_HierarchyTemplate TemplateSource
+        internal mod_Tpl_HierarchyTemplate TemplateSource
         {
             get { return _cTemplateSource; }
             set { _cTemplateSource = value; }
         }
 
-        internal List<mod_CeritarClient> LstClientsUsing
+        internal List<mod_CeC_CeritarClient> LstClientsUsing
         {
             get { return _lstClientsUsing; }
             set { _lstClientsUsing = value; }

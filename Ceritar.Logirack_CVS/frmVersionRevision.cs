@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace Ceritar.Logirack_CVS
 {
-    public partial class frmVersionRevision : Form
+    public partial class frmVersionRevision : Form, IFormController
     {
         public frmVersionRevision()
         {
@@ -15,6 +15,11 @@ namespace Ceritar.Logirack_CVS
         public void LoadDataEventHandler(LoadDataEventArgs eventArgs) {
 
             
+        }
+
+        ctlFormController IFormController.GetFormController()
+        {
+            return this.formController;
         }
     }
 }

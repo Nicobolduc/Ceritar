@@ -2,13 +2,13 @@
 
 namespace Ceritar.CVS.Models.Module_Configuration
 {
-    class mod_ClientVersionApp
+    class mod_CVA_ClientVersionApp
     {
         //Model attributes
         private string _strVersionCourante;
         private string _strLicense;
-        private List<mod_CeritarClient> _lstClient;
-        private mod_CeritarApplication _cApplication;
+        private List<mod_CeC_CeritarClient> _lstClient;
+        private mod_CeA_CeritarApplication _cApplication;
         
         //Working variables
 
@@ -27,13 +27,13 @@ namespace Ceritar.CVS.Models.Module_Configuration
             set { _strLicense = value; }
         }
 
-        internal List<mod_CeritarClient> Client
+        internal List<mod_CeC_CeritarClient> Client
         {
             get { return _lstClient; }
             set { _lstClient = value; }
         }
 
-        internal mod_CeritarApplication Application
+        internal mod_CeA_CeritarApplication Application
         {
             get { return _cApplication; }
             set { _cApplication = value; }

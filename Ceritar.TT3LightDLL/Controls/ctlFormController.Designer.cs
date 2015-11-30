@@ -77,7 +77,7 @@ namespace Ceritar.TT3LightDLL.Controls
             // 
             this.imgFormMode.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.imgFormMode.Image = global::Ceritar.TT3LightDLL.Properties.Resources.AddItem;
-            this.imgFormMode.Location = new System.Drawing.Point(5, 0);
+            this.imgFormMode.Location = new System.Drawing.Point(5, -1);
             this.imgFormMode.Name = "imgFormMode";
             this.imgFormMode.Size = new System.Drawing.Size(36, 33);
             this.imgFormMode.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;

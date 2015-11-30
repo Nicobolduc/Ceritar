@@ -2,7 +2,7 @@
 
 namespace Ceritar.CVS.Models.Module_Configuration
 {
-    internal class mod_UerGroup
+    internal class mod_TTG_UerGroup
     {
         //Model attributes
         private string _strGroupCode;
@@ -14,7 +14,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
         private bool _blnRight_HierarchyModification;
         private bool _blnRight_ClientModification;
         private bool _blnRight_ApplicationModification;
-        private List<mod_User> _lstUers;
+        private List<mod_TTU_User> _lstUers;
 
 
         //Working variables
@@ -76,7 +76,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
             set { _blnRight_ApplicationModification = value; }
         }
 
-        internal List<mod_User> LstUers
+        internal List<mod_TTU_User> LstUers
         {
             get { return _lstUers; }
             set { _lstUers = value; }

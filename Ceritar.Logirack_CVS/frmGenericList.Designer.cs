@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmGenericList));
             this.grdList = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.btnAdd = new System.Windows.Forms.Button();
@@ -36,11 +37,13 @@
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnRefresh = new Ceritar.TT3LightDLL.Controls.ctlRefresh();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.grdList)).BeginInit();
             this.SuspendLayout();
             // 
             // grdList
             // 
+            this.grdList.AutoResize = true;
             this.grdList.ColumnInfo = "4,1,0,0,0,90,Columns:0{Width:5;}\t1{Width:94;Caption:\"Latitude\";}\t2{Width:113;Capt" +
     "ion:\"Longitude\";}\t3{Caption:\"Sél.\";}\t";
             this.grdList.ExtendLastCol = true;
@@ -63,6 +66,7 @@
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(35, 35);
             this.btnAdd.TabIndex = 14;
+            this.toolTip.SetToolTip(this.btnAdd, "Ajouter");
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
@@ -74,6 +78,7 @@
             this.btnConsult.Name = "btnConsult";
             this.btnConsult.Size = new System.Drawing.Size(35, 35);
             this.btnConsult.TabIndex = 15;
+            this.toolTip.SetToolTip(this.btnConsult, "Consulter");
             this.btnConsult.UseVisualStyleBackColor = true;
             this.btnConsult.Click += new System.EventHandler(this.btnConsult_Click);
             // 
@@ -85,6 +90,7 @@
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(35, 35);
             this.btnDelete.TabIndex = 16;
+            this.toolTip.SetToolTip(this.btnDelete, "Supprimer");
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
@@ -96,6 +102,7 @@
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(35, 35);
             this.btnUpdate.TabIndex = 17;
+            this.toolTip.SetToolTip(this.btnUpdate, "Modifier");
             this.btnUpdate.UseVisualStyleBackColor = true;
             this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
@@ -105,7 +112,6 @@
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(35, 35);
             this.btnRefresh.TabIndex = 18;
-            //this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // formController
             // 
@@ -120,6 +126,10 @@
             this.formController.Size = new System.Drawing.Size(574, 33);
             this.formController.TabIndex = 10;
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
+            // 
+            // toolTip
+            // 
+            this.toolTip.AutomaticDelay = 100;
             // 
             // frmGenericList
             // 
@@ -152,5 +162,6 @@
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnUpdate;
         private TT3LightDLL.Controls.ctlRefresh btnRefresh;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

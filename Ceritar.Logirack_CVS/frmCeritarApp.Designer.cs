@@ -59,7 +59,7 @@
             this.txtName.Location = new System.Drawing.Point(70, 12);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(306, 20);
-            this.txtName.TabIndex = 1;
+            this.txtName.TabIndex = 0;
             this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
             // 
             // label1
@@ -75,7 +75,7 @@
             this.txtDescription.Location = new System.Drawing.Point(70, 38);
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.Size = new System.Drawing.Size(306, 20);
-            this.txtDescription.TabIndex = 3;
+            this.txtDescription.TabIndex = 1;
             this.txtDescription.TextChanged += new System.EventHandler(this.txtDescription_TextChanged);
             // 
             // groupBox1
@@ -97,9 +97,10 @@
             this.btnGrdDel.Location = new System.Drawing.Point(333, 60);
             this.btnGrdDel.Name = "btnGrdDel";
             this.btnGrdDel.Size = new System.Drawing.Size(35, 35);
-            this.btnGrdDel.TabIndex = 14;
+            this.btnGrdDel.TabIndex = 1;
             this.toolTip1.SetToolTip(this.btnGrdDel, "Supprimer la ligne");
             this.btnGrdDel.UseVisualStyleBackColor = true;
+            this.btnGrdDel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnGrdDel_MouseUp);
             // 
             // btnGrdAdd
             // 
@@ -108,7 +109,7 @@
             this.btnGrdAdd.Location = new System.Drawing.Point(333, 19);
             this.btnGrdAdd.Name = "btnGrdAdd";
             this.btnGrdAdd.Size = new System.Drawing.Size(35, 35);
-            this.btnGrdAdd.TabIndex = 13;
+            this.btnGrdAdd.TabIndex = 0;
             this.toolTip1.SetToolTip(this.btnGrdAdd, "Ajouter une ligne");
             this.btnGrdAdd.UseVisualStyleBackColor = true;
             // 
@@ -125,9 +126,10 @@
             this.grdModules.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
             this.grdModules.Size = new System.Drawing.Size(327, 149);
             this.grdModules.StyleInfo = resources.GetString("grdModules.StyleInfo");
-            this.grdModules.TabIndex = 12;
+            this.grdModules.TabIndex = 2;
             this.grdModules.Tag = "1";
             this.grdModules.DoubleClick += new System.EventHandler(this.grdModules_DoubleClick);
+            this.grdModules.Validating += new System.ComponentModel.CancelEventHandler(this.grdModules_Validating);
             this.grdModules.Validated += new System.EventHandler(this.grdModules_Validated);
             // 
             // cboDomain
@@ -137,7 +139,7 @@
             this.cboDomain.Location = new System.Drawing.Point(70, 64);
             this.cboDomain.Name = "cboDomain";
             this.cboDomain.Size = new System.Drawing.Size(153, 21);
-            this.cboDomain.TabIndex = 14;
+            this.cboDomain.TabIndex = 2;
             // 
             // label2
             // 
@@ -154,11 +156,11 @@
             this.formController.FormIsLoading = false;
             this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.CONSULT_MODE;
             this.formController.Item_ID = 0;
-            this.formController.Location = new System.Drawing.Point(5, 276);
+            this.formController.Location = new System.Drawing.Point(-5, 276);
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
-            this.formController.Size = new System.Drawing.Size(373, 33);
-            this.formController.TabIndex = 13;
+            this.formController.Size = new System.Drawing.Size(383, 33);
+            this.formController.TabIndex = 3;
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
@@ -182,7 +184,6 @@
             this.Name = "frmCeritarApp";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Définition d\'une application Ceritar";
-            this.Load += new System.EventHandler(this.frmCeritarApp_Load);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdModules)).EndInit();
             this.ResumeLayout(false);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Ceritar.CVS.Models.Module_Configuration;
 using Ceritar.TT3LightDLL.Static_Classes;
 
 
@@ -8,13 +9,62 @@ namespace Ceritar.CVS.Controllers
     public class ctr_CeritarApplication
     {
         private Interfaces.ICeritarApp mcView;
-        private Models.Module_Configuration.mod_CeritarApplication mcCerApp;
+        private mod_CeA_CeritarApplication mcModCerApp;
         private clsActionResults mcActionResult;
 
-        public ctr_CeritarApplication(Interfaces.ICeritarApp vView)
+        public enum ErrorCode_CeA
         {
-            mcCerApp = new Models.Module_Configuration.mod_CeritarApplication();
-            mcView = vView;
+            NAME_MANDATORY = 1,
+            DESCRIPTION_MANDATORY = 2,
+            DOMAIN_MANDATORY = 3,
+            MODULES_LIST_MANDATORY = 4
+        }
+
+
+        public ctr_CeritarApplication(Interfaces.ICeritarApp rView)
+        {
+            mcModCerApp = new Models.Module_Configuration.mod_CeA_CeritarApplication();
+            mcView = rView;
+        }
+
+        public clsActionResults Validate()
+        {
+            try
+            {
+                mcModCerApp = new Models.Module_Configuration.mod_CeA_CeritarApplication();
+                mcModCerApp.CeritarApplication_NRI = mcView.GetCerApp_NRI();
+                mcModCerApp.Name = mcView.GetName();
+                mcModCerApp.Description = mcView.GetDescription();
+                mcModCerApp.LstModules = mcView.GetLstModules();
+                mcModCerApp.DML_Action = mcView.GetDML_Mode();
+                mcModCerApp.Domaine_NRI = mcView.GetDomain_NRI();
+
+                mcActionResult = mcModCerApp.Validate();
+            }
+            catch (Exception ex) {
+                mcActionResult.SetInvalid(sclsConstants.Error_Message.ERROR_UNHANDLED, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return mcActionResult;
+        }
+
+        public clsActionResults Save()
+        {
+            try
+            {
+                if (mcModCerApp.Save()){
+
+                }
+                mcActionResult = mcModCerApp.ActionResults;
+            }
+            catch (Exception ex)
+            {
+                mcActionResult.SetInvalid(sclsConstants.Error_Message.ERROR_UNHANDLED, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return mcActionResult;
         }
 
         public string strGetDataLoad_SQL(int vintCeA_NRI)
@@ -59,42 +109,6 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " FROM AppDomain " + Environment.NewLine;
 
             return strSQL;
-        }
-
-        public clsActionResults Validate()
-        {
-            try
-            {
-                mcCerApp = new Models.Module_Configuration.mod_CeritarApplication();
-                mcCerApp.CeritarApplication_NRI = mcView.GetCerApp_NRI();
-                mcCerApp.Name = mcView.GetName();
-                mcCerApp.Description = mcView.GetDescription();
-                mcCerApp.LstModules = mcView.GetLstModules();
-                mcCerApp.Action = mcView.GetDML_Mode();
-                mcCerApp.Domaine_NRI = mcView.GetDomain_NRI();
-
-                mcActionResult = mcCerApp.Validate();
-            }
-            catch (Exception ex) {
-                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
-            }
-
-            return mcActionResult;
-        }
-
-        public clsActionResults Save()
-        {
-            try
-            {
-                mcActionResult = mcCerApp.Save();
-            }
-            catch (Exception ex)
-            {
-                mcActionResult.SetInvalid(sclsConstants.Error_Message.ERROR_UNHANDLED, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
-                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
-            }
-
-            return mcActionResult;
         }
     }
 }

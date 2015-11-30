@@ -50,6 +50,10 @@
             this.tmrBlink.Interval = 1000;
             this.tmrBlink.Tick += new System.EventHandler(this.tmrBlink_Tick);
             // 
+            // toolTip
+            // 
+            this.toolTip.AutomaticDelay = 100;
+            // 
             // ctlRefresh
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);

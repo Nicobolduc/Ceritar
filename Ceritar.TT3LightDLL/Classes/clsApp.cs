@@ -289,10 +289,10 @@ namespace Ceritar.TT3LightDLL.Classes
 
                             break;
 
-                        //case "GridControl": //TODO
-                        //    ((GridControl)objControl).BrowseOnly = true;
+                        //case "C1FlexGrid":
+                        //    ((C1.Win.C1FlexGrid.C1FlexGrid) objControl).Enabled = false;
 
-                        //break;
+                        //    break;
 
                         case "TabControl":
                             foreach (TabPage tp in ((TabControl)objControl).TabPages)

@@ -7,7 +7,7 @@ using Ceritar.TT3LightDLL.Controls;
 
 namespace Ceritar.Logirack_CVS
 {
-    public partial class frmGenericList : Form
+    public partial class frmGenericList : Form, IFormController
     {
 
         //Public members
@@ -86,20 +86,20 @@ namespace Ceritar.Logirack_CVS
                 {
                     case sclsConstants.DML_Mode.INSERT_MODE:
 
-                        frmToOpen.ShowForm(vFormMode, 0, mblnChildFormIsModal);
+                        frmToOpen.GetFormController().ShowForm(vFormMode, 0, mblnChildFormIsModal);
                         
                         break;
 
                     case sclsConstants.DML_Mode.UPDATE_MODE:
-                        frmToOpen.ShowForm(vFormMode, intItem_ID, mblnChildFormIsModal);
+                        frmToOpen.GetFormController().ShowForm(vFormMode, intItem_ID, mblnChildFormIsModal);
        
                         break;
 
                     case sclsConstants.DML_Mode.CONSULT_MODE:
                     case sclsConstants.DML_Mode.DELETE_MODE:
                         clsApp.GetAppController.DisableAllFormControls((Form)frmToOpen, null, null);
-                        
-                        frmToOpen.ShowForm(vFormMode, intItem_ID, mblnChildFormIsModal);
+
+                        frmToOpen.GetFormController().ShowForm(vFormMode, intItem_ID, mblnChildFormIsModal);
 
                         break;
                 }
@@ -111,7 +111,7 @@ namespace Ceritar.Logirack_CVS
                     case sclsConstants.DML_Mode.INSERT_MODE:
                     case sclsConstants.DML_Mode.UPDATE_MODE:
 
-                        for (int intRowIndex = 1; intRowIndex <= grdList.Rows.Count; intRowIndex++)
+                        for (int intRowIndex = 1; intRowIndex <= grdList.Rows.Count - 1; intRowIndex++)
                         {
                             if (Microsoft.VisualBasic.Conversion.Val(grdList[intRowIndex, mintItem_ID_col]) == intItem_ID)
                             {
@@ -124,7 +124,7 @@ namespace Ceritar.Logirack_CVS
                         break;
                 }
 
-                if (mintSelectedRow >= 0 & grdList.Rows.Count > 0)
+                if (mintSelectedRow >= 0 & grdList.Rows.Count > 1)
                 {
                     grdList.Row = mintSelectedRow;
                 }
@@ -261,5 +261,10 @@ namespace Ceritar.Logirack_CVS
             pfblnGrdList_Load();
         }
 
+
+        ctlFormController IFormController.GetFormController()
+        {
+            return this.formController;
+        }
     }
 }
