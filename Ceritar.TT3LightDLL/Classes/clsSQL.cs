@@ -291,11 +291,11 @@ namespace Ceritar.TT3LightDLL.Classes
 
                             break;
                         case clsSQL.MySQL_FieldTypes.BIT_TYPE:
-                            if (vstrValue == true.ToString())
+                            if (vstrValue == true.ToString() || vstrValue == "1")
                             {
                                 vstrValue = "1";
                             }
-                            else if (vstrValue == false.ToString())
+                            else if (vstrValue == false.ToString() || vstrValue == "0")
                             {
                                 vstrValue = "0";
                             }
@@ -308,8 +308,10 @@ namespace Ceritar.TT3LightDLL.Classes
                     }
                 }
 
-                mColFields.Add(vstrField, vstrValue);
-
+                if (blnValidReturn)
+                {
+                    mColFields.Add(vstrField, vstrValue);
+                }
             }
             catch (Exception ex)
             {

@@ -12,6 +12,9 @@ namespace Ceritar.CVS
         private int mintMessage_NRI;
         private object mErrorCode;
 
+        //Messages
+        private const ushort mintMSG_NotUsedError = 11;
+
         public enum BaseErrorCode
         {
             NO_ERROR = 0,
@@ -25,8 +28,8 @@ namespace Ceritar.CVS
         public clsActionResults()
         {
             mblnValid = false;
-            mErrorCode = BaseErrorCode.UNHANDLED_ERROR;
-            mintMessage_NRI = -1;
+            mErrorCode = BaseErrorCode.NO_ERROR;
+            mintMessage_NRI = mintMSG_NotUsedError;
         }
 
 
@@ -71,6 +74,13 @@ namespace Ceritar.CVS
             mblnValid = false;
             mErrorCode = vintErrorCode;
             mintMessage_NRI = (int)vintMessage_NRI;
+        }
+
+        internal void SetDefault()
+        {
+            mblnValid = false;
+            mErrorCode = BaseErrorCode.NO_ERROR;
+            mintMessage_NRI = mintMSG_NotUsedError;
         }
     }
 }

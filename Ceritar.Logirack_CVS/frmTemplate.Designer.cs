@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmTemplate));
             this.txtName = new System.Windows.Forms.TextBox();
             this.lblNom = new System.Windows.Forms.Label();
@@ -36,11 +37,15 @@
             this.chkByDefault = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.cboApplications = new System.Windows.Forms.ComboBox();
-            this.grdTemplate = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
-            this.btnAddNode = new System.Windows.Forms.Button();
-            this.btnMoveLeft = new System.Windows.Forms.Button();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.btnMoveRight = new System.Windows.Forms.Button();
+            this.btnMoveLeft = new System.Windows.Forms.Button();
+            this.btnAddNode = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cboFolderType = new System.Windows.Forms.ComboBox();
+            this.grdTemplate = new C1.Win.C1FlexGrid.C1FlexGrid();
+            this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdTemplate)).BeginInit();
             this.SuspendLayout();
             // 
@@ -50,6 +55,7 @@
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(306, 20);
             this.txtName.TabIndex = 3;
+            this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
             // 
             // lblNom
             // 
@@ -75,12 +81,13 @@
             this.cboTypes.Name = "cboTypes";
             this.cboTypes.Size = new System.Drawing.Size(203, 21);
             this.cboTypes.TabIndex = 16;
+            this.cboTypes.SelectedIndexChanged += new System.EventHandler(this.cboTypes_SelectedIndexChanged);
             // 
             // chkByDefault
             // 
             this.chkByDefault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkByDefault.AutoSize = true;
-            this.chkByDefault.Location = new System.Drawing.Point(420, 14);
+            this.chkByDefault.Location = new System.Drawing.Point(587, 14);
             this.chkByDefault.Name = "chkByDefault";
             this.chkByDefault.Size = new System.Drawing.Size(75, 17);
             this.chkByDefault.TabIndex = 18;
@@ -105,24 +112,6 @@
             this.cboApplications.TabIndex = 21;
             this.cboApplications.SelectedIndexChanged += new System.EventHandler(this.cboApplications_SelectedIndexChanged);
             // 
-            // grdTemplate
-            // 
-            this.grdTemplate.AllowEditing = false;
-            this.grdTemplate.AutoSearch = C1.Win.C1FlexGrid.AutoSearchEnum.FromTop;
-            this.grdTemplate.ColumnInfo = "1,1,0,0,0,90,Columns:0{Width:5;}\t";
-            this.grdTemplate.ExtendLastCol = true;
-            this.grdTemplate.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdTemplate.Location = new System.Drawing.Point(5, 106);
-            this.grdTemplate.Name = "grdTemplate";
-            this.grdTemplate.Rows.Count = 1;
-            this.grdTemplate.Rows.DefaultSize = 18;
-            this.grdTemplate.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdTemplate.Size = new System.Drawing.Size(464, 463);
-            this.grdTemplate.StyleInfo = resources.GetString("grdTemplate.StyleInfo");
-            this.grdTemplate.TabIndex = 23;
-            this.grdTemplate.Tag = "9";
-            this.grdTemplate.DoubleClick += new System.EventHandler(this.grdTemplate_DoubleClick);
-            // 
             // formController
             // 
             this.formController.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -130,56 +119,103 @@
             this.formController.FormIsLoading = false;
             this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.NO_MODE;
             this.formController.Item_ID = 0;
-            this.formController.Location = new System.Drawing.Point(3, 575);
+            this.formController.Location = new System.Drawing.Point(3, 579);
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
-            this.formController.Size = new System.Drawing.Size(504, 33);
+            this.formController.Size = new System.Drawing.Size(671, 33);
             this.formController.TabIndex = 24;
             this.formController.SetReadRights += new Ceritar.TT3LightDLL.Controls.ctlFormController.SetReadRightsEventHandler(this.formController_SetReadRights);
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
+            this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
-            // 
-            // btnAddNode
-            // 
-            this.btnAddNode.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnAddNode.BackgroundImage")));
-            this.btnAddNode.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnAddNode.Location = new System.Drawing.Point(475, 126);
-            this.btnAddNode.Name = "btnAddNode";
-            this.btnAddNode.Size = new System.Drawing.Size(25, 25);
-            this.btnAddNode.TabIndex = 25;
-            this.btnAddNode.UseVisualStyleBackColor = true;
-            this.btnAddNode.Click += new System.EventHandler(this.btnAddNode_Click);
-            // 
-            // btnMoveLeft
-            // 
-            this.btnMoveLeft.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMoveLeft.BackgroundImage")));
-            this.btnMoveLeft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnMoveLeft.Location = new System.Drawing.Point(475, 155);
-            this.btnMoveLeft.Name = "btnMoveLeft";
-            this.btnMoveLeft.Size = new System.Drawing.Size(25, 25);
-            this.btnMoveLeft.TabIndex = 26;
-            this.btnMoveLeft.UseVisualStyleBackColor = true;
             // 
             // btnMoveRight
             // 
+            this.btnMoveRight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnMoveRight.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMoveRight.BackgroundImage")));
             this.btnMoveRight.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnMoveRight.Location = new System.Drawing.Point(475, 184);
+            this.btnMoveRight.Location = new System.Drawing.Point(633, 77);
             this.btnMoveRight.Name = "btnMoveRight";
             this.btnMoveRight.Size = new System.Drawing.Size(25, 25);
-            this.btnMoveRight.TabIndex = 27;
+            this.btnMoveRight.TabIndex = 30;
+            this.toolTip.SetToolTip(this.btnMoveRight, "Augmenter d\'un niveau");
             this.btnMoveRight.UseVisualStyleBackColor = true;
+            // 
+            // btnMoveLeft
+            // 
+            this.btnMoveLeft.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnMoveLeft.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnMoveLeft.BackgroundImage")));
+            this.btnMoveLeft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnMoveLeft.Location = new System.Drawing.Point(633, 48);
+            this.btnMoveLeft.Name = "btnMoveLeft";
+            this.btnMoveLeft.Size = new System.Drawing.Size(25, 25);
+            this.btnMoveLeft.TabIndex = 29;
+            this.toolTip.SetToolTip(this.btnMoveLeft, "Reculer d\'un niveau");
+            this.btnMoveLeft.UseVisualStyleBackColor = true;
+            // 
+            // btnAddNode
+            // 
+            this.btnAddNode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAddNode.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnAddNode.BackgroundImage")));
+            this.btnAddNode.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnAddNode.Location = new System.Drawing.Point(633, 19);
+            this.btnAddNode.Name = "btnAddNode";
+            this.btnAddNode.Size = new System.Drawing.Size(25, 25);
+            this.btnAddNode.TabIndex = 28;
+            this.toolTip.SetToolTip(this.btnAddNode, "Ajouter un noeud");
+            this.btnAddNode.UseVisualStyleBackColor = true;
+            this.btnAddNode.Click += new System.EventHandler(this.btnAddNode_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.cboFolderType);
+            this.groupBox1.Controls.Add(this.btnMoveRight);
+            this.groupBox1.Controls.Add(this.btnMoveLeft);
+            this.groupBox1.Controls.Add(this.btnAddNode);
+            this.groupBox1.Controls.Add(this.grdTemplate);
+            this.groupBox1.Location = new System.Drawing.Point(6, 92);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(664, 485);
+            this.groupBox1.TabIndex = 28;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Hiérarchie de dossiers";
+            // 
+            // cboFolderType
+            // 
+            this.cboFolderType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboFolderType.FormattingEnabled = true;
+            this.cboFolderType.Location = new System.Drawing.Point(451, 116);
+            this.cboFolderType.Name = "cboFolderType";
+            this.cboFolderType.Size = new System.Drawing.Size(121, 21);
+            this.cboFolderType.TabIndex = 31;
+            this.cboFolderType.SelectedIndexChanged += new System.EventHandler(this.cboFolderType_SelectedIndexChanged);
+            // 
+            // grdTemplate
+            // 
+            this.grdTemplate.AllowEditing = false;
+            this.grdTemplate.AutoSearch = C1.Win.C1FlexGrid.AutoSearchEnum.FromTop;
+            this.grdTemplate.ColumnInfo = "1,1,0,0,0,90,Columns:0{Width:5;}\t";
+            this.grdTemplate.ExtendLastCol = true;
+            this.grdTemplate.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdTemplate.Location = new System.Drawing.Point(6, 19);
+            this.grdTemplate.Name = "grdTemplate";
+            this.grdTemplate.Rows.Count = 1;
+            this.grdTemplate.Rows.DefaultSize = 18;
+            this.grdTemplate.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
+            this.grdTemplate.Size = new System.Drawing.Size(621, 463);
+            this.grdTemplate.StyleInfo = resources.GetString("grdTemplate.StyleInfo");
+            this.grdTemplate.TabIndex = 24;
+            this.grdTemplate.Tag = "9";
+            this.grdTemplate.AfterRowColChange += new C1.Win.C1FlexGrid.RangeEventHandler(this.grdTemplate_AfterRowColChange);
+            this.grdTemplate.DoubleClick += new System.EventHandler(this.grdTemplate_DoubleClick);
             // 
             // frmTemplate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(507, 609);
-            this.Controls.Add(this.btnMoveRight);
-            this.Controls.Add(this.btnMoveLeft);
-            this.Controls.Add(this.btnAddNode);
+            this.ClientSize = new System.Drawing.Size(674, 613);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.formController);
-            this.Controls.Add(this.grdTemplate);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.cboApplications);
             this.Controls.Add(this.chkByDefault);
@@ -193,6 +229,7 @@
             this.Name = "frmTemplate";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Définition de gabarit";
+            this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdTemplate)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -208,10 +245,13 @@
         private System.Windows.Forms.CheckBox chkByDefault;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cboApplications;
-        public C1.Win.C1FlexGrid.C1FlexGrid grdTemplate;
         private TT3LightDLL.Controls.ctlFormController formController;
-        private System.Windows.Forms.Button btnAddNode;
-        private System.Windows.Forms.Button btnMoveLeft;
+        private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnMoveRight;
+        private System.Windows.Forms.Button btnMoveLeft;
+        private System.Windows.Forms.Button btnAddNode;
+        public C1.Win.C1FlexGrid.C1FlexGrid grdTemplate;
+        private System.Windows.Forms.ComboBox cboFolderType;
     }
 }

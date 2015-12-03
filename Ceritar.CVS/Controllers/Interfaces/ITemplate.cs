@@ -15,19 +15,21 @@ namespace Ceritar.CVS.Controllers.Interfaces
         int GetTemplate_NRI();
         ushort GetTemplate_TS();
         bool GetByDefaultValue();
+        structHierarchyComponent GetRacineSystem();
         sclsConstants.DML_Mode GetDML_Action();
         List<structHierarchyComponent> GetHierarchyComponentList();
     }
 
     public struct structHierarchyComponent
     {
+        public sclsConstants.DML_Mode Action;
         public int intHierarchyComponent_NRI;
         public int intHierarchyComponent_TS;
-        public bool blnIsFolder;
         public string strName;
         public string strLocation;
         public int intScriptSequenceNo;
         public int Parent_NRI;
-        public int intNodeLevel;
+        public ushort intNodeLevel;
+        public int intFolderType_NRI;
     }
 }

@@ -117,10 +117,36 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="grdTemplate.StyleInfo" xml:space="preserve">
-    <value>Normal{Font:Tahoma, 8.25pt;}	Alternate{}	Fixed{BackColor:Control;ForeColor:ControlText;Border:Flat,1,ControlDark,Both;BackgroundImageLayout:Hide;}	Highlight{BackColor:Highlight;ForeColor:HighlightText;}	Focus{}	Editor{}	Search{BackColor:Highlight;ForeColor:HighlightText;}	Frozen{BackColor:Beige;}	NewRow{ForeColor:GrayText;}	EmptyArea{BackColor:AppWorkspace;Border:Flat,1,ControlDarkDark,Both;}	SelectedColumnHeader{}	SelectedRowHeader{}	GrandTotal{BackColor:Black;ForeColor:White;}	Subtotal0{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal1{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal2{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal3{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal4{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal5{BackColor:ControlDarkDark;ForeColor:White;}	FilterEditor{}	FirstCustomStyle{}	</value>
-  </data>
+  <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="btnMoveRight.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7O
+        HOkAAAAEZ0FNQQAAsY8L/GEFAAAACXBIWXMAAAsMAAALDAE/QCLIAAABa0lEQVRoQ+2YS07DMBCGI3qO
+        ePyoOAQPAcdAPO7BawPHYIXE1bhAC7tWMEnGkokGcO0YhDuf9C/STsb/11XlpiZmFuDRAZzQczau1Ze4
+        754eizJzoJ8x75i3KSSG8no97IQH+rgIYXmfLInP5X0KSeDycXmfJIm5Muf47qi8TwEJXHrFH9ZnYwmn
+        1J5p1YLZRREJnm2ROKbRKEQiFVx6zR/WZ2MJq9S+SKSwFRJzrY9oNIp6JACWzC5KGYkb/rA+IsFHJHiq
+        l7CgX/+FhFX6lj8sUaK1ByKRgkgw/JXEHX/YIGFac0ijUXQS+C7+5+J3osSkVzY7+Is98Qf1Ai/GmF2a
+        jcIodYbvrsa7KGun9AWNZiPlQ6R8JFI+pOry3XUljWYj5UOkfCRSPqTq8t33NJqNlA+R8pFI+ZAfyq+k
+        vGfq8hbgFN/9nfIdX90mpJTv+OY2YfrynrFEankPI1GuvMdL5Jb3BBIFyzfNB0ohzh/tY+uSAAAAAElF
+        TkSuQmCC
+</value>
+  </data>
+  <data name="btnMoveLeft.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7O
+        HOkAAAAEZ0FNQQAAsY8L/GEFAAAACXBIWXMAAAsMAAALDAE/QCLIAAABgElEQVRoQ+2Y207CQBCGa/At
+        THdnt6IP4QET38J4eBKvNMSH8E59MyXeq9xRnNJZKWTaLtstiWS+5E/IMux+PyGUkgg1jJLRvtXwbJW6
+        pKXOHCpzbRWM8eFeudIThXyWwlumYY6ZxihRyONes3JP/YRL/ZRYk3fpVGJV3qWHEjXyLlM89IJGveHl
+        y9DHKQ4t8nOj4d0e2CGNe9Ekj5kVz9NoN0R+ja3JI4OdlcdrwIfIL5OLPPHP5TW8rh3wF5FfzXbljTFH
+        NOtFm3ym4IZGOyPyVUTek4HV+oU5xGUi8svkeF25pdHOiHwVkfelUT5Vn5vKG62v8LV18rhnRPkCvDG+
+        Zw8q87PpjbhJzRl+zX4zey2C5z3iWNx/E6QEg5QIRUow7EQJm9pTKRGClGCQEqH0UQJ/O30xey0iJeqQ
+        EgxSIhQpwWCVOpESIbSVGAKc06gXbSXwTXmg0Xg0lJgAwDGNedNQIrcAdzQWF6ZEkLyDKdGfvKNSopO8
+        o1KiIp8kv8nQ04FudDiEAAAAAElFTkSuQmCC
+</value>
+  </data>
   <data name="btnAddNode.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7O
@@ -139,31 +165,8 @@
         AABJRU5ErkJggg==
 </value>
   </data>
-  <data name="btnMoveLeft.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7O
-        HOkAAAAEZ0FNQQAAsY8L/GEFAAAACXBIWXMAAAsMAAALDAE/QCLIAAABgElEQVRoQ+2Y207CQBCGa/At
-        THdnt6IP4QET38J4eBKvNMSH8E59MyXeq9xRnNJZKWTaLtstiWS+5E/IMux+PyGUkgg1jJLRvtXwbJW6
-        pKXOHCpzbRWM8eFeudIThXyWwlumYY6ZxihRyONes3JP/YRL/ZRYk3fpVGJV3qWHEjXyLlM89IJGveHl
-        y9DHKQ4t8nOj4d0e2CGNe9Ekj5kVz9NoN0R+ja3JI4OdlcdrwIfIL5OLPPHP5TW8rh3wF5FfzXbljTFH
-        NOtFm3ym4IZGOyPyVUTek4HV+oU5xGUi8svkeF25pdHOiHwVkfelUT5Vn5vKG62v8LV18rhnRPkCvDG+
-        Zw8q87PpjbhJzRl+zX4zey2C5z3iWNx/E6QEg5QIRUow7EQJm9pTKRGClGCQEqH0UQJ/O30xey0iJeqQ
-        EgxSIhQpwWCVOpESIbSVGAKc06gXbSXwTXmg0Xg0lJgAwDGNedNQIrcAdzQWF6ZEkLyDKdGfvKNSopO8
-        o1KiIp8kv8nQ04FudDiEAAAAAElFTkSuQmCC
-</value>
-  </data>
-  <data name="btnMoveRight.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7O
-        HOkAAAAEZ0FNQQAAsY8L/GEFAAAACXBIWXMAAAsMAAALDAE/QCLIAAABa0lEQVRoQ+2YS07DMBCGI3qO
-        ePyoOAQPAcdAPO7BawPHYIXE1bhAC7tWMEnGkokGcO0YhDuf9C/STsb/11XlpiZmFuDRAZzQczau1Ze4
-        754eizJzoJ8x75i3KSSG8no97IQH+rgIYXmfLInP5X0KSeDycXmfJIm5Muf47qi8TwEJXHrFH9ZnYwmn
-        1J5p1YLZRREJnm2ROKbRKEQiFVx6zR/WZ2MJq9S+SKSwFRJzrY9oNIp6JACWzC5KGYkb/rA+IsFHJHiq
-        l7CgX/+FhFX6lj8sUaK1ByKRgkgw/JXEHX/YIGFac0ijUXQS+C7+5+J3osSkVzY7+Is98Qf1Ai/GmF2a
-        jcIodYbvrsa7KGun9AWNZiPlQ6R8JFI+pOry3XUljWYj5UOkfCRSPqTq8t33NJqNlA+R8pFI+ZAfyq+k
-        vGfq8hbgFN/9nfIdX90mpJTv+OY2YfrynrFEankPI1GuvMdL5Jb3BBIFyzfNB0ohzh/tY+uSAAAAAElF
-        TkSuQmCC
-</value>
+  <data name="grdTemplate.StyleInfo" xml:space="preserve">
+    <value>Normal{Font:Tahoma, 8.25pt;}	Alternate{}	Fixed{BackColor:Control;ForeColor:ControlText;Border:Flat,1,ControlDark,Both;BackgroundImageLayout:Hide;}	Highlight{BackColor:Highlight;ForeColor:HighlightText;}	Focus{}	Editor{}	Search{BackColor:Highlight;ForeColor:HighlightText;}	Frozen{BackColor:Beige;}	NewRow{ForeColor:GrayText;}	EmptyArea{BackColor:AppWorkspace;Border:Flat,1,ControlDarkDark,Both;}	SelectedColumnHeader{}	SelectedRowHeader{}	GrandTotal{BackColor:Black;ForeColor:White;}	Subtotal0{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal1{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal2{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal3{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal4{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal5{BackColor:ControlDarkDark;ForeColor:White;}	FilterEditor{}	FirstCustomStyle{}	</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

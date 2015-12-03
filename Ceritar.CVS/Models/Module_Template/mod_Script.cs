@@ -34,7 +34,7 @@ namespace Ceritar.CVS.Models.Module_Template
             throw new NotImplementedException();
         }
 
-        internal bool Save()
+        internal override bool blnSave()
         {
             throw new NotImplementedException();
         }

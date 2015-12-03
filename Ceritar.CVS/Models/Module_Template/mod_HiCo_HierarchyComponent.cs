@@ -80,10 +80,12 @@ namespace Ceritar.CVS.Models.Module_Template
 #endregion
 
 
-        internal clsActionResults Validate()
+        protected clsActionResults Validate()
         {
             try
             {
+                mcActionResults.SetDefault();
+
                 switch (mintDML_Action)
                 {
                     case sclsConstants.DML_Mode.INSERT_MODE:
@@ -127,91 +129,84 @@ namespace Ceritar.CVS.Models.Module_Template
             return mcActionResults;
         }
 
-        internal bool Save()
+        internal abstract bool blnSave();
+        //protected bool blnSave()
+        //{
+        //    bool blnValidReturn = false;
+
+        //    try
+        //    {
+        //        mcActionResults.SetValid();
+
+        //        switch (mintDML_Action)
+        //        {
+        //            case sclsConstants.DML_Mode.INSERT_MODE:
+
+        //                if (!pfblnHiCo_AddFields())
+        //                { }
+        //                else if (!mcSQL.bln_ADOInsert("HierarchyComp", out _intTemplate_NRI))
+        //                { }
+        //                else
+        //                {
+        //                    blnValidReturn = true;
+        //                }
+
+        //                break;
+
+        //            case sclsConstants.DML_Mode.UPDATE_MODE:
+
+        //                if (!pfblnHiCo_AddFields())
+        //                { }
+        //                else if (!mcSQL.bln_ADOUpdate("HierarchyComp", "HierarchyComp.HiCo_NRI = " + _intTemplate_NRI))
+        //                { }
+        //                else
+        //                {
+        //                    blnValidReturn = true;
+        //                }
+
+        //                break;
+
+        //            case sclsConstants.DML_Mode.DELETE_MODE:
+
+        //                if (!mcSQL.bln_ADODelete("HierarchyComp", "HierarchyComp.HiCo_NRI = " + _intTemplate_NRI))
+        //                { }
+        //                else
+        //                {
+        //                    blnValidReturn = true;
+        //                }
+
+        //                break;
+        //        }
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        blnValidReturn = false;
+        //        sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+        //    }
+        //    finally
+        //    {
+        //        if (!blnValidReturn & mcActionResults.IsValid)
+        //        {
+        //            mcActionResults.SetInvalid(sclsConstants.Error_Message.ERROR_SAVE_MSG, clsActionResults.BaseErrorCode.ERROR_SAVE);
+        //        }
+        //        else if (blnValidReturn & !mcActionResults.IsValid)
+        //        {
+        //            blnValidReturn = false;
+        //        }
+        //    }
+
+        //    return blnValidReturn;
+        //}
+
+        protected bool pfblnHiCo_AddFields()
         {
             bool blnValidReturn = false;
-
+            
             try
             {
-                mcActionResults.SetValid();
-
-                mcSQL = new clsSQL();
-                mcSQL.bln_BeginTransaction();
-
-                switch (mintDML_Action)
-                {
-                    case sclsConstants.DML_Mode.INSERT_MODE:
-
-                        if (!pfblnHiCo_AddFields())
-                        { }
-                        else if (!mcSQL.bln_ADOInsert("HierarchyComp", out _intTemplate_NRI))
-                        { }
-                        else
-                        {
-                            blnValidReturn = true;
-                        }
-
-                        break;
-
-                    case sclsConstants.DML_Mode.UPDATE_MODE:
-
-                        if (!pfblnHiCo_AddFields())
-                        { }
-                        else if (!mcSQL.bln_ADOUpdate("HierarchyComp", "HierarchyComp.HiCo_NRI = " + _intTemplate_NRI))
-                        { }
-                        else
-                        {
-                            blnValidReturn = true;
-                        }
-
-                        break;
-
-                    case sclsConstants.DML_Mode.DELETE_MODE:
-
-                        if (!mcSQL.bln_ADODelete("HierarchyComp", "HierarchyComp.HiCo_NRI = " + _intTemplate_NRI))
-                        { }
-                        else
-                        {
-                            blnValidReturn = true;
-                        }
-
-                        break;
-                }
-            }
-            catch (System.Exception ex)
-            {
-                blnValidReturn = false;
-                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
-            }
-            finally
-            {
-                if (!blnValidReturn & mcActionResults.IsValid)
-                {
-                    mcActionResults.SetInvalid(sclsConstants.Error_Message.ERROR_SAVE_MSG, clsActionResults.BaseErrorCode.ERROR_SAVE);
-                }
-                else if (blnValidReturn & !mcActionResults.IsValid)
-                {
-                    blnValidReturn = false;
-                }
-
-                mcSQL.bln_EndTransaction(blnValidReturn);
-                mcSQL = null;
-            }
-
-            return blnValidReturn;
-        }
-
-        private bool pfblnHiCo_AddFields()
-        {
-            bool blnValidReturn = false;
-
-            try
-            {
-                if (!mcSQL.bln_RefreshFields())
+                if (!mcSQL.bln_AddField("HiCo_Name", _strNameOnDisk, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("HiCo_Name", _strNameOnDisk, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
-                { }
-                else if (!mcSQL.bln_AddField("HiCo_Parent_NRI", _cParentComponent._intHierarchyComponent_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("HiCo_Parent_NRI", (_cParentComponent == null ? 0 : _cParentComponent._intHierarchyComponent_NRI), clsSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else
                 {

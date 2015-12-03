@@ -12,9 +12,11 @@ namespace Ceritar.CVS.Models.Module_Template
         private int _intTemplate_NRI;
         private ushort _intTemplate_TS;
         private string _strTemplateName;
-        private int _templateType;
+        private TemplateType _templateType;
         private bool _blnByDefault;
-        private List<mod_HiCo_HierarchyComponent> _lstHierarchyComponents;
+        private int _intCeritarApplication_NRI;
+        private mod_HiCo_HierarchyComponent _cRacineSystem;
+        //private List<mod_HiCo_HierarchyComponent> _lstHierarchyComponents;
 
         public enum TemplateType
         {
@@ -48,7 +50,7 @@ namespace Ceritar.CVS.Models.Module_Template
             set { _strTemplateName = value; }
         }
 
-        internal int TemplatType
+        internal TemplateType TemplatType
         {
             get { return _templateType; }
             set { _templateType = value; }
@@ -60,11 +62,19 @@ namespace Ceritar.CVS.Models.Module_Template
             set { _blnByDefault = value; }
         }
 
-        List<mod_HiCo_HierarchyComponent> LstHierarchyComponents
+        /// <summary>
+        /// Représente la racine système du composant. Cette attribut n'est jamais sauvegardé.
+        /// </summary>
+        internal mod_HiCo_HierarchyComponent RacineSystem
         {
-            get { return _lstHierarchyComponents; }
-            set { _lstHierarchyComponents = value; }
+            get { return _cRacineSystem; }
+            set { _cRacineSystem = value; }
         }
+        //List<mod_HiCo_HierarchyComponent> LstHierarchyComponents
+        //{
+        //    get { return _lstHierarchyComponents; }
+        //    set { _lstHierarchyComponents = value; }
+        //}
 
         internal clsActionResults ActionResults
         {
@@ -82,6 +92,12 @@ namespace Ceritar.CVS.Models.Module_Template
             set { mcSQL = value; }
         }
 
+        internal int CeritarApplication_NRI
+        {
+            get { return _intCeritarApplication_NRI; }
+            set { _intCeritarApplication_NRI = value; }
+        }
+
 #endregion
 
 
@@ -89,6 +105,8 @@ namespace Ceritar.CVS.Models.Module_Template
         {
             try
             {
+                mcActionResults.SetDefault();
+
                 switch (mintDML_Action)
                 {
                     case sclsConstants.DML_Mode.INSERT_MODE:
@@ -102,10 +120,14 @@ namespace Ceritar.CVS.Models.Module_Template
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Template.ErrorCode_Tpl.TEMPLATE_TYPE_MANDATORY);
                         }
-                        else if (_lstHierarchyComponents == null || _lstHierarchyComponents.Count == 0)
+                        else if (_intCeritarApplication_NRI == 0)
                         {
-                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Template.ErrorCode_Tpl.HIERARCHY_MANDATORY);
+                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Template.ErrorCode_Tpl.CERITAR_APPLICATION_MANDATORY);
                         }
+                        //else if (_lstHierarchyComponents == null || _lstHierarchyComponents.Count == 0)
+                        //{
+                        //    mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Template.ErrorCode_Tpl.HIERARCHY_MANDATORY);
+                        //}
                         else if (!clsSQL.bln_ADOValid_TS("Template", "Tpl_NRI", _intTemplate_NRI, "Tpl_TS", _intTemplate_TS))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_TIMESTAMP, clsActionResults.BaseErrorCode.INVALID_TIMESTAMP);
@@ -140,16 +162,13 @@ namespace Ceritar.CVS.Models.Module_Template
             return mcActionResults;
         }
 
-        internal bool Save()
+        internal bool blnSave()
         {
             bool blnValidReturn = false;
 
             try
             {
                 mcActionResults.SetValid();
-
-                mcSQL = new clsSQL();
-                mcSQL.bln_BeginTransaction();
 
                 switch (mintDML_Action)
                 {
@@ -159,8 +178,8 @@ namespace Ceritar.CVS.Models.Module_Template
                         { }
                         else if (!mcSQL.bln_ADOInsert("Template", out _intTemplate_NRI))
                         { }
-                        else if (!pfblnLists_Save())
-                        { }
+                        //else if (!pfblnLists_Save())
+                        //{ }
                         else
                         {
                             blnValidReturn = true;
@@ -174,8 +193,8 @@ namespace Ceritar.CVS.Models.Module_Template
                         { }
                         else if (!mcSQL.bln_ADOUpdate("Template", "Template.Tpl_NRI = " + _intTemplate_NRI))
                         { }
-                        else if (!pfblnLists_Save())
-                        { }
+                        //else if (!pfblnLists_Save())
+                        //{ }
                         else
                         {
                             blnValidReturn = true;
@@ -185,9 +204,9 @@ namespace Ceritar.CVS.Models.Module_Template
 
                     case sclsConstants.DML_Mode.DELETE_MODE:
 
-                        if (!pfblnLists_Save())
-                        { }
-                        else if (!mcSQL.bln_ADODelete("Template", "Template.Tpl_NRI = " + _intTemplate_NRI))
+                        //if (!pfblnLists_Save())
+                        //{ }
+                        if (!mcSQL.bln_ADODelete("Template", "Template.Tpl_NRI = " + _intTemplate_NRI))
                         { }
                         else
                         {
@@ -212,9 +231,6 @@ namespace Ceritar.CVS.Models.Module_Template
                 {
                     blnValidReturn = false;
                 }
-
-                mcSQL.bln_EndTransaction(blnValidReturn);
-                mcSQL = null;
             }
 
             return blnValidReturn;
@@ -233,6 +249,8 @@ namespace Ceritar.CVS.Models.Module_Template
                 else if (!mcSQL.bln_AddField("Tpl_ByDefault", _blnByDefault, clsSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("TeT_NRI", (int)_templateType, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                { }
+                else if (!mcSQL.bln_AddField("CeA_NRI", _intCeritarApplication_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else
                 {
@@ -259,42 +277,49 @@ namespace Ceritar.CVS.Models.Module_Template
             return blnValidReturn;
         }
 
-        private bool pfblnLists_Save()
-        {
-            bool blnValidReturn = false;
+        //private bool pfblnLists_Save()
+        //{
+        //    bool blnValidReturn = false;
 
-            try
-            {
-                foreach (mod_HiCo_HierarchyComponent cHiCo in _lstHierarchyComponents)
-                {
-                    cHiCo.SetcSQL = mcSQL;
-                    cHiCo.Save();
+        //    try
+        //    {
+        //        _cRacine.Template_NRI = _intTemplate_NRI;
+        //        _cRacine.SetcSQL = mcSQL;
 
-                    mcActionResults = cHiCo.ActionResults;
+        //        blnValidReturn = _cRacine.blnSave();
 
-                    blnValidReturn = mcActionResults.IsValid;
+        //        mcActionResults = _cRacine.ActionResults;
 
-                    if (!blnValidReturn) break;
-                }
-            }
-            catch (Exception ex)
-            {
-                blnValidReturn = false;
-                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
-            }
-            finally
-            {
-                if (!blnValidReturn & mcActionResults.IsValid)
-                {
-                    mcActionResults.SetInvalid(sclsConstants.Error_Message.ERROR_SAVE_MSG, clsActionResults.BaseErrorCode.ERROR_SAVE);
-                }
-                else if (blnValidReturn & !mcActionResults.IsValid)
-                {
-                    blnValidReturn = false;
-                }
-            }
+        //        //foreach (mod_HiCo_HierarchyComponent cHiCo in _lstHierarchyComponents)
+        //        //{
+        //        //    cHiCo.SetcSQL = mcSQL;
+        //        //    cHiCo.Save();
 
-            return blnValidReturn;
-        }
+        //        //    mcActionResults = cHiCo.ActionResults;
+
+        //        //    blnValidReturn = mcActionResults.IsValid;
+
+        //        //    if (!blnValidReturn) break;
+        //        //}
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        blnValidReturn = false;
+        //        sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+        //    }
+        //    finally
+        //    {
+        //        if (!blnValidReturn & mcActionResults.IsValid)
+        //        {
+        //            mcActionResults.SetInvalid(sclsConstants.Error_Message.ERROR_SAVE_MSG, clsActionResults.BaseErrorCode.ERROR_SAVE);
+        //        }
+        //        else if (blnValidReturn & !mcActionResults.IsValid)
+        //        {
+        //            blnValidReturn = false;
+        //        }
+        //    }
+
+        //    return blnValidReturn;
+        //}
     }
 }

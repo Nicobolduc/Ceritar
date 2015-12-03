@@ -13,7 +13,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
         private int _intCeritarApplication_TS;
         private string _strName;
         private string _strDescription;
-        private int _domain_NRI;
+        private AppDomain _domain_NRI;
         private List<string> _lstModules;
 
         public enum AppDomain
@@ -58,7 +58,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
             set { _strDescription = value; }
         }
 
-        internal int Domaine_NRI
+        internal AppDomain Domaine_NRI
         {
             get { return _domain_NRI; }
             set { _domain_NRI = value; }
@@ -93,6 +93,8 @@ namespace Ceritar.CVS.Models.Module_Configuration
         {
             try
             {
+                mcActionResults.SetDefault();
+
                 switch (mintDML_Action)
                 {
                     case sclsConstants.DML_Mode.INSERT_MODE:
@@ -148,16 +150,13 @@ namespace Ceritar.CVS.Models.Module_Configuration
             return mcActionResults;
         }
 
-        internal bool Save()
+        internal bool blnSave()
         {
             bool blnValidReturn = false;
 
             try
             {
                 mcActionResults.SetValid();
-
-                mcSQL = new clsSQL();
-                mcSQL.bln_BeginTransaction();
 
                 switch (mintDML_Action)
                 {
@@ -219,9 +218,6 @@ namespace Ceritar.CVS.Models.Module_Configuration
                 {
                     blnValidReturn = false;
                 }
-
-                mcSQL.bln_EndTransaction(blnValidReturn);
-                mcSQL = null;
             }
 
             return blnValidReturn;

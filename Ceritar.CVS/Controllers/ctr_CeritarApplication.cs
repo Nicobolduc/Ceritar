@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Ceritar.CVS.Models.Module_Configuration;
 using Ceritar.TT3LightDLL.Static_Classes;
+using Ceritar.TT3LightDLL.Classes;
 
 
 namespace Ceritar.CVS.Controllers
@@ -11,6 +12,7 @@ namespace Ceritar.CVS.Controllers
         private Interfaces.ICeritarApp mcView;
         private mod_CeA_CeritarApplication mcModCerApp;
         private clsActionResults mcActionResult;
+        private clsSQL mcSQL;
 
         public enum ErrorCode_CeA
         {
@@ -37,7 +39,7 @@ namespace Ceritar.CVS.Controllers
                 mcModCerApp.Description = mcView.GetDescription();
                 mcModCerApp.LstModules = mcView.GetLstModules();
                 mcModCerApp.DML_Action = mcView.GetDML_Mode();
-                mcModCerApp.Domaine_NRI = mcView.GetDomain_NRI();
+                mcModCerApp.Domaine_NRI = (mod_CeA_CeritarApplication.AppDomain)mcView.GetDomain_NRI();
 
                 mcActionResult = mcModCerApp.Validate();
             }
@@ -51,17 +53,40 @@ namespace Ceritar.CVS.Controllers
 
         public clsActionResults Save()
         {
+            bool blnValidReturn = false;
+
             try
             {
-                if (mcModCerApp.Save()){
+                mcSQL = new clsSQL();
+                
 
+                if (mcSQL.bln_BeginTransaction()){
+
+                    mcModCerApp.SetcSQL = mcSQL;
+
+                    blnValidReturn = mcModCerApp.blnSave();
+
+                    mcActionResult = mcModCerApp.ActionResults;
                 }
-                mcActionResult = mcModCerApp.ActionResults;
             }
             catch (Exception ex)
             {
                 mcActionResult.SetInvalid(sclsConstants.Error_Message.ERROR_UNHANDLED, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
                 sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                if (!blnValidReturn & mcActionResult.IsValid)
+                {
+                    mcActionResult.SetInvalid(sclsConstants.Error_Message.ERROR_SAVE_MSG, clsActionResults.BaseErrorCode.ERROR_SAVE);
+                }
+                else if (blnValidReturn & !mcActionResult.IsValid)
+                {
+                    blnValidReturn = false;
+                }
+
+                mcSQL.bln_EndTransaction(mcActionResult.IsValid);
+                mcSQL = null;
             }
 
             return mcActionResult;
