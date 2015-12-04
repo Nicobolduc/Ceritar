@@ -93,6 +93,7 @@
             this.chkByDefault.TabIndex = 18;
             this.chkByDefault.Text = "Par défaut";
             this.chkByDefault.UseVisualStyleBackColor = true;
+            this.chkByDefault.CheckedChanged += new System.EventHandler(this.chkByDefault_CheckedChanged);
             // 
             // label3
             // 
@@ -140,6 +141,7 @@
             this.btnMoveRight.TabIndex = 30;
             this.toolTip.SetToolTip(this.btnMoveRight, "Augmenter d\'un niveau");
             this.btnMoveRight.UseVisualStyleBackColor = true;
+            this.btnMoveRight.Click += new System.EventHandler(this.btnMoveRight_Click);
             // 
             // btnMoveLeft
             // 
@@ -152,6 +154,7 @@
             this.btnMoveLeft.TabIndex = 29;
             this.toolTip.SetToolTip(this.btnMoveLeft, "Reculer d\'un niveau");
             this.btnMoveLeft.UseVisualStyleBackColor = true;
+            this.btnMoveLeft.Click += new System.EventHandler(this.btnMoveLeft_Click);
             // 
             // btnAddNode
             // 

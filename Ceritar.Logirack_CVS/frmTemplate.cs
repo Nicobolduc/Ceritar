@@ -92,13 +92,17 @@ namespace Ceritar.Logirack_CVS
         structHierarchyComponent ITemplate.GetRacineSystem()
         {
             structHierarchyComponent structHiCo = new structHierarchyComponent();
-            int intLastSystemRow = grdTemplate.FindRow("0", 1, mintGrdTpl_HiCo_IsSystemItem_col, false);
+            int intLastSystemRow = grdTemplate.FindRow("0", 1, mintGrdTpl_HiCo_IsSystemItem_col, false, false, false);
 
-            structHiCo.intHierarchyComponent_NRI = Int32.Parse(mcGrdTemplate[intLastSystemRow, mintGrdTpl_HiCo_NRI_col]);
-            structHiCo.intNodeLevel = UInt16.Parse(mcGrdTemplate[intLastSystemRow, mintGrdTpl_HiCo_Level_col]);
-            structHiCo.strName = mcGrdTemplate[intLastSystemRow, mintGrdTpl_HiCo_Name_col];
-            structHiCo.Action = (sclsConstants.DML_Mode)grdTemplate[intLastSystemRow, mintGrdTpl_HiCo_Action_col];
-            structHiCo.intFolderType_NRI = (int)grdTemplate[intLastSystemRow, mintGrdTpl_HiCo_FolderType_NRI_col];
+            if (intLastSystemRow > 0)
+            {
+                structHiCo.intHierarchyComponent_NRI = Int32.Parse(mcGrdTemplate[intLastSystemRow, mintGrdTpl_HiCo_NRI_col]);
+                structHiCo.intNodeLevel = UInt16.Parse(mcGrdTemplate[intLastSystemRow, mintGrdTpl_HiCo_Level_col]);
+                structHiCo.strName = mcGrdTemplate[intLastSystemRow, mintGrdTpl_HiCo_Name_col];
+                structHiCo.Action = (sclsConstants.DML_Mode)grdTemplate[intLastSystemRow, mintGrdTpl_HiCo_Action_col];
+                structHiCo.FolderType = (ctr_Template.FolderType)grdTemplate[intLastSystemRow, mintGrdTpl_HiCo_FolderType_NRI_col];
+                structHiCo.Parent_NRI = (int)grdTemplate[intLastSystemRow - 1, mintGrdTpl_HiCo_NRI_col];
+            }
 
             return structHiCo;
         }
@@ -110,14 +114,14 @@ namespace Ceritar.Logirack_CVS
 
             for (int intRowIndex = 1; intRowIndex < grdTemplate.Rows.Count; intRowIndex++)
             {
-                if (mcGrdTemplate[intRowIndex, mintGrdTpl_HiCo_IsSystemItem_col] != "1") {
+                if (mcGrdTemplate[intRowIndex, mintGrdTpl_HiCo_IsSystemItem_col] != "1" && (int)grdTemplate[intRowIndex, mintGrdTpl_HiCo_FolderType_NRI_col] != (int)ctr_Template.FolderType.Ceritar_Application) {
 
                     structHiCo = new structHierarchyComponent();
                     structHiCo.intHierarchyComponent_NRI = Int32.Parse(mcGrdTemplate[intRowIndex, mintGrdTpl_HiCo_NRI_col]);
                     structHiCo.intNodeLevel = UInt16.Parse(mcGrdTemplate[intRowIndex, mintGrdTpl_HiCo_Level_col]);
                     structHiCo.strName = mcGrdTemplate[intRowIndex, mintGrdTpl_HiCo_Name_col];
                     structHiCo.Action = (sclsConstants.DML_Mode) grdTemplate[intRowIndex, mintGrdTpl_HiCo_Action_col];
-                    structHiCo.intFolderType_NRI = (int)grdTemplate[intRowIndex, mintGrdTpl_HiCo_FolderType_NRI_col];
+                    structHiCo.FolderType = (ctr_Template.FolderType)grdTemplate[intRowIndex, mintGrdTpl_HiCo_FolderType_NRI_col];
 
                     lstHierarchyComponents.Add(structHiCo);
                 }                
@@ -139,37 +143,57 @@ namespace Ceritar.Logirack_CVS
         private bool pfblnGrdTemplate_Load()
         {
             bool blnValidReturn = false;
+            int intLastUnmodifiableRow = 0;
             System.Data.SqlClient.SqlDataReader cDataReader = null;
 
             try
             {
+                mcGrdTemplate.GridIsLoading = true;
+
                 cDataReader = clsSQL.ADOSelect(mcCtrTemplate.strGetListe_HierarchyComponents_SQL(formController.Item_ID));
 
-                if (!cDataReader.HasRows) blnValidReturn = false;
-
-                while (cDataReader.Read())
+                if (cDataReader.HasRows)
                 {
-                    mcGrdTemplate.AddTreeItem(mintGrdTpl_HiCo_Name_col, cDataReader["HiCo_Name"].ToString(), Int16.Parse(cDataReader["HiCo_NodeLevel"].ToString()), true);
-
-                    grdTemplate[grdTemplate.Rows.Count - 1, mintGrdTpl_HiCo_NRI_col] = cDataReader["HiCo_NRI"];
-                    grdTemplate[grdTemplate.Rows.Count - 1, mintGrdTpl_HiCo_IsSystemItem_col] = cDataReader["IsSystem"];
-                    grdTemplate[grdTemplate.Rows.Count - 1, mintGrdTpl_HiCo_Level_col] = cDataReader["HiCo_NodeLevel"];
-                    grdTemplate[grdTemplate.Rows.Count - 1, mintGrdTpl_HiCo_IsRoot_col] = cDataReader["IsRoot"];
-
-                    if (mcGrdTemplate[grdTemplate.Rows.Count - 1, mintGrdTpl_HiCo_IsSystemItem_col] == "1")
+                    while (cDataReader.Read())
                     {
-                        CellRange crRow = grdTemplate.GetCellRange(grdTemplate.Rows.Count - 1, mintGrdTpl_HiCo_Name_col, grdTemplate.Rows.Count - 1, mintGrdTpl_HiCo_FolderType_col);
+                        mcGrdTemplate.AddTreeItem(mintGrdTpl_HiCo_Name_col, cDataReader["HiCo_Name"].ToString(), Int16.Parse(cDataReader["HiCo_NodeLevel"].ToString()), true);
 
-                        crRow.Style = csSystemItem;
+                        grdTemplate[grdTemplate.Rows.Count - 1, mintGrdTpl_HiCo_Action_col] = cDataReader["ActionCol"];
+                        grdTemplate[grdTemplate.Rows.Count - 1, mintGrdTpl_HiCo_NRI_col] = cDataReader["HiCo_NRI"];
+                        grdTemplate[grdTemplate.Rows.Count - 1, mintGrdTpl_HiCo_IsSystemItem_col] = cDataReader["IsSystem"];
+                        grdTemplate[grdTemplate.Rows.Count - 1, mintGrdTpl_HiCo_Level_col] = cDataReader["HiCo_NodeLevel"];
+                        grdTemplate[grdTemplate.Rows.Count - 1, mintGrdTpl_HiCo_IsRoot_col] = cDataReader["IsRoot"];
+                        grdTemplate[grdTemplate.Rows.Count - 1, mintGrdTpl_HiCo_FolderType_NRI_col] = cDataReader["FoT_NRI"];
+                        grdTemplate[grdTemplate.Rows.Count - 1, mintGrdTpl_HiCo_FolderType_col] = cDataReader["FoT_Code"];
+
+
+                        if (mcGrdTemplate[grdTemplate.Rows.Count - 1, mintGrdTpl_HiCo_IsSystemItem_col] == "1" || (int)grdTemplate[grdTemplate.Rows.Count - 1, mintGrdTpl_HiCo_FolderType_NRI_col] == (int)ctr_Template.FolderType.Ceritar_Application)
+                        {
+                            intLastUnmodifiableRow = grdTemplate.Rows.Count - 1;
+                        }
                     }
 
-                    grdTemplate[grdTemplate.Rows.Count - 1, mintGrdTpl_HiCo_FolderType_NRI_col] = cDataReader["FoT_NRI"];
-                    grdTemplate[grdTemplate.Rows.Count - 1, mintGrdTpl_HiCo_FolderType_col] = cDataReader["FoT_Code"];
-                }
+                    cboFolderType.Visible = true;
 
-                cboFolderType.Visible = true;
-                CellRange cr = grdTemplate.GetCellRange(1, mintGrdTpl_HiCo_FolderType_col, grdTemplate.Rows.Count - 1, mintGrdTpl_HiCo_FolderType_col);
-                cr.StyleNew.Editor = cboFolderType;
+                    CellRange crFixedRows = grdTemplate.GetCellRange(1, mintGrdTpl_HiCo_Name_col, intLastUnmodifiableRow, mintGrdTpl_HiCo_FolderType_col);
+                    crFixedRows.Style = csSystemItem;
+                    //crFixedRows = grdTemplate.GetCellRange(1, mintGrdTpl_HiCo_FolderType_col, intLastUnmodifiableRow, mintGrdTpl_HiCo_FolderType_col);
+                    //crFixedRows.Style.Editor = cboFolderType;
+
+                    if (intLastUnmodifiableRow + 1 < grdTemplate.Rows.Count)
+                    {
+                        CellRange cr = grdTemplate.GetCellRange(intLastUnmodifiableRow + 1, mintGrdTpl_HiCo_Name_col, grdTemplate.Rows.Count - 1, mintGrdTpl_HiCo_FolderType_col);
+                        cr.Style = grdTemplate.Styles.Normal;
+                        cr = grdTemplate.GetCellRange(intLastUnmodifiableRow + 1, mintGrdTpl_HiCo_FolderType_col, grdTemplate.Rows.Count - 1, mintGrdTpl_HiCo_FolderType_col);
+                        cr.Style.Editor = cboFolderType;
+                    }
+
+                    grdTemplate.Row = grdTemplate.Rows.Count - 1;
+                }
+                else
+                {
+                    blnValidReturn = false;
+                }  
             }
             catch (Exception ex)
             {
@@ -180,6 +204,8 @@ namespace Ceritar.Logirack_CVS
             {
                 if (cDataReader != null) cDataReader.Dispose();
             }
+
+            mcGrdTemplate.GridIsLoading = false;
 
             return blnValidReturn;
         }
@@ -224,11 +250,11 @@ namespace Ceritar.Logirack_CVS
 
         private void btnAddNode_Click(object sender, EventArgs e)
         {
-            if (mcGrdTemplate[grdTemplate.Row + 1, mintGrdTpl_HiCo_IsSystemItem_col] == "0" | String.IsNullOrEmpty(mcGrdTemplate[grdTemplate.Row + 1, mintGrdTpl_HiCo_IsSystemItem_col]))
+            if (grdTemplate.Rows.Count > 1 && mcGrdTemplate[grdTemplate.Row + 1, mintGrdTpl_HiCo_IsSystemItem_col] == "0" | String.IsNullOrEmpty(mcGrdTemplate[grdTemplate.Row + 1, mintGrdTpl_HiCo_IsSystemItem_col]))
             {
                 mcGrdTemplate.AddTreeItem(mintGrdTpl_HiCo_Name_col, "", grdTemplate.Rows[grdTemplate.Row].Node.Level, true, grdTemplate.Row + 1);
 
-                grdTemplate.Row = grdTemplate.Rows.Count - 1;
+                grdTemplate.Row = grdTemplate.Row +  1;
                 grdTemplate[grdTemplate.Row, mintGrdTpl_HiCo_NRI_col] = 0;
                 grdTemplate[grdTemplate.Row, mintGrdTpl_HiCo_IsSystemItem_col] = "0";
                 grdTemplate[grdTemplate.Row, mintGrdTpl_HiCo_Level_col] = grdTemplate.Rows[grdTemplate.Row - 1].Node.Level;
@@ -238,6 +264,8 @@ namespace Ceritar.Logirack_CVS
 
                 CellRange cr = grdTemplate.GetCellRange(grdTemplate.Row, mintGrdTpl_HiCo_FolderType_col, grdTemplate.Rows.Count - 1, mintGrdTpl_HiCo_FolderType_col);
                 cr.StyleNew.Editor = cboFolderType;
+
+                formController.ChangeMade = true;
             }
         }
 
@@ -245,7 +273,7 @@ namespace Ceritar.Logirack_CVS
         {
             grdTemplate.Tree.Column = mintGrdTpl_HiCo_Name_col;
 
-            grdTemplate.Cols[mintGrdTpl_HiCo_Name_col].Width = 491;
+            grdTemplate.Cols[mintGrdTpl_HiCo_Name_col].Width = 481;
         }
 
         private void formController_LoadData(TT3LightDLL.Controls.LoadDataEventArgs eventArgs)
@@ -358,7 +386,19 @@ namespace Ceritar.Logirack_CVS
 
         private void formController_SaveData(TT3LightDLL.Controls.SaveDataEventArgs eventArgs)
         {
-            mcActionResults = mcCtrTemplate.Save();
+            if (formController.FormMode == sclsConstants.DML_Mode.DELETE_MODE)
+            {
+                mcActionResults = mcCtrTemplate.blnDeleteTemplate();
+            }
+            else if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE || formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
+            {
+                mcActionResults = mcCtrTemplate.Save();
+            }
+
+            if (!mcActionResults.IsValid)
+            {
+                clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
+            }
 
             eventArgs.SaveSuccessful = mcActionResults.IsValid;
         }
@@ -369,6 +409,8 @@ namespace Ceritar.Logirack_CVS
 
             if (!mcActionResults.IsValid)
             {
+                clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
+
                 switch ((ctr_Template.ErrorCode_Tpl)mcActionResults.GetErrorCode)
                 {
                     case ctr_Template.ErrorCode_Tpl.HIERARCHY_MANDATORY:
@@ -387,9 +429,13 @@ namespace Ceritar.Logirack_CVS
                         cboTypes.Focus();
                         cboTypes.DroppedDown = true;
                         break;
-                }
 
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
+                    case ctr_Template.ErrorCode_Tpl.CERITAR_APPLICATION_MANDATORY:
+
+                        cboApplications.Focus();
+                        cboApplications.DroppedDown = true;
+                        break;
+                }   
             }
             else
             {
@@ -454,6 +500,30 @@ namespace Ceritar.Logirack_CVS
             else
             {
                 //Do nothing
+            }
+        }
+
+        private void chkByDefault_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!mblnFormIsLoading)
+            {
+                formController.ChangeMade = true;
+            }
+        }
+
+        private void btnMoveLeft_Click(object sender, EventArgs e)
+        {
+            if (grdTemplate.Rows.Count > 1 && grdTemplate.Row > 0 && mcGrdTemplate[grdTemplate.Row + 1, mintGrdTpl_HiCo_IsSystemItem_col] == "0" | String.IsNullOrEmpty(mcGrdTemplate[grdTemplate.Row + 1, mintGrdTpl_HiCo_IsSystemItem_col]))
+            {
+                grdTemplate.Rows[grdTemplate.Row].Node.Level--;
+            }
+        }
+
+        private void btnMoveRight_Click(object sender, EventArgs e)
+        {
+            if (grdTemplate.Rows.Count > 1 && grdTemplate.Row > 0 && mcGrdTemplate[grdTemplate.Row + 1, mintGrdTpl_HiCo_IsSystemItem_col] == "0" | String.IsNullOrEmpty(mcGrdTemplate[grdTemplate.Row + 1, mintGrdTpl_HiCo_IsSystemItem_col]))
+            {
+                grdTemplate.Rows[grdTemplate.Row].Node.Level++;
             }
         }
 

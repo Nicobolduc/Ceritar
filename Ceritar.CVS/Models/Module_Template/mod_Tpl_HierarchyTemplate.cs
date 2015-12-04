@@ -18,6 +18,9 @@ namespace Ceritar.CVS.Models.Module_Template
         private mod_HiCo_HierarchyComponent _cRacineSystem;
         //private List<mod_HiCo_HierarchyComponent> _lstHierarchyComponents;
 
+        //Messages
+        private const int mintMSG_UniqueDefaultTemplate = 13;
+
         public enum TemplateType
         {
             Version = 1,
@@ -124,17 +127,33 @@ namespace Ceritar.CVS.Models.Module_Template
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Template.ErrorCode_Tpl.CERITAR_APPLICATION_MANDATORY);
                         }
-                        //else if (_lstHierarchyComponents == null || _lstHierarchyComponents.Count == 0)
-                        //{
-                        //    mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Template.ErrorCode_Tpl.HIERARCHY_MANDATORY);
-                        //}
+                        else if (_cRacineSystem == null || (_cRacineSystem.GetType() == typeof(mod_Folder) && ((mod_Folder)_cRacineSystem).LstChildrensComponents.Count == 0 && _cRacineSystem.DML_Action == sclsConstants.DML_Mode.UPDATE_MODE))
+                        {
+                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Template.ErrorCode_Tpl.HIERARCHY_MANDATORY);
+                        }
                         else if (!clsSQL.bln_ADOValid_TS("Template", "Tpl_NRI", _intTemplate_NRI, "Tpl_TS", _intTemplate_TS))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_TIMESTAMP, clsActionResults.BaseErrorCode.INVALID_TIMESTAMP);
                         }
                         else
                         {
-                            mcActionResults.SetValid();
+                            if (_blnByDefault)
+                            {      
+                                string strDeExistingDefaultTemplateName = clsSQL.str_ADOSingleLookUp("Tpl_Name", "Template", "Tpl_NRI <> " + _intTemplate_NRI + " AND Tpl_ByDefault = 1 AND CeA_NRI = " + _intCeritarApplication_NRI);
+
+                                if (!string.IsNullOrEmpty(strDeExistingDefaultTemplateName))
+                                {
+                                    mcActionResults.SetInvalid(mintMSG_UniqueDefaultTemplate, ctr_Template.ErrorCode_Tpl.UNIQUE_DEFAULT_TEMPLATE);
+                                }
+                                else
+                                {
+                                    mcActionResults.SetValid();
+                                }
+                            }
+                            else
+                            {
+                                mcActionResults.SetValid();
+                            }
                         }
 
                         break;

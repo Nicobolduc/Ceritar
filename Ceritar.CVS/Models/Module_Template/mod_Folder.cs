@@ -27,7 +27,15 @@ namespace Ceritar.CVS.Models.Module_Template
 
         internal List<mod_HiCo_HierarchyComponent> LstChildrensComponents
         {
-            get { return _lstChildrensComponents; }
+            get 
+            {
+                if (_lstChildrensComponents == null)
+                {
+                    _lstChildrensComponents = new List<mod_HiCo_HierarchyComponent>();
+                }
+
+                return _lstChildrensComponents; 
+            }
             set { _lstChildrensComponents = value; }
         }
 
@@ -110,7 +118,7 @@ namespace Ceritar.CVS.Models.Module_Template
                         { }
                         else if (!base.pfblnHiCo_AddFields())
                         { }
-                        else if (!mcSQL.bln_ADOInsert("HierarchyComp", out _intTemplate_NRI))
+                        else if (!mcSQL.bln_ADOInsert("HierarchyComp", out _intHierarchyComponent_NRI))
                         { }
                         else if (!pfblnChildrens_Save())
                         { }
@@ -148,6 +156,12 @@ namespace Ceritar.CVS.Models.Module_Template
                         {
                             blnValidReturn = true;
                         }
+
+                        break;
+
+                    default:
+
+                        blnValidReturn = pfblnChildrens_Save();
 
                         break;
                 }
@@ -217,21 +231,20 @@ namespace Ceritar.CVS.Models.Module_Template
 
         private bool pfblnChildrens_Save()
         {
-            bool blnValidReturn = false;
+            bool blnValidReturn = true;
 
             try
             {
-                foreach (mod_HiCo_HierarchyComponent cHiCo in _lstChildrensComponents)
+                foreach (mod_HiCo_HierarchyComponent cHiCo in LstChildrensComponents)
                 {
-                    cHiCo.ParentComponent = this;
                     cHiCo.SetcSQL = mcSQL;
-                    //cHiCo.blnSave();
+                    cHiCo.Template_NRI = _intTemplate_NRI;
+
+                    blnValidReturn = cHiCo.blnSave();
 
                     mcActionResults = cHiCo.ActionResults;
 
-                    blnValidReturn = mcActionResults.IsValid;
-
-                    if (!blnValidReturn) break;
+                    if (!blnValidReturn || !mcActionResults.IsValid) break;
                 }
             }
             catch (Exception ex)

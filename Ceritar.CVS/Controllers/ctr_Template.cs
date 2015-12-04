@@ -12,7 +12,7 @@ namespace Ceritar.CVS.Controllers
         private Interfaces.ITemplate mcView;
         private mod_Tpl_HierarchyTemplate mcModTemplate;
         private mod_Folder mcModFolder_Root;
-        private clsActionResults mcActionResult;
+        private clsActionResults mcActionResult = new clsActionResults();
         private clsSQL mcSQL;
 
         public enum FolderType
@@ -30,7 +30,8 @@ namespace Ceritar.CVS.Controllers
             NAME_MANDATORY = 1,
             TEMPLATE_TYPE_MANDATORY = 2,
             HIERARCHY_MANDATORY = 3,
-            CERITAR_APPLICATION_MANDATORY = 4
+            CERITAR_APPLICATION_MANDATORY = 4,
+            UNIQUE_DEFAULT_TEMPLATE = 5
         }
 
         public enum ErrorCode_HiCo
@@ -48,10 +49,12 @@ namespace Ceritar.CVS.Controllers
 
         public clsActionResults Validate()
         {
-            mod_Folder cFolder;
+            mod_Folder cCurrentFolder;
             structHierarchyComponent structRacine;
             List<structHierarchyComponent> lstHiCo;
             mod_Folder cParentFolder = null;
+
+            mcActionResult.SetDefault();
 
             try
             {
@@ -65,44 +68,57 @@ namespace Ceritar.CVS.Controllers
                 mcModTemplate.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
 
                 structRacine = mcView.GetRacineSystem();
-                mcModTemplate.RacineSystem = new mod_Folder();
-                mcModTemplate.RacineSystem.DML_Action = structRacine.Action;
-                mcModTemplate.RacineSystem.HierarchyComponent_NRI = structRacine.intHierarchyComponent_NRI;
-                mcModTemplate.RacineSystem.HierarchyComponent_TS = structRacine.intHierarchyComponent_TS;
-                mcModTemplate.RacineSystem.NameOnDisk = structRacine.strName;
-                mcModTemplate.RacineSystem.Template_NRI = mcModTemplate.Template_NRI;
 
-                lstHiCo =  mcView.GetHierarchyComponentList();
-
-                for (int intIdx = 0; intIdx < lstHiCo.Count; intIdx++) 
+                if (structRacine.intHierarchyComponent_NRI > 0)
                 {
-                    cFolder = new mod_Folder();
-                    cFolder.DML_Action = lstHiCo[intIdx].Action;
-                    cFolder.HierarchyComponent_NRI = lstHiCo[intIdx].intHierarchyComponent_NRI;
-                    cFolder.HierarchyComponent_TS = lstHiCo[intIdx].intHierarchyComponent_TS;
-                    cFolder.NameOnDisk = lstHiCo[intIdx].strName;
-                    cFolder.NodeLevel = lstHiCo[intIdx].intNodeLevel;
-                    cFolder.Type = (FolderType)lstHiCo[intIdx].intFolderType_NRI;
-                    cFolder.Template_NRI = mcModTemplate.Template_NRI;
-
-                    if (intIdx == 0) //Il faut ajouter ls enfant ou bien sauvegarder le parent composant
-                    {
-                        mcModFolder_Root = cFolder;
-                        cFolder.ParentComponent = mcModTemplate.RacineSystem;
-                        cParentFolder = cFolder;
-                    }
-                    else if (cParentFolder.NodeLevel < cFolder.NodeLevel)
-                    {
-                        cFolder.ParentComponent = cParentFolder;
-                        cParentFolder = cFolder;
-                    }
-                    else
-                    {
-                        cFolder.ParentComponent = cParentFolder;
-                    }
+                    mcModTemplate.RacineSystem = new mod_Folder();
+                    mcModTemplate.RacineSystem.DML_Action = structRacine.Action;
+                    mcModTemplate.RacineSystem.HierarchyComponent_NRI = structRacine.intHierarchyComponent_NRI;
+                    mcModTemplate.RacineSystem.HierarchyComponent_TS = structRacine.intHierarchyComponent_TS;
+                    mcModTemplate.RacineSystem.NameOnDisk = structRacine.strName;
+                    mcModTemplate.RacineSystem.Template_NRI = mcModTemplate.Template_NRI;
+                    mcModTemplate.RacineSystem.ParentComponent = new mod_Folder();
+                    mcModTemplate.RacineSystem.ParentComponent.HierarchyComponent_NRI = structRacine.Parent_NRI;
+                    ((mod_Folder)mcModTemplate.RacineSystem).Type = structRacine.FolderType;
+                    ((mod_Folder)mcModTemplate.RacineSystem).NodeLevel = structRacine.intNodeLevel;
                 }
 
                 mcActionResult = mcModTemplate.Validate();
+
+                if (mcActionResult.IsValid)
+                {
+                    lstHiCo = mcView.GetHierarchyComponentList();
+
+                    for (int intIdx = 0; intIdx < lstHiCo.Count; intIdx++)
+                    {
+                        cCurrentFolder = new mod_Folder();
+                        cCurrentFolder.DML_Action = lstHiCo[intIdx].Action;
+                        cCurrentFolder.HierarchyComponent_NRI = lstHiCo[intIdx].intHierarchyComponent_NRI;
+                        cCurrentFolder.HierarchyComponent_TS = lstHiCo[intIdx].intHierarchyComponent_TS;
+                        cCurrentFolder.NameOnDisk = lstHiCo[intIdx].strName;
+                        cCurrentFolder.NodeLevel = lstHiCo[intIdx].intNodeLevel;
+                        cCurrentFolder.Type = (FolderType)lstHiCo[intIdx].FolderType;
+                        cCurrentFolder.Template_NRI = mcModTemplate.Template_NRI;
+
+                        if (intIdx == 0)
+                        {
+                            //mcModFolder_Root = cFolder;
+                            cCurrentFolder.ParentComponent = mcModTemplate.RacineSystem;
+                            cParentFolder = ((mod_Folder)mcModTemplate.RacineSystem);
+                            ((mod_Folder)mcModTemplate.RacineSystem).LstChildrensComponents.Add(cCurrentFolder);
+                        }
+                        else if (cParentFolder.NodeLevel < cCurrentFolder.NodeLevel)
+                        {
+                            cCurrentFolder.ParentComponent = cParentFolder;
+                            cParentFolder = cCurrentFolder;
+                        }
+                        else
+                        {
+                            cCurrentFolder.ParentComponent = cParentFolder;
+                            cParentFolder.LstChildrensComponents.Add(cCurrentFolder);
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -131,12 +147,63 @@ namespace Ceritar.CVS.Controllers
 
                     if (blnValidReturn && mcActionResult.IsValid)
                     {
-                        mcModFolder_Root.SetcSQL = mcSQL;
+                        mcModTemplate.RacineSystem.SetcSQL = mcSQL;
+                        mcModTemplate.RacineSystem.Template_NRI = mcModTemplate.Template_NRI;
 
-                        blnValidReturn = mcModFolder_Root.blnSave();
+                        blnValidReturn = mcModTemplate.RacineSystem.blnSave();
 
                         mcActionResult = mcModTemplate.ActionResults;
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                mcActionResult.SetInvalid(sclsConstants.Error_Message.ERROR_UNHANDLED, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                if (!blnValidReturn & mcActionResult.IsValid)
+                {
+                    mcActionResult.SetInvalid(sclsConstants.Error_Message.ERROR_SAVE_MSG, clsActionResults.BaseErrorCode.ERROR_SAVE);
+                }
+                else if (blnValidReturn & !mcActionResult.IsValid)
+                {
+                    blnValidReturn = false;
+                }
+
+                mcSQL.bln_EndTransaction(mcActionResult.IsValid);
+                mcSQL = null;
+            }
+
+            return mcActionResult;
+        }
+
+        public clsActionResults blnDeleteTemplate()
+        {
+            bool blnValidReturn = false;
+
+            mcActionResult.SetDefault();
+
+            try
+            {
+                mcSQL = new clsSQL();
+
+                mcModTemplate.SetcSQL = mcSQL;
+
+                mcActionResult = mcModTemplate.Validate();
+
+                if (!mcActionResult.IsValid)
+                { }
+                else if (!mcSQL.bln_BeginTransaction())
+                { }
+                else if (!mcSQL.bln_ADODelete("HierarchyComp", "Tpl_NRI = " + mcModTemplate.Template_NRI))
+                { }
+                else if (!mcModTemplate.blnSave())
+                { }
+                else
+                {
+                    blnValidReturn = true;
                 }
             }
             catch (Exception ex)

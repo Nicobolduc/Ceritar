@@ -21,8 +21,7 @@ namespace Ceritar.TT3LightDLL.Static_Classes
         public enum Error_Message
         {
             ERROR_UNHANDLED = 1,
-            ERROR_SAVE_MSG = 5,
-            ERROR_ITEM_USED_MSG = 19
+            ERROR_SAVE_MSG = 12
         }
 
         public enum Validation_Message

@@ -30,6 +30,6 @@ namespace Ceritar.CVS.Controllers.Interfaces
         public int intScriptSequenceNo;
         public int Parent_NRI;
         public ushort intNodeLevel;
-        public int intFolderType_NRI;
+        public ctr_Template.FolderType FolderType;
     }
 }

@@ -28,6 +28,7 @@ namespace Ceritar.Logirack_CVS
         {
             string strListGenTitle = string.Empty;
             string strSQL = string.Empty;
+            int intItem_NRI = 0;
             
             try
             {
@@ -65,9 +66,9 @@ namespace Ceritar.Logirack_CVS
                     frmGenList.Text = frmGenList.Text + strListGenTitle;
                     frmGenList.MdiParent = mdiGeneral.ActiveForm;
 
-                    frmGenList.formController.ShowForm(sclsConstants.DML_Mode.CONSULT_MODE);
+                    frmGenList.formController.ShowForm(sclsConstants.DML_Mode.CONSULT_MODE, ref intItem_NRI);
 
-                    //if (My.Forms.mdiGeneral.GetGenListChildCount == 0)
+                    //if (mdiGeneral.GetGenListChildCount == 0)
                     //{
                     //    frmGenList.Location = new Point(0, 0);
                     //}
@@ -76,7 +77,7 @@ namespace Ceritar.Logirack_CVS
                     //    frmGenList.Location = new Point(My.Forms.mdiGeneral.GetGenListChildCount * 25, My.Forms.mdiGeneral.GetGenListChildCount * 25);
                     //}
 
-                    //My.Forms.mdiGeneral.AddGenListHandle((object)frmGenList, frmGenList.Handle.ToInt32);
+                    //mdiGeneral.AddGenListHandle((object)frmGenList, frmGenList.Handle.ToInt32);
                 }
 
             }

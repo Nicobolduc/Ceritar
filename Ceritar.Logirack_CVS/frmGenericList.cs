@@ -18,7 +18,7 @@ namespace Ceritar.Logirack_CVS
         private const int mintItem_ID_col = 1;
         private int mintSelectedRow = 1;
         private string mstrFormToOpenName = string.Empty;
-        private bool mblnChildFormIsModal = true;
+        private bool mblnChildFormIsModal = false;
         private sclsGenList.GeneralLists_ID mListToOpen;       
 
         //Private class members
@@ -68,30 +68,31 @@ namespace Ceritar.Logirack_CVS
             bool blnValidReturn = true;
             IFormController frmToOpen = null;
             string strFormName = string.Empty;
-            int intItem_ID = 0;
+            int intItem_NRI = 0;
 
             try
             {
                 strFormName = typeof(mdiGeneral).Namespace + "." + mstrFormToOpenName;
 
                 frmToOpen = (IFormController) System.Reflection.Assembly.GetEntryAssembly().CreateInstance(strFormName, true);
+                ((Form)frmToOpen).MdiParent = this.MdiParent;
 
                 if (grdList.Row > 0)
                 {
                     mintSelectedRow = grdList.Row;
-                    intItem_ID = Convert.ToInt32(grdList[mintSelectedRow, mintItem_ID_col]);
+                    intItem_NRI = Convert.ToInt32(grdList[mintSelectedRow, mintItem_ID_col]);
                 }
 
                 switch (vFormMode)
                 {
                     case sclsConstants.DML_Mode.INSERT_MODE:
-
-                        frmToOpen.GetFormController().ShowForm(vFormMode, 0, mblnChildFormIsModal);
+                        intItem_NRI = 0;
+                        frmToOpen.GetFormController().ShowForm(vFormMode, ref intItem_NRI, mblnChildFormIsModal);
                         
                         break;
 
                     case sclsConstants.DML_Mode.UPDATE_MODE:
-                        frmToOpen.GetFormController().ShowForm(vFormMode, intItem_ID, mblnChildFormIsModal);
+                        frmToOpen.GetFormController().ShowForm(vFormMode, ref intItem_NRI, mblnChildFormIsModal);
        
                         break;
 
@@ -99,27 +100,20 @@ namespace Ceritar.Logirack_CVS
                     case sclsConstants.DML_Mode.DELETE_MODE:
                         clsApp.GetAppController.DisableAllFormControls((Form)frmToOpen, null, null);
 
-                        frmToOpen.GetFormController().ShowForm(vFormMode, intItem_ID, mblnChildFormIsModal);
+                        frmToOpen.GetFormController().ShowForm(vFormMode, ref intItem_NRI, mblnChildFormIsModal);
 
                         break;
                 }
 
-                //formController.LoadFormData();
+                formController.LoadFormData();
 
                 switch (vFormMode)
                 {
                     case sclsConstants.DML_Mode.INSERT_MODE:
                     case sclsConstants.DML_Mode.UPDATE_MODE:
+                        int intCurrentItem = grdList.FindRow(intItem_NRI.ToString(), 1, mintItem_ID_col, false, true, false);
 
-                        for (int intRowIndex = 1; intRowIndex <= grdList.Rows.Count - 1; intRowIndex++)
-                        {
-                            if (Microsoft.VisualBasic.Conversion.Val(grdList[intRowIndex, mintItem_ID_col]) == intItem_ID)
-                            {
-                                mintSelectedRow = intRowIndex;
-
-                                break;
-                            }
-                        }
+                        grdList.Row = (intCurrentItem > 0 ? intCurrentItem : 1);
 
                         break;
                 }
@@ -256,7 +250,7 @@ namespace Ceritar.Logirack_CVS
             }
         }
 
-        private void btnRefresh_Click() //(object sender, EventArgs e)
+        private void btnRefresh_Click()
         {
             pfblnGrdList_Load();
         }

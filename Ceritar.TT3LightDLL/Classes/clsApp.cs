@@ -212,14 +212,14 @@ namespace Ceritar.TT3LightDLL.Classes
             return DateTime.ParseExact(vdtToFormat, str_GetUserDateFormat, System.Globalization.CultureInfo.InvariantCulture);
         }
 
-        public void ShowMessage(int vintCaption_ID, MessageBoxButtons vmsgType = MessageBoxButtons.OK, List<string> vlstMsgParam = null)
+        public void ShowMessage(int vintCaption_NRI, MessageBoxButtons vmsgType = MessageBoxButtons.OK, List<string> vlstMsgParam = null)
         {
             string strMessage = string.Empty;
             int intParamCpt = 1;
 
             try
             {
-                strMessage = _myUniqueInstance.str_GetCaption(vintCaption_ID, mctrlUser.GetUserLanguage);
+                strMessage = _myUniqueInstance.str_GetCaption(vintCaption_NRI, mctrlUser.GetUserLanguage);
 
                 if ((vlstMsgParam != null))
                 {

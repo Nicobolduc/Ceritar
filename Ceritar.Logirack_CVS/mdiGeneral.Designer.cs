@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mdiGeneral));
             this.mnuMain = new System.Windows.Forms.MenuStrip();
             this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuLogOut = new System.Windows.Forms.ToolStripMenuItem();
             this.muManagement = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuVersion = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuConfiguration = new System.Windows.Forms.ToolStripMenuItem();
@@ -39,7 +41,6 @@
             this.lblCurrentUser = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblDatabase = new System.Windows.Forms.ToolStripStatusLabel();
-            this.mnuLogOut = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMain.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.SuspendLayout();
@@ -64,6 +65,12 @@
             this.mnuFile.Size = new System.Drawing.Size(54, 20);
             this.mnuFile.Text = "Fichier";
             this.mnuFile.Click += new System.EventHandler(this.fileToolStripMenuItem_Click);
+            // 
+            // mnuLogOut
+            // 
+            this.mnuLogOut.Name = "mnuLogOut";
+            this.mnuLogOut.Size = new System.Drawing.Size(155, 22);
+            this.mnuLogOut.Text = "Se déconnecter";
             // 
             // muManagement
             // 
@@ -140,12 +147,6 @@
             this.lblDatabase.Size = new System.Drawing.Size(56, 17);
             this.lblDatabase.Text = "database";
             // 
-            // mnuLogOut
-            // 
-            this.mnuLogOut.Name = "mnuLogOut";
-            this.mnuLogOut.Size = new System.Drawing.Size(155, 22);
-            this.mnuLogOut.Text = "Se déconnecter";
-            // 
             // mdiGeneral
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -153,6 +154,7 @@
             this.ClientSize = new System.Drawing.Size(1314, 770);
             this.Controls.Add(this.statusBar);
             this.Controls.Add(this.mnuMain);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.Name = "mdiGeneral";
             this.Text = "Logirack CVS";

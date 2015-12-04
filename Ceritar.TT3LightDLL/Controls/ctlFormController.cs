@@ -156,7 +156,7 @@ namespace Ceritar.TT3LightDLL.Controls
 
 #region Functions / Subs
 
-        public void ShowForm(sclsConstants.DML_Mode vintFormMode, int rintItem_ID = 0, bool vblnIsModal = false)
+        public void ShowForm(sclsConstants.DML_Mode vintFormMode, ref int rintItem_ID, bool vblnIsModal = false)
         {
 
             mintFormMode = vintFormMode;
@@ -166,7 +166,7 @@ namespace Ceritar.TT3LightDLL.Controls
             {
                 this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
 
-                mfrmParent = this.FindForm(); //TODO Chu rendu ici
+                mfrmParent = this.FindForm();
 
                 SetVisualStyle();
 
@@ -176,7 +176,7 @@ namespace Ceritar.TT3LightDLL.Controls
                 {
                     if (!vblnIsModal)
                     {
-                        //mfrmParent.MdiParent = MdiClient;
+                        //mfrmParent.MdiParent = mfrmParent.ParentForm;
                         
                         mfrmParent.Show();
                     }
@@ -344,7 +344,8 @@ namespace Ceritar.TT3LightDLL.Controls
                 }
                 else
                 {
-                   Classes.clsApp.GetAppController.ShowMessage((int) sclsConstants.Error_Message.ERROR_SAVE_MSG);
+                    //TODO Silent mode
+                   //Classes.clsApp.GetAppController.ShowMessage((int) sclsConstants.Error_Message.ERROR_SAVE_MSG);
                 }
             }
 

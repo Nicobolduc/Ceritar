@@ -462,7 +462,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
             if (!blnValidReturn)
             {
-                clsApp.GetAppController.ShowMessage((int) sclsConstants.Error_Message.ERROR_ITEM_USED_MSG);
+                clsApp.GetAppController.ShowMessage((int) sclsConstants.Validation_Message.INVALID_REFERENCE_INTEGRITY);
             }
 
             return blnValidReturn;
