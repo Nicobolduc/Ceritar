@@ -53,6 +53,7 @@ namespace Ceritar.CVS.Controllers
             structHierarchyComponent structRacine;
             List<structHierarchyComponent> lstHiCo;
             mod_Folder cParentFolder = null;
+            mod_Folder cPreviousFolder = null;
 
             mcActionResult.SetDefault();
 
@@ -69,7 +70,7 @@ namespace Ceritar.CVS.Controllers
 
                 structRacine = mcView.GetRacineSystem();
 
-                if (structRacine.intHierarchyComponent_NRI > 0)
+                if (structRacine.intHierarchyComponent_NRI > 0 || mcModTemplate.DML_Action == sclsConstants.DML_Mode.INSERT_MODE)
                 {
                     mcModTemplate.RacineSystem = new mod_Folder();
                     mcModTemplate.RacineSystem.DML_Action = structRacine.Action;
@@ -102,21 +103,27 @@ namespace Ceritar.CVS.Controllers
 
                         if (intIdx == 0)
                         {
-                            //mcModFolder_Root = cFolder;
-                            cCurrentFolder.ParentComponent = mcModTemplate.RacineSystem;
                             cParentFolder = ((mod_Folder)mcModTemplate.RacineSystem);
                             ((mod_Folder)mcModTemplate.RacineSystem).LstChildrensComponents.Add(cCurrentFolder);
                         }
-                        else if (cParentFolder.NodeLevel < cCurrentFolder.NodeLevel)
+                        else if (cPreviousFolder.NodeLevel < cCurrentFolder.NodeLevel)
                         {
-                            cCurrentFolder.ParentComponent = cParentFolder;
-                            cParentFolder = cCurrentFolder;
+                            cParentFolder = (mod_Folder)cPreviousFolder;
+                            cPreviousFolder.LstChildrensComponents.Add(cCurrentFolder);
+                        }
+                        else if (cPreviousFolder.NodeLevel > cCurrentFolder.NodeLevel)
+                        {
+                            cParentFolder = (mod_Folder)cPreviousFolder.ParentComponent.ParentComponent;
+                            cParentFolder.LstChildrensComponents.Add(cCurrentFolder);
                         }
                         else
                         {
-                            cCurrentFolder.ParentComponent = cParentFolder;
                             cParentFolder.LstChildrensComponents.Add(cCurrentFolder);
                         }
+
+                        cCurrentFolder.ParentComponent = cParentFolder;
+
+                        cPreviousFolder = cCurrentFolder;
                     }
                 }
             }
@@ -250,58 +257,97 @@ namespace Ceritar.CVS.Controllers
         {
             string strSQL = string.Empty;
 
-            strSQL = strSQL + " SELECT  ActionCol = " + (vintTemplate_NRI == 0 ? (int)sclsConstants.DML_Mode.INSERT_MODE: (int)sclsConstants.DML_Mode.NO_MODE) + "," + Environment.NewLine;
-            strSQL = strSQL + "   		HierarchyComp.HiCo_NRI,  " + Environment.NewLine;
-            strSQL = strSQL + "   		IsSystem = 1,  " + Environment.NewLine;
-            strSQL = strSQL + "   		HierarchyComp.HiCo_NodeLevel AS HiCo_NodeLevel,  " + Environment.NewLine;
-            strSQL = strSQL + "   		IsRoot = CASE WHEN HierarchyComp.HiCo_Parent_NRI = TNode.Parent OR HierarchyComp.HiCo_Parent_NRI IS NULL THEN 1 ELSE 0 END, " + Environment.NewLine;
-            strSQL = strSQL + "   		HierarchyComp.HiCo_Name,  " + Environment.NewLine;
-            strSQL = strSQL + "   		FoT_NRI = '',  " + Environment.NewLine;
-            strSQL = strSQL + "   		FoT_Code = '' " + Environment.NewLine;
+            //strSQL = strSQL + " SELECT  ActionCol = " + (vintTemplate_NRI == 0 ? (int)sclsConstants.DML_Mode.INSERT_MODE: (int)sclsConstants.DML_Mode.NO_MODE) + "," + Environment.NewLine;
+            //strSQL = strSQL + "   		HierarchyComp.HiCo_NRI,  " + Environment.NewLine;
+            //strSQL = strSQL + "   		IsSystem = 1,  " + Environment.NewLine;
+            //strSQL = strSQL + "   		HierarchyComp.HiCo_NodeLevel AS HiCo_NodeLevel,  " + Environment.NewLine;
+            //strSQL = strSQL + "   		IsRoot = CASE WHEN HierarchyComp.HiCo_Parent_NRI = TNode.Parent OR HierarchyComp.HiCo_Parent_NRI IS NULL THEN 1 ELSE 0 END, " + Environment.NewLine;
+            //strSQL = strSQL + "   		HierarchyComp.HiCo_Name,  " + Environment.NewLine;
+            //strSQL = strSQL + "   		FoT_NRI = '',  " + Environment.NewLine;
+            //strSQL = strSQL + "   		FoT_Code = '' " + Environment.NewLine;
 
-            strSQL = strSQL + " FROM AppConfig  " + Environment.NewLine;
-            strSQL = strSQL + " 	INNER JOIN HierarchyComp ON HierarchyComp.ACg_NRI = AppConfig.ACg_NRI " + Environment.NewLine;
-            //strSQL = strSQL + " 	INNER JOIN FolderType ON FolderType.FoT_NRI = HierarchyComp.FoT_NRI " + Environment.NewLine;
+            //strSQL = strSQL + " FROM AppConfig  " + Environment.NewLine;
+            //strSQL = strSQL + " 	INNER JOIN HierarchyComp ON HierarchyComp.ACg_NRI = AppConfig.ACg_NRI " + Environment.NewLine;
+            ////strSQL = strSQL + " 	INNER JOIN FolderType ON FolderType.FoT_NRI = HierarchyComp.FoT_NRI " + Environment.NewLine;
 
-            strSQL = strSQL + " 	LEFT JOIN ( SELECT MIN(HierarchyComp.HiCo_NRI) AS Enfant, MAX(Parent.HiCo_NRI) AS Parent  " + Environment.NewLine;
-            strSQL = strSQL + "   				FROM HierarchyComp   " + Environment.NewLine;
-            strSQL = strSQL + "   					INNER JOIN HierarchyComp Parent ON Parent.HiCo_NRI = HierarchyComp.HiCo_Parent_NRI   " + Environment.NewLine;
-            strSQL = strSQL + "   				WHERE HierarchyComp.HiCo_NodeLevel - 1 = Parent.HiCo_NodeLevel  " + Environment.NewLine;
-            strSQL = strSQL + "   				GROUP BY HierarchyComp.HiCo_NodeLevel  " + Environment.NewLine;
-            strSQL = strSQL + "   				) AS TNode ON TNode.Enfant = HierarchyComp.HiCo_NRI  " + Environment.NewLine;
+            //strSQL = strSQL + " 	LEFT JOIN ( SELECT MIN(HierarchyComp.HiCo_NRI) AS Enfant, MAX(Parent.HiCo_NRI) AS Parent  " + Environment.NewLine;
+            //strSQL = strSQL + "   				FROM HierarchyComp   " + Environment.NewLine;
+            //strSQL = strSQL + "   					INNER JOIN HierarchyComp Parent ON Parent.HiCo_NRI = HierarchyComp.HiCo_Parent_NRI   " + Environment.NewLine;
+            //strSQL = strSQL + "   				WHERE HierarchyComp.HiCo_NodeLevel - 1 = Parent.HiCo_NodeLevel  " + Environment.NewLine;
+            //strSQL = strSQL + "   				GROUP BY HierarchyComp.HiCo_NodeLevel  " + Environment.NewLine;
+            //strSQL = strSQL + "   				) AS TNode ON TNode.Enfant = HierarchyComp.HiCo_NRI  " + Environment.NewLine;
 
-            strSQL = strSQL + " WHERE AppConfig.ACg_Racine_Name = 'InstallationsActives' " + Environment.NewLine;
+            //strSQL = strSQL + " WHERE AppConfig.ACg_Racine_Name = 'InstallationsActives' " + Environment.NewLine;
 
-            if (vintTemplate_NRI > 0)
-            {
-                strSQL = strSQL + " UNION ALL " + Environment.NewLine;
+            //if (vintTemplate_NRI > 0)
+            //{
+            //    strSQL = strSQL + " UNION ALL " + Environment.NewLine;
 
-                strSQL = strSQL + " SELECT  ActionCol = 0,  " + Environment.NewLine;
-                strSQL = strSQL + "   		HierarchyComp.HiCo_NRI,  " + Environment.NewLine;
-                strSQL = strSQL + "   		IsSystem = 0,  " + Environment.NewLine;
-                strSQL = strSQL + "   		HierarchyComp.HiCo_NodeLevel AS HiCo_NodeLevel,  " + Environment.NewLine;
-                strSQL = strSQL + "   		IsRoot = CASE WHEN HierarchyComp.HiCo_Parent_NRI = TNode.Parent OR HierarchyComp.HiCo_Parent_NRI IS NULL THEN 1 ELSE 0 END, " + Environment.NewLine;
-                strSQL = strSQL + "   		HierarchyComp.HiCo_Name,  " + Environment.NewLine;
-                strSQL = strSQL + "   		FolderType.FoT_NRI,  " + Environment.NewLine;
-                strSQL = strSQL + "   		FolderType.FoT_Code  " + Environment.NewLine;
+            //    strSQL = strSQL + " SELECT  ActionCol = 0,  " + Environment.NewLine;
+            //    strSQL = strSQL + "   		HierarchyComp.HiCo_NRI,  " + Environment.NewLine;
+            //    strSQL = strSQL + "   		IsSystem = 0,  " + Environment.NewLine;
+            //    strSQL = strSQL + "   		HierarchyComp.HiCo_NodeLevel AS HiCo_NodeLevel,  " + Environment.NewLine;
+            //    strSQL = strSQL + "   		IsRoot = CASE WHEN HierarchyComp.HiCo_Parent_NRI = TNode.Parent OR HierarchyComp.HiCo_Parent_NRI IS NULL THEN 1 ELSE 0 END, " + Environment.NewLine;
+            //    strSQL = strSQL + "   		HierarchyComp.HiCo_Name,  " + Environment.NewLine;
+            //    strSQL = strSQL + "   		FolderType.FoT_NRI,  " + Environment.NewLine;
+            //    strSQL = strSQL + "   		FolderType.FoT_Code  " + Environment.NewLine;
 
-                strSQL = strSQL + " FROM Template  " + Environment.NewLine;
-                strSQL = strSQL + " 	INNER JOIN HierarchyComp " + Environment.NewLine;
-                strSQL = strSQL + " 	    INNER JOIN FolderType ON FolderType.FoT_NRI = HierarchyComp.FoT_NRI " + Environment.NewLine;
-                strSQL = strSQL + " 	ON HierarchyComp.Tpl_NRI = Template.Tpl_NRI " + Environment.NewLine;
+            //    strSQL = strSQL + " FROM Template  " + Environment.NewLine;
+            //    strSQL = strSQL + " 	INNER JOIN HierarchyComp " + Environment.NewLine;
+            //    strSQL = strSQL + " 	    INNER JOIN FolderType ON FolderType.FoT_NRI = HierarchyComp.FoT_NRI " + Environment.NewLine;
+            //    strSQL = strSQL + " 	ON HierarchyComp.Tpl_NRI = Template.Tpl_NRI " + Environment.NewLine;
 
-                strSQL = strSQL + " 	LEFT JOIN ( SELECT MIN(HierarchyComp.HiCo_NRI) AS Enfant, MAX(Parent.HiCo_NRI) AS Parent  " + Environment.NewLine;
-                strSQL = strSQL + "   				FROM HierarchyComp   " + Environment.NewLine;
-                strSQL = strSQL + "   					INNER JOIN HierarchyComp Parent ON Parent.HiCo_NRI = HierarchyComp.HiCo_Parent_NRI   " + Environment.NewLine;
-                strSQL = strSQL + "   				WHERE HierarchyComp.HiCo_NodeLevel - 1 = Parent.HiCo_NodeLevel  " + Environment.NewLine;
-                strSQL = strSQL + "   				GROUP BY HierarchyComp.HiCo_NodeLevel  " + Environment.NewLine;
-                strSQL = strSQL + "   				) AS TNode ON TNode.Enfant = HierarchyComp.HiCo_NRI  " + Environment.NewLine;
+            //    strSQL = strSQL + " 	LEFT JOIN ( SELECT MIN(HierarchyComp.HiCo_NRI) AS Enfant, MAX(Parent.HiCo_NRI) AS Parent  " + Environment.NewLine;
+            //    strSQL = strSQL + "   				FROM HierarchyComp   " + Environment.NewLine;
+            //    strSQL = strSQL + "   					INNER JOIN HierarchyComp Parent ON Parent.HiCo_NRI = HierarchyComp.HiCo_Parent_NRI   " + Environment.NewLine;
+            //    strSQL = strSQL + "   				WHERE HierarchyComp.HiCo_NodeLevel - 1 = Parent.HiCo_NodeLevel  " + Environment.NewLine;
+            //    strSQL = strSQL + "   				GROUP BY HierarchyComp.HiCo_NodeLevel  " + Environment.NewLine;
+            //    strSQL = strSQL + "   				) AS TNode ON TNode.Enfant = HierarchyComp.HiCo_NRI  " + Environment.NewLine;
 
-                strSQL = strSQL + " WHERE Template.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
-            }
-            
-            strSQL = strSQL + " ORDER BY HierarchyComp.HiCo_NodeLevel  " + Environment.NewLine;
+            //    strSQL = strSQL + " WHERE Template.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
+            //}
 
+            //strSQL = strSQL + " ORDER BY HierarchyComp.HiCo_NodeLevel " + Environment.NewLine;
+
+            strSQL = strSQL + " WITH LstHierarchyComp " + Environment.NewLine;
+            strSQL = strSQL + " AS " + Environment.NewLine;
+            strSQL = strSQL + " ( " + Environment.NewLine;
+            strSQL = strSQL + "     SELECT *, " + Environment.NewLine;
+            strSQL = strSQL + " 		   CAST(0 AS varbinary(max)) AS Level " + Environment.NewLine;
+            strSQL = strSQL + " 	FROM HierarchyComp  " + Environment.NewLine;
+            strSQL = strSQL + " 	WHERE HiCo_Parent_NRI IS NULL " + Environment.NewLine;
+
+            strSQL = strSQL + "     UNION ALL " + Environment.NewLine;
+
+            strSQL = strSQL + "     SELECT HiCo_Childrens.*, " + Environment.NewLine;
+            strSQL = strSQL + " 		   Level + CAST(HiCo_Childrens.HiCo_NRI AS varbinary(max)) AS Level " + Environment.NewLine;
+            strSQL = strSQL + " 	FROM HierarchyComp HiCo_Childrens  " + Environment.NewLine;
+            strSQL = strSQL + " 		INNER JOIN LstHierarchyComp on HiCo_Childrens.HiCo_Parent_NRI = LstHierarchyComp.HiCo_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 	WHERE HiCo_Childrens.HiCo_Parent_NRI IS NOT NULL " + Environment.NewLine;
+            strSQL = strSQL + " ) " + Environment.NewLine;
+
+            strSQL = strSQL + " SELECT  ActionCol = 0, " + Environment.NewLine;
+            strSQL = strSQL + "    		LstHierarchyComp.HiCo_NRI,   " + Environment.NewLine;
+            strSQL = strSQL + "    		IsSystem = CASE WHEN LstHierarchyComp.ACg_NRI IS NULL THEN 0 ELSE 1 END,   " + Environment.NewLine;
+            strSQL = strSQL + "    		LstHierarchyComp.HiCo_NodeLevel,   " + Environment.NewLine;
+            strSQL = strSQL + "    		IsNode = 0, --CASE WHEN LstHierarchyComp.HiCo_Parent_NRI = TNode.Parent OR LstHierarchyComp.HiCo_Parent_NRI IS NULL THEN 1 ELSE 0 END,  " + Environment.NewLine; //Not used anymore
+            strSQL = strSQL + "    		LstHierarchyComp.HiCo_Name,   " + Environment.NewLine;
+            strSQL = strSQL + "    		FoT_NRI = CASE WHEN LstHierarchyComp.ACg_NRI IS NULL THEN LstHierarchyComp.FoT_NRI ELSE 0 END,  " + Environment.NewLine;
+            strSQL = strSQL + "    		FoT_Code = CASE WHEN LstHierarchyComp.ACg_NRI IS NULL THEN FolderType.FoT_Code ELSE NULL END  " + Environment.NewLine;
+
+            strSQL = strSQL + " FROM LstHierarchyComp " + Environment.NewLine;
+            strSQL = strSQL + " 	INNER JOIN FolderType ON FolderType.FoT_NRI = LstHierarchyComp.FoT_NRI  " + Environment.NewLine;
+
+            //strSQL = strSQL + " 	LEFT JOIN ( SELECT MIN(HierarchyComp.HiCo_NRI) AS Enfant, MAX(Parent.HiCo_NRI) AS Parent   " + Environment.NewLine;
+            //strSQL = strSQL + "    				FROM HierarchyComp    " + Environment.NewLine;
+            //strSQL = strSQL + "    					INNER JOIN HierarchyComp Parent ON Parent.HiCo_NRI = HierarchyComp.HiCo_Parent_NRI    " + Environment.NewLine;
+            //strSQL = strSQL + "    				WHERE HierarchyComp.HiCo_NodeLevel - 1 = Parent.HiCo_NodeLevel   " + Environment.NewLine;
+            //strSQL = strSQL + "    				GROUP BY HierarchyComp.HiCo_NodeLevel   " + Environment.NewLine;
+            //strSQL = strSQL + "    			   ) AS TNode ON TNode.Enfant = HiCo_NRI " + Environment.NewLine;
+
+            strSQL = strSQL + " WHERE LstHierarchyComp.ACg_NRI IS NOT NULL OR LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
+
+            strSQL = strSQL + " ORDER BY Level " + Environment.NewLine;
 
             return strSQL;
         }

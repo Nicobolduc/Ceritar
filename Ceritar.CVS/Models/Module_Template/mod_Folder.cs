@@ -60,6 +60,11 @@ namespace Ceritar.CVS.Models.Module_Template
 
                     switch (mintDML_Action)
                     {
+                        case sclsConstants.DML_Mode.NO_MODE:
+                            mcActionResults.SetValid();
+
+                            break;
+
                         case sclsConstants.DML_Mode.INSERT_MODE:
                         case sclsConstants.DML_Mode.UPDATE_MODE:
 
@@ -131,11 +136,11 @@ namespace Ceritar.CVS.Models.Module_Template
 
                     case sclsConstants.DML_Mode.UPDATE_MODE:
 
-                        if (!base.pfblnHiCo_AddFields())
+                        if (!pfblnFoT_AddFields())
                         { }
-                        else if (!pfblnFoT_AddFields())
+                        else if (!base.pfblnHiCo_AddFields())
                         { }
-                        else if (!mcSQL.bln_ADOUpdate("HierarchyComp", "HierarchyComp.HiCo_NRI = " + _intTemplate_NRI))
+                        else if (!mcSQL.bln_ADOUpdate("HierarchyComp", "HierarchyComp.HiCo_NRI = " + _intHierarchyComponent_NRI))
                         { }
                         else if (!pfblnChildrens_Save())
                         { }
@@ -150,7 +155,7 @@ namespace Ceritar.CVS.Models.Module_Template
 
                         if (!pfblnChildrens_Save())
                         { }
-                        else if (!mcSQL.bln_ADODelete("HierarchyComp", "HierarchyComp.HiCo_NRI = " + _intTemplate_NRI))
+                        else if (!mcSQL.bln_ADODelete("HierarchyComp", "HierarchyComp.HiCo_NRI = " + _intHierarchyComponent_NRI))
                         { }
                         else
                         {
