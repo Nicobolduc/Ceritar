@@ -47,7 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\clsApp.cs" />
-    <Compile Include="Classes\clsFlexGridWrapper.cs" />
+    <Compile Include="Classes\clsC1FlexGridWrapper.cs" />
     <Compile Include="Classes\clsSQL.cs" />
     <Compile Include="Classes\clsUser.cs" />
     <Compile Include="Controls\ctlFormController.cs">
@@ -99,6 +99,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Refresh.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Refresh.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

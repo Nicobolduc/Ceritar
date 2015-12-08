@@ -32,12 +32,7 @@ namespace Ceritar.Logirack_CVS
 
         private void versionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int intPlaceHolder = 0;
-            frmVersionRevision frmVersionAndRevision = new frmVersionRevision();
-
-            frmVersionAndRevision.MdiParent = this;
-
-            frmVersionAndRevision.formController.ShowForm(sclsConstants.DML_Mode.UPDATE_MODE, ref intPlaceHolder, false);
+            sclsGenList.ShowGenList(sclsGenList.GeneralLists_ID.VERSION_REVISION_LIST_NRI);
         }
 
         private void mdiGeneral_Load(object sender, EventArgs e)

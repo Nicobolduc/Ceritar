@@ -64,17 +64,23 @@
     <Compile Include="frmGenericList.Designer.cs">
       <DependentUpon>frmGenericList.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmRevision.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRevision.Designer.cs">
+      <DependentUpon>frmRevision.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmTemplate.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmTemplate.Designer.cs">
       <DependentUpon>frmTemplate.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmVersionRevision.cs">
+    <Compile Include="frmVersion.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmVersionRevision.Designer.cs">
-      <DependentUpon>frmVersionRevision.cs</DependentUpon>
+    <Compile Include="frmVersion.Designer.cs">
+      <DependentUpon>frmVersion.cs</DependentUpon>
     </Compile>
     <Compile Include="mdiGeneral.cs">
       <SubType>Form</SubType>
@@ -96,16 +102,18 @@
     <EmbeddedResource Include="frmGenericList.resx">
       <DependentUpon>frmGenericList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmRevision.resx">
+      <DependentUpon>frmRevision.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmTemplate.resx">
       <DependentUpon>frmTemplate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmVersionRevision.resx">
-      <DependentUpon>frmVersionRevision.cs</DependentUpon>
+    <EmbeddedResource Include="frmVersion.resx">
+      <DependentUpon>frmVersion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="mdiGeneral.resx">
       <DependentUpon>mdiGeneral.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>

@@ -12,13 +12,15 @@ namespace Ceritar.Logirack_CVS
         public enum GeneralLists_ID
         {
             CERITAR_APPLICATION_LIST_NRI = 1,
-            TEMPLATE_LIST_NRI = 2
+            TEMPLATE_LIST_NRI = 2,
+            VERSION_REVISION_LIST_NRI = 3
         }
 
         public enum GeneralList_GridCapID
         {
             CERITAR_APPLICATION_CAP_NRI = 2,
-            TEMPLATE_CAP_NRI = 8
+            TEMPLATE_CAP_NRI = 8,
+            VERSION_REVISION_CAP_NRI = 14
         }
 
 
@@ -49,8 +51,16 @@ namespace Ceritar.Logirack_CVS
                         strSQL = strGetList_Templates_SQL();
                         strListGenTitle = " - Gabarits des installations actives";
                         //TODO caption pour ca
-                        frmGenList.mintGridTag = ((int)GeneralList_GridCapID.TEMPLATE_CAP_NRI).ToString();
+                        frmGenList.mintGridTag = ((int) GeneralList_GridCapID.TEMPLATE_CAP_NRI).ToString();
                         frmGenList.SetFormToOpenName = typeof(frmTemplate).Name;
+
+                        break;
+
+                    case GeneralLists_ID.VERSION_REVISION_LIST_NRI:
+                        strSQL = strGetList_Versions_SQL();
+                        strListGenTitle = " - Versions et révisions";
+                        frmGenList.mintGridTag = ((int) GeneralList_GridCapID.VERSION_REVISION_CAP_NRI).ToString();
+                        frmGenList.SetFormToOpenName = typeof(frmVersion).Name;
 
                         break;
 
@@ -127,6 +137,27 @@ namespace Ceritar.Logirack_CVS
             }
 
             strSQL = strSQL + "  ORDER BY Template.Tpl_Name " + Environment.NewLine;
+
+            return strSQL;
+        }
+
+        private static string strGetList_Versions_SQL(string vstrWhere = null)
+        {
+            string strSQL = string.Empty;
+
+            strSQL = strSQL + " SELECT CerApp.CeA_Name, " + Environment.NewLine;
+            strSQL = strSQL + "        Version.Ver_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        Version.Ver_No " + Environment.NewLine;
+
+            strSQL = strSQL + " FROM Version " + Environment.NewLine;
+            strSQL = strSQL + "     INNER JOIN CerApp ON CerApp.CeA_NRI = Version.CeA_NRI " + Environment.NewLine;
+
+            if (vstrWhere != string.Empty)
+            {
+                strSQL = strSQL + vstrWhere + Environment.NewLine;
+            }
+
+            strSQL = strSQL + "  ORDER BY CerApp.CeA_Name, Version.Ver_No " + Environment.NewLine;
 
             return strSQL;
         }

@@ -11,7 +11,6 @@ namespace Ceritar.CVS.Controllers
     {
         private Interfaces.ITemplate mcView;
         private mod_Tpl_HierarchyTemplate mcModTemplate;
-        private mod_Folder mcModFolder_Root;
         private clsActionResults mcActionResult = new clsActionResults();
         private clsSQL mcSQL;
 
@@ -352,7 +351,7 @@ namespace Ceritar.CVS.Controllers
             return strSQL;
         }
 
-        public string strGetListe_Applications_SQL()
+        public string strGetApplications_SQL()
         {
             string strSQL = string.Empty;
 
@@ -366,7 +365,7 @@ namespace Ceritar.CVS.Controllers
             return strSQL;
         }
 
-        public string strGetListe_TemplateTypes_SQL()
+        public string strGetTemplateTypes_SQL()
         {
             string strSQL = string.Empty;
 
@@ -380,7 +379,7 @@ namespace Ceritar.CVS.Controllers
             return strSQL;
         }
 
-        public string strGetListe_FolderTypes_SQL()
+        public string strGetFolderTypes_SQL()
         {
             string strSQL = string.Empty;
 

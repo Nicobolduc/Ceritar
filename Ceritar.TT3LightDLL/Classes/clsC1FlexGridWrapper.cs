@@ -13,7 +13,7 @@ using System.Collections.Specialized;
 namespace Ceritar.TT3LightDLL.Classes
 {
 
-    public class clsFlexGridWrapper
+    public class clsC1FlexGridWrapper
     {
         //Docuumentation available here: //http://helpcentral.componentone.com/nethelp/c1flexgrid/topic132.html
         //Row 0 is the Header and col 0 is the first small fixed col
@@ -45,7 +45,7 @@ namespace Ceritar.TT3LightDLL.Classes
         private bool mblnGridIsLoading = false;
 
 
-        public clsFlexGridWrapper()
+        public clsC1FlexGridWrapper()
         {
             SetGridDisplay += clsFlexGridWrapper_SetDisplay;
         }
@@ -660,6 +660,8 @@ namespace Ceritar.TT3LightDLL.Classes
         {
             if (!mblnGridIsLoading && 
                 !mblnHasNoActionColumn && 
+                mGrdFlex.Rows.Count > 1 &&
+                mGrdFlex.Row > 0 &&
                 mGrdFlex[mGrdFlex.Row, mintDefaultActionCol] != null && 
                 (mGrdFlex[mGrdFlex.Row, mintDefaultActionCol].ToString().Equals(((int)sclsConstants.DML_Mode.NO_MODE).ToString()) || 
                  mGrdFlex[mGrdFlex.Row, mintDefaultActionCol].ToString().Equals((sclsConstants.DML_Mode.NO_MODE).ToString())

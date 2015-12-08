@@ -48,7 +48,7 @@ namespace Ceritar.CVS.Models.Module_Template
 #endregion
 
 
-        internal clsActionResults Validate()
+        internal new clsActionResults Validate()
         {
             try
             {

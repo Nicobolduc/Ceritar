@@ -27,7 +27,7 @@ namespace Ceritar.Logirack_CVS
         private const short mintGrdTpl_HiCo_FolderType_col = 8;
 
         //Classes
-        private clsFlexGridWrapper mcGrdTemplate;
+        private clsC1FlexGridWrapper mcGrdTemplate;
         private Ceritar.CVS.clsActionResults mcActionResults;
         private CellStyle csSystemItem;
 
@@ -41,7 +41,7 @@ namespace Ceritar.Logirack_CVS
             
             mcCtrTemplate = new ctr_Template((Ceritar.CVS.Controllers.Interfaces.ITemplate) this);
                    
-            mcGrdTemplate = new clsFlexGridWrapper();
+            mcGrdTemplate = new clsC1FlexGridWrapper();
             mcGrdTemplate.SetGridDisplay += mcGrdTemplate_SetGridDisplay;
 
             csSystemItem = grdTemplate.Styles.Add("SystemItem");
@@ -337,11 +337,11 @@ namespace Ceritar.Logirack_CVS
 
             if (!mcGrdTemplate.bln_Init(ref grdTemplate, ref placeHolder, ref btnDeleteRow, true))
             { }
-            else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrTemplate.strGetListe_Applications_SQL(), "CeA_NRI", "CeA_Name", true, ref cboApplications))
+            else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrTemplate.strGetApplications_SQL(), "CeA_NRI", "CeA_Name", true, ref cboApplications))
             { }
-            else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrTemplate.strGetListe_TemplateTypes_SQL(), "TeT_NRI", "TeT_Code", false, ref cboTypes))
+            else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrTemplate.strGetTemplateTypes_SQL(), "TeT_NRI", "TeT_Code", false, ref cboTypes))
             { }
-            else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrTemplate.strGetListe_FolderTypes_SQL(), "FoT_NRI", "FoT_Code", false, ref cboFolderType))
+            else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrTemplate.strGetFolderTypes_SQL(), "FoT_NRI", "FoT_Code", false, ref cboFolderType))
             { }
             else if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE)
             {
