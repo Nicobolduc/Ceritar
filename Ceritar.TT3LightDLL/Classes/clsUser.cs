@@ -10,7 +10,7 @@ namespace Ceritar.TT3LightDLL.Classes
     {
         //Working variables
         private short _intLanguage = 1;
-        private int _intUser_NRI = 1;
+        private int _intUser_NRI = 101;
 
 
 

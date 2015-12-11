@@ -77,9 +77,10 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { _intVersionNo = value; }
         }
 
-        internal string GetCreationDate
+        internal string CreationDate
         {
             get { return _strCreationDate; }
+            set { _strCreationDate = value; }
         }
 
         internal mod_TTU_User GetCreatedByUser
@@ -292,8 +293,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 { }
                 else if (!mcSQL.bln_AddField("Ver_No", _intVersionNo, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("Ver_DtCreation", System.DateTime.Now, clsSQL.MySQL_FieldTypes.DATETIME_TYPE))
-                { }
+                //else if (!mcSQL.bln_AddField("Ver_DtCreation", _strCreationDate, clsSQL.MySQL_FieldTypes.DATETIME_TYPE)) //TODO
+                //{ }
                 else if (!mcSQL.bln_AddField("TTU_NRI", clsApp.GetAppController.cUser.GetUser_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("CeA_NRI", _cApplication.CeritarApplication_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE ))
