@@ -234,7 +234,10 @@ namespace Ceritar.CVS.Controllers
 
             return mcActionResult;
         }
-        
+
+
+#region "SQL Queries"
+
         public string strGetDataLoad_SQL(int vintTpl_NRI)
         {
             string strSQL = string.Empty;
@@ -394,5 +397,9 @@ namespace Ceritar.CVS.Controllers
 
             return strSQL;
         }
+
+#endregion
+
+
     }
 }

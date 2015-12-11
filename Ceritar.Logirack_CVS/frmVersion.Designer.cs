@@ -34,7 +34,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.dtpBuild = new System.Windows.Forms.DateTimePicker();
             this.label5 = new System.Windows.Forms.Label();
-            this.cboGabarits = new System.Windows.Forms.ComboBox();
+            this.cboTemplates = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.txtVersionNo = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -54,15 +54,16 @@
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.tabRevision = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.c1FlexGrid1 = new C1.Win.C1FlexGrid.C1FlexGrid();
+            this.btnGrdRevDel = new System.Windows.Forms.Button();
+            this.btnGrdRevAdd = new System.Windows.Forms.Button();
+            this.grdRevisions = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.tabVersion = new System.Windows.Forms.TabPage();
-            this.txtExecutablePath = new System.Windows.Forms.TextBox();
+            this.txtReleasePath = new System.Windows.Forms.TextBox();
             this.txtTTAppPath = new System.Windows.Forms.TextBox();
             this.txtWordAppChangePath = new System.Windows.Forms.TextBox();
             this.txtExcelAppChangePath = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.cboClients = new System.Windows.Forms.ComboBox();
             this.btnGrdClientsDel = new System.Windows.Forms.Button();
             this.btnGrdClientsAdd = new System.Windows.Forms.Button();
             this.grdClients = new C1.Win.C1FlexGrid.C1FlexGrid();
@@ -72,7 +73,7 @@
             this.groupBox1.SuspendLayout();
             this.tabRevision.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.c1FlexGrid1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grdRevisions)).BeginInit();
             this.tabVersion.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdClients)).BeginInit();
@@ -84,7 +85,7 @@
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.dtpBuild);
             this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.cboGabarits);
+            this.groupBox1.Controls.Add(this.cboTemplates);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.txtVersionNo);
             this.groupBox1.Controls.Add(this.label1);
@@ -101,7 +102,7 @@
             // label7
             // 
             this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label7.Location = new System.Drawing.Point(699, 49);
+            this.label7.Location = new System.Drawing.Point(704, 49);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(80, 17);
             this.label7.TabIndex = 54;
@@ -111,6 +112,7 @@
             // 
             this.dtpBuild.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.dtpBuild.CustomFormat = "MM-dd-yy";
+            this.dtpBuild.Enabled = false;
             this.dtpBuild.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpBuild.Location = new System.Drawing.Point(702, 19);
             this.dtpBuild.Name = "dtpBuild";
@@ -127,12 +129,13 @@
             // 
             // cboGabarits
             // 
-            this.cboGabarits.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboGabarits.FormattingEnabled = true;
-            this.cboGabarits.Location = new System.Drawing.Point(74, 46);
-            this.cboGabarits.Name = "cboGabarits";
-            this.cboGabarits.Size = new System.Drawing.Size(203, 21);
-            this.cboGabarits.TabIndex = 1;
+            this.cboTemplates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboTemplates.FormattingEnabled = true;
+            this.cboTemplates.Location = new System.Drawing.Point(74, 46);
+            this.cboTemplates.Name = "cboGabarits";
+            this.cboTemplates.Size = new System.Drawing.Size(203, 21);
+            this.cboTemplates.TabIndex = 1;
+            this.cboTemplates.SelectedIndexChanged += new System.EventHandler(this.cboGabarits_SelectedIndexChanged);
             // 
             // label4
             // 
@@ -149,6 +152,7 @@
             this.txtVersionNo.Name = "txtVersionNo";
             this.txtVersionNo.Size = new System.Drawing.Size(66, 20);
             this.txtVersionNo.TabIndex = 3;
+            this.txtVersionNo.TextChanged += new System.EventHandler(this.txtVersionNo_TextChanged);
             // 
             // label1
             // 
@@ -164,6 +168,7 @@
             this.txtCompiledBy.Name = "txtCompiledBy";
             this.txtCompiledBy.Size = new System.Drawing.Size(182, 20);
             this.txtCompiledBy.TabIndex = 2;
+            this.txtCompiledBy.TextChanged += new System.EventHandler(this.txtCompiledBy_TextChanged);
             // 
             // label3
             // 
@@ -181,6 +186,7 @@
             this.cboApplications.Name = "cboApplications";
             this.cboApplications.Size = new System.Drawing.Size(203, 21);
             this.cboApplications.TabIndex = 0;
+            this.cboApplications.SelectedIndexChanged += new System.EventHandler(this.cboApplications_SelectedIndexChanged);
             // 
             // toolTip
             // 
@@ -320,9 +326,9 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.button1);
-            this.groupBox3.Controls.Add(this.button2);
-            this.groupBox3.Controls.Add(this.c1FlexGrid1);
+            this.groupBox3.Controls.Add(this.btnGrdRevDel);
+            this.groupBox3.Controls.Add(this.btnGrdRevAdd);
+            this.groupBox3.Controls.Add(this.grdRevisions);
             this.groupBox3.Location = new System.Drawing.Point(6, 52);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(414, 256);
@@ -330,41 +336,41 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Liste des révisions";
             // 
-            // button1
+            // btnGrdRevDel
             // 
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
-            this.button1.Location = new System.Drawing.Point(370, 62);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(35, 35);
-            this.button1.TabIndex = 16;
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnGrdRevDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnGrdRevDel.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevDel.Image")));
+            this.btnGrdRevDel.Location = new System.Drawing.Point(370, 62);
+            this.btnGrdRevDel.Name = "btnGrdRevDel";
+            this.btnGrdRevDel.Size = new System.Drawing.Size(35, 35);
+            this.btnGrdRevDel.TabIndex = 16;
+            this.btnGrdRevDel.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // btnGrdRevAdd
             // 
-            this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button2.Image = ((System.Drawing.Image)(resources.GetObject("button2.Image")));
-            this.button2.Location = new System.Drawing.Point(370, 21);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(35, 35);
-            this.button2.TabIndex = 15;
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnGrdRevAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnGrdRevAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevAdd.Image")));
+            this.btnGrdRevAdd.Location = new System.Drawing.Point(370, 21);
+            this.btnGrdRevAdd.Name = "btnGrdRevAdd";
+            this.btnGrdRevAdd.Size = new System.Drawing.Size(35, 35);
+            this.btnGrdRevAdd.TabIndex = 15;
+            this.btnGrdRevAdd.UseVisualStyleBackColor = true;
             // 
-            // c1FlexGrid1
+            // grdRevisions
             // 
-            this.c1FlexGrid1.AutoSearch = C1.Win.C1FlexGrid.AutoSearchEnum.FromTop;
-            this.c1FlexGrid1.ColumnInfo = resources.GetString("c1FlexGrid1.ColumnInfo");
-            this.c1FlexGrid1.ExtendLastCol = true;
-            this.c1FlexGrid1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.c1FlexGrid1.Location = new System.Drawing.Point(6, 21);
-            this.c1FlexGrid1.Name = "c1FlexGrid1";
-            this.c1FlexGrid1.Rows.Count = 6;
-            this.c1FlexGrid1.Rows.DefaultSize = 18;
-            this.c1FlexGrid1.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.c1FlexGrid1.Size = new System.Drawing.Size(358, 229);
-            this.c1FlexGrid1.StyleInfo = resources.GetString("c1FlexGrid1.StyleInfo");
-            this.c1FlexGrid1.TabIndex = 14;
-            this.c1FlexGrid1.Tag = "1";
+            this.grdRevisions.AutoSearch = C1.Win.C1FlexGrid.AutoSearchEnum.FromTop;
+            this.grdRevisions.ColumnInfo = resources.GetString("grdRevisions.ColumnInfo");
+            this.grdRevisions.ExtendLastCol = true;
+            this.grdRevisions.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdRevisions.Location = new System.Drawing.Point(6, 21);
+            this.grdRevisions.Name = "grdRevisions";
+            this.grdRevisions.Rows.Count = 6;
+            this.grdRevisions.Rows.DefaultSize = 18;
+            this.grdRevisions.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
+            this.grdRevisions.Size = new System.Drawing.Size(358, 229);
+            this.grdRevisions.StyleInfo = resources.GetString("grdRevisions.StyleInfo");
+            this.grdRevisions.TabIndex = 14;
+            this.grdRevisions.Tag = "1";
             // 
             // tabVersion
             // 
@@ -372,7 +378,7 @@
             this.tabVersion.Controls.Add(this.btnReplaceTTApp);
             this.tabVersion.Controls.Add(this.btnReplaceAppChangeDOC);
             this.tabVersion.Controls.Add(this.btnReplaceAppChangeXLS);
-            this.tabVersion.Controls.Add(this.txtExecutablePath);
+            this.tabVersion.Controls.Add(this.txtReleasePath);
             this.tabVersion.Controls.Add(this.btnShowExecutable);
             this.tabVersion.Controls.Add(this.txtTTAppPath);
             this.tabVersion.Controls.Add(this.btnCreate);
@@ -392,12 +398,12 @@
             // 
             // txtExecutablePath
             // 
-            this.txtExecutablePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtExecutablePath.Location = new System.Drawing.Point(43, 321);
-            this.txtExecutablePath.Name = "txtExecutablePath";
-            this.txtExecutablePath.ReadOnly = true;
-            this.txtExecutablePath.Size = new System.Drawing.Size(507, 26);
-            this.txtExecutablePath.TabIndex = 60;
+            this.txtReleasePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtReleasePath.Location = new System.Drawing.Point(43, 321);
+            this.txtReleasePath.Name = "txtExecutablePath";
+            this.txtReleasePath.ReadOnly = true;
+            this.txtReleasePath.Size = new System.Drawing.Size(507, 26);
+            this.txtReleasePath.TabIndex = 60;
             // 
             // txtTTAppPath
             // 
@@ -428,6 +434,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.cboClients);
             this.groupBox2.Controls.Add(this.btnGrdClientsDel);
             this.groupBox2.Controls.Add(this.btnGrdClientsAdd);
             this.groupBox2.Controls.Add(this.grdClients);
@@ -437,6 +444,15 @@
             this.groupBox2.TabIndex = 14;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Clients qui installerons la version";
+            // 
+            // cboClients
+            // 
+            this.cboClients.FormattingEnabled = true;
+            this.cboClients.Location = new System.Drawing.Point(37, 48);
+            this.cboClients.Name = "cboClients";
+            this.cboClients.Size = new System.Drawing.Size(275, 21);
+            this.cboClients.TabIndex = 15;
+            this.cboClients.Visible = false;
             // 
             // btnGrdClientsDel
             // 
@@ -473,6 +489,7 @@
             this.grdClients.StyleInfo = resources.GetString("grdClients.StyleInfo");
             this.grdClients.TabIndex = 14;
             this.grdClients.Tag = "15";
+            this.grdClients.DoubleClick += new System.EventHandler(this.grdClients_DoubleClick);
             // 
             // tab
             // 
@@ -503,7 +520,7 @@
             this.groupBox1.PerformLayout();
             this.tabRevision.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.c1FlexGrid1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grdRevisions)).EndInit();
             this.tabVersion.ResumeLayout(false);
             this.tabVersion.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -518,7 +535,7 @@
         public TT3LightDLL.Controls.ctlFormController formController;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ComboBox cboGabarits;
+        private System.Windows.Forms.ComboBox cboTemplates;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtVersionNo;
         private System.Windows.Forms.Label label1;
@@ -543,10 +560,10 @@
         public C1.Win.C1FlexGrid.C1FlexGrid grdClients;
         private System.Windows.Forms.TabControl tab;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        public C1.Win.C1FlexGrid.C1FlexGrid c1FlexGrid1;
-        private System.Windows.Forms.TextBox txtExecutablePath;
+        private System.Windows.Forms.Button btnGrdRevDel;
+        private System.Windows.Forms.Button btnGrdRevAdd;
+        public C1.Win.C1FlexGrid.C1FlexGrid grdRevisions;
+        private System.Windows.Forms.TextBox txtReleasePath;
         private System.Windows.Forms.Button btnShowExecutable;
         private System.Windows.Forms.Button btnReplaceExecutable;
         private System.Windows.Forms.Button btnReplaceTTApp;
@@ -554,5 +571,6 @@
         private System.Windows.Forms.Button btnReplaceAppChangeXLS;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
+        private System.Windows.Forms.ComboBox cboClients;
     }
 }

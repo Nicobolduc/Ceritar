@@ -227,6 +227,11 @@ namespace Ceritar.Logirack_CVS
         {
             mcActionResults = mcCtrCeritarApp.Save();
 
+            if (!mcActionResults.IsValid)
+            {
+                clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
+            }
+
             eventArgs.SaveSuccessful = mcActionResults.IsValid;
         }
 
