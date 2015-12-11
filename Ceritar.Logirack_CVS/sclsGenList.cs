@@ -145,8 +145,8 @@ namespace Ceritar.Logirack_CVS
         {
             string strSQL = string.Empty;
 
-            strSQL = strSQL + " SELECT CerApp.CeA_Name, " + Environment.NewLine;
-            strSQL = strSQL + "        Version.Ver_NRI, " + Environment.NewLine;
+            strSQL = strSQL + " SELECT Version.Ver_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.CeA_Name, " + Environment.NewLine;
             strSQL = strSQL + "        Version.Ver_No " + Environment.NewLine;
 
             strSQL = strSQL + " FROM Version " + Environment.NewLine;
