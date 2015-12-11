@@ -58,6 +58,12 @@
     <Compile Include="frmCeritarApp.Designer.cs">
       <DependentUpon>frmCeritarApp.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmCeritarClient.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCeritarClient.Designer.cs">
+      <DependentUpon>frmCeritarClient.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmGenericList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,6 +104,9 @@
     <Compile Include="sclsGenList.cs" />
     <EmbeddedResource Include="frmCeritarApp.resx">
       <DependentUpon>frmCeritarApp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCeritarClient.resx">
+      <DependentUpon>frmCeritarClient.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmGenericList.resx">
       <DependentUpon>frmGenericList.cs</DependentUpon>
