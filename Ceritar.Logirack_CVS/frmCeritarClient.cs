@@ -9,12 +9,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace Ceritar.Logirack_CVS
 {
     public partial class frmCeritarClient : Form
     {
         //Classes
-        private clsFlexGridWrapper mcGrdApp;
+        private clsC1FlexGridWrapper mcGrdApp;
 
         public frmCeritarClient()
         {
@@ -29,6 +30,16 @@ namespace Ceritar.Logirack_CVS
         }
 
         private void ctlFormController1_LoadData(TT3LightDLL.Controls.LoadDataEventArgs eventArgs)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
         {
 
         }
