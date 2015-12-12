@@ -13,7 +13,8 @@ namespace Ceritar.Logirack_CVS
         {
             CERITAR_APPLICATION_LIST_NRI = 1,
             TEMPLATE_LIST_NRI = 2,
-            VERSION_REVISION_LIST_NRI = 3
+            VERSION_REVISION_LIST_NRI = 3,
+            CERITAR_CLIENT_LIST_NRI = 4
         }
 
         public enum GeneralList_GridCapID
@@ -44,6 +45,14 @@ namespace Ceritar.Logirack_CVS
                         //TODO caption pour ca
                         frmGenList.mintGridTag = ((int) GeneralList_GridCapID.CERITAR_APPLICATION_CAP_NRI).ToString();
                         frmGenList.SetFormToOpenName = typeof(frmCeritarApp).Name;
+
+                        break;
+
+                    case GeneralLists_ID.CERITAR_CLIENT_LIST_NRI:
+                        strSQL = strGetList_CeritarClient_SQL();
+                        strListGenTitle = " - Fiche d'un client de Ceritar";
+                        frmGenList.mintGridTag = ((int)GeneralList_GridCapID.CERITAR_APPLICATION_CAP_NRI).ToString();
+                        frmGenList.SetFormToOpenName = typeof(frmCeritarClient).Name;
 
                         break;
 
@@ -121,6 +130,27 @@ namespace Ceritar.Logirack_CVS
 
             return strSQL;
         }
+
+        private static string strGetList_CeritarClient_SQL(string vstrWhere = null)
+        {
+            string strSQL = string.Empty;
+
+            strSQL = strSQL + " SELECT CerClient.CeC_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        CerClient.CeC_Name " + Environment.NewLine;
+
+
+            strSQL = strSQL + " FROM CerClient " + Environment.NewLine;
+
+            if (vstrWhere != string.Empty)
+            {
+                strSQL = strSQL + vstrWhere + Environment.NewLine;
+            }
+
+            strSQL = strSQL + "  ORDER BY CerClient.CeC_Name " + Environment.NewLine;
+
+            return strSQL;
+        }
+
 
         private static string strGetList_Templates_SQL(string vstrWhere = null)
         {

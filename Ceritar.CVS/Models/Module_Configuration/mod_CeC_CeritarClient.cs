@@ -1,18 +1,40 @@
-﻿
+﻿using System.Collections.Generic;
+using Ceritar.TT3LightDLL.Static_Classes;
+using Ceritar.TT3LightDLL.Classes;
+using Ceritar.CVS.Controllers;
+using System;
 
-namespace Ceritar.CVS.Models.Module_ActivesInstallations
+namespace Ceritar.CVS.Models.Module_Configuration
 {
     internal class mod_CeC_CeritarClient
     {
         //Model attributes
+        private int _intCeritarApplication_NRI;
+        private int _intCeritarApplication_TS;
         private string _strCompanyName;
         private bool _blnIsActive;
-        private mod_CAV_ClientAppVersion _cCurrentVersion;
+        private List<int> _lstApplications;
+
 
         //Working variables
+        private clsActionResults mcActionResults = new clsActionResults();
+        private sclsConstants.DML_Mode mintDML_Action;
+        private clsSQL mcSQL;
 
 
 #region "Properties"
+
+        public int CeritarApplication_NRI
+        {
+            get { return _intCeritarApplication_NRI; }
+            set { _intCeritarApplication_NRI = value; }
+        }
+
+        public int CeritarApplication_TS
+        {
+            get { return _intCeritarApplication_TS; }
+            set { _intCeritarApplication_TS = value; }
+        }
 
         internal string CompanyName
         {
@@ -26,11 +48,28 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { _blnIsActive = value; }
         }
 
-        internal mod_CAV_ClientAppVersion CurrentVersion
+        internal List<int> LstApplications
         {
-            get { return _cCurrentVersion; }
-            set { _cCurrentVersion = value; }
+            get { return _lstApplications; }
+            set { _lstApplications = value; }
         }
+
+        internal clsActionResults ActionResults
+        {
+            get { return mcActionResults; }
+        }
+
+        internal sclsConstants.DML_Mode DML_Action
+        {
+            get { return mintDML_Action; }
+            set { mintDML_Action = value; }
+        }
+
+        internal clsSQL SetcSQL
+        {
+            set { mcSQL = value; }
+        }
+
 
 #endregion
 

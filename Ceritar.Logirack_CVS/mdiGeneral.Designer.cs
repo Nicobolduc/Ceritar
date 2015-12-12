@@ -41,19 +41,22 @@
             this.lblCurrentUser = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblDatabase = new System.Windows.Forms.ToolStripStatusLabel();
+            this.clientCeritarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMain.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.SuspendLayout();
             // 
             // mnuMain
             // 
+            this.mnuMain.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.mnuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuFile,
             this.muManagement,
             this.mnuConfiguration});
             this.mnuMain.Location = new System.Drawing.Point(0, 0);
             this.mnuMain.Name = "mnuMain";
-            this.mnuMain.Size = new System.Drawing.Size(1314, 24);
+            this.mnuMain.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
+            this.mnuMain.Size = new System.Drawing.Size(1752, 28);
             this.mnuMain.TabIndex = 2;
             this.mnuMain.Text = "menuStrip2";
             // 
@@ -62,14 +65,14 @@
             this.mnuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuLogOut});
             this.mnuFile.Name = "mnuFile";
-            this.mnuFile.Size = new System.Drawing.Size(54, 20);
+            this.mnuFile.Size = new System.Drawing.Size(64, 24);
             this.mnuFile.Text = "Fichier";
             this.mnuFile.Click += new System.EventHandler(this.fileToolStripMenuItem_Click);
             // 
             // mnuLogOut
             // 
             this.mnuLogOut.Name = "mnuLogOut";
-            this.mnuLogOut.Size = new System.Drawing.Size(155, 22);
+            this.mnuLogOut.Size = new System.Drawing.Size(186, 26);
             this.mnuLogOut.Text = "Se déconnecter";
             // 
             // muManagement
@@ -77,14 +80,14 @@
             this.muManagement.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuVersion});
             this.muManagement.Name = "muManagement";
-            this.muManagement.Size = new System.Drawing.Size(59, 20);
+            this.muManagement.Size = new System.Drawing.Size(71, 24);
             this.muManagement.Text = "Gestion";
             this.muManagement.Click += new System.EventHandler(this.installationsActivesToolStripMenuItem_Click);
             // 
             // mnuVersion
             // 
             this.mnuVersion.Name = "mnuVersion";
-            this.mnuVersion.Size = new System.Drawing.Size(228, 22);
+            this.mnuVersion.Size = new System.Drawing.Size(278, 26);
             this.mnuVersion.Text = "Gestion de version et révision";
             this.mnuVersion.Click += new System.EventHandler(this.versionToolStripMenuItem_Click);
             // 
@@ -92,34 +95,37 @@
             // 
             this.mnuConfiguration.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuCerApp,
+            this.clientCeritarToolStripMenuItem,
             this.mnuTemplate});
             this.mnuConfiguration.Name = "mnuConfiguration";
-            this.mnuConfiguration.Size = new System.Drawing.Size(93, 20);
+            this.mnuConfiguration.Size = new System.Drawing.Size(112, 24);
             this.mnuConfiguration.Text = "Configuration";
             // 
             // mnuCerApp
             // 
             this.mnuCerApp.Name = "mnuCerApp";
-            this.mnuCerApp.Size = new System.Drawing.Size(173, 22);
+            this.mnuCerApp.Size = new System.Drawing.Size(209, 26);
             this.mnuCerApp.Text = "Application Ceritar";
             this.mnuCerApp.Click += new System.EventHandler(this.mnuCerApp_Click);
             // 
             // mnuTemplate
             // 
             this.mnuTemplate.Name = "mnuTemplate";
-            this.mnuTemplate.Size = new System.Drawing.Size(173, 22);
+            this.mnuTemplate.Size = new System.Drawing.Size(209, 26);
             this.mnuTemplate.Text = "Gabarit";
             this.mnuTemplate.Click += new System.EventHandler(this.gabaritToolStripMenuItem_Click);
             // 
             // statusBar
             // 
+            this.statusBar.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lblCurrentUser,
             this.toolStripStatusLabel3,
             this.lblDatabase});
-            this.statusBar.Location = new System.Drawing.Point(0, 748);
+            this.statusBar.Location = new System.Drawing.Point(0, 923);
             this.statusBar.Name = "statusBar";
-            this.statusBar.Size = new System.Drawing.Size(1314, 22);
+            this.statusBar.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
+            this.statusBar.Size = new System.Drawing.Size(1752, 25);
             this.statusBar.TabIndex = 4;
             this.statusBar.Text = "statusStrip1";
             // 
@@ -128,7 +134,7 @@
             this.lblCurrentUser.AutoSize = false;
             this.lblCurrentUser.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCurrentUser.Name = "lblCurrentUser";
-            this.lblCurrentUser.Size = new System.Drawing.Size(500, 17);
+            this.lblCurrentUser.Size = new System.Drawing.Size(500, 20);
             this.lblCurrentUser.Text = "lblUser";
             this.lblCurrentUser.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -136,7 +142,7 @@
             // 
             this.toolStripStatusLabel3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(64, 17);
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(82, 20);
             this.toolStripStatusLabel3.Text = "Database: ";
             this.toolStripStatusLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -144,18 +150,26 @@
             // 
             this.lblDatabase.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDatabase.Name = "lblDatabase";
-            this.lblDatabase.Size = new System.Drawing.Size(56, 17);
+            this.lblDatabase.Size = new System.Drawing.Size(72, 20);
             this.lblDatabase.Text = "database";
+            // 
+            // clientCeritarToolStripMenuItem
+            // 
+            this.clientCeritarToolStripMenuItem.Name = "clientCeritarToolStripMenuItem";
+            this.clientCeritarToolStripMenuItem.Size = new System.Drawing.Size(209, 26);
+            this.clientCeritarToolStripMenuItem.Text = "Client Ceritar";
+            this.clientCeritarToolStripMenuItem.Click += new System.EventHandler(this.clientCeritarToolStripMenuItem_Click);
             // 
             // mdiGeneral
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1314, 770);
+            this.ClientSize = new System.Drawing.Size(1752, 948);
             this.Controls.Add(this.statusBar);
             this.Controls.Add(this.mnuMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "mdiGeneral";
             this.Text = "Logirack CVS";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
@@ -184,5 +198,6 @@
         private System.Windows.Forms.ToolStripMenuItem mnuCerApp;
         private System.Windows.Forms.ToolStripMenuItem mnuTemplate;
         private System.Windows.Forms.ToolStripMenuItem mnuLogOut;
+        private System.Windows.Forms.ToolStripMenuItem clientCeritarToolStripMenuItem;
     }
 }

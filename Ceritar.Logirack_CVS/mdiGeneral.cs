@@ -57,5 +57,10 @@ namespace Ceritar.Logirack_CVS
         {
             sclsGenList.ShowGenList(sclsGenList.GeneralLists_ID.TEMPLATE_LIST_NRI);
         }
+
+        private void clientCeritarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            sclsGenList.ShowGenList(sclsGenList.GeneralLists_ID.CERITAR_CLIENT_LIST_NRI);
+        }
     }
 }

@@ -117,10 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="grdModules.ColumnInfo" xml:space="preserve">
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="btnGrdDel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAKdJREFUWEftjlsShCAMBDn63py1iVKsomCKbH7SVeOLmJ4UBEFgQN7valgwkztG
+        54/kz0SYk/EueTtUlajLz8JzmCl/9CkFCM/yaY6yvPlRne2iKlELrA67RfGMWQHCftHcY1qA4BBVH/MC
+        BI/orvylAA5covzFvEAjJxdMC4zkB2VwRQ4x4Z3de4a0w6q0Bd7KV1ALeMihiL3k4CoHVzm4yoPgJSl9
+        Ab2LBLR1SME1AAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btnGrdAdd.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAJFJREFUWEftkYEKgDAIBf30/nxhJg4KdcslhfeQiM3eQVAUxddo5zMFLNcE+Nya
+        KdoR/QMNNsdMSFB5hADfGZCQcgwtzg9mQIBrY+MU6Fdi4xDor8fHEOivrokiQIerowq8IWH+gtUShgBy
+        L4HvEWOUM1cJWX46bmiBJQbsIxGJJAFEJJIEEC5PE0DSBYrijwDsRDkEtJ+BKHIAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="grdApp.ColumnInfo" xml:space="preserve">
     <value>4,1,0,0,0,90,Columns:0{Width:5;}	1{Width:94;Caption:"Test";StyleFixed:"Font:Microsoft Sans Serif, 8.25pt, style=Bold;Margins:1, 0, 0, 0;TextAlign:CenterCenter;TextEffect:Flat;TextDirection:Normal;Trimming:None;";}	2{Width:113;Caption:"Longitude";}	3{Caption:"Sél.";}	</value>
   </data>
-  <data name="grdModules.StyleInfo" xml:space="preserve">
+  <data name="grdApp.StyleInfo" xml:space="preserve">
     <value>Normal{Font:Tahoma, 8.25pt;}	Alternate{}	Fixed{BackColor:Control;ForeColor:ControlText;Border:Flat,1,ControlDark,Both;BackgroundImageLayout:Hide;}	Highlight{BackColor:Highlight;ForeColor:HighlightText;}	Focus{}	Editor{}	Search{BackColor:Highlight;ForeColor:HighlightText;}	Frozen{BackColor:Beige;}	NewRow{ForeColor:GrayText;}	EmptyArea{BackColor:AppWorkspace;Border:Flat,1,ControlDarkDark,Both;}	SelectedColumnHeader{}	SelectedRowHeader{}	GrandTotal{BackColor:Black;ForeColor:White;}	Subtotal0{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal1{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal2{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal3{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal4{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal5{BackColor:ControlDarkDark;ForeColor:White;}	FilterEditor{}	FirstCustomStyle{}	</value>
   </data>
 </root>
