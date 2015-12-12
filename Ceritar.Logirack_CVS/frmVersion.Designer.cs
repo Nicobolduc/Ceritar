@@ -32,7 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmVersion));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.dtpBuild = new System.Windows.Forms.DateTimePicker();
+            this.dtpCreation = new System.Windows.Forms.DateTimePicker();
             this.label5 = new System.Windows.Forms.Label();
             this.cboTemplates = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -51,7 +51,6 @@
             this.btnReplaceAppChangeDOC = new System.Windows.Forms.Button();
             this.btnReplaceTTApp = new System.Windows.Forms.Button();
             this.btnReplaceExecutable = new System.Windows.Forms.Button();
-            this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.tabRevision = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.btnGrdRevDel = new System.Windows.Forms.Button();
@@ -70,6 +69,7 @@
             this.tab = new System.Windows.Forms.TabControl();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.groupBox1.SuspendLayout();
             this.tabRevision.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -83,7 +83,7 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.dtpBuild);
+            this.groupBox1.Controls.Add(this.dtpCreation);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.cboTemplates);
             this.groupBox1.Controls.Add(this.label4);
@@ -108,16 +108,16 @@
             this.label7.TabIndex = 54;
             this.label7.Text = "Current user";
             // 
-            // dtpBuild
+            // dtpCreation
             // 
-            this.dtpBuild.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.dtpBuild.CustomFormat = "MM-dd-yy";
-            this.dtpBuild.Enabled = false;
-            this.dtpBuild.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpBuild.Location = new System.Drawing.Point(702, 19);
-            this.dtpBuild.Name = "dtpBuild";
-            this.dtpBuild.Size = new System.Drawing.Size(96, 20);
-            this.dtpBuild.TabIndex = 53;
+            this.dtpCreation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.dtpCreation.CustomFormat = "MM-dd-yy";
+            this.dtpCreation.Enabled = false;
+            this.dtpCreation.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpCreation.Location = new System.Drawing.Point(702, 19);
+            this.dtpCreation.Name = "dtpCreation";
+            this.dtpCreation.Size = new System.Drawing.Size(96, 20);
+            this.dtpCreation.TabIndex = 53;
             // 
             // label5
             // 
@@ -127,12 +127,12 @@
             this.label5.TabIndex = 49;
             this.label5.Text = "Gabarit:";
             // 
-            // cboGabarits
+            // cboTemplates
             // 
             this.cboTemplates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboTemplates.FormattingEnabled = true;
             this.cboTemplates.Location = new System.Drawing.Point(74, 46);
-            this.cboTemplates.Name = "cboGabarits";
+            this.cboTemplates.Name = "cboTemplates";
             this.cboTemplates.Size = new System.Drawing.Size(203, 21);
             this.cboTemplates.TabIndex = 1;
             this.cboTemplates.SelectedIndexChanged += new System.EventHandler(this.cboGabarits_SelectedIndexChanged);
@@ -298,21 +298,6 @@
             this.btnReplaceExecutable.UseVisualStyleBackColor = true;
             this.btnReplaceExecutable.Click += new System.EventHandler(this.btnReplaceExecutable_Click);
             // 
-            // formController
-            // 
-            this.formController.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.formController.FormIsLoading = false;
-            this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.CONSULT_MODE;
-            this.formController.Item_ID = 0;
-            this.formController.Location = new System.Drawing.Point(0, 481);
-            this.formController.Name = "formController";
-            this.formController.ShowButtonQuitOnly = false;
-            this.formController.Size = new System.Drawing.Size(812, 33);
-            this.formController.TabIndex = 0;
-            this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
-            this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
-            this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
-            // 
             // tabRevision
             // 
             this.tabRevision.Controls.Add(this.groupBox3);
@@ -396,11 +381,11 @@
             this.tabVersion.Text = "Version";
             this.tabVersion.UseVisualStyleBackColor = true;
             // 
-            // txtExecutablePath
+            // txtReleasePath
             // 
             this.txtReleasePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtReleasePath.Location = new System.Drawing.Point(43, 321);
-            this.txtReleasePath.Name = "txtExecutablePath";
+            this.txtReleasePath.Name = "txtReleasePath";
             this.txtReleasePath.ReadOnly = true;
             this.txtReleasePath.Size = new System.Drawing.Size(507, 26);
             this.txtReleasePath.TabIndex = 60;
@@ -447,12 +432,14 @@
             // 
             // cboClients
             // 
+            this.cboClients.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboClients.FormattingEnabled = true;
             this.cboClients.Location = new System.Drawing.Point(37, 48);
             this.cboClients.Name = "cboClients";
             this.cboClients.Size = new System.Drawing.Size(275, 21);
             this.cboClients.TabIndex = 15;
             this.cboClients.Visible = false;
+            this.cboClients.SelectedIndexChanged += new System.EventHandler(this.cboClients_SelectedIndexChanged);
             // 
             // btnGrdClientsDel
             // 
@@ -502,6 +489,21 @@
             this.tab.Size = new System.Drawing.Size(807, 386);
             this.tab.TabIndex = 0;
             // 
+            // formController
+            // 
+            this.formController.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.formController.FormIsLoading = false;
+            this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.CONSULT_MODE;
+            this.formController.Item_ID = 0;
+            this.formController.Location = new System.Drawing.Point(0, 481);
+            this.formController.Name = "formController";
+            this.formController.ShowButtonQuitOnly = false;
+            this.formController.Size = new System.Drawing.Size(812, 33);
+            this.formController.TabIndex = 0;
+            this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
+            this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
+            this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
+            // 
             // frmVersion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -543,7 +545,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cboApplications;
         private System.Windows.Forms.ToolTip toolTip;
-        private System.Windows.Forms.DateTimePicker dtpBuild;
+        private System.Windows.Forms.DateTimePicker dtpCreation;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TabPage tabRevision;
         private System.Windows.Forms.TabPage tabVersion;

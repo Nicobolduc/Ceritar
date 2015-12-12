@@ -29,7 +29,10 @@ namespace Ceritar.CVS.Controllers
         public ctr_Version(IVersion rView)
         {
             mcModVersion = new mod_Ver_Version();
+            
             mcView = rView;
+
+            mcActionResult = new clsActionResults();
         }
 
         public clsActionResults Validate()
@@ -39,9 +42,11 @@ namespace Ceritar.CVS.Controllers
             try
             {
                 mcModVersion = new mod_Ver_Version();
+                mcModVersion.DML_Action = mcView.GetDML_Action();
                 mcModVersion.Version_NRI = mcView.GetVersion_NRI();
                 mcModVersion.Version_TS = mcView.GetVersion_TS();
                 mcModVersion.VersionNo = mcView.GetVersionNo();
+                mcModVersion.CompiledBy = mcView.GetCompiledBy();
                 mcModVersion.Application = new Models.Module_Configuration.mod_CeA_CeritarApplication();
                 mcModVersion.Application.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
                 mcModVersion.Location_APP_CHANGEMENT = mcView.GetLocation_APP_CHANGEMENT();
@@ -49,7 +54,8 @@ namespace Ceritar.CVS.Controllers
                 mcModVersion.Location_TTApp = mcView.GetLocation_TTApp();
                 mcModVersion.TemplateSource = new Models.Module_Template.mod_Tpl_HierarchyTemplate();
                 mcModVersion.TemplateSource.Template_NRI = mcView.GetTemplateSource_NRI();
-                mcModVersion.LstClientsUsing = mcView.GetClientUsingList();              
+                mcModVersion.LstClientsUsing = mcView.GetClientUsingList();
+                mcModVersion.CreationDate = mcView.GetCreationDate();
 
                 mcActionResult = mcModVersion.Validate();
             }
@@ -115,10 +121,12 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        Version.Ver_CompiledBy, " + Environment.NewLine;
             strSQL = strSQL + "        Version.Ver_No, " + Environment.NewLine;
             strSQL = strSQL + "        Version.Ver_DtCreation, " + Environment.NewLine;
-            strSQL = strSQL + "        Version.Tpl_NRI " + Environment.NewLine;
+            strSQL = strSQL + "        Version.Tpl_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        Version.CeA_NRI " + Environment.NewLine;
 
             strSQL = strSQL + " FROM Version " + Environment.NewLine;
-            strSQL = strSQL + "     INNER JOIN Revision ON Revision.Ver_NRI = Version.Ver_NRI " + Environment.NewLine;
+            strSQL = strSQL + "     LEFT JOIN Revision ON Revision.Ver_NRI = Version.Ver_NRI " + Environment.NewLine;
+            //strSQL = strSQL + "     INNER JOIN CerApp ON CerApp.CeA_NRI = Version.CeA_NRI " + Environment.NewLine;
 
             strSQL = strSQL + " WHERE Version.Ver_NRI = " + vintVersion_NRI + Environment.NewLine;
 

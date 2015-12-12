@@ -347,7 +347,7 @@ namespace Ceritar.CVS.Controllers
             //strSQL = strSQL + "    				GROUP BY HierarchyComp.HiCo_NodeLevel   " + Environment.NewLine;
             //strSQL = strSQL + "    			   ) AS TNode ON TNode.Enfant = HiCo_NRI " + Environment.NewLine;
 
-            strSQL = strSQL + " WHERE LstHierarchyComp.ACg_NRI IS NOT NULL OR LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
+            strSQL = strSQL + " WHERE LstHierarchyComp.ACg_NRI = 100 OR LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
 
             strSQL = strSQL + " ORDER BY Level " + Environment.NewLine;
 

@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using Ceritar.TT3LightDLL.Static_Classes;
 
 namespace Ceritar.CVS.Controllers.Interfaces
 {
     public interface IVersion
     {
+        sclsConstants.DML_Mode GetDML_Action();
         int GetVersion_NRI();
         int GetVersion_TS();
+        string GetCreationDate();
         string GetCompiledBy();
         ushort GetVersionNo();
         int GetCeritarApplication_NRI();
