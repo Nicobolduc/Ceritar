@@ -114,9 +114,9 @@
             this.dtpCreation.CustomFormat = "MM-dd-yy";
             this.dtpCreation.Enabled = false;
             this.dtpCreation.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpCreation.Location = new System.Drawing.Point(702, 19);
+            this.dtpCreation.Location = new System.Drawing.Point(707, 19);
             this.dtpCreation.Name = "dtpCreation";
-            this.dtpCreation.Size = new System.Drawing.Size(96, 20);
+            this.dtpCreation.Size = new System.Drawing.Size(91, 20);
             this.dtpCreation.TabIndex = 53;
             // 
             // label5
@@ -205,6 +205,7 @@
             this.btnCreate.TabIndex = 4;
             this.toolTip.SetToolTip(this.btnCreate, "Créer la version");
             this.btnCreate.UseVisualStyleBackColor = true;
+            this.btnCreate.Click += new System.EventHandler(this.btnCreate_Click);
             // 
             // btnShowExecutable
             // 
@@ -464,7 +465,7 @@
             // grdClients
             // 
             this.grdClients.AutoSearch = C1.Win.C1FlexGrid.AutoSearchEnum.FromTop;
-            this.grdClients.ColumnInfo = resources.GetString("grdClients.ColumnInfo");
+            this.grdClients.ColumnInfo = "1,1,0,0,0,90,Columns:0{Width:5;}\t";
             this.grdClients.ExtendLastCol = true;
             this.grdClients.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grdClients.Location = new System.Drawing.Point(6, 21);
@@ -500,6 +501,7 @@
             this.formController.ShowButtonQuitOnly = false;
             this.formController.Size = new System.Drawing.Size(812, 33);
             this.formController.TabIndex = 0;
+            this.formController.SetReadRights += new Ceritar.TT3LightDLL.Controls.ctlFormController.SetReadRightsEventHandler(this.formController_SetReadRights);
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);

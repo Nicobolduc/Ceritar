@@ -37,12 +37,15 @@ namespace Ceritar.TT3LightDLL.Classes
 	    public event SetDisplayEventHandler SetGridDisplay;
 	    public delegate void SetDisplayEventHandler();
 	    public event ValidateGridDataEventHandler ValidateGridData;
-	    public delegate void ValidateGridDataEventHandler(ValidateGridEventArgs eventArgs);
+	    public delegate void ValidateGridDataEventHandler(ValidateGridDataEventArgs eventArgs);
 	    public event SaveGridDataEventHandler SaveGridData;
 	    public delegate void SaveGridDataEventHandler(SaveGridDataEventArgs eventArgs);
+        public event AfterRowAddEventHandler AfterRowAdd;
+        public delegate void AfterRowAddEventHandler();
 
         //Working variables
         private bool mblnGridIsLoading = false;
+        private bool mblnFromButtonAddClick;
 
 
         public clsC1FlexGridWrapper()
@@ -149,7 +152,7 @@ namespace Ceritar.TT3LightDLL.Classes
 	    public bool bln_Init(ref C1FlexGrid rgrdGrid, ref Button rbtnAddRow, ref Button rbtnRemoveRow, bool vblnIsTree = false)
 	    {
 		    bool blnValidReturn = true;
-
+            
 		    try {
                 mblnGridIsLoading = true;
 
@@ -503,6 +506,8 @@ namespace Ceritar.TT3LightDLL.Classes
         {
             CellRange crRow;
 
+            mblnFromButtonAddClick = true;
+
             mGrdFlex.Rows.InsertRange((vintPosition == -1 ? mGrdFlex.Rows.Count : vintPosition), 1);
 
             if (!mblnHasNoActionColumn)
@@ -514,6 +519,8 @@ namespace Ceritar.TT3LightDLL.Classes
 
             crRow = mGrdFlex.GetCellRange((vintPosition == -1 ? mGrdFlex.Rows.Count - 1 : vintPosition), 0, (vintPosition == -1 ? mGrdFlex.Rows.Count - 1 : vintPosition), mGrdFlex.Cols.Count - 1);
             crRow.Style = csNewRow;
+
+            
         }
 
         public void AddTreeItem(int vintColIndex, string vstrNodeName, int vintLevel, bool vblnIsNode,  int vintRowIndex = 0)
@@ -535,6 +542,15 @@ namespace Ceritar.TT3LightDLL.Classes
             mGrdFlex.SetCellStyle(intNewRowidx, vintColIndex, mGrdFlex.Styles["Data"]);
         }
 
+        public bool blnValidateGridData()
+        {
+            ValidateGridDataEventArgs cGridValidResults = new ValidateGridDataEventArgs();
+
+            this.ValidateGridData(cGridValidResults);
+
+            return cGridValidResults.IsValid;
+        }
+
         private C1FlexGrid SetGrdFlexEvents
         {
             set
@@ -545,12 +561,14 @@ namespace Ceritar.TT3LightDLL.Classes
                 {
                     mGrdFlex.CellChanged -= mGrdFlex_CellsChanged;
                     mGrdFlex.CellChecked -= mGrdFlex_CheckBoxClick;
+                    mGrdFlex.AfterRowColChange -= mGrdFlex_AfterRowColChange;
                 }
 
                 if (mGrdFlex != null)
                 {
                     mGrdFlex.CellChanged += mGrdFlex_CellsChanged;
                     mGrdFlex.CellChecked += mGrdFlex_CheckBoxClick;
+                    mGrdFlex.AfterRowColChange += mGrdFlex_AfterRowColChange;
                 }
             }
         }
@@ -586,7 +604,7 @@ namespace Ceritar.TT3LightDLL.Classes
                 }
             }
         }
-
+     
 #endregion
 
 
@@ -624,7 +642,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
         public bool bln_ValidateGridEvent()
         {
-            ValidateGridEventArgs validateGridEventArgs = new ValidateGridEventArgs();
+            ValidateGridDataEventArgs validateGridEventArgs = new ValidateGridDataEventArgs();
 
             if (ValidateGridData != null)
             {
@@ -683,13 +701,23 @@ namespace Ceritar.TT3LightDLL.Classes
             }
         }
 
-
+        void mGrdFlex_AfterRowColChange(object sender, RangeEventArgs e)
+        {
+            if (!mblnGridIsLoading && mblnFromButtonAddClick)
+            {
+                if (AfterRowAdd != null)
+                {
+                    AfterRowAdd();
+                    mblnFromButtonAddClick = false;
+                }     
+            }
+        }
 }
 
 
 #region "Custom events"
 
-    public class ValidateGridEventArgs : System.EventArgs
+    public class ValidateGridDataEventArgs : System.EventArgs
     {
 	    private bool mblnIsValid;
 

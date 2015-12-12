@@ -1,5 +1,5 @@
 ﻿
-namespace Ceritar.CVS.Models.Module_Configuration
+namespace Ceritar.CVS.Models.Module_ActivesInstallations
 {
     internal class mod_TTU_User
     {

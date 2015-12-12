@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Ceritar.CVS.Models.Module_Configuration;
+using Ceritar.CVS.Models.Module_ActivesInstallations;
 using Ceritar.TT3LightDLL.Static_Classes;
 using Ceritar.TT3LightDLL.Classes;
 
@@ -25,7 +25,7 @@ namespace Ceritar.CVS.Controllers
 
         public ctr_CeritarApplication(Interfaces.ICeritarApp rView)
         {
-            mcModCerApp = new Models.Module_Configuration.mod_CeA_CeritarApplication();
+            mcModCerApp = new Models.Module_ActivesInstallations.mod_CeA_CeritarApplication();
             mcView = rView;
         }
 
@@ -33,7 +33,6 @@ namespace Ceritar.CVS.Controllers
         {
             try
             {
-                mcModCerApp = new Models.Module_Configuration.mod_CeA_CeritarApplication();
                 mcModCerApp.CeritarApplication_NRI = mcView.GetCerApp_NRI();
                 mcModCerApp.Name = mcView.GetName();
                 mcModCerApp.Description = mcView.GetDescription();
@@ -46,6 +45,10 @@ namespace Ceritar.CVS.Controllers
             catch (Exception ex) {
                 mcActionResult.SetInvalid(sclsConstants.Error_Message.ERROR_UNHANDLED, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
                 sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                if (!mcActionResult.IsValid) mcModCerApp = new Models.Module_ActivesInstallations.mod_CeA_CeritarApplication();
             }
 
             return mcActionResult;

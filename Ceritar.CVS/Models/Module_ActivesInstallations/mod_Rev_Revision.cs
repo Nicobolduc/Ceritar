@@ -1,5 +1,5 @@
 ﻿using Ceritar.CVS.Models.Module_Template;
-using Ceritar.CVS.Models.Module_Configuration;
+using Ceritar.CVS.Models.Module_ActivesInstallations;
 using System.Collections.Generic;
 
 namespace Ceritar.CVS.Models.Module_ActivesInstallations

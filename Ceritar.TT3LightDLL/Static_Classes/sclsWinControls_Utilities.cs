@@ -62,6 +62,142 @@ namespace Ceritar.TT3LightDLL.Static_Classes
             return blnValidReturn;
         }
 
-    }
+        public static void DisableAllFormControls(Form rForm, TabPage rTabPage, Control rControl)
+        {
+            System.Windows.Forms.Control.ControlCollection controlCollection = default(System.Windows.Forms.Control.ControlCollection);
 
+            try
+            {
+                if ((rControl != null))
+                {
+                    controlCollection = rControl.Controls;
+                }
+                else if (rTabPage != null)
+                {
+                    controlCollection = rTabPage.Controls;
+                }
+                else
+                {
+                    controlCollection = rForm.Controls;
+                }
+
+                foreach (Control objControl in controlCollection)
+                {
+                    switch (objControl.GetType().Name)
+                    {
+                        case "Button":
+                        case "TextBox":
+                        case "CheckBox":
+                        case "RadioButton":
+                        case "DateTimePicker":
+                        case "ListView":
+                        case "ComboBox":
+                            objControl.Enabled = false;
+
+                            break;
+
+                        case "GroupBox":
+                            DisableAllFormControls(null, null, objControl);
+
+                            break;
+
+                        case "DataGridView":
+                            ((DataGridView)objControl).ReadOnly = true;
+
+                            break;
+
+                        //case "C1FlexGrid":
+                        //    ((C1.Win.C1FlexGrid.C1FlexGrid) objControl).Enabled = false;
+
+                        //    break;
+
+                        case "TabControl":
+                            foreach (TabPage tp in ((TabControl)objControl).TabPages)
+                            {
+                                DisableAllFormControls(null, tp, null);
+                            }
+
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+        }
+
+        public static void EmptyAllFormControls(System.Windows.Forms.Form rForm = null, TabPage rTabPage = null, Control rControl = null)
+        {
+            System.Windows.Forms.Control.ControlCollection controlCollection = default(System.Windows.Forms.Control.ControlCollection);
+
+            try
+            {
+                if ((rControl != null))
+                {
+
+                    controlCollection = rControl.Controls;
+                }
+                else if (rTabPage != null)
+                {
+                    controlCollection = rTabPage.Controls;
+                }
+                else
+                {
+                    controlCollection = rForm.Controls;
+                }
+
+                foreach (Control objControl in controlCollection)
+                {
+                    switch (objControl.GetType().Name)
+                    {
+                        case "TextBox":
+                            objControl.Text = string.Empty;
+
+                            break;
+
+                        case "CheckBox":
+                            ((CheckBox)objControl).Checked = false;
+
+                            break;
+
+                        case "RadioButton":
+                            ((RadioButton)objControl).Checked = false;
+
+                            break;
+
+                        case "ComboBox":
+                            ((ComboBox)objControl).DataSource = null;
+                            ((ComboBox)objControl).Items.Clear();
+
+                            break;
+
+                        case "GroupBox":
+                            EmptyAllFormControls(null, null, objControl);
+
+                            break;
+
+                        case "TabControl":
+                            foreach (TabPage tp in ((TabControl)objControl).TabPages)
+                            {
+                                EmptyAllFormControls(null, tp);
+                            }
+
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+        }
+    }
 }

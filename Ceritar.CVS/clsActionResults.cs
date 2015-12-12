@@ -19,9 +19,10 @@ namespace Ceritar.CVS
         {
             NO_ERROR = 0,
             UNHANDLED_ERROR = -1,
-            UNHANDLED_EXCEPTION = -2,
-            ERROR_SAVE = -3,
-            INVALID_TIMESTAMP = -4
+            UNHANDLED_VALIDATION = -2,
+            UNHANDLED_EXCEPTION = -3,
+            ERROR_SAVE = -4,
+            INVALID_TIMESTAMP = -5
         }
 
 

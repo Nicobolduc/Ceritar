@@ -14,7 +14,7 @@ namespace Ceritar.Logirack_CVS
     public partial class frmCeritarClient : Form
     {
         //Classes
-        private clsFlexGridWrapper mcGrdApp;
+        private clsC1FlexGridWrapper mcGrdApp;
 
         public frmCeritarClient()
         {

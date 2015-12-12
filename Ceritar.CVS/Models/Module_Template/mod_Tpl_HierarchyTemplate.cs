@@ -243,6 +243,11 @@ namespace Ceritar.CVS.Models.Module_Template
                         }
 
                         break;
+
+                    default:
+                        blnValidReturn = true;
+
+                        break;
                 }
             }
             catch (System.Exception ex)

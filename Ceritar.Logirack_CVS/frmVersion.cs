@@ -20,9 +20,13 @@ namespace Ceritar.Logirack_CVS
 
         //Columns grdClients
         private const short mintGrdClients_Action_col = 1;
-        private const short mintGrdClients_CeC_NRI_col = 2;
-        private const short mintGrdClients_CeC_TS_col = 3;
-        private const short mintGrdClients_CeC_Name_col = 4;
+        private const short mintGrdClients_CAV_NRI_col = 2;
+        private const short mintGrdClients_CAV_TS_col = 3;
+        private const short mintGrdClients_CeC_NRI_col = 4;
+        private const short mintGrdClients_CeC_Name_col = 5;
+        private const short mintGrdClients_Installed_col = 6;
+        private const short mintGrdClients_IsCurrent_col = 7;
+        private const short mintGrdClients_License_col = 8;
 
         //Columns grdRevModif
         private const short mintGrdRevMod_Action_col = 1;
@@ -30,8 +34,9 @@ namespace Ceritar.Logirack_CVS
         private const short mintGrdRevMod_RevM_Description_col = 3;
 
         //Classes
-        private clsC1FlexGridWrapper mcGrdClients;
+        public clsC1FlexGridWrapper mcGrdClients;
         private Ceritar.CVS.clsActionResults mcActionResults;
+        List<structClientAppVersion> lstClient_NRI;
 
         //Working variables
         private ushort mintVersion_TS;
@@ -45,11 +50,12 @@ namespace Ceritar.Logirack_CVS
 
             mcGrdClients = new clsC1FlexGridWrapper();
             mcGrdClients.SetGridDisplay += mcGrdClients_SetGridDisplay;
+            mcGrdClients.ValidateGridData += mcGrdClients_ValidateGridData;
+            mcGrdClients.AfterRowAdd += mcGrdClients_AfterRowAdd;
 
             dtpCreation.CustomFormat = clsApp.GetAppController.str_GetServerDateTimeFormat;
         }
-
-        
+       
 
 #region "Interfaces functions"
 
@@ -66,18 +72,6 @@ namespace Ceritar.Logirack_CVS
         int IVersion.GetCeritarApplication_NRI()
         {
             return (int)cboApplications.SelectedValue;
-        }
-
-        List<int> IVersion.GetClientUsingList()
-        {
-            List<int> lstClient_NRI = new List<int>();
-
-            for (int intRowIndex = 1; intRowIndex < grdClients.Rows.Count; intRowIndex++)
-            {
-                lstClient_NRI.Add((int)grdClients[intRowIndex, mintGrdClients_CeC_NRI_col]);
-            }
-
-            return lstClient_NRI;
         }
 
         string IVersion.GetCompiledBy()
@@ -140,7 +134,7 @@ namespace Ceritar.Logirack_CVS
 
             try
             {
-                blnValidReturn = mcGrdClients.bln_FillData(mcCtrVersion.strGetListe_Clients_SQL());
+                blnValidReturn = mcGrdClients.bln_FillData(mcCtrVersion.strGetListe_Clients_SQL(formController.Item_ID));
             }
             catch (Exception ex)
             {
@@ -167,7 +161,7 @@ namespace Ceritar.Logirack_CVS
                     txtCompiledBy.Text = sqlRecord["Ver_CompiledBy"].ToString();
                     txtVersionNo.Text = sqlRecord["Ver_No"].ToString();
 
-                    dtpCreation.Value = DateTime.Parse(sqlRecord["Ver_DtCreation"].ToString());
+                    //dtpCreation.Value = DateTime.Parse(sqlRecord["Ver_DtCreation"].ToString());
 
                     cboApplications.SelectedValue = Int32.Parse(sqlRecord["CeA_NRI"].ToString());
                     cboTemplates.SelectedValue = Int32.Parse(sqlRecord["Tpl_NRI"].ToString());
@@ -247,6 +241,12 @@ namespace Ceritar.Logirack_CVS
 
         void mcGrdClients_SetGridDisplay()
         {
+            grdClients.Cols[mintGrdClients_CeC_Name_col].Width = 220;
+            grdClients.Cols[mintGrdClients_Installed_col].Width = 55;
+
+            grdClients.Cols[mintGrdClients_IsCurrent_col].DataType = typeof(bool);
+            grdClients.Cols[mintGrdClients_Installed_col].DataType = typeof(bool);
+
             if (grdClients.Rows.Count > 1)
             {
                 cboClients.Visible = true;
@@ -254,6 +254,7 @@ namespace Ceritar.Logirack_CVS
                 //CellRange crNameCol = grdClients.GetCellRange(1, mintGrdClients_CeC_Name_col, grdClients.Rows.Count - 1, mintGrdClients_CeC_Name_col);
                 //crNameCol.Style.Editor = cboClients;
             }
+
             grdClients.Cols[mintGrdClients_CeC_Name_col].Style = grdClients.Styles.Normal;
             grdClients.Cols[mintGrdClients_CeC_Name_col].Style.Editor = cboClients;
         }
@@ -284,64 +285,71 @@ namespace Ceritar.Logirack_CVS
             {
                 blnValidReturn = true;
             }
-
+      
             if (!blnValidReturn) this.Close();
         }
 
         private void formController_ValidateForm(ValidateFormEventArgs eventArgs)
         {
-            mcActionResults = mcCtrVersion.Validate();
+            eventArgs.IsValid = false;
 
-            if (!mcActionResults.IsValid)
+            if (!mcGrdClients.blnValidateGridData())
+            {}
+            else
             {
-                switch ((ctr_Version.ErrorCode_Ver)mcActionResults.GetErrorCode)
+                mcActionResults = mcCtrVersion.Validate();
+
+                if (!mcActionResults.IsValid)
                 {
-                    case ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY:
+                    switch ((ctr_Version.ErrorCode_Ver)mcActionResults.GetErrorCode)
+                    {
+                        case ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY:
 
-                        txtExcelAppChangePath.Focus();
-                        break;
+                            txtExcelAppChangePath.Focus();
+                            break;
 
-                    case ctr_Version.ErrorCode_Ver.CERITAR_APP_MANDATORY:
+                        case ctr_Version.ErrorCode_Ver.CERITAR_APP_MANDATORY:
 
-                        cboApplications.Focus();
-                        cboApplications.DroppedDown = true;
-                        break;
+                            cboApplications.Focus();
+                            cboApplications.DroppedDown = true;
+                            break;
 
-                    case ctr_Version.ErrorCode_Ver.CLIENTS_LIST_MANDATORY:
+                        case ctr_Version.ErrorCode_Ver.CLIENTS_LIST_MANDATORY:
 
-                        btnGrdClientsAdd.Focus();
-                        break;
+                            btnGrdClientsAdd.Focus();
+                            break;
 
-                    case ctr_Version.ErrorCode_Ver.COMPILED_BY_MANDATORY:
+                        case ctr_Version.ErrorCode_Ver.COMPILED_BY_MANDATORY:
 
-                        txtCompiledBy.Focus();
-                        break;
+                            txtCompiledBy.Focus();
+                            break;
 
-                    case ctr_Version.ErrorCode_Ver.RELEASE_MANDATORY:
+                        case ctr_Version.ErrorCode_Ver.RELEASE_MANDATORY:
 
-                        txtReleasePath.Focus();
-                        break;
+                            txtReleasePath.Focus();
+                            break;
 
-                    case ctr_Version.ErrorCode_Ver.TEMPLATE_MANDATORY:
+                        case ctr_Version.ErrorCode_Ver.TEMPLATE_MANDATORY:
 
-                        cboTemplates.Focus();
-                        cboTemplates.DroppedDown = true;
-                        break;
+                            cboTemplates.Focus();
+                            cboTemplates.DroppedDown = true;
+                            break;
 
-                    case ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY:
+                        case ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY:
 
-                        txtTTAppPath.Focus();
-                        break;
+                            txtTTAppPath.Focus();
+                            break;
 
-                    case ctr_Version.ErrorCode_Ver.VERSION_NO_MANDATORY:
-                        txtVersionNo.Focus();
-                        break;
+                        case ctr_Version.ErrorCode_Ver.VERSION_NO_MANDATORY:
+                            txtVersionNo.Focus();
+                            break;
+                    }
+
+                    clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
                 }
 
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
+                eventArgs.IsValid = mcActionResults.IsValid;
             }
-
-            eventArgs.IsValid = mcActionResults.IsValid;
         }
 
         private void formController_SaveData(SaveDataEventArgs eventArgs)
@@ -387,6 +395,18 @@ namespace Ceritar.Logirack_CVS
                         grdClients.StartEditing();
 
                         break;
+
+                    case mintGrdClients_Installed_col:
+
+                        mcGrdClients[grdClients.Row, mintGrdClients_Installed_col] = (mcGrdClients[grdClients.Row, mintGrdClients_Installed_col] == "0"? "1" : "0");
+
+                        break;
+
+                    case mintGrdClients_IsCurrent_col:
+
+                        mcGrdClients[grdClients.Row, mintGrdClients_IsCurrent_col] = (mcGrdClients[grdClients.Row, mintGrdClients_IsCurrent_col] == "0" ? "1" : "0");
+
+                        break;
                 }
             }
         }
@@ -425,16 +445,86 @@ namespace Ceritar.Logirack_CVS
 
         private void cboClients_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!formController.FormIsLoading)
+            if (!formController.FormIsLoading & cboClients.SelectedIndex > -1)
             {
                 grdClients[grdClients.Row, mintGrdClients_CeC_Name_col] = cboClients.SelectedText;
                 grdClients[grdClients.Row, mintGrdClients_CeC_NRI_col] = cboClients.SelectedValue;
-                grdClients[grdClients.Row, mintGrdClients_CeC_TS_col] = 0;
-             
+
                 formController.ChangeMade = true;
             }
         }
 
+        void mcGrdClients_AfterRowAdd()
+        {
+            grdClients[grdClients.Row, mintGrdClients_CAV_NRI_col] = 0;
+            grdClients[grdClients.Row, mintGrdClients_CAV_TS_col] = 0;
+            grdClients[grdClients.Row, mintGrdClients_Installed_col] = 0;
+            grdClients[grdClients.Row, mintGrdClients_IsCurrent_col] = 0;
+            grdClients[grdClients.Row, mintGrdClients_License_col] = "";
+        }
 
+        void mcGrdClients_ValidateGridData(ValidateGridDataEventArgs eventArgs)
+        {
+            eventArgs.IsValid = false;
+
+            structClientAppVersion structCAV;
+
+            for (int intRowIndex = 1; intRowIndex < grdClients.Rows.Count; intRowIndex++)
+            {
+                eventArgs.IsValid = false;
+
+                structCAV = new structClientAppVersion();
+                
+                structCAV.Action = clsApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdClients[intRowIndex, mintGrdClients_Action_col]);
+                Int32.TryParse(mcGrdClients[intRowIndex, mintGrdClients_CeC_NRI_col], out structCAV.intCeritarClient_NRI);
+                structCAV.intClientAppVersion_NRI = Int32.Parse(mcGrdClients[intRowIndex, mintGrdClients_CAV_NRI_col]);
+                structCAV.intClientAppVersion_TS = Int32.Parse(mcGrdClients[intRowIndex, mintGrdClients_CAV_TS_col]);
+                structCAV.strLicense = grdClients[intRowIndex, mintGrdClients_License_col].ToString();
+                structCAV.blnInstalled = Convert.ToBoolean(grdClients[intRowIndex, mintGrdClients_Installed_col]);
+                structCAV.blnIsCurrentVersion = Convert.ToBoolean(grdClients[intRowIndex, mintGrdClients_IsCurrent_col]);
+
+                mcActionResults = mcCtrVersion.Validate_Client(structCAV);
+
+                if (!mcActionResults.IsValid)
+                {
+                    clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
+
+                    switch ((ctr_Version.ErrorCode_Ver)mcActionResults.GetErrorCode)
+                    {
+                        case ctr_Version.ErrorCode_Ver.CLIENT_NAME_MANDATORY:
+
+                            ((ComboBox)grdClients.GetCellRange(1, mintGrdClients_CeC_Name_col).Style.Editor).DroppedDown = true;
+
+                            break;
+                    }
+                }
+                else
+                {
+                    eventArgs.IsValid = true;
+                }
+            }
+        }
+
+        private void formController_SetReadRights()
+        {
+            switch (formController.FormMode)
+            {
+                case sclsConstants.DML_Mode.UPDATE_MODE:
+
+                    cboApplications.Enabled = false;
+                    cboTemplates.Enabled = false;
+                    
+                    txtVersionNo.ReadOnly = true;
+
+                    btnCreate.Enabled = false;
+
+                    break;
+            }
+        }
+
+        private void btnCreate_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

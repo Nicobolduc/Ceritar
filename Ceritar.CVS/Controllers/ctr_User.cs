@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Ceritar.CVS.Models.Module_Configuration;
+using Ceritar.CVS.Models.Module_ActivesInstallations;
 
 namespace Ceritar.CVS.Controllers
 {

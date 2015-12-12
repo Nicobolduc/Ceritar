@@ -299,6 +299,29 @@ namespace Ceritar.TT3LightDLL.Controls
             this.Dispose();
         }
 
+        public bool pfblnValidate_Grids()
+        {
+            bool blnValidReturn = false;
+
+            Type type = this.mfrmParent.GetType();
+            System.Reflection.MemberInfo[] fields = type.GetFields();
+
+            foreach (System.Reflection.MemberInfo property in fields)
+
+            {
+                if (fields.GetType() == typeof(Ceritar.TT3LightDLL.Classes.clsC1FlexGridWrapper))
+                {
+                    MessageBox.Show("Name: " + property.Name); 
+                }
+            }
+            //foreach (Ceritar.TT3LightDLL.Classes.clsC1FlexGridWrapper cGrid in this.mfrmParent.Controls)
+            //{
+
+            //}
+
+            return blnValidReturn;
+        }
+
 #endregion
 
 
@@ -345,7 +368,7 @@ namespace Ceritar.TT3LightDLL.Controls
                 else
                 {
                     //TODO Silent mode
-                   //Classes.clsApp.GetAppController.ShowMessage((int) sclsConstants.Error_Message.ERROR_SAVE_MSG);
+                   Classes.clsApp.GetAppController.ShowMessage((int) sclsConstants.Error_Message.ERROR_UNHANDLED);
                 }
             }
 
@@ -354,7 +377,7 @@ namespace Ceritar.TT3LightDLL.Controls
 
         private void btnCancel_Click(object sender, System.EventArgs e)
         {
-            Classes.clsApp.GetAppController.EmptyAllFormControls(mfrmParent);
+            sclsWinControls_Utilities.EmptyAllFormControls(mfrmParent);
             LoadFormData();
         }
 

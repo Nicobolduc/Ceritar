@@ -50,7 +50,7 @@
     <Compile Include="Models\Module_Template\mod_Folder.cs" />
     <Compile Include="sclsAppConfigs.cs" />
     <Compile Include="Controllers\ctr_User.cs" />
-    <Compile Include="Models\Module_Configuration\mod_CVA_ClientVersionApp.cs" />
+    <Compile Include="Models\Module_ActivesInstallations\mod_CAV_ClientAppVersion.cs" />
     <Compile Include="Models\Module_ActivesInstallations\mod_Rev_Revision.cs" />
     <Compile Include="Models\Module_ActivesInstallations\mod_Ver_Version.cs" />
     <Compile Include="Models\Module_Configuration\mod_CeA_CeritarApplication.cs" />

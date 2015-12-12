@@ -1,13 +1,13 @@
 ﻿
 
-namespace Ceritar.CVS.Models.Module_Configuration
+namespace Ceritar.CVS.Models.Module_ActivesInstallations
 {
     internal class mod_CeC_CeritarClient
     {
         //Model attributes
         private string _strCompanyName;
         private bool _blnIsActive;
-        private mod_CVA_ClientVersionApp _cCurrentVersion;
+        private mod_CAV_ClientAppVersion _cCurrentVersion;
 
         //Working variables
 
@@ -26,7 +26,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
             set { _blnIsActive = value; }
         }
 
-        internal mod_CVA_ClientVersionApp CurrentVersion
+        internal mod_CAV_ClientAppVersion CurrentVersion
         {
             get { return _cCurrentVersion; }
             set { _cCurrentVersion = value; }

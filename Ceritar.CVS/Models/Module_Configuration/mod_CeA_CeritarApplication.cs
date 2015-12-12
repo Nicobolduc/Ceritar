@@ -4,7 +4,7 @@ using Ceritar.TT3LightDLL.Classes;
 using Ceritar.CVS.Controllers;
 using System;
 
-namespace Ceritar.CVS.Models.Module_Configuration
+namespace Ceritar.CVS.Models.Module_ActivesInstallations
 {
     internal class mod_CeA_CeritarApplication
     {
@@ -206,6 +206,11 @@ namespace Ceritar.CVS.Models.Module_Configuration
                         }
 
                         break;
+
+                    default:
+                        blnValidReturn = true;
+
+                        break;
                 }
             }
             catch (System.Exception ex)
@@ -240,7 +245,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
                 { }
                 else if (!mcSQL.bln_AddField("CeA_Desc", _strDescription, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("ApD_NRI", _domain_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("ApD_NRI", (int)_domain_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else {
                     blnValidReturn = true;

@@ -58,7 +58,6 @@ namespace Ceritar.CVS.Controllers
 
             try
             {
-                mcModTemplate = new mod_Tpl_HierarchyTemplate();
                 mcModTemplate.DML_Action = mcView.GetDML_Action();
                 mcModTemplate.TemplateName = mcView.GetTemplateName();
                 mcModTemplate.Template_NRI = mcView.GetTemplate_NRI();
@@ -130,6 +129,10 @@ namespace Ceritar.CVS.Controllers
             {
                 mcActionResult.SetInvalid(sclsConstants.Error_Message.ERROR_UNHANDLED, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
                 sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                if (!mcActionResult.IsValid) mcModTemplate = new mod_Tpl_HierarchyTemplate();
             }
 
             return mcActionResult;

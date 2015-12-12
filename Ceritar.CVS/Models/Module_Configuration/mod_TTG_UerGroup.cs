@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Ceritar.CVS.Models.Module_Configuration
+namespace Ceritar.CVS.Models.Module_ActivesInstallations
 {
     internal class mod_TTG_UerGroup
     {
