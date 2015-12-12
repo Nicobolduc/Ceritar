@@ -60,7 +60,7 @@ namespace Ceritar.Logirack_CVS
 
         private void clientCeritarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            sclsGenList.ShowGenList(sclsGenList.GeneralLists_ID.CERITAR_CLIENT_LIST_NRI);
         }
     }
 }
