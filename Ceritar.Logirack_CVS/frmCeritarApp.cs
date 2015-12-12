@@ -24,7 +24,7 @@ namespace Ceritar.Logirack_CVS
         private const short mintGrdMod_ApM_Description_col = 4;
 
         //Classes
-        private clsFlexGridWrapper mcGrdModules;
+        private clsC1FlexGridWrapper mcGrdModules;
         private Ceritar.CVS.clsActionResults mcActionResults;
 
         //Working variables
@@ -37,8 +37,8 @@ namespace Ceritar.Logirack_CVS
             
             mcCtrCeritarApp = new ctr_CeritarApplication((Ceritar.CVS.Controllers.Interfaces.ICeritarApp) this);
 
-            mcGrdModules = new clsFlexGridWrapper();
-            mcGrdModules.SetGridDisplay += new clsFlexGridWrapper.SetDisplayEventHandler(mcGrdModules_SetDisplay);
+            mcGrdModules = new clsC1FlexGridWrapper();
+            mcGrdModules.SetGridDisplay += new clsC1FlexGridWrapper.SetDisplayEventHandler(mcGrdModules_SetDisplay);
             //mcGrdModules.ValidateGridData += mcGrdModules_ValidateGridData;
             //mcGrdModules.SaveGridData += mcGrdModules_SaveGridData;
         }
@@ -96,6 +96,8 @@ namespace Ceritar.Logirack_CVS
 #endregion
 
 
+#region "Functions"
+
         private bool pfblnGrdModules_Load()
         {
             bool blnValidReturn = false;
@@ -108,10 +110,47 @@ namespace Ceritar.Logirack_CVS
             {
                 blnValidReturn = false;
                 sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
-            }        
+            }
 
             return blnValidReturn;
         }
+
+        private bool pfblnData_Load()
+        {
+            bool blnValidReturn = false;
+            SqlDataReader sqlRecord = null;
+
+            try
+            {
+                sqlRecord = clsSQL.ADOSelect(mcCtrCeritarApp.strGetDataLoad_SQL(formController.Item_ID));
+
+                if (sqlRecord.Read())
+                {
+                    UInt16.TryParse(sqlRecord["CeA_TS"].ToString(), out mintCerApp_TS);
+                    txtName.Text = sqlRecord["CeA_Name"].ToString();
+                    txtDescription.Text = sqlRecord["CeA_Desc"].ToString();
+                    cboDomain.SelectedValue = Int32.Parse(sqlRecord["ApD_NRI"].ToString());
+
+                    blnValidReturn = true;
+                }
+
+                return blnValidReturn;
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                if (sqlRecord != null) sqlRecord.Dispose();
+            }
+
+            return blnValidReturn;
+        }
+
+#endregion
+        
 
         private void formController_LoadData(TT3LightDLL.Controls.LoadDataEventArgs eventArgs)
         {
@@ -188,6 +227,11 @@ namespace Ceritar.Logirack_CVS
         {
             mcActionResults = mcCtrCeritarApp.Save();
 
+            if (!mcActionResults.IsValid)
+            {
+                clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
+            }
+
             eventArgs.SaveSuccessful = mcActionResults.IsValid;
         }
 
@@ -205,41 +249,7 @@ namespace Ceritar.Logirack_CVS
         {
             formController.ChangeMade = true;
         }
-
-        private bool pfblnData_Load()
-        {
-            bool blnValidReturn = false;
-            SqlDataReader sqlRecord = null;
-
-            try
-            {
-                sqlRecord = clsSQL.ADOSelect(mcCtrCeritarApp.strGetDataLoad_SQL(formController.Item_ID));
-
-                if (sqlRecord.Read())
-                {
-                    UInt16.TryParse(sqlRecord["CeA_TS"].ToString(), out mintCerApp_TS);
-                    txtName.Text = sqlRecord["CeA_Name"].ToString();
-                    txtDescription.Text = sqlRecord["CeA_Desc"].ToString();
-                    cboDomain.SelectedValue = Int32.Parse(sqlRecord["ApD_NRI"].ToString());
-
-                    blnValidReturn = true;
-                }
-                
-                return blnValidReturn;
-            }
-            catch (Exception ex)
-            {
-                blnValidReturn = false;
-                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
-            }
-            finally
-            {
-                if (sqlRecord != null) sqlRecord.Dispose();           
-            }
-
-            return blnValidReturn;
-        }
-
+      
         private void grdModules_DoubleClick(object sender, EventArgs e)
         {
             switch (grdModules.Col)

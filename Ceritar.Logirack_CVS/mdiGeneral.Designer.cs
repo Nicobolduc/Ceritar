@@ -84,8 +84,8 @@
             // mnuVersion
             // 
             this.mnuVersion.Name = "mnuVersion";
-            this.mnuVersion.Size = new System.Drawing.Size(242, 22);
-            this.mnuVersion.Text = "Gestion des Versions et Révision";
+            this.mnuVersion.Size = new System.Drawing.Size(228, 22);
+            this.mnuVersion.Text = "Gestion de version et révision";
             this.mnuVersion.Click += new System.EventHandler(this.versionToolStripMenuItem_Click);
             // 
             // mnuConfiguration

@@ -148,7 +148,7 @@ namespace Ceritar.TT3LightDLL.Classes
         public static bool bln_ADOValid_TS(string vstrTableName, string vstrNRI_FieldName, int vintItem_NRI, string vstrTS_FieldName, int vintItem_TS)
         {
             bool blnValidReturn = false;
-            SqlCommand cSQLCmd = null;
+            //SqlCommand cSQLCmd = null;
             SqlDataReader cSQLReader = null;
 
             try

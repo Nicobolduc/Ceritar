@@ -13,7 +13,7 @@ using System.Collections.Specialized;
 namespace Ceritar.TT3LightDLL.Classes
 {
 
-    public class clsFlexGridWrapper
+    public class clsC1FlexGridWrapper
     {
         //Docuumentation available here: //http://helpcentral.componentone.com/nethelp/c1flexgrid/topic132.html
         //Row 0 is the Header and col 0 is the first small fixed col
@@ -45,7 +45,7 @@ namespace Ceritar.TT3LightDLL.Classes
         private bool mblnGridIsLoading = false;
 
 
-        public clsFlexGridWrapper()
+        public clsC1FlexGridWrapper()
         {
             SetGridDisplay += clsFlexGridWrapper_SetDisplay;
         }
@@ -155,10 +155,10 @@ namespace Ceritar.TT3LightDLL.Classes
 
 			    mfrmParent = (Ceritar.TT3LightDLL.Controls.IFormController) rgrdGrid.FindForm();
 
-			    SetGrdFlex = rgrdGrid;
+			    SetGrdFlexEvents = rgrdGrid;
 
-                SetBtnAddRow = rbtnAddRow;
-			    SetBtnDeleteRow = rbtnRemoveRow;
+                SetBtnAddRowEvents = rbtnAddRow;
+			    SetBtnDeleteRowEvents = rbtnRemoveRow;
 
 			    mGrdFlex.BeginInit();
 
@@ -280,7 +280,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
 			    mySQLReader.Dispose();
 
-			    blnValidReturn = pblnSetColsDisplay();
+			    blnValidReturn = pblnSetHeaderAndColsDisplay();
 
 			    if (SetGridDisplay != null) {
 				    SetGridDisplay();
@@ -348,7 +348,7 @@ namespace Ceritar.TT3LightDLL.Classes
 		    return blnCellIsChecked;
 	    }
 
-	    private bool pblnSetColsDisplay()
+	    private bool pblnSetHeaderAndColsDisplay()
 	    {
 		    bool blnValidReturn = true;
 		    string strGridCaption = string.Empty;
@@ -401,6 +401,44 @@ namespace Ceritar.TT3LightDLL.Classes
 
 		    return blnValidReturn;
 	    }
+
+        public bool bln_SetRowActionToInsert(int vintRowIndex)
+        {
+            bool blnValidReturn = false;
+
+            if (mGrdFlex.Rows.Count > 1 && mGrdFlex.Row > 0 && mfrmParent.GetFormController().FormMode != sclsConstants.DML_Mode.DELETE_MODE && mfrmParent.GetFormController().FormMode != sclsConstants.DML_Mode.CONSULT_MODE)
+            {
+                CellRange crCell = mGrdFlex.GetCellRange(vintRowIndex, 0);
+                crCell.Style = csNewRow;
+
+                mGrdFlex[vintRowIndex, mintDefaultActionCol] = sclsConstants.DML_Mode.INSERT_MODE;
+
+                mfrmParent.GetFormController().ChangeMade = true;
+
+                blnValidReturn = true;
+            }
+
+            return blnValidReturn;
+        }
+
+        public bool bln_SetRowActionToDelete(int vintRowIndex)
+        {
+            bool blnValidReturn = false;
+
+            if (mGrdFlex.Rows.Count > 1 && mGrdFlex.Row > 0 && mfrmParent.GetFormController().FormMode != sclsConstants.DML_Mode.DELETE_MODE && mfrmParent.GetFormController().FormMode != sclsConstants.DML_Mode.CONSULT_MODE)
+            {
+                CellRange crCell = mGrdFlex.GetCellRange(vintRowIndex, 0);
+                crCell.Style= csRemoveRow;
+
+                mGrdFlex[vintRowIndex, mintDefaultActionCol] = sclsConstants.DML_Mode.DELETE_MODE;
+
+                mfrmParent.GetFormController().ChangeMade = true;
+
+                blnValidReturn = true;
+            }
+            
+            return blnValidReturn;
+        }
 
 	    public void SetColType_CheckBox(int vintColumnIndex)
 	    {
@@ -478,7 +516,7 @@ namespace Ceritar.TT3LightDLL.Classes
             crRow.Style = csNewRow;
         }
 
-        public void AddTreeItem(int vintColIndex, string vstrNodeName, int vintLevel, bool vblnIsNode, int vintRowIndex = 0)
+        public void AddTreeItem(int vintColIndex, string vstrNodeName, int vintLevel, bool vblnIsNode,  int vintRowIndex = 0)
         {
             int intNewRowidx;
 
@@ -491,14 +529,13 @@ namespace Ceritar.TT3LightDLL.Classes
                 intNewRowidx = vintRowIndex;
             }
 
-            mGrdFlex.AddItem(new object[1] { vstrNodeName }, intNewRowidx, vintColIndex);          
+            mGrdFlex.AddItem(new object[1] { vstrNodeName }, intNewRowidx, vintColIndex);  
             mGrdFlex.Rows[intNewRowidx].IsNode = vblnIsNode;
             mGrdFlex.Rows[intNewRowidx].Node.Level = vintLevel;
-            mGrdFlex[intNewRowidx, mintDefaultActionCol] = sclsConstants.DML_Mode.INSERT_MODE;
             mGrdFlex.SetCellStyle(intNewRowidx, vintColIndex, mGrdFlex.Styles["Data"]);
         }
 
-        private C1FlexGrid SetGrdFlex
+        private C1FlexGrid SetGrdFlexEvents
         {
             set
             {
@@ -508,19 +545,17 @@ namespace Ceritar.TT3LightDLL.Classes
                 {
                     mGrdFlex.CellChanged -= mGrdFlex_CellsChanged;
                     mGrdFlex.CellChecked -= mGrdFlex_CheckBoxClick;
-                    mGrdFlex.ComboCloseUp -= GrdFlex_CurrentCellCloseDropDown;
                 }
 
                 if (mGrdFlex != null)
                 {
                     mGrdFlex.CellChanged += mGrdFlex_CellsChanged;
                     mGrdFlex.CellChecked += mGrdFlex_CheckBoxClick;
-                    mGrdFlex.ComboCloseUp += GrdFlex_CurrentCellCloseDropDown;
                 }
             }
         }
 
-        private Button SetBtnAddRow
+        private Button SetBtnAddRowEvents
         {
             set
             {
@@ -536,7 +571,7 @@ namespace Ceritar.TT3LightDLL.Classes
             }
         }
 
-        private Button SetBtnDeleteRow
+        private Button SetBtnDeleteRowEvents
         {
             set
             {
@@ -578,7 +613,8 @@ namespace Ceritar.TT3LightDLL.Classes
 			    } else {
 				    mGrdFlex[intSelectedRow, mintDefaultActionCol] = sclsConstants.DML_Mode.DELETE_MODE;
 
-                    crRow = mGrdFlex.GetCellRange(intSelectedRow, 0, intSelectedRow, mGrdFlex.Cols.Count - 1);
+                    //crRow = mGrdFlex.GetCellRange(intSelectedRow, 0, intSelectedRow, mGrdFlex.Cols.Count - 1); //TODO: en attendant de voir comment eviter d'affecter le style et le remplacer
+                    crRow = mGrdFlex.GetCellRange(intSelectedRow, 0);
                     crRow.Style = csRemoveRow;
 
                     mfrmParent.GetFormController().ChangeMade = true;
@@ -612,13 +648,8 @@ namespace Ceritar.TT3LightDLL.Classes
 
 	    private void clsFlexGridWrapper_SetDisplay()
 	    {
-            pblnSetColsDisplay();
+            pblnSetHeaderAndColsDisplay();
 	    }
-
-        private void GrdFlex_CurrentCellCloseDropDown(object sender, RowColEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
 
         private void mGrdFlex_CheckBoxClick(object sender, RowColEventArgs e)
         {
@@ -629,22 +660,30 @@ namespace Ceritar.TT3LightDLL.Classes
         {
             if (!mblnGridIsLoading && 
                 !mblnHasNoActionColumn && 
+                mGrdFlex.Rows.Count > 1 &&
+                mGrdFlex.Row > 0 &&
                 mGrdFlex[mGrdFlex.Row, mintDefaultActionCol] != null && 
                 (mGrdFlex[mGrdFlex.Row, mintDefaultActionCol].ToString().Equals(((int)sclsConstants.DML_Mode.NO_MODE).ToString()) || 
                  mGrdFlex[mGrdFlex.Row, mintDefaultActionCol].ToString().Equals((sclsConstants.DML_Mode.NO_MODE).ToString())
                 ) && 
-                (mfrmParent.GetFormController().FormMode == sclsConstants.DML_Mode.INSERT_MODE || 
-                 mfrmParent.GetFormController().FormMode == sclsConstants.DML_Mode.UPDATE_MODE
-                )
+                mfrmParent.GetFormController().FormMode == sclsConstants.DML_Mode.UPDATE_MODE &&
+                e.Row == mGrdFlex.Row
                )
             {
-                CellRange crUpdate = mGrdFlex.GetCellRange(mGrdFlex.Row, 0, mGrdFlex.Row, mGrdFlex.Cols.Count - 1);
-                crUpdate.Style = csUpdateRow;
+                //NE FONCTIONNE PAS BIEN, CAUSE LE STYLE TO CHANGE
+                //CellRange crUpdate = mGrdFlex.GetCellRange(mGrdFlex.Row, 0, mGrdFlex.Row, mGrdFlex.Cols.Count - 1);
+                //crUpdate.Style = mGrdFlex.Styles.Add(null);
+                //crUpdate.Style = csUpdateRow;
                 mGrdFlex[mGrdFlex.Row, mintDefaultActionCol] = sclsConstants.DML_Mode.UPDATE_MODE;
+              
+                CellRange crUpdate = mGrdFlex.GetCellRange(mGrdFlex.Row, 0);
+                crUpdate.Style = csUpdateRow;
 
                 mfrmParent.GetFormController().ChangeMade = true;
             }
         }
+
+
 }
 
 

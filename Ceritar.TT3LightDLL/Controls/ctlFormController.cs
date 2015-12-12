@@ -44,15 +44,22 @@ namespace Ceritar.TT3LightDLL.Controls
 
         void ctlFormController_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (mblnShowButtonQuitOnly) {
+            if (mblnShowButtonQuitOnly) 
+            {
 
                 imgFormMode.Visible = false;
                 btnCancel.Visible = false;
                 btnApply.Visible = false;
-            } else {
+
+                this.Width = 80;
+            }
+            else 
+            {
                 imgFormMode.Visible = true;
                 btnCancel.Visible = true;
                 btnApply.Visible = true;
+
+                this.Width = 324;
             }
         }
 
@@ -145,13 +152,6 @@ namespace Ceritar.TT3LightDLL.Controls
         }
 
 #endregion
-
-
-        //event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
-        //{
-        //    add { this.Visible = false; ; }
-        //    remove { this.Visible = false; ; }
-        //}
 
 
 #region Functions / Subs
@@ -380,11 +380,6 @@ namespace Ceritar.TT3LightDLL.Controls
             }
         }
 
-        private void ctlFormControler_PropertyChanged(object sender, PropertyChangedEventArgs e) 
-        {
-            SetControlsVisility();
-        }
-
         private void mfrmParent_ResizeBegin(object sender, System.EventArgs e)
         {
             mfrmParent.SuspendLayout();
@@ -406,10 +401,6 @@ namespace Ceritar.TT3LightDLL.Controls
         //        End If
         //    Next
         //End Sub
-
-
-
-
 
     }
 

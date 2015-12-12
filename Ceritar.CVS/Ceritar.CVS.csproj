@@ -43,8 +43,10 @@
     <Compile Include="clsActionResults.cs" />
     <Compile Include="Controllers\ctr_CeritarApplication.cs" />
     <Compile Include="Controllers\ctr_Template.cs" />
+    <Compile Include="Controllers\ctr_Version.cs" />
     <Compile Include="Controllers\Interfaces\ICeritarApp.cs" />
     <Compile Include="Controllers\Interfaces\ITemplate.cs" />
+    <Compile Include="Controllers\Interfaces\IVersion.cs" />
     <Compile Include="Models\Module_Template\mod_Folder.cs" />
     <Compile Include="sclsAppConfigs.cs" />
     <Compile Include="Controllers\ctr_User.cs" />

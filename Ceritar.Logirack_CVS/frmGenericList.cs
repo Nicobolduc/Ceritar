@@ -22,7 +22,7 @@ namespace Ceritar.Logirack_CVS
         private sclsGenList.GeneralLists_ID mListToOpen;       
 
         //Private class members
-        private clsFlexGridWrapper mcGrdList;
+        private clsC1FlexGridWrapper mcGrdList;
 
 #region "Constructor"
 
@@ -32,7 +32,7 @@ namespace Ceritar.Logirack_CVS
             
 	        mListToOpen = vstrGenList_ID;
 
-            mcGrdList = new clsFlexGridWrapper();
+            mcGrdList = new clsC1FlexGridWrapper();
 
             btnRefresh.Click += btnRefresh_Click;
         }
@@ -111,9 +111,13 @@ namespace Ceritar.Logirack_CVS
                 {
                     case sclsConstants.DML_Mode.INSERT_MODE:
                     case sclsConstants.DML_Mode.UPDATE_MODE:
-                        int intCurrentItem = grdList.FindRow(intItem_NRI.ToString(), 1, mintItem_ID_col, false, true, false);
 
-                        grdList.Row = (intCurrentItem > 0 ? intCurrentItem : 1);
+                        if (grdList.Rows.Count > 1)
+                        {
+                            int intCurrentItem = grdList.FindRow(intItem_NRI.ToString(), 1, mintItem_ID_col, false, true, false);
+
+                            grdList.Row = (intCurrentItem > 0 ? intCurrentItem : 1);
+                        }  
 
                         break;
                 }
@@ -165,6 +169,19 @@ namespace Ceritar.Logirack_CVS
             bool blnValidReturn = false;
 
             blnValidReturn = mcGrdList.bln_FillData(mstrGridSQL);
+
+            if (!blnValidReturn || grdList.Rows.Count == 1)
+            {
+                btnUpdate.Enabled = false;
+                btnDelete.Enabled = false;
+                btnConsult.Enabled = false;
+            }
+            else
+            {
+                btnUpdate.Enabled = true;
+                btnDelete.Enabled = true;
+                btnConsult.Enabled = true;
+            }
 
             return blnValidReturn;
         }
@@ -254,7 +271,6 @@ namespace Ceritar.Logirack_CVS
         {
             pfblnGrdList_Load();
         }
-
 
         ctlFormController IFormController.GetFormController()
         {

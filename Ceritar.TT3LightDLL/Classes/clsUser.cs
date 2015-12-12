@@ -10,7 +10,7 @@ namespace Ceritar.TT3LightDLL.Classes
     {
         //Working variables
         private short _intLanguage = 1;
-
+        private int _intUser_NRI = 1;
 
 
 
@@ -20,6 +20,12 @@ namespace Ceritar.TT3LightDLL.Classes
         {
             get { return _intLanguage; }
             set { _intLanguage = value; }
+        }
+
+        public int GetUser_NRI
+        {
+            get { return _intUser_NRI; }
+            set { _intUser_NRI = value; }
         }
 
 #endregion
