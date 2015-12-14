@@ -13,10 +13,12 @@ namespace Ceritar.CVS.Controllers.Interfaces
         string GetCompiledBy();
         ushort GetVersionNo();
         int GetCeritarApplication_NRI();
+        string GetCeritarApplication_Name();
         int GetTemplateSource_NRI();
         string GetLocation_APP_CHANGEMENT();
         string GetLocation_Release();
         string GetLocation_TTApp();
+        List<structClientAppVersion> GetClientsList();
     }
 
     public struct structClientAppVersion
@@ -27,6 +29,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         public bool blnIsCurrentVersion;
         public bool blnInstalled;
         public string strLicense;
+        public string strCeritarClient_Name;
         public int intCeritarClient_NRI;
     }
 }

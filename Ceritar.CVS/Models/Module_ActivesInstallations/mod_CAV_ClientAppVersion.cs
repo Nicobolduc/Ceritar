@@ -109,6 +109,22 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         break;
 
                     case sclsConstants.DML_Mode.INSERT_MODE:
+
+                        if (_intCeritarClient_NRI <= 0)
+                        {
+                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, Ceritar.CVS.Controllers.ctr_Version.ErrorCode_Ver.CLIENT_NAME_MANDATORY);
+                        }
+                        else if (_intCeritarApplication_NRI <= 0)
+                        {
+                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION);
+                        }
+                        else
+                        {
+                            mcActionResults.SetValid();
+                        }
+
+                        break;
+
                     case sclsConstants.DML_Mode.UPDATE_MODE:
 
                         if (_intCeritarClient_NRI <= 0)

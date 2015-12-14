@@ -11,6 +11,7 @@ namespace Ceritar.CVS
         private bool mblnValid;
         private int mintMessage_NRI;
         private object mErrorCode;
+        private string[] lstParams;
 
         //Messages
         private const ushort mintMSG_NotUsedError = 11;
@@ -45,13 +46,16 @@ namespace Ceritar.CVS
         public int GetMessage_NRI
         {
             get { return mintMessage_NRI; }
-            set { mintMessage_NRI = value; }
         }
 
         public object GetErrorCode
         {
             get { return mErrorCode; }
-            set { mErrorCode = value; }
+        }
+
+        public string[] GetLstParams
+        {
+            get { return lstParams; }
         }
 
 #endregion
@@ -61,6 +65,7 @@ namespace Ceritar.CVS
             mblnValid = false;
             mErrorCode = BaseErrorCode.UNHANDLED_ERROR;
             mintMessage_NRI = -1;
+            lstParams = null;
         }
 
         internal void SetValid()
@@ -68,13 +73,15 @@ namespace Ceritar.CVS
             mblnValid = true;
             mErrorCode = BaseErrorCode.NO_ERROR;
             mintMessage_NRI = 0;
+            lstParams = null;
         }
 
-        internal void SetInvalid(object vintMessage_NRI, object vintErrorCode)
+        internal void SetInvalid(object vintMessage_NRI, object vintErrorCode, params string[] vstrParams)
         {
             mblnValid = false;
             mErrorCode = vintErrorCode;
             mintMessage_NRI = (int)vintMessage_NRI;
+            lstParams = vstrParams;
         }
 
         internal void SetDefault()
@@ -82,6 +89,7 @@ namespace Ceritar.CVS
             mblnValid = false;
             mErrorCode = BaseErrorCode.NO_ERROR;
             mintMessage_NRI = mintMSG_NotUsedError;
+            lstParams = null;
         }
     }
 }

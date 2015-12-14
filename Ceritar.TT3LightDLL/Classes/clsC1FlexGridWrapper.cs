@@ -46,6 +46,7 @@ namespace Ceritar.TT3LightDLL.Classes
         //Working variables
         private bool mblnGridIsLoading = false;
         private bool mblnFromButtonAddClick;
+        private int mintNbVisibleColumns = 0;
 
 
         public clsC1FlexGridWrapper()
@@ -143,6 +144,11 @@ namespace Ceritar.TT3LightDLL.Classes
 	    public bool HasActionColumn {
 		    set { mblnHasNoActionColumn = value; }
 	    }
+
+        public int GetNbVisibleColumns
+        {
+            get { return mintNbVisibleColumns; }
+        }
 
 #endregion
 
@@ -356,7 +362,9 @@ namespace Ceritar.TT3LightDLL.Classes
 		    bool blnValidReturn = true;
 		    string strGridCaption = string.Empty;
 		    string[] lstColumns = null;
-            CellStyle individualColStyle = mGrdFlex.Styles.Add("column");
+            CellRange crColHeader;
+
+            mintNbVisibleColumns = 0;
 
 		    try {
                 strGridCaption = clsApp.GetAppController.str_GetCaption(Convert.ToInt32(mGrdFlex.Tag), clsApp.GetAppController.cUser.GetUserLanguage);
@@ -374,24 +382,31 @@ namespace Ceritar.TT3LightDLL.Classes
 				    } else {
                         mGrdFlex[0, colHeaderCpt] = (string)lstColumns[colHeaderCpt].Substring(1, lstColumns[colHeaderCpt].Length - 1);
 
+                        crColHeader = mGrdFlex.GetCellRange(0, colHeaderCpt);
+
+                        crColHeader.Style = mGrdFlex.Styles.Add(null);
+
 					    switch (lstColumns[colHeaderCpt].ToCharArray()[0]) {
 						    case '<':
-                                individualColStyle.TextAlign = TextAlignEnum.LeftCenter;
-
+                                //mGrdFlex.Cols[colHeaderCpt].StyleFixed.TextAlign = TextAlignEnum.LeftCenter;
+                                crColHeader.Style.TextAlign = TextAlignEnum.LeftCenter;
+                                
 							    break;
 
 						    case '^':
-                                individualColStyle.TextAlign = TextAlignEnum.CenterCenter;
-
+                                //mGrdFlex.Cols[colHeaderCpt].StyleFixed.TextAlign = TextAlignEnum.CenterCenter;
+                                crColHeader.Style.TextAlign = TextAlignEnum.CenterCenter;
+                                
 							    break;
 
 						    case '>':
-                                individualColStyle.TextAlign = TextAlignEnum.RightCenter;
-
+                                //mGrdFlex.Cols[colHeaderCpt].StyleFixed.TextAlign = TextAlignEnum.RightCenter;
+                                crColHeader.Style.TextAlign = TextAlignEnum.RightCenter;
+                                
 							    break;
 					    }
 
-					    mGrdFlex.Cols[colHeaderCpt].Style = individualColStyle;
+                        mintNbVisibleColumns++;
 				    }
 			    }
 

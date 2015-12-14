@@ -9,7 +9,6 @@ namespace Ceritar.Logirack_CVS
 {
     public partial class frmGenericList : Form, IFormController
     {
-
         //Public members
         public string mintGridTag = string.Empty;
         public string mstrGridSQL = string.Empty;
@@ -33,8 +32,17 @@ namespace Ceritar.Logirack_CVS
 	        mListToOpen = vstrGenList_ID;
 
             mcGrdList = new clsC1FlexGridWrapper();
+            mcGrdList.SetGridDisplay += mcGrdList_SetGridDisplay;
 
             btnRefresh.Click += btnRefresh_Click;
+        }
+
+        void mcGrdList_SetGridDisplay()
+        {
+            foreach (C1.Win.C1FlexGrid.Column cCol in grdList.Cols)
+            {
+                if (cCol.IsVisible && cCol.Index > 1) cCol.Width = grdList.Width / mcGrdList.GetNbVisibleColumns - 10;
+            }
         }
 
         //void btnRefresh_Click()

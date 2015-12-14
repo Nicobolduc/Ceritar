@@ -34,7 +34,7 @@ namespace Ceritar.Logirack_CVS
         //Working variables
         private ushort mintTpl_TS;
 
-        //TODO: Si on ajoute une ligne et qu'elle ne suit pas immediatement la precedent, ca fonctionne pas !! ********************************************
+        //TODO: Si on ajoute une ligne et qu'elle ne suit pas immediatement la precedent, ca fonctionne pas bien !! ********************************************
         public frmTemplate()
         {
             InitializeComponent();
@@ -256,7 +256,7 @@ namespace Ceritar.Logirack_CVS
                 !mcGrdTemplate.GridIsLoading &&
                 grdTemplate.Rows.Count > 1 && 
                 grdTemplate.Row > 0 && 
-                (mcGrdTemplate[grdTemplate.Row + 1, mintGrdTpl_HiCo_IsSystemItem_col] == "0" | String.IsNullOrEmpty(mcGrdTemplate[grdTemplate.Row + 1, mintGrdTpl_HiCo_IsSystemItem_col])) &&
+                (mcGrdTemplate[grdTemplate.Row , mintGrdTpl_HiCo_IsSystemItem_col] == "0" | String.IsNullOrEmpty(mcGrdTemplate[grdTemplate.Row + 1, mintGrdTpl_HiCo_IsSystemItem_col])) &&
                 mcGrdTemplate[grdTemplate.Row, mintGrdTpl_HiCo_FolderType_NRI_col] != ((int)ctr_Template.FolderType.Ceritar_Application).ToString() &&
                 (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE || formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
                )
@@ -272,7 +272,9 @@ namespace Ceritar.Logirack_CVS
             bool blnValidReturn = false;
             int intNewRowIndex = 0;
 
-            if (pfblnCanEditRow() || (int)grdTemplate[grdTemplate.Row, mintGrdTpl_HiCo_FolderType_NRI_col] == (int)ctr_Template.FolderType.Ceritar_Application)
+            if ((pfblnCanEditRow() || (int)grdTemplate[grdTemplate.Row, mintGrdTpl_HiCo_FolderType_NRI_col] == (int)ctr_Template.FolderType.Ceritar_Application) & 
+                (int)grdTemplate[grdTemplate.Row, mintGrdTpl_HiCo_FolderType_NRI_col] != (int)ctr_Template.FolderType.Scripts &
+                (int)grdTemplate[grdTemplate.Row, mintGrdTpl_HiCo_FolderType_NRI_col] != (int)ctr_Template.FolderType.Report)
             {
                 Node currentNode = grdTemplate.Rows[grdTemplate.Row].Node;
                 currentNode.AddNode(nodeType, "");
@@ -318,7 +320,7 @@ namespace Ceritar.Logirack_CVS
 
         private void btnAddChild_Click(object sender, EventArgs e)
         {
-            pfblnAddNodeRow(NodeTypeEnum.NextSibling);       
+            pfblnAddNodeRow(NodeTypeEnum.NextSibling); 
         }
 
         void mcGrdTemplate_SetGridDisplay()
@@ -326,6 +328,8 @@ namespace Ceritar.Logirack_CVS
             grdTemplate.Tree.Column = mintGrdTpl_HiCo_Name_col;
 
             grdTemplate.Cols[mintGrdTpl_HiCo_Name_col].Width = 481;
+
+            grdTemplate.Cols[mintGrdTpl_HiCo_Name_col].StyleDisplay.TextAlign = TextAlignEnum.LeftCenter;
         }
 
         private void formController_LoadData(TT3LightDLL.Controls.LoadDataEventArgs eventArgs)
@@ -563,6 +567,18 @@ namespace Ceritar.Logirack_CVS
             else
             {
                 btnAddSibbling.Enabled = false;
+            }
+
+            if (!formController.FormIsLoading &&
+                grdTemplate.Rows.Count > 1 &&
+                grdTemplate.Row > 0 &&
+                grdTemplate[grdTemplate.Row, mintGrdTpl_HiCo_FolderType_NRI_col] != null &&
+                (int)grdTemplate[grdTemplate.Row, mintGrdTpl_HiCo_FolderType_NRI_col] != (int)ctr_Template.FolderType.Normal
+               )
+            {
+                btnAddChild.Enabled = false;
+
+                if ((int)grdTemplate[grdTemplate.Row, mintGrdTpl_HiCo_FolderType_NRI_col] != (int)ctr_Template.FolderType.Ceritar_Application) btnAddSibbling.Enabled = false;
             }
         }
 

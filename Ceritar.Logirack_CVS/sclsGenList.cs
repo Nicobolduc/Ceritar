@@ -178,9 +178,11 @@ namespace Ceritar.Logirack_CVS
             strSQL = strSQL + " SELECT Version.Ver_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_Name, " + Environment.NewLine;
             strSQL = strSQL + "        Version.Ver_No " + Environment.NewLine;
+            //strSQL = strSQL + "        CurrentlyInProd =  " + Environment.NewLine;
 
             strSQL = strSQL + " FROM Version " + Environment.NewLine;
             strSQL = strSQL + "     INNER JOIN CerApp ON CerApp.CeA_NRI = Version.CeA_NRI " + Environment.NewLine;
+            //strSQL = strSQL + "     LEFT JOIN ClientAppVersion ON ClientAppVersion.Ver_NRI = Version.Ver_NRI AND ClientAppVersion.CeA_NRI = Version.CeA_NRI " + Environment.NewLine;
 
             if (vstrWhere != string.Empty)
             {

@@ -18,10 +18,11 @@ namespace Ceritar.CVS.Controllers
         {
             Normal = 1,
             Ceritar_Application = 2,
-            Executable = 3,
-            TTApp = 4,
-            Script = 5,
-            Other = 6
+            Release = 3,
+            CaptionsAndMenus = 4,
+            Scripts = 5,
+            Report = 6,
+            Other = 7
         }
 
         public enum ErrorCode_Tpl
@@ -30,7 +31,8 @@ namespace Ceritar.CVS.Controllers
             TEMPLATE_TYPE_MANDATORY = 2,
             HIERARCHY_MANDATORY = 3,
             CERITAR_APPLICATION_MANDATORY = 4,
-            UNIQUE_DEFAULT_TEMPLATE = 5
+            UNIQUE_DEFAULT_TEMPLATE = 5,
+            ONLY_NORMAL_AND_OTHER_FOLDERTYPE_MULTIPLE = 6
         }
 
         public enum ErrorCode_HiCo
@@ -82,48 +84,45 @@ namespace Ceritar.CVS.Controllers
                     ((mod_Folder)mcModTemplate.RacineSystem).NodeLevel = structRacine.intNodeLevel;
                 }
 
-                mcActionResult = mcModTemplate.Validate();
+                lstHiCo = mcView.GetHierarchyComponentList();
 
-                if (mcActionResult.IsValid)
+                for (int intIdx = 0; intIdx < lstHiCo.Count; intIdx++)
                 {
-                    lstHiCo = mcView.GetHierarchyComponentList();
+                    cCurrentFolder = new mod_Folder();
+                    cCurrentFolder.DML_Action = lstHiCo[intIdx].Action;
+                    cCurrentFolder.HierarchyComponent_NRI = lstHiCo[intIdx].intHierarchyComponent_NRI;
+                    cCurrentFolder.HierarchyComponent_TS = lstHiCo[intIdx].intHierarchyComponent_TS;
+                    cCurrentFolder.NameOnDisk = lstHiCo[intIdx].strName;
+                    cCurrentFolder.NodeLevel = lstHiCo[intIdx].intNodeLevel;
+                    cCurrentFolder.Type = (FolderType)lstHiCo[intIdx].FolderType;
+                    cCurrentFolder.Template_NRI = mcModTemplate.Template_NRI;
 
-                    for (int intIdx = 0; intIdx < lstHiCo.Count; intIdx++)
+                    if (intIdx == 0)
                     {
-                        cCurrentFolder = new mod_Folder();
-                        cCurrentFolder.DML_Action = lstHiCo[intIdx].Action;
-                        cCurrentFolder.HierarchyComponent_NRI = lstHiCo[intIdx].intHierarchyComponent_NRI;
-                        cCurrentFolder.HierarchyComponent_TS = lstHiCo[intIdx].intHierarchyComponent_TS;
-                        cCurrentFolder.NameOnDisk = lstHiCo[intIdx].strName;
-                        cCurrentFolder.NodeLevel = lstHiCo[intIdx].intNodeLevel;
-                        cCurrentFolder.Type = (FolderType)lstHiCo[intIdx].FolderType;
-                        cCurrentFolder.Template_NRI = mcModTemplate.Template_NRI;
-
-                        if (intIdx == 0)
-                        {
-                            cParentFolder = ((mod_Folder)mcModTemplate.RacineSystem);
-                            ((mod_Folder)mcModTemplate.RacineSystem).LstChildrensComponents.Add(cCurrentFolder);
-                        }
-                        else if (cPreviousFolder.NodeLevel < cCurrentFolder.NodeLevel)
-                        {
-                            cParentFolder = (mod_Folder)cPreviousFolder;
-                            cPreviousFolder.LstChildrensComponents.Add(cCurrentFolder);
-                        }
-                        else if (cPreviousFolder.NodeLevel > cCurrentFolder.NodeLevel)
-                        {
-                            cParentFolder = (mod_Folder)cPreviousFolder.ParentComponent.ParentComponent;
-                            cParentFolder.LstChildrensComponents.Add(cCurrentFolder);
-                        }
-                        else
-                        {
-                            cParentFolder.LstChildrensComponents.Add(cCurrentFolder);
-                        }
-
-                        cCurrentFolder.ParentComponent = cParentFolder;
-
-                        cPreviousFolder = cCurrentFolder;
+                        cParentFolder = ((mod_Folder)mcModTemplate.RacineSystem);
+                        ((mod_Folder)mcModTemplate.RacineSystem).LstChildrensComponents.Add(cCurrentFolder);
                     }
+                    else if (cPreviousFolder.NodeLevel < cCurrentFolder.NodeLevel)
+                    {
+                        cParentFolder = (mod_Folder)cPreviousFolder;
+                        cPreviousFolder.LstChildrensComponents.Add(cCurrentFolder);
+                    }
+                    else if (cPreviousFolder.NodeLevel > cCurrentFolder.NodeLevel)
+                    {
+                        cParentFolder = (mod_Folder)cPreviousFolder.ParentComponent.ParentComponent;
+                        cParentFolder.LstChildrensComponents.Add(cCurrentFolder);
+                    }
+                    else
+                    {
+                        cParentFolder.LstChildrensComponents.Add(cCurrentFolder);
+                    }
+
+                    cCurrentFolder.ParentComponent = cParentFolder;
+
+                    cPreviousFolder = cCurrentFolder;
                 }
+                
+                mcActionResult = mcModTemplate.Validate(); //TODO Valider hierarchy
             }
             catch (Exception ex)
             {
@@ -183,6 +182,7 @@ namespace Ceritar.CVS.Controllers
 
                 mcSQL.bln_EndTransaction(mcActionResult.IsValid);
                 mcSQL = null;
+                mcModTemplate = new mod_Tpl_HierarchyTemplate();
             }
 
             return mcActionResult;
@@ -333,12 +333,12 @@ namespace Ceritar.CVS.Controllers
 
             strSQL = strSQL + " SELECT  ActionCol = 0, " + Environment.NewLine;
             strSQL = strSQL + "    		LstHierarchyComp.HiCo_NRI,   " + Environment.NewLine;
-            strSQL = strSQL + "    		IsSystem = CASE WHEN LstHierarchyComp.ACg_NRI IS NULL THEN 0 ELSE 1 END,   " + Environment.NewLine;
+            strSQL = strSQL + "    		IsSystem = CASE WHEN LstHierarchyComp.TTP_NRI IS NULL THEN 0 ELSE 1 END,   " + Environment.NewLine;
             strSQL = strSQL + "    		LstHierarchyComp.HiCo_NodeLevel,   " + Environment.NewLine;
             strSQL = strSQL + "    		IsNode = 0, --CASE WHEN LstHierarchyComp.HiCo_Parent_NRI = TNode.Parent OR LstHierarchyComp.HiCo_Parent_NRI IS NULL THEN 1 ELSE 0 END,  " + Environment.NewLine; //Not used anymore
             strSQL = strSQL + "    		LstHierarchyComp.HiCo_Name,   " + Environment.NewLine;
-            strSQL = strSQL + "    		FoT_NRI = CASE WHEN LstHierarchyComp.ACg_NRI IS NULL THEN LstHierarchyComp.FoT_NRI ELSE 0 END,  " + Environment.NewLine;
-            strSQL = strSQL + "    		FoT_Code = CASE WHEN LstHierarchyComp.ACg_NRI IS NULL THEN FolderType.FoT_Code ELSE NULL END  " + Environment.NewLine;
+            strSQL = strSQL + "    		FoT_NRI = CASE WHEN LstHierarchyComp.TTP_NRI IS NULL THEN LstHierarchyComp.FoT_NRI ELSE 0 END,  " + Environment.NewLine;
+            strSQL = strSQL + "    		FoT_Code = CASE WHEN LstHierarchyComp.TTP_NRI IS NULL THEN FolderType.FoT_Code ELSE NULL END  " + Environment.NewLine;
 
             strSQL = strSQL + " FROM LstHierarchyComp " + Environment.NewLine;
             strSQL = strSQL + " 	INNER JOIN FolderType ON FolderType.FoT_NRI = LstHierarchyComp.FoT_NRI  " + Environment.NewLine;
@@ -350,7 +350,7 @@ namespace Ceritar.CVS.Controllers
             //strSQL = strSQL + "    				GROUP BY HierarchyComp.HiCo_NodeLevel   " + Environment.NewLine;
             //strSQL = strSQL + "    			   ) AS TNode ON TNode.Enfant = HiCo_NRI " + Environment.NewLine;
 
-            strSQL = strSQL + " WHERE LstHierarchyComp.ACg_NRI = 100 OR LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
+            strSQL = strSQL + " WHERE LstHierarchyComp.TTP_NRI = " + (int)sclsAppConfigs.TTPARAM_TYPE.PATH_INSTALLATIONS_ACTIVES + " OR LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
 
             strSQL = strSQL + " ORDER BY Level " + Environment.NewLine;
 

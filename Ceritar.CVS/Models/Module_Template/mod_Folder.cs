@@ -207,7 +207,7 @@ namespace Ceritar.CVS.Models.Module_Template
                 { }
                 else if (!mcSQL.bln_AddField("Tpl_NRI", _intTemplate_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("ACg_NRI", _intAppConfig_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("TTP_NRI", _intAppConfig_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else
                 {

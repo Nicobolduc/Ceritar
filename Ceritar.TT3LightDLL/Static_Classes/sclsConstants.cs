@@ -31,7 +31,8 @@ namespace Ceritar.TT3LightDLL.Static_Classes
             UNIQUE_ATTRIBUTE = 5,
             MANDATORY_GRID = 6,
             INVALID_REFERENCE_INTEGRITY = 7,
-            INVALID_TIMESTAMP = 10
+            INVALID_TIMESTAMP = 10,
+            INVALID_PATH = 17
         }
     }
 }

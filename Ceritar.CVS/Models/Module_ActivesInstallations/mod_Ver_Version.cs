@@ -30,6 +30,9 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private sclsConstants.DML_Mode mintDML_Action;
         private clsSQL mcSQL;
 
+        //Messages
+        private const int mintMSG_VersionNo_UniqueAndBiggerPrevious = 18;
+
         //Working variables
 
 
@@ -159,18 +162,18 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.COMPILED_BY_MANDATORY);
                         }
-                        else if (string.IsNullOrEmpty(_strLocation_APP_CHANGEMENT))
-                        {
-                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY);
-                        }
-                        else if (string.IsNullOrEmpty(_strLocation_Release))
-                        {
-                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.RELEASE_MANDATORY);
-                        }
-                        else if (string.IsNullOrEmpty(_strLocation_TTApp))
-                        {
-                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY);
-                        }
+                        //else if (string.IsNullOrEmpty(_strLocation_APP_CHANGEMENT))
+                        //{
+                        //    mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY);
+                        //}
+                        //else if (string.IsNullOrEmpty(_strLocation_Release))
+                        //{
+                        //    mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.RELEASE_MANDATORY);
+                        //}
+                        //else if (string.IsNullOrEmpty(_strLocation_TTApp))
+                        //{
+                        //    mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY);
+                        //}
                         else if (_lstClientsUsing == null || _lstClientsUsing.Count == 0)
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.CLIENTS_LIST_MANDATORY);
@@ -190,6 +193,10 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         else if (!clsSQL.bln_ADOValid_TS("Version", "Ver_NRI", _intVersion_NRI, "Ver_TS", _intVersion_TS))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_TIMESTAMP, clsActionResults.BaseErrorCode.INVALID_TIMESTAMP);
+                        }
+                        else if (!string.IsNullOrEmpty(clsSQL.str_ADOSingleLookUp("Ver_NRI", "Version", "CeA_NRI = " + _cCerApplication.CeritarApplication_NRI +  " AND Ver_No >= " + clsApp.GetAppController.str_FixStringForSQL(_intVersionNo.ToString()))))
+                        {
+                            mcActionResults.SetInvalid(mintMSG_VersionNo_UniqueAndBiggerPrevious, ctr_Version.ErrorCode_Ver.VERSION_NO_UNIQUE_AND_BIGGER_PREVIOUS);
                         }
                         else
                         {
@@ -437,6 +444,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 {
                     _lstClientsUsing[intIndex].SetcSQL = mcSQL;
                     _lstClientsUsing[intIndex].Version_NRI = _intVersion_NRI;
+                    _lstClientsUsing[intIndex].DML_Action = (mintDML_Action == sclsConstants.DML_Mode.DELETE_MODE ? sclsConstants.DML_Mode.DELETE_MODE : _lstClientsUsing[intIndex].DML_Action);
 
                     blnValidReturn = _lstClientsUsing[intIndex].blnSave();
 

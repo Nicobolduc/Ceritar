@@ -1,6 +1,7 @@
 ﻿using Ceritar.TT3LightDLL.Classes;
 using Ceritar.TT3LightDLL.Static_Classes;
 using System;
+using System.IO;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Collections.Generic;
@@ -112,7 +113,7 @@ namespace Ceritar.TT3LightDLL.Classes
         {
             mctrlUser = new clsUser();
 
-            blnOpenMySQLConnection();
+            blnOpenSQLServerConnection();
         }
 
 #endregion
@@ -120,14 +121,19 @@ namespace Ceritar.TT3LightDLL.Classes
 
 #region "Functions / Subs"
 
-        private bool blnOpenMySQLConnection()
+        private bool blnOpenSQLServerConnection()
         {
             bool blnValidReturn = false;
 
             try
             {
                 //mcMySQLConnection = new SqlConnection(@"Persist Security Info=False;User ID=sa;Password=sa;Initial Catalog=Logirack_CVS_Dev;Data Source=localhost\SVR_SQL");
-                mcMySQLConnection = new SqlConnection(@"Persist Security Info=False;User ID=sa;Password=sa;Initial Catalog=Logirack_CVS_Dev;Data Source=24.200.162.199\SVR_SQL");
+                mcMySQLConnection = new SqlConnection(@"Persist Security Info=False;
+                                                        User ID=sa;
+                                                        Password=sa;
+                                                        Initial Catalog=Logirack_CVS_Dev;
+                                                        Data Source=24.200.162.199\SVR_SQL;
+                                                        MultipleActiveResultSets=True");
                 
                 mcMySQLConnection.Open();
 
@@ -213,7 +219,7 @@ namespace Ceritar.TT3LightDLL.Classes
             return DateTime.ParseExact(vdtToFormat, str_GetUserDateFormat, System.Globalization.CultureInfo.InvariantCulture);
         }
 
-        public void ShowMessage(int vintCaption_NRI, MessageBoxButtons vmsgType = MessageBoxButtons.OK, List<string> vlstMsgParam = null)
+        public void ShowMessage(int vintCaption_NRI, MessageBoxButtons vmsgType = MessageBoxButtons.OK, params string[] vlstMsgParam)
         {
             string strMessage = string.Empty;
             int intParamCpt = 1;
@@ -236,7 +242,7 @@ namespace Ceritar.TT3LightDLL.Classes
                         }
                         else
                         {
-                            break; // TODO: might not be correct. Was : Exit For
+                            break;
                         }
                     }
                 }
@@ -255,6 +261,33 @@ namespace Ceritar.TT3LightDLL.Classes
             T enumVal = (T)Enum.Parse(typeof(T), vobjValue.ToString());
 
             return enumVal;
+        }
+
+        public bool blnCopyFolderContent(string vstrSourceFolderPath, string vstrDestinationFolderPath, bool vblnOverwrite = true, bool vblnCreateFolderIfNotExist = false)
+        {
+            bool blnValidReturn = false;
+            string strFileDestinationPath = string.Empty;
+
+            try
+            {
+                string[] lstReleaseFiles = Directory.GetFiles(vstrSourceFolderPath);
+
+                foreach (string strCurrentFile in lstReleaseFiles)
+                {
+                    if (vblnCreateFolderIfNotExist && !Directory.Exists(vstrDestinationFolderPath)) Directory.CreateDirectory(vstrDestinationFolderPath);
+
+                    strFileDestinationPath = Path.Combine(vstrDestinationFolderPath, Path.GetFileName(strCurrentFile));
+
+                    File.Copy(strCurrentFile, strFileDestinationPath, vblnOverwrite);
+                }
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnValidReturn;
         }
 
 #endregion

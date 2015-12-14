@@ -119,11 +119,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmVersion.resx">
       <DependentUpon>frmVersion.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="mdiGeneral.resx">
       <DependentUpon>mdiGeneral.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>

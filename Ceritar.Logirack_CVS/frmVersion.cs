@@ -25,7 +25,7 @@ namespace Ceritar.Logirack_CVS
         private const short mintGrdClients_CeC_NRI_col = 4;
         private const short mintGrdClients_CeC_Name_col = 5;
         private const short mintGrdClients_Installed_col = 6;
-        private const short mintGrdClients_IsCurrent_col = 7;
+        private const short mintGrdClients_IsCurrentVersion_col = 7;
         private const short mintGrdClients_License_col = 8;
 
         //Columns grdRevModif
@@ -72,6 +72,11 @@ namespace Ceritar.Logirack_CVS
         int IVersion.GetCeritarApplication_NRI()
         {
             return (int)cboApplications.SelectedValue;
+        }
+
+        string IVersion.GetCeritarApplication_Name()
+        {
+            return (cboApplications.SelectedIndex >= 0 ? cboApplications.GetItemText(cboApplications.SelectedItem) : string.Empty);
         }
 
         string IVersion.GetCompiledBy()
@@ -121,6 +126,30 @@ namespace Ceritar.Logirack_CVS
         string IVersion.GetCreationDate()
         {
             return dtpCreation.Value.ToString();
+        }
+
+        List<structClientAppVersion> IVersion.GetClientsList()
+        {
+            List<structClientAppVersion> lstClient_NRI = new List<structClientAppVersion>();
+            structClientAppVersion structCAV;
+
+            for (int intRowIndex = 1; intRowIndex < grdClients.Rows.Count; intRowIndex++)
+            {
+                structCAV = new structClientAppVersion();
+
+                structCAV.Action = clsApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdClients[intRowIndex, mintGrdClients_Action_col]);
+                structCAV.blnInstalled = Convert.ToBoolean(grdClients[intRowIndex, mintGrdClients_Installed_col]);
+                structCAV.blnIsCurrentVersion = Convert.ToBoolean(grdClients[intRowIndex, mintGrdClients_IsCurrentVersion_col]);
+                structCAV.strCeritarClient_Name = mcGrdClients[intRowIndex, mintGrdClients_CeC_Name_col];
+                structCAV.intCeritarClient_NRI = Int32.Parse(mcGrdClients[intRowIndex, mintGrdClients_CeC_NRI_col]);
+                structCAV.intClientAppVersion_NRI = Int32.Parse(mcGrdClients[intRowIndex, mintGrdClients_CAV_NRI_col]);
+                structCAV.intClientAppVersion_TS = Int32.Parse(mcGrdClients[intRowIndex, mintGrdClients_CAV_TS_col]);
+                structCAV.strLicense = grdClients[intRowIndex, mintGrdClients_License_col].ToString();
+
+                lstClient_NRI.Add(structCAV);
+            }
+
+            return lstClient_NRI;
         }
 
 #endregion
@@ -235,7 +264,6 @@ namespace Ceritar.Logirack_CVS
             }
         }
 
-
 #endregion
 
 
@@ -244,7 +272,7 @@ namespace Ceritar.Logirack_CVS
             grdClients.Cols[mintGrdClients_CeC_Name_col].Width = 220;
             grdClients.Cols[mintGrdClients_Installed_col].Width = 55;
 
-            grdClients.Cols[mintGrdClients_IsCurrent_col].DataType = typeof(bool);
+            grdClients.Cols[mintGrdClients_IsCurrentVersion_col].DataType = typeof(bool);
             grdClients.Cols[mintGrdClients_Installed_col].DataType = typeof(bool);
 
             if (grdClients.Rows.Count > 1)
@@ -294,7 +322,9 @@ namespace Ceritar.Logirack_CVS
             eventArgs.IsValid = false;
 
             if (!mcGrdClients.blnValidateGridData())
-            {}
+            {
+                clsApp.GetAppController.ShowMessage((int)sclsConstants.Validation_Message.MANDATORY_GRID, MessageBoxButtons.OK, groupBox2.Text);
+            }
             else
             {
                 mcActionResults = mcCtrVersion.Validate();
@@ -341,7 +371,14 @@ namespace Ceritar.Logirack_CVS
                             break;
 
                         case ctr_Version.ErrorCode_Ver.VERSION_NO_MANDATORY:
+                            
                             txtVersionNo.Focus();
+                            break;
+
+                        case ctr_Version.ErrorCode_Ver.VERSION_NO_UNIQUE_AND_BIGGER_PREVIOUS:
+                            
+                            txtVersionNo.Focus();
+                            txtVersionNo.SelectAll();
                             break;
                     }
 
@@ -402,9 +439,15 @@ namespace Ceritar.Logirack_CVS
 
                         break;
 
-                    case mintGrdClients_IsCurrent_col:
+                    case mintGrdClients_IsCurrentVersion_col:
 
-                        mcGrdClients[grdClients.Row, mintGrdClients_IsCurrent_col] = (mcGrdClients[grdClients.Row, mintGrdClients_IsCurrent_col] == "0" ? "1" : "0");
+                        mcGrdClients[grdClients.Row, mintGrdClients_IsCurrentVersion_col] = (mcGrdClients[grdClients.Row, mintGrdClients_IsCurrentVersion_col] == "0" ? "1" : "0");
+
+                        if (mcGrdClients[grdClients.Row, mintGrdClients_IsCurrentVersion_col] == "1")
+                        {
+
+                            mcGrdClients[grdClients.Row, mintGrdClients_Installed_col]  = "1";
+                        }
 
                         break;
                 }
@@ -459,7 +502,7 @@ namespace Ceritar.Logirack_CVS
             grdClients[grdClients.Row, mintGrdClients_CAV_NRI_col] = 0;
             grdClients[grdClients.Row, mintGrdClients_CAV_TS_col] = 0;
             grdClients[grdClients.Row, mintGrdClients_Installed_col] = 0;
-            grdClients[grdClients.Row, mintGrdClients_IsCurrent_col] = 0;
+            grdClients[grdClients.Row, mintGrdClients_IsCurrentVersion_col] = 0;
             grdClients[grdClients.Row, mintGrdClients_License_col] = "";
         }
 
@@ -481,7 +524,7 @@ namespace Ceritar.Logirack_CVS
                 structCAV.intClientAppVersion_TS = Int32.Parse(mcGrdClients[intRowIndex, mintGrdClients_CAV_TS_col]);
                 structCAV.strLicense = grdClients[intRowIndex, mintGrdClients_License_col].ToString();
                 structCAV.blnInstalled = Convert.ToBoolean(grdClients[intRowIndex, mintGrdClients_Installed_col]);
-                structCAV.blnIsCurrentVersion = Convert.ToBoolean(grdClients[intRowIndex, mintGrdClients_IsCurrent_col]);
+                structCAV.blnIsCurrentVersion = Convert.ToBoolean(grdClients[intRowIndex, mintGrdClients_IsCurrentVersion_col]);
 
                 mcActionResults = mcCtrVersion.Validate_Client(structCAV);
 
@@ -509,6 +552,12 @@ namespace Ceritar.Logirack_CVS
         {
             switch (formController.FormMode)
             {
+                case sclsConstants.DML_Mode.INSERT_MODE:
+
+                    btnGenerate.Enabled = false;
+
+                    break;
+
                 case sclsConstants.DML_Mode.UPDATE_MODE:
 
                     cboApplications.Enabled = false;
@@ -516,15 +565,27 @@ namespace Ceritar.Logirack_CVS
                     
                     txtVersionNo.ReadOnly = true;
 
-                    btnCreate.Enabled = false;
-
                     break;
             }
         }
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
+            this.Cursor = Cursors.WaitCursor;
 
+            mcCtrVersion.blnBuildHierarchy((int)cboTemplates.SelectedValue);
+
+            mcActionResults = mcCtrVersion.GetActionResult;
+
+            if (!mcActionResults.IsValid)
+            {
+                clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI, MessageBoxButtons.OK, mcActionResults.GetLstParams);
+            }
+
+            this.Cursor = Cursors.Default;
         }
+
+
+        
     }
 }

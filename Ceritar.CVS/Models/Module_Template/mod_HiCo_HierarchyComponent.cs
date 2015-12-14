@@ -89,6 +89,7 @@ namespace Ceritar.CVS.Models.Module_Template
                 switch (mintDML_Action)
                 {
                     case sclsConstants.DML_Mode.NO_MODE:
+
                         mcActionResults.SetValid();
 
                         break;

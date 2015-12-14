@@ -15,11 +15,12 @@ namespace Ceritar.CVS.Models.Module_Template
         private TemplateType _templateType;
         private bool _blnByDefault;
         private int _intCeritarApplication_NRI;
-        private mod_HiCo_HierarchyComponent _cRacineSystem;
+        private mod_HiCo_HierarchyComponent _cRootSystem;
         //private List<mod_HiCo_HierarchyComponent> _lstHierarchyComponents;
 
         //Messages
         private const int mintMSG_UniqueDefaultTemplate = 13;
+        private const int mintMSG_FolderTypeRules = 19;
 
         public enum TemplateType
         {
@@ -31,6 +32,13 @@ namespace Ceritar.CVS.Models.Module_Template
         private clsActionResults mcActionResults = new clsActionResults();
         private sclsConstants.DML_Mode mintDML_Action;
         private clsSQL mcSQL;
+
+        //Working variables
+        private int mintReleaseFolderCount = 0;
+        private int mintCaptionsAndMenusFolderCount = 0;
+        private int mintScriptsFolderCount = 0;
+        private int mintReportFolderCount = 0;
+        private const int mintMinMaxFolderType = 4; //Release, CaptionsAndMenus, Report, Scripts
 
 
 #region "Properties"
@@ -70,8 +78,8 @@ namespace Ceritar.CVS.Models.Module_Template
         /// </summary>
         internal mod_HiCo_HierarchyComponent RacineSystem
         {
-            get { return _cRacineSystem; }
-            set { _cRacineSystem = value; }
+            get { return _cRootSystem; }
+            set { _cRootSystem = value; }
         }
         //List<mod_HiCo_HierarchyComponent> LstHierarchyComponents
         //{
@@ -132,7 +140,7 @@ namespace Ceritar.CVS.Models.Module_Template
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Template.ErrorCode_Tpl.CERITAR_APPLICATION_MANDATORY);
                         }
-                        else if (_cRacineSystem == null || (_cRacineSystem.GetType() == typeof(mod_Folder) && ((mod_Folder)_cRacineSystem).LstChildrensComponents.Count == 0 && _cRacineSystem.DML_Action == sclsConstants.DML_Mode.UPDATE_MODE))
+                        else if (_cRootSystem == null || (_cRootSystem.GetType() == typeof(mod_Folder) && ((mod_Folder)_cRootSystem).LstChildrensComponents.Count == 0 && _cRootSystem.DML_Action == sclsConstants.DML_Mode.UPDATE_MODE))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Template.ErrorCode_Tpl.HIERARCHY_MANDATORY);
                         }
@@ -140,13 +148,18 @@ namespace Ceritar.CVS.Models.Module_Template
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_TIMESTAMP, clsActionResults.BaseErrorCode.INVALID_TIMESTAMP);
                         }
+                        else if (!pfblnValidateFolderTypes((mod_Folder)_cRootSystem) || (mintCaptionsAndMenusFolderCount + mintReportFolderCount + mintScriptsFolderCount + mintReleaseFolderCount) != 4)
+                        {
+                            mcActionResults.SetInvalid(mintMSG_FolderTypeRules, ctr_Template.ErrorCode_Tpl.ONLY_NORMAL_AND_OTHER_FOLDERTYPE_MULTIPLE);
+                        }
+ 
                         else
                         {
                             if (_blnByDefault)
                             {      
-                                string strDeExistingDefaultTemplateName = clsSQL.str_ADOSingleLookUp("Tpl_Name", "Template", "Tpl_NRI <> " + _intTemplate_NRI + " AND Tpl_ByDefault = 1 AND CeA_NRI = " + _intCeritarApplication_NRI);
+                                string strExistingDefaultTemplateName = clsSQL.str_ADOSingleLookUp("Tpl_Name", "Template", "Tpl_NRI <> " + _intTemplate_NRI + " AND Tpl_ByDefault = 1 AND CeA_NRI = " + _intCeritarApplication_NRI);
 
-                                if (!string.IsNullOrEmpty(strDeExistingDefaultTemplateName))
+                                if (!string.IsNullOrEmpty(strExistingDefaultTemplateName))
                                 {
                                     mcActionResults.SetInvalid(mintMSG_UniqueDefaultTemplate, ctr_Template.ErrorCode_Tpl.UNIQUE_DEFAULT_TEMPLATE);
                                 }
@@ -179,7 +192,7 @@ namespace Ceritar.CVS.Models.Module_Template
 
                 if (mcActionResults.IsValid)
                 {
-                    mcActionResults = ((mod_Folder)_cRacineSystem).Validate();
+                    mcActionResults = ((mod_Folder)_cRootSystem).Validate();
                 }
             }
             catch (System.Exception ex)
@@ -189,6 +202,59 @@ namespace Ceritar.CVS.Models.Module_Template
             }
 
             return mcActionResults;
+        }
+
+        private bool pfblnValidateFolderTypes(mod_Folder vcRootFolderToSearchFrom)
+        {
+            bool blnValidReturn = true;
+
+            try
+            {
+                foreach (mod_Folder cFolder in ((mod_Folder)vcRootFolderToSearchFrom).LstChildrensComponents)
+                {
+                    blnValidReturn = pfblnValidateFolderTypes(cFolder);
+
+                    if (!blnValidReturn) break;
+                }
+
+                if (blnValidReturn)
+                {
+                    switch (vcRootFolderToSearchFrom.Type)
+                    {
+                        case ctr_Template.FolderType.Release:
+
+                            mintReleaseFolderCount++;
+                            break;
+
+                        case ctr_Template.FolderType.Report:
+
+                            mintReportFolderCount++;
+                            break;
+
+                        case ctr_Template.FolderType.Scripts:
+
+                            mintScriptsFolderCount++;
+                            break;
+
+                        case ctr_Template.FolderType.CaptionsAndMenus:
+
+                            mintCaptionsAndMenusFolderCount++;
+                            break;
+                    }
+
+                    if (mintReleaseFolderCount > 1 || mintReportFolderCount > 1 || mintScriptsFolderCount > 1 || mintCaptionsAndMenusFolderCount > 1)
+                    {
+                        blnValidReturn = false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnValidReturn;
         }
 
         internal bool blnSave()

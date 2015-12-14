@@ -42,7 +42,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.cboApplications = new System.Windows.Forms.ComboBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnCreate = new System.Windows.Forms.Button();
+            this.btnGenerate = new System.Windows.Forms.Button();
             this.btnShowExecutable = new System.Windows.Forms.Button();
             this.btnShowAccess = new System.Windows.Forms.Button();
             this.btnShowWord = new System.Windows.Forms.Button();
@@ -194,18 +194,18 @@
             this.toolTip.InitialDelay = 250;
             this.toolTip.ReshowDelay = 100;
             // 
-            // btnCreate
+            // btnGenerate
             // 
-            this.btnCreate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCreate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnCreate.BackgroundImage")));
-            this.btnCreate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnCreate.Location = new System.Drawing.Point(753, 314);
-            this.btnCreate.Name = "btnCreate";
-            this.btnCreate.Size = new System.Drawing.Size(40, 40);
-            this.btnCreate.TabIndex = 4;
-            this.toolTip.SetToolTip(this.btnCreate, "Créer la version");
-            this.btnCreate.UseVisualStyleBackColor = true;
-            this.btnCreate.Click += new System.EventHandler(this.btnCreate_Click);
+            this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnGenerate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGenerate.BackgroundImage")));
+            this.btnGenerate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnGenerate.Location = new System.Drawing.Point(753, 314);
+            this.btnGenerate.Name = "btnGenerate";
+            this.btnGenerate.Size = new System.Drawing.Size(40, 40);
+            this.btnGenerate.TabIndex = 4;
+            this.toolTip.SetToolTip(this.btnGenerate, "Générer/Regénérer la version");
+            this.btnGenerate.UseVisualStyleBackColor = true;
+            this.btnGenerate.Click += new System.EventHandler(this.btnCreate_Click);
             // 
             // btnShowExecutable
             // 
@@ -367,7 +367,7 @@
             this.tabVersion.Controls.Add(this.txtReleasePath);
             this.tabVersion.Controls.Add(this.btnShowExecutable);
             this.tabVersion.Controls.Add(this.txtTTAppPath);
-            this.tabVersion.Controls.Add(this.btnCreate);
+            this.tabVersion.Controls.Add(this.btnGenerate);
             this.tabVersion.Controls.Add(this.txtWordAppChangePath);
             this.tabVersion.Controls.Add(this.txtExcelAppChangePath);
             this.tabVersion.Controls.Add(this.btnShowAccess);
@@ -552,7 +552,7 @@
         private System.Windows.Forms.TabPage tabRevision;
         private System.Windows.Forms.TabPage tabVersion;
         private System.Windows.Forms.TextBox txtTTAppPath;
-        private System.Windows.Forms.Button btnCreate;
+        private System.Windows.Forms.Button btnGenerate;
         private System.Windows.Forms.TextBox txtWordAppChangePath;
         private System.Windows.Forms.TextBox txtExcelAppChangePath;
         private System.Windows.Forms.Button btnShowAccess;
