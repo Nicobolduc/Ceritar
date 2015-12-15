@@ -28,13 +28,15 @@ namespace Ceritar.Logirack_CVS
         private const short mintGrdClients_IsCurrentVersion_col = 7;
         private const short mintGrdClients_License_col = 8;
 
-        //Columns grdRevModif
-        private const short mintGrdRevMod_Action_col = 1;
-        private const short mintGrdRevMod_RevM_NRI_col = 2;
-        private const short mintGrdRevMod_RevM_Description_col = 3;
+        //Columns grdRev
+        private const short mintGrdRev_Rev_NRI_col = 1;
+        private const short mintGrdRev_Rev_TS_col = 2;
+        private const short mintGrdRev_Description_col = 3;
+        private const short mintGrdRev_CreationDate_col = 4;
 
         //Classes
         public clsC1FlexGridWrapper mcGrdClients;
+        public clsC1FlexGridWrapper mcGrdRevisions;
         private Ceritar.CVS.clsActionResults mcActionResults;
         List<structClientAppVersion> lstClient_NRI;
 
@@ -52,6 +54,9 @@ namespace Ceritar.Logirack_CVS
             mcGrdClients.SetGridDisplay += mcGrdClients_SetGridDisplay;
             mcGrdClients.ValidateGridData += mcGrdClients_ValidateGridData;
             mcGrdClients.AfterRowAdd += mcGrdClients_AfterRowAdd;
+
+            mcGrdRevisions = new clsC1FlexGridWrapper();
+            mcGrdRevisions.SetGridDisplay +=mcGrdRevisions_SetGridDisplay;
 
             dtpCreation.CustomFormat = clsApp.GetAppController.str_GetServerDateTimeFormat;
         }
@@ -115,7 +120,7 @@ namespace Ceritar.Logirack_CVS
 
         int IVersion.GetVersion_NRI()
         {
-            return formController.Item_ID;
+            return formController.Item_NRI;
         }
 
         int IVersion.GetVersion_TS()
@@ -163,7 +168,24 @@ namespace Ceritar.Logirack_CVS
 
             try
             {
-                blnValidReturn = mcGrdClients.bln_FillData(mcCtrVersion.strGetListe_Clients_SQL(formController.Item_ID));
+                blnValidReturn = mcGrdClients.bln_FillData(mcCtrVersion.strGetListe_Clients_SQL(formController.Item_NRI));
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnValidReturn;
+        }
+
+        private bool pfblnGrdRevisions_Load()
+        {
+            bool blnValidReturn = false;
+
+            try
+            {
+                blnValidReturn = mcGrdRevisions.bln_FillData(mcCtrVersion.strGetListe_Revisions_SQL(formController.Item_NRI));
             }
             catch (Exception ex)
             {
@@ -181,7 +203,7 @@ namespace Ceritar.Logirack_CVS
 
             try
             {
-                sqlRecord = clsSQL.ADOSelect(mcCtrVersion.strGetDataLoad_SQL(formController.Item_ID));
+                sqlRecord = clsSQL.ADOSelect(mcCtrVersion.strGetDataLoad_SQL(formController.Item_NRI));
 
                 if (sqlRecord.Read())
                 {
@@ -278,20 +300,26 @@ namespace Ceritar.Logirack_CVS
             if (grdClients.Rows.Count > 1)
             {
                 cboClients.Visible = true;
-
-                //CellRange crNameCol = grdClients.GetCellRange(1, mintGrdClients_CeC_Name_col, grdClients.Rows.Count - 1, mintGrdClients_CeC_Name_col);
-                //crNameCol.Style.Editor = cboClients;
             }
 
             grdClients.Cols[mintGrdClients_CeC_Name_col].Style = grdClients.Styles.Normal;
             grdClients.Cols[mintGrdClients_CeC_Name_col].Style.Editor = cboClients;
         }
 
+        void mcGrdRevisions_SetGridDisplay()
+        {
+            grdRevisions.Cols[mintGrdRev_Description_col].Width = 220;
+
+        }
+
         private void formController_LoadData(LoadDataEventArgs eventArgs)
         {
             bool blnValidReturn = false;
+            Button btnPlaceHolder = null;
 
-            if (!mcGrdClients.bln_Init(ref grdClients, ref btnGrdClientsAdd, ref btnGrdClientsDel))
+            if (!mcGrdClients.bln_Init(ref grdClients, ref btnPlaceHolder, ref btnPlaceHolder))
+            { }
+            if (!mcGrdRevisions.bln_Init(ref grdRevisions, ref btnGrdRevAdd, ref btnGrdRevDel))
             { }
             else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetApplications_SQL(), "CeA_NRI", "CeA_Name", false, ref cboApplications))
             { }
@@ -301,13 +329,15 @@ namespace Ceritar.Logirack_CVS
             { }
             else if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE)
             {
-                cboTemplates.SelectedIndex = 0;
+                cboTemplates.SelectedIndex = (cboTemplates.Items.Count > 0 ? 0 : -1);
 
                 blnValidReturn = true;
             }
+            else if (!pfblnData_Load())
+            { }
             else if (!pfblnGrdClients_Load())
             { }
-            else if (!pfblnData_Load())
+            else if (!pfblnGrdRevisions_Load())
             { }
             else
             {
@@ -573,7 +603,7 @@ namespace Ceritar.Logirack_CVS
         {
             this.Cursor = Cursors.WaitCursor;
 
-            mcCtrVersion.blnBuildHierarchy((int)cboTemplates.SelectedValue);
+            mcCtrVersion.blnBuildVersionHierarchy((int)cboTemplates.SelectedValue);
 
             mcActionResults = mcCtrVersion.GetActionResult;
 
@@ -585,7 +615,33 @@ namespace Ceritar.Logirack_CVS
             this.Cursor = Cursors.Default;
         }
 
+        private void btnGrdRevAdd_Click(object sender, EventArgs e)
+        {
+            if (formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
+            {
+                int intNewItem_NRI = 0;
+                frmRevision frmVersion = new frmRevision();
 
-        
+                frmVersion.mintVersion_NRI = formController.Item_NRI;
+                frmVersion.formController.ShowForm(sclsConstants.DML_Mode.INSERT_MODE, ref intNewItem_NRI, true);
+
+                pfblnGrdRevisions_Load();
+            }
+        }
+
+        private void btnGrdRevDel_Click(object sender, EventArgs e)
+        {
+            if (formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
+            {
+                int intItem_NRI = (int)grdRevisions[grdRevisions.Row, mintGrdRev_Rev_NRI_col];
+                frmRevision frmVersion = new frmRevision();
+
+                frmVersion.formController.ShowForm(sclsConstants.DML_Mode.DELETE_MODE, ref intItem_NRI, true);
+
+                pfblnGrdRevisions_Load();
+            }
+        }
+
+
     }
 }

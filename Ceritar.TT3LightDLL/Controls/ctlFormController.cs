@@ -67,7 +67,7 @@ namespace Ceritar.TT3LightDLL.Controls
 #region Properties
 
         [Browsable(false)]
-        public int Item_ID
+        public int Item_NRI
         {
             get
             {

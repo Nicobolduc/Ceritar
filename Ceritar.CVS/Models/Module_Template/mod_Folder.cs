@@ -96,6 +96,11 @@ namespace Ceritar.CVS.Models.Module_Template
 
                             break;
                     }
+
+                    if (mcActionResults.IsValid)
+                    {
+                        pfblnChildrens_Validate();
+                    }
                 }         
             }
             catch (System.Exception ex)
@@ -105,6 +110,39 @@ namespace Ceritar.CVS.Models.Module_Template
             }
 
             return mcActionResults;
+        }
+
+        private bool pfblnChildrens_Validate()
+        {
+            bool blnValidReturn = true;
+
+            try
+            {
+                foreach (mod_Folder cHiCo in LstChildrensComponents)
+                {
+                    mcActionResults = cHiCo.Validate();
+
+                    if (!blnValidReturn || !mcActionResults.IsValid) break;
+                }
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                if (!blnValidReturn & mcActionResults.IsValid)
+                {
+                    mcActionResults.SetInvalid(sclsConstants.Error_Message.ERROR_SAVE_MSG, clsActionResults.BaseErrorCode.ERROR_SAVE);
+                }
+                else if (blnValidReturn & !mcActionResults.IsValid)
+                {
+                    blnValidReturn = false;
+                }
+            }
+
+            return blnValidReturn;
         }
 
         internal override bool  blnSave()

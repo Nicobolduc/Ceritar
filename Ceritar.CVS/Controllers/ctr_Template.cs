@@ -22,8 +22,19 @@ namespace Ceritar.CVS.Controllers
             CaptionsAndMenus = 4,
             Scripts = 5,
             Report = 6,
-            Other = 7
+            Version_Number = 7,
+            Other = 8
         }
+
+        public enum TemplateType
+        {
+            VERSION = 1,
+            REVISION = 2
+        }
+
+#region "Error codes"
+
+        //Note: Errors codes must all have different values when in the same class
 
         public enum ErrorCode_Tpl
         {
@@ -37,10 +48,11 @@ namespace Ceritar.CVS.Controllers
 
         public enum ErrorCode_HiCo
         {
-            NAME_ON_DISK_MANDATORY = 1,
-            FOLDER_TYPE_MANDATORY = 2
+            NAME_ON_DISK_MANDATORY = 10,
+            FOLDER_TYPE_MANDATORY = 11
         }
 
+#endregion
 
         public ctr_Template(Interfaces.ITemplate rView)
         {
@@ -123,6 +135,11 @@ namespace Ceritar.CVS.Controllers
                 }
                 
                 mcActionResult = mcModTemplate.Validate(); //TODO Valider hierarchy
+
+                if (mcActionResult.IsValid)
+                {
+                    mcActionResult = ((mod_Folder)mcModTemplate.RacineSystem).Validate();
+                }
             }
             catch (Exception ex)
             {

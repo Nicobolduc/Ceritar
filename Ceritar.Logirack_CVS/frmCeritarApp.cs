@@ -80,7 +80,7 @@ namespace Ceritar.Logirack_CVS
 
         int CVS.Controllers.Interfaces.ICeritarApp.GetCerApp_NRI()
         {
-            return formController.Item_ID;
+            return formController.Item_NRI;
         }
 
         public int GetCerApp_TS()
@@ -104,7 +104,7 @@ namespace Ceritar.Logirack_CVS
 
             try
             {
-                blnValidReturn = mcGrdModules.bln_FillData(mcCtrCeritarApp.strGetListe_Modules_SQL(formController.Item_ID));
+                blnValidReturn = mcGrdModules.bln_FillData(mcCtrCeritarApp.strGetListe_Modules_SQL(formController.Item_NRI));
             }
             catch (Exception ex)
             {
@@ -122,7 +122,7 @@ namespace Ceritar.Logirack_CVS
 
             try
             {
-                sqlRecord = clsSQL.ADOSelect(mcCtrCeritarApp.strGetDataLoad_SQL(formController.Item_ID));
+                sqlRecord = clsSQL.ADOSelect(mcCtrCeritarApp.strGetDataLoad_SQL(formController.Item_NRI));
 
                 if (sqlRecord.Read())
                 {

@@ -50,7 +50,7 @@ namespace Ceritar.Logirack_CVS
 
             try
             {
-                blnValidReturn = mcGrdApp.bln_FillData(mcCtrCeritarClient.strGetListe_Application_SQL(formController.Item_ID));
+                blnValidReturn = mcGrdApp.bln_FillData(mcCtrCeritarClient.strGetListe_Application_SQL(formController.Item_NRI));
             }
             catch (Exception ex)
             {
@@ -68,7 +68,7 @@ namespace Ceritar.Logirack_CVS
 
             try
             {
-                sqlRecord = clsSQL.ADOSelect(mcCtrCeritarClient.strGetDataLoad_SQL(formController.Item_ID));
+                sqlRecord = clsSQL.ADOSelect(mcCtrCeritarClient.strGetDataLoad_SQL(formController.Item_NRI));
 
                 if (sqlRecord.Read())
                 {
@@ -146,7 +146,7 @@ namespace Ceritar.Logirack_CVS
 
         int ICeritarClient.GetCerClient_NRI()
         {
-            return formController.Item_ID;
+            return formController.Item_NRI;
         }
 
         int ICeritarClient.GetCerClient_TS()

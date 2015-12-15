@@ -121,7 +121,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.formController.FormIsLoading = false;
             this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.NO_MODE;
-            this.formController.Item_ID = 0;
+            this.formController.Item_NRI = 0;
             this.formController.Location = new System.Drawing.Point(3, 579);
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;

@@ -154,10 +154,11 @@ namespace Ceritar.CVS.Controllers
             return mcActionResult;
         }
 
-        public bool blnBuildHierarchy(int vintTemplate_NRI)
+        public bool blnBuildVersionHierarchy(int vintTemplate_NRI)
         {
             bool blnValidReturn = false;
             string strSQL = string.Empty;
+            string strFolderName = string.Empty;
             int intPreviousFolderLevel = -1;
             SqlCommand cSQLCmd = default(SqlCommand);
             SqlDataReader cSQLReader = null;
@@ -204,24 +205,37 @@ namespace Ceritar.CVS.Controllers
 
                 while (cSQLReader.Read())
                 {
+                    switch (Int32.Parse(cSQLReader["FoT_NRI"].ToString()))
+                    {
+                        case (int)ctr_Template.FolderType.Version_Number:
+
+                            strFolderName = sclsAppConfigs.GetVersionNumberPrefix + mcView.GetVersionNo().ToString();
+                            break;
+
+                        default:
+
+                            strFolderName = cSQLReader["HiCo_Name"].ToString();
+                            break;
+                    }
+
                     if (Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString()) > intPreviousFolderLevel) //On entre dans un sous-dossier
                     {
-                        currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.FullName, cSQLReader["HiCo_Name"].ToString()));
+                        currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.FullName, strFolderName));
                     }
-                    else if (Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString()) < intPreviousFolderLevel) //On recule pour revenir au dossier d'avant du niveau courant
+                    else if (Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString()) < intPreviousFolderLevel) //On recule pour revenir au dossier du niveau courant
                     {
                         int intNbLevelBack = intPreviousFolderLevel - Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString());
 
                         while (intNbLevelBack > 0)
                         {
-                            currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.Parent.Parent.FullName, cSQLReader["HiCo_Name"].ToString()));
+                            currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.Parent.Parent.FullName, strFolderName));
 
                             intNbLevelBack--;
                         }      
                     }
-                    else if (Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString()) == intPreviousFolderLevel) //On recule d'un niveau pour revenir au dossier d'avant
+                    else //On recule d'un niveau pour revenir au dossier d'avant
                     {
-                        currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.Parent.FullName, cSQLReader["HiCo_Name"].ToString()));
+                        currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.Parent.FullName, strFolderName));
                     }
 
                     if (!Directory.Exists(currentFolderInfos.FullName))
@@ -280,6 +294,7 @@ namespace Ceritar.CVS.Controllers
 
             return blnValidReturn;
         }
+
         /// <summary>
         /// Va chercher tous les dossiers de scripts dans DB_UpgradeScripts pour une nouvelle version donnée, puis copie chacun des scripts dans le répertoire des installations actives pour chacun des clients concernés.
         /// </summary>
@@ -354,8 +369,6 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        Version.CeA_NRI " + Environment.NewLine;
 
             strSQL = strSQL + " FROM Version " + Environment.NewLine;
-            strSQL = strSQL + "     LEFT JOIN Revision ON Revision.Ver_NRI = Version.Ver_NRI " + Environment.NewLine;
-            //strSQL = strSQL + "     INNER JOIN CerApp ON CerApp.CeA_NRI = Version.CeA_NRI " + Environment.NewLine;
 
             strSQL = strSQL + " WHERE Version.Ver_NRI = " + vintVersion_NRI + Environment.NewLine;
 
@@ -376,12 +389,29 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        ClientAppVersion.CAV_License " + Environment.NewLine;
 
             strSQL = strSQL + " FROM ClientAppVersion " + Environment.NewLine;
-
             strSQL = strSQL + "     INNER JOIN CerClient ON CerClient.CeC_NRI = ClientAppVersion.CeC_NRI " + Environment.NewLine;
 
             strSQL = strSQL + " WHERE ClientAppVersion.Ver_NRI = " + vintVersion_NRI + Environment.NewLine;
 
             strSQL = strSQL + " ORDER BY CerClient.CeC_Name " + Environment.NewLine;
+
+            return strSQL;
+        }
+
+        public string strGetListe_Revisions_SQL(int vintVersion_NRI)
+        {
+            string strSQL = string.Empty;
+
+            strSQL = strSQL + " SELECT Revision.Rev_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        Revision.Rev_TS, " + Environment.NewLine;
+            strSQL = strSQL + "        Revision.Rev_No, " + Environment.NewLine;
+            strSQL = strSQL + "        NULL " + Environment.NewLine;
+
+            strSQL = strSQL + " FROM Revision " + Environment.NewLine;
+
+            strSQL = strSQL + " WHERE Revision.Ver_NRI = " + vintVersion_NRI + Environment.NewLine;
+
+            strSQL = strSQL + " ORDER BY Revision.Rev_No " + Environment.NewLine;
 
             return strSQL;
         }
@@ -408,6 +438,8 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        Template.Tpl_Name " + Environment.NewLine;
 
             strSQL = strSQL + " FROM Template " + Environment.NewLine;
+
+            strSQL = strSQL + " WHERE Template.TeT_NRI = " + (int)ctr_Template.TemplateType.VERSION + Environment.NewLine;
 
             strSQL = strSQL + " ORDER BY Template.Tpl_ByDefault DESC, Template.Tpl_Name " + Environment.NewLine;
 

@@ -382,7 +382,7 @@ namespace Ceritar.TT3LightDLL.Classes
 				    } else {
                         mGrdFlex[0, colHeaderCpt] = (string)lstColumns[colHeaderCpt].Substring(1, lstColumns[colHeaderCpt].Length - 1);
 
-                        crColHeader = mGrdFlex.GetCellRange(0, colHeaderCpt);
+                        crColHeader = mGrdFlex.GetCellRange(0, colHeaderCpt, mGrdFlex.Rows.Count - 1, colHeaderCpt);
 
                         crColHeader.Style = mGrdFlex.Styles.Add(null);
 

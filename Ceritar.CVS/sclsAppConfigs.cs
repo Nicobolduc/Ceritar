@@ -7,7 +7,9 @@ namespace Ceritar.CVS
     {
         private static string _strRoot_DB_UPGRADE_SCRIPTS_Dir;
         private static string _strRoot_INSTALLATIONS_ACTIVES_Dir;
-        private static string _strCaptionsAndMenusFileName;      
+        private static string _strCaptionsAndMenusFileName;
+        private const string _strVersionNumberPrefix = "V_";
+        private const string _strRevisionNumberPrefix = "R_";
 
         internal enum TTPARAM_TYPE
         {
@@ -57,6 +59,16 @@ namespace Ceritar.CVS
                 return _strCaptionsAndMenusFileName;
             }
         }
+
+        internal static string GetVersionNumberPrefix
+        {
+            get { return _strVersionNumberPrefix; }
+        }
+
+        internal static string GetRevisionNumberPrefix
+        {
+            get { return _strRevisionNumberPrefix; }
+        } 
 
 #endregion
 

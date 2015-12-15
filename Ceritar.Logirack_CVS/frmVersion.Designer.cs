@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmVersion));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.dtpCreation = new System.Windows.Forms.DateTimePicker();
             this.label5 = new System.Windows.Forms.Label();
@@ -82,6 +83,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.dtpCreation);
             this.groupBox1.Controls.Add(this.label5);
@@ -98,6 +100,15 @@
             this.groupBox1.TabIndex = 37;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Informations";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(615, 22);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(89, 13);
+            this.label2.TabIndex = 69;
+            this.label2.Text = "Date de création:";
             // 
             // label7
             // 
@@ -259,7 +270,7 @@
             this.btnReplaceAppChangeXLS.Name = "btnReplaceAppChangeXLS";
             this.btnReplaceAppChangeXLS.Size = new System.Drawing.Size(30, 30);
             this.btnReplaceAppChangeXLS.TabIndex = 61;
-            this.toolTip.SetToolTip(this.btnReplaceAppChangeXLS, "Remplacer le App_Changements");
+            this.toolTip.SetToolTip(this.btnReplaceAppChangeXLS, "Sélectionner le App_Changements");
             this.btnReplaceAppChangeXLS.UseVisualStyleBackColor = true;
             this.btnReplaceAppChangeXLS.Click += new System.EventHandler(this.btnReplaceAppChangeXLS_Click);
             // 
@@ -271,7 +282,7 @@
             this.btnReplaceAppChangeDOC.Name = "btnReplaceAppChangeDOC";
             this.btnReplaceAppChangeDOC.Size = new System.Drawing.Size(30, 30);
             this.btnReplaceAppChangeDOC.TabIndex = 62;
-            this.toolTip.SetToolTip(this.btnReplaceAppChangeDOC, "Remplacer le App_Changements");
+            this.toolTip.SetToolTip(this.btnReplaceAppChangeDOC, "Sélectionner le App_Changements");
             this.btnReplaceAppChangeDOC.UseVisualStyleBackColor = true;
             this.btnReplaceAppChangeDOC.Click += new System.EventHandler(this.btnReplaceAppChangeDOC_Click);
             // 
@@ -283,7 +294,7 @@
             this.btnReplaceTTApp.Name = "btnReplaceTTApp";
             this.btnReplaceTTApp.Size = new System.Drawing.Size(30, 30);
             this.btnReplaceTTApp.TabIndex = 63;
-            this.toolTip.SetToolTip(this.btnReplaceTTApp, "Remplacer le TTApp");
+            this.toolTip.SetToolTip(this.btnReplaceTTApp, "Sélectionner le TTApp");
             this.btnReplaceTTApp.UseVisualStyleBackColor = true;
             this.btnReplaceTTApp.Click += new System.EventHandler(this.btnReplaceTTApp_Click);
             // 
@@ -295,7 +306,7 @@
             this.btnReplaceExecutable.Name = "btnReplaceExecutable";
             this.btnReplaceExecutable.Size = new System.Drawing.Size(30, 30);
             this.btnReplaceExecutable.TabIndex = 64;
-            this.toolTip.SetToolTip(this.btnReplaceExecutable, "Remplacer l\'exécutable");
+            this.toolTip.SetToolTip(this.btnReplaceExecutable, "Sélectionner l\'exécutable");
             this.btnReplaceExecutable.UseVisualStyleBackColor = true;
             this.btnReplaceExecutable.Click += new System.EventHandler(this.btnReplaceExecutable_Click);
             // 
@@ -315,32 +326,34 @@
             this.groupBox3.Controls.Add(this.btnGrdRevDel);
             this.groupBox3.Controls.Add(this.btnGrdRevAdd);
             this.groupBox3.Controls.Add(this.grdRevisions);
-            this.groupBox3.Location = new System.Drawing.Point(6, 52);
+            this.groupBox3.Location = new System.Drawing.Point(6, 3);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(414, 256);
+            this.groupBox3.Size = new System.Drawing.Size(414, 351);
             this.groupBox3.TabIndex = 15;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Liste des révisions";
             // 
             // btnGrdRevDel
             // 
+            this.btnGrdRevDel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGrdRevDel.BackgroundImage")));
             this.btnGrdRevDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnGrdRevDel.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevDel.Image")));
             this.btnGrdRevDel.Location = new System.Drawing.Point(370, 62);
             this.btnGrdRevDel.Name = "btnGrdRevDel";
             this.btnGrdRevDel.Size = new System.Drawing.Size(35, 35);
             this.btnGrdRevDel.TabIndex = 16;
             this.btnGrdRevDel.UseVisualStyleBackColor = true;
+            this.btnGrdRevDel.Click += new System.EventHandler(this.btnGrdRevDel_Click);
             // 
             // btnGrdRevAdd
             // 
+            this.btnGrdRevAdd.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGrdRevAdd.BackgroundImage")));
             this.btnGrdRevAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnGrdRevAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevAdd.Image")));
             this.btnGrdRevAdd.Location = new System.Drawing.Point(370, 21);
             this.btnGrdRevAdd.Name = "btnGrdRevAdd";
             this.btnGrdRevAdd.Size = new System.Drawing.Size(35, 35);
             this.btnGrdRevAdd.TabIndex = 15;
             this.btnGrdRevAdd.UseVisualStyleBackColor = true;
+            this.btnGrdRevAdd.Click += new System.EventHandler(this.btnGrdRevAdd_Click);
             // 
             // grdRevisions
             // 
@@ -353,10 +366,10 @@
             this.grdRevisions.Rows.Count = 6;
             this.grdRevisions.Rows.DefaultSize = 18;
             this.grdRevisions.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdRevisions.Size = new System.Drawing.Size(358, 229);
+            this.grdRevisions.Size = new System.Drawing.Size(358, 324);
             this.grdRevisions.StyleInfo = resources.GetString("grdRevisions.StyleInfo");
             this.grdRevisions.TabIndex = 14;
-            this.grdRevisions.Tag = "1";
+            this.grdRevisions.Tag = "20";
             // 
             // tabVersion
             // 
@@ -429,7 +442,7 @@
             this.groupBox2.Size = new System.Drawing.Size(414, 165);
             this.groupBox2.TabIndex = 14;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Clients qui installerons la version";
+            this.groupBox2.Text = "Clients à qui la version est destinée";
             // 
             // cboClients
             // 
@@ -495,7 +508,7 @@
             this.formController.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.formController.FormIsLoading = false;
             this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.CONSULT_MODE;
-            this.formController.Item_ID = 0;
+            this.formController.Item_NRI = 0;
             this.formController.Location = new System.Drawing.Point(0, 481);
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
@@ -576,5 +589,6 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
         private System.Windows.Forms.ComboBox cboClients;
+        private System.Windows.Forms.Label label2;
     }
 }

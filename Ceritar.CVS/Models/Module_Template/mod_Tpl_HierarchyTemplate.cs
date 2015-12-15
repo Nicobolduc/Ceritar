@@ -37,6 +37,7 @@ namespace Ceritar.CVS.Models.Module_Template
         private int mintReleaseFolderCount = 0;
         private int mintCaptionsAndMenusFolderCount = 0;
         private int mintScriptsFolderCount = 0;
+        private int mintVersionNoFolderCount = 0;
         private int mintReportFolderCount = 0;
         private const int mintMinMaxFolderType = 4; //Release, CaptionsAndMenus, Report, Scripts
 
@@ -148,7 +149,8 @@ namespace Ceritar.CVS.Models.Module_Template
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_TIMESTAMP, clsActionResults.BaseErrorCode.INVALID_TIMESTAMP);
                         }
-                        else if (!pfblnValidateFolderTypes((mod_Folder)_cRootSystem) || (mintCaptionsAndMenusFolderCount + mintReportFolderCount + mintScriptsFolderCount + mintReleaseFolderCount) != 4)
+                        else if (!pfblnValidateFolderTypes((mod_Folder)_cRootSystem) || ((int)_templateType == (int)ctr_Template.TemplateType.VERSION &&
+                                 (mintCaptionsAndMenusFolderCount + mintReportFolderCount + mintScriptsFolderCount + mintReleaseFolderCount + mintVersionNoFolderCount) != 5))
                         {
                             mcActionResults.SetInvalid(mintMSG_FolderTypeRules, ctr_Template.ErrorCode_Tpl.ONLY_NORMAL_AND_OTHER_FOLDERTYPE_MULTIPLE);
                         }
@@ -157,7 +159,7 @@ namespace Ceritar.CVS.Models.Module_Template
                         {
                             if (_blnByDefault)
                             {      
-                                string strExistingDefaultTemplateName = clsSQL.str_ADOSingleLookUp("Tpl_Name", "Template", "Tpl_NRI <> " + _intTemplate_NRI + " AND Tpl_ByDefault = 1 AND CeA_NRI = " + _intCeritarApplication_NRI);
+                                string strExistingDefaultTemplateName = clsSQL.str_ADOSingleLookUp("Tpl_Name", "Template", "Tpl_NRI <> " + _intTemplate_NRI + " AND Tpl_ByDefault = 1 AND CeA_NRI = " + _intCeritarApplication_NRI + " AND Template.TeT_NRI = " + (int)_templateType);
 
                                 if (!string.IsNullOrEmpty(strExistingDefaultTemplateName))
                                 {
@@ -190,7 +192,7 @@ namespace Ceritar.CVS.Models.Module_Template
                         break;
                 }
 
-                if (mcActionResults.IsValid)
+                if (mcActionResults.IsValid && _cRootSystem != null)
                 {
                     mcActionResults = ((mod_Folder)_cRootSystem).Validate();
                 }
@@ -210,42 +212,54 @@ namespace Ceritar.CVS.Models.Module_Template
 
             try
             {
-                foreach (mod_Folder cFolder in ((mod_Folder)vcRootFolderToSearchFrom).LstChildrensComponents)
+                if ((int)_templateType == (int)ctr_Template.TemplateType.VERSION)
                 {
-                    blnValidReturn = pfblnValidateFolderTypes(cFolder);
+                    foreach (mod_Folder cFolder in ((mod_Folder)vcRootFolderToSearchFrom).LstChildrensComponents)
+                    {
+                        blnValidReturn = pfblnValidateFolderTypes(cFolder);
 
-                    if (!blnValidReturn) break;
+                        if (!blnValidReturn) break;
+                    }
+
+                    if (blnValidReturn)
+                    {
+                        switch (vcRootFolderToSearchFrom.Type)
+                        {
+                            case ctr_Template.FolderType.Release:
+
+                                mintReleaseFolderCount++;
+                                break;
+
+                            case ctr_Template.FolderType.Report:
+
+                                mintReportFolderCount++;
+                                break;
+
+                            case ctr_Template.FolderType.Scripts:
+
+                                mintScriptsFolderCount++;
+                                break;
+
+                            case ctr_Template.FolderType.CaptionsAndMenus:
+
+                                mintCaptionsAndMenusFolderCount++;
+                                break;
+
+                            case ctr_Template.FolderType.Version_Number:
+
+                                mintVersionNoFolderCount++;
+                                break;
+                        }
+
+                        if (mintReleaseFolderCount > 1 || mintReportFolderCount > 1 || mintScriptsFolderCount > 1 || mintCaptionsAndMenusFolderCount > 1 || mintVersionNoFolderCount > 1)
+                        {
+                            blnValidReturn = false;
+                        }
+                    }
                 }
-
-                if (blnValidReturn)
+                else
                 {
-                    switch (vcRootFolderToSearchFrom.Type)
-                    {
-                        case ctr_Template.FolderType.Release:
-
-                            mintReleaseFolderCount++;
-                            break;
-
-                        case ctr_Template.FolderType.Report:
-
-                            mintReportFolderCount++;
-                            break;
-
-                        case ctr_Template.FolderType.Scripts:
-
-                            mintScriptsFolderCount++;
-                            break;
-
-                        case ctr_Template.FolderType.CaptionsAndMenus:
-
-                            mintCaptionsAndMenusFolderCount++;
-                            break;
-                    }
-
-                    if (mintReleaseFolderCount > 1 || mintReportFolderCount > 1 || mintScriptsFolderCount > 1 || mintCaptionsAndMenusFolderCount > 1)
-                    {
-                        blnValidReturn = false;
-                    }
+                    blnValidReturn = true;
                 }
             }
             catch (Exception ex)
