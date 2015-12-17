@@ -58,7 +58,7 @@
             // 
             this.txtName.Location = new System.Drawing.Point(70, 12);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(306, 20);
+            this.txtName.Size = new System.Drawing.Size(268, 20);
             this.txtName.TabIndex = 0;
             this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
             // 
@@ -73,8 +73,9 @@
             // txtDescription
             // 
             this.txtDescription.Location = new System.Drawing.Point(70, 38);
+            this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(306, 20);
+            this.txtDescription.Size = new System.Drawing.Size(268, 40);
             this.txtDescription.TabIndex = 1;
             this.txtDescription.TextChanged += new System.EventHandler(this.txtDescription_TextChanged);
             // 
@@ -83,7 +84,7 @@
             this.groupBox1.Controls.Add(this.btnGrdDel);
             this.groupBox1.Controls.Add(this.btnGrdAdd);
             this.groupBox1.Controls.Add(this.grdModules);
-            this.groupBox1.Location = new System.Drawing.Point(5, 91);
+            this.groupBox1.Location = new System.Drawing.Point(5, 117);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(371, 174);
             this.groupBox1.TabIndex = 12;
@@ -136,14 +137,14 @@
             // 
             this.cboDomain.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboDomain.FormattingEnabled = true;
-            this.cboDomain.Location = new System.Drawing.Point(70, 64);
+            this.cboDomain.Location = new System.Drawing.Point(70, 85);
             this.cboDomain.Name = "cboDomain";
-            this.cboDomain.Size = new System.Drawing.Size(153, 21);
+            this.cboDomain.Size = new System.Drawing.Size(177, 21);
             this.cboDomain.TabIndex = 2;
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(2, 67);
+            this.label2.Location = new System.Drawing.Point(2, 88);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(62, 17);
             this.label2.TabIndex = 15;
@@ -156,7 +157,7 @@
             this.formController.FormIsLoading = false;
             this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.CONSULT_MODE;
             this.formController.Item_NRI = 0;
-            this.formController.Location = new System.Drawing.Point(-5, 276);
+            this.formController.Location = new System.Drawing.Point(-5, 294);
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
             this.formController.Size = new System.Drawing.Size(383, 33);
@@ -169,7 +170,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(380, 309);
+            this.ClientSize = new System.Drawing.Size(380, 327);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cboDomain);
             this.Controls.Add(this.formController);

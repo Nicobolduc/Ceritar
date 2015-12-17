@@ -270,6 +270,15 @@ namespace Ceritar.CVS.Controllers
                             blnValidReturn = pfblnCopyAllScriptsForClients(currentFolderInfos.FullName);
                                                         
                             break;
+
+                        case (int)ctr_Template.FolderType.Version_Number:
+
+                            if (!string.IsNullOrEmpty(mcView.GetLocation_APP_CHANGEMENT()))
+                            {
+                                File.Copy(mcView.GetLocation_APP_CHANGEMENT(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_APP_CHANGEMENT())), true);
+                            }
+                            
+                            break;
                     }
 
                     intPreviousFolderLevel = Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString());

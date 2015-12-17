@@ -167,6 +167,7 @@ namespace Ceritar.CVS.Models.Module_Template
                         { }
                         else
                         {
+                            mcActionResults.SetNewItem_NRI = _intHierarchyComponent_NRI;
                             blnValidReturn = true;
                         }
 

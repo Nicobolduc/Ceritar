@@ -267,6 +267,7 @@ namespace Ceritar.TT3LightDLL.Classes
                 if (mGrdFlex.Cols.Count != myDataTable.Columns.Count + 1)
                 {
                     blnValidReturn = false;
+                    System.Windows.Forms.MessageBox.Show("Caption columns count and SQL columns count differs.");
                 }
                 else
                 {

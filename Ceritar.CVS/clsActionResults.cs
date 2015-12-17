@@ -10,6 +10,7 @@ namespace Ceritar.CVS
     {
         private bool mblnValid;
         private int mintMessage_NRI;
+        private int mintNewItem_NRI;
         private object mErrorCode;
         private string[] lstParams;
 
@@ -56,6 +57,16 @@ namespace Ceritar.CVS
         public string[] GetLstParams
         {
             get { return lstParams; }
+        }
+
+        public int GetNewItem_NRI
+        {
+            get { return mintNewItem_NRI; }
+        }
+
+        internal int SetNewItem_NRI
+        {
+            set { mintNewItem_NRI = value; }
         }
 
 #endregion

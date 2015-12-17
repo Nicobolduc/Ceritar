@@ -11,7 +11,7 @@ namespace Ceritar.CVS
         private const string _strVersionNumberPrefix = "V_";
         private const string _strRevisionNumberPrefix = "R_";
 
-        internal enum TTPARAM_TYPE
+        internal enum CONFIG_TYPE
         {
             PATH_INSTALLATIONS_ACTIVES = 100,
             PATH_DB_UPGRADE_SCRIPTS = 102,
@@ -27,7 +27,7 @@ namespace Ceritar.CVS
             {
                 if (string.IsNullOrEmpty(_strRoot_DB_UPGRADE_SCRIPTS_Dir))
                 {
-                    _strRoot_DB_UPGRADE_SCRIPTS_Dir = clsSQL.str_ADOSingleLookUp("TTP_Value", "TTParam", "TTP_NRI = " + (int)TTPARAM_TYPE.PATH_DB_UPGRADE_SCRIPTS);
+                    _strRoot_DB_UPGRADE_SCRIPTS_Dir = clsSQL.str_ADOSingleLookUp("TTP_Value", "TTParam", "TTP_NRI = " + (int)CONFIG_TYPE.PATH_DB_UPGRADE_SCRIPTS);
                 }
 
                 return _strRoot_DB_UPGRADE_SCRIPTS_Dir;
@@ -40,7 +40,7 @@ namespace Ceritar.CVS
             {
                 if (string.IsNullOrEmpty(_strRoot_INSTALLATIONS_ACTIVES_Dir))
                 {
-                    _strRoot_INSTALLATIONS_ACTIVES_Dir = clsSQL.str_ADOSingleLookUp("TTP_Value", "TTParam", "TTP_NRI = " + (int)TTPARAM_TYPE.PATH_INSTALLATIONS_ACTIVES);
+                    _strRoot_INSTALLATIONS_ACTIVES_Dir = clsSQL.str_ADOSingleLookUp("TTP_Value", "TTParam", "TTP_NRI = " + (int)CONFIG_TYPE.PATH_INSTALLATIONS_ACTIVES);
                 }
 
                 return _strRoot_INSTALLATIONS_ACTIVES_Dir;
@@ -53,7 +53,7 @@ namespace Ceritar.CVS
             {
                 if (string.IsNullOrEmpty(_strCaptionsAndMenusFileName))
                 {
-                    _strCaptionsAndMenusFileName = clsSQL.str_ADOSingleLookUp("TTP_Value", "TTParam", "TTP_NRI = " + (int)TTPARAM_TYPE.FILENAME_CAPTIONS_AND_MENUS);
+                    _strCaptionsAndMenusFileName = clsSQL.str_ADOSingleLookUp("TTP_Value", "TTParam", "TTP_NRI = " + (int)CONFIG_TYPE.FILENAME_CAPTIONS_AND_MENUS);
                 }
 
                 return _strCaptionsAndMenusFileName;

@@ -164,6 +164,7 @@
             this.txtVersionNo.Size = new System.Drawing.Size(66, 20);
             this.txtVersionNo.TabIndex = 3;
             this.txtVersionNo.TextChanged += new System.EventHandler(this.txtVersionNo_TextChanged);
+            this.txtVersionNo.Validating += new System.ComponentModel.CancelEventHandler(this.txtVersionNo_Validating);
             // 
             // label1
             // 

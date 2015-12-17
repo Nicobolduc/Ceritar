@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using Ceritar.CVS.Controllers;
 using Ceritar.TT3LightDLL.Classes;
@@ -13,7 +14,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         //Model attributes
         private int _intVersion_NRI;
         private int _intVersion_TS;
-        private string _strCompiledBy;
+        private string  ;
         private ushort _intVersionNo;
         private string _strCreationDate;
         private string _strLocation_APP_CHANGEMENT;
@@ -211,18 +212,18 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.COMPILED_BY_MANDATORY);
                         }
-                        else if (!string.IsNullOrEmpty(_strLocation_APP_CHANGEMENT) && !System.IO.Directory.Exists(_strLocation_APP_CHANGEMENT))
-                        {
-                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY);
-                        }
-                        else if (!string.IsNullOrEmpty(_strLocation_Release) && !System.IO.Directory.Exists(_strLocation_Release))
-                        {
-                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.RELEASE_MANDATORY);
-                        }
-                        else if (!string.IsNullOrEmpty(_strLocation_TTApp) && !System.IO.Directory.Exists(_strLocation_TTApp))
-                        {
-                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY);
-                        }
+                        //else if (string.IsNullOrEmpty(_strLocation_APP_CHANGEMENT) && !System.IO.Directory.Exists(_strLocation_APP_CHANGEMENT))
+                        //{
+                        //    mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY); //TODO
+                        //}
+                        //else if (string.IsNullOrEmpty(_strLocation_Release) || !System.IO.Directory.Exists(_strLocation_Release))
+                        //{
+                        //    mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.RELEASE_MANDATORY);
+                        //}
+                        //else if (string.IsNullOrEmpty(_strLocation_TTApp) || !File.Exists(_strLocation_TTApp))
+                        //{
+                        //    mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY);
+                        //}
                         else if (_lstClientsUsing == null || _lstClientsUsing.Count == 0)
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.CLIENTS_LIST_MANDATORY);
@@ -287,6 +288,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         { }
                         else
                         {
+                            mcActionResults.SetNewItem_NRI = _intVersion_NRI;
                             blnValidReturn = true;
                         }
 

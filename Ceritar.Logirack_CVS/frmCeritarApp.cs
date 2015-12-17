@@ -226,12 +226,12 @@ namespace Ceritar.Logirack_CVS
         private void formController_SaveData(TT3LightDLL.Controls.SaveDataEventArgs eventArgs)
         {
             mcActionResults = mcCtrCeritarApp.Save();
-
+            
             if (!mcActionResults.IsValid)
             {
                 clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
             }
-
+            formController.Item_NRI = mcActionResults.GetNewItem_NRI;
             eventArgs.SaveSuccessful = mcActionResults.IsValid;
         }
 

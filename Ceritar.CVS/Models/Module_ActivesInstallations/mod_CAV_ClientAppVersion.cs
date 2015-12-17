@@ -191,6 +191,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         { }
                         else
                         {
+                            mcActionResults.SetNewItem_NRI = _intClientAppVersion_NRI;
                             blnValidReturn = true;
                         }
 

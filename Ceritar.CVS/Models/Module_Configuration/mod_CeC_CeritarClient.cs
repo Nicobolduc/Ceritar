@@ -13,7 +13,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
         private int _intCeritarApplication_TS;
         private string _strCompanyName;
         private bool _blnIsActive;
-        private List<int> _lstApplications;
+        private List<int> _lstApplications; //TODO Remove, peut etre calculer a partir des versions installee
 
 
         //Working variables

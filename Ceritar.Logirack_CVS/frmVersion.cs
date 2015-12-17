@@ -317,9 +317,9 @@ namespace Ceritar.Logirack_CVS
             bool blnValidReturn = false;
             Button btnPlaceHolder = null;
 
-            if (!mcGrdClients.bln_Init(ref grdClients, ref btnPlaceHolder, ref btnPlaceHolder))
+            if (!mcGrdClients.bln_Init(ref grdClients, ref btnGrdClientsAdd, ref btnGrdClientsDel))
             { }
-            if (!mcGrdRevisions.bln_Init(ref grdRevisions, ref btnGrdRevAdd, ref btnGrdRevDel))
+            if (!mcGrdRevisions.bln_Init(ref grdRevisions, ref btnPlaceHolder, ref btnPlaceHolder))
             { }
             else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetApplications_SQL(), "CeA_NRI", "CeA_Name", false, ref cboApplications))
             { }
@@ -639,6 +639,16 @@ namespace Ceritar.Logirack_CVS
                 frmVersion.formController.ShowForm(sclsConstants.DML_Mode.DELETE_MODE, ref intItem_NRI, true);
 
                 pfblnGrdRevisions_Load();
+            }
+        }
+
+        private void txtVersionNo_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (!Microsoft.VisualBasic.Information.IsNumeric(txtVersionNo.Text))
+            {
+                clsApp.GetAppController.ShowMessage((int)sclsConstants.Validation_Message.NUMERIC_VALUE);
+                e.Cancel = true;
+                txtVersionNo.SelectAll();
             }
         }
 

@@ -291,6 +291,7 @@ namespace Ceritar.CVS.Models.Module_Template
                         //{ }
                         else
                         {
+                            mcActionResults.SetNewItem_NRI = _intTemplate_NRI;
                             blnValidReturn = true;
                         }
 

@@ -43,6 +43,19 @@ namespace Ceritar.Logirack_CVS
             {
                 if (cCol.IsVisible && cCol.Index > 1) cCol.Width = grdList.Width / mcGrdList.GetNbVisibleColumns - 10;
             }
+
+            switch (mListToOpen)
+            {
+                case sclsGenList.GeneralLists_ID.VERSION_REVISION_LIST_NRI:
+
+                    grdList.AllowMerging = C1.Win.C1FlexGrid.AllowMergingEnum.RestrictAll;
+                    C1.Win.C1FlexGrid.CellRange crMerged = grdList.GetCellRange(1, 1, grdList.Rows.Count - 1, 1);
+                    //grdList.Cols[0].AllowMerging = true;
+                    grdList.Cols[1].AllowMerging = true;
+                    grdList.Cols[2].AllowMerging = true;
+                    
+                    break;
+            }
         }
 
         //void btnRefresh_Click()

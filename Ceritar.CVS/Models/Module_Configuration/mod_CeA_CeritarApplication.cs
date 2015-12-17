@@ -174,6 +174,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         else if (!pfblnListModules_Save()) 
                         { } 
                         else {
+                            mcActionResults.SetNewItem_NRI = _intCeritarApplication_NRI; //TODO chagner ca
                             blnValidReturn = true;
                         }
  

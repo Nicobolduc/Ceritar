@@ -19,9 +19,10 @@ namespace Ceritar.Logirack_CVS
 
         public enum GeneralList_GridCapID
         {
-            CERITAR_APPLICATION_CAP_NRI = 2,
-            TEMPLATE_CAP_NRI = 8,
-            VERSION_REVISION_CAP_NRI = 14
+            CERITAR_APPLICATION_GRID_CAP_NRI = 2,
+            CERITAR_CLIENT_GRID_CAP_NRI = 8,
+            TEMPLATE_GRID_CAP_NRI = 8,
+            VERSION_REVISION_GRID_CAP_NRI = 14
         }
 
 
@@ -43,7 +44,7 @@ namespace Ceritar.Logirack_CVS
                         strSQL = strGetList_CeritarApplications_SQL();
                         strListGenTitle = " - Fiche d'une application de Ceritar";
                         //TODO caption pour ca
-                        frmGenList.mintGridTag = ((int) GeneralList_GridCapID.CERITAR_APPLICATION_CAP_NRI).ToString();
+                        frmGenList.mintGridTag = ((int) GeneralList_GridCapID.CERITAR_APPLICATION_GRID_CAP_NRI).ToString();
                         frmGenList.SetFormToOpenName = typeof(frmCeritarApp).Name;
 
                         break;
@@ -51,7 +52,7 @@ namespace Ceritar.Logirack_CVS
                     case GeneralLists_ID.CERITAR_CLIENT_LIST_NRI:
                         strSQL = strGetList_CeritarClient_SQL();
                         strListGenTitle = " - Fiche d'un client de Ceritar";
-                        frmGenList.mintGridTag = ((int)GeneralList_GridCapID.CERITAR_APPLICATION_CAP_NRI).ToString();
+                        frmGenList.mintGridTag = ((int)GeneralList_GridCapID.CERITAR_CLIENT_GRID_CAP_NRI).ToString();
                         frmGenList.SetFormToOpenName = typeof(frmCeritarClient).Name;
 
                         break;
@@ -60,7 +61,7 @@ namespace Ceritar.Logirack_CVS
                         strSQL = strGetList_Templates_SQL();
                         strListGenTitle = " - Gabarits des installations actives";
                         //TODO caption pour ca
-                        frmGenList.mintGridTag = ((int) GeneralList_GridCapID.TEMPLATE_CAP_NRI).ToString();
+                        frmGenList.mintGridTag = ((int) GeneralList_GridCapID.TEMPLATE_GRID_CAP_NRI).ToString();
                         frmGenList.SetFormToOpenName = typeof(frmTemplate).Name;
 
                         break;
@@ -68,7 +69,7 @@ namespace Ceritar.Logirack_CVS
                     case GeneralLists_ID.VERSION_REVISION_LIST_NRI:
                         strSQL = strGetList_Versions_SQL();
                         strListGenTitle = " - Versions et révisions";
-                        frmGenList.mintGridTag = ((int) GeneralList_GridCapID.VERSION_REVISION_CAP_NRI).ToString();
+                        frmGenList.mintGridTag = ((int) GeneralList_GridCapID.VERSION_REVISION_GRID_CAP_NRI).ToString();
                         frmGenList.SetFormToOpenName = typeof(frmVersion).Name;
 
                         break;
