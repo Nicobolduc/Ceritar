@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Ceritar.CVS.Models.Module_Template
 {
+    /// <summary>
+    /// Cette classe représente le modèle objet d'un fichier script dans la hiérarchie.
+    /// </summary>
     internal class mod_Script : mod_HiCo_HierarchyComponent
     {
         //Model attributes

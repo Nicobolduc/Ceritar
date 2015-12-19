@@ -7,6 +7,10 @@ using Ceritar.CVS.Models.Module_ActivesInstallations;
 
 namespace Ceritar.CVS.Controllers
 {
+    /// <summary>
+    /// Cette classe représente le controleur qui fait le lien entre la vue permettant de définir les révisions d'une version et le modèle mod_Ver_Version.
+    /// Elle passe par l'interface IVersion afin d'extraire les informations de la vue.
+    /// </summary>
     public class ctr_Revision
     {
         private Interfaces.IRevision mcView;

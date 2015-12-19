@@ -7,6 +7,10 @@ using Ceritar.TT3LightDLL.Controls;
 
 namespace Ceritar.Logirack_CVS
 {
+    /// <summary>
+    /// Cette classe permet d'afficher une liste représentant n'importe quel objet dans le système. Elle offre la possibilité de consulter, ajouter, modifier ou supprimer ces objets via
+    /// leur vue respective.
+    /// </summary>
     public partial class frmGenericList : Form, IFormController
     {
         //Public members

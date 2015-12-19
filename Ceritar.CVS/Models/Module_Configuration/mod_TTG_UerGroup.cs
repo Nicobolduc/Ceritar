@@ -2,6 +2,10 @@
 
 namespace Ceritar.CVS.Models.Module_ActivesInstallations
 {
+    /// <summary>
+    /// Cette classe représente le modèle objet d'un groupe usager dans l'application.
+    /// TTG représente le préfixe des colonnes de la table "TTGroupe" correspondant au modèle dans la base de données.
+    /// </summary>
     internal class mod_TTG_UerGroup
     {
         //Model attributes

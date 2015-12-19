@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace Ceritar.TT3LightDLL.Classes
 {
+    /// <summary>
+    /// Cette classe est une petite classe générique représentant l'utilisateur courant de l'application.
+    /// </summary>
     public class clsUser
     {
         //Working variables
         private short _intLanguage = 1;
         private int _intUser_NRI = 101;
-
 
 
 #region "Properties"

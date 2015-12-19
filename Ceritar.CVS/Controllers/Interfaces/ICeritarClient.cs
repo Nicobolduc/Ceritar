@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Ceritar.CVS.Controllers.Interfaces
 {
+    /// <summary>
+    /// Cette interface est utilisée par le controleur ctr_CeritarClient pour accéder aux informations
+    /// d'une vue l'implémentant.
+    /// </summary>
     public interface ICeritarClient
     {
         int GetCerClient_NRI();

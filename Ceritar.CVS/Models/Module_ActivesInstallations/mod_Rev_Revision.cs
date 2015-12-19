@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 namespace Ceritar.CVS.Models.Module_ActivesInstallations
 {
+    /// <summary>
+    /// Cette classe représente le modèle objet d'une révision de version.
+    /// Rev représente le préfixe des colonnes de la table "Revision" correspondant au modèle dans la base de données.
+    /// </summary>
     internal class mod_Rev_Revision
     {
         //Model attributes

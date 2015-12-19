@@ -9,12 +9,16 @@ using Ceritar.CVS.Models.Module_ActivesInstallations;
 
 namespace Ceritar.CVS.Models.Module_ActivesInstallations
 {
+    /// <summary>
+    /// Cette classe représente le modèle objet d'une version d'application.
+    /// Ver représente le préfixe des colonnes de la table "Version" correspondant au modèle dans la base de données.
+    /// </summary>
     internal class mod_Ver_Version
     {
         //Model attributes
         private int _intVersion_NRI;
         private int _intVersion_TS;
-        private string  ;
+        private string  _strCompiledBy;
         private ushort _intVersionNo;
         private string _strCreationDate;
         private string _strLocation_APP_CHANGEMENT;

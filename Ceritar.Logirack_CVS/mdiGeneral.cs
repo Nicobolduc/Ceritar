@@ -12,6 +12,9 @@ using Ceritar.TT3LightDLL.Classes;
 
 namespace Ceritar.Logirack_CVS
 {
+    /// <summary>
+    /// Cette classe représente la fenêtre principale de l'application via laquelle tous les menus sont accessibles.
+    /// </summary>
     public partial class mdiGeneral : Form
     {
         public mdiGeneral()

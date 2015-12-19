@@ -7,6 +7,10 @@ using Ceritar.TT3LightDLL.Static_Classes;
 
 namespace Ceritar.CVS.Controllers.Interfaces
 {
+    /// <summary>
+    /// Cette interface est utilisée par le controleur ctr_Template pour accéder aux informations
+    /// d'une vue l'implémentant.
+    /// </summary>
     public interface ITemplate
     {
         string GetTemplateName();
@@ -20,6 +24,9 @@ namespace Ceritar.CVS.Controllers.Interfaces
         List<structHierarchyComponent> GetHierarchyComponentList();
     }
 
+    /// <summary>
+    /// Cette structure représente les informations potentiellement contenues dans un niveau de hiérarchie.
+    /// </summary>
     public struct structHierarchyComponent
     {
         public sclsConstants.DML_Mode Action;

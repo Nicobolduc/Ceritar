@@ -10,6 +10,10 @@ using System.Windows.Forms;
 
 namespace Ceritar.TT3LightDLL.Controls
 {
+    /// <summary>
+    /// Cette classe représente un bouton de rafraichissement pour recharger les données d'une grille. Il offre des fonctionnalités simples comme le fait de clignoter lorsqu'une grille
+    /// possède des données qui ne sont plus à jour.
+    /// </summary>
     public partial class ctlRefresh : UserControl
     {
         //Private members

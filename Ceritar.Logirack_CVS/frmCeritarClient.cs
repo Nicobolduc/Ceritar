@@ -13,6 +13,9 @@ using Ceritar.TT3LightDLL.Controls;
 
 namespace Ceritar.Logirack_CVS
 {
+    /// <summary>
+    /// Cette classe contient les fonctions et évènements de la vue permettant de définir les clients de Ceritar.
+    /// </summary>
     public partial class frmCeritarClient : Form , ICeritarClient, Ceritar.TT3LightDLL.Controls.IFormController
     {
         //Controller

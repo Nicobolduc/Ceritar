@@ -8,7 +8,10 @@ using System.Collections.Generic;
 
 namespace Ceritar.TT3LightDLL.Classes
 {
-
+    /// <summary>
+    /// Cette classe est un genre de controleur des propriétés de l'application. Par exemple, elle gère la connexion au server de base de données et offre des fonctionnalités 
+    /// communes et utilisables par tous les écrans de l'application.
+    /// </summary>
     public sealed class clsApp
     {
 

@@ -6,6 +6,10 @@ using Ceritar.TT3LightDLL.Classes;
 
 namespace Ceritar.CVS.Controllers
 {
+    /// <summary>
+    /// Cette classe représente le controleur qui fait le lien entre la vue permettant de définir les clients de Ceritar et le modèle mod_CeC_CeritarClient.
+    /// Elle passe par l'interface ICeritarClient afin d'extraire les informations de la vue.
+    /// </summary>
     public class ctr_CeritarClient
     {
         private Interfaces.ICeritarClient mcView;

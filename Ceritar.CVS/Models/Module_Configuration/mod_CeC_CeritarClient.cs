@@ -6,6 +6,10 @@ using System;
 
 namespace Ceritar.CVS.Models.Module_Configuration
 {
+    /// <summary>
+    /// Cette classe représente le modèle objet d'un client de Ceritar.
+    /// CeC représente le préfixe des colonnes de la table "CerClient" correspondant au modèle dans la base de données.
+    /// </summary>
     internal class mod_CeC_CeritarClient
     {
         //Model attributes

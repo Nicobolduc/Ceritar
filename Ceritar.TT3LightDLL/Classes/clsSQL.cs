@@ -6,8 +6,11 @@ using Ceritar.TT3LightDLL.Static_Classes;
 
 namespace Ceritar.TT3LightDLL.Classes
 {
-
-    public class clsSQL
+    /// <summary>
+    /// Cette classe offre toutes les fonctionnalités nécessaires pour interagir avec la base de données. 
+    /// Notamment la gestion des transactions et des opérations de select, insert, update et delete.
+    /// </summary>
+    public sealed class clsSQL
     {
 
         //Private members

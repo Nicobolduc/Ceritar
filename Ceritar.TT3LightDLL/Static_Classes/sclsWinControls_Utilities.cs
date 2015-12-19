@@ -7,6 +7,9 @@ using System.Windows.Forms;
 
 namespace Ceritar.TT3LightDLL.Static_Classes
 {
+    /// <summary>
+    /// Cette classe statique contient des fonctions génériques utilisables pour toutes les Forms de l'application.
+    /// </summary>
     public static class sclsWinControls_Utilities
     {
 

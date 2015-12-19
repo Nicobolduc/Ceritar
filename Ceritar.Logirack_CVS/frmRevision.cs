@@ -8,6 +8,9 @@ using Ceritar.TT3LightDLL.Classes;
 
 namespace Ceritar.Logirack_CVS
 {
+    /// <summary>
+    /// Cette classe contient les fonctions et évènements de la vue permettant de définir les révisions d'une version.
+    /// </summary>
     public partial class frmRevision : Form, IFormController, Ceritar.CVS.Controllers.Interfaces.IRevision
     {
         //Controller
@@ -298,8 +301,5 @@ namespace Ceritar.Logirack_CVS
             ShowFolderBrowserDialog(ref txtScriptsPath);
         }
 
-
-
-        
     }
 }

@@ -11,6 +11,9 @@ using Ceritar.CVS.Controllers.Interfaces;
 
 namespace Ceritar.Logirack_CVS
 {
+    /// <summary>
+    /// Cette classe contient les fonctions et évènements de la vue permettant de définir les gabarits d'une hiérarchie.
+    /// </summary>
     public partial class frmTemplate : Form, Ceritar.TT3LightDLL.Controls.IFormController, Ceritar.CVS.Controllers.Interfaces.ITemplate
     {
         //Controller

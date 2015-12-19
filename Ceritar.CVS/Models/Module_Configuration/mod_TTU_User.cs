@@ -1,6 +1,10 @@
 ﻿
 namespace Ceritar.CVS.Models.Module_ActivesInstallations
 {
+    /// <summary>
+    /// Cette classe représente le modèle objet d'une usager de l'application.
+    /// TTU représente le préfixe des colonnes de la table "TTUser" correspondant au modèle dans la base de données.
+    /// </summary>
     internal class mod_TTU_User
     {
         //Model attributes

@@ -13,6 +13,9 @@ using System.Collections.Generic;
 
 namespace Ceritar.Logirack_CVS
 {
+    /// <summary>
+    /// Cette classe contient les fonctions et évènements de la vue permettant de définir les versions d'une application.
+    /// </summary>
     public partial class frmVersion : Form, IFormController, IVersion
     {
         //Controller

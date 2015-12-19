@@ -5,7 +5,11 @@ using Ceritar.TT3LightDLL.Static_Classes;
 
 namespace Ceritar.CVS.Models.Module_ActivesInstallations
 {
-    class mod_CAV_ClientAppVersion
+    /// <summary>
+    /// Cette classe représente le modèle objet d'une application de Ceritar.
+    /// CAV représente le préfixe des colonnes de la table "ClientAppVersion" correspondant au modèle dans la base de données.
+    /// </summary>
+    internal class mod_CAV_ClientAppVersion
     {
         //Model attributes
         private int _intClientAppVersion_NRI;

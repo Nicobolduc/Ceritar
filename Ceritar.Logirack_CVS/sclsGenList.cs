@@ -5,6 +5,9 @@ using Ceritar.TT3LightDLL.Static_Classes;
 
 namespace Ceritar.Logirack_CVS
 {
+    /// <summary>
+    /// Cette classe statique contients les informations relatives aux listes génériques affichées par l'écran "frmGenericList".
+    /// </summary>
     public static class sclsGenList
     {
 

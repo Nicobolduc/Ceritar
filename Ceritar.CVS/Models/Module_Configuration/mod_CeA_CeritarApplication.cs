@@ -6,6 +6,10 @@ using System;
 
 namespace Ceritar.CVS.Models.Module_ActivesInstallations
 {
+    /// <summary>
+    /// Cette classe représente le modèle objet d'une application de Ceritar.
+    /// CeA représente le préfixe des colonnes de la table "CerApp" correspondant au modèle dans la base de données.
+    /// </summary>
     internal class mod_CeA_CeritarApplication
     {
         //Model attributes

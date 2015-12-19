@@ -1,6 +1,9 @@
 ﻿
 namespace Ceritar.TT3LightDLL.Static_Classes
 {
+    /// <summary>
+    /// Cette classe statique contient des constantes génériques communes à toute l'application.
+    /// </summary>
     public static class sclsConstants
     {
         public enum Language {

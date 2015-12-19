@@ -3,6 +3,10 @@ using System.Collections.Generic;
 
 namespace Ceritar.CVS.Controllers.Interfaces
 {
+    /// <summary>
+    /// Cette interface est utilisée par le controleur ctr_CeritarApplication pour accéder aux informations
+    /// d'une vue l'implémentant.
+    /// </summary>
     public interface ICeritarApp
     {
         int GetCerApp_NRI();

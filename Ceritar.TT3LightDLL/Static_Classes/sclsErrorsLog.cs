@@ -9,7 +9,9 @@ using System.IO;
 
 namespace Ceritar.TT3LightDLL.Static_Classes
 {
-
+    /// <summary>
+    /// Cette classe statique est utilisée pour effectuer la gestion des erreurs en les loggant dans un fichier.
+    /// </summary>
     public static class sclsErrorsLog 
     {
 

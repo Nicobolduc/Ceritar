@@ -12,6 +12,9 @@ using Ceritar.CVS.Controllers;
 
 namespace Ceritar.Logirack_CVS
 {
+    /// <summary>
+    /// Cette classe contient les fonctions et évènements de la vue permettant de définir les applications de Ceritar.
+    /// </summary>
     public partial class frmCeritarApp : Form, Ceritar.CVS.Controllers.Interfaces.ICeritarApp, Ceritar.TT3LightDLL.Controls.IFormController
     {
         //Controller

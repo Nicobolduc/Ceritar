@@ -3,6 +3,9 @@ using Ceritar.TT3LightDLL.Classes;
 
 namespace Ceritar.CVS
 {
+    /// <summary>
+    /// Cette classe statique contient des propriétés potentiellement variables communes à toute la DLL.
+    /// </summary>
     internal static class sclsAppConfigs
     {
         private static string _strRoot_DB_UPGRADE_SCRIPTS_Dir;

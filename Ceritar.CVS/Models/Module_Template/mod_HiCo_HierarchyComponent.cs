@@ -5,6 +5,10 @@ using System;
 
 namespace Ceritar.CVS.Models.Module_Template
 {
+    /// <summary>
+    /// Cette classe représente le modèle objet générique d'un composant d'une hiérarchie.
+    /// HiCo représente le préfixe des colonnes de la table "HierarchyComp" correspondant au modèle dans la base de données. Les types mod_Folder et mod_Script sont enregistrés dans cette table.
+    /// </summary>
     internal abstract class mod_HiCo_HierarchyComponent
     {
         //Model attributes

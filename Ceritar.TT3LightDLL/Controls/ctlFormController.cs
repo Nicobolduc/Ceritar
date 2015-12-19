@@ -7,7 +7,11 @@ using System.Windows.Forms;
 
 namespace Ceritar.TT3LightDLL.Controls
 {
-
+    /// <summary>
+    /// Cette classe est un controleur de Windows Form. Elle offre des fonctionnalités, propriétés et évènements permettant de gérer l'ouverture, 
+    /// le chargement des données, la validation et la sauvegarde des informations. 
+    /// Elle permet aux Forms de recevoir à leur ouverture et de retourner à leur fermeture de l'information.
+    /// </summary>
     public partial class ctlFormController : System.Windows.Forms.UserControl, INotifyPropertyChanged
     {
 

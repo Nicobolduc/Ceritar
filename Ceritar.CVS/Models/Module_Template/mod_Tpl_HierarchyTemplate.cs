@@ -6,6 +6,10 @@ using System;
 
 namespace Ceritar.CVS.Models.Module_Template
 {
+    /// <summary>
+    /// Cette classe représente le modèle objet d'un gabarit d'une hiérarchie.
+    /// Tpl représente le préfixe des colonnes de la table "Template" correspondant au modèle dans la base de données.
+    /// </summary>
     internal class mod_Tpl_HierarchyTemplate
     {
         //Model attributes
@@ -15,7 +19,7 @@ namespace Ceritar.CVS.Models.Module_Template
         private TemplateType _templateType;
         private bool _blnByDefault;
         private int _intCeritarApplication_NRI;
-        private mod_HiCo_HierarchyComponent _cRootSystem;
+        private mod_HiCo_HierarchyComponent _cRootSystem; //La racine représentant un dossier système invariable
         //private List<mod_HiCo_HierarchyComponent> _lstHierarchyComponents;
 
         //Messages

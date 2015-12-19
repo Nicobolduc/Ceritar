@@ -12,7 +12,10 @@ using System.Collections.Specialized;
 
 namespace Ceritar.TT3LightDLL.Classes
 {
-
+    /// <summary>
+    /// Cette classe est un wrapper sur le contrôle de grille "C1FlexGrid". Elle permet d'offrir des fonctionnalités génériques simplifiant l'utilisation de ce contrôle.
+    /// Elle ajoute également des événements sur la grille qui sont utiles pour les forms.
+    /// </summary>
     public class clsC1FlexGridWrapper
     {
         //Docuumentation available here: //http://helpcentral.componentone.com/nethelp/c1flexgrid/topic132.html

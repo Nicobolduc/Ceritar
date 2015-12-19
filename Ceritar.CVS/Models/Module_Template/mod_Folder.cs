@@ -6,6 +6,9 @@ using System;
 
 namespace Ceritar.CVS.Models.Module_Template
 {
+    /// <summary>
+    /// Cette classe représente le modèle objet d'un dossier dans une hiérarchie.
+    /// </summary>
     internal class mod_Folder : mod_HiCo_HierarchyComponent
     {
         //Model attributes

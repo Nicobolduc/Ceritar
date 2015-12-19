@@ -4,6 +4,10 @@ using Ceritar.TT3LightDLL.Static_Classes;
 
 namespace Ceritar.CVS.Controllers.Interfaces
 {
+    /// <summary>
+    /// Cette interface est utilisé par le controleur ctr_Version pour accéder aux informations
+    /// d'une vue l'implémentant.
+    /// </summary>
     public interface IVersion
     {
         sclsConstants.DML_Mode GetDML_Action();
@@ -21,6 +25,9 @@ namespace Ceritar.CVS.Controllers.Interfaces
         List<structClientAppVersion> GetClientsList();
     }
 
+    /// <summary>
+    /// Cette structure représente les informations contenues dans une grille qui fait le lien entre un Client, une Application et une Version.
+    /// </summary>
     public struct structClientAppVersion
     {
         public sclsConstants.DML_Mode Action;
