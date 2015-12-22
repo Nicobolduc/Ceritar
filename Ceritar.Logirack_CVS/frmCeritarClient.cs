@@ -22,9 +22,8 @@ namespace Ceritar.Logirack_CVS
         private ctr_CeritarClient mcCtrCeritarClient;
 
         //Columns grdApp
-        private const short mintGrdApp_Action_col = 1;
-        private const short mintGrdApp_CeA_NRI= 2;
-        private const short mintGrdApp_CeA_Name_col = 3;
+        private const short mintGrdApp_CeA_NRI= 1;
+        private const short mintGrdApp_CeA_Name_col = 2;
 
         //Classes
         private clsC1FlexGridWrapper mcGrdApp;
@@ -41,6 +40,7 @@ namespace Ceritar.Logirack_CVS
             mcCtrCeritarClient = new ctr_CeritarClient((ICeritarClient) this);
 
             mcGrdApp = new clsC1FlexGridWrapper();
+            mcGrdApp.HasActionColumn = false;
             mcGrdApp.SetGridDisplay += new clsC1FlexGridWrapper.SetDisplayEventHandler(mcGrdApp_SetGridDisplay);
         }
 
@@ -77,8 +77,8 @@ namespace Ceritar.Logirack_CVS
                 {
                     UInt16.TryParse(sqlRecord["CeC_TS"].ToString(), out mintCerClient_TS);
                     txtName.Text = sqlRecord["CeC_Name"].ToString();
-                   
-      
+
+                    chkActive.Checked = Convert.ToBoolean(sqlRecord["CeC_IsActive"].ToString());
 
                     blnValidReturn = true;
                 }
@@ -100,13 +100,12 @@ namespace Ceritar.Logirack_CVS
 
         #endregion
 
-        private void ctlFormController1_LoadData(TT3LightDLL.Controls.LoadDataEventArgs eventArgs)
+        private void formController_LoadData(LoadDataEventArgs eventArgs)
         {
             bool blnValidReturn = false;
+            Button btnPlaceHolder = null;
 
-            if (!mcGrdApp.bln_Init(ref grdApp, ref btnGrdAdd, ref btnGrdDel))
-            { }
-            else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrCeritarClient.strGetApplications_SQL(),"CeA_NRI","CeA_Name",false, ref cboApp))
+            if (!mcGrdApp.bln_Init(ref grdCerApp, ref btnPlaceHolder, ref btnPlaceHolder))
             { }
             else if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE)
             {
@@ -126,17 +125,7 @@ namespace Ceritar.Logirack_CVS
 
         private void mcGrdApp_SetGridDisplay()
         {
-            grdApp.Cols[mintGrdApp_CeA_Name_col].Width = 30;
-
-            if (grdApp.Rows.Count > 1)
-            {
-                cboApp.Visible = true;
-            }
-
-            grdApp.Cols[mintGrdApp_CeA_Name_col].Style = grdApp.Styles.Normal;
-            grdApp.Cols[mintGrdApp_CeA_Name_col].Style.Editor = cboApp;
-
-           
+            grdCerApp.Cols[mintGrdApp_CeA_Name_col].Width = 30;
         }
 
         private void txtNom_TextChanged(object sender, EventArgs e)
@@ -166,9 +155,9 @@ namespace Ceritar.Logirack_CVS
         {
             List<int> lstApplication = new List<int>();
             
-            for (int intRowIdx = 1; intRowIdx <= grdApp.Rows.Count - 1; intRowIdx++)
+            for (int intRowIdx = 1; intRowIdx <= grdCerApp.Rows.Count - 1; intRowIdx++)
             {
-                lstApplication.Add((int)grdApp[intRowIdx,mintGrdApp_CeA_Name_col]);
+                lstApplication.Add((int)grdCerApp[intRowIdx,mintGrdApp_CeA_Name_col]);
             }
 
             return lstApplication;
@@ -185,30 +174,14 @@ namespace Ceritar.Logirack_CVS
         }
         #endregion
 
-        private void groupBox1_Enter(object sender, EventArgs e)
+        private void chkActive_CheckedChanged(object sender, EventArgs e)
         {
-
-        }
-
-        private void cboApp_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void grdApp_DoubleClick(object sender, EventArgs e)
-        {
-            if(grdApp.Rows.Count > 1 & grdApp.Row > 0)
+            if (!formController.FormIsLoading)
             {
-                switch (grdApp.Col)
-                {
-                    case mintGrdApp_CeA_Name_col:
-
-                        grdApp.StartEditing();
-
-                        break;
-
-                }
+                formController.ChangeMade = true;
             }
         }
+
+
     }
 }

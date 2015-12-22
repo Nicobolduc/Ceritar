@@ -30,6 +30,7 @@ namespace Ceritar.CVS.Controllers
             mcView = rView;
 
         }
+
         public clsActionResults Validate()
             {
             try
@@ -47,21 +48,8 @@ namespace Ceritar.CVS.Controllers
             return mcActionResult;
         }
 
-        #region "SQL Queries"
 
-        public string strGetApplications_SQL()
-        {
-            string strSQL = string.Empty;
-
-            strSQL = strSQL + " SELECT CerApp.CeA_NRI, " + Environment.NewLine;
-            strSQL = strSQL + "        CerApp.CeA_Name " + Environment.NewLine;
-
-            strSQL = strSQL + " FROM CerApp " + Environment.NewLine;
-
-            strSQL = strSQL + " ORDER BY CerApp.CeA_Name " + Environment.NewLine;
-
-            return strSQL;
-        }
+#region "SQL Queries"
         
         public string strGetDataLoad_SQL(int vintCeC_NRI)
         {
@@ -81,22 +69,22 @@ namespace Ceritar.CVS.Controllers
         {
             string strSQL = string.Empty;
 
-            strSQL = strSQL + " SELECT Action = " + (int)sclsConstants.DML_Mode.NO_MODE + ", " + Environment.NewLine;
-            strSQL = strSQL + "        CeC_CeA.CeA_NRI, " + Environment.NewLine;
+            strSQL = strSQL + " SELECT CerApp.CeA_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_Name " + Environment.NewLine;
 
-            strSQL = strSQL + " FROM CeC_CeA " + Environment.NewLine;
-            strSQL = strSQL + "     INNER JOIN CerApp ON CerApp.CeA_NRI = CeC_CeA.CeA_NRI " + Environment.NewLine;
+            strSQL = strSQL + " FROM ClientAppVersion " + Environment.NewLine;
+            strSQL = strSQL + "     INNER JOIN CerApp ON CerApp.CeA_NRI = ClientAppVersion.CeA_NRI " + Environment.NewLine;
 
-            strSQL = strSQL + " WHERE CeC_CeA.CeC_NRI = " + vintCeC_NRI + Environment.NewLine;
+            strSQL = strSQL + " WHERE ClientAppVersion.CeC_NRI = " + vintCeC_NRI + Environment.NewLine;
+            strSQL = strSQL + "   AND ClientAppVersion.CAV_Installed = 1 " + Environment.NewLine;
+
+            strSQL = strSQL + " GROUP BY CerApp.CeA_NRI, CerApp.CeA_Name " + Environment.NewLine;
             
             return strSQL;
         }
 
-
-
 #endregion
+
+
     }
-
-
 }

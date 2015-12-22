@@ -443,6 +443,11 @@ namespace Ceritar.TT3LightDLL.Classes
             return blnValidReturn;
         }
 
+        public bool bln_RowsSelValid()
+        {
+            return mGrdFlex.Rows.Count > 1 && mGrdFlex.Row > 0 && mfrmParent.GetFormController().FormMode != sclsConstants.DML_Mode.CONSULT_MODE && mfrmParent.GetFormController().FormMode != sclsConstants.DML_Mode.DELETE_MODE;
+        }
+
         public bool bln_SetRowActionToDelete(int vintRowIndex)
         {
             bool blnValidReturn = false;

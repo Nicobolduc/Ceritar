@@ -6,7 +6,7 @@ namespace Ceritar.CVS
     /// <summary>
     /// Cette classe statique contient des propriétés potentiellement variables communes à toute la DLL.
     /// </summary>
-    internal static class sclsAppConfigs
+    public static class sclsAppConfigs
     {
         private static string _strRoot_DB_UPGRADE_SCRIPTS_Dir;
         private static string _strRoot_INSTALLATIONS_ACTIVES_Dir;
@@ -24,7 +24,7 @@ namespace Ceritar.CVS
 
 #region "Properties"
 
-        internal static string GetRoot_DB_UPGRADE_SCRIPTS
+        public static string GetRoot_DB_UPGRADE_SCRIPTS
         {
             get
             {
@@ -37,7 +37,7 @@ namespace Ceritar.CVS
             }
         }
 
-        internal static string GetRoot_INSTALLATIONS_ACTIVES
+        public static string GetRoot_INSTALLATIONS_ACTIVES
         {
             get
             {
@@ -50,7 +50,7 @@ namespace Ceritar.CVS
             }
         }
 
-        internal static string GetCaptionsAndMenusFileName
+        public static string GetCaptionsAndMenusFileName
         {
             get
             {
@@ -63,12 +63,12 @@ namespace Ceritar.CVS
             }
         }
 
-        internal static string GetVersionNumberPrefix
+        public static string GetVersionNumberPrefix
         {
             get { return _strVersionNumberPrefix; }
         }
 
-        internal static string GetRevisionNumberPrefix
+        public static string GetRevisionNumberPrefix
         {
             get { return _strRevisionNumberPrefix; }
         } 

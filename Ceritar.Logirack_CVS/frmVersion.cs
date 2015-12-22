@@ -37,11 +37,14 @@ namespace Ceritar.Logirack_CVS
         private const short mintGrdRev_Description_col = 3;
         private const short mintGrdRev_CreationDate_col = 4;
 
+        //Tab pages
+        private const short mintTab_Version = 0;
+        private const short mintTab_Revision = 1;
+
         //Classes
         public clsC1FlexGridWrapper mcGrdClients;
         public clsC1FlexGridWrapper mcGrdRevisions;
         private Ceritar.CVS.clsActionResults mcActionResults;
-        List<structClientAppVersion> lstClient_NRI;
 
         //Working variables
         private ushort mintVersion_TS;
@@ -255,8 +258,6 @@ namespace Ceritar.Logirack_CVS
                 if (dialogResult == System.Windows.Forms.DialogResult.OK)
                 {
                     txtAffected.Text = openFileDialog.FileName;
-
-                    formController.ChangeMade = true;
                 }
             }
         }
@@ -283,8 +284,6 @@ namespace Ceritar.Logirack_CVS
                 if (dialogResult == System.Windows.Forms.DialogResult.OK)
                 {
                     txtAffected.Text = folderBrowserDialog.SelectedPath;
-
-                    formController.ChangeMade = true;
                 }
             }
         }
@@ -589,13 +588,15 @@ namespace Ceritar.Logirack_CVS
 
                     btnGenerate.Enabled = false;
 
+                    tab.TabPages[mintTab_Revision].Enabled = false;
+
                     break;
 
                 case sclsConstants.DML_Mode.UPDATE_MODE:
 
                     cboApplications.Enabled = false;
                     cboTemplates.Enabled = false;
-                    
+                    txtCompiledBy.Enabled = false;
                     txtVersionNo.ReadOnly = true;
 
                     break;
@@ -634,7 +635,7 @@ namespace Ceritar.Logirack_CVS
 
         private void btnGrdRevDel_Click(object sender, EventArgs e)
         {
-            if (formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
+            if (mcGrdClients.bln_RowsSelValid())
             {
                 int intItem_NRI = (int)grdRevisions[grdRevisions.Row, mintGrdRev_Rev_NRI_col];
                 frmRevision frmVersion = new frmRevision();

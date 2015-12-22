@@ -27,7 +27,8 @@ namespace Ceritar.CVS.Controllers
             Scripts = 5,
             Report = 6,
             Version_Number = 7,
-            Other = 8
+            Revision_Number = 8,
+            Other = 9
         }
 
         public enum TemplateType
@@ -86,19 +87,17 @@ namespace Ceritar.CVS.Controllers
 
                 structRacine = mcView.GetRacineSystem();
 
-                if (structRacine.intHierarchyComponent_NRI > 0 || mcModTemplate.DML_Action == sclsConstants.DML_Mode.INSERT_MODE)
-                {
-                    mcModTemplate.RacineSystem = new mod_Folder();
-                    mcModTemplate.RacineSystem.DML_Action = structRacine.Action;
-                    mcModTemplate.RacineSystem.HierarchyComponent_NRI = structRacine.intHierarchyComponent_NRI;
-                    mcModTemplate.RacineSystem.HierarchyComponent_TS = structRacine.intHierarchyComponent_TS;
-                    mcModTemplate.RacineSystem.NameOnDisk = structRacine.strName;
-                    mcModTemplate.RacineSystem.Template_NRI = mcModTemplate.Template_NRI;
-                    mcModTemplate.RacineSystem.ParentComponent = new mod_Folder();
-                    mcModTemplate.RacineSystem.ParentComponent.HierarchyComponent_NRI = structRacine.Parent_NRI;
-                    ((mod_Folder)mcModTemplate.RacineSystem).Type = structRacine.FolderType;
-                    ((mod_Folder)mcModTemplate.RacineSystem).NodeLevel = structRacine.intNodeLevel;
-                }
+                mcModTemplate.RacineSystem = new mod_Folder();
+                mcModTemplate.RacineSystem.DML_Action = structRacine.Action;
+                mcModTemplate.RacineSystem.HierarchyComponent_NRI = structRacine.intHierarchyComponent_NRI;
+                mcModTemplate.RacineSystem.HierarchyComponent_TS = structRacine.intHierarchyComponent_TS;
+                mcModTemplate.RacineSystem.NameOnDisk = structRacine.strName;
+                mcModTemplate.RacineSystem.Template_NRI = mcModTemplate.Template_NRI;
+                mcModTemplate.RacineSystem.ParentComponent = new mod_Folder();
+                mcModTemplate.RacineSystem.ParentComponent.HierarchyComponent_NRI = structRacine.Parent_NRI;
+                ((mod_Folder)mcModTemplate.RacineSystem).Type = structRacine.FolderType;
+                ((mod_Folder)mcModTemplate.RacineSystem).NodeLevel = structRacine.intNodeLevel;
+
 
                 lstHiCo = mcView.GetHierarchyComponentList();
 
@@ -140,7 +139,7 @@ namespace Ceritar.CVS.Controllers
                 
                 mcActionResult = mcModTemplate.Validate(); //TODO Valider hierarchy
 
-                if (mcActionResult.IsValid)
+                if (mcActionResult.IsValid && mcModTemplate.RacineSystem != null)
                 {
                     mcActionResult = ((mod_Folder)mcModTemplate.RacineSystem).Validate();
                 }
@@ -279,7 +278,7 @@ namespace Ceritar.CVS.Controllers
             return strSQL;
         }
 
-        public string strGetListe_HierarchyComponents_SQL(int vintTemplate_NRI = 0)
+        public string strGetListe_HierarchyComponents_SQL(int vintTemplate_NRI = 0, bool vblnLoadRevision = false)
         {
             string strSQL = string.Empty;
 
@@ -341,7 +340,16 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "     SELECT *, " + Environment.NewLine;
             strSQL = strSQL + " 		   CAST(0 AS varbinary(max)) AS Level " + Environment.NewLine;
             strSQL = strSQL + " 	FROM HierarchyComp  " + Environment.NewLine;
-            strSQL = strSQL + " 	WHERE HiCo_Parent_NRI IS NULL " + Environment.NewLine;
+            strSQL = strSQL + " 	WHERE 1 = 1 " + Environment.NewLine;
+
+            if (vblnLoadRevision)
+            {
+                strSQL = strSQL + "   AND HierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
+            }
+            else
+            {
+                strSQL = strSQL + "   AND HiCo_Parent_NRI IS NULL " + Environment.NewLine;
+            }
 
             strSQL = strSQL + "     UNION ALL " + Environment.NewLine;
 
@@ -371,7 +379,16 @@ namespace Ceritar.CVS.Controllers
             //strSQL = strSQL + "    				GROUP BY HierarchyComp.HiCo_NodeLevel   " + Environment.NewLine;
             //strSQL = strSQL + "    			   ) AS TNode ON TNode.Enfant = HiCo_NRI " + Environment.NewLine;
 
-            strSQL = strSQL + " WHERE LstHierarchyComp.TTP_NRI = " + (int)sclsAppConfigs.CONFIG_TYPE.PATH_INSTALLATIONS_ACTIVES + " OR LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
+            strSQL = strSQL + " WHERE  1 = 1 " + Environment.NewLine;
+
+            if (vblnLoadRevision)
+            {
+                strSQL = strSQL + "   AND LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
+            }
+            else
+            {
+                strSQL = strSQL + "   AND LstHierarchyComp.TTP_NRI = " + (int)sclsAppConfigs.CONFIG_TYPE.PATH_INSTALLATIONS_ACTIVES + " OR LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
+            }
 
             strSQL = strSQL + " ORDER BY Level " + Environment.NewLine;
 
@@ -415,7 +432,7 @@ namespace Ceritar.CVS.Controllers
 
             strSQL = strSQL + " FROM FolderType " + Environment.NewLine;
 
-            strSQL = strSQL + " WHERE FolderType.FoT_Modifiable = 1 " + Environment.NewLine;
+            strSQL = strSQL + " WHERE FolderType.FoT_NRI NOT IN (" + (int)ctr_Template.FolderType.Ceritar_Application + ")" + Environment.NewLine;
 
             strSQL = strSQL + " ORDER BY FolderType.FoT_NRI " + Environment.NewLine;
 

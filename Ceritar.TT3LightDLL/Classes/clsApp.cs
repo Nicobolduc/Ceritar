@@ -266,6 +266,14 @@ namespace Ceritar.TT3LightDLL.Classes
             return enumVal;
         }
 
+        /// <summary>
+        /// Cettte fonction copie tous les fichiers contenu dans une source vers la destination spécifiée.
+        /// </summary>
+        /// <param name="vstrSourceFolderPath">Le chemin sur le disque vers le dossier contenant les fichiers à copier.</param>
+        /// <param name="vstrDestinationFolderPath">Le chemin sur le disque vers le dossier où les fichiers doivent être copiés.</param>
+        /// <param name="vblnOverwrite">Si true, les fichiers existant déjà seront remplacés.</param>
+        /// <param name="vblnCreateFolderIfNotExist">Si le dossier de destination spécifié n'existe pas, il sera créé.</param>
+        /// <returns></returns>
         public bool blnCopyFolderContent(string vstrSourceFolderPath, string vstrDestinationFolderPath, bool vblnOverwrite = true, bool vblnCreateFolderIfNotExist = false)
         {
             bool blnValidReturn = false;

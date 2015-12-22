@@ -158,6 +158,12 @@ namespace Ceritar.CVS.Controllers
             return mcActionResult;
         }
 
+        /// <summary>
+        /// Construit la hiérarchie reçu en paramètre à partir de ce qui est dans la base de données.
+        /// Boucle sur chaque niveau de la hiérarchie et en fonction du type de dossier, effectue divers traitements.
+        /// </summary>
+        /// <param name="vintTemplate_NRI">Le NRI du gabarit à utiliser.</param>
+        /// <returns>Une valeur indiquant si la génération s'est effectuée avec succès.</returns>
         public bool blnBuildVersionHierarchy(int vintTemplate_NRI)
         {
             bool blnValidReturn = false;
@@ -309,7 +315,8 @@ namespace Ceritar.CVS.Controllers
         }
 
         /// <summary>
-        /// Va chercher tous les dossiers de scripts dans DB_UpgradeScripts pour une nouvelle version donnée, puis copie chacun des scripts dans le répertoire des installations actives pour chacun des clients concernés.
+        /// Va chercher tous les dossiers de scripts dans DB_UpgradeScripts pour une nouvelle version donnée, 
+        /// puis copie chacun des scripts dans le répertoire des installations actives pour chacun des clients concernés.
         /// </summary>
         /// <param name="vstrDestinationFolderPath">Le chemin du répertoire où les scripts doivent être copiés.</param>
         /// <returns></returns>

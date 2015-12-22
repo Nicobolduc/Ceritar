@@ -145,7 +145,7 @@ namespace Ceritar.CVS.Models.Module_Template
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Template.ErrorCode_Tpl.CERITAR_APPLICATION_MANDATORY);
                         }
-                        else if (_cRootSystem == null || (_cRootSystem.GetType() == typeof(mod_Folder) && ((mod_Folder)_cRootSystem).LstChildrensComponents.Count == 0 && _cRootSystem.DML_Action == sclsConstants.DML_Mode.UPDATE_MODE))
+                        else if (_cRootSystem == null && _templateType == TemplateType.Version && (_cRootSystem.GetType() == typeof(mod_Folder) && ((mod_Folder)_cRootSystem).LstChildrensComponents.Count == 0 && _cRootSystem.DML_Action == sclsConstants.DML_Mode.UPDATE_MODE))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Template.ErrorCode_Tpl.HIERARCHY_MANDATORY);
                         }
