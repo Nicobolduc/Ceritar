@@ -84,7 +84,7 @@
             this.grdCerApp.Size = new System.Drawing.Size(359, 168);
             this.grdCerApp.StyleInfo = resources.GetString("grdCerApp.StyleInfo");
             this.grdCerApp.TabIndex = 2;
-            this.grdCerApp.Tag = "8";
+            this.grdCerApp.Tag = "21";
             // 
             // chkActive
             // 

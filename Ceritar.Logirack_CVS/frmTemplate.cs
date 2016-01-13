@@ -482,7 +482,7 @@ namespace Ceritar.Logirack_CVS
 
                 case sclsConstants.DML_Mode.UPDATE_MODE:
 
-                    txtName.Enabled = false;
+                    //txtName.Enabled = false;
 
                     cboApplications.Enabled = false;
                     cboTypes.Enabled = false;

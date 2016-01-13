@@ -167,18 +167,18 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.COMPILED_BY_MANDATORY);
                         }
-                        //else if (string.IsNullOrEmpty(_strLocation_APP_CHANGEMENT))
-                        //{
-                        //    mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY);
-                        //}
-                        //else if (string.IsNullOrEmpty(_strLocation_Release))
-                        //{
-                        //    mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.RELEASE_MANDATORY);
-                        //}
-                        //else if (string.IsNullOrEmpty(_strLocation_TTApp))
-                        //{
-                        //    mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY);
-                        //}
+                        else if (string.IsNullOrEmpty(_strLocation_APP_CHANGEMENT))
+                        {
+                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY);
+                        }
+                        else if (string.IsNullOrEmpty(_strLocation_Release))
+                        {
+                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.RELEASE_MANDATORY);
+                        }
+                        else if (string.IsNullOrEmpty(_strLocation_TTApp))
+                        {
+                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY);
+                        }
                         else if (_lstClientsUsing == null || _lstClientsUsing.Count == 0)
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.CLIENTS_LIST_MANDATORY);
@@ -216,18 +216,6 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.COMPILED_BY_MANDATORY);
                         }
-                        //else if (string.IsNullOrEmpty(_strLocation_APP_CHANGEMENT) && !System.IO.Directory.Exists(_strLocation_APP_CHANGEMENT))
-                        //{
-                        //    mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY); //TODO
-                        //}
-                        //else if (string.IsNullOrEmpty(_strLocation_Release) || !System.IO.Directory.Exists(_strLocation_Release))
-                        //{
-                        //    mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.RELEASE_MANDATORY);
-                        //}
-                        //else if (string.IsNullOrEmpty(_strLocation_TTApp) || !File.Exists(_strLocation_TTApp))
-                        //{
-                        //    mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY);
-                        //}
                         else if (_lstClientsUsing == null || _lstClientsUsing.Count == 0)
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.CLIENTS_LIST_MANDATORY);
@@ -272,6 +260,38 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             return mcActionResults;
         }
 
+        internal clsActionResults ValidateHierarchyBuild()
+        {
+            try
+            {
+                mcActionResults.SetDefault();
+
+                if (string.IsNullOrEmpty(_strLocation_APP_CHANGEMENT) && !System.IO.Directory.Exists(_strLocation_APP_CHANGEMENT))
+                {
+                    mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY); 
+                }
+                else if (string.IsNullOrEmpty(_strLocation_Release) || !System.IO.Directory.Exists(_strLocation_Release))
+                {
+                    mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.RELEASE_MANDATORY);
+                }
+                else if (string.IsNullOrEmpty(_strLocation_TTApp) || !File.Exists(_strLocation_TTApp))
+                {
+                    mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY);
+                }
+                else
+                {
+                    mcActionResults.SetValid();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                mcActionResults.SetInvalid(sclsConstants.Error_Message.ERROR_UNHANDLED, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return mcActionResults;
+        }
+        
         internal bool blnSave()
         {
             bool blnValidReturn = false;

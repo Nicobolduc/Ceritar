@@ -132,6 +132,11 @@ namespace Ceritar.CVS.Controllers
                     blnValidReturn = mcModVersion.blnSave();
 
                     mcActionResult = mcModVersion.ActionResults;
+
+                    if (blnValidReturn & mcActionResult.IsValid & mcModVersion.DML_Action == sclsConstants.DML_Mode.INSERT_MODE)
+                    {
+                        blnValidReturn = blnBuildVersionHierarchy(mcModVersion.TemplateSource.Template_NRI);
+                    }
                 }
             }
             catch (Exception ex)
@@ -170,11 +175,9 @@ namespace Ceritar.CVS.Controllers
             string strSQL = string.Empty;
             string strFolderName = string.Empty;
             int intPreviousFolderLevel = -1;
-            SqlCommand cSQLCmd = default(SqlCommand);
             SqlDataReader cSQLReader = null;
             DirectoryInfo currentFolderInfos = null;
 
-            mcActionResult.SetDefault();
 
             strSQL = strSQL + " WITH LstHierarchyComp " + Environment.NewLine;
             strSQL = strSQL + " AS " + Environment.NewLine;
@@ -205,14 +208,12 @@ namespace Ceritar.CVS.Controllers
 
             try
             {
-                currentFolderInfos = new DirectoryInfo(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES + 
-                                                       (sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Substring(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Length - 1, 1) == "\\" ? "" : "\\")
-                                                          );
+                currentFolderInfos = new DirectoryInfo(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES +
+                                                        (sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Substring(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Length - 1, 1) == "\\" ? "" : "\\")
+                                                      );
 
-                cSQLCmd = new SqlCommand(strSQL, clsApp.GetAppController.SQLConnection);
-
-                cSQLReader = cSQLCmd.ExecuteReader();
-
+                cSQLReader = clsSQL.ADOSelect(strSQL);
+                
                 while (cSQLReader.Read())
                 {
                     switch (Int32.Parse(cSQLReader["FoT_NRI"].ToString()))
@@ -241,7 +242,7 @@ namespace Ceritar.CVS.Controllers
                             currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.Parent.Parent.FullName, strFolderName));
 
                             intNbLevelBack--;
-                        }      
+                        }
                     }
                     else //On recule d'un niveau pour revenir au dossier d'avant
                     {
@@ -263,7 +264,7 @@ namespace Ceritar.CVS.Controllers
 
                                 clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName);
                             }
-                                                        
+
                             break;
 
                         case (int)ctr_Template.FolderType.CaptionsAndMenus:
@@ -272,13 +273,13 @@ namespace Ceritar.CVS.Controllers
                             {
                                 File.Copy(mcView.GetLocation_TTApp(), Path.Combine(currentFolderInfos.FullName, sclsAppConfigs.GetCaptionsAndMenusFileName), true);
                             }
-                            
+
                             break;
 
                         case (int)ctr_Template.FolderType.Scripts:
 
                             blnValidReturn = pfblnCopyAllScriptsForClients(currentFolderInfos.FullName);
-                                                        
+
                             break;
 
                         case (int)ctr_Template.FolderType.Version_Number:
@@ -287,7 +288,7 @@ namespace Ceritar.CVS.Controllers
                             {
                                 File.Copy(mcView.GetLocation_APP_CHANGEMENT(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_APP_CHANGEMENT())), true);
                             }
-                            
+
                             break;
                     }
 
@@ -334,8 +335,15 @@ namespace Ceritar.CVS.Controllers
 
                 foreach (structClientAppVersion structClient in lstClients)
                 {
-                    intActiveVersionInProd = UInt16.Parse(clsSQL.str_ADOSingleLookUp("ISNULL(MAX(Version.Ver_No), 0)", "ClientAppVersion INNER JOIN Version ON Version.Ver_NRI = ClientAppVersion.Ver_NRI", "ClientAppVersion.CAV_IsCurrentVersion = 1 AND Version.CeA_NRI = " + mcView.GetCeritarApplication_NRI() + " AND ClientAppVersion.CeC_NRI = " + structClient.intCeritarClient_NRI));
-
+                    if (mcSQL == null)
+                    {
+                        intActiveVersionInProd = UInt16.Parse(clsSQL.str_ADOSingleLookUp("ISNULL(MAX(Version.Ver_No), 0)", "ClientAppVersion INNER JOIN Version ON Version.Ver_NRI = ClientAppVersion.Ver_NRI", "ClientAppVersion.CAV_IsCurrentVersion = 1 AND Version.CeA_NRI = " + mcView.GetCeritarApplication_NRI() + " AND ClientAppVersion.CeC_NRI = " + structClient.intCeritarClient_NRI));
+                    }
+                    else
+                    {
+                        intActiveVersionInProd = UInt16.Parse(mcSQL.str_ADOSingleLookUp_Trans("ISNULL(MAX(Version.Ver_No), 0)", "ClientAppVersion INNER JOIN Version ON Version.Ver_NRI = ClientAppVersion.Ver_NRI", "ClientAppVersion.CAV_IsCurrentVersion = 1 AND Version.CeA_NRI = " + mcView.GetCeritarApplication_NRI() + " AND ClientAppVersion.CeC_NRI = " + structClient.intCeritarClient_NRI));
+                    }
+                    
                     lstVersionsFolders = Directory.GetDirectories(Path.Combine(sclsAppConfigs.GetRoot_DB_UPGRADE_SCRIPTS, mcView.GetCeritarApplication_Name()));
 
                     foreach (string strCurrentVersionFolderToCopy_Path in lstVersionsFolders)

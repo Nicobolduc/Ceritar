@@ -24,7 +24,7 @@ namespace Ceritar.Logirack_CVS
         {
             CERITAR_APPLICATION_GRID_CAP_NRI = 2,
             CERITAR_CLIENT_GRID_CAP_NRI = 8,
-            TEMPLATE_GRID_CAP_NRI = 8,
+            TEMPLATE_GRID_CAP_NRI = 21,
             VERSION_REVISION_GRID_CAP_NRI = 14
         }
 
@@ -140,9 +140,9 @@ namespace Ceritar.Logirack_CVS
             string strSQL = string.Empty;
 
             strSQL = strSQL + " SELECT CerClient.CeC_NRI, " + Environment.NewLine;
-            strSQL = strSQL + "        CerClient.CeC_Name " + Environment.NewLine;
-
-
+            strSQL = strSQL + "        CerClient.CeC_Name, " + Environment.NewLine;
+            strSQL = strSQL + "        CerClient.CeC_IsActive " + Environment.NewLine;
+            
             strSQL = strSQL + " FROM CerClient " + Environment.NewLine;
 
             if (vstrWhere != string.Empty)

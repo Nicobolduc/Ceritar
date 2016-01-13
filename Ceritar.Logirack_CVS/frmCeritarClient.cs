@@ -45,6 +45,48 @@ namespace Ceritar.Logirack_CVS
         }
 
 
+#region "Interfaces functions"
+
+        int ICeritarClient.GetCerClient_NRI()
+        {
+            return formController.Item_NRI;
+        }
+
+        int ICeritarClient.GetCerClient_TS()
+        {
+            return mintCerClient_TS;
+        }
+
+        string ICeritarClient.GetName()
+        {
+            return txtName.Text;
+        }
+
+        List<int> ICeritarClient.GetLstCerApplication()
+        {
+            List<int> lstApplication = new List<int>();
+
+            for (int intRowIdx = 1; intRowIdx <= grdCerApp.Rows.Count - 1; intRowIdx++)
+            {
+                lstApplication.Add((int)grdCerApp[intRowIdx, mintGrdApp_CeA_Name_col]);
+            }
+
+            return lstApplication;
+        }
+
+        sclsConstants.DML_Mode ICeritarClient.GetDML_Mode()
+        {
+            return formController.FormMode;
+        }
+
+        ctlFormController IFormController.GetFormController()
+        {
+            return this.formController;
+        }
+
+#endregion
+
+
  #region "Functions"
 
         private bool pfblnGrdModules_Load()
@@ -100,6 +142,7 @@ namespace Ceritar.Logirack_CVS
 
         #endregion
 
+
         private void formController_LoadData(LoadDataEventArgs eventArgs)
         {
             bool blnValidReturn = false;
@@ -131,48 +174,7 @@ namespace Ceritar.Logirack_CVS
         private void txtNom_TextChanged(object sender, EventArgs e)
         {
             formController.ChangeMade = true;
-        }
-        
-
-#region "Interfaces functions"  
-
-        int ICeritarClient.GetCerClient_NRI()
-        {
-            return formController.Item_NRI;
-        }
-
-        int ICeritarClient.GetCerClient_TS()
-        {
-            return mintCerClient_TS;
-        }
-
-        string ICeritarClient.GetName()
-        {
-            return txtName.Text;
-        }
-
-        List<int> ICeritarClient.GetLstCerApplication()
-        {
-            List<int> lstApplication = new List<int>();
-            
-            for (int intRowIdx = 1; intRowIdx <= grdCerApp.Rows.Count - 1; intRowIdx++)
-            {
-                lstApplication.Add((int)grdCerApp[intRowIdx,mintGrdApp_CeA_Name_col]);
-            }
-
-            return lstApplication;
-        }
-
-        sclsConstants.DML_Mode ICeritarClient.GetDML_Mode()
-        {
-            return formController.FormMode;
-        }
-
-        ctlFormController IFormController.GetFormController()
-        {
-            return this.formController;
-        }
-        #endregion
+        }        
 
         private void chkActive_CheckedChanged(object sender, EventArgs e)
         {

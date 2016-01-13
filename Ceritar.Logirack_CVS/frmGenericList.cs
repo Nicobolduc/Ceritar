@@ -41,27 +41,6 @@ namespace Ceritar.Logirack_CVS
             btnRefresh.Click += btnRefresh_Click;
         }
 
-        void mcGrdList_SetGridDisplay()
-        {
-            foreach (C1.Win.C1FlexGrid.Column cCol in grdList.Cols)
-            {
-                if (cCol.IsVisible && cCol.Index > 1) cCol.Width = grdList.Width / mcGrdList.GetNbVisibleColumns - 10;
-            }
-
-            switch (mListToOpen)
-            {
-                case sclsGenList.GeneralLists_ID.VERSION_REVISION_LIST_NRI:
-
-                    grdList.AllowMerging = C1.Win.C1FlexGrid.AllowMergingEnum.RestrictAll;
-                    C1.Win.C1FlexGrid.CellRange crMerged = grdList.GetCellRange(1, 1, grdList.Rows.Count - 1, 1);
-                    //grdList.Cols[0].AllowMerging = true;
-                    grdList.Cols[1].AllowMerging = true;
-                    grdList.Cols[2].AllowMerging = true;
-                    
-                    break;
-            }
-        }
-
         //void btnRefresh_Click()
         //{
         //    throw new NotImplementedException();
@@ -295,6 +274,33 @@ namespace Ceritar.Logirack_CVS
         private void btnRefresh_Click()
         {
             pfblnGrdList_Load();
+        }
+
+        void mcGrdList_SetGridDisplay()
+        {
+            foreach (C1.Win.C1FlexGrid.Column cCol in grdList.Cols)
+            {
+                if (cCol.IsVisible && cCol.Index > 1) cCol.Width = grdList.Width / mcGrdList.GetNbVisibleColumns - 10;
+            }
+
+            switch (mListToOpen)
+            {
+                case sclsGenList.GeneralLists_ID.VERSION_REVISION_LIST_NRI:
+
+                    grdList.AllowMerging = C1.Win.C1FlexGrid.AllowMergingEnum.Free;
+                    C1.Win.C1FlexGrid.CellRange crMerged = grdList.GetCellRange(1, 2, grdList.Rows.Count - 1, 2);
+                    //grdList.Cols[0].AllowMerging = true;
+                    //grdList.Cols[1].AllowMerging = true;
+                    grdList.Cols[2].AllowMerging = true;
+
+                    break;
+
+                case sclsGenList.GeneralLists_ID.CERITAR_CLIENT_LIST_NRI:
+
+                    grdList.Cols[3].DataType = typeof(Boolean); //TODO gestion colonnes
+
+                    break;
+            }
         }
 
         ctlFormController IFormController.GetFormController()

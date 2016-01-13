@@ -16,7 +16,7 @@ namespace Ceritar.TT3LightDLL.Classes
     {
 
         //Private class members
-        private SqlConnection mcMySQLConnection;
+        private SqlConnection mcSQLConnection;
         private clsUser mctrlUser;
         private System.Text.RegularExpressions.Regex mcStringCleaner = new System.Text.RegularExpressions.Regex("'", System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant | System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
@@ -41,7 +41,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
         public SqlConnection SQLConnection
         {
-            get { return mcMySQLConnection; }
+            get { return mcSQLConnection; }
         }
 
         public clsUser cUser
@@ -130,9 +130,11 @@ namespace Ceritar.TT3LightDLL.Classes
 
             try
             {
-                mcMySQLConnection = new SqlConnection(@"Persist Security Info=False;
+                //OSQL -S <insert_servername_here> -E 
+                //sp_password NULL, ‘<insert_new_password_here>’, ’sa’
+                mcSQLConnection = new SqlConnection(@"Persist Security Info=False;
                                                         User ID=sa;
-                                                        Password=sa;
+                                                        Password=1234;
                                                         Initial Catalog=Logirack_CVS_Dev;
                                                         Data Source=localhost\SVR_SQL;
                                                         MultipleActiveResultSets=True");
@@ -143,8 +145,8 @@ namespace Ceritar.TT3LightDLL.Classes
 //                                                        Initial Catalog=Logirack_CVS_Dev;
 //                                                        Data Source=24.200.162.199\SVR_SQL;
 //                                                        MultipleActiveResultSets=True");
-                
-                mcMySQLConnection.Open();
+       
+                mcSQLConnection.Open();
 
                 //MultipleActiveResultSets=true        
 
@@ -157,7 +159,7 @@ namespace Ceritar.TT3LightDLL.Classes
                 MessageBox.Show("La connexion au serveur a échouée.");
 
                 sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
-                mcMySQLConnection.Dispose();
+                mcSQLConnection.Dispose();
                 
 #if Debug
 			    Application.Exit();

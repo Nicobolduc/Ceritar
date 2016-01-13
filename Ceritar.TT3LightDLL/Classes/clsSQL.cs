@@ -14,11 +14,11 @@ namespace Ceritar.TT3LightDLL.Classes
     {
 
         //Private members
-        private bool mblnTransactionStarted;
+        private SqlConnection mcSQLConnection;
         private SqlCommand mcSQLCmd;
         private SqlTransaction mcSQLTransaction;
         private sclsConstants.DML_Mode _intDMLCommand;
-
+        private bool mblnTransactionStarted;
         private System.Collections.Specialized.StringDictionary mColFields;
 
 
@@ -35,7 +35,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
 #region "Properties"
 
-        public bool blnTransactionStarted
+        public bool TransactionStarted
         {
             get { return mblnTransactionStarted; }
         }
@@ -54,9 +54,11 @@ namespace Ceritar.TT3LightDLL.Classes
         public clsSQL()
         {
 
-            mcSQLCmd = new SqlCommand();
+            //mcSQLCmd = new SqlCommand();
 
             mColFields = new System.Collections.Specialized.StringDictionary();
+
+            blnOpenSQLServerConnection();
         }
 
 #endregion
@@ -79,41 +81,8 @@ namespace Ceritar.TT3LightDLL.Classes
             {
                 sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
-            finally
-            {
-                //if ((cSQLReader != null)) cSQLReader.Dispose();
-            }
 
             return cSQLReader;
-        }
-
-        public bool bln_ADOExecute(string vstrSQL)
-        {
-            bool blnValidReturn = false;
-            //SqlCommand cSQLCmd = null;
-            //SqlDataReader cSQLReader = null;
-
-            try
-            {
-                mcSQLCmd.CommandText = vstrSQL; //= new SqlCommand(vstrSQL, clsApp.GetAppController.SQLConnection);
-
-                //cSQLReader = mcSQLCmd.ExecuteReader();
-                mcSQLCmd.ExecuteNonQuery();
-
-                blnValidReturn = true;
-
-            }
-            catch (Exception ex)
-            {
-                blnValidReturn = false;
-                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
-            }
-            finally
-            {
-                //if ((cSQLReader != null)) cSQLReader.Dispose();
-            }
-
-            return blnValidReturn;
         }
 
         public static string str_ADOSingleLookUp(string vstrField, string vstrTable, string vstrWhere)
@@ -194,11 +163,11 @@ namespace Ceritar.TT3LightDLL.Classes
 
             try
             {
-                mcSQLTransaction = clsApp.GetAppController.SQLConnection.BeginTransaction(System.Data.IsolationLevel.Serializable);
+                mcSQLTransaction = mcSQLConnection.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
                 mblnTransactionStarted = true;
                 mcSQLCmd.Transaction = mcSQLTransaction;
-                mcSQLCmd.Connection = clsApp.GetAppController.SQLConnection;
-                mcSQLCmd.CommandType = System.Data.CommandType.Text;
+                //mcSQLCmd.Connection = mcSQLConnection;// clsApp.GetAppController.SQLConnection;
+                //mcSQLCmd.CommandType = System.Data.CommandType.Text;
 
                 blnValidReturn = true;
             }
@@ -272,16 +241,19 @@ namespace Ceritar.TT3LightDLL.Classes
                             vstrValue = clsApp.GetAppController.str_FixStringForSQL(vstrValue);
 
                             break;
+
                         case clsSQL.MySQL_FieldTypes.DATETIME_TYPE:
                             vstrValue = String.Format(clsApp.GetAppController.str_GetServerDateTimeFormat, Convert.ToDateTime(vstrValue));
                             vstrValue = clsApp.GetAppController.str_FixStringForSQL(vstrValue);
 
                             break;
+
                         case clsSQL.MySQL_FieldTypes.DECIMAL_TYPE:
                         case clsSQL.MySQL_FieldTypes.INT_TYPE:
                             vstrValue = vstrValue.ToString();
 
                             break;
+
                         case clsSQL.MySQL_FieldTypes.NRI_TYPE:
                             if (vstrValue == "0")
                             {
@@ -293,6 +265,7 @@ namespace Ceritar.TT3LightDLL.Classes
                             }
 
                             break;
+
                         case clsSQL.MySQL_FieldTypes.BIT_TYPE:
                             if (vstrValue == true.ToString() || vstrValue == "1")
                             {
@@ -436,6 +409,77 @@ namespace Ceritar.TT3LightDLL.Classes
             return blnValidReturn;
         }
 
+        public SqlDataReader ADOSelect_Trans(string vstrSQL)
+        {
+            SqlDataReader cSQLReader = null;
+
+            try
+            {
+                mcSQLCmd.CommandText = vstrSQL;
+
+                cSQLReader = mcSQLCmd.ExecuteReader();
+            }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return cSQLReader;
+        }
+
+        public bool bln_ADOExecute(string vstrSQL)
+        {
+            bool blnValidReturn = false;
+
+            try
+            {
+                mcSQLCmd.CommandText = vstrSQL;
+
+                mcSQLCmd.ExecuteNonQuery();
+
+                blnValidReturn = true;
+
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnValidReturn;
+        }
+
+        public string str_ADOSingleLookUp_Trans(string vstrField, string vstrTable, string vstrWhere)
+        {
+            SqlDataReader cSQLReader = null;
+            string strReturnValue = string.Empty;
+            string strSQL = string.Empty;
+
+            try
+            {
+                strSQL = "SELECT " + vstrField + " AS " + clsApp.GetAppController.str_FixStringForSQL(vstrField) + " FROM " + vstrTable + " WHERE " + vstrWhere;
+
+                mcSQLCmd.CommandText = strSQL;
+
+                cSQLReader = mcSQLCmd.ExecuteReader();
+
+                if (cSQLReader.Read())
+                {
+                    strReturnValue = cSQLReader[vstrField].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                if ((cSQLReader != null)) cSQLReader.Dispose();
+            }
+
+            return strReturnValue;
+        }
+
         public static bool bln_CheckReferenceIntegrity(string vstrForeignTableName, string vstrForeignKeyName, int vintForeignKeyValue)
         {
             bool blnValidReturn = false;
@@ -470,6 +514,50 @@ namespace Ceritar.TT3LightDLL.Classes
 
             return blnValidReturn;
 
+        }
+
+        private bool blnOpenSQLServerConnection()
+        {
+            bool blnValidReturn = false;
+
+            try
+            {
+                //OSQL -S <insert_servername_here> -E 
+                //sp_password NULL, ‘<insert_new_password_here>’, ’sa’
+                mcSQLConnection = new SqlConnection(@"Persist Security Info=False;
+                                                        User ID=sa;
+                                                        Password=1234;
+                                                        Initial Catalog=Logirack_CVS_Dev;
+                                                        Data Source=localhost\SVR_SQL;
+                                                        MultipleActiveResultSets=True");
+
+                //                mcMySQLConnection = new SqlConnection(@"Persist Security Info=False;
+                //                                                        User ID=sa;
+                //                                                        Password=sa;
+                //                                                        Initial Catalog=Logirack_CVS_Dev;
+                //                                                        Data Source=24.200.162.199\SVR_SQL;
+                //                                                        MultipleActiveResultSets=True");
+
+                mcSQLConnection.Open();
+
+                mcSQLCmd = new SqlCommand();
+                mcSQLCmd.Connection = mcSQLConnection;// clsApp.GetAppController.SQLConnection;
+                mcSQLCmd.CommandType = System.Data.CommandType.Text;
+
+                //MultipleActiveResultSets=true        
+
+                blnValidReturn = true;
+            }
+            catch (SqlException ex)
+            {
+                blnValidReturn = false;
+
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+                mcSQLConnection.Dispose();
+
+            }
+
+            return blnValidReturn;
         }
 
 #endregion

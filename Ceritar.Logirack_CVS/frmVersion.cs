@@ -367,7 +367,7 @@ namespace Ceritar.Logirack_CVS
                     {
                         case ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY:
 
-                            txtExcelAppChangePath.Focus();
+                            btnReplaceAppChangeXLS.Focus();
                             break;
 
                         case ctr_Version.ErrorCode_Ver.CERITAR_APP_MANDATORY:
@@ -388,7 +388,7 @@ namespace Ceritar.Logirack_CVS
 
                         case ctr_Version.ErrorCode_Ver.RELEASE_MANDATORY:
 
-                            txtReleasePath.Focus();
+                            btnReplaceExecutable.Focus();
                             break;
 
                         case ctr_Version.ErrorCode_Ver.TEMPLATE_MANDATORY:
@@ -399,7 +399,7 @@ namespace Ceritar.Logirack_CVS
 
                         case ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY:
 
-                            txtTTAppPath.Focus();
+                            btnReplaceTTApp.Focus();
                             break;
 
                         case ctr_Version.ErrorCode_Ver.VERSION_NO_MANDATORY:
@@ -614,6 +614,27 @@ namespace Ceritar.Logirack_CVS
             if (!mcActionResults.IsValid)
             {
                 clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI, MessageBoxButtons.OK, mcActionResults.GetLstParams);
+
+                switch ((ctr_Version.ErrorCode_Ver)mcActionResults.GetErrorCode)
+                {
+                    case ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY:
+
+                        btnReplaceAppChangeXLS.Focus();
+
+                        break;
+
+                    case ctr_Version.ErrorCode_Ver.RELEASE_MANDATORY:
+
+                        btnReplaceExecutable.Focus();
+
+                        break;
+
+                    case ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY:
+
+                        btnReplaceTTApp.Focus();
+
+                        break;
+                }
             }
 
             this.Cursor = Cursors.Default;
@@ -648,7 +669,7 @@ namespace Ceritar.Logirack_CVS
 
         private void txtVersionNo_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (!Microsoft.VisualBasic.Information.IsNumeric(txtVersionNo.Text))
+            if (txtVersionNo.Text != string.Empty && !Microsoft.VisualBasic.Information.IsNumeric(txtVersionNo.Text))
             {
                 clsApp.GetAppController.ShowMessage((int)sclsConstants.Validation_Message.NUMERIC_VALUE);
                 e.Cancel = true;
