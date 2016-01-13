@@ -130,13 +130,19 @@ namespace Ceritar.TT3LightDLL.Classes
 
             try
             {
-                //mcMySQLConnection = new SqlConnection(@"Persist Security Info=False;User ID=sa;Password=sa;Initial Catalog=Logirack_CVS_Dev;Data Source=localhost\SVR_SQL");
                 mcMySQLConnection = new SqlConnection(@"Persist Security Info=False;
                                                         User ID=sa;
                                                         Password=sa;
                                                         Initial Catalog=Logirack_CVS_Dev;
-                                                        Data Source=24.200.162.199\SVR_SQL;
+                                                        Data Source=localhost\SVR_SQL;
                                                         MultipleActiveResultSets=True");
+                
+//                mcMySQLConnection = new SqlConnection(@"Persist Security Info=False;
+//                                                        User ID=sa;
+//                                                        Password=sa;
+//                                                        Initial Catalog=Logirack_CVS_Dev;
+//                                                        Data Source=24.200.162.199\SVR_SQL;
+//                                                        MultipleActiveResultSets=True");
                 
                 mcMySQLConnection.Open();
 
