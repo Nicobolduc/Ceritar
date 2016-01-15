@@ -27,6 +27,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private clsSQL mcSQL;
         
         //Working variables
+        private string _strLocationReportExe;
 
 
 #region "Properties"
@@ -95,6 +96,12 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { mcSQL = value; }
         }
 
+        internal string LocationReportExe
+        {
+            get { return _strLocationReportExe; }
+            set { _strLocationReportExe = value; }
+        }
+
 #endregion
 
 
@@ -121,6 +128,10 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         else if (_intCeritarApplication_NRI <= 0)
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION);
+                        }
+                        else if (string.IsNullOrEmpty(_strLocationReportExe))
+                        {
+                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, Ceritar.CVS.Controllers.ctr_Version.ErrorCode_Ver.REPORT_MANDATORY);
                         }
                         else
                         {

@@ -116,62 +116,13 @@ namespace Ceritar.TT3LightDLL.Classes
         {
             mctrlUser = new clsUser();
 
-            blnOpenSQLServerConnection();
+            clsSQL.OpenSQLServerConnection(ref mcSQLConnection);
         }
 
 #endregion
 
 
 #region "Functions / Subs"
-
-        private bool blnOpenSQLServerConnection()
-        {
-            bool blnValidReturn = false;
-
-            try
-            {
-                //OSQL -S <insert_servername_here> -E 
-                //sp_password NULL, ‘<insert_new_password_here>’, ’sa’
-                mcSQLConnection = new SqlConnection(@"Persist Security Info=False;
-                                                        User ID=sa;
-                                                        Password=1234;
-                                                        Initial Catalog=Logirack_CVS_Dev;
-                                                        Data Source=localhost\SVR_SQL;
-                                                        MultipleActiveResultSets=True");
-                
-//                mcMySQLConnection = new SqlConnection(@"Persist Security Info=False;
-//                                                        User ID=sa;
-//                                                        Password=sa;
-//                                                        Initial Catalog=Logirack_CVS_Dev;
-//                                                        Data Source=24.200.162.199\SVR_SQL;
-//                                                        MultipleActiveResultSets=True");
-       
-                mcSQLConnection.Open();
-
-                //MultipleActiveResultSets=true        
-
-                blnValidReturn = true;
-            }
-            catch (SqlException ex)
-            {
-                blnValidReturn = false;
-
-                MessageBox.Show("La connexion au serveur a échouée.");
-
-                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
-                mcSQLConnection.Dispose();
-                
-#if Debug
-			    Application.Exit();
-#endif
-            }
-            finally
-            {
-                //if (mcMySQLConnection != null) mcMySQLConnection.Dispose();
-            }
-
-            return blnValidReturn;
-        }
 
         public bool bln_CTLBindCaption(ref Control rControl)
         {

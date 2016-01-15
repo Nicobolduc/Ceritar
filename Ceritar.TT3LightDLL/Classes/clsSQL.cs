@@ -53,12 +53,13 @@ namespace Ceritar.TT3LightDLL.Classes
 
         public clsSQL()
         {
-
-            //mcSQLCmd = new SqlCommand();
-
             mColFields = new System.Collections.Specialized.StringDictionary();
 
-            blnOpenSQLServerConnection();
+            OpenSQLServerConnection(ref mcSQLConnection);
+
+            mcSQLCmd = new SqlCommand();
+            mcSQLCmd.Connection = mcSQLConnection;
+            mcSQLCmd.CommandType = System.Data.CommandType.Text;
         }
 
 #endregion
@@ -166,8 +167,6 @@ namespace Ceritar.TT3LightDLL.Classes
                 mcSQLTransaction = mcSQLConnection.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
                 mblnTransactionStarted = true;
                 mcSQLCmd.Transaction = mcSQLTransaction;
-                //mcSQLCmd.Connection = mcSQLConnection;// clsApp.GetAppController.SQLConnection;
-                //mcSQLCmd.CommandType = System.Data.CommandType.Text;
 
                 blnValidReturn = true;
             }
@@ -516,15 +515,13 @@ namespace Ceritar.TT3LightDLL.Classes
 
         }
 
-        private bool blnOpenSQLServerConnection()
+        internal static void OpenSQLServerConnection(ref SqlConnection rcSQLConnection)
         {
-            bool blnValidReturn = false;
-
             try
             {
                 //OSQL -S <insert_servername_here> -E 
                 //sp_password NULL, ‘<insert_new_password_here>’, ’sa’
-                mcSQLConnection = new SqlConnection(@"Persist Security Info=False;
+                rcSQLConnection = new SqlConnection(@"Persist Security Info=False;
                                                         User ID=sa;
                                                         Password=1234;
                                                         Initial Catalog=Logirack_CVS_Dev;
@@ -538,30 +535,24 @@ namespace Ceritar.TT3LightDLL.Classes
                 //                                                        Data Source=24.200.162.199\SVR_SQL;
                 //                                                        MultipleActiveResultSets=True");
 
-                mcSQLConnection.Open();
-
-                mcSQLCmd = new SqlCommand();
-                mcSQLCmd.Connection = mcSQLConnection;// clsApp.GetAppController.SQLConnection;
-                mcSQLCmd.CommandType = System.Data.CommandType.Text;
-
-                //MultipleActiveResultSets=true        
-
-                blnValidReturn = true;
+                rcSQLConnection.Open();
             }
             catch (SqlException ex)
             {
-                blnValidReturn = false;
+                System.Windows.Forms.MessageBox.Show("La connexion au serveur a échouée.");
 
                 sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
-                mcSQLConnection.Dispose();
+                rcSQLConnection.Dispose();
 
+#if ! Debug
+                System.Windows.Forms.Application.Exit();
+#endif
             }
 
-            return blnValidReturn;
-        }
 
 #endregion
 
-    }
 
+        }
+    }
 }

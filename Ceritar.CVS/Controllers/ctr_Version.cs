@@ -32,7 +32,8 @@ namespace Ceritar.CVS.Controllers
             CERITAR_APP_MANDATORY = 7,
             TEMPLATE_MANDATORY = 8,
             CLIENT_NAME_MANDATORY = 9,
-            VERSION_NO_UNIQUE_AND_BIGGER_PREVIOUS = 10
+            VERSION_NO_UNIQUE_AND_BIGGER_PREVIOUS = 10,
+            REPORT_MANDATORY = 11
         }
 
         public clsActionResults GetActionResult
@@ -98,6 +99,7 @@ namespace Ceritar.CVS.Controllers
                 cCAV.IsCurrentVersion = vstructCAV.blnIsCurrentVersion;
                 cCAV.License = vstructCAV.strLicense;
                 cCAV.Version_NRI = mcView.GetVersion_NRI();
+                cCAV.LocationReportExe = vstructCAV.strLocationReportExe;
 
                 mcModVersion.LstClientsUsing.Add(cCAV);
 
@@ -178,138 +180,170 @@ namespace Ceritar.CVS.Controllers
             SqlDataReader cSQLReader = null;
             DirectoryInfo currentFolderInfos = null;
 
+            mcModVersion.DML_Action = mcView.GetDML_Action();
+            mcModVersion.Location_APP_CHANGEMENT = mcView.GetLocation_APP_CHANGEMENT();
+            mcModVersion.Location_Release = mcView.GetLocation_Release();
+            mcModVersion.Location_TTApp = mcView.GetLocation_TTApp();
 
-            strSQL = strSQL + " WITH LstHierarchyComp " + Environment.NewLine;
-            strSQL = strSQL + " AS " + Environment.NewLine;
-            strSQL = strSQL + " ( " + Environment.NewLine;
-            strSQL = strSQL + "     SELECT *, " + Environment.NewLine;
-            strSQL = strSQL + " 		   CAST(0 AS varbinary(max)) AS Level " + Environment.NewLine;
-            strSQL = strSQL + " 	FROM HierarchyComp  " + Environment.NewLine;
-            strSQL = strSQL + " 	WHERE HiCo_Parent_NRI IS NULL " + Environment.NewLine;
+            mod_CAV_ClientAppVersion cCAV;
+            List<structClientAppVersion> lstStructCAV = mcView.GetClientsList();
 
-            strSQL = strSQL + "     UNION ALL " + Environment.NewLine;
-
-            strSQL = strSQL + "     SELECT HiCo_Childrens.*, " + Environment.NewLine;
-            strSQL = strSQL + " 		   Level + CAST(HiCo_Childrens.HiCo_NRI AS varbinary(max)) AS Level " + Environment.NewLine;
-            strSQL = strSQL + " 	FROM HierarchyComp HiCo_Childrens  " + Environment.NewLine;
-            strSQL = strSQL + " 		INNER JOIN LstHierarchyComp on HiCo_Childrens.HiCo_Parent_NRI = LstHierarchyComp.HiCo_NRI " + Environment.NewLine;
-            strSQL = strSQL + " 	WHERE HiCo_Childrens.HiCo_Parent_NRI IS NOT NULL " + Environment.NewLine;
-            strSQL = strSQL + " ) " + Environment.NewLine;
-
-            strSQL = strSQL + " SELECT  LstHierarchyComp.HiCo_Name, " + Environment.NewLine;
-            strSQL = strSQL + "    		LstHierarchyComp.HiCo_NodeLevel, " + Environment.NewLine;
-            strSQL = strSQL + "    		LstHierarchyComp.FoT_NRI " + Environment.NewLine;
-
-            strSQL = strSQL + " FROM LstHierarchyComp " + Environment.NewLine;
-
-            strSQL = strSQL + " WHERE LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
-
-            strSQL = strSQL + " ORDER BY Level " + Environment.NewLine;
-
-            try
+            foreach (structClientAppVersion structCAV in lstStructCAV)
             {
-                currentFolderInfos = new DirectoryInfo(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES +
-                                                        (sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Substring(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Length - 1, 1) == "\\" ? "" : "\\")
-                                                      );
+                cCAV = new mod_CAV_ClientAppVersion();
+                cCAV.DML_Action = structCAV.Action;
+                cCAV.LocationReportExe = structCAV.strLocationReportExe;
 
-                cSQLReader = clsSQL.ADOSelect(strSQL);
-                
-                while (cSQLReader.Read())
+                mcModVersion.LstClientsUsing.Add(cCAV);
+            }
+          
+            blnValidReturn = mcModVersion.blnValidateHierarchyBuildFiles();
+
+            if (blnValidReturn)
+            {
+
+                strSQL = strSQL + " WITH LstHierarchyComp " + Environment.NewLine;
+                strSQL = strSQL + " AS " + Environment.NewLine;
+                strSQL = strSQL + " ( " + Environment.NewLine;
+                strSQL = strSQL + "     SELECT *, " + Environment.NewLine;
+                strSQL = strSQL + " 		   CAST(0 AS varbinary(max)) AS Level " + Environment.NewLine;
+                strSQL = strSQL + " 	FROM HierarchyComp  " + Environment.NewLine;
+                strSQL = strSQL + " 	WHERE HiCo_Parent_NRI IS NULL " + Environment.NewLine;
+
+                strSQL = strSQL + "     UNION ALL " + Environment.NewLine;
+
+                strSQL = strSQL + "     SELECT HiCo_Childrens.*, " + Environment.NewLine;
+                strSQL = strSQL + " 		   Level + CAST(HiCo_Childrens.HiCo_NRI AS varbinary(max)) AS Level " + Environment.NewLine;
+                strSQL = strSQL + " 	FROM HierarchyComp HiCo_Childrens  " + Environment.NewLine;
+                strSQL = strSQL + " 		INNER JOIN LstHierarchyComp on HiCo_Childrens.HiCo_Parent_NRI = LstHierarchyComp.HiCo_NRI " + Environment.NewLine;
+                strSQL = strSQL + " 	WHERE HiCo_Childrens.HiCo_Parent_NRI IS NOT NULL " + Environment.NewLine;
+                strSQL = strSQL + " ) " + Environment.NewLine;
+
+                strSQL = strSQL + " SELECT  LstHierarchyComp.HiCo_Name, " + Environment.NewLine;
+                strSQL = strSQL + "    		LstHierarchyComp.HiCo_NodeLevel, " + Environment.NewLine;
+                strSQL = strSQL + "    		LstHierarchyComp.FoT_NRI " + Environment.NewLine;
+
+                strSQL = strSQL + " FROM LstHierarchyComp " + Environment.NewLine;
+
+                strSQL = strSQL + " WHERE LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
+
+                strSQL = strSQL + " ORDER BY Level " + Environment.NewLine;
+
+                try
                 {
-                    switch (Int32.Parse(cSQLReader["FoT_NRI"].ToString()))
+                    currentFolderInfos = new DirectoryInfo(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES +
+                                                            (sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Substring(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Length - 1, 1) == "\\" ? "" : "\\")
+                                                          );
+
+                    cSQLReader = clsSQL.ADOSelect(strSQL);
+
+                    while (cSQLReader.Read())
                     {
-                        case (int)ctr_Template.FolderType.Version_Number:
-
-                            strFolderName = sclsAppConfigs.GetVersionNumberPrefix + mcView.GetVersionNo().ToString();
-                            break;
-
-                        default:
-
-                            strFolderName = cSQLReader["HiCo_Name"].ToString();
-                            break;
-                    }
-
-                    if (Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString()) > intPreviousFolderLevel) //On entre dans un sous-dossier
-                    {
-                        currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.FullName, strFolderName));
-                    }
-                    else if (Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString()) < intPreviousFolderLevel) //On recule pour revenir au dossier du niveau courant
-                    {
-                        int intNbLevelBack = intPreviousFolderLevel - Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString());
-
-                        while (intNbLevelBack > 0)
+                        switch (Int32.Parse(cSQLReader["FoT_NRI"].ToString()))
                         {
-                            currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.Parent.Parent.FullName, strFolderName));
+                            case (int)ctr_Template.FolderType.Version_Number:
 
-                            intNbLevelBack--;
+                                strFolderName = sclsAppConfigs.GetVersionNumberPrefix + mcView.GetVersionNo().ToString();
+                                break;
+
+                            default:
+
+                                strFolderName = cSQLReader["HiCo_Name"].ToString();
+                                break;
                         }
-                    }
-                    else //On recule d'un niveau pour revenir au dossier d'avant
-                    {
-                        currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.Parent.FullName, strFolderName));
-                    }
 
-                    if (!Directory.Exists(currentFolderInfos.FullName))
-                    {
-                        currentFolderInfos.Create();
-                    }
+                        if (Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString()) > intPreviousFolderLevel) //On entre dans un sous-dossier
+                        {
+                            currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.FullName, strFolderName));
+                        }
+                        else if (Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString()) < intPreviousFolderLevel) //On recule pour revenir au dossier du niveau courant
+                        {
+                            int intNbLevelBack = intPreviousFolderLevel - Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString());
 
-                    switch (Int32.Parse(cSQLReader["FoT_NRI"].ToString()))
-                    {
-                        case (int)ctr_Template.FolderType.Release:
-
-                            if (!string.IsNullOrEmpty(mcView.GetLocation_Release()))
+                            while (intNbLevelBack > 0)
                             {
-                                //TODO clean release folder
+                                currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.Parent.Parent.FullName, strFolderName));
 
-                                clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName);
+                                intNbLevelBack--;
                             }
+                        }
+                        else //On recule d'un niveau pour revenir au dossier d'avant
+                        {
+                            currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.Parent.FullName, strFolderName));
+                        }
 
-                            break;
+                        if (!Directory.Exists(currentFolderInfos.FullName))
+                        {
+                            currentFolderInfos.Create();
+                        }
 
-                        case (int)ctr_Template.FolderType.CaptionsAndMenus:
+                        switch (Int32.Parse(cSQLReader["FoT_NRI"].ToString()))
+                        {
+                            case (int)ctr_Template.FolderType.Release:
 
-                            if (!string.IsNullOrEmpty(mcView.GetLocation_TTApp()))
-                            {
-                                File.Copy(mcView.GetLocation_TTApp(), Path.Combine(currentFolderInfos.FullName, sclsAppConfigs.GetCaptionsAndMenusFileName), true);
-                            }
+                                if (!string.IsNullOrEmpty(mcView.GetLocation_Release()))
+                                {
+                                    //TODO clean release folder
 
-                            break;
+                                    clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName);
+                                }
 
-                        case (int)ctr_Template.FolderType.Scripts:
+                                break;
 
-                            blnValidReturn = pfblnCopyAllScriptsForClients(currentFolderInfos.FullName);
+                            case (int)ctr_Template.FolderType.CaptionsAndMenus:
 
-                            break;
+                                if (!string.IsNullOrEmpty(mcView.GetLocation_TTApp()))
+                                {
+                                    File.Copy(mcView.GetLocation_TTApp(), Path.Combine(currentFolderInfos.FullName, sclsAppConfigs.GetCaptionsAndMenusFileName), true);
+                                }
 
-                        case (int)ctr_Template.FolderType.Version_Number:
+                                break;
 
-                            if (!string.IsNullOrEmpty(mcView.GetLocation_APP_CHANGEMENT()))
-                            {
-                                File.Copy(mcView.GetLocation_APP_CHANGEMENT(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_APP_CHANGEMENT())), true);
-                            }
+                            case (int)ctr_Template.FolderType.Scripts:
 
-                            break;
+                                blnValidReturn = pfblnCopyAllScriptsForClients(currentFolderInfos.FullName);
+
+                                break;
+
+                            case (int)ctr_Template.FolderType.Version_Number:
+
+                                if (!string.IsNullOrEmpty(mcView.GetLocation_APP_CHANGEMENT()))
+                                {
+                                    File.Copy(mcView.GetLocation_APP_CHANGEMENT(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_APP_CHANGEMENT())), true);
+                                }
+
+                                break;
+
+                            case (int)ctr_Template.FolderType.Report:
+
+                                pfblnCopyAllReportsForClients(currentFolderInfos.FullName);
+
+                                break;
+                        }
+
+                        intPreviousFolderLevel = Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString());
                     }
+                }
+                catch (FileNotFoundException exPath)
+                {
+                    blnValidReturn = false;
+                    mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exPath.FileName);
+                }
+                catch (Exception ex)
+                {
+                    blnValidReturn = false;
+                    sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+                }
+                finally
+                {
+                    if (cSQLReader != null) cSQLReader.Dispose();
 
-                    intPreviousFolderLevel = Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString());
+                    if (blnValidReturn) mcActionResult.SetValid();
                 }
             }
-            catch (FileNotFoundException exPath)
+            else
             {
-                blnValidReturn = false;
-                mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exPath.FileName);
-            }
-            catch (Exception ex)
-            {
-                blnValidReturn = false;
-                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
-            }
-            finally
-            {
-                if (cSQLReader != null) cSQLReader.Dispose();
-
-                if (blnValidReturn) mcActionResult.SetValid();
+                mcActionResult = mcModVersion.ActionResults;
             }
 
             return blnValidReturn;
@@ -382,6 +416,46 @@ namespace Ceritar.CVS.Controllers
             return blnValidReturn;
         }
 
+        /// <summary>
+        /// Copie chacun des executables de rapport dans le répertoire des installations actives pour chacun des clients concernés.
+        /// </summary>
+        /// <param name="vstrDestinationFolderPath">Le chemin du répertoire où les rapports doivent être copiés.</param>
+        /// <returns></returns>
+        private bool pfblnCopyAllReportsForClients(string vstrDestinationFolderPath)
+        {
+            bool blnValidReturn = false;
+            List<structClientAppVersion> lstClients;
+
+            try
+            {
+                lstClients = mcView.GetClientsList();
+
+                foreach (structClientAppVersion structClient in lstClients)
+                {
+                    if (!string.IsNullOrEmpty(structClient.strLocationReportExe))
+                    {
+                        Directory.CreateDirectory(Path.Combine(vstrDestinationFolderPath, structClient.strCeritarClient_Name));
+
+                        File.Copy(structClient.strLocationReportExe, Path.Combine(vstrDestinationFolderPath, structClient.strCeritarClient_Name, Path.GetFileName(structClient.strLocationReportExe)), true);
+                    }
+                }
+
+                blnValidReturn = true;
+            }
+            catch (FileNotFoundException exPath)
+            {
+                blnValidReturn = false;
+                mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exPath.FileName);
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnValidReturn;
+        }
+
 
 #region "SQL Queries"
 
@@ -413,7 +487,8 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        CerClient.CeC_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        CerClient.CeC_Name, " + Environment.NewLine;
             strSQL = strSQL + "        ClientAppVersion.CAV_Installed, " + Environment.NewLine;
-            strSQL = strSQL + "        ClientAppVersion.CAV_IsCurrentVersion, " + Environment.NewLine;       
+            strSQL = strSQL + "        ClientAppVersion.CAV_IsCurrentVersion, " + Environment.NewLine;
+            strSQL = strSQL + "        ReportExeLocation = NULL, " + Environment.NewLine;
             strSQL = strSQL + "        ClientAppVersion.CAV_License " + Environment.NewLine;
 
             strSQL = strSQL + " FROM ClientAppVersion " + Environment.NewLine;

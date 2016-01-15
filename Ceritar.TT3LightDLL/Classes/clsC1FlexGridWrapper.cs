@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Collections;
 using System.Collections.Generic;
 using Ceritar.TT3LightDLL;
 using Ceritar.TT3LightDLL.Static_Classes;
@@ -24,6 +25,7 @@ namespace Ceritar.TT3LightDLL.Classes
 	    //private members
 	    private const short mintDefaultActionCol = 1;
 	    private bool mblnHasNoActionColumn;
+        private ArrayList mlstHostedCellControls;
 
 	    //Private class members
         private C1FlexGrid mGrdFlex;
@@ -54,6 +56,8 @@ namespace Ceritar.TT3LightDLL.Classes
 
         public clsC1FlexGridWrapper()
         {
+            mlstHostedCellControls = new ArrayList();
+
             SetGridDisplay += clsFlexGridWrapper_SetDisplay;
         }
 
@@ -151,6 +155,21 @@ namespace Ceritar.TT3LightDLL.Classes
         public int GetNbVisibleColumns
         {
             get { return mintNbVisibleColumns; }
+        }
+
+        public ArrayList LstHostedCellControls
+        {
+            get { return mlstHostedCellControls; }
+            set 
+            {
+                if (mlstHostedCellControls != null)
+                {
+                    foreach (HostedCellControl control in mlstHostedCellControls)
+                        control.GetCellControl.Dispose();
+                }
+
+                mlstHostedCellControls = value; 
+            }
         }
 
 #endregion
@@ -480,9 +499,8 @@ namespace Ceritar.TT3LightDLL.Classes
 		    ListDictionary  myBindingList = new ListDictionary();
             CellStyle individualColStyle = mGrdFlex.Styles.Add("ComboBox" + vintColumnIndex);
 
-		    try {
-                //mGrdFlex.Cols[vintColumnIndex].Style.DataType = "ComboBox";
-
+		    try 
+            {
 			    mySQLCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.SQLConnection);
 
 			    mySQLReader = mySQLCmd.ExecuteReader();
@@ -543,8 +561,6 @@ namespace Ceritar.TT3LightDLL.Classes
 
             crRow = mGrdFlex.GetCellRange((vintPosition == -1 ? mGrdFlex.Rows.Count - 1 : vintPosition), 0, (vintPosition == -1 ? mGrdFlex.Rows.Count - 1 : vintPosition), mGrdFlex.Cols.Count - 1);
             crRow.Style = csNewRow;
-
-            
         }
 
         public void AddTreeItem(int vintColIndex, string vstrNodeName, int vintLevel, bool vblnIsNode,  int vintRowIndex = 0)
@@ -586,6 +602,7 @@ namespace Ceritar.TT3LightDLL.Classes
                     mGrdFlex.CellChanged -= mGrdFlex_CellsChanged;
                     mGrdFlex.CellChecked -= mGrdFlex_CheckBoxClick;
                     mGrdFlex.AfterRowColChange -= mGrdFlex_AfterRowColChange;
+                    mGrdFlex.Paint -= mGrdFlex_Paint;
                 }
 
                 if (mGrdFlex != null)
@@ -593,6 +610,7 @@ namespace Ceritar.TT3LightDLL.Classes
                     mGrdFlex.CellChanged += mGrdFlex_CellsChanged;
                     mGrdFlex.CellChecked += mGrdFlex_CheckBoxClick;
                     mGrdFlex.AfterRowColChange += mGrdFlex_AfterRowColChange;
+                    mGrdFlex.Paint += mGrdFlex_Paint;
                 }
             }
         }
@@ -736,7 +754,70 @@ namespace Ceritar.TT3LightDLL.Classes
                 }     
             }
         }
-}
+
+        void mGrdFlex_Paint(object sender, PaintEventArgs e)
+        {
+            if (mlstHostedCellControls != null)
+            {
+                foreach (HostedCellControl control in mlstHostedCellControls)
+                    control.UpdatePosition();
+            }   
+        }
+
+    }
+
+    /// <summary>
+    /// HostedControl
+    /// helper class that contains a control hosted within a C1FlexGrid
+    /// </summary>
+    public class HostedCellControl
+    {
+        private C1FlexGrid mFlexGrid;
+        private Control mCellControl;
+        private Row mRow;
+        private Column mCol;
+
+        public Control GetCellControl
+        {
+            get { return mCellControl; }
+        }
+
+        public HostedCellControl(C1FlexGrid flexGrid, Control hosted, int row, int col)
+        {
+            // save info
+            mFlexGrid = flexGrid;
+            mCellControl = hosted;
+            mRow = flexGrid.Rows[row];
+            mCol = flexGrid.Cols[col];
+            
+            // insert hosted control into grid
+            mFlexGrid.Controls.Add(mCellControl);
+        }
+
+        public bool UpdatePosition()
+        {
+            int intRowIndex = mRow.Index;
+            int intColIndex = mCol.Index;
+
+            if (intRowIndex < 0 || intColIndex < 0) return false;
+
+            // get cell rect
+            System.Drawing.Rectangle rect = mFlexGrid.GetCellRect(intRowIndex, intColIndex, false);
+
+            // hide control if out of range
+            if (rect.Width <= 0 || rect.Height <= 0 || !rect.IntersectsWith(mFlexGrid.ClientRectangle))
+            {
+                mCellControl.Visible = false;
+                return true;
+            }
+
+            // move the control and show it
+            mCellControl.Bounds = rect;
+            mCellControl.Visible = true;
+
+            return true;
+        }
+    }
 
 
 #region "Custom events"

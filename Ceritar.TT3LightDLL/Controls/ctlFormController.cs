@@ -372,7 +372,7 @@ namespace Ceritar.TT3LightDLL.Controls
                 else
                 {
                     //TODO Silent mode
-                   Classes.clsApp.GetAppController.ShowMessage((int) sclsConstants.Error_Message.ERROR_UNHANDLED);
+                  // Classes.clsApp.GetAppController.ShowMessage((int) sclsConstants.Error_Message.ERROR_UNHANDLED);
                 }
             }
 
