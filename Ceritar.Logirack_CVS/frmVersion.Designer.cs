@@ -538,7 +538,6 @@
             this.Name = "frmVersion";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Gestion de version";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmVersion_FormClosed);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabRevision.ResumeLayout(false);

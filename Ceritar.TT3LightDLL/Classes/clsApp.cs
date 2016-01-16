@@ -5,6 +5,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Ceritar.TT3LightDLL.Classes
 {
@@ -232,17 +233,34 @@ namespace Ceritar.TT3LightDLL.Classes
         /// <param name="vstrDestinationFolderPath">Le chemin sur le disque vers le dossier où les fichiers doivent être copiés.</param>
         /// <param name="vblnOverwrite">Si true, les fichiers existant déjà seront remplacés.</param>
         /// <param name="vblnCreateFolderIfNotExist">Si le dossier de destination spécifié n'existe pas, il sera créé.</param>
+        /// <param name="vlstExtensionsToCopy">La liste des extensions de fichier qui seront copiés. Si vide, tout est copié.</param>
         /// <returns></returns>
-        public bool blnCopyFolderContent(string vstrSourceFolderPath, string vstrDestinationFolderPath, bool vblnOverwrite = true, bool vblnCreateFolderIfNotExist = false)
+        public bool blnCopyFolderContent(string vstrSourceFolderPath, 
+                                         string vstrDestinationFolderPath, 
+                                         bool vblnOverwrite = true, 
+                                         bool vblnCreateFolderIfNotExist = false, 
+                                         params string[] vlstExtensionsToCopy)
         {
             bool blnValidReturn = true;
             string strFileDestinationPath = string.Empty;
+            string[] lstReleaseFilesToCopy;
 
             try
             {
-                string[] lstReleaseFiles = Directory.GetFiles(vstrSourceFolderPath);
+                if (vlstExtensionsToCopy != null && vlstExtensionsToCopy.Length > 0)
+                {
+                    var lstReleaseFilesWithFilters = Directory.GetFiles(vstrSourceFolderPath, "*.*", SearchOption.AllDirectories).Where(f => vlstExtensionsToCopy.Contains(System.IO.Path.GetExtension(f).ToLower())).ToArray();
 
-                foreach (string strCurrentFile in lstReleaseFiles)
+                    lstReleaseFilesToCopy = lstReleaseFilesWithFilters;
+                }
+                else
+                {
+                    string[] lstReleaseFilesNoFilter = Directory.GetFiles(vstrSourceFolderPath, "*.*", SearchOption.AllDirectories);
+
+                    lstReleaseFilesToCopy = lstReleaseFilesNoFilter;
+                }
+
+                foreach (string strCurrentFile in lstReleaseFilesToCopy)
                 {
                     if (vblnCreateFolderIfNotExist && !Directory.Exists(vstrDestinationFolderPath)) Directory.CreateDirectory(vstrDestinationFolderPath);
 

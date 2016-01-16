@@ -20,6 +20,7 @@ namespace Ceritar.CVS.Controllers
         private mod_Ver_Version mcModVersion;
         private clsActionResults mcActionResult;
         private clsSQL mcSQL;
+        private string[] mstrReleaseValidExtensions = { ".dll", ".config", ".exe" };
 
         public enum ErrorCode_Ver
         {
@@ -295,9 +296,12 @@ namespace Ceritar.CVS.Controllers
 
                                 if (!string.IsNullOrEmpty(mcView.GetLocation_Release()))
                                 {
-                                    //TODO clean release folder
+                                    blnValidReturn = clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, mstrReleaseValidExtensions);
 
-                                    blnValidReturn = clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName);
+                                    if (blnValidReturn)
+                                    {
+                                        pfblnCleanReleaseFolder(currentFolderInfos.FullName);
+                                    }
                                 }
 
                                 break;
@@ -494,6 +498,56 @@ namespace Ceritar.CVS.Controllers
                 process.StartInfo = startInfo;
                 process.Start();
                 process.WaitForExit();
+
+                blnValidReturn = true;
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnValidReturn;
+        }
+
+        /// <summary>
+        /// Efface tous les  fichiers inutiles générés lors de la compilation d'un exéctutable.
+        /// </summary>
+        /// <param name="vstrReleaseFolderLocation">Le chemin du répertoire à supprimer</param>
+        /// <returns></returns>
+        private bool pfblnCleanReleaseFolder(string vstrReleaseFolderLocation)
+        {
+            bool blnValidReturn = false;
+            string strCommands = string.Empty;
+
+            try
+            {
+                //strCommands = @"/C SET folder=""" + vstrReleaseFolderLocation + @"""";
+                //strCommands = strCommands + @" & del /s /f /q %folder%\*.xml";
+                //strCommands = strCommands + @" & del /s /f /q %folder%\*.pdb";
+                //strCommands = strCommands + @" & del /s /f /q %folder%\*.ini";
+                //strCommands = strCommands + @" & del /s /f /q %folder%\*.LOG";
+                //strCommands = strCommands + @" & rmdir /s /q %folder%\zh-CN";
+                //strCommands = strCommands + @" & rmdir /s /q %folder%\Class";
+
+                //System.Diagnostics.Process process = new System.Diagnostics.Process();
+                //System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+
+                //startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                //startInfo.FileName = "cmd.exe";
+                //startInfo.Arguments = strCommands;
+
+                //process.StartInfo = startInfo;
+                //process.Start();
+                //process.WaitForExit();
+
+                //string MyBatchFile = @"E:\Users\Bolduc\Desktop\CleanRelease.bat";
+
+
+                //strCommands = string.Format("\"{0}\"", vstrReleaseFolderLocation);
+
+                //process.StartInfo.FileName = MyBatchFile;
+                //bool b = process.Start();
 
                 blnValidReturn = true;
             }
