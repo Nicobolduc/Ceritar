@@ -235,7 +235,7 @@ namespace Ceritar.TT3LightDLL.Classes
         /// <returns></returns>
         public bool blnCopyFolderContent(string vstrSourceFolderPath, string vstrDestinationFolderPath, bool vblnOverwrite = true, bool vblnCreateFolderIfNotExist = false)
         {
-            bool blnValidReturn = false;
+            bool blnValidReturn = true;
             string strFileDestinationPath = string.Empty;
 
             try

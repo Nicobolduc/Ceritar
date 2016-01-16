@@ -37,6 +37,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
         //Messages
         private const int mintMSG_VersionNo_UniqueAndBiggerPrevious = 18;
+        private const int mintMSG_CantDeleteVersionIfUsed = 22;
 
         //Working variables
 
@@ -225,7 +226,11 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                     case sclsConstants.DML_Mode.DELETE_MODE:
 
-                        if (!clsSQL.bln_CheckReferenceIntegrity("Ver_NRI", "Ver_NRI", _intVersion_NRI))
+                        if (!string.IsNullOrEmpty(clsSQL.str_ADOSingleLookUp("CAV_NRI", "ClientAppVersion", "(CAV_Installed = 1 OR CAV_IsCurrentVersion = 1) AND CeA_NRI = " + _cCerApplication.CeritarApplication_NRI + " AND Ver_NRI = " + _intVersion_NRI)))
+                        {
+                            mcActionResults.SetInvalid(mintMSG_CantDeleteVersionIfUsed, ctr_Version.ErrorCode_Ver.CANT_DELETE_USED_VERSION);
+                        }
+                        else if (!clsSQL.bln_CheckReferenceIntegrity("Ver_NRI", "Ver_NRI", _intVersion_NRI))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_REFERENCE_INTEGRITY, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
                         }
@@ -329,6 +334,12 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                                 blnValidReturn = true;
                             }
                         }
+
+                        break;
+
+                    default:
+
+                        blnValidReturn = true;
 
                         break;
                 } 

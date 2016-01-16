@@ -27,6 +27,7 @@ namespace Ceritar.Logirack_CVS
         //Private class members
         private clsC1FlexGridWrapper mcGrdList;
 
+
 #region "Constructor"
 
         public frmGenericList(sclsGenList.GeneralLists_ID vstrGenList_ID)
@@ -40,11 +41,6 @@ namespace Ceritar.Logirack_CVS
 
             btnRefresh.Click += btnRefresh_Click;
         }
-
-        //void btnRefresh_Click()
-        //{
-        //    throw new NotImplementedException();
-        //}
 
 #endregion
 
@@ -109,7 +105,7 @@ namespace Ceritar.Logirack_CVS
                         break;
                 }
 
-                formController.LoadFormData();
+                formController.LoadLinkedFormData();
 
                 switch (vFormMode)
                 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using Microsoft.VisualBasic;
 using C1.Win.C1FlexGrid;
 using System.Data.SqlClient;
 using System.Windows.Forms;
@@ -147,19 +148,22 @@ namespace Ceritar.Logirack_CVS
 
             for (int intRowIndex = 1; intRowIndex < grdClients.Rows.Count; intRowIndex++)
             {
-                structCAV = new structClientAppVersion();
+                if (!mcGrdClients.CellIsEmpty(intRowIndex, mintGrdClients_CeC_NRI_col))
+                {
+                    structCAV = new structClientAppVersion();
 
-                structCAV.Action = clsApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdClients[intRowIndex, mintGrdClients_Action_col]);
-                structCAV.blnInstalled = Convert.ToBoolean(grdClients[intRowIndex, mintGrdClients_Installed_col]);
-                structCAV.blnIsCurrentVersion = Convert.ToBoolean(grdClients[intRowIndex, mintGrdClients_IsCurrentVersion_col]);
-                structCAV.strCeritarClient_Name = mcGrdClients[intRowIndex, mintGrdClients_CeC_Name_col];
-                structCAV.intCeritarClient_NRI = Int32.Parse(mcGrdClients[intRowIndex, mintGrdClients_CeC_NRI_col]);
-                structCAV.intClientAppVersion_NRI = Int32.Parse(mcGrdClients[intRowIndex, mintGrdClients_CAV_NRI_col]);
-                structCAV.intClientAppVersion_TS = Int32.Parse(mcGrdClients[intRowIndex, mintGrdClients_CAV_TS_col]);
-                structCAV.strLicense = grdClients[intRowIndex, mintGrdClients_License_col].ToString();
-                structCAV.strLocationReportExe = mcGrdClients[intRowIndex, mintGrdClients_LocationReportExe_col];
+                    structCAV.Action = clsApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdClients[intRowIndex, mintGrdClients_Action_col]);
+                    structCAV.blnInstalled = Convert.ToBoolean(grdClients[intRowIndex, mintGrdClients_Installed_col]);
+                    structCAV.blnIsCurrentVersion = Convert.ToBoolean(grdClients[intRowIndex, mintGrdClients_IsCurrentVersion_col]);
+                    structCAV.strCeritarClient_Name = mcGrdClients[intRowIndex, mintGrdClients_CeC_Name_col];
+                    structCAV.intCeritarClient_NRI = Int32.Parse(mcGrdClients[intRowIndex, mintGrdClients_CeC_NRI_col]);
+                    structCAV.intClientAppVersion_NRI = Int32.Parse(mcGrdClients[intRowIndex, mintGrdClients_CAV_NRI_col]);
+                    structCAV.intClientAppVersion_TS = Int32.Parse(mcGrdClients[intRowIndex, mintGrdClients_CAV_TS_col]);
+                    structCAV.strLicense = grdClients[intRowIndex, mintGrdClients_License_col].ToString();
+                    structCAV.strLocationReportExe = mcGrdClients[intRowIndex, mintGrdClients_LocationReportExe_col];
 
-                lstClient_NRI.Add(structCAV);
+                    lstClient_NRI.Add(structCAV);
+                }
             }
 
             return lstClient_NRI;
@@ -177,6 +181,11 @@ namespace Ceritar.Logirack_CVS
             try
             {
                 blnValidReturn = mcGrdClients.bln_FillData(mcCtrVersion.strGetListe_Clients_SQL(formController.Item_NRI));
+
+                if (blnValidReturn)
+                {
+                    pfblnEnableDisable_btnGrdClientsDelete(1);
+                }
             }
             catch (Exception ex)
             {
@@ -269,53 +278,95 @@ namespace Ceritar.Logirack_CVS
         {
             DialogResult dialogResult;
 
-            if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE || formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
+            try
             {
-                openFileDialog.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                openFileDialog.Multiselect = false;
-                openFileDialog.Filter = vstrExtensionsFilter;
-
-                dialogResult = openFileDialog.ShowDialog();
-
-                if (dialogResult == System.Windows.Forms.DialogResult.OK)
+                if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE || formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
                 {
-                    if (rControl.GetType() == typeof(TextBox))
-                    {
-                        ((TextBox)rControl).Text = openFileDialog.FileName;
-                    }
+                    openFileDialog.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                    openFileDialog.Multiselect = false;
+                    openFileDialog.Filter = vstrExtensionsFilter;
 
-                    if (rControl.GetType() == typeof(C1FlexGrid))
+                    dialogResult = openFileDialog.ShowDialog();
+
+                    if (dialogResult == System.Windows.Forms.DialogResult.OK)
                     {
-                        ((C1FlexGrid)rControl)[grdClients.Row, mintGrdClients_LocationReportExe_col] = openFileDialog.FileName;
+                        if (rControl.GetType() == typeof(TextBox))
+                        {
+                            ((TextBox)rControl).Text = openFileDialog.FileName;
+                        }
+
+                        if (rControl.GetType() == typeof(C1FlexGrid))
+                        {
+                            ((C1FlexGrid)rControl)[grdClients.Row, mintGrdClients_LocationReportExe_col] = openFileDialog.FileName;
+                            ((HostedCellControl)mcGrdClients.LstHostedCellControls[grdClients.Row - 1]).GetCellControl.BackColor = System.Drawing.Color.Yellow;
+                        }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }         
         }
 
         private void ShowFolderBrowserDialog(ref TextBox rtxtAffected)
         {
             DialogResult dialogResult;
 
-            if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE || formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
+            try
             {
-                folderBrowserDialog.ShowNewFolderButton = false;
+                if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE || formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
+                {
+                    folderBrowserDialog.ShowNewFolderButton = false;
 
-                if (rtxtAffected.Name == txtReleasePath.Name && !string.IsNullOrEmpty(txtReleasePath.Text))
-                {
-                    folderBrowserDialog.SelectedPath = txtReleasePath.Text;
-                }
-                else
-                {
-                    folderBrowserDialog.RootFolder = Environment.SpecialFolder.Desktop;
-                }
-                
-                dialogResult = folderBrowserDialog.ShowDialog();
+                    if (rtxtAffected.Name == txtReleasePath.Name && !string.IsNullOrEmpty(txtReleasePath.Text))
+                    {
+                        folderBrowserDialog.SelectedPath = txtReleasePath.Text;
+                    }
+                    else
+                    {
+                        folderBrowserDialog.RootFolder = Environment.SpecialFolder.Desktop;
+                    }
 
-                if (dialogResult == System.Windows.Forms.DialogResult.OK)
-                {
-                    rtxtAffected.Text = folderBrowserDialog.SelectedPath;
+                    dialogResult = folderBrowserDialog.ShowDialog();
+
+                    if (dialogResult == System.Windows.Forms.DialogResult.OK)
+                    {
+                        rtxtAffected.Text = folderBrowserDialog.SelectedPath;
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+        }
+
+        private bool pfblnEnableDisable_btnGrdClientsDelete(int vintCurrentRow)
+        {
+            bool blnValidReturn = false;
+
+            try
+            {
+                if (mcGrdClients.bln_RowsSelValid())
+                {
+                    if (string.IsNullOrEmpty(mcGrdClients[vintCurrentRow, mintGrdClients_Action_col]) || mcGrdClients[vintCurrentRow, mintGrdClients_Action_col] == sclsConstants.DML_Mode.INSERT_MODE.ToString())
+                    {
+                        btnGrdClientsDel.Enabled = true;
+                    }
+                    else
+                    {
+                        btnGrdClientsDel.Enabled = false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnValidReturn;
         }
 
 #endregion
@@ -516,24 +567,45 @@ namespace Ceritar.Logirack_CVS
                 {
                     case mintGrdClients_CeC_Name_col:
 
+                        string strListOfClientSelected = string.Empty;
+
+                        for (int intRowIdx = 1; intRowIdx < grdClients.Rows.Count; intRowIdx++)
+                        {
+                            strListOfClientSelected = strListOfClientSelected + (strListOfClientSelected == string.Empty ? mcGrdClients[intRowIdx, mintGrdClients_CeC_NRI_col] : "," + Conversion.Val(mcGrdClients[intRowIdx, mintGrdClients_CeC_NRI_col]));
+                        }
+                        
+                        sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetClients_SQL(strListOfClientSelected), "CeC_NRI", "Cec_Name", false, ref cboClients);
+
                         grdClients.StartEditing();
 
                         break;
 
                     case mintGrdClients_Installed_col:
 
-                        mcGrdClients[grdClients.Row, mintGrdClients_Installed_col] = (mcGrdClients[grdClients.Row, mintGrdClients_Installed_col] == "0"? "1" : "0");
+                        if (formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
+                        {
+                            mcGrdClients[grdClients.Row, mintGrdClients_Installed_col] = (mcGrdClients[grdClients.Row, mintGrdClients_Installed_col] == "0" ? "1" : "0");
 
+                            if (mcGrdClients[grdClients.Row, mintGrdClients_Installed_col] == "0")
+                            {
+
+                                mcGrdClients[grdClients.Row, mintGrdClients_IsCurrentVersion_col] = "0";
+                            }
+                        }
+                        
                         break;
 
                     case mintGrdClients_IsCurrentVersion_col:
 
-                        mcGrdClients[grdClients.Row, mintGrdClients_IsCurrentVersion_col] = (mcGrdClients[grdClients.Row, mintGrdClients_IsCurrentVersion_col] == "0" ? "1" : "0");
-
-                        if (mcGrdClients[grdClients.Row, mintGrdClients_IsCurrentVersion_col] == "1")
+                        if (formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
                         {
+                            mcGrdClients[grdClients.Row, mintGrdClients_IsCurrentVersion_col] = (mcGrdClients[grdClients.Row, mintGrdClients_IsCurrentVersion_col] == "0" ? "1" : "0");
 
-                            mcGrdClients[grdClients.Row, mintGrdClients_Installed_col]  = "1";
+                            if (mcGrdClients[grdClients.Row, mintGrdClients_IsCurrentVersion_col] == "1")
+                            {
+
+                                mcGrdClients[grdClients.Row, mintGrdClients_Installed_col] = "1";
+                            }
                         }
 
                         break;
@@ -599,7 +671,6 @@ namespace Ceritar.Logirack_CVS
         {
             eventArgs.IsValid = false;
 
-            //structClientAppVersion structCAV;
             List<structClientAppVersion> lstStructCAV = ((IVersion)this).GetClientsList();
 
             if (grdClients.Rows.Count <= 1)
@@ -608,20 +679,9 @@ namespace Ceritar.Logirack_CVS
             }
             else
             {
-                for (int intRowIndex = 1; intRowIndex < lstStructCAV.Count; intRowIndex++)
+                for (int intRowIndex = 0; intRowIndex < lstStructCAV.Count; intRowIndex++)
                 {
                     eventArgs.IsValid = false;
-
-                    //structCAV = new structClientAppVersion();
-
-                    //structCAV.Action = clsApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdClients[intRowIndex, mintGrdClients_Action_col]);
-                    //Int32.TryParse(mcGrdClients[intRowIndex, mintGrdClients_CeC_NRI_col], out structCAV.intCeritarClient_NRI);
-                    //structCAV.intClientAppVersion_NRI = Int32.Parse(mcGrdClients[intRowIndex, mintGrdClients_CAV_NRI_col]);
-                    //structCAV.intClientAppVersion_TS = Int32.Parse(mcGrdClients[intRowIndex, mintGrdClients_CAV_TS_col]);
-                    //structCAV.strLicense = grdClients[intRowIndex, mintGrdClients_License_col].ToString();
-                    //structCAV.blnInstalled = Convert.ToBoolean(grdClients[intRowIndex, mintGrdClients_Installed_col]);
-                    //structCAV.blnIsCurrentVersion = Convert.ToBoolean(grdClients[intRowIndex, mintGrdClients_IsCurrentVersion_col]);
-                    //structCAV.strLocationReportExe = mcGrdClients[intRowIndex, mintGrdClients_LocationReportExe_col].ToString();
 
                     mcActionResults = mcCtrVersion.Validate_Client(lstStructCAV[intRowIndex]);
 
@@ -639,10 +699,12 @@ namespace Ceritar.Logirack_CVS
 
                             case ctr_Version.ErrorCode_Ver.REPORT_MANDATORY:
 
-                                ((HostedCellControl)mcGrdClients.LstHostedCellControls[intRowIndex - 1]).GetCellControl.Focus();
+                                ((HostedCellControl)mcGrdClients.LstHostedCellControls[intRowIndex]).GetCellControl.Focus();
 
                                 break;
                         }
+
+                        break;
                     }
                     else
                     {
@@ -758,16 +820,35 @@ namespace Ceritar.Logirack_CVS
         private void btnReplaceReportExe_Click(object sender, EventArgs e)
         {
             mcGrdClients.GridIsLoading = true;
+
+            foreach (HostedCellControl control in mcGrdClients.LstHostedCellControls)
+            {
+                if (control.GetCellControl.Handle == ((Button)sender).Handle)
+                {
+                    grdClients.Row = control.GetRowLinked.Index;
+                }
+            }
+
             ShowOpenFileDialog("LogirackTransport RPT (*.exe)|*.exe", grdClients);
+
             mcGrdClients.GridIsLoading = false;
         }
 
         private void btnGrdClientsDel_Click(object sender, EventArgs e)
         {
-            ((HostedCellControl)mcGrdClients.LstHostedCellControls[grdClients.Row - 1]).GetCellControl.Dispose();
+            if (mcGrdClients.bln_RowsSelValid() && mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.DELETE_MODE.ToString())
+            {
+                ((HostedCellControl)mcGrdClients.LstHostedCellControls[grdClients.Row - 1]).GetCellControl.Dispose();
 
-            mcGrdClients.LstHostedCellControls.RemoveAt(grdClients.Row-1);
+                mcGrdClients.LstHostedCellControls.RemoveAt(grdClients.Row - 1);
+            }
         }
+
+        private void grdClients_AfterRowColChange(object sender, RangeEventArgs e)
+        {
+            pfblnEnableDisable_btnGrdClientsDelete(e.NewRange.r1);
+        }
+
 
     }
 }

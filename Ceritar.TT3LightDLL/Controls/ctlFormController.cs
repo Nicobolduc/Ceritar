@@ -27,6 +27,8 @@ namespace Ceritar.TT3LightDLL.Controls
         //Public Events
         public delegate void BeNotifyEventHandler(BeNotifyEventArgs eventArgs);
         public event BeNotifyEventHandler BeNotify;
+        public delegate void NotifyCallerEventHandler(NotifyCallerEventArgs eventArgs);
+        public event NotifyCallerEventHandler NotifyCaller;
         public event PropertyChangedEventHandler PropertyChanged;
         public delegate void SetReadRightsEventHandler();
         public event SetReadRightsEventHandler SetReadRights;
@@ -38,36 +40,25 @@ namespace Ceritar.TT3LightDLL.Controls
         public event SaveDataEventHandler SaveData;
 
 
+#region "Contructor / Destructor"
+
         public ctlFormController()
         {
             InitializeComponent();
             SubscribeToEvents();
-
+            this.HandleDestroyed += ctlFormController_HandleDestroyed;
             this.PropertyChanged += ctlFormController_PropertyChanged;
+
         }
 
-        void ctlFormController_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        ~ctlFormController()
         {
-            if (mblnShowButtonQuitOnly) 
-            {
-
-                imgFormMode.Visible = false;
-                btnCancel.Visible = false;
-                btnApply.Visible = false;
-
-                this.Width = 80;
-            }
-            else 
-            {
-                imgFormMode.Visible = true;
-                btnCancel.Visible = true;
-                btnApply.Visible = true;
-
-                this.Width = 324;
-            }
+            this.Dispose();
         }
 
+#endregion
 
+    
 #region Properties
 
         [Browsable(false)]
@@ -93,7 +84,7 @@ namespace Ceritar.TT3LightDLL.Controls
             set
             {
                 mintFormMode = value;
-                SetVisualStyle();
+                SetControlDisplay();
             }
         }
 
@@ -111,7 +102,7 @@ namespace Ceritar.TT3LightDLL.Controls
                     mblnChangeMade = false;
                 }
 
-                SetVisualStyle();
+                SetControlDisplay();
             }
         }
 
@@ -172,16 +163,14 @@ namespace Ceritar.TT3LightDLL.Controls
 
                 mfrmParent = this.FindForm();
 
-                SetVisualStyle();
+                SetControlDisplay();
 
-                LoadFormData();
+                LoadLinkedFormData();
 
                 if (!mfrmParent.IsDisposed)
                 {
                     if (!vblnIsModal)
                     {
-                        //mfrmParent.MdiParent = mfrmParent.ParentForm;
-                        
                         mfrmParent.Show();
                     }
                     else
@@ -190,7 +179,7 @@ namespace Ceritar.TT3LightDLL.Controls
                         mfrmParent.ShowInTaskbar = false;
 
                         this.Cursor = System.Windows.Forms.Cursors.Default;
-
+     
                         mfrmParent.ShowDialog();
                     }
 
@@ -200,7 +189,6 @@ namespace Ceritar.TT3LightDLL.Controls
                 {
                     this.Dispose();
                 }
-
             }
             catch (Exception ex)
             {
@@ -212,7 +200,7 @@ namespace Ceritar.TT3LightDLL.Controls
             }
         }
 
-        private void SetVisualStyle()
+        private void SetControlDisplay()
         {
             switch (mintFormMode)
             {
@@ -248,6 +236,7 @@ namespace Ceritar.TT3LightDLL.Controls
                     
                     break;
             }
+
             imgFormMode.BackgroundImageLayout = ImageLayout.Zoom;
             imgFormMode.SizeMode = PictureBoxSizeMode.Zoom;
 
@@ -268,7 +257,7 @@ namespace Ceritar.TT3LightDLL.Controls
             }
         }
 
-        public void LoadFormData()
+        public void LoadLinkedFormData()
         {
             FormIsLoading = true;
 
@@ -298,11 +287,6 @@ namespace Ceritar.TT3LightDLL.Controls
             }
         }
 
-        ~ctlFormController()
-        {
-            this.Dispose();
-        }
-
         public bool pfblnValidate_Grids()
         {
             bool blnValidReturn = false;
@@ -328,6 +312,26 @@ namespace Ceritar.TT3LightDLL.Controls
 
 #endregion
 
+        void ctlFormController_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (mblnShowButtonQuitOnly)
+            {
+
+                imgFormMode.Visible = false;
+                btnCancel.Visible = false;
+                btnApply.Visible = false;
+
+                this.Width = 80;
+            }
+            else
+            {
+                imgFormMode.Visible = true;
+                btnCancel.Visible = true;
+                btnApply.Visible = true;
+
+                this.Width = 324;
+            }
+        }
 
         private void btnApply_Click(object sender, System.EventArgs e)
         {
@@ -354,12 +358,12 @@ namespace Ceritar.TT3LightDLL.Controls
                     {
                         case sclsConstants.DML_Mode.INSERT_MODE:
                             FormMode = sclsConstants.DML_Mode.UPDATE_MODE;
-                            LoadFormData();
+                            LoadLinkedFormData();
 
                             break;
 
                         case sclsConstants.DML_Mode.UPDATE_MODE:
-                            LoadFormData();
+                            LoadLinkedFormData();
 
                             break;
 
@@ -382,7 +386,7 @@ namespace Ceritar.TT3LightDLL.Controls
         private void btnCancel_Click(object sender, System.EventArgs e)
         {
             sclsWinControls_Utilities.EmptyAllFormControls(mfrmParent);
-            LoadFormData();
+            LoadLinkedFormData();
         }
 
         private void btnQuit_Click(object sender, System.EventArgs e)
@@ -428,7 +432,11 @@ namespace Ceritar.TT3LightDLL.Controls
         //        End If
         //    Next
         //End Sub
-
+        
+        private void ctlFormController_HandleDestroyed(Object sender, EventArgs e)
+        {
+            NotifyCaller(new NotifyCallerEventArgs());
+        }
     }
 
 
@@ -487,6 +495,23 @@ namespace Ceritar.TT3LightDLL.Controls
     }
 
     public class BeNotifyEventArgs : System.EventArgs
+    {
+        private List<object> _lstReceivedValues;
+
+        public List<object> LstReceivedValues
+        {
+            get
+            {
+                return new List<object>();
+            }
+            set
+            {
+                _lstReceivedValues = value;
+            }
+        }
+    }
+
+    public class NotifyCallerEventArgs : System.EventArgs
     {
         private List<object> _lstReceivedValues;
 

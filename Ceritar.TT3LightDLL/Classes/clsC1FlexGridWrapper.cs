@@ -342,7 +342,7 @@ namespace Ceritar.TT3LightDLL.Classes
 		    bool blnIsEmpty = true;
 
 		    try {
-                if (!Information.IsDBNull(mGrdFlex[vintRow, vintCol]) & mGrdFlex[vintRow, vintCol] != null & !string.IsNullOrEmpty(Strings.Trim(mGrdFlex[vintRow, vintCol].ToString())))
+                if (!Information.IsDBNull(mGrdFlex[vintRow, vintCol]) && mGrdFlex[vintRow, vintCol] != null && !string.IsNullOrEmpty(Strings.Trim(mGrdFlex[vintRow, vintCol].ToString())))
                 {
                     blnIsEmpty = false;
                 }
@@ -780,6 +780,11 @@ namespace Ceritar.TT3LightDLL.Classes
         public Control GetCellControl
         {
             get { return mCellControl; }
+        }
+
+        public Row GetRowLinked
+        {
+            get { return mRow; }
         }
 
         public HostedCellControl(C1FlexGrid flexGrid, Control hosted, int row, int col)

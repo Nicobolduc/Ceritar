@@ -214,7 +214,7 @@
             this.btnGenerate.Location = new System.Drawing.Point(753, 314);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(40, 40);
-            this.btnGenerate.TabIndex = 8;
+            this.btnGenerate.TabIndex = 4;
             this.toolTip.SetToolTip(this.btnGenerate, "Générer/Regénérer la version");
             this.btnGenerate.UseVisualStyleBackColor = true;
             this.btnGenerate.Click += new System.EventHandler(this.btnCreate_Click);
@@ -442,7 +442,7 @@
             this.groupBox2.Controls.Add(this.grdClients);
             this.groupBox2.Location = new System.Drawing.Point(6, 6);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(436, 165);
+            this.groupBox2.Size = new System.Drawing.Size(436, 167);
             this.groupBox2.TabIndex = 14;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Clients à qui la version est destinée";
@@ -462,7 +462,7 @@
             // 
             this.btnGrdClientsDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnGrdClientsDel.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdClientsDel.Image")));
-            this.btnGrdClientsDel.Location = new System.Drawing.Point(395, 62);
+            this.btnGrdClientsDel.Location = new System.Drawing.Point(395, 58);
             this.btnGrdClientsDel.Name = "btnGrdClientsDel";
             this.btnGrdClientsDel.Size = new System.Drawing.Size(35, 35);
             this.btnGrdClientsDel.TabIndex = 1;
@@ -473,7 +473,7 @@
             // 
             this.btnGrdClientsAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnGrdClientsAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdClientsAdd.Image")));
-            this.btnGrdClientsAdd.Location = new System.Drawing.Point(395, 21);
+            this.btnGrdClientsAdd.Location = new System.Drawing.Point(395, 17);
             this.btnGrdClientsAdd.Name = "btnGrdClientsAdd";
             this.btnGrdClientsAdd.Size = new System.Drawing.Size(35, 35);
             this.btnGrdClientsAdd.TabIndex = 0;
@@ -485,15 +485,16 @@
             this.grdClients.ColumnInfo = "1,1,0,0,0,90,Columns:0{Width:5;}\t";
             this.grdClients.ExtendLastCol = true;
             this.grdClients.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdClients.Location = new System.Drawing.Point(6, 21);
+            this.grdClients.Location = new System.Drawing.Point(6, 17);
             this.grdClients.Name = "grdClients";
             this.grdClients.Rows.Count = 1;
             this.grdClients.Rows.DefaultSize = 18;
             this.grdClients.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdClients.Size = new System.Drawing.Size(383, 138);
+            this.grdClients.Size = new System.Drawing.Size(383, 144);
             this.grdClients.StyleInfo = resources.GetString("grdClients.StyleInfo");
-            this.grdClients.TabIndex = 14;
+            this.grdClients.TabIndex = 2;
             this.grdClients.Tag = "15";
+            this.grdClients.AfterRowColChange += new C1.Win.C1FlexGrid.RangeEventHandler(this.grdClients_AfterRowColChange);
             this.grdClients.DoubleClick += new System.EventHandler(this.grdClients_DoubleClick);
             // 
             // tab
@@ -537,6 +538,7 @@
             this.Name = "frmVersion";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Gestion de version";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmVersion_FormClosed);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabRevision.ResumeLayout(false);

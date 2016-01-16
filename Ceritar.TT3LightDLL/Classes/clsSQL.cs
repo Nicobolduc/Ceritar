@@ -205,8 +205,8 @@ namespace Ceritar.TT3LightDLL.Classes
             finally
             {
                 mblnTransactionStarted = false;
-                mcSQLTransaction.Dispose();
-                mcSQLCmd.Dispose();
+                if (mcSQLTransaction != null) mcSQLTransaction.Dispose();
+                if (mcSQLCmd != null) mcSQLCmd.Dispose();
             }
 
             return blnValidReturn;
@@ -519,14 +519,14 @@ namespace Ceritar.TT3LightDLL.Classes
         {
             try
             {
-                //OSQL -S <insert_servername_here> -E 
-                //sp_password NULL, ‘<insert_new_password_here>’, ’sa’
+                //OSQL -S BOLDUC-PC\SVR_SQL -E 
+                //sp_password NULL, '1234', 'sa' GO
                 rcSQLConnection = new SqlConnection(@"Persist Security Info=False;
-                                                        User ID=sa;
-                                                        Password=1234;
-                                                        Initial Catalog=Logirack_CVS_Dev;
-                                                        Data Source=localhost\SVR_SQL;
-                                                        MultipleActiveResultSets=True");
+                                                      User ID=sa;
+                                                      Password=1234;
+                                                      Initial Catalog=Logirack_CVS_Dev;
+                                                      Data Source=localhost\SVR_SQL;
+                                                      MultipleActiveResultSets=True");
 
                 //                mcMySQLConnection = new SqlConnection(@"Persist Security Info=False;
                 //                                                        User ID=sa;

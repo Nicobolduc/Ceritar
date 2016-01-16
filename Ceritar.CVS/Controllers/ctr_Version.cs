@@ -33,7 +33,8 @@ namespace Ceritar.CVS.Controllers
             TEMPLATE_MANDATORY = 8,
             CLIENT_NAME_MANDATORY = 9,
             VERSION_NO_UNIQUE_AND_BIGGER_PREVIOUS = 10,
-            REPORT_MANDATORY = 11
+            REPORT_MANDATORY = 11,
+            CANT_DELETE_USED_VERSION = 12
         }
 
         public clsActionResults GetActionResult
@@ -135,7 +136,7 @@ namespace Ceritar.CVS.Controllers
 
                     mcActionResult = mcModVersion.ActionResults;
 
-                    if (blnValidReturn & mcActionResult.IsValid & mcModVersion.DML_Action == sclsConstants.DML_Mode.INSERT_MODE)
+                    if (blnValidReturn & mcActionResult.IsValid)
                     {
                         blnValidReturn = blnBuildVersionHierarchy(mcModVersion.TemplateSource.Template_NRI);
                     }
@@ -176,6 +177,7 @@ namespace Ceritar.CVS.Controllers
             bool blnValidReturn = false;
             string strSQL = string.Empty;
             string strFolderName = string.Empty;
+            string strVersionFolderRoot = string.Empty;
             int intPreviousFolderLevel = -1;
             SqlDataReader cSQLReader = null;
             DirectoryInfo currentFolderInfos = null;
@@ -232,7 +234,7 @@ namespace Ceritar.CVS.Controllers
                 try
                 {
                     currentFolderInfos = new DirectoryInfo(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES +
-                                                            (sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Substring(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Length - 1, 1) == "\\" ? "" : "\\")
+                                                           (sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Substring(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Length - 1, 1) == "\\" ? "" : "\\")
                                                           );
 
                     cSQLReader = clsSQL.ADOSelect(strSQL);
@@ -244,6 +246,16 @@ namespace Ceritar.CVS.Controllers
                             case (int)ctr_Template.FolderType.Version_Number:
 
                                 strFolderName = sclsAppConfigs.GetVersionNumberPrefix + mcView.GetVersionNo().ToString();
+
+                                strVersionFolderRoot = Path.Combine(currentFolderInfos.FullName, strFolderName);
+
+                                if (mcView.GetDML_Action() == sclsConstants.DML_Mode.DELETE_MODE) //On supprime toute la hierarchie existante et on sort
+                                {
+                                    blnValidReturn = pfblnDeleteVersionHierarchy(strVersionFolderRoot);
+
+                                    return blnValidReturn;
+                                }
+
                                 break;
 
                             default:
@@ -285,7 +297,7 @@ namespace Ceritar.CVS.Controllers
                                 {
                                     //TODO clean release folder
 
-                                    clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName);
+                                    blnValidReturn = clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName);
                                 }
 
                                 break;
@@ -316,7 +328,7 @@ namespace Ceritar.CVS.Controllers
 
                             case (int)ctr_Template.FolderType.Report:
 
-                                pfblnCopyAllReportsForClients(currentFolderInfos.FullName);
+                                blnValidReturn = pfblnCopyAllReportsForClients(currentFolderInfos.FullName);
 
                                 break;
                         }
@@ -344,6 +356,11 @@ namespace Ceritar.CVS.Controllers
             else
             {
                 mcActionResult = mcModVersion.ActionResults;
+            }
+
+            if (!blnValidReturn)
+            {
+                pfblnDeleteVersionHierarchy(strVersionFolderRoot);
             }
 
             return blnValidReturn;
@@ -456,6 +473,39 @@ namespace Ceritar.CVS.Controllers
             return blnValidReturn;
         }
 
+        /// <summary>
+        /// Efface toute la hierarchy de dossiers et son contenu du disque pour la version et application données. Supprime le dossier racine également.
+        /// </summary>
+        /// <param name="vstrVersionFolderRoot">Le chemin du répertoire à supprimer</param>
+        /// <returns></returns>
+        private bool pfblnDeleteVersionHierarchy(string vstrVersionFolderRoot)
+        {
+            bool blnValidReturn = false;
+
+            try
+            {
+                System.Diagnostics.Process process = new System.Diagnostics.Process();
+                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+
+                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                startInfo.FileName = "cmd.exe";
+                startInfo.Arguments = @"/C RMDIR """ + vstrVersionFolderRoot + @""" /S /Q";
+
+                process.StartInfo = startInfo;
+                process.Start();
+                process.WaitForExit();
+
+                blnValidReturn = true;
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnValidReturn;
+        }
+
 
 #region "SQL Queries"
 
@@ -549,14 +599,18 @@ namespace Ceritar.CVS.Controllers
             return strSQL;
         }
 
-        public string strGetClients_SQL()
+        public string strGetClients_SQL(string vstrCeritarClientToIgnore = "")
         {
             string strSQL = string.Empty;
+
+            vstrCeritarClientToIgnore = (string.IsNullOrEmpty(vstrCeritarClientToIgnore) ? vstrCeritarClientToIgnore = "0" : vstrCeritarClientToIgnore);
 
             strSQL = strSQL + " SELECT CerClient.CeC_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        CerClient.CeC_Name " + Environment.NewLine;
 
             strSQL = strSQL + " FROM CerClient " + Environment.NewLine;
+
+            strSQL = strSQL + " WHERE CerClient.CeC_NRI NOT IN (" + vstrCeritarClientToIgnore + ")" + Environment.NewLine;
 
             strSQL = strSQL + " ORDER BY CerClient.CeC_Name " + Environment.NewLine;
 
