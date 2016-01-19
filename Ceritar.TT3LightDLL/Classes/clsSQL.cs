@@ -319,6 +319,7 @@ namespace Ceritar.TT3LightDLL.Classes
                 }
 
                 strFields = strFields + ") " + Environment.NewLine;
+
                 strValues = strValues + ") " + Environment.NewLine;
 
                 mcSQLCmd.CommandText = strSQL + strFields + strValues;

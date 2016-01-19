@@ -91,6 +91,7 @@ namespace Ceritar.TT3LightDLL.Controls
         [Browsable(false)]
         public bool ChangeMade
         {
+            get { return mblnChangeMade; }
             set
             {
                 if (!FormIsLoading)

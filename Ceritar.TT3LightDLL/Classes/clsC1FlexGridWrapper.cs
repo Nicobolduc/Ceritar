@@ -25,7 +25,7 @@ namespace Ceritar.TT3LightDLL.Classes
 	    //private members
 	    private const short mintDefaultActionCol = 1;
 	    private bool mblnHasNoActionColumn;
-        private ArrayList mlstHostedCellControls;
+        private List<HostedCellControl> mlstHostedCellControls;
 
 	    //Private class members
         private C1FlexGrid mGrdFlex;
@@ -56,7 +56,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
         public clsC1FlexGridWrapper()
         {
-            mlstHostedCellControls = new ArrayList();
+            mlstHostedCellControls = new List<HostedCellControl>();
 
             SetGridDisplay += clsFlexGridWrapper_SetDisplay;
         }
@@ -157,7 +157,7 @@ namespace Ceritar.TT3LightDLL.Classes
             get { return mintNbVisibleColumns; }
         }
 
-        public ArrayList LstHostedCellControls
+        public List<HostedCellControl> LstHostedCellControls
         {
             get { return mlstHostedCellControls; }
             set 
@@ -337,7 +337,7 @@ namespace Ceritar.TT3LightDLL.Classes
 		    return blnValidReturn;
 	    }
 
-	    public bool CellIsEmpty(int vintRow, int vintCol)
+	    public bool bln_CellIsEmpty(int vintRow, int vintCol)
 	    {
 		    bool blnIsEmpty = true;
 
@@ -354,7 +354,7 @@ namespace Ceritar.TT3LightDLL.Classes
 		    return blnIsEmpty;
 	    }
 
-	    public bool CurrentCellIsEmpty()
+	    public bool bln_CurrentCellIsEmpty()
 	    {
 		    bool blnIsEmpty = true;
 

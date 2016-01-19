@@ -23,7 +23,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private string _strCreationDate;
         private string _strLocation_APP_CHANGEMENT;
         private string _strLocation_Release;
-        private string _strLocation_TTApp;      
+        private string _strLocation_CaptionsAndMenus;      
         private mod_TTU_User _cCreatedByUser;
         private List<mod_Rev_Revision> _lstRevisions; //TODO unused
         private mod_CeA_CeritarApplication _cCerApplication;
@@ -74,10 +74,10 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { _strLocation_Release = value; }
         }
 
-        internal string Location_TTApp
+        internal string Location_CaptionsAndMenus
         {
-            get { return _strLocation_TTApp; }
-            set { _strLocation_TTApp = value; }
+            get { return _strLocation_CaptionsAndMenus; }
+            set { _strLocation_CaptionsAndMenus = value; }
         }
 
         internal ushort VersionNo
@@ -267,7 +267,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY);
                         }
-                        else if (string.IsNullOrEmpty(_strLocation_TTApp) || !File.Exists(_strLocation_TTApp))
+                        else if (string.IsNullOrEmpty(_strLocation_CaptionsAndMenus) || !File.Exists(_strLocation_CaptionsAndMenus))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY);
                         }
@@ -305,7 +305,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY);
                         }
-                        else if (!string.IsNullOrEmpty(_strLocation_TTApp) && !File.Exists(_strLocation_TTApp))
+                        else if (!string.IsNullOrEmpty(_strLocation_CaptionsAndMenus) && !File.Exists(_strLocation_CaptionsAndMenus))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY);
                         }
@@ -455,8 +455,16 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 { }
                 else if (!mcSQL.bln_AddField("Tpl_NRI", _cTemplateSource.Template_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
+                else if (!mcSQL.bln_AddField("Ver_CaptionsAndMenus_Location", _strLocation_CaptionsAndMenus, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                { }
                 else
                 {
+                    if (DML_Action == sclsConstants.DML_Mode.INSERT_MODE)
+                    {
+                        mcSQL.bln_AddField("Ver_Release_Location", _strLocation_Release, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE);
+                        mcSQL.bln_AddField("Ver_AppChange_Location", _strLocation_APP_CHANGEMENT, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE);
+                    }
+
                     blnValidReturn = true;
                 }
             }
@@ -492,7 +500,12 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                     {
                         mcActionResults = LstClientsUsing[intIndex].Validate();
 
-                        if (!mcActionResults.IsValid) break;
+                        if (!mcActionResults.IsValid)
+                        {
+                            mcActionResults.RowInError = intIndex + 1;
+
+                            break;
+                        }
                     }
 
                     blnValidReturn = mcActionResults.IsValid;
@@ -556,6 +569,45 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 {
                     blnValidReturn = false;
                 }
+            }
+
+            return blnValidReturn;
+        }
+
+        internal bool blnLocationsUpdate()
+        {
+            bool blnValidReturn = false;
+
+            try
+            {
+                if (!mcSQL.bln_RefreshFields())
+                { }
+                else if (!mcSQL.bln_AddField("Ver_AppChange_Location", _strLocation_APP_CHANGEMENT, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                { }
+                else if (!mcSQL.bln_AddField("Ver_Release_Location", _strLocation_Release, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                { }
+                else if (!mcSQL.bln_AddField("Ver_CaptionsAndMenus_Location", _strLocation_CaptionsAndMenus, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                { }
+                else if (!mcSQL.bln_ADOUpdate("Version", "Version.Ver_NRI = " + _intVersion_NRI))
+                { }
+                else
+                {
+                    blnValidReturn = true;
+
+                    foreach (mod_CAV_ClientAppVersion cCAV in LstClientsUsing)
+                    {
+                        cCAV.SetcSQL = mcSQL;
+
+                        blnValidReturn = cCAV.blnLocationUpdate();
+
+                        if (!blnValidReturn) break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
 
             return blnValidReturn;

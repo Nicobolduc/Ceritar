@@ -215,7 +215,7 @@
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(40, 40);
             this.btnGenerate.TabIndex = 4;
-            this.toolTip.SetToolTip(this.btnGenerate, "Générer/Regénérer la version");
+            this.toolTip.SetToolTip(this.btnGenerate, "Mettre à jour la hierarchie");
             this.btnGenerate.UseVisualStyleBackColor = true;
             this.btnGenerate.Click += new System.EventHandler(this.btnCreate_Click);
             // 
@@ -229,6 +229,7 @@
             this.btnShowExecutable.TabIndex = 7;
             this.toolTip.SetToolTip(this.btnShowExecutable, "Consulter l\'exécutable");
             this.btnShowExecutable.UseVisualStyleBackColor = true;
+            this.btnShowExecutable.Click += new System.EventHandler(this.btnShowExecutable_Click);
             // 
             // btnShowAccess
             // 
@@ -240,6 +241,7 @@
             this.btnShowAccess.TabIndex = 6;
             this.toolTip.SetToolTip(this.btnShowAccess, "Consulter TTApp");
             this.btnShowAccess.UseVisualStyleBackColor = true;
+            this.btnShowAccess.Click += new System.EventHandler(this.btnShowAccess_Click);
             // 
             // btnShowWord
             // 
@@ -251,6 +253,7 @@
             this.btnShowWord.TabIndex = 5;
             this.toolTip.SetToolTip(this.btnShowWord, "Consulter App_Changements.docx");
             this.btnShowWord.UseVisualStyleBackColor = true;
+            this.btnShowWord.Click += new System.EventHandler(this.btnShowWord_Click);
             // 
             // btnShowExcel
             // 
@@ -262,6 +265,7 @@
             this.btnShowExcel.TabIndex = 4;
             this.toolTip.SetToolTip(this.btnShowExcel, "Consulter App_Changements.xls");
             this.btnShowExcel.UseVisualStyleBackColor = true;
+            this.btnShowExcel.Click += new System.EventHandler(this.btnShowExcel_Click);
             // 
             // btnReplaceAppChangeXLS
             // 

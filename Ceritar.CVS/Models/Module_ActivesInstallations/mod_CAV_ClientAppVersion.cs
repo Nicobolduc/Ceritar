@@ -282,6 +282,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 { }
                 else if (!mcSQL.bln_AddField("CAV_License", _strLicense, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
+                else if (!mcSQL.bln_AddField("CAV_ReportExe_Location", _strLocationReportExe, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                { }
                 else
                 {
                     blnValidReturn = true;
@@ -302,6 +304,32 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 {
                     blnValidReturn = false;
                 }
+            }
+
+            return blnValidReturn;
+        }
+
+        internal bool blnLocationUpdate()
+        {
+            bool blnValidReturn = false;
+
+            try
+            {
+                if (!mcSQL.bln_RefreshFields())
+                { }
+                else if (!mcSQL.bln_AddField("CAV_ReportExe_Location", _strLocationReportExe, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                { }
+                else if (!mcSQL.bln_ADOUpdate("ClientAppVersion", "ClientAppVersion.CAV_NRI = " + _intClientAppVersion_NRI))
+                { }
+                else
+                {
+                    blnValidReturn = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
 
             return blnValidReturn;

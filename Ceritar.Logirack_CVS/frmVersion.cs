@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Data;
 using Microsoft.VisualBasic;
 using C1.Win.C1FlexGrid;
@@ -148,22 +149,19 @@ namespace Ceritar.Logirack_CVS
 
             for (int intRowIndex = 1; intRowIndex < grdClients.Rows.Count; intRowIndex++)
             {
-                if (!mcGrdClients.CellIsEmpty(intRowIndex, mintGrdClients_CeC_NRI_col))
-                {
-                    structCAV = new structClientAppVersion();
+                structCAV = new structClientAppVersion();
 
-                    structCAV.Action = clsApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdClients[intRowIndex, mintGrdClients_Action_col]);
-                    structCAV.blnInstalled = Convert.ToBoolean(grdClients[intRowIndex, mintGrdClients_Installed_col]);
-                    structCAV.blnIsCurrentVersion = Convert.ToBoolean(grdClients[intRowIndex, mintGrdClients_IsCurrentVersion_col]);
-                    structCAV.strCeritarClient_Name = mcGrdClients[intRowIndex, mintGrdClients_CeC_Name_col];
-                    structCAV.intCeritarClient_NRI = Int32.Parse(mcGrdClients[intRowIndex, mintGrdClients_CeC_NRI_col]);
-                    structCAV.intClientAppVersion_NRI = Int32.Parse(mcGrdClients[intRowIndex, mintGrdClients_CAV_NRI_col]);
-                    structCAV.intClientAppVersion_TS = Int32.Parse(mcGrdClients[intRowIndex, mintGrdClients_CAV_TS_col]);
-                    structCAV.strLicense = grdClients[intRowIndex, mintGrdClients_License_col].ToString();
-                    structCAV.strLocationReportExe = mcGrdClients[intRowIndex, mintGrdClients_LocationReportExe_col];
+                structCAV.Action = clsApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdClients[intRowIndex, mintGrdClients_Action_col]);
+                structCAV.blnInstalled = Convert.ToBoolean(grdClients[intRowIndex, mintGrdClients_Installed_col]);
+                structCAV.blnIsCurrentVersion = Convert.ToBoolean(grdClients[intRowIndex, mintGrdClients_IsCurrentVersion_col]);
+                structCAV.strCeritarClient_Name = mcGrdClients[intRowIndex, mintGrdClients_CeC_Name_col];
+                Int32.TryParse(mcGrdClients[intRowIndex, mintGrdClients_CeC_NRI_col], out structCAV.intCeritarClient_NRI);
+                Int32.TryParse(mcGrdClients[intRowIndex, mintGrdClients_CAV_NRI_col], out structCAV.intClientAppVersion_NRI);
+                structCAV.intClientAppVersion_TS = Int32.Parse(mcGrdClients[intRowIndex, mintGrdClients_CAV_TS_col]);
+                structCAV.strLicense = grdClients[intRowIndex, mintGrdClients_License_col].ToString();
+                structCAV.strLocationReportExe = mcGrdClients[intRowIndex, mintGrdClients_LocationReportExe_col];
 
-                    lstClient_NRI.Add(structCAV);
-                }
+                lstClient_NRI.Add(structCAV);
             }
 
             return lstClient_NRI;
@@ -217,6 +215,7 @@ namespace Ceritar.Logirack_CVS
         {
             bool blnValidReturn = false;
             SqlDataReader sqlRecord = null;
+            string strAppChangeLocation = string.Empty;
 
             try
             {
@@ -228,6 +227,23 @@ namespace Ceritar.Logirack_CVS
 
                     txtCompiledBy.Text = sqlRecord["Ver_CompiledBy"].ToString();
                     txtVersionNo.Text = sqlRecord["Ver_No"].ToString();
+                    txtReleasePath.Text = sqlRecord["Ver_No"].ToString();
+
+                    strAppChangeLocation = sqlRecord["Ver_AppChange_Location"].ToString();
+
+                    if (strAppChangeLocation.Substring(strAppChangeLocation.Length - 4, 4) == "xlsx" || strAppChangeLocation.Substring(strAppChangeLocation.Length - 3, 3) == "xls")
+                    {
+                        txtExcelAppChangePath.Text = sqlRecord["Ver_AppChange_Location"].ToString();
+                        txtWordAppChangePath.Text = string.Empty;
+                    }
+                    else if (strAppChangeLocation.Substring(strAppChangeLocation.Length - 4, 4) == "docx" || strAppChangeLocation.Substring(strAppChangeLocation.Length - 3, 3) == "doc")
+                    {
+                        txtWordAppChangePath.Text = sqlRecord["Ver_AppChange_Location"].ToString();
+                        txtExcelAppChangePath.Text = string.Empty;
+                    }
+
+                    txtReleasePath.Text = sqlRecord["Ver_Release_Location"].ToString();
+                    txtTTAppPath.Text = sqlRecord["Ver_CaptionsAndMenus_Location"].ToString();
 
                     //dtpCreation.Value = DateTime.Parse(sqlRecord["Ver_DtCreation"].ToString());
 
@@ -274,18 +290,24 @@ namespace Ceritar.Logirack_CVS
             return btnLocationReport;
         }
 
-        private void ShowOpenFileDialog(string vstrExtensionsFilter, Object rControl)
+        private void ShowOpenFileDialog(string vstrExtensionsFilter, Object rControl, string vstrInitialDirectory = "", bool vblnShowFile = false)
         {
             DialogResult dialogResult;
-
+            
             try
             {
                 if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE || formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
                 {
-                    openFileDialog.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                    if (vblnShowFile && vstrInitialDirectory != "")
+                    {
+                        vstrInitialDirectory = Path.GetDirectoryName(vstrInitialDirectory);
+
+                        openFileDialog.FileName = Path.GetFileName(mcGrdClients[grdClients.Row, mintGrdClients_LocationReportExe_col]);
+                    }
+
+                    openFileDialog.InitialDirectory = (vstrInitialDirectory == "" ? System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop) : vstrInitialDirectory);
                     openFileDialog.Multiselect = false;
                     openFileDialog.Filter = vstrExtensionsFilter;
-
                     dialogResult = openFileDialog.ShowDialog();
 
                     if (dialogResult == System.Windows.Forms.DialogResult.OK)
@@ -389,6 +411,11 @@ namespace Ceritar.Logirack_CVS
                 for (int intRowIndex = 1; intRowIndex < grdClients.Rows.Count; intRowIndex++)
                 {
                     mcGrdClients.LstHostedCellControls.Add(new HostedCellControl(grdClients, pfblnGetNewLocationReportButton(), intRowIndex, mintGrdClients_LocationReportExe_col));
+
+                    if (!mcGrdClients.bln_CellIsEmpty(intRowIndex, mintGrdClients_LocationReportExe_col))
+                    {
+                        mcGrdClients.LstHostedCellControls[intRowIndex - 1].GetCellControl.BackColor = System.Drawing.Color.Yellow;
+                    }
                 }   
             }
 
@@ -406,7 +433,7 @@ namespace Ceritar.Logirack_CVS
             bool blnValidReturn = false;
             Button btnPlaceHolder = null;
 
-            mcGrdClients.LstHostedCellControls = new System.Collections.ArrayList();
+            mcGrdClients.LstHostedCellControls = new List<HostedCellControl>();
 
             if (!mcGrdClients.bln_Init(ref grdClients, ref btnGrdClientsAdd, ref btnGrdClientsDel))
             { }
@@ -442,68 +469,87 @@ namespace Ceritar.Logirack_CVS
         {
             eventArgs.IsValid = false;
 
-            if (mcGrdClients.blnValidateGridData())
+            mcActionResults = mcCtrVersion.Validate();
+
+            if (!mcActionResults.IsValid)
             {
-                mcActionResults = mcCtrVersion.Validate();
+                clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
 
-                if (!mcActionResults.IsValid)
+                switch ((ctr_Version.ErrorCode_Ver)mcActionResults.GetErrorCode)
                 {
-                    switch ((ctr_Version.ErrorCode_Ver)mcActionResults.GetErrorCode)
-                    {
-                        case ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY:
+                    case ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY:
 
-                            btnReplaceAppChangeXLS.Focus();
-                            break;
+                        btnReplaceAppChangeXLS.Focus();
+                        break;
 
-                        case ctr_Version.ErrorCode_Ver.CERITAR_APP_MANDATORY:
+                    case ctr_Version.ErrorCode_Ver.CERITAR_APP_MANDATORY:
 
-                            cboApplications.Focus();
-                            cboApplications.DroppedDown = true;
-                            break;
+                        cboApplications.Focus();
+                        cboApplications.DroppedDown = true;
+                        break;
 
-                        case ctr_Version.ErrorCode_Ver.CLIENTS_LIST_MANDATORY:
+                    case ctr_Version.ErrorCode_Ver.CLIENTS_LIST_MANDATORY:
 
-                            btnGrdClientsAdd.Focus();
-                            break;
+                        btnGrdClientsAdd.Focus();
+                        break;
 
-                        case ctr_Version.ErrorCode_Ver.COMPILED_BY_MANDATORY:
+                    case ctr_Version.ErrorCode_Ver.COMPILED_BY_MANDATORY:
 
-                            txtCompiledBy.Focus();
-                            break;
+                        txtCompiledBy.Focus();
+                        break;
 
-                        case ctr_Version.ErrorCode_Ver.RELEASE_MANDATORY:
+                    case ctr_Version.ErrorCode_Ver.RELEASE_MANDATORY:
 
-                            btnReplaceExecutable.Focus();
-                            break;
+                        btnReplaceExecutable.Focus();
+                        break;
 
-                        case ctr_Version.ErrorCode_Ver.TEMPLATE_MANDATORY:
+                    case ctr_Version.ErrorCode_Ver.TEMPLATE_MANDATORY:
 
-                            cboTemplates.Focus();
-                            cboTemplates.DroppedDown = true;
-                            break;
+                        cboTemplates.Focus();
+                        cboTemplates.DroppedDown = true;
+                        break;
 
-                        case ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY:
+                    case ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY:
 
-                            btnReplaceTTApp.Focus();
-                            break;
+                        btnReplaceTTApp.Focus();
+                        break;
 
-                        case ctr_Version.ErrorCode_Ver.VERSION_NO_MANDATORY:
+                    case ctr_Version.ErrorCode_Ver.VERSION_NO_MANDATORY:
                             
-                            txtVersionNo.Focus();
-                            break;
+                        txtVersionNo.Focus();
+                        break;
 
-                        case ctr_Version.ErrorCode_Ver.VERSION_NO_UNIQUE_AND_BIGGER_PREVIOUS:
+                    case ctr_Version.ErrorCode_Ver.VERSION_NO_UNIQUE_AND_BIGGER_PREVIOUS:
                             
-                            txtVersionNo.Focus();
-                            txtVersionNo.SelectAll();
-                            break;
-                    }
+                        txtVersionNo.Focus();
+                        txtVersionNo.SelectAll();
+                        break;
 
-                    clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
+                    case ctr_Version.ErrorCode_Ver.CLIENT_NAME_MANDATORY:
+
+                        string strListOfClientSelected = string.Empty;
+
+                        for (int intRowIdx = 1; intRowIdx < grdClients.Rows.Count; intRowIdx++)
+                        {
+                            strListOfClientSelected = strListOfClientSelected + (strListOfClientSelected == string.Empty ? mcGrdClients[intRowIdx, mintGrdClients_CeC_NRI_col] : "," + Conversion.Val(mcGrdClients[intRowIdx, mintGrdClients_CeC_NRI_col]));
+                        }
+                        
+                        sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetClients_SQL(strListOfClientSelected), "CeC_NRI", "Cec_Name", false, ref cboClients);
+
+                        grdClients.Row = mcActionResults.RowInError;
+                        grdClients.StartEditing();
+
+                        break;
+
+                    case ctr_Version.ErrorCode_Ver.REPORT_MANDATORY:
+
+                        ((HostedCellControl)mcGrdClients.LstHostedCellControls[mcActionResults.RowInError - 1]).GetCellControl.Focus();
+
+                        break;
                 }
-
-                eventArgs.IsValid = mcActionResults.IsValid;
             }
+
+            eventArgs.IsValid = mcActionResults.IsValid;
         }
 
         private void formController_SaveData(SaveDataEventArgs eventArgs)
@@ -542,11 +588,15 @@ namespace Ceritar.Logirack_CVS
         private void btnReplaceAppChangeDOC_Click(object sender, EventArgs e)
         {
             ShowOpenFileDialog("Word Documents (.docx)|*.docx", txtWordAppChangePath);
+
+            if (!string.IsNullOrEmpty(txtWordAppChangePath.Text)) txtExcelAppChangePath.Text = string.Empty;
         }
 
         private void btnReplaceAppChangeXLS_Click(object sender, EventArgs e)
         {
-            ShowOpenFileDialog("Excel|*.xls|Excel 2010|*.xlsx", txtExcelAppChangePath); 
+            ShowOpenFileDialog("Excel|*.xls|Excel 2010|*.xlsx", txtExcelAppChangePath);
+
+            if (!string.IsNullOrEmpty(txtExcelAppChangePath.Text)) txtWordAppChangePath.Text = string.Empty;
         }
 
         private void btnReplaceTTApp_Click(object sender, EventArgs e)
@@ -582,7 +632,7 @@ namespace Ceritar.Logirack_CVS
 
                     case mintGrdClients_Installed_col:
 
-                        if (formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
+                        if (mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.INSERT_MODE.ToString())
                         {
                             mcGrdClients[grdClients.Row, mintGrdClients_Installed_col] = (mcGrdClients[grdClients.Row, mintGrdClients_Installed_col] == "0" ? "1" : "0");
 
@@ -597,7 +647,7 @@ namespace Ceritar.Logirack_CVS
 
                     case mintGrdClients_IsCurrentVersion_col:
 
-                        if (formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
+                        if (mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.INSERT_MODE.ToString())
                         {
                             mcGrdClients[grdClients.Row, mintGrdClients_IsCurrentVersion_col] = (mcGrdClients[grdClients.Row, mintGrdClients_IsCurrentVersion_col] == "0" ? "1" : "0");
 
@@ -669,49 +719,49 @@ namespace Ceritar.Logirack_CVS
 
         void mcGrdClients_ValidateGridData(ValidateGridDataEventArgs eventArgs)
         {
-            eventArgs.IsValid = false;
+            eventArgs.IsValid = true;
 
-            List<structClientAppVersion> lstStructCAV = ((IVersion)this).GetClientsList();
+            //List<structClientAppVersion> lstStructCAV = ((IVersion)this).GetClientsList();
 
-            if (grdClients.Rows.Count <= 1)
-            {
-                clsApp.GetAppController.ShowMessage((int)sclsConstants.Validation_Message.MANDATORY_GRID, MessageBoxButtons.OK, groupBox2.Text);
-            }
-            else
-            {
-                for (int intRowIndex = 0; intRowIndex < lstStructCAV.Count; intRowIndex++)
-                {
-                    eventArgs.IsValid = false;
+            //if (grdClients.Rows.Count <= 1)
+            //{
+            //    clsApp.GetAppController.ShowMessage((int)sclsConstants.Validation_Message.MANDATORY_GRID, MessageBoxButtons.OK, groupBox2.Text);
+            //}
+            //else
+            //{
+            //    for (int intRowIndex = 0; intRowIndex < lstStructCAV.Count; intRowIndex++)
+            //    {
+            //        eventArgs.IsValid = false;
 
-                    mcActionResults = mcCtrVersion.Validate_Client(lstStructCAV[intRowIndex]);
+            //        mcActionResults = mcCtrVersion.Validate_Client(lstStructCAV[intRowIndex]);
 
-                    if (!mcActionResults.IsValid)
-                    {
-                        clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
+            //        if (!mcActionResults.IsValid)
+            //        {
+            //            clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
 
-                        switch ((ctr_Version.ErrorCode_Ver)mcActionResults.GetErrorCode)
-                        {
-                            case ctr_Version.ErrorCode_Ver.CLIENT_NAME_MANDATORY:
+            //            switch ((ctr_Version.ErrorCode_Ver)mcActionResults.GetErrorCode)
+            //            {
+            //                case ctr_Version.ErrorCode_Ver.CLIENT_NAME_MANDATORY:
 
-                                ((ComboBox)grdClients.GetCellRange(1, mintGrdClients_CeC_Name_col).Style.Editor).DroppedDown = true;
+            //                    ((ComboBox)grdClients.GetCellRange(1, mintGrdClients_CeC_Name_col).Style.Editor).DroppedDown = true;
 
-                                break;
+            //                    break;
 
-                            case ctr_Version.ErrorCode_Ver.REPORT_MANDATORY:
+            //                case ctr_Version.ErrorCode_Ver.REPORT_MANDATORY:
 
-                                ((HostedCellControl)mcGrdClients.LstHostedCellControls[intRowIndex]).GetCellControl.Focus();
+            //                    ((HostedCellControl)mcGrdClients.LstHostedCellControls[intRowIndex]).GetCellControl.Focus();
 
-                                break;
-                        }
+            //                    break;
+            //            }
 
-                        break;
-                    }
-                    else
-                    {
-                        eventArgs.IsValid = true;
-                    }
-                }
-            }
+            //            break;
+            //        }
+            //        else
+            //        {
+            //            eventArgs.IsValid = true;
+            //        }
+            //    }
+            //}
         }
 
         private void formController_SetReadRights()
@@ -739,45 +789,58 @@ namespace Ceritar.Logirack_CVS
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
-            this.Cursor = Cursors.WaitCursor;
-
-            mcCtrVersion.blnBuildVersionHierarchy((int)cboTemplates.SelectedValue);
-
-            mcActionResults = mcCtrVersion.GetActionResult;
-
-            if (!mcActionResults.IsValid)
+            if (!formController.ChangeMade)
             {
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI, MessageBoxButtons.OK, mcActionResults.GetLstParams);
+                this.Cursor = Cursors.WaitCursor;
 
-                switch ((ctr_Version.ErrorCode_Ver)mcActionResults.GetErrorCode)
+                mcCtrVersion.blnUpdateVersionHierarchy();
+
+                mcActionResults = mcCtrVersion.GetActionResult;
+
+                if (!mcActionResults.IsValid)
                 {
-                    case ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY:
+                    clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI, MessageBoxButtons.OK, mcActionResults.GetLstParams);
 
-                        btnReplaceAppChangeXLS.Focus();
+                    switch ((ctr_Version.ErrorCode_Ver)mcActionResults.GetErrorCode)
+                    {
+                        case ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY:
 
-                        break;
+                            btnReplaceAppChangeXLS.Focus();
 
-                    case ctr_Version.ErrorCode_Ver.RELEASE_MANDATORY:
+                            break;
 
-                        btnReplaceExecutable.Focus();
+                        case ctr_Version.ErrorCode_Ver.RELEASE_MANDATORY:
 
-                        break;
+                            btnReplaceExecutable.Focus();
 
-                    case ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY:
+                            break;
 
-                        btnReplaceTTApp.Focus();
+                        case ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY:
 
-                        break;
+                            btnReplaceTTApp.Focus();
 
-                    case ctr_Version.ErrorCode_Ver.REPORT_MANDATORY:
+                            break;
 
-                        grdClients.Select(grdClients.Row, mintGrdClients_LocationReportExe_col);
+                        case ctr_Version.ErrorCode_Ver.REPORT_MANDATORY:
 
-                        break;
+                            grdClients.Select(grdClients.Row, mintGrdClients_LocationReportExe_col);
+
+                            break;
+                    }
                 }
-            }
+                else
+                {
+                    formController.FormIsLoading = true;
+                    formController_LoadData(new LoadDataEventArgs(formController.Item_NRI));
+                    formController.FormIsLoading = false; //TODO METHOD 
+                }
 
-            this.Cursor = Cursors.Default;
+                this.Cursor = Cursors.Default;
+            }
+            else
+            {
+                clsApp.GetAppController.ShowMessage((int)sclsConstants.Validation_Message.INVALID_ACTION_IF_CHANGE_MADE);
+            }
         }
 
         private void btnGrdRevAdd_Click(object sender, EventArgs e)
@@ -796,7 +859,7 @@ namespace Ceritar.Logirack_CVS
 
         private void btnGrdRevDel_Click(object sender, EventArgs e)
         {
-            if (mcGrdClients.bln_RowsSelValid())
+            if (mcGrdRevisions.bln_RowsSelValid())
             {
                 int intItem_NRI = (int)grdRevisions[grdRevisions.Row, mintGrdRev_Rev_NRI_col];
                 frmRevision frmVersion = new frmRevision();
@@ -829,7 +892,7 @@ namespace Ceritar.Logirack_CVS
                 }
             }
 
-            ShowOpenFileDialog("LogirackTransport RPT (*.exe)|*.exe", grdClients);
+            ShowOpenFileDialog("LogirackTransport RPT (*.exe)|*.exe",grdClients, mcGrdClients[grdClients.Row, mintGrdClients_LocationReportExe_col], true);
 
             mcGrdClients.GridIsLoading = false;
         }
@@ -849,6 +912,40 @@ namespace Ceritar.Logirack_CVS
             pfblnEnableDisable_btnGrdClientsDelete(e.NewRange.r1);
         }
 
+        private void btnShowExecutable_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtReleasePath.Text) && Directory.Exists(txtReleasePath.Text))
+            {
+                System.Diagnostics.Process.Start(txtReleasePath.Text);
+            }
+        }
 
+        private void btnShowExcel_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtExcelAppChangePath.Text) && File.Exists(txtExcelAppChangePath.Text))
+            {
+                System.Diagnostics.Process.Start(txtExcelAppChangePath.Text);
+            }
+        }
+
+        private void btnShowWord_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtWordAppChangePath.Text) && File.Exists(txtWordAppChangePath.Text))
+            {
+                System.Diagnostics.Process.Start(txtWordAppChangePath.Text);
+            }
+        }
+
+        private void btnShowAccess_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtTTAppPath.Text) && File.Exists(txtTTAppPath.Text))
+            {
+                if (File.Exists(txtTTAppPath.Text))
+                {
+                    System.Diagnostics.Process.Start("explorer.exe", "/select, " + txtTTAppPath.Text);
+                }
+            }
+        }
+        
     }
 }
