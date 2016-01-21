@@ -35,7 +35,8 @@ namespace Ceritar.CVS.Controllers
             CLIENT_NAME_MANDATORY = 9,
             VERSION_NO_UNIQUE_AND_BIGGER_PREVIOUS = 10,
             REPORT_MANDATORY = 11,
-            CANT_DELETE_USED_VERSION = 12
+            CANT_DELETE_USED_VERSION = 12,
+            DEMO_CANT_BE_INSTALLED = 13
         }
 
         public clsActionResults GetActionResult
@@ -259,7 +260,7 @@ namespace Ceritar.CVS.Controllers
 
                             if (!string.IsNullOrEmpty(mcView.GetLocation_Release()) && mcView.GetLocation_Release() != currentFolderInfos.FullName)
                             {
-                                blnValidReturn = clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, mstrReleaseValidExtensions);
+                                blnValidReturn = clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, mstrReleaseValidExtensions);
                             }
                             else
                             {
@@ -392,9 +393,37 @@ namespace Ceritar.CVS.Controllers
                                 clsApp.GetAppController.blnCopyFolderContent(strCurrentVersionFolderToCopy_Path,
                                                                              Path.Combine(vstrDestinationFolderPath,
                                                                                           structClient.strCeritarClient_Name,
-                                                                                          intCurrentFolder_VersionNo.ToString()),
+                                                                                          sclsAppConfigs.GetVersionNumberPrefix + intCurrentFolder_VersionNo.ToString()),
                                                                              true,
                                                                              true);
+
+                                //Copy all client's specific scripts
+                                if (Directory.Exists(Path.Combine(strCurrentVersionFolderToCopy_Path, structClient.strCeritarClient_Name)))
+                                {
+                                    string[] lstSpecificScripts = Directory.GetFiles(Path.Combine(strCurrentVersionFolderToCopy_Path, structClient.strCeritarClient_Name));
+                                    string strNewScriptName = string.Empty;
+                                    int intNewScriptNumber = 0;
+
+                                    for (int intIndex = 0; intIndex < lstSpecificScripts.Length; intIndex++)
+                                    {
+                                        strNewScriptName = Path.GetFileName(lstSpecificScripts[intIndex]);
+                                        strNewScriptName = strNewScriptName.Substring(strNewScriptName.IndexOf("_") + 1);
+
+                                        intNewScriptNumber = (intNewScriptNumber == 0 ? Directory.GetFiles(strCurrentVersionFolderToCopy_Path).Length + 1 : intNewScriptNumber + 1);
+
+                                        strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
+
+                                        File.Copy(lstSpecificScripts[intIndex], Path.Combine(vstrDestinationFolderPath,
+                                                                                             structClient.strCeritarClient_Name,
+                                                                                             sclsAppConfigs.GetVersionNumberPrefix + intCurrentFolder_VersionNo.ToString(),
+                                                                                             strNewScriptName)
+                                                 );
+                                    }
+                                }
+                                else 
+                                {
+                                    //Do nothing
+                                }
                             }
                             else
                             {
@@ -575,6 +604,7 @@ namespace Ceritar.CVS.Controllers
                 mcModVersion.TemplateSource = new Models.Module_Template.mod_Tpl_HierarchyTemplate();
                 mcModVersion.TemplateSource.Template_NRI = mcView.GetTemplateSource_NRI();
                 mcModVersion.CreationDate = mcView.GetCreationDate();
+                mcModVersion.IsDemo = mcView.GetIsDemo();
 
                 lstStructCAV = mcView.GetClientsList();
 
@@ -621,7 +651,8 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        Version.CeA_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        Version.Ver_AppChange_Location, " + Environment.NewLine;
             strSQL = strSQL + "        Version.Ver_Release_Location, " + Environment.NewLine;
-            strSQL = strSQL + "        Version.Ver_CaptionsAndMenus_Location " + Environment.NewLine;
+            strSQL = strSQL + "        Version.Ver_CaptionsAndMenus_Location, " + Environment.NewLine;
+            strSQL = strSQL + "        Version.Ver_IsDemo " + Environment.NewLine;
 
             strSQL = strSQL + " FROM Version " + Environment.NewLine;
 
@@ -642,7 +673,8 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        ClientAppVersion.CAV_Installed, " + Environment.NewLine;
             strSQL = strSQL + "        ClientAppVersion.CAV_IsCurrentVersion, " + Environment.NewLine;
             strSQL = strSQL + "        ClientAppVersion.CAV_ReportExe_Location, " + Environment.NewLine;
-            strSQL = strSQL + "        ClientAppVersion.CAV_License " + Environment.NewLine;
+            strSQL = strSQL + "        ClientAppVersion.CAV_License, " + Environment.NewLine;
+            strSQL = strSQL + "        SelCol = 0 " + Environment.NewLine;
 
             strSQL = strSQL + " FROM ClientAppVersion " + Environment.NewLine;
             strSQL = strSQL + "     INNER JOIN CerClient ON CerClient.CeC_NRI = ClientAppVersion.CeC_NRI " + Environment.NewLine;

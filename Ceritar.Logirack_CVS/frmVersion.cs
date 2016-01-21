@@ -33,6 +33,7 @@ namespace Ceritar.Logirack_CVS
         private const short mintGrdClients_IsCurrentVersion_col = 7;
         private const short mintGrdClients_LocationReportExe_col = 8;
         private const short mintGrdClients_License_col = 9;
+        private const short mintGrdClients_Selection_col = 10;
 
         //Columns grdRev
         private const short mintGrdRev_Rev_NRI_col = 1;
@@ -167,6 +168,11 @@ namespace Ceritar.Logirack_CVS
             return lstClient_NRI;
         }
 
+        bool IVersion.GetIsDemo()
+        {
+            return chkDemoVersion.Checked;
+        }
+
 #endregion
         
         
@@ -227,7 +233,6 @@ namespace Ceritar.Logirack_CVS
 
                     txtCompiledBy.Text = sqlRecord["Ver_CompiledBy"].ToString();
                     txtVersionNo.Text = sqlRecord["Ver_No"].ToString();
-                    txtReleasePath.Text = sqlRecord["Ver_No"].ToString();
 
                     strAppChangeLocation = sqlRecord["Ver_AppChange_Location"].ToString();
 
@@ -249,6 +254,8 @@ namespace Ceritar.Logirack_CVS
 
                     cboApplications.SelectedValue = Int32.Parse(sqlRecord["CeA_NRI"].ToString());
                     cboTemplates.SelectedValue = Int32.Parse(sqlRecord["Tpl_NRI"].ToString());
+
+                    chkDemoVersion.Checked = Convert.ToBoolean(sqlRecord["Ver_IsDemo"]);
 
                     blnValidReturn = true;
                 }
@@ -300,14 +307,21 @@ namespace Ceritar.Logirack_CVS
                 {
                     if (vblnShowFile && vstrInitialDirectory != "")
                     {
-                        vstrInitialDirectory = Path.GetDirectoryName(vstrInitialDirectory);
+                        openFileDialog.FileName = vstrInitialDirectory;
 
-                        openFileDialog.FileName = Path.GetFileName(mcGrdClients[grdClients.Row, mintGrdClients_LocationReportExe_col]);
+                        vstrInitialDirectory = Path.GetDirectoryName(vstrInitialDirectory);
+                    }
+                    else
+                    {
+                        openFileDialog.FileName = string.Empty;
+
+                        vstrInitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                     }
 
-                    openFileDialog.InitialDirectory = (vstrInitialDirectory == "" ? System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop) : vstrInitialDirectory);
+                    openFileDialog.InitialDirectory = vstrInitialDirectory;
                     openFileDialog.Multiselect = false;
                     openFileDialog.Filter = vstrExtensionsFilter;
+
                     dialogResult = openFileDialog.ShowDialog();
 
                     if (dialogResult == System.Windows.Forms.DialogResult.OK)
@@ -341,15 +355,15 @@ namespace Ceritar.Logirack_CVS
                 {
                     folderBrowserDialog.ShowNewFolderButton = false;
 
-                    if (rtxtAffected.Name == txtReleasePath.Name && !string.IsNullOrEmpty(txtReleasePath.Text))
+                    if (!string.IsNullOrEmpty(rtxtAffected.Text))
                     {
-                        folderBrowserDialog.SelectedPath = txtReleasePath.Text;
+                        folderBrowserDialog.SelectedPath = rtxtAffected.Text;
                     }
                     else
                     {
                         folderBrowserDialog.RootFolder = Environment.SpecialFolder.Desktop;
                     }
-
+                    
                     dialogResult = folderBrowserDialog.ShowDialog();
 
                     if (dialogResult == System.Windows.Forms.DialogResult.OK)
@@ -391,18 +405,41 @@ namespace Ceritar.Logirack_CVS
             return blnValidReturn;
         }
 
+        private bool pfblnExportInstallationKit()
+        {
+            bool blnValidReturn = false;
+            TextBox txtTemp = new TextBox();
+
+            try
+            {
+                ShowFolderBrowserDialog(ref txtTemp);
+
+
+
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnValidReturn;
+        }
+
 #endregion
 
 
         void mcGrdClients_SetGridDisplay()
         {
-            grdClients.Cols[mintGrdClients_CeC_Name_col].Width = 220;
-            grdClients.Cols[mintGrdClients_Installed_col].Width = 50;
+            grdClients.Cols[mintGrdClients_CeC_Name_col].Width = 210;
+            grdClients.Cols[mintGrdClients_Installed_col].Width = 48;
             grdClients.Cols[mintGrdClients_IsCurrentVersion_col].Width = 50;
-            grdClients.Cols[mintGrdClients_LocationReportExe_col].Width = 20;
+            grdClients.Cols[mintGrdClients_LocationReportExe_col].Width = 42;
+            grdClients.Cols[mintGrdClients_Selection_col].Width = 20;
 
             grdClients.Cols[mintGrdClients_IsCurrentVersion_col].DataType = typeof(bool);
             grdClients.Cols[mintGrdClients_Installed_col].DataType = typeof(bool);
+            grdClients.Cols[mintGrdClients_Selection_col].DataType = typeof(bool);
 
             if (grdClients.Rows.Count > 1)
             {
@@ -546,6 +583,12 @@ namespace Ceritar.Logirack_CVS
                         ((HostedCellControl)mcGrdClients.LstHostedCellControls[mcActionResults.RowInError - 1]).GetCellControl.Focus();
 
                         break;
+
+                    case ctr_Version.ErrorCode_Ver.DEMO_CANT_BE_INSTALLED:
+
+                        chkDemoVersion.Focus();
+
+                        break;
                 }
             }
 
@@ -587,21 +630,21 @@ namespace Ceritar.Logirack_CVS
 
         private void btnReplaceAppChangeDOC_Click(object sender, EventArgs e)
         {
-            ShowOpenFileDialog("Word Documents (.docx)|*.docx", txtWordAppChangePath);
+            ShowOpenFileDialog("Word Documents (.docx)|*.docx", txtWordAppChangePath, txtWordAppChangePath.Text, true);
 
             if (!string.IsNullOrEmpty(txtWordAppChangePath.Text)) txtExcelAppChangePath.Text = string.Empty;
         }
 
         private void btnReplaceAppChangeXLS_Click(object sender, EventArgs e)
         {
-            ShowOpenFileDialog("Excel|*.xls|Excel 2010|*.xlsx", txtExcelAppChangePath);
+            ShowOpenFileDialog("Excel|*.xls|Excel 2010|*.xlsx", txtExcelAppChangePath, txtExcelAppChangePath.Text, true);
 
             if (!string.IsNullOrEmpty(txtExcelAppChangePath.Text)) txtWordAppChangePath.Text = string.Empty;
         }
 
         private void btnReplaceTTApp_Click(object sender, EventArgs e)
         {
-            ShowOpenFileDialog("Access files (*.mdb)|*.mdb", txtTTAppPath);
+            ShowOpenFileDialog("Access files (*.mdb)|*.mdb", txtTTAppPath, (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE ? txtTTAppPath.Text : string.Empty), true);
         }
 
         private void btnReplaceExecutable_Click(object sender, EventArgs e)
@@ -656,6 +699,15 @@ namespace Ceritar.Logirack_CVS
 
                                 mcGrdClients[grdClients.Row, mintGrdClients_Installed_col] = "1";
                             }
+                        }
+
+                        break;
+
+                    case mintGrdClients_Selection_col:
+
+                        if (mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.INSERT_MODE.ToString())
+                        {
+                            mcGrdClients[grdClients.Row, mintGrdClients_Selection_col] = (mcGrdClients[grdClients.Row, mintGrdClients_Selection_col] == "0" ? "1" : "0");
                         }
 
                         break;
@@ -946,6 +998,19 @@ namespace Ceritar.Logirack_CVS
                 }
             }
         }
-        
+
+        private void chkDemoVersion_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!formController.FormIsLoading)
+            {
+                formController.ChangeMade = true;
+            }
+        }
+
+        private void btnExportInstallationKit_Click(object sender, EventArgs e)
+        {
+            pfblnExportInstallationKit();
+        }
+
     }
 }

@@ -22,6 +22,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         string GetLocation_APP_CHANGEMENT();
         string GetLocation_Release();
         string GetLocation_TTApp();
+        bool GetIsDemo();
         List<structClientAppVersion> GetClientsList();
     }
 

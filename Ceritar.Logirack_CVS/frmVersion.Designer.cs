@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmVersion));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkDemoVersion = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.dtpCreation = new System.Windows.Forms.DateTimePicker();
@@ -43,7 +44,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.cboApplications = new System.Windows.Forms.ComboBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnGenerate = new System.Windows.Forms.Button();
             this.btnShowExecutable = new System.Windows.Forms.Button();
             this.btnShowAccess = new System.Windows.Forms.Button();
             this.btnShowWord = new System.Windows.Forms.Button();
@@ -71,6 +71,13 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.grdSatellite = new C1.Win.C1FlexGrid.C1FlexGrid();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.btnGenerate = new System.Windows.Forms.Button();
+            this.btnExportInstallationKit = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.tabRevision.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -79,10 +86,14 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdClients)).BeginInit();
             this.tab.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.grdSatellite)).BeginInit();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.chkDemoVersion);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.dtpCreation);
@@ -100,6 +111,17 @@
             this.groupBox1.TabIndex = 37;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Informations";
+            // 
+            // chkDemoVersion
+            // 
+            this.chkDemoVersion.AutoSize = true;
+            this.chkDemoVersion.Location = new System.Drawing.Point(452, 48);
+            this.chkDemoVersion.Name = "chkDemoVersion";
+            this.chkDemoVersion.Size = new System.Drawing.Size(54, 17);
+            this.chkDemoVersion.TabIndex = 4;
+            this.chkDemoVersion.Text = "Démo";
+            this.chkDemoVersion.UseVisualStyleBackColor = true;
+            this.chkDemoVersion.CheckedChanged += new System.EventHandler(this.chkDemoVersion_CheckedChanged);
             // 
             // label2
             // 
@@ -206,27 +228,14 @@
             this.toolTip.InitialDelay = 250;
             this.toolTip.ReshowDelay = 100;
             // 
-            // btnGenerate
-            // 
-            this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGenerate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGenerate.BackgroundImage")));
-            this.btnGenerate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnGenerate.Location = new System.Drawing.Point(753, 314);
-            this.btnGenerate.Name = "btnGenerate";
-            this.btnGenerate.Size = new System.Drawing.Size(40, 40);
-            this.btnGenerate.TabIndex = 4;
-            this.toolTip.SetToolTip(this.btnGenerate, "Mettre à jour la hierarchie");
-            this.btnGenerate.UseVisualStyleBackColor = true;
-            this.btnGenerate.Click += new System.EventHandler(this.btnCreate_Click);
-            // 
             // btnShowExecutable
             // 
             this.btnShowExecutable.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowExecutable.BackgroundImage")));
             this.btnShowExecutable.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowExecutable.Location = new System.Drawing.Point(556, 314);
+            this.btnShowExecutable.Location = new System.Drawing.Point(660, 314);
             this.btnShowExecutable.Name = "btnShowExecutable";
             this.btnShowExecutable.Size = new System.Drawing.Size(40, 40);
-            this.btnShowExecutable.TabIndex = 7;
+            this.btnShowExecutable.TabIndex = 21;
             this.toolTip.SetToolTip(this.btnShowExecutable, "Consulter l\'exécutable");
             this.btnShowExecutable.UseVisualStyleBackColor = true;
             this.btnShowExecutable.Click += new System.EventHandler(this.btnShowExecutable_Click);
@@ -235,10 +244,10 @@
             // 
             this.btnShowAccess.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowAccess.BackgroundImage")));
             this.btnShowAccess.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowAccess.Location = new System.Drawing.Point(556, 269);
+            this.btnShowAccess.Location = new System.Drawing.Point(660, 269);
             this.btnShowAccess.Name = "btnShowAccess";
             this.btnShowAccess.Size = new System.Drawing.Size(40, 40);
-            this.btnShowAccess.TabIndex = 6;
+            this.btnShowAccess.TabIndex = 20;
             this.toolTip.SetToolTip(this.btnShowAccess, "Consulter TTApp");
             this.btnShowAccess.UseVisualStyleBackColor = true;
             this.btnShowAccess.Click += new System.EventHandler(this.btnShowAccess_Click);
@@ -247,10 +256,10 @@
             // 
             this.btnShowWord.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowWord.BackgroundImage")));
             this.btnShowWord.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowWord.Location = new System.Drawing.Point(556, 223);
+            this.btnShowWord.Location = new System.Drawing.Point(660, 223);
             this.btnShowWord.Name = "btnShowWord";
             this.btnShowWord.Size = new System.Drawing.Size(40, 40);
-            this.btnShowWord.TabIndex = 5;
+            this.btnShowWord.TabIndex = 19;
             this.toolTip.SetToolTip(this.btnShowWord, "Consulter App_Changements.docx");
             this.btnShowWord.UseVisualStyleBackColor = true;
             this.btnShowWord.Click += new System.EventHandler(this.btnShowWord_Click);
@@ -259,10 +268,10 @@
             // 
             this.btnShowExcel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowExcel.BackgroundImage")));
             this.btnShowExcel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowExcel.Location = new System.Drawing.Point(556, 177);
+            this.btnShowExcel.Location = new System.Drawing.Point(660, 177);
             this.btnShowExcel.Name = "btnShowExcel";
             this.btnShowExcel.Size = new System.Drawing.Size(40, 40);
-            this.btnShowExcel.TabIndex = 4;
+            this.btnShowExcel.TabIndex = 18;
             this.toolTip.SetToolTip(this.btnShowExcel, "Consulter App_Changements.xls");
             this.btnShowExcel.UseVisualStyleBackColor = true;
             this.btnShowExcel.Click += new System.EventHandler(this.btnShowExcel_Click);
@@ -274,7 +283,7 @@
             this.btnReplaceAppChangeXLS.Location = new System.Drawing.Point(7, 181);
             this.btnReplaceAppChangeXLS.Name = "btnReplaceAppChangeXLS";
             this.btnReplaceAppChangeXLS.Size = new System.Drawing.Size(30, 30);
-            this.btnReplaceAppChangeXLS.TabIndex = 0;
+            this.btnReplaceAppChangeXLS.TabIndex = 13;
             this.toolTip.SetToolTip(this.btnReplaceAppChangeXLS, "Sélectionner le App_Changements");
             this.btnReplaceAppChangeXLS.UseVisualStyleBackColor = true;
             this.btnReplaceAppChangeXLS.Click += new System.EventHandler(this.btnReplaceAppChangeXLS_Click);
@@ -286,7 +295,7 @@
             this.btnReplaceAppChangeDOC.Location = new System.Drawing.Point(7, 228);
             this.btnReplaceAppChangeDOC.Name = "btnReplaceAppChangeDOC";
             this.btnReplaceAppChangeDOC.Size = new System.Drawing.Size(30, 30);
-            this.btnReplaceAppChangeDOC.TabIndex = 1;
+            this.btnReplaceAppChangeDOC.TabIndex = 14;
             this.toolTip.SetToolTip(this.btnReplaceAppChangeDOC, "Sélectionner le App_Changements");
             this.btnReplaceAppChangeDOC.UseVisualStyleBackColor = true;
             this.btnReplaceAppChangeDOC.Click += new System.EventHandler(this.btnReplaceAppChangeDOC_Click);
@@ -298,7 +307,7 @@
             this.btnReplaceTTApp.Location = new System.Drawing.Point(7, 274);
             this.btnReplaceTTApp.Name = "btnReplaceTTApp";
             this.btnReplaceTTApp.Size = new System.Drawing.Size(30, 30);
-            this.btnReplaceTTApp.TabIndex = 2;
+            this.btnReplaceTTApp.TabIndex = 15;
             this.toolTip.SetToolTip(this.btnReplaceTTApp, "Sélectionner le TTApp");
             this.btnReplaceTTApp.UseVisualStyleBackColor = true;
             this.btnReplaceTTApp.Click += new System.EventHandler(this.btnReplaceTTApp_Click);
@@ -310,7 +319,7 @@
             this.btnReplaceExecutable.Location = new System.Drawing.Point(7, 319);
             this.btnReplaceExecutable.Name = "btnReplaceExecutable";
             this.btnReplaceExecutable.Size = new System.Drawing.Size(30, 30);
-            this.btnReplaceExecutable.TabIndex = 3;
+            this.btnReplaceExecutable.TabIndex = 16;
             this.toolTip.SetToolTip(this.btnReplaceExecutable, "Sélectionner l\'exécutable");
             this.btnReplaceExecutable.UseVisualStyleBackColor = true;
             this.btnReplaceExecutable.Click += new System.EventHandler(this.btnReplaceExecutable_Click);
@@ -380,6 +389,8 @@
             // 
             // tabVersion
             // 
+            this.tabVersion.Controls.Add(this.groupBox5);
+            this.tabVersion.Controls.Add(this.groupBox4);
             this.tabVersion.Controls.Add(this.btnReplaceExecutable);
             this.tabVersion.Controls.Add(this.btnReplaceTTApp);
             this.tabVersion.Controls.Add(this.btnReplaceAppChangeDOC);
@@ -387,7 +398,6 @@
             this.tabVersion.Controls.Add(this.txtReleasePath);
             this.tabVersion.Controls.Add(this.btnShowExecutable);
             this.tabVersion.Controls.Add(this.txtTTAppPath);
-            this.tabVersion.Controls.Add(this.btnGenerate);
             this.tabVersion.Controls.Add(this.txtWordAppChangePath);
             this.tabVersion.Controls.Add(this.txtExcelAppChangePath);
             this.tabVersion.Controls.Add(this.btnShowAccess);
@@ -408,7 +418,7 @@
             this.txtReleasePath.Location = new System.Drawing.Point(43, 321);
             this.txtReleasePath.Name = "txtReleasePath";
             this.txtReleasePath.ReadOnly = true;
-            this.txtReleasePath.Size = new System.Drawing.Size(507, 26);
+            this.txtReleasePath.Size = new System.Drawing.Size(611, 26);
             this.txtReleasePath.TabIndex = 60;
             // 
             // txtTTAppPath
@@ -417,7 +427,7 @@
             this.txtTTAppPath.Location = new System.Drawing.Point(43, 275);
             this.txtTTAppPath.Name = "txtTTAppPath";
             this.txtTTAppPath.ReadOnly = true;
-            this.txtTTAppPath.Size = new System.Drawing.Size(507, 26);
+            this.txtTTAppPath.Size = new System.Drawing.Size(611, 26);
             this.txtTTAppPath.TabIndex = 58;
             // 
             // txtWordAppChangePath
@@ -426,7 +436,7 @@
             this.txtWordAppChangePath.Location = new System.Drawing.Point(43, 229);
             this.txtWordAppChangePath.Name = "txtWordAppChangePath";
             this.txtWordAppChangePath.ReadOnly = true;
-            this.txtWordAppChangePath.Size = new System.Drawing.Size(507, 26);
+            this.txtWordAppChangePath.Size = new System.Drawing.Size(611, 26);
             this.txtWordAppChangePath.TabIndex = 57;
             // 
             // txtExcelAppChangePath
@@ -435,11 +445,12 @@
             this.txtExcelAppChangePath.Location = new System.Drawing.Point(43, 183);
             this.txtExcelAppChangePath.Name = "txtExcelAppChangePath";
             this.txtExcelAppChangePath.ReadOnly = true;
-            this.txtExcelAppChangePath.Size = new System.Drawing.Size(507, 26);
+            this.txtExcelAppChangePath.Size = new System.Drawing.Size(611, 26);
             this.txtExcelAppChangePath.TabIndex = 56;
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.btnExportInstallationKit);
             this.groupBox2.Controls.Add(this.cboClients);
             this.groupBox2.Controls.Add(this.btnGrdClientsDel);
             this.groupBox2.Controls.Add(this.btnGrdClientsAdd);
@@ -469,7 +480,7 @@
             this.btnGrdClientsDel.Location = new System.Drawing.Point(395, 58);
             this.btnGrdClientsDel.Name = "btnGrdClientsDel";
             this.btnGrdClientsDel.Size = new System.Drawing.Size(35, 35);
-            this.btnGrdClientsDel.TabIndex = 1;
+            this.btnGrdClientsDel.TabIndex = 12;
             this.btnGrdClientsDel.UseVisualStyleBackColor = true;
             this.btnGrdClientsDel.Click += new System.EventHandler(this.btnGrdClientsDel_Click);
             // 
@@ -480,7 +491,7 @@
             this.btnGrdClientsAdd.Location = new System.Drawing.Point(395, 17);
             this.btnGrdClientsAdd.Name = "btnGrdClientsAdd";
             this.btnGrdClientsAdd.Size = new System.Drawing.Size(35, 35);
-            this.btnGrdClientsAdd.TabIndex = 0;
+            this.btnGrdClientsAdd.TabIndex = 11;
             this.btnGrdClientsAdd.UseVisualStyleBackColor = true;
             // 
             // grdClients
@@ -510,11 +521,12 @@
             this.tab.Name = "tab";
             this.tab.SelectedIndex = 0;
             this.tab.Size = new System.Drawing.Size(807, 386);
-            this.tab.TabIndex = 0;
+            this.tab.TabIndex = 10;
             // 
             // formController
             // 
             this.formController.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.formController.ChangeMade = false;
             this.formController.FormIsLoading = false;
             this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.CONSULT_MODE;
             this.formController.Item_NRI = 0;
@@ -522,11 +534,93 @@
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
             this.formController.Size = new System.Drawing.Size(812, 33);
-            this.formController.TabIndex = 0;
+            this.formController.TabIndex = 50;
             this.formController.SetReadRights += new Ceritar.TT3LightDLL.Controls.ctlFormController.SetReadRightsEventHandler(this.formController_SetReadRights);
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
+            // 
+            // button1
+            // 
+            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
+            this.button1.Location = new System.Drawing.Point(297, 58);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(35, 35);
+            this.button1.TabIndex = 12;
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.button2.Image = ((System.Drawing.Image)(resources.GetObject("button2.Image")));
+            this.button2.Location = new System.Drawing.Point(297, 17);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(35, 35);
+            this.button2.TabIndex = 11;
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.button1);
+            this.groupBox4.Controls.Add(this.button2);
+            this.groupBox4.Controls.Add(this.grdSatellite);
+            this.groupBox4.Location = new System.Drawing.Point(448, 6);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(338, 167);
+            this.groupBox4.TabIndex = 62;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Applications satellites";
+            // 
+            // grdSatellite
+            // 
+            this.grdSatellite.AutoSearch = C1.Win.C1FlexGrid.AutoSearchEnum.FromTop;
+            this.grdSatellite.ColumnInfo = "1,1,0,0,0,90,Columns:0{Width:5;}\t";
+            this.grdSatellite.ExtendLastCol = true;
+            this.grdSatellite.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdSatellite.Location = new System.Drawing.Point(6, 17);
+            this.grdSatellite.Name = "grdSatellite";
+            this.grdSatellite.Rows.Count = 1;
+            this.grdSatellite.Rows.DefaultSize = 18;
+            this.grdSatellite.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
+            this.grdSatellite.Size = new System.Drawing.Size(285, 144);
+            this.grdSatellite.StyleInfo = resources.GetString("grdSatellite.StyleInfo");
+            this.grdSatellite.TabIndex = 2;
+            this.grdSatellite.Tag = "";
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.btnGenerate);
+            this.groupBox5.Location = new System.Drawing.Point(737, 289);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(56, 65);
+            this.groupBox5.TabIndex = 63;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Actions";
+            // 
+            // btnGenerate
+            // 
+            this.btnGenerate.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnGenerate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGenerate.BackgroundImage")));
+            this.btnGenerate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnGenerate.Location = new System.Drawing.Point(8, 17);
+            this.btnGenerate.Name = "btnGenerate";
+            this.btnGenerate.Size = new System.Drawing.Size(40, 40);
+            this.btnGenerate.TabIndex = 62;
+            this.toolTip.SetToolTip(this.btnGenerate, "Mettre à jour la hierarchie");
+            this.btnGenerate.UseVisualStyleBackColor = true;
+            // 
+            // btnExportInstallationKit
+            // 
+            this.btnExportInstallationKit.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnExportInstallationKit.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnExportInstallationKit.BackgroundImage")));
+            this.btnExportInstallationKit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnExportInstallationKit.Location = new System.Drawing.Point(395, 126);
+            this.btnExportInstallationKit.Name = "btnExportInstallationKit";
+            this.btnExportInstallationKit.Size = new System.Drawing.Size(35, 35);
+            this.btnExportInstallationKit.TabIndex = 64;
+            this.toolTip.SetToolTip(this.btnExportInstallationKit, "Exporter un kit d\'installation");
+            this.btnExportInstallationKit.UseVisualStyleBackColor = true;
             // 
             // frmVersion
             // 
@@ -552,6 +646,9 @@
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdClients)).EndInit();
             this.tab.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.grdSatellite)).EndInit();
+            this.groupBox5.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -574,7 +671,6 @@
         private System.Windows.Forms.TabPage tabRevision;
         private System.Windows.Forms.TabPage tabVersion;
         private System.Windows.Forms.TextBox txtTTAppPath;
-        private System.Windows.Forms.Button btnGenerate;
         private System.Windows.Forms.TextBox txtWordAppChangePath;
         private System.Windows.Forms.TextBox txtExcelAppChangePath;
         private System.Windows.Forms.Button btnShowAccess;
@@ -599,5 +695,13 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
         private System.Windows.Forms.ComboBox cboClients;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox chkDemoVersion;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        public C1.Win.C1FlexGrid.C1FlexGrid grdSatellite;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.Button btnGenerate;
+        private System.Windows.Forms.Button btnExportInstallationKit;
     }
 }

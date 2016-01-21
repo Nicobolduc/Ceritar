@@ -23,7 +23,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private string _strCreationDate;
         private string _strLocation_APP_CHANGEMENT;
         private string _strLocation_Release;
-        private string _strLocation_CaptionsAndMenus;      
+        private string _strLocation_CaptionsAndMenus;
+        private bool _blnIsDemo;
         private mod_TTU_User _cCreatedByUser;
         private List<mod_Rev_Revision> _lstRevisions; //TODO unused
         private mod_CeA_CeritarApplication _cCerApplication;
@@ -38,6 +39,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         //Messages
         private const int mintMSG_VersionNo_UniqueAndBiggerPrevious = 18;
         private const int mintMSG_CantDeleteVersionIfUsed = 22;
+        private const int mintMSG_CantInstallDemoInProd = 24;
 
         //Working variables
 
@@ -143,6 +145,12 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         internal clsSQL SetcSQL
         {
             set { mcSQL = value; }
+        }
+
+        internal bool IsDemo
+        {
+            get { return _blnIsDemo; }
+            set { _blnIsDemo = value; }
         }
 
 #endregion
@@ -457,6 +465,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 { }
                 else if (!mcSQL.bln_AddField("Ver_CaptionsAndMenus_Location", _strLocation_CaptionsAndMenus, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
+                else if (!mcSQL.bln_AddField("Ver_IsDemo", _blnIsDemo, clsSQL.MySQL_FieldTypes.BIT_TYPE))
+                { }
                 else
                 {
                     if (DML_Action == sclsConstants.DML_Mode.INSERT_MODE)
@@ -503,6 +513,12 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         if (!mcActionResults.IsValid)
                         {
                             mcActionResults.RowInError = intIndex + 1;
+
+                            break;
+                        }
+                        else if (_blnIsDemo && (LstClientsUsing[intIndex].Installed | LstClientsUsing[intIndex].IsCurrentVersion))
+                        {
+                            mcActionResults.SetInvalid(mintMSG_CantInstallDemoInProd, ctr_Version.ErrorCode_Ver.DEMO_CANT_BE_INSTALLED);
 
                             break;
                         }

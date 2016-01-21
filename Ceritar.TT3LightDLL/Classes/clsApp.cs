@@ -238,7 +238,8 @@ namespace Ceritar.TT3LightDLL.Classes
         public bool blnCopyFolderContent(string vstrSourceFolderPath, 
                                          string vstrDestinationFolderPath, 
                                          bool vblnOverwrite = true, 
-                                         bool vblnCreateFolderIfNotExist = false, 
+                                         bool vblnCreateFolderIfNotExist = false,
+                                         SearchOption vSearchOption = SearchOption.TopDirectoryOnly,
                                          params string[] vlstExtensionsToCopy)
         {
             bool blnValidReturn = true;
@@ -249,13 +250,13 @@ namespace Ceritar.TT3LightDLL.Classes
             {
                 if (vlstExtensionsToCopy != null && vlstExtensionsToCopy.Length > 0)
                 {
-                    var lstReleaseFilesWithFilters = Directory.GetFiles(vstrSourceFolderPath, "*.*", SearchOption.AllDirectories).Where(f => vlstExtensionsToCopy.Contains(System.IO.Path.GetExtension(f).ToLower())).ToArray();
+                    var lstReleaseFilesWithFilters = Directory.GetFiles(vstrSourceFolderPath, "*.*", vSearchOption).Where(f => vlstExtensionsToCopy.Contains(System.IO.Path.GetExtension(f).ToLower())).ToArray();
 
                     lstReleaseFilesToCopy = lstReleaseFilesWithFilters;
                 }
                 else
                 {
-                    string[] lstReleaseFilesNoFilter = Directory.GetFiles(vstrSourceFolderPath, "*.*", SearchOption.AllDirectories);
+                    string[] lstReleaseFilesNoFilter = Directory.GetFiles(vstrSourceFolderPath, "*.*", vSearchOption);
 
                     lstReleaseFilesToCopy = lstReleaseFilesNoFilter;
                 }
