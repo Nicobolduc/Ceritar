@@ -6,7 +6,7 @@ using Ceritar.TT3LightDLL.Static_Classes;
 namespace Ceritar.CVS.Models.Module_ActivesInstallations
 {
     /// <summary>
-    /// Cette classe représente le modèle objet d'une application de Ceritar.
+    /// Cette classe représente le modèle objet de la version d'une application de Ceritar pour un client donné.
     /// CAV représente le préfixe des colonnes de la table "ClientAppVersion" correspondant au modèle dans la base de données.
     /// </summary>
     internal class mod_CAV_ClientAppVersion
@@ -17,6 +17,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private bool _blnIsCurrentVersion;
         private bool _blnInstalled;
         private string _strLicense;
+        private string _strLocationReportExe;
         private int _intCeritarClient_NRI;
         private int _intCeritarApplication_NRI;
         private int _intVersion_NRI;
@@ -25,10 +26,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private clsActionResults mcActionResults = new clsActionResults();
         private sclsConstants.DML_Mode mintDML_Action;
         private clsSQL mcSQL;
-        
-        //Working variables
-        private string _strLocationReportExe;
-
+      
 
 #region "Properties"
 

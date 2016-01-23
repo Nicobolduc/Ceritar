@@ -54,10 +54,15 @@
             this.btnReplaceExecutable = new System.Windows.Forms.Button();
             this.btnGrdRevDel = new System.Windows.Forms.Button();
             this.btnGrdRevAdd = new System.Windows.Forms.Button();
+            this.btnGenerate = new System.Windows.Forms.Button();
+            this.btnExportInstallationKit = new System.Windows.Forms.Button();
             this.tabRevision = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.grdRevisions = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.tabVersion = new System.Windows.Forms.TabPage();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.grdSatellite = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.txtReleasePath = new System.Windows.Forms.TextBox();
             this.txtTTAppPath = new System.Windows.Forms.TextBox();
             this.txtWordAppChangePath = new System.Windows.Forms.TextBox();
@@ -71,24 +76,17 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.grdSatellite = new C1.Win.C1FlexGrid.C1FlexGrid();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.btnGenerate = new System.Windows.Forms.Button();
-            this.btnExportInstallationKit = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.tabRevision.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevisions)).BeginInit();
             this.tabVersion.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.grdSatellite)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdClients)).BeginInit();
             this.tab.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.grdSatellite)).BeginInit();
-            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -348,6 +346,32 @@
             this.btnGrdRevAdd.UseVisualStyleBackColor = true;
             this.btnGrdRevAdd.Click += new System.EventHandler(this.btnGrdRevAdd_Click);
             // 
+            // btnGenerate
+            // 
+            this.btnGenerate.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnGenerate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGenerate.BackgroundImage")));
+            this.btnGenerate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnGenerate.Location = new System.Drawing.Point(8, 17);
+            this.btnGenerate.Name = "btnGenerate";
+            this.btnGenerate.Size = new System.Drawing.Size(40, 40);
+            this.btnGenerate.TabIndex = 62;
+            this.toolTip.SetToolTip(this.btnGenerate, "Mettre à jour la hierarchie");
+            this.btnGenerate.UseVisualStyleBackColor = true;
+            this.btnGenerate.Click += new System.EventHandler(this.btnCreate_Click);
+            // 
+            // btnExportInstallationKit
+            // 
+            this.btnExportInstallationKit.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnExportInstallationKit.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnExportInstallationKit.BackgroundImage")));
+            this.btnExportInstallationKit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnExportInstallationKit.Location = new System.Drawing.Point(395, 126);
+            this.btnExportInstallationKit.Name = "btnExportInstallationKit";
+            this.btnExportInstallationKit.Size = new System.Drawing.Size(35, 35);
+            this.btnExportInstallationKit.TabIndex = 64;
+            this.toolTip.SetToolTip(this.btnExportInstallationKit, "Exporter un kit d\'installation");
+            this.btnExportInstallationKit.UseVisualStyleBackColor = true;
+            this.btnExportInstallationKit.Click += new System.EventHandler(this.btnExportInstallationKit_Click);
+            // 
             // tabRevision
             // 
             this.tabRevision.Controls.Add(this.groupBox3);
@@ -411,6 +435,42 @@
             this.tabVersion.TabIndex = 0;
             this.tabVersion.Text = "Version";
             this.tabVersion.UseVisualStyleBackColor = true;
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.btnGenerate);
+            this.groupBox5.Location = new System.Drawing.Point(737, 289);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(56, 65);
+            this.groupBox5.TabIndex = 63;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Actions";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.grdSatellite);
+            this.groupBox4.Location = new System.Drawing.Point(448, 6);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(338, 167);
+            this.groupBox4.TabIndex = 62;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Applications satellites";
+            // 
+            // grdSatellite
+            // 
+            this.grdSatellite.AutoSearch = C1.Win.C1FlexGrid.AutoSearchEnum.FromTop;
+            this.grdSatellite.ColumnInfo = "1,1,0,0,0,90,Columns:0{Width:5;}\t";
+            this.grdSatellite.ExtendLastCol = true;
+            this.grdSatellite.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdSatellite.Location = new System.Drawing.Point(6, 17);
+            this.grdSatellite.Name = "grdSatellite";
+            this.grdSatellite.Rows.Count = 1;
+            this.grdSatellite.Rows.DefaultSize = 18;
+            this.grdSatellite.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
+            this.grdSatellite.Size = new System.Drawing.Size(326, 144);
+            this.grdSatellite.StyleInfo = resources.GetString("grdSatellite.StyleInfo");
+            this.grdSatellite.TabIndex = 2;
+            this.grdSatellite.Tag = "26";
             // 
             // txtReleasePath
             // 
@@ -540,88 +600,6 @@
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
             // 
-            // button1
-            // 
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
-            this.button1.Location = new System.Drawing.Point(297, 58);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(35, 35);
-            this.button1.TabIndex = 12;
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button2.Image = ((System.Drawing.Image)(resources.GetObject("button2.Image")));
-            this.button2.Location = new System.Drawing.Point(297, 17);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(35, 35);
-            this.button2.TabIndex = 11;
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.button1);
-            this.groupBox4.Controls.Add(this.button2);
-            this.groupBox4.Controls.Add(this.grdSatellite);
-            this.groupBox4.Location = new System.Drawing.Point(448, 6);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(338, 167);
-            this.groupBox4.TabIndex = 62;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Applications satellites";
-            // 
-            // grdSatellite
-            // 
-            this.grdSatellite.AutoSearch = C1.Win.C1FlexGrid.AutoSearchEnum.FromTop;
-            this.grdSatellite.ColumnInfo = "1,1,0,0,0,90,Columns:0{Width:5;}\t";
-            this.grdSatellite.ExtendLastCol = true;
-            this.grdSatellite.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdSatellite.Location = new System.Drawing.Point(6, 17);
-            this.grdSatellite.Name = "grdSatellite";
-            this.grdSatellite.Rows.Count = 1;
-            this.grdSatellite.Rows.DefaultSize = 18;
-            this.grdSatellite.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdSatellite.Size = new System.Drawing.Size(285, 144);
-            this.grdSatellite.StyleInfo = resources.GetString("grdSatellite.StyleInfo");
-            this.grdSatellite.TabIndex = 2;
-            this.grdSatellite.Tag = "";
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.btnGenerate);
-            this.groupBox5.Location = new System.Drawing.Point(737, 289);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(56, 65);
-            this.groupBox5.TabIndex = 63;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Actions";
-            // 
-            // btnGenerate
-            // 
-            this.btnGenerate.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnGenerate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGenerate.BackgroundImage")));
-            this.btnGenerate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnGenerate.Location = new System.Drawing.Point(8, 17);
-            this.btnGenerate.Name = "btnGenerate";
-            this.btnGenerate.Size = new System.Drawing.Size(40, 40);
-            this.btnGenerate.TabIndex = 62;
-            this.toolTip.SetToolTip(this.btnGenerate, "Mettre à jour la hierarchie");
-            this.btnGenerate.UseVisualStyleBackColor = true;
-            // 
-            // btnExportInstallationKit
-            // 
-            this.btnExportInstallationKit.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnExportInstallationKit.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnExportInstallationKit.BackgroundImage")));
-            this.btnExportInstallationKit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnExportInstallationKit.Location = new System.Drawing.Point(395, 126);
-            this.btnExportInstallationKit.Name = "btnExportInstallationKit";
-            this.btnExportInstallationKit.Size = new System.Drawing.Size(35, 35);
-            this.btnExportInstallationKit.TabIndex = 64;
-            this.toolTip.SetToolTip(this.btnExportInstallationKit, "Exporter un kit d\'installation");
-            this.btnExportInstallationKit.UseVisualStyleBackColor = true;
-            // 
             // frmVersion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -643,12 +621,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.grdRevisions)).EndInit();
             this.tabVersion.ResumeLayout(false);
             this.tabVersion.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.grdSatellite)).EndInit();
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdClients)).EndInit();
             this.tab.ResumeLayout(false);
-            this.groupBox4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.grdSatellite)).EndInit();
-            this.groupBox5.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -697,8 +675,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox chkDemoVersion;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
         public C1.Win.C1FlexGrid.C1FlexGrid grdSatellite;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Button btnGenerate;

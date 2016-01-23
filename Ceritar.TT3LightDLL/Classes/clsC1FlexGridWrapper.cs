@@ -21,6 +21,7 @@ namespace Ceritar.TT3LightDLL.Classes
     {
         //Docuumentation available here: //http://helpcentral.componentone.com/nethelp/c1flexgrid/topic132.html
         //Row 0 is the Header and col 0 is the first small fixed col
+        //Caption: first col starts after the first pipe. || = 2 cols.
         
 	    //private members
 	    private const short mintDefaultActionCol = 1;

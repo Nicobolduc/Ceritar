@@ -7,6 +7,7 @@ using Ceritar.CVS.Models.Module_ActivesInstallations;
 using Ceritar.CVS.Controllers.Interfaces;
 using Ceritar.TT3LightDLL.Static_Classes;
 using Ceritar.TT3LightDLL.Classes;
+using System.IO.Compression;
 
 namespace Ceritar.CVS.Controllers
 {
@@ -21,7 +22,7 @@ namespace Ceritar.CVS.Controllers
         private clsActionResults mcActionResult;
         private clsSQL mcSQL;
         private string[] mstrReleaseValidExtensions = { ".dll", ".config", ".exe" };
-
+        
         public enum ErrorCode_Ver
         {
             COMPILED_BY_MANDATORY = 1,
@@ -133,9 +134,9 @@ namespace Ceritar.CVS.Controllers
 
                 mcModVersion.SetcSQL = mcSQL;
 
-                pfblnFeedModelWithView();
+                blnValidReturn = pfblnFeedModelWithView();
 
-                if (mcModVersion.blnValidateHierarchyBuildFiles())
+                if (blnValidReturn & mcModVersion.blnValidateHierarchyBuildFiles())
                 {
                     blnValidReturn = blnBuildVersionHierarchy(mcView.GetTemplateSource_NRI());
                 }
@@ -168,33 +169,8 @@ namespace Ceritar.CVS.Controllers
             int intPreviousFolderLevel = -1;
             SqlDataReader cSQLReader = null;
             DirectoryInfo currentFolderInfos = null;
-                                             
-            strSQL = strSQL + " WITH LstHierarchyComp " + Environment.NewLine;
-            strSQL = strSQL + " AS " + Environment.NewLine;
-            strSQL = strSQL + " ( " + Environment.NewLine;
-            strSQL = strSQL + "     SELECT *, " + Environment.NewLine;
-            strSQL = strSQL + " 		   CAST(0 AS varbinary(max)) AS Level " + Environment.NewLine;
-            strSQL = strSQL + " 	FROM HierarchyComp  " + Environment.NewLine;
-            strSQL = strSQL + " 	WHERE HiCo_Parent_NRI IS NULL " + Environment.NewLine;
 
-            strSQL = strSQL + "     UNION ALL " + Environment.NewLine;
-
-            strSQL = strSQL + "     SELECT HiCo_Childrens.*, " + Environment.NewLine;
-            strSQL = strSQL + " 		   Level + CAST(HiCo_Childrens.HiCo_NRI AS varbinary(max)) AS Level " + Environment.NewLine;
-            strSQL = strSQL + " 	FROM HierarchyComp HiCo_Childrens  " + Environment.NewLine;
-            strSQL = strSQL + " 		INNER JOIN LstHierarchyComp on HiCo_Childrens.HiCo_Parent_NRI = LstHierarchyComp.HiCo_NRI " + Environment.NewLine;
-            strSQL = strSQL + " 	WHERE HiCo_Childrens.HiCo_Parent_NRI IS NOT NULL " + Environment.NewLine;
-            strSQL = strSQL + " ) " + Environment.NewLine;
-
-            strSQL = strSQL + " SELECT  LstHierarchyComp.HiCo_Name, " + Environment.NewLine;
-            strSQL = strSQL + "    		LstHierarchyComp.HiCo_NodeLevel, " + Environment.NewLine;
-            strSQL = strSQL + "    		LstHierarchyComp.FoT_NRI " + Environment.NewLine;
-
-            strSQL = strSQL + " FROM LstHierarchyComp " + Environment.NewLine;
-
-            strSQL = strSQL + " WHERE LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
-
-            strSQL = strSQL + " ORDER BY Level " + Environment.NewLine;
+            strSQL = pfstrGetTemplateHierarchy_SQL(vintTemplate_NRI);
 
             try
             {
@@ -345,7 +321,7 @@ namespace Ceritar.CVS.Controllers
             }
             else
             {
-                blnValidReturn = mcModVersion.blnLocationsUpdate();
+                blnValidReturn = pfblnUpdateLocations();
             }
 
             return blnValidReturn;
@@ -588,6 +564,8 @@ namespace Ceritar.CVS.Controllers
             bool blnValidReturn = false;
             List<structClientAppVersion> lstStructCAV;
             mod_CAV_ClientAppVersion cCAV;
+            List<structClientSatVersion> lstStructCSV;
+            mod_CSV_ClientSatVersion cCSV;
 
             try
             {
@@ -625,6 +603,24 @@ namespace Ceritar.CVS.Controllers
                     mcModVersion.LstClientsUsing.Add(cCAV);
                 }
 
+                lstStructCSV = mcView.GetClientSatellitesList();
+
+                foreach (structClientSatVersion structCSV in lstStructCSV)
+                {
+                    cCSV = new mod_CSV_ClientSatVersion();
+                    cCSV.DML_Action = structCSV.Action;
+                    cCSV.ClientSatVersion_NRI = structCSV.intClientSatVersion_NRI;
+                    cCSV.CeritarClient = new Models.Module_Configuration.mod_CeC_CeritarClient();
+                    cCSV.CeritarClient.CeritarClient_NRI = structCSV.intCeritarClient_NRI;
+                    cCSV.CeritarClient.CompanyName = structCSV.strCeritarClient_Name;
+                    cCSV.CeritarSatelliteApp_Name = structCSV.strCeritarSatelliteApp_Name;
+                    cCSV.CeritarSatelliteApp = structCSV.intCeritarAppSat_NRI;
+                    cCSV.Location_Exe = structCSV.strLocationSatelliteExe;
+                    cCSV.Version_NRI = mcView.GetVersion_NRI();
+
+                    mcModVersion.LstClientSatelliteApps.Add(cCSV);
+                }
+
                 blnValidReturn = true;
             }
             catch (Exception ex)
@@ -634,6 +630,291 @@ namespace Ceritar.CVS.Controllers
             }
 
             return blnValidReturn;
+        }
+
+        /// <summary>
+        /// Construit un fichier zip contenant tout ce qu'il faut pour déployer une nouvelle version chez un client.
+        /// </summary>
+        /// <param name="vintTemplate_NRI">Le NRI du gabarit à utiliser.</param>
+        /// <param name="vintCeritarClient_NRI">Le client à qui le kit est destiné.</param>
+        /// <param name="vstrExportLocation">L'endroit ou générer le fichier zip.</param>
+        /// <returns>Une valeur indiquant si la génération s'est effectuée avec succès.</returns>
+        public bool blnExportVersionInstallationKit(int vintTemplate_NRI, int vintCeritarClient_NRI, string vstrExportLocation)
+        {
+            bool blnValidReturn = false;
+            string strSQL = string.Empty;
+            string strFolderName = string.Empty;
+            string strVersionFolderRoot = string.Empty;
+            int intPreviousFolderLevel = -1;
+            SqlDataReader cSQLReader = null;
+            DirectoryInfo currentFolderInfos = null;
+
+            strSQL = pfstrGetTemplateHierarchy_SQL(vintTemplate_NRI);
+            
+            try
+            {
+
+
+
+                currentFolderInfos = new DirectoryInfo(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES +
+                                                        (sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Substring(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Length - 1, 1) == "\\" ? "" : "\\")
+                                                        );
+
+                cSQLReader = clsSQL.ADOSelect(strSQL);
+
+                while (cSQLReader.Read())
+                {
+                    switch (Int32.Parse(cSQLReader["FoT_NRI"].ToString()))
+                    {
+                        case (int)ctr_Template.FolderType.Version_Number:
+
+                            strFolderName = sclsAppConfigs.GetVersionNumberPrefix + mcView.GetVersionNo().ToString();
+
+                            strVersionFolderRoot = Path.Combine(currentFolderInfos.FullName, strFolderName);
+
+                            break;
+
+                        default:
+
+                            strFolderName = cSQLReader["HiCo_Name"].ToString();
+                            break;
+                    }
+
+                    if (Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString()) > intPreviousFolderLevel) //On entre dans un sous-dossier
+                    {
+                        currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.FullName, strFolderName));
+                    }
+                    else if (Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString()) < intPreviousFolderLevel) //On recule pour revenir au dossier du niveau courant
+                    {
+                        int intNbLevelBack = intPreviousFolderLevel - Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString());
+
+                        while (intNbLevelBack > 0)
+                        {
+                            currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.Parent.Parent.FullName, strFolderName));
+
+                            intNbLevelBack--;
+                        }
+                    }
+                    else //On recule d'un niveau pour revenir au dossier d'avant
+                    {
+                        currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.Parent.FullName, strFolderName));
+                    }
+
+                    if (Directory.Exists(currentFolderInfos.FullName))
+                    {
+
+                        switch (Int32.Parse(cSQLReader["FoT_NRI"].ToString()))
+                        {
+                            case (int)ctr_Template.FolderType.Release:
+
+                                if (!string.IsNullOrEmpty(mcView.GetLocation_Release()) && mcView.GetLocation_Release() != currentFolderInfos.FullName)
+                                {
+                                    blnValidReturn = clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, mstrReleaseValidExtensions);
+                                }
+                                else
+                                {
+                                    blnValidReturn = true;
+                                }
+
+                                if (blnValidReturn)
+                                {
+                                    mcModVersion.Location_Release = currentFolderInfos.FullName;
+                                }
+
+                                break;
+
+                            case (int)ctr_Template.FolderType.CaptionsAndMenus:
+
+                                mcModVersion.Location_CaptionsAndMenus = Path.Combine(currentFolderInfos.FullName, sclsAppConfigs.GetCaptionsAndMenusFileName);
+
+                                if (!string.IsNullOrEmpty(mcView.GetLocation_TTApp()) && mcModVersion.Location_CaptionsAndMenus != mcView.GetLocation_TTApp())
+                                {
+                                    File.Copy(mcView.GetLocation_TTApp(), Path.Combine(currentFolderInfos.FullName, sclsAppConfigs.GetCaptionsAndMenusFileName), true);
+                                }
+
+                                blnValidReturn = true;
+
+                                break;
+
+                            case (int)ctr_Template.FolderType.Scripts:
+
+                                blnValidReturn = pfblnCopyAllScriptsForClients(currentFolderInfos.FullName);
+
+                                break;
+
+                            case (int)ctr_Template.FolderType.Version_Number:
+
+                                mcModVersion.Location_APP_CHANGEMENT = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_APP_CHANGEMENT()));
+
+                                if (!string.IsNullOrEmpty(mcView.GetLocation_APP_CHANGEMENT()) && mcModVersion.Location_APP_CHANGEMENT != mcView.GetLocation_APP_CHANGEMENT())
+                                {
+                                    File.Copy(mcView.GetLocation_APP_CHANGEMENT(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_APP_CHANGEMENT())), true);
+                                }
+
+                                blnValidReturn = true;
+
+                                break;
+
+                            case (int)ctr_Template.FolderType.Report:
+
+                                blnValidReturn = pfblnCopyAllReportsForClients(currentFolderInfos.FullName);
+
+                                break;
+
+                            default:
+                                blnValidReturn = true;
+                                break;
+                        }
+                    }
+
+                    intPreviousFolderLevel = Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString());
+
+                    if (!blnValidReturn) break;
+                }
+            }
+            catch (FileNotFoundException exPath)
+            {
+                blnValidReturn = false;
+                mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exPath.FileName);
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                if (cSQLReader != null) cSQLReader.Dispose();
+
+                if (blnValidReturn) mcActionResult.SetValid();
+            }
+
+            //Creates a new, blank zip file to work with - the file will be
+            //finalized when the using statement completes
+            using (ZipArchive newZipFile = ZipFile.Open("Installation Kit " + mcView.GetVersionNo(), ZipArchiveMode.Create))
+            {
+                //Here are two hard-coded files that we will be adding to the zip
+                //file.  If you don't have these files in your system, this will
+                //fail.  Either create them or change the file names.
+                newZipFile.CreateEntryFromFile(@"C:\Temp\File1.txt", "File1.txt");
+                newZipFile.CreateEntryFromFile(@"C:\Temp\File2.txt", "File2.txt", CompressionLevel.Fastest);
+
+                //newZipFile.CreateEntry
+            }
+
+            return blnValidReturn;
+        }
+
+        private bool pfblnUpdateLocations()
+        {
+            bool blnValidReturn = false;
+            DirectoryInfo currentFolderInfos = null;
+
+            try
+            {
+                foreach (mod_CSV_ClientSatVersion cCSV in mcModVersion.LstClientSatelliteApps)
+                {
+                    if (File.Exists(cCSV.Location_Exe))
+                    {
+                        blnValidReturn = false;
+
+                        currentFolderInfos = new DirectoryInfo(Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES +
+                                                                            (sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Substring(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Length - 1, 1) == "\\" ? "" : "\\"),
+                                                                            cCSV.CeritarSatelliteApp_Name,
+                                                                            cCSV.CeritarClient.CompanyName,
+                                                                            mcModVersion.VersionNo.ToString()
+                                                                           )
+                                                        );
+
+                        if (!Directory.Exists(currentFolderInfos.FullName)) currentFolderInfos.Create();
+
+                        FileAttributes locationAttributes = File.GetAttributes(cCSV.Location_Exe);
+
+                        if ((locationAttributes & FileAttributes.Directory) == FileAttributes.Directory) //Executable is a folder
+                        {
+                            clsApp.GetAppController.blnCopyFolderContent(cCSV.Location_Exe, currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, mstrReleaseValidExtensions);
+
+                            cCSV.Location_Exe = currentFolderInfos.FullName;
+                        }
+                        else //Executable is a file
+                        {
+                            File.Copy(cCSV.Location_Exe, Path.Combine(currentFolderInfos.FullName, Path.GetFileName(cCSV.Location_Exe)), true);
+
+                            cCSV.Location_Exe = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(cCSV.Location_Exe));
+                        }
+
+                        cCSV.SetcSQL = mcSQL;
+                        
+                        blnValidReturn = cCSV.blnSave();
+                    }
+                    else
+                    {
+                        blnValidReturn = true;
+                    }
+
+                    if (!blnValidReturn)
+                    {
+                        mcActionResult = mcModVersion.ActionResults;
+
+                        break;
+                    }
+                }
+
+                if (blnValidReturn)
+                {
+                    blnValidReturn = mcModVersion.blnLocationsUpdate();
+                }
+            }
+            catch (FileNotFoundException exPath)
+            {
+                blnValidReturn = false;
+                mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exPath.FileName);
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                if (blnValidReturn) mcActionResult.SetValid();
+            }
+
+            return blnValidReturn;
+        }
+
+        private string pfstrGetTemplateHierarchy_SQL(int vintTemplate_NRI)
+        {
+            string strSQL = string.Empty;
+
+            strSQL = strSQL + " WITH LstHierarchyComp " + Environment.NewLine;
+            strSQL = strSQL + " AS " + Environment.NewLine;
+            strSQL = strSQL + " ( " + Environment.NewLine;
+            strSQL = strSQL + "     SELECT *, " + Environment.NewLine;
+            strSQL = strSQL + " 		   CAST(0 AS varbinary(max)) AS Level " + Environment.NewLine;
+            strSQL = strSQL + " 	FROM HierarchyComp  " + Environment.NewLine;
+            strSQL = strSQL + " 	WHERE HiCo_Parent_NRI IS NULL " + Environment.NewLine;
+
+            strSQL = strSQL + "     UNION ALL " + Environment.NewLine;
+
+            strSQL = strSQL + "     SELECT HiCo_Childrens.*, " + Environment.NewLine;
+            strSQL = strSQL + " 		   Level + CAST(HiCo_Childrens.HiCo_NRI AS varbinary(max)) AS Level " + Environment.NewLine;
+            strSQL = strSQL + " 	FROM HierarchyComp HiCo_Childrens  " + Environment.NewLine;
+            strSQL = strSQL + " 		INNER JOIN LstHierarchyComp on HiCo_Childrens.HiCo_Parent_NRI = LstHierarchyComp.HiCo_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 	WHERE HiCo_Childrens.HiCo_Parent_NRI IS NOT NULL " + Environment.NewLine;
+            strSQL = strSQL + " ) " + Environment.NewLine;
+
+            strSQL = strSQL + " SELECT  LstHierarchyComp.HiCo_Name, " + Environment.NewLine;
+            strSQL = strSQL + "    		LstHierarchyComp.HiCo_NodeLevel, " + Environment.NewLine;
+            strSQL = strSQL + "    		LstHierarchyComp.FoT_NRI " + Environment.NewLine;
+
+            strSQL = strSQL + " FROM LstHierarchyComp " + Environment.NewLine;
+
+            strSQL = strSQL + " WHERE LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
+
+            strSQL = strSQL + " ORDER BY Level " + Environment.NewLine;
+
+            return strSQL;
         }
 
 
@@ -682,6 +963,31 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " WHERE ClientAppVersion.Ver_NRI = " + vintVersion_NRI + Environment.NewLine;
 
             strSQL = strSQL + " ORDER BY CerClient.CeC_Name " + Environment.NewLine;
+
+            return strSQL;
+        }
+
+        public string strGetListe_SatelliteApps_SQL(int vintVersion_NRI, int vintCeritarClient_NRI)
+        {
+            string strSQL = string.Empty;
+
+            strSQL = strSQL + " SELECT Action = '" + sclsConstants.DML_Mode.NO_MODE + "', " + Environment.NewLine;
+            strSQL = strSQL + "        CerAppSat.CAS_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        CerAppSat.CAS_TS, " + Environment.NewLine;
+            strSQL = strSQL + "        CerAppSat.CAS_Name, " + Environment.NewLine;
+            strSQL = strSQL + "        ClientSatVersion.CSV_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        ClientSatVersion.CSV_Exe_Location " + Environment.NewLine;
+
+            strSQL = strSQL + " FROM Version " + Environment.NewLine;
+
+            strSQL = strSQL + "     INNER JOIN CerAppSat ON CerAppSat.CeA_NRI = Version.CeA_NRI " + Environment.NewLine;
+            strSQL = strSQL + "     LEFT JOIN ClientSatVersion ON ClientSatVersion.Ver_NRI = Version.Ver_NRI " + Environment.NewLine;
+            strSQL = strSQL + "                               AND ClientSatVersion.CAS_NRI = CerAppSat.CAS_NRI " + Environment.NewLine;
+            strSQL = strSQL + "                               AND ClientSatVersion.CeC_NRI = " + vintCeritarClient_NRI + Environment.NewLine;
+
+            strSQL = strSQL + " WHERE Version.Ver_NRI = " + vintVersion_NRI + Environment.NewLine;
+
+            strSQL = strSQL + " ORDER BY CerAppSat.CAS_Name " + Environment.NewLine;
 
             return strSQL;
         }

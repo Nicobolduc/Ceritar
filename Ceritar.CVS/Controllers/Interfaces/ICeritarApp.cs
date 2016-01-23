@@ -15,6 +15,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         string GetName();
         string GetDescription();
         List<string> GetLstModules();
+        List<string> GetLstAppSatellites();
         Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode GetDML_Mode();
     }
 }

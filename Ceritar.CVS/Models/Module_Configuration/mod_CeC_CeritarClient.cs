@@ -13,8 +13,8 @@ namespace Ceritar.CVS.Models.Module_Configuration
     internal class mod_CeC_CeritarClient
     {
         //Model attributes
-        private int _intCeritarApplication_NRI;
-        private int _intCeritarApplication_TS;
+        private int _intCeritarClient_NRI;
+        private int _intCeritarClient_TS;
         private string _strCompanyName;
         private bool _blnIsActive;
         private List<int> _lstApplications; //TODO Remove, peut etre calculer a partir des versions installee
@@ -28,16 +28,16 @@ namespace Ceritar.CVS.Models.Module_Configuration
 
 #region "Properties"
 
-        public int CeritarApplication_NRI
+        public int CeritarClient_NRI
         {
-            get { return _intCeritarApplication_NRI; }
-            set { _intCeritarApplication_NRI = value; }
+            get { return _intCeritarClient_NRI; }
+            set { _intCeritarClient_NRI = value; }
         }
 
-        public int CeritarApplication_TS
+        public int CeritarClient_TS
         {
-            get { return _intCeritarApplication_TS; }
-            set { _intCeritarApplication_TS = value; }
+            get { return _intCeritarClient_TS; }
+            set { _intCeritarClient_TS = value; }
         }
 
         internal string CompanyName

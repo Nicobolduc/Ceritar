@@ -19,6 +19,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private string _strDescription;
         private AppDomain _domain_NRI;
         private List<string> _lstModules;
+        private List<string> _lstSatelliteApps;
 
         public enum AppDomain
         {
@@ -72,6 +73,12 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         {
             get { return _lstModules; }
             set { _lstModules = value; }
+        }
+
+        internal List<string> LstCeritarSatelliteApps
+        {
+            get { return _lstSatelliteApps; }
+            set { _lstSatelliteApps = value; }
         }
 
         internal clsActionResults ActionResults
@@ -129,6 +136,14 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_TIMESTAMP, clsActionResults.BaseErrorCode.INVALID_TIMESTAMP);
                         }
+                        else if (!pfblnListModules_Validate())
+                        {
+                            //Invalid
+                        }
+                        else if (!pfblnListAppSatellites_Validate())
+                        {
+                            //Invalid
+                        }
                         else
                         {
                             mcActionResults.SetValid();
@@ -176,6 +191,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         else if (!mcSQL.bln_ADOInsert("CerApp", out _intCeritarApplication_NRI))
                         { }
                         else if (!pfblnListModules_Save()) 
+                        { }
+                        else if (!pfblnListSatelliteApps_Save())
                         { } 
                         else {
                             mcActionResults.SetNewItem_NRI = _intCeritarApplication_NRI; //TODO chagner ca
@@ -192,6 +209,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         { }
                         else if (!pfblnListModules_Save())
                         { }
+                        else if (!pfblnListSatelliteApps_Save())
+                        { } 
                         else
                         {
                             blnValidReturn = true;
@@ -202,6 +221,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                     case sclsConstants.DML_Mode.DELETE_MODE:
 
                         if (!mcSQL.bln_ADODelete("AppModule", "AppModule.CeA_NRI = " + _intCeritarApplication_NRI))
+                        { }
+                        if (!mcSQL.bln_ADODelete("CerAppSat", "CerAppSat.CeA_NRI = " + _intCeritarApplication_NRI))
                         { }
                         else if (!mcSQL.bln_ADODelete("CerApp", "CerApp.CeA_NRI = " + _intCeritarApplication_NRI))
                         { }
@@ -284,7 +305,6 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             try
             {
                 blnValidReturn = mcSQL.bln_ADODelete("AppModule", "CeA_NRI = " + _intCeritarApplication_NRI);
-
                 
                 for (int intIndex = 0; intIndex < _lstModules.Count & blnValidReturn; intIndex++)
                 {
@@ -321,6 +341,109 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 {
                     blnValidReturn = false;
                 }
+            }
+
+            return blnValidReturn;
+        }
+
+        private bool pfblnListSatelliteApps_Save()
+        {
+            bool blnValidReturn = false;
+            int intDML_OutParam = 0;
+
+            try
+            {
+                blnValidReturn = mcSQL.bln_ADODelete("CerAppSat", "CeA_NRI = " + _intCeritarApplication_NRI);
+
+                for (int intIndex = 0; intIndex < _lstSatelliteApps.Count & blnValidReturn; intIndex++)
+                {
+                    blnValidReturn = false;
+
+                    if (!mcSQL.bln_RefreshFields())
+                    { }
+                    else if (!mcSQL.bln_AddField("CAS_Name", _lstSatelliteApps[intIndex], clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                    { }
+                    else if (!mcSQL.bln_AddField("CeA_NRI", _intCeritarApplication_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                    { }
+                    else if (!mcSQL.bln_ADOInsert("CerAppSat", out intDML_OutParam))
+                    { }
+                    else
+                    {
+                        blnValidReturn = true;
+                    }
+
+                    if (!blnValidReturn) break;
+                }
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                if (!blnValidReturn & mcActionResults.IsValid)
+                {
+                    mcActionResults.SetInvalid(sclsConstants.Error_Message.ERROR_SAVE_MSG, clsActionResults.BaseErrorCode.ERROR_SAVE);
+                }
+                else if (blnValidReturn & !mcActionResults.IsValid)
+                {
+                    blnValidReturn = false;
+                }
+            }
+
+            return blnValidReturn;
+        }
+
+        private bool pfblnListModules_Validate()
+        {
+            bool blnValidReturn = true;
+
+            try
+            {
+                for (int intIndex = 0; intIndex < _lstModules.Count & blnValidReturn; intIndex++)
+                {
+                    if (string.IsNullOrEmpty(_lstModules[intIndex]))
+                    {
+                        mcActionResults.RowInError = intIndex + 1;
+                        mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_CeritarApplication.ErrorCode_CeA.MODULES_LIST_MANDATORY);
+                        blnValidReturn = false;
+
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnValidReturn;
+        }
+
+        private bool pfblnListAppSatellites_Validate()
+        {
+            bool blnValidReturn = true;
+
+            try
+            {
+                for (int intIndex = 0; intIndex < _lstSatelliteApps.Count; intIndex++)
+                {
+                    if (string.IsNullOrEmpty(_lstSatelliteApps[intIndex]))
+                    {
+                        mcActionResults.RowInError = intIndex + 1;
+                        mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_CeritarApplication.ErrorCode_CeA.SATELLITE_LIST_MANDATORY);
+                        blnValidReturn = false;
+
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
 
             return blnValidReturn;

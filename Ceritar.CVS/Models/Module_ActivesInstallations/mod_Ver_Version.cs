@@ -30,6 +30,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private mod_CeA_CeritarApplication _cCerApplication;
         private mod_Tpl_HierarchyTemplate _cTemplateSource;
         private List<mod_CAV_ClientAppVersion> _lstClientsUsing;
+        private List<mod_CSV_ClientSatVersion> _lstClientSatelliteApps;
 
         //mod_IBase
         private clsActionResults mcActionResults = new clsActionResults();
@@ -129,6 +130,21 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 return _lstClientsUsing; 
             }
             set { _lstClientsUsing = value; }
+        }
+
+        internal List<mod_CSV_ClientSatVersion> LstClientSatelliteApps
+        {
+            get 
+            {
+                if (_lstClientSatelliteApps == null)
+                {
+
+                    _lstClientSatelliteApps = new List<mod_CSV_ClientSatVersion>();
+                }
+
+                return _lstClientSatelliteApps;
+            }
+            set { _lstClientSatelliteApps = value; }
         }
 
         internal clsActionResults ActionResults
@@ -380,6 +396,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         { }
                         else if (!pfblnListClients_Save())
                         { }
+                        else if (!pfblnListClientSatelliteApps_Save())
+                        { }
                         else
                         {
                             mcActionResults.SetNewItem_NRI = _intVersion_NRI;
@@ -396,6 +414,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         { }
                         else if (!pfblnListClients_Save())
                         { }
+                        else if (!pfblnListClientSatelliteApps_Save())
+                        { }
                         else
                         {
                             blnValidReturn = true;
@@ -406,6 +426,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                     case sclsConstants.DML_Mode.DELETE_MODE:
 
                         if (!pfblnListClients_Save())
+                        { }
+                        else if (!pfblnListClientSatelliteApps_Save())
                         { }
                         else if (!mcSQL.bln_ADODelete("Version", "Version.Ver_NRI = " + _intVersion_NRI))
                         { }
@@ -418,7 +440,14 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                     default:
 
-                        blnValidReturn = pfblnListClients_Save();
+                        if (!pfblnListClients_Save())
+                        { }
+                        else if (!pfblnListClientSatelliteApps_Save())
+                        { }
+                        else
+                        {
+                            blnValidReturn = true;
+                        }
 
                         break;
                 }
@@ -566,6 +595,45 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                     blnValidReturn = _lstClientsUsing[intIndex].blnSave();
 
                     mcActionResults = _lstClientsUsing[intIndex].ActionResults;
+
+                    if (!blnValidReturn) break;
+                }
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                if (!blnValidReturn & mcActionResults.IsValid)
+                {
+                    mcActionResults.SetInvalid(sclsConstants.Error_Message.ERROR_SAVE_MSG, clsActionResults.BaseErrorCode.ERROR_SAVE);
+                }
+                else if (blnValidReturn & !mcActionResults.IsValid)
+                {
+                    blnValidReturn = false;
+                }
+            }
+
+            return blnValidReturn;
+        }
+
+        private bool pfblnListClientSatelliteApps_Save()
+        {
+            bool blnValidReturn = false;
+
+            try
+            {
+                for (int intIndex = 0; intIndex < _lstClientSatelliteApps.Count; intIndex++)
+                {
+                    _lstClientSatelliteApps[intIndex].SetcSQL = mcSQL;
+                    _lstClientSatelliteApps[intIndex].Version_NRI = _intVersion_NRI;
+                    _lstClientSatelliteApps[intIndex].DML_Action = (mintDML_Action == sclsConstants.DML_Mode.DELETE_MODE ? sclsConstants.DML_Mode.DELETE_MODE : _lstClientSatelliteApps[intIndex].DML_Action);
+
+                    blnValidReturn = _lstClientSatelliteApps[intIndex].blnSave();
+
+                    mcActionResults = _lstClientSatelliteApps[intIndex].ActionResults;
 
                     if (!blnValidReturn) break;
                 }

@@ -26,8 +26,15 @@ namespace Ceritar.Logirack_CVS
         private const short mintGrdMod_ApM_TS_col = 3;
         private const short mintGrdMod_ApM_Description_col = 4;
 
+        //Columns grdAppSat
+        private const short mintGrdSat_Action_col = 1;
+        private const short mintGrdSat_CAS_NRI_col = 2;
+        private const short mintGrdSat_CAS_TS_col = 3;
+        private const short mintGrdSat_CAS_Name_col = 4;
+
         //Classes
         private clsC1FlexGridWrapper mcGrdModules;
+        private clsC1FlexGridWrapper mcGrdSatApp;
         private Ceritar.CVS.clsActionResults mcActionResults;
 
         //Working variables
@@ -42,8 +49,9 @@ namespace Ceritar.Logirack_CVS
 
             mcGrdModules = new clsC1FlexGridWrapper();
             mcGrdModules.SetGridDisplay += new clsC1FlexGridWrapper.SetDisplayEventHandler(mcGrdModules_SetDisplay);
-            //mcGrdModules.ValidateGridData += mcGrdModules_ValidateGridData;
-            //mcGrdModules.SaveGridData += mcGrdModules_SaveGridData;
+
+            mcGrdSatApp = new clsC1FlexGridWrapper();
+            mcGrdSatApp.SetGridDisplay += mcGrdAppSat_SetGridDisplay;
         }
 
 
@@ -96,6 +104,23 @@ namespace Ceritar.Logirack_CVS
             return this.formController;
         }
 
+        int CVS.Controllers.Interfaces.ICeritarApp.GetCerApp_TS()
+        {
+            return mintCerApp_TS;
+        }
+
+        List<string> CVS.Controllers.Interfaces.ICeritarApp.GetLstAppSatellites()
+        {
+            List<string> lstSatelliteApp = new List<string>();
+
+            for (int intRowIdx = 1; intRowIdx <= grdSatApp.Rows.Count - 1; intRowIdx++)
+            {
+                lstSatelliteApp.Add(mcGrdSatApp[intRowIdx, mintGrdSat_CAS_Name_col]);
+            }
+
+            return lstSatelliteApp;
+        }
+
 #endregion
 
 
@@ -108,6 +133,23 @@ namespace Ceritar.Logirack_CVS
             try
             {
                 blnValidReturn = mcGrdModules.bln_FillData(mcCtrCeritarApp.strGetListe_Modules_SQL(formController.Item_NRI));
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnValidReturn;
+        }
+
+        private bool pfblnGrdSatelliteApps_Load()
+        {
+            bool blnValidReturn = false;
+
+            try
+            {
+                blnValidReturn = mcGrdSatApp.bln_FillData(mcCtrCeritarApp.strGetListe_SatelliteApps_SQL(formController.Item_NRI));
             }
             catch (Exception ex)
             {
@@ -159,7 +201,9 @@ namespace Ceritar.Logirack_CVS
         {
             bool blnValidReturn = false;
 
-            if (!mcGrdModules.bln_Init(ref grdModules, ref btnGrdAdd, ref btnGrdDel))
+            if (!mcGrdModules.bln_Init(ref grdModules, ref btnGrdModAdd, ref btnGrdModDel))
+            { }
+            if (!mcGrdSatApp.bln_Init(ref grdSatApp, ref btnGrdSatAdd, ref btnGrdSatDel))
             { }
             else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrCeritarApp.strGetListe_Domains_SQL(), "ApD_NRI", "ApD_Code", false, ref cboDomain))
             { }
@@ -168,6 +212,8 @@ namespace Ceritar.Logirack_CVS
                 blnValidReturn = true; 
             }
             else if (!pfblnGrdModules_Load())
+            { }
+            else if (!pfblnGrdSatelliteApps_Load())
             { }
             else if (!pfblnData_Load())
             { }
@@ -184,12 +230,19 @@ namespace Ceritar.Logirack_CVS
             grdModules.Cols[mintGrdMod_ApM_Description_col].Width = 30;
         }
 
+        private void mcGrdAppSat_SetGridDisplay()
+        {
+            grdModules.Cols[mintGrdMod_ApM_Description_col].Width = 30;
+        }
+
         private void formController_ValidateForm(TT3LightDLL.Controls.ValidateFormEventArgs eventArgs)
         {
             mcActionResults = mcCtrCeritarApp.Validate();
 
             if (!mcActionResults.IsValid)
             {
+                clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
+
                 switch ((ctr_CeritarApplication.ErrorCode_CeA)mcActionResults.GetErrorCode)
                 {
                     case ctr_CeritarApplication.ErrorCode_CeA.DESCRIPTION_MANDATORY:
@@ -206,7 +259,7 @@ namespace Ceritar.Logirack_CVS
 
                     case ctr_CeritarApplication.ErrorCode_CeA.MODULES_LIST_MANDATORY:
 
-                        btnGrdAdd.Focus();
+                        grdModules.Row = mcActionResults.RowInError;
                         break;
 
                     case ctr_CeritarApplication.ErrorCode_CeA.DOMAIN_MANDATORY:
@@ -214,9 +267,13 @@ namespace Ceritar.Logirack_CVS
                         cboDomain.Focus();
                         cboDomain.DroppedDown = true;
                         break;
-                }
 
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
+                    case ctr_CeritarApplication.ErrorCode_CeA.SATELLITE_LIST_MANDATORY:
+
+                        grdSatApp.Row = mcActionResults.RowInError;
+
+                        break;
+                }
             }
             else
             {
@@ -234,7 +291,7 @@ namespace Ceritar.Logirack_CVS
             {
                 clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
             }
-            formController.Item_NRI = mcActionResults.GetNewItem_NRI;
+            //formController.Item_NRI = mcActionResults.GetNewItem_NRI;//TODO gestion des NRI en insert
             eventArgs.SaveSuccessful = mcActionResults.IsValid;
         }
 
@@ -283,10 +340,43 @@ namespace Ceritar.Logirack_CVS
 
         private void grdModules_Validating(object sender, CancelEventArgs e)
         {
-            if (mcGrdModules[grdModules.Row, mintGrdMod_ApM_Description_col] == "")
+            //if (mcGrdModules[grdModules.Row, mintGrdMod_ApM_Description_col] == "")
+            //{
+            //    e.Cancel = true;
+            //    clsApp.GetAppController.ShowMessage((int)sclsConstants.Validation_Message.MANDATORY_GRID);
+            //}
+        }
+
+        private void grdAppSat_DoubleClick(object sender, EventArgs e)
+        {
+            switch (grdSatApp.Col)
             {
-                e.Cancel = true;
-                clsApp.GetAppController.ShowMessage((int)sclsConstants.Validation_Message.MANDATORY_GRID);
+                case mintGrdSat_CAS_Name_col:
+
+                    if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE | formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
+                    {
+                        grdSatApp.StartEditing();
+                        formController.ChangeMade = true;
+                    }
+                    else
+                    {
+                        //Do nothing
+                    }
+
+                    break;
+            }
+        }
+
+        private void grdAppSat_Validated(object sender, EventArgs e)
+        {
+            formController.ChangeMade = true;
+        }
+
+        private void btnGrdSatDel_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (grdSatApp.Row > 0)
+            {
+                grdSatApp.RemoveItem(grdSatApp.Row);
             }
         }
 
@@ -297,7 +387,6 @@ namespace Ceritar.Logirack_CVS
         //        grdModules.StartEditing(grdModules.Row, mintGrdMod_Action_col);
         //    }
         //}
-
     }
 }
 
