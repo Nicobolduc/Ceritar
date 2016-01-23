@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Ceritar.TT3LightDLL.Classes;
 using Ceritar.TT3LightDLL.Static_Classes;
 using Ceritar.CVS.Controllers;
+using Ceritar.CVS.Controllers.Interfaces;
 
 namespace Ceritar.Logirack_CVS
 {
@@ -28,9 +29,11 @@ namespace Ceritar.Logirack_CVS
 
         //Columns grdAppSat
         private const short mintGrdSat_Action_col = 1;
-        private const short mintGrdSat_CAS_NRI_col = 2;
-        private const short mintGrdSat_CAS_TS_col = 3;
-        private const short mintGrdSat_CAS_Name_col = 4;
+        private const short mintGrdSat_CSA_NRI_col = 2;
+        private const short mintGrdSat_CSA_TS_col = 3;
+        private const short mintGrdSat_CSA_Name_col = 4;
+        private const short mintGrdSat_CSA_KitFolderName_col = 5;
+        private const short mintGrdSat_CSA_Exe_IsFolder_col = 6;
 
         //Classes
         private clsC1FlexGridWrapper mcGrdModules;
@@ -109,13 +112,22 @@ namespace Ceritar.Logirack_CVS
             return mintCerApp_TS;
         }
 
-        List<string> CVS.Controllers.Interfaces.ICeritarApp.GetLstAppSatellites()
+        List<structCeritarSatelliteApp> ICeritarApp.GetLstAppSatellites()
         {
-            List<string> lstSatelliteApp = new List<string>();
+            List<structCeritarSatelliteApp> lstSatelliteApp = new List<structCeritarSatelliteApp>();
+            structCeritarSatelliteApp structCSA;
 
             for (int intRowIdx = 1; intRowIdx <= grdSatApp.Rows.Count - 1; intRowIdx++)
             {
-                lstSatelliteApp.Add(mcGrdSatApp[intRowIdx, mintGrdSat_CAS_Name_col]);
+                structCSA = new structCeritarSatelliteApp();
+                structCSA.Action = clsApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdSatApp[intRowIdx, mintGrdSat_Action_col]);
+                structCSA.blnExeIsFolder = Convert.ToBoolean(grdSatApp[intRowIdx, mintGrdSat_CSA_Exe_IsFolder_col]);
+                Int32.TryParse(mcGrdSatApp[intRowIdx, mintGrdSat_CSA_NRI_col], out structCSA.intCeritarSatelliteApp_NRI);
+                Int32.TryParse(mcGrdSatApp[intRowIdx, mintGrdSat_CSA_TS_col], out structCSA.intCeritarSatelliteApp_TS);
+                structCSA.strSatelliteApp_Name = mcGrdSatApp[intRowIdx, mintGrdSat_CSA_Name_col];
+                structCSA.strKitExport_FolderName = mcGrdSatApp[intRowIdx, mintGrdSat_CSA_KitFolderName_col];
+
+                lstSatelliteApp.Add(structCSA);
             }
 
             return lstSatelliteApp;
@@ -232,7 +244,11 @@ namespace Ceritar.Logirack_CVS
 
         private void mcGrdAppSat_SetGridDisplay()
         {
-            grdModules.Cols[mintGrdMod_ApM_Description_col].Width = 30;
+            grdSatApp.Cols[mintGrdSat_CSA_Name_col].Width = 160;
+            grdSatApp.Cols[mintGrdSat_CSA_KitFolderName_col].Width = 125;
+            grdSatApp.Cols[mintGrdSat_CSA_Exe_IsFolder_col].Width = 62;
+
+            mcGrdSatApp.SetColType_CheckBox(mintGrdSat_CSA_Exe_IsFolder_col);
         }
 
         private void formController_ValidateForm(TT3LightDLL.Controls.ValidateFormEventArgs eventArgs)
@@ -272,6 +288,15 @@ namespace Ceritar.Logirack_CVS
 
                         grdSatApp.Row = mcActionResults.RowInError;
 
+                        break;
+                }
+
+                switch ((ctr_CeritarApplication.ErrorCode_CSA)mcActionResults.GetErrorCode)
+                {
+                    case ctr_CeritarApplication.ErrorCode_CSA.NAME_MANDATORY:
+                    case ctr_CeritarApplication.ErrorCode_CSA.KIT_FOLDER_NAME_MANDATORY:
+
+                        grdSatApp.Row = mcActionResults.RowInError;
                         break;
                 }
             }
@@ -321,10 +346,6 @@ namespace Ceritar.Logirack_CVS
                         grdModules.StartEditing();
                         formController.ChangeMade = true;
                     }
-                    else
-                    {
-                        //Do nothing
-                    }
 
                     break;
             }
@@ -338,32 +359,35 @@ namespace Ceritar.Logirack_CVS
             }
         }
 
-        private void grdModules_Validating(object sender, CancelEventArgs e)
-        {
-            //if (mcGrdModules[grdModules.Row, mintGrdMod_ApM_Description_col] == "")
-            //{
-            //    e.Cancel = true;
-            //    clsApp.GetAppController.ShowMessage((int)sclsConstants.Validation_Message.MANDATORY_GRID);
-            //}
-        }
-
         private void grdAppSat_DoubleClick(object sender, EventArgs e)
         {
-            switch (grdSatApp.Col)
+            if (mcGrdSatApp.bln_RowEditIsValid())
             {
-                case mintGrdSat_CAS_Name_col:
+                switch (grdSatApp.Col)
+                {
+                    case mintGrdSat_CSA_Name_col:
 
-                    if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE | formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
-                    {
+                        if (mcGrdSatApp[grdSatApp.Row, mintGrdSat_Action_col] == sclsConstants.DML_Mode.INSERT_MODE.ToString())
+                        {
+                            grdSatApp.StartEditing();
+                            formController.ChangeMade = true;
+                        }
+
+                        break;
+
+                    case mintGrdSat_CSA_KitFolderName_col:
+
                         grdSatApp.StartEditing();
                         formController.ChangeMade = true;
-                    }
-                    else
-                    {
-                        //Do nothing
-                    }
 
-                    break;
+                        break;
+
+                    case mintGrdSat_CSA_Exe_IsFolder_col:
+
+                        mcGrdSatApp[grdSatApp.Row, mintGrdSat_CSA_Exe_IsFolder_col] = (mcGrdSatApp[grdSatApp.Row, mintGrdSat_CSA_Exe_IsFolder_col] == "0" ? "1" : "0");
+
+                        break;
+                }
             }
         }
 
@@ -372,21 +396,6 @@ namespace Ceritar.Logirack_CVS
             formController.ChangeMade = true;
         }
 
-        private void btnGrdSatDel_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (grdSatApp.Row > 0)
-            {
-                grdSatApp.RemoveItem(grdSatApp.Row);
-            }
-        }
-
-        //private void grdModules_AfterRowColChange(object sender, C1.Win.C1FlexGrid.RangeEventArgs e)
-        //{
-        //    if (mcGrdModules[grdModules.Row, mintGrdMod_Action_col] == ((int)sclsConstants.DML_Mode.INSERT_MODE).ToString())
-        //    {
-        //        grdModules.StartEditing(grdModules.Row, mintGrdMod_Action_col);
-        //    }
-        //}
     }
 }
 

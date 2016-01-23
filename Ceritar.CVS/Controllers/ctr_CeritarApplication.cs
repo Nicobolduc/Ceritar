@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Ceritar.CVS.Models.Module_Configuration;
 using Ceritar.CVS.Models.Module_ActivesInstallations;
 using Ceritar.TT3LightDLL.Static_Classes;
 using Ceritar.TT3LightDLL.Classes;
+using Ceritar.CVS.Controllers.Interfaces;
 
 
 namespace Ceritar.CVS.Controllers
@@ -27,24 +29,49 @@ namespace Ceritar.CVS.Controllers
             SATELLITE_LIST_MANDATORY = 5 
         }
 
+        public enum ErrorCode_CSA
+        {
+            NAME_MANDATORY = 1,
+            KIT_FOLDER_NAME_MANDATORY = 2
+        }
 
         public ctr_CeritarApplication(Interfaces.ICeritarApp rView)
         {
-            mcModCerApp = new Models.Module_ActivesInstallations.mod_CeA_CeritarApplication();
+            mcModCerApp = new mod_CeA_CeritarApplication();
             mcView = rView;
         }
 
         public clsActionResults Validate()
         {
+            List<structCeritarSatelliteApp> lstSatelliteApps;
+            mod_CSA_CeritarSatelliteApp cCSA;
+
+            mcModCerApp = new mod_CeA_CeritarApplication();
+
             try
             {
                 mcModCerApp.CeritarApplication_NRI = mcView.GetCerApp_NRI();
                 mcModCerApp.Name = mcView.GetName();
                 mcModCerApp.Description = mcView.GetDescription();
-                mcModCerApp.LstCeritarSatelliteApps = mcView.GetLstAppSatellites();
                 mcModCerApp.LstModules = mcView.GetLstModules();
                 mcModCerApp.DML_Action = mcView.GetDML_Mode();
                 mcModCerApp.Domaine_NRI = (mod_CeA_CeritarApplication.AppDomain)mcView.GetDomain_NRI();
+
+                lstSatelliteApps = mcView.GetLstAppSatellites();
+
+                foreach (structCeritarSatelliteApp structCSA in lstSatelliteApps)
+                {
+                    cCSA = new mod_CSA_CeritarSatelliteApp();
+                    cCSA.CeritarApp_NRI = mcModCerApp.CeritarApplication_NRI;
+                    cCSA.CeritarSatelliteApp_NRI = structCSA.intCeritarSatelliteApp_NRI;
+                    cCSA.CeritarSatelliteApp_TS = structCSA.intCeritarSatelliteApp_TS;
+                    cCSA.DML_Action = structCSA.Action;
+                    cCSA.ExeIsFolder = structCSA.blnExeIsFolder;
+                    cCSA.Name = structCSA.strSatelliteApp_Name;
+                    cCSA.KitFolderName = structCSA.strKitExport_FolderName;
+
+                    mcModCerApp.LstCeritarSatelliteApps.Add(cCSA);
+                }
 
                 mcActionResult = mcModCerApp.Validate();
             }
@@ -54,7 +81,7 @@ namespace Ceritar.CVS.Controllers
             }
             finally
             {
-                if (!mcActionResult.IsValid) mcModCerApp = new Models.Module_ActivesInstallations.mod_CeA_CeritarApplication();
+                if (!mcActionResult.IsValid) mcModCerApp = new mod_CeA_CeritarApplication();
             }
 
             return mcActionResult;
@@ -68,7 +95,6 @@ namespace Ceritar.CVS.Controllers
             {
                 mcSQL = new clsSQL();
                 
-
                 if (mcSQL.bln_BeginTransaction()){
 
                     mcModCerApp.SetcSQL = mcSQL;
@@ -141,13 +167,15 @@ namespace Ceritar.CVS.Controllers
             string strSQL = string.Empty;
 
             strSQL = strSQL + " SELECT Action = " + (int)sclsConstants.DML_Mode.NO_MODE + ", " + Environment.NewLine;
-            strSQL = strSQL + "        CerAppSat.CAS_NRI, " + Environment.NewLine;
-            strSQL = strSQL + "        CerAppSat.CAS_TS, " + Environment.NewLine;
-            strSQL = strSQL + "        CerAppSat.CAS_Name " + Environment.NewLine;
+            strSQL = strSQL + "        CerSatApp.CSA_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        CerSatApp.CSA_TS, " + Environment.NewLine;
+            strSQL = strSQL + "        CerSatApp.CSA_Name, " + Environment.NewLine;
+            strSQL = strSQL + "        CerSatApp.CSA_KitFolderName, " + Environment.NewLine;
+            strSQL = strSQL + "        CerSatApp.CSA_ExeIsFolder " + Environment.NewLine;
 
-            strSQL = strSQL + " FROM CerAppSat " + Environment.NewLine;
+            strSQL = strSQL + " FROM CerSatApp " + Environment.NewLine;
 
-            strSQL = strSQL + " WHERE CerAppSat.CeA_NRI = " + vintCerApp_NRI + Environment.NewLine;
+            strSQL = strSQL + " WHERE CerSatApp.CeA_NRI = " + vintCerApp_NRI + Environment.NewLine;
 
             return strSQL;
         }

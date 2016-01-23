@@ -37,9 +37,9 @@ namespace Ceritar.Logirack_CVS
 
         //Columns grdSatellites
         private const short mintGrdSat_Action_col = 1;
-        private const short mintGrdSat_CAS_NRI_col = 2;
-        private const short mintGrdSat_CAS_TS_col = 3;
-        private const short mintGrdSat_CAS_Name_col = 4;
+        private const short mintGrdSat_CSA_NRI_col = 2;
+        private const short mintGrdSat_CSA_TS_col = 3;
+        private const short mintGrdSat_CSA_Name_col = 4;
         private const short mintGrdSat_CSV_NRI_col = 5;
         private const short mintGrdSat_CSV_LocationExe_col = 6;
 
@@ -190,12 +190,12 @@ namespace Ceritar.Logirack_CVS
                 structCSV = new structClientSatVersion();
 
                 structCSV.Action = clsApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdSatellite[intRowIndex, mintGrdSat_Action_col]);
-                structCSV.intCeritarAppSat_NRI = Int32.Parse(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CAS_NRI_col]);
+                structCSV.intCeritarAppSat_NRI = Int32.Parse(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_NRI_col]);
                 structCSV.intCeritarClient_NRI = Int32.Parse(mcGrdClients[grdClients.Row, mintGrdClients_CeC_NRI_col]);
                 Int32.TryParse(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSV_NRI_col], out structCSV.intClientSatVersion_NRI);
                 structCSV.strCeritarClient_Name = mcGrdClients[grdClients.Row, mintGrdClients_CeC_Name_col];
                 structCSV.strLocationSatelliteExe = mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSV_LocationExe_col];
-                structCSV.strCeritarSatelliteApp_Name = mcGrdSatelliteApps[intRowIndex, mintGrdSat_CAS_Name_col];
+                structCSV.strCeritarSatelliteApp_Name = mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_Name_col];
 
                 lstSatelliteApps_NRI.Add(structCSV);
             }
@@ -241,13 +241,15 @@ namespace Ceritar.Logirack_CVS
 
             try
             {
-                mcGrdSatelliteApps.LstHostedCellControls = new List<HostedCellControl>();
-
-                blnValidReturn = mcGrdSatelliteApps.bln_FillData(mcCtrVersion.strGetListe_SatelliteApps_SQL(formController.Item_NRI, Int32.Parse(mcGrdClients[grdClients.Row, mintGrdClients_CeC_NRI_col])));
-
-                if (blnValidReturn)
+                if (grdClients.Rows.Count > 1 && !mcGrdClients.bln_CellIsEmpty(grdClients.Row, mintGrdClients_CeC_NRI_col))
                 {
-                    
+                    mcGrdSatelliteApps.LstHostedCellControls = new List<HostedCellControl>();
+
+                    blnValidReturn = mcGrdSatelliteApps.bln_FillData(mcCtrVersion.strGetListe_SatelliteApps_SQL(formController.Item_NRI, Int32.Parse(mcGrdClients[grdClients.Row, mintGrdClients_CeC_NRI_col])));
+                }
+                else
+                {
+                    mcGrdSatelliteApps.ClearGrid();
                 }
             }
             catch (Exception ex)
@@ -481,7 +483,7 @@ namespace Ceritar.Logirack_CVS
 
             try
             {
-                if (mcGrdClients.bln_RowsSelValid())
+                if (mcGrdClients.bln_RowEditIsValid())
                 {
                     if (string.IsNullOrEmpty(mcGrdClients[vintCurrentRow, mintGrdClients_Action_col]) || mcGrdClients[vintCurrentRow, mintGrdClients_Action_col] == sclsConstants.DML_Mode.INSERT_MODE.ToString())
                     {
@@ -570,12 +572,12 @@ namespace Ceritar.Logirack_CVS
 
         void mcGrdSatelliteApps_SetGridDisplay()
         {
-            grdSatellite.Cols[mintGrdSat_CAS_Name_col].Width = 240;
+            grdSatellite.Cols[mintGrdSat_CSA_Name_col].Width = 240;
             grdSatellite.Cols[mintGrdSat_CSV_LocationExe_col].Width = 42;
 
             if (grdSatellite.Rows.Count > 1)
             {
-                for (int intRowIndex = 1; intRowIndex < grdClients.Rows.Count; intRowIndex++)
+                for (int intRowIndex = 1; intRowIndex < grdSatellite.Rows.Count; intRowIndex++)
                 {
                     mcGrdSatelliteApps.LstHostedCellControls.Add(new HostedCellControl(grdSatellite, pfblnGetNewLocationSatelliteExeButton(), intRowIndex, mintGrdSat_CSV_LocationExe_col));
 
@@ -598,8 +600,8 @@ namespace Ceritar.Logirack_CVS
             Button btnPlaceHolder = null;
 
             mcGrdClients.LstHostedCellControls = new List<HostedCellControl>();
+            mcGrdSatelliteApps.LstHostedCellControls = new List<HostedCellControl>();
             
-
             if (!mcGrdClients.bln_Init(ref grdClients, ref btnGrdClientsAdd, ref btnGrdClientsDel))
             { }
             if (!mcGrdSatelliteApps.bln_Init(ref grdSatellite, ref btnPlaceHolder, ref btnPlaceHolder))
@@ -813,7 +815,6 @@ namespace Ceritar.Logirack_CVS
 
                             if (mcGrdClients[grdClients.Row, mintGrdClients_Installed_col] == "0")
                             {
-
                                 mcGrdClients[grdClients.Row, mintGrdClients_IsCurrentVersion_col] = "0";
                             }
                         }
@@ -828,7 +829,6 @@ namespace Ceritar.Logirack_CVS
 
                             if (mcGrdClients[grdClients.Row, mintGrdClients_IsCurrentVersion_col] == "1")
                             {
-
                                 mcGrdClients[grdClients.Row, mintGrdClients_Installed_col] = "1";
                             }
                         }
@@ -887,9 +887,11 @@ namespace Ceritar.Logirack_CVS
         {
             if (!formController.FormIsLoading & cboClients.SelectedIndex > -1)
             {
-                grdClients[grdClients.Row, mintGrdClients_CeC_Name_col] = cboClients.SelectedText;
                 grdClients[grdClients.Row, mintGrdClients_CeC_NRI_col] = cboClients.SelectedValue;
 
+                //if (!string.IsNullOrEmpty(mcGrdClients[grdClients.Row, mintGrdClients_CeC_Name_col]))
+                    pfblnGrdSatelliteApps_Load();
+                
                 formController.ChangeMade = true;
             }
         }
@@ -903,6 +905,8 @@ namespace Ceritar.Logirack_CVS
             grdClients[grdClients.Row, mintGrdClients_License_col] = "";
 
             mcGrdClients.LstHostedCellControls.Add(new HostedCellControl(grdClients, pfblnGetNewLocationReportButton(), grdClients.Row, mintGrdClients_LocationReportExe_col));
+
+            mcGrdSatelliteApps.ClearGrid();
         }
 
         void mcGrdClients_ValidateGridData(ValidateGridDataEventArgs eventArgs)
@@ -959,6 +963,7 @@ namespace Ceritar.Logirack_CVS
                 case sclsConstants.DML_Mode.INSERT_MODE:
 
                     btnGenerate.Enabled = false;
+                    btnExportInstallationKit.Enabled = false;
 
                     tab.TabPages[mintTab_Revision].Enabled = false;
 
@@ -1047,7 +1052,7 @@ namespace Ceritar.Logirack_CVS
 
         private void btnGrdRevDel_Click(object sender, EventArgs e)
         {
-            if (mcGrdRevisions.bln_RowsSelValid())
+            if (mcGrdRevisions.bln_RowEditIsValid())
             {
                 int intItem_NRI = (int)grdRevisions[grdRevisions.Row, mintGrdRev_Rev_NRI_col];
                 frmRevision frmVersion = new frmRevision();
@@ -1104,11 +1109,13 @@ namespace Ceritar.Logirack_CVS
 
         private void btnGrdClientsDel_Click(object sender, EventArgs e)
         {
-            if (mcGrdClients.bln_RowsSelValid() && mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.DELETE_MODE.ToString())
+            if (mcGrdClients.bln_RowEditIsValid() && mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.DELETE_MODE.ToString())
             {
                 ((HostedCellControl)mcGrdClients.LstHostedCellControls[grdClients.Row - 1]).GetCellControl.Dispose();
 
                 mcGrdClients.LstHostedCellControls.RemoveAt(grdClients.Row - 1);
+
+                mcGrdSatelliteApps.ClearGrid();
             }
         }
 
@@ -1116,7 +1123,7 @@ namespace Ceritar.Logirack_CVS
         {
             if (!formController.FormIsLoading)
             {
-                if (mcGrdSatelliteApps.bln_RowsSelValid() & e.OldRange.r1 != e.NewRange.r2)
+                if (mcGrdSatelliteApps.bln_RowEditIsValid() & e.OldRange.r1 != e.NewRange.r2)
                 {
                     pfblnGrdSatelliteApps_Load();
                 }

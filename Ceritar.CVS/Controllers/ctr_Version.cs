@@ -574,7 +574,7 @@ namespace Ceritar.CVS.Controllers
                 mcModVersion.Version_TS = mcView.GetVersion_TS();
                 mcModVersion.VersionNo = mcView.GetVersionNo();
                 mcModVersion.CompiledBy = mcView.GetCompiledBy();
-                mcModVersion.CerApplication = new Models.Module_ActivesInstallations.mod_CeA_CeritarApplication();
+                mcModVersion.CerApplication = new Ceritar.CVS.Models.Module_Configuration.mod_CeA_CeritarApplication();
                 mcModVersion.CerApplication.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
                 mcModVersion.Location_APP_CHANGEMENT = mcView.GetLocation_APP_CHANGEMENT();
                 mcModVersion.Location_Release = mcView.GetLocation_Release();
@@ -610,13 +610,16 @@ namespace Ceritar.CVS.Controllers
                     cCSV = new mod_CSV_ClientSatVersion();
                     cCSV.DML_Action = structCSV.Action;
                     cCSV.ClientSatVersion_NRI = structCSV.intClientSatVersion_NRI;
+                    cCSV.Location_Exe = structCSV.strLocationSatelliteExe;
+                    cCSV.Version_NRI = mcView.GetVersion_NRI();
+
                     cCSV.CeritarClient = new Models.Module_Configuration.mod_CeC_CeritarClient();
                     cCSV.CeritarClient.CeritarClient_NRI = structCSV.intCeritarClient_NRI;
                     cCSV.CeritarClient.CompanyName = structCSV.strCeritarClient_Name;
-                    cCSV.CeritarSatelliteApp_Name = structCSV.strCeritarSatelliteApp_Name;
-                    cCSV.CeritarSatelliteApp = structCSV.intCeritarAppSat_NRI;
-                    cCSV.Location_Exe = structCSV.strLocationSatelliteExe;
-                    cCSV.Version_NRI = mcView.GetVersion_NRI();
+
+                    cCSV.CeritarSatelliteApp = new Models.Module_Configuration.mod_CSA_CeritarSatelliteApp();
+                    cCSV.CeritarSatelliteApp.Name = structCSV.strCeritarSatelliteApp_Name;
+                    cCSV.CeritarSatelliteApp.CeritarSatelliteApp_NRI = structCSV.intCeritarAppSat_NRI;
 
                     mcModVersion.LstClientSatelliteApps.Add(cCSV);
                 }
@@ -820,7 +823,7 @@ namespace Ceritar.CVS.Controllers
 
                         currentFolderInfos = new DirectoryInfo(Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES +
                                                                             (sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Substring(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Length - 1, 1) == "\\" ? "" : "\\"),
-                                                                            cCSV.CeritarSatelliteApp_Name,
+                                                                            cCSV.CeritarSatelliteApp.KitFolderName,
                                                                             cCSV.CeritarClient.CompanyName,
                                                                             mcModVersion.VersionNo.ToString()
                                                                            )
@@ -972,22 +975,23 @@ namespace Ceritar.CVS.Controllers
             string strSQL = string.Empty;
 
             strSQL = strSQL + " SELECT Action = '" + sclsConstants.DML_Mode.NO_MODE + "', " + Environment.NewLine;
-            strSQL = strSQL + "        CerAppSat.CAS_NRI, " + Environment.NewLine;
-            strSQL = strSQL + "        CerAppSat.CAS_TS, " + Environment.NewLine;
-            strSQL = strSQL + "        CerAppSat.CAS_Name, " + Environment.NewLine;
+            strSQL = strSQL + "        CerSatApp.CSA_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        CerSatApp.CSA_TS, " + Environment.NewLine;
+            strSQL = strSQL + "        CerSatApp.CSA_Name, " + Environment.NewLine;
             strSQL = strSQL + "        ClientSatVersion.CSV_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        ClientSatVersion.CSV_Exe_Location " + Environment.NewLine;
 
-            strSQL = strSQL + " FROM Version " + Environment.NewLine;
+            strSQL = strSQL + " FROM CerSatApp " + Environment.NewLine;
 
-            strSQL = strSQL + "     INNER JOIN CerAppSat ON CerAppSat.CeA_NRI = Version.CeA_NRI " + Environment.NewLine;
-            strSQL = strSQL + "     LEFT JOIN ClientSatVersion ON ClientSatVersion.Ver_NRI = Version.Ver_NRI " + Environment.NewLine;
-            strSQL = strSQL + "                               AND ClientSatVersion.CAS_NRI = CerAppSat.CAS_NRI " + Environment.NewLine;
-            strSQL = strSQL + "                               AND ClientSatVersion.CeC_NRI = " + vintCeritarClient_NRI + Environment.NewLine;
+            strSQL = strSQL + "     LEFT JOIN ClientSatVersion  " + Environment.NewLine;
+            strSQL = strSQL + " 		INNER JOIN Version ON Version.Ver_NRI = ClientSatVersion.Ver_NRI  " + Environment.NewLine;
+            strSQL = strSQL + " 	ON ClientSatVersion.Ver_NRI = Version.Ver_NRI  " + Environment.NewLine;
+            strSQL = strSQL + "    AND ClientSatVersion.CSA_NRI = CerSatApp.CSA_NRI  " + Environment.NewLine;
+            strSQL = strSQL + "    AND ClientSatVersion.CeC_NRI = " + vintCeritarClient_NRI + Environment.NewLine;
 
-            strSQL = strSQL + " WHERE Version.Ver_NRI = " + vintVersion_NRI + Environment.NewLine;
+            strSQL = strSQL + " WHERE CerSatApp.CeA_NRI = " + mcView.GetCeritarApplication_NRI() + Environment.NewLine;
 
-            strSQL = strSQL + " ORDER BY CerAppSat.CAS_Name " + Environment.NewLine;
+            strSQL = strSQL + " ORDER BY CerSatApp.CSA_Name " + Environment.NewLine;
 
             return strSQL;
         }

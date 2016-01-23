@@ -5,7 +5,7 @@ using Ceritar.CVS.Controllers;
 using Ceritar.TT3LightDLL.Classes;
 using Ceritar.TT3LightDLL.Static_Classes;
 using Ceritar.CVS.Models.Module_Template;
-using Ceritar.CVS.Models.Module_ActivesInstallations;
+using Ceritar.CVS.Models.Module_Configuration;
 
 namespace Ceritar.CVS.Models.Module_ActivesInstallations
 {
@@ -625,17 +625,23 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
             try
             {
-                for (int intIndex = 0; intIndex < _lstClientSatelliteApps.Count; intIndex++)
+                if (mintDML_Action != sclsConstants.DML_Mode.DELETE_MODE)
                 {
-                    _lstClientSatelliteApps[intIndex].SetcSQL = mcSQL;
-                    _lstClientSatelliteApps[intIndex].Version_NRI = _intVersion_NRI;
-                    _lstClientSatelliteApps[intIndex].DML_Action = (mintDML_Action == sclsConstants.DML_Mode.DELETE_MODE ? sclsConstants.DML_Mode.DELETE_MODE : _lstClientSatelliteApps[intIndex].DML_Action);
+                    for (int intIndex = 0; intIndex < _lstClientSatelliteApps.Count; intIndex++)
+                    {
+                        _lstClientSatelliteApps[intIndex].SetcSQL = mcSQL;
+                        _lstClientSatelliteApps[intIndex].Version_NRI = _intVersion_NRI;
 
-                    blnValidReturn = _lstClientSatelliteApps[intIndex].blnSave();
+                        blnValidReturn = _lstClientSatelliteApps[intIndex].blnSave();
 
-                    mcActionResults = _lstClientSatelliteApps[intIndex].ActionResults;
+                        mcActionResults = _lstClientSatelliteApps[intIndex].ActionResults;
 
-                    if (!blnValidReturn) break;
+                        if (!blnValidReturn) break;
+                    }
+                }
+                else
+                {
+                    blnValidReturn = mcSQL.bln_ADODelete("ClientSatVersion", "ClientSatVersion.Ver_NRI = " + _intVersion_NRI);
                 }
             }
             catch (Exception ex)

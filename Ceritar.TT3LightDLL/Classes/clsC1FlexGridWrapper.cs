@@ -19,7 +19,7 @@ namespace Ceritar.TT3LightDLL.Classes
     /// </summary>
     public class clsC1FlexGridWrapper
     {
-        //Docuumentation available here: //http://helpcentral.componentone.com/nethelp/c1flexgrid/topic132.html
+        //Documentation available here: //http://helpcentral.componentone.com/nethelp/c1flexgrid/topic132.html
         //Row 0 is the Header and col 0 is the first small fixed col
         //Caption: first col starts after the first pipe. || = 2 cols.
         
@@ -192,6 +192,8 @@ namespace Ceritar.TT3LightDLL.Classes
                 SetBtnAddRowEvents = rbtnAddRow;
 			    SetBtnDeleteRowEvents = rbtnRemoveRow;
 
+                //mlstHostedCellControls = new List<HostedCellControl>();
+
 			    mGrdFlex.BeginInit();
 
                 mGrdFlex.DataSource = null;
@@ -276,6 +278,8 @@ namespace Ceritar.TT3LightDLL.Classes
 
 		    try {
                 mblnGridIsLoading = true;
+
+                //mlstHostedCellControls = new List<HostedCellControl>();
 
                 mGrdFlex.BeginUpdate();
 
@@ -463,7 +467,7 @@ namespace Ceritar.TT3LightDLL.Classes
             return blnValidReturn;
         }
 
-        public bool bln_RowsSelValid()
+        public bool bln_RowEditIsValid()
         {
             return mGrdFlex.Rows.Count > 1 && mGrdFlex.Row > 0 && mfrmParent.GetFormController().FormMode != sclsConstants.DML_Mode.CONSULT_MODE && mfrmParent.GetFormController().FormMode != sclsConstants.DML_Mode.DELETE_MODE;
         }
@@ -489,7 +493,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
 	    public void SetColType_CheckBox(int vintColumnIndex)
 	    {
-		    mGrdFlex.Cols[vintColumnIndex].Style.DataType = typeof(bool);
+		    mGrdFlex.Cols[vintColumnIndex].DataType = typeof(bool);
             mGrdFlex.Cols[vintColumnIndex].Style.TextAlign = TextAlignEnum.CenterCenter;
 	    }
 
@@ -592,6 +596,23 @@ namespace Ceritar.TT3LightDLL.Classes
             return cGridValidResults.IsValid;
         }
 
+        public void ClearGrid()
+        {
+            try
+            {
+                mlstHostedCellControls.Clear();
+
+                for (int intRowIndex = 1; intRowIndex < mGrdFlex.Rows.Count; intRowIndex++)
+                {
+                    mGrdFlex.Rows.Remove(intRowIndex);
+                }
+            }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source + " - " + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);
+            }
+        }
+
         private C1FlexGrid SetGrdFlexEvents
         {
             set
@@ -604,6 +625,7 @@ namespace Ceritar.TT3LightDLL.Classes
                     mGrdFlex.CellChecked -= mGrdFlex_CheckBoxClick;
                     mGrdFlex.AfterRowColChange -= mGrdFlex_AfterRowColChange;
                     mGrdFlex.Paint -= mGrdFlex_Paint;
+                    mGrdFlex.DoubleClick -= mGrdFlex_DoubleClick;
                 }
 
                 if (mGrdFlex != null)
@@ -612,6 +634,7 @@ namespace Ceritar.TT3LightDLL.Classes
                     mGrdFlex.CellChecked += mGrdFlex_CheckBoxClick;
                     mGrdFlex.AfterRowColChange += mGrdFlex_AfterRowColChange;
                     mGrdFlex.Paint += mGrdFlex_Paint;
+                    mGrdFlex.DoubleClick += mGrdFlex_DoubleClick;
                 }
             }
         }
@@ -765,6 +788,17 @@ namespace Ceritar.TT3LightDLL.Classes
             }   
         }
 
+        void mGrdFlex_DoubleClick(object sender, EventArgs e)
+        {
+            if (!mblnGridIsLoading)
+            {
+                //On ne veut pas toujours permettre la sélection
+                //if (mGrdFlex.Cols[mGrdFlex.Col].DataType == typeof(bool))
+                //{
+                //    this[mGrdFlex.Row, mGrdFlex.Col] = (this[mGrdFlex.Row, mGrdFlex.Col] == "0" ? "1" : "0");
+                //}
+            }
+        }
     }
 
     /// <summary>

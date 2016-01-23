@@ -352,7 +352,7 @@ namespace Ceritar.Logirack_CVS
             }
 
             if (!formController.FormIsLoading &&
-                mcGrdTemplate.bln_RowsSelValid() &&
+                mcGrdTemplate.bln_RowEditIsValid() &&
                 mcGrdTemplate[grdTemplate.Row, mintGrdTpl_HiCo_IsSystemItem_col] == "0"
                )
             {

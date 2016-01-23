@@ -15,7 +15,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         //Model attributes
         private int _intClientSatVersion_NRI;
         private int _intVersion_NRI;
-        private int _intCeritarSatelliteApp;
+        private mod_CSA_CeritarSatelliteApp _cCeritarSatelliteApp;
         private mod_CeC_CeritarClient _cCeritarClient;
         private string _strLocation_Exe;
 
@@ -23,9 +23,6 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private clsActionResults mcActionResults = new clsActionResults();
         private sclsConstants.DML_Mode mintDML_Action;
         private clsSQL mcSQL;
-
-        //Working variables
-        private string _strCeritarSatelliteApp_Name;
 
 
 #region "Properties"
@@ -48,10 +45,10 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { _cCeritarClient = value; }
         }
 
-        internal int CeritarSatelliteApp
+        internal mod_CSA_CeritarSatelliteApp CeritarSatelliteApp
         {
-            get { return _intCeritarSatelliteApp; }
-            set { _intCeritarSatelliteApp = value; }
+            get { return _cCeritarSatelliteApp; }
+            set { _cCeritarSatelliteApp = value; }
         }
 
         internal string Location_Exe
@@ -74,12 +71,6 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         internal clsActionResults ActionResults
         {
             get { return mcActionResults; }
-        }
-
-        internal string CeritarSatelliteApp_Name
-        {
-            get { return _strCeritarSatelliteApp_Name; }
-            set { _strCeritarSatelliteApp_Name = value; }
         }
 
 #endregion
@@ -118,7 +109,6 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         { }
                         else
                         {
-                            mcActionResults.SetNewItem_NRI = _intCeritarSatelliteApp;
                             blnValidReturn = true;
                         }
 
@@ -186,7 +176,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 { }
                 else if (!mcSQL.bln_AddField("CeC_NRI", _cCeritarClient.CeritarClient_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("CAS_NRI", _intCeritarSatelliteApp, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("CSA_NRI", _cCeritarSatelliteApp.CeritarSatelliteApp_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("CSV_Exe_Location", _strLocation_Exe, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }

@@ -4,7 +4,7 @@ using Ceritar.TT3LightDLL.Classes;
 using Ceritar.CVS.Controllers;
 using System;
 
-namespace Ceritar.CVS.Models.Module_ActivesInstallations
+namespace Ceritar.CVS.Models.Module_Configuration
 {
     /// <summary>
     /// Cette classe représente le modèle objet d'une application de Ceritar.
@@ -19,7 +19,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private string _strDescription;
         private AppDomain _domain_NRI;
         private List<string> _lstModules;
-        private List<string> _lstSatelliteApps;
+        private List<mod_CSA_CeritarSatelliteApp> _lstSatelliteApps;
 
         public enum AppDomain
         {
@@ -75,9 +75,14 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { _lstModules = value; }
         }
 
-        internal List<string> LstCeritarSatelliteApps
+        internal List<mod_CSA_CeritarSatelliteApp> LstCeritarSatelliteApps
         {
-            get { return _lstSatelliteApps; }
+            get 
+            {
+                if (_lstSatelliteApps == null) _lstSatelliteApps = new List<mod_CSA_CeritarSatelliteApp>();
+
+                return _lstSatelliteApps; 
+            }
             set { _lstSatelliteApps = value; }
         }
 
@@ -222,7 +227,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                         if (!mcSQL.bln_ADODelete("AppModule", "AppModule.CeA_NRI = " + _intCeritarApplication_NRI))
                         { }
-                        if (!mcSQL.bln_ADODelete("CerAppSat", "CerAppSat.CeA_NRI = " + _intCeritarApplication_NRI))
+                        if (!mcSQL.bln_ADODelete("CerSatApp", "CerSatApp.CeA_NRI = " + _intCeritarApplication_NRI))
                         { }
                         else if (!mcSQL.bln_ADODelete("CerApp", "CerApp.CeA_NRI = " + _intCeritarApplication_NRI))
                         { }
@@ -348,31 +353,22 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
         private bool pfblnListSatelliteApps_Save()
         {
-            bool blnValidReturn = false;
-            int intDML_OutParam = 0;
+            bool blnValidReturn = true;
 
             try
             {
-                blnValidReturn = mcSQL.bln_ADODelete("CerAppSat", "CeA_NRI = " + _intCeritarApplication_NRI);
-
-                for (int intIndex = 0; intIndex < _lstSatelliteApps.Count & blnValidReturn; intIndex++)
+                for (int intIndex = 0; intIndex < _lstSatelliteApps.Count; intIndex++)
                 {
-                    blnValidReturn = false;
+                    _lstSatelliteApps[intIndex].SetcSQL = mcSQL;
 
-                    if (!mcSQL.bln_RefreshFields())
-                    { }
-                    else if (!mcSQL.bln_AddField("CAS_Name", _lstSatelliteApps[intIndex], clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
-                    { }
-                    else if (!mcSQL.bln_AddField("CeA_NRI", _intCeritarApplication_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
-                    { }
-                    else if (!mcSQL.bln_ADOInsert("CerAppSat", out intDML_OutParam))
-                    { }
-                    else
+                    blnValidReturn = _lstSatelliteApps[intIndex].blnSave();
+
+                    if (!blnValidReturn)
                     {
-                        blnValidReturn = true;
-                    }
+                        mcActionResults = _lstSatelliteApps[intIndex].ActionResults;
 
-                    if (!blnValidReturn) break;
+                        break;
+                    }
                 }
             }
             catch (Exception ex)
@@ -430,10 +426,11 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             {
                 for (int intIndex = 0; intIndex < _lstSatelliteApps.Count; intIndex++)
                 {
-                    if (string.IsNullOrEmpty(_lstSatelliteApps[intIndex]))
+                    mcActionResults = _lstSatelliteApps[intIndex].Validate();
+
+                    if (!mcActionResults.IsValid)
                     {
                         mcActionResults.RowInError = intIndex + 1;
-                        mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_CeritarApplication.ErrorCode_CeA.SATELLITE_LIST_MANDATORY);
                         blnValidReturn = false;
 
                         break;
