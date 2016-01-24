@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
@@ -297,6 +298,11 @@ namespace Ceritar.CVS.Controllers
 
                     if (!blnValidReturn) break;
                 }
+
+                if (blnValidReturn)
+                {
+                    blnValidReturn = pfblnUpdateSatellitesAndLocations();
+                }
             }
             catch (FileNotFoundException exPath)
             {
@@ -313,15 +319,11 @@ namespace Ceritar.CVS.Controllers
                 if (cSQLReader != null) cSQLReader.Dispose();
 
                 if (blnValidReturn) mcActionResult.SetValid();
-            }
 
-            if (!blnValidReturn && mcModVersion.DML_Action == sclsConstants.DML_Mode.INSERT_MODE)
-            {
-                pfblnDeleteVersionHierarchy(strVersionFolderRoot);
-            }
-            else
-            {
-                blnValidReturn = pfblnUpdateLocations();
+                if (!blnValidReturn && mcModVersion.DML_Action == sclsConstants.DML_Mode.INSERT_MODE)
+                {
+                    pfblnDeleteVersionHierarchy(strVersionFolderRoot);
+                }
             }
 
             return blnValidReturn;
@@ -347,7 +349,7 @@ namespace Ceritar.CVS.Controllers
 
                 foreach (structClientAppVersion structClient in lstClients)
                 {
-                    if (structClient.Action == sclsConstants.DML_Mode.INSERT_MODE)
+                    if (structClient.Action == sclsConstants.DML_Mode.INSERT_MODE | mcView.GetIncludeScriptsOnRefresh())
                     {
                         if (mcSQL == null)
                         {
@@ -382,17 +384,19 @@ namespace Ceritar.CVS.Controllers
 
                                     for (int intIndex = 0; intIndex < lstSpecificScripts.Length; intIndex++)
                                     {
+                                        List<string> lstScripts = Directory.GetFiles(strCurrentVersionFolderToCopy_Path).OrderBy(f => f).ToList<string>();
+
                                         strNewScriptName = Path.GetFileName(lstSpecificScripts[intIndex]);
                                         strNewScriptName = strNewScriptName.Substring(strNewScriptName.IndexOf("_") + 1);
 
-                                        intNewScriptNumber = (intNewScriptNumber == 0 ? Directory.GetFiles(strCurrentVersionFolderToCopy_Path).Length + 1 : intNewScriptNumber + 1);
-
+                                        intNewScriptNumber = (intNewScriptNumber == 0 ? Int32.Parse(new String(Path.GetFileName(lstScripts[lstScripts.Count - 1]).TakeWhile(Char.IsDigit).ToArray())) + 1 : intNewScriptNumber + 1);
+                                        
                                         strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
 
                                         File.Copy(lstSpecificScripts[intIndex], Path.Combine(vstrDestinationFolderPath,
                                                                                              structClient.strCeritarClient_Name,
                                                                                              sclsAppConfigs.GetVersionNumberPrefix + intCurrentFolder_VersionNo.ToString(),
-                                                                                             strNewScriptName)
+                                                                                             strNewScriptName), true
                                                  );
                                     }
                                 }
@@ -484,6 +488,7 @@ namespace Ceritar.CVS.Controllers
         private bool pfblnDeleteVersionHierarchy(string vstrVersionFolderRoot)
         {
             bool blnValidReturn = false;
+            List<mod_CSV_ClientSatVersion> lstSatellites;
 
             try
             {
@@ -497,6 +502,29 @@ namespace Ceritar.CVS.Controllers
                 process.StartInfo = startInfo;
                 process.Start();
                 process.WaitForExit();
+
+                lstSatellites = mcModVersion.LstClientSatelliteApps;
+
+                foreach (mod_CSV_ClientSatVersion cCSV in lstSatellites)
+                {
+                    vstrVersionFolderRoot = Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES +
+                                                    (sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Substring(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Length - 1, 1) == "\\" ? "" : "\\"),
+                                                    cCSV.CeritarSatelliteApp.Name,
+                                                    cCSV.CeritarClient.CompanyName,
+                                                    sclsAppConfigs.GetVersionNumberPrefix + mcModVersion.VersionNo.ToString()
+                                                   );
+
+                    process = new System.Diagnostics.Process();
+                    startInfo = new System.Diagnostics.ProcessStartInfo();
+
+                    startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                    startInfo.FileName = "cmd.exe";
+                    startInfo.Arguments = @"/C RMDIR """ + vstrVersionFolderRoot + @""" /S /Q";
+
+                    process.StartInfo = startInfo;
+                    process.Start();
+                    process.WaitForExit();
+                }
 
                 blnValidReturn = true;
             }
@@ -583,6 +611,7 @@ namespace Ceritar.CVS.Controllers
                 mcModVersion.TemplateSource.Template_NRI = mcView.GetTemplateSource_NRI();
                 mcModVersion.CreationDate = mcView.GetCreationDate();
                 mcModVersion.IsDemo = mcView.GetIsDemo();
+                mcModVersion.IncludeScriptsOnRefresh = mcView.GetIncludeScriptsOnRefresh();
 
                 lstStructCAV = mcView.GetClientsList();
 
@@ -620,6 +649,8 @@ namespace Ceritar.CVS.Controllers
                     cCSV.CeritarSatelliteApp = new Models.Module_Configuration.mod_CSA_CeritarSatelliteApp();
                     cCSV.CeritarSatelliteApp.Name = structCSV.strCeritarSatelliteApp_Name;
                     cCSV.CeritarSatelliteApp.CeritarSatelliteApp_NRI = structCSV.intCeritarAppSat_NRI;
+                    cCSV.CeritarSatelliteApp.ExeIsFolder = structCSV.blnExeIsFolder;
+                    cCSV.CeritarSatelliteApp.KitFolderName = structCSV.strKitFolderName;
 
                     mcModVersion.LstClientSatelliteApps.Add(cCSV);
                 }
@@ -808,7 +839,7 @@ namespace Ceritar.CVS.Controllers
             return blnValidReturn;
         }
 
-        private bool pfblnUpdateLocations()
+        private bool pfblnUpdateSatellitesAndLocations()
         {
             bool blnValidReturn = false;
             DirectoryInfo currentFolderInfos = null;
@@ -817,17 +848,17 @@ namespace Ceritar.CVS.Controllers
             {
                 foreach (mod_CSV_ClientSatVersion cCSV in mcModVersion.LstClientSatelliteApps)
                 {
-                    if (File.Exists(cCSV.Location_Exe))
-                    {
-                        blnValidReturn = false;
+                    blnValidReturn = false;
 
+                    if (!string.IsNullOrEmpty(cCSV.Location_Exe))
+                    {
                         currentFolderInfos = new DirectoryInfo(Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES +
-                                                                            (sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Substring(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Length - 1, 1) == "\\" ? "" : "\\"),
-                                                                            cCSV.CeritarSatelliteApp.KitFolderName,
-                                                                            cCSV.CeritarClient.CompanyName,
-                                                                            mcModVersion.VersionNo.ToString()
-                                                                           )
-                                                        );
+                                                                        (sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Substring(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Length - 1, 1) == "\\" ? "" : "\\"),
+                                                                        cCSV.CeritarSatelliteApp.Name,
+                                                                        cCSV.CeritarClient.CompanyName,
+                                                                        sclsAppConfigs.GetVersionNumberPrefix + mcModVersion.VersionNo.ToString()
+                                                                        )
+                                                    );
 
                         if (!Directory.Exists(currentFolderInfos.FullName)) currentFolderInfos.Create();
 
@@ -835,31 +866,38 @@ namespace Ceritar.CVS.Controllers
 
                         if ((locationAttributes & FileAttributes.Directory) == FileAttributes.Directory) //Executable is a folder
                         {
-                            clsApp.GetAppController.blnCopyFolderContent(cCSV.Location_Exe, currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, mstrReleaseValidExtensions);
+                            if (cCSV.Location_Exe != currentFolderInfos.FullName)
+                            {
+                                clsApp.GetAppController.blnCopyFolderContent(cCSV.Location_Exe, currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, mstrReleaseValidExtensions);
 
-                            cCSV.Location_Exe = currentFolderInfos.FullName;
+                                cCSV.Location_Exe = currentFolderInfos.FullName;
+                            }
                         }
                         else //Executable is a file
                         {
-                            File.Copy(cCSV.Location_Exe, Path.Combine(currentFolderInfos.FullName, Path.GetFileName(cCSV.Location_Exe)), true);
+                            if (cCSV.Location_Exe != Path.Combine(currentFolderInfos.FullName, Path.GetFileName(cCSV.Location_Exe)))
+                            {
+                                File.Copy(cCSV.Location_Exe, Path.Combine(currentFolderInfos.FullName, Path.GetFileName(cCSV.Location_Exe)), true);
 
-                            cCSV.Location_Exe = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(cCSV.Location_Exe));
+                                cCSV.Location_Exe = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(cCSV.Location_Exe));
+                            }
                         }
 
                         cCSV.SetcSQL = mcSQL;
-                        
+                        cCSV.DML_Action = (mcModVersion.DML_Action == sclsConstants.DML_Mode.INSERT_MODE ? sclsConstants.DML_Mode.UPDATE_MODE : cCSV.DML_Action);
+
                         blnValidReturn = cCSV.blnSave();
+
+                        if (!blnValidReturn)
+                        {
+                            mcActionResult = mcModVersion.ActionResults;
+
+                            break;
+                        }
                     }
                     else
                     {
                         blnValidReturn = true;
-                    }
-
-                    if (!blnValidReturn)
-                    {
-                        mcActionResult = mcModVersion.ActionResults;
-
-                        break;
                     }
                 }
 
@@ -978,8 +1016,10 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        CerSatApp.CSA_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        CerSatApp.CSA_TS, " + Environment.NewLine;
             strSQL = strSQL + "        CerSatApp.CSA_Name, " + Environment.NewLine;
+            strSQL = strSQL + "        CerSatApp.CSA_KitFolderName, " + Environment.NewLine;
+            strSQL = strSQL + "        CerSatApp.CSA_ExeIsFolder, " + Environment.NewLine;
             strSQL = strSQL + "        ClientSatVersion.CSV_NRI, " + Environment.NewLine;
-            strSQL = strSQL + "        ClientSatVersion.CSV_Exe_Location " + Environment.NewLine;
+            strSQL = strSQL + "        ClientSatVersion.CSV_Exe_Location " + Environment.NewLine;        
 
             strSQL = strSQL + " FROM CerSatApp " + Environment.NewLine;
 

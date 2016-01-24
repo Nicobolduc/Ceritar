@@ -21,7 +21,7 @@ namespace Ceritar.TT3LightDLL.Classes
     {
         //Documentation available here: //http://helpcentral.componentone.com/nethelp/c1flexgrid/topic132.html
         //Row 0 is the Header and col 0 is the first small fixed col
-        //Caption: first col starts after the first pipe. || = 2 cols.
+        //Caption: first col starts before the first pipe. || = 3 cols.
         
 	    //private members
 	    private const short mintDefaultActionCol = 1;
@@ -46,8 +46,10 @@ namespace Ceritar.TT3LightDLL.Classes
 	    public delegate void ValidateGridDataEventHandler(ValidateGridDataEventArgs eventArgs);
 	    public event SaveGridDataEventHandler SaveGridData;
 	    public delegate void SaveGridDataEventHandler(SaveGridDataEventArgs eventArgs);
-        public event AfterRowAddEventHandler AfterRowAdd;
-        public delegate void AfterRowAddEventHandler();
+        public event AfterClickAddEventHandler AfterClickAdd;
+        public delegate void AfterClickAddEventHandler();
+        public event BeforeClickAddEventHandler BeforeClickAdd;
+        public delegate void BeforeClickAddEventHandler(ref bool vblnCancel);
 
         //Working variables
         private bool mblnGridIsLoading = false;
@@ -600,11 +602,17 @@ namespace Ceritar.TT3LightDLL.Classes
         {
             try
             {
+                foreach (HostedCellControl cControl in mlstHostedCellControls)
+                {
+                    cControl.GetCellControl.Dispose();
+                }
+
                 mlstHostedCellControls.Clear();
 
-                for (int intRowIndex = 1; intRowIndex < mGrdFlex.Rows.Count; intRowIndex++)
+                //for (int intRowIndex = 1; intRowIndex < mGrdFlex.Rows.Count; intRowIndex++)
+                while (mGrdFlex.Rows.Count > 1)
                 {
-                    mGrdFlex.Rows.Remove(intRowIndex);
+                    mGrdFlex.RemoveItem();
                 }
             }
             catch (Exception ex)
@@ -676,11 +684,15 @@ namespace Ceritar.TT3LightDLL.Classes
 
 	    private void btnAddRow_Click(object sender, EventArgs e)
 	    {
-            AddRow();
-            //System.Data.DataRow cRow = ((DataTable) mGrdFlex.DataSource).NewRow();
-            
-            //((DataTable)mGrdFlex.DataSource).Rows.InsertAt(cRow, mGrdFlex.Rows.Count - 1);
-            //((DataTable)mGrdFlex.DataSource).Rows.Add(0);
+            bool blnCancel = false;
+
+            if (BeforeClickAdd != null)
+            {
+                BeforeClickAdd(ref blnCancel);
+            }
+
+            if (!blnCancel)
+                AddRow();
 	    }
 
 	    private void btnDeleteRow_Click(object sender, EventArgs e)
@@ -771,9 +783,9 @@ namespace Ceritar.TT3LightDLL.Classes
         {
             if (!mblnGridIsLoading && mblnFromButtonAddClick)
             {
-                if (AfterRowAdd != null)
+                if (AfterClickAdd != null)
                 {
-                    AfterRowAdd();
+                    AfterClickAdd();
                     mblnFromButtonAddClick = false;
                 }     
             }

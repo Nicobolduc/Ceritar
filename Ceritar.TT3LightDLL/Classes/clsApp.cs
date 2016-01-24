@@ -182,10 +182,11 @@ namespace Ceritar.TT3LightDLL.Classes
             return DateTime.ParseExact(vdtToFormat, str_GetUserDateFormat, System.Globalization.CultureInfo.InvariantCulture);
         }
 
-        public void ShowMessage(int vintCaption_NRI, MessageBoxButtons vmsgType = MessageBoxButtons.OK, params string[] vlstMsgParam)
+        public DialogResult ShowMessage(int vintCaption_NRI, MessageBoxButtons vmsgType = MessageBoxButtons.OK, params string[] vlstMsgParam)
         {
             string strMessage = string.Empty;
             int intParamCpt = 1;
+            DialogResult msgResult = DialogResult.OK;
 
             try
             {
@@ -210,13 +211,15 @@ namespace Ceritar.TT3LightDLL.Classes
                     }
                 }
 
-                MessageBox.Show(strMessage, "Message", vmsgType);
+                msgResult = MessageBox.Show(strMessage, "Message", vmsgType);
 
             }
             catch (Exception ex)
             {
                 sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
+
+            return msgResult;
         }
 
         public T ConvertToEnum<T>(object vobjValue)

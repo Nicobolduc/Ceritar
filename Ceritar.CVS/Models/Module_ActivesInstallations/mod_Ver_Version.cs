@@ -43,6 +43,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private const int mintMSG_CantInstallDemoInProd = 24;
 
         //Working variables
+        private bool mblnIncludeScriptsOnRefresh = false;
 
 
 #region "Properties"
@@ -167,6 +168,12 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         {
             get { return _blnIsDemo; }
             set { _blnIsDemo = value; }
+        }
+
+        internal bool IncludeScriptsOnRefresh
+        {
+            get { return mblnIncludeScriptsOnRefresh; }
+            set { mblnIncludeScriptsOnRefresh = value; }
         }
 
 #endregion

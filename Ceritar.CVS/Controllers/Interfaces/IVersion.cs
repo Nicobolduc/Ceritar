@@ -23,6 +23,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         string GetLocation_Release();
         string GetLocation_TTApp();
         bool GetIsDemo();
+        bool GetIncludeScriptsOnRefresh();
         List<structClientAppVersion> GetClientsList();
         List<structClientSatVersion> GetClientSatellitesList();
     }
@@ -54,6 +55,8 @@ namespace Ceritar.CVS.Controllers.Interfaces
         public int intCeritarAppSat_NRI;
         public string strCeritarClient_Name;
         public string strCeritarSatelliteApp_Name;
-        public string strLocationSatelliteExe;      
+        public string strLocationSatelliteExe;
+        public bool blnExeIsFolder;
+        public string strKitFolderName;
     }
 }

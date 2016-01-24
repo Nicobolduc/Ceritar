@@ -75,6 +75,7 @@
             this.tab = new System.Windows.Forms.TabControl();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.chkIncludeScripts = new System.Windows.Forms.CheckBox();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.groupBox1.SuspendLayout();
             this.tabRevision.SuspendLayout();
@@ -351,7 +352,7 @@
             this.btnGenerate.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnGenerate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGenerate.BackgroundImage")));
             this.btnGenerate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnGenerate.Location = new System.Drawing.Point(8, 17);
+            this.btnGenerate.Location = new System.Drawing.Point(27, 16);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(40, 40);
             this.btnGenerate.TabIndex = 62;
@@ -378,7 +379,7 @@
             this.tabRevision.Location = new System.Drawing.Point(4, 22);
             this.tabRevision.Name = "tabRevision";
             this.tabRevision.Padding = new System.Windows.Forms.Padding(3);
-            this.tabRevision.Size = new System.Drawing.Size(799, 360);
+            this.tabRevision.Size = new System.Drawing.Size(806, 360);
             this.tabRevision.TabIndex = 1;
             this.tabRevision.Text = "Révisions";
             this.tabRevision.UseVisualStyleBackColor = true;
@@ -431,17 +432,18 @@
             this.tabVersion.Location = new System.Drawing.Point(4, 22);
             this.tabVersion.Name = "tabVersion";
             this.tabVersion.Padding = new System.Windows.Forms.Padding(3);
-            this.tabVersion.Size = new System.Drawing.Size(799, 360);
+            this.tabVersion.Size = new System.Drawing.Size(806, 360);
             this.tabVersion.TabIndex = 0;
             this.tabVersion.Text = "Version";
             this.tabVersion.UseVisualStyleBackColor = true;
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.chkIncludeScripts);
             this.groupBox5.Controls.Add(this.btnGenerate);
-            this.groupBox5.Location = new System.Drawing.Point(737, 289);
+            this.groupBox5.Location = new System.Drawing.Point(706, 275);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(56, 65);
+            this.groupBox5.Size = new System.Drawing.Size(94, 79);
             this.groupBox5.TabIndex = 63;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Actions";
@@ -451,7 +453,7 @@
             this.groupBox4.Controls.Add(this.grdSatellite);
             this.groupBox4.Location = new System.Drawing.Point(448, 6);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(338, 167);
+            this.groupBox4.Size = new System.Drawing.Size(352, 167);
             this.groupBox4.TabIndex = 62;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Applications satellites";
@@ -467,7 +469,7 @@
             this.grdSatellite.Rows.Count = 1;
             this.grdSatellite.Rows.DefaultSize = 18;
             this.grdSatellite.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdSatellite.Size = new System.Drawing.Size(326, 144);
+            this.grdSatellite.Size = new System.Drawing.Size(340, 144);
             this.grdSatellite.StyleInfo = resources.GetString("grdSatellite.StyleInfo");
             this.grdSatellite.TabIndex = 2;
             this.grdSatellite.Tag = "26";
@@ -569,31 +571,45 @@
             this.grdClients.StyleInfo = resources.GetString("grdClients.StyleInfo");
             this.grdClients.TabIndex = 2;
             this.grdClients.Tag = "15";
+            this.grdClients.BeforeRowColChange += new C1.Win.C1FlexGrid.RangeEventHandler(this.grdClients_BeforeRowColChange);
             this.grdClients.AfterRowColChange += new C1.Win.C1FlexGrid.RangeEventHandler(this.grdClients_AfterRowColChange);
             this.grdClients.DoubleClick += new System.EventHandler(this.grdClients_DoubleClick);
             // 
             // tab
             // 
-            this.tab.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.tab.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tab.Controls.Add(this.tabVersion);
             this.tab.Controls.Add(this.tabRevision);
             this.tab.Location = new System.Drawing.Point(5, 85);
             this.tab.Name = "tab";
             this.tab.SelectedIndex = 0;
-            this.tab.Size = new System.Drawing.Size(807, 386);
+            this.tab.Size = new System.Drawing.Size(814, 386);
             this.tab.TabIndex = 10;
+            // 
+            // chkIncludeScripts
+            // 
+            this.chkIncludeScripts.AutoSize = true;
+            this.chkIncludeScripts.Location = new System.Drawing.Point(6, 58);
+            this.chkIncludeScripts.Name = "chkIncludeScripts";
+            this.chkIncludeScripts.Size = new System.Drawing.Size(91, 17);
+            this.chkIncludeScripts.TabIndex = 63;
+            this.chkIncludeScripts.Text = "Inclure scripts";
+            this.chkIncludeScripts.UseVisualStyleBackColor = true;
             // 
             // formController
             // 
-            this.formController.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.formController.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.formController.ChangeMade = false;
             this.formController.FormIsLoading = false;
             this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.CONSULT_MODE;
             this.formController.Item_NRI = 0;
-            this.formController.Location = new System.Drawing.Point(0, 481);
+            this.formController.Location = new System.Drawing.Point(-1, 481);
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
-            this.formController.Size = new System.Drawing.Size(812, 33);
+            this.formController.Size = new System.Drawing.Size(820, 33);
             this.formController.TabIndex = 50;
             this.formController.SetReadRights += new Ceritar.TT3LightDLL.Controls.ctlFormController.SetReadRightsEventHandler(this.formController_SetReadRights);
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
@@ -604,7 +620,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(814, 515);
+            this.ClientSize = new System.Drawing.Size(821, 515);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.formController);
             this.Controls.Add(this.tab);
@@ -622,6 +638,7 @@
             this.tabVersion.ResumeLayout(false);
             this.tabVersion.PerformLayout();
             this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdSatellite)).EndInit();
             this.groupBox2.ResumeLayout(false);
@@ -679,5 +696,6 @@
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Button btnGenerate;
         private System.Windows.Forms.Button btnExportInstallationKit;
+        private System.Windows.Forms.CheckBox chkIncludeScripts;
     }
 }
