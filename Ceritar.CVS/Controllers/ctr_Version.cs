@@ -676,9 +676,9 @@ namespace Ceritar.CVS.Controllers
         /// </summary>
         /// <param name="vintTemplate_NRI">Le NRI du gabarit à utiliser.</param>
         /// <param name="vintCeritarClient_NRI">Le client à qui le kit est destiné.</param>
-        /// <param name="vstrExportLocation">L'endroit ou générer le fichier zip.</param>
+        /// <param name="vstrExportFolderLocation">L'endroit ou générer le fichier zip.</param>
         /// <returns>Une valeur indiquant si l'exportation s'est effectuée avec succès.</returns>
-        public bool blnExportVersionInstallationKit(int vintTemplate_NRI, int vintCeritarClient_NRI, string vstrExportLocation)
+        public bool blnExportVersionInstallationKit(int vintTemplate_NRI, int vintCeritarClient_NRI, string vstrExportFolderLocation)
         {
             bool blnValidReturn = false;
             string strSQL = string.Empty;
@@ -690,148 +690,148 @@ namespace Ceritar.CVS.Controllers
 
             strSQL = pfstrGetTemplateHierarchy_SQL(vintTemplate_NRI);
             
-            try
-            {
+            //try
+            //{
 
 
-                currentFolderInfos = new DirectoryInfo(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES +
-                                                        (sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Substring(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Length - 1, 1) == "\\" ? "" : "\\")
-                                                        );
+            //    currentFolderInfos = new DirectoryInfo(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES +
+            //                                            (sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Substring(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Length - 1, 1) == "\\" ? "" : "\\")
+            //                                            );
 
-                cSQLReader = clsSQL.ADOSelect(strSQL);
+            //    cSQLReader = clsSQL.ADOSelect(strSQL);
 
-                while (cSQLReader.Read())
-                {
-                    switch (Int32.Parse(cSQLReader["FoT_NRI"].ToString()))
-                    {
-                        case (int)ctr_Template.FolderType.Version_Number:
+            //    while (cSQLReader.Read())
+            //    {
+            //        switch (Int32.Parse(cSQLReader["FoT_NRI"].ToString()))
+            //        {
+            //            case (int)ctr_Template.FolderType.Version_Number:
 
-                            strFolderName = sclsAppConfigs.GetVersionNumberPrefix + mcView.GetVersionNo().ToString();
+            //                strFolderName = sclsAppConfigs.GetVersionNumberPrefix + mcView.GetVersionNo().ToString();
 
-                            strVersionFolderRoot = Path.Combine(currentFolderInfos.FullName, strFolderName);
+            //                strVersionFolderRoot = Path.Combine(currentFolderInfos.FullName, strFolderName);
 
-                            break;
+            //                break;
 
-                        default:
+            //            default:
 
-                            strFolderName = cSQLReader["HiCo_Name"].ToString();
-                            break;
-                    }
+            //                strFolderName = cSQLReader["HiCo_Name"].ToString();
+            //                break;
+            //        }
 
-                    if (Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString()) > intPreviousFolderLevel) //On entre dans un sous-dossier
-                    {
-                        currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.FullName, strFolderName));
-                    }
-                    else if (Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString()) < intPreviousFolderLevel) //On recule pour revenir au dossier du niveau courant
-                    {
-                        int intNbLevelBack = intPreviousFolderLevel - Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString());
+            //        if (Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString()) > intPreviousFolderLevel) //On entre dans un sous-dossier
+            //        {
+            //            currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.FullName, strFolderName));
+            //        }
+            //        else if (Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString()) < intPreviousFolderLevel) //On recule pour revenir au dossier du niveau courant
+            //        {
+            //            int intNbLevelBack = intPreviousFolderLevel - Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString());
 
-                        while (intNbLevelBack > 0)
-                        {
-                            currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.Parent.Parent.FullName, strFolderName));
+            //            while (intNbLevelBack > 0)
+            //            {
+            //                currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.Parent.Parent.FullName, strFolderName));
 
-                            intNbLevelBack--;
-                        }
-                    }
-                    else //On recule d'un niveau pour revenir au dossier d'avant
-                    {
-                        currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.Parent.FullName, strFolderName));
-                    }
+            //                intNbLevelBack--;
+            //            }
+            //        }
+            //        else //On recule d'un niveau pour revenir au dossier d'avant
+            //        {
+            //            currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.Parent.FullName, strFolderName));
+            //        }
 
-                    if (Directory.Exists(currentFolderInfos.FullName))
-                    {
+            //        if (Directory.Exists(currentFolderInfos.FullName))
+            //        {
 
-                        switch (Int32.Parse(cSQLReader["FoT_NRI"].ToString()))
-                        {
-                            case (int)ctr_Template.FolderType.Release:
+            //            switch (Int32.Parse(cSQLReader["FoT_NRI"].ToString()))
+            //            {
+            //                case (int)ctr_Template.FolderType.Release:
 
-                                if (!string.IsNullOrEmpty(mcView.GetLocation_Release()) && mcView.GetLocation_Release() != currentFolderInfos.FullName)
-                                {
-                                    blnValidReturn = clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, mstrReleaseValidExtensions);
-                                }
-                                else
-                                {
-                                    blnValidReturn = true;
-                                }
+            //                    if (!string.IsNullOrEmpty(mcView.GetLocation_Release()) && mcView.GetLocation_Release() != currentFolderInfos.FullName)
+            //                    {
+            //                        blnValidReturn = clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, mstrReleaseValidExtensions);
+            //                    }
+            //                    else
+            //                    {
+            //                        blnValidReturn = true;
+            //                    }
 
-                                if (blnValidReturn)
-                                {
-                                    mcModVersion.Location_Release = currentFolderInfos.FullName;
-                                }
+            //                    if (blnValidReturn)
+            //                    {
+            //                        mcModVersion.Location_Release = currentFolderInfos.FullName;
+            //                    }
 
-                                break;
+            //                    break;
 
-                            case (int)ctr_Template.FolderType.CaptionsAndMenus:
+            //                case (int)ctr_Template.FolderType.CaptionsAndMenus:
 
-                                mcModVersion.Location_CaptionsAndMenus = Path.Combine(currentFolderInfos.FullName, sclsAppConfigs.GetCaptionsAndMenusFileName);
+            //                    mcModVersion.Location_CaptionsAndMenus = Path.Combine(currentFolderInfos.FullName, sclsAppConfigs.GetCaptionsAndMenusFileName);
 
-                                if (!string.IsNullOrEmpty(mcView.GetLocation_TTApp()) && mcModVersion.Location_CaptionsAndMenus != mcView.GetLocation_TTApp())
-                                {
-                                    File.Copy(mcView.GetLocation_TTApp(), Path.Combine(currentFolderInfos.FullName, sclsAppConfigs.GetCaptionsAndMenusFileName), true);
-                                }
+            //                    if (!string.IsNullOrEmpty(mcView.GetLocation_TTApp()) && mcModVersion.Location_CaptionsAndMenus != mcView.GetLocation_TTApp())
+            //                    {
+            //                        File.Copy(mcView.GetLocation_TTApp(), Path.Combine(currentFolderInfos.FullName, sclsAppConfigs.GetCaptionsAndMenusFileName), true);
+            //                    }
 
-                                blnValidReturn = true;
+            //                    blnValidReturn = true;
 
-                                break;
+            //                    break;
 
-                            case (int)ctr_Template.FolderType.Scripts:
+            //                case (int)ctr_Template.FolderType.Scripts:
 
-                                blnValidReturn = pfblnCopyAllScriptsForClients(currentFolderInfos.FullName);
+            //                    blnValidReturn = pfblnCopyAllScriptsForClients(currentFolderInfos.FullName);
 
-                                break;
+            //                    break;
 
-                            case (int)ctr_Template.FolderType.Version_Number:
+            //                case (int)ctr_Template.FolderType.Version_Number:
 
-                                mcModVersion.Location_APP_CHANGEMENT = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_APP_CHANGEMENT()));
+            //                    mcModVersion.Location_APP_CHANGEMENT = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_APP_CHANGEMENT()));
 
-                                if (!string.IsNullOrEmpty(mcView.GetLocation_APP_CHANGEMENT()) && mcModVersion.Location_APP_CHANGEMENT != mcView.GetLocation_APP_CHANGEMENT())
-                                {
-                                    File.Copy(mcView.GetLocation_APP_CHANGEMENT(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_APP_CHANGEMENT())), true);
-                                }
+            //                    if (!string.IsNullOrEmpty(mcView.GetLocation_APP_CHANGEMENT()) && mcModVersion.Location_APP_CHANGEMENT != mcView.GetLocation_APP_CHANGEMENT())
+            //                    {
+            //                        File.Copy(mcView.GetLocation_APP_CHANGEMENT(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_APP_CHANGEMENT())), true);
+            //                    }
 
-                                blnValidReturn = true;
+            //                    blnValidReturn = true;
 
-                                break;
+            //                    break;
 
-                            case (int)ctr_Template.FolderType.Report:
+            //                case (int)ctr_Template.FolderType.Report:
 
-                                blnValidReturn = pfblnCopyAllReportsForClients(currentFolderInfos.FullName);
+            //                    blnValidReturn = pfblnCopyAllReportsForClients(currentFolderInfos.FullName);
 
-                                break;
+            //                    break;
 
-                            default:
-                                blnValidReturn = true;
-                                break;
-                        }
-                    }
+            //                default:
+            //                    blnValidReturn = true;
+            //                    break;
+            //            }
+            //        }
 
-                    intPreviousFolderLevel = Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString());
+            //        intPreviousFolderLevel = Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString());
 
-                    if (!blnValidReturn) break;
-                }
-            }
-            catch (FileNotFoundException exPath)
-            {
-                blnValidReturn = false;
-                mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exPath.FileName);
-            }
-            catch (Exception ex)
-            {
-                blnValidReturn = false;
-                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
-            }
-            finally
-            {
-                if (cSQLReader != null) cSQLReader.Dispose();
+            //        if (!blnValidReturn) break;
+            //    }
+            //}
+            //catch (FileNotFoundException exPath)
+            //{
+            //    blnValidReturn = false;
+            //    mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exPath.FileName);
+            //}
+            //catch (Exception ex)
+            //{
+            //    blnValidReturn = false;
+            //    sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            //}
+            //finally
+            //{
+            //    if (cSQLReader != null) cSQLReader.Dispose();
 
-                if (blnValidReturn) mcActionResult.SetValid();
-            }
+            //    if (blnValidReturn) mcActionResult.SetValid();
+            //}
 
             //TESTS
-            string strNewZipFileLocation = @"C:\Users\Nic-Bolduc\Desktop\Installation Kit.zip";
-            string strReleaseLocation = @"C:\Users\Nic-Bolduc\Desktop\SVR-CERITAR-01\Developpement\InstallationsActives\Logirack Transport\V_375\_APP_COMPIL\Release";
-            string strReportLocation = @"C:\Users\Nic-Bolduc\Desktop\Kit exemple\LogirackTransport_RPT.exe";
-            string strCaptionsAndMenusLocation = @"C:\Users\Nic-Bolduc\Desktop\SVR-CERITAR-01\Developpement\InstallationsActives\Logirack Transport\V_375\_APP_COMPIL\TTApp";
+            string strNewZipFileLocation = vstrExportFolderLocation + @"\Installation Kit " + mcView.GetVersionNo().ToString() + @".zip";
+            string strReleaseLocation = mcView.GetLocation_Release();
+            string strReportLocation = mcView.GetSelectedClient().strLocationReportExe;
+            string strCaptionsAndMenusLocation = mcView.GetLocation_TTApp();
             string strCurrentScriptFolderLocation = "";
 
             if (File.Exists(strNewZipFileLocation))
@@ -845,13 +845,33 @@ namespace Ceritar.CVS.Controllers
                 //Add the release folder with the report application to the zip archive.
                 foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strReleaseLocation, "*.*", SearchOption.AllDirectories))
                 {
-                    newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine("Release", Path.GetFileName(strCurrentFileToCopyPath)));
+                    newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
                 }
-                newZipFile.CreateEntryFromFile(strReportLocation, Path.Combine("Release", Path.GetFileName(strReportLocation)));
+                newZipFile.CreateEntryFromFile(strReportLocation, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strReportLocation)));
 
                 //Add the TTApp to the Zip archive.
-                File.SetAttributes(strCaptionsAndMenusLocation, FileAttributes.Normal);
-                newZipFile.CreateEntryFromFile(strCaptionsAndMenusLocation, Path.Combine("TTApp", Path.GetFileName(strCaptionsAndMenusLocation)));
+                    //File.SetAttributes(strCaptionsAndMenusLocation, FileAttributes.Normal);
+                newZipFile.CreateEntryFromFile(strCaptionsAndMenusLocation, Path.Combine(sclsAppConfigs.GetCaptionsAndMenusFileName, Path.GetFileName(strCaptionsAndMenusLocation)));
+
+                //Add every satellites applications to the zip archive.
+                List<structClientSatVersion> lstSatellites = mcView.GetClientSatellitesList();
+
+                foreach (structClientSatVersion structSat in lstSatellites)
+                {
+                    if (structSat.blnExeIsFolder && Directory.Exists(structSat.strLocationSatelliteExe))
+                    {
+                        foreach (string strCurrentFileToCopyPath in Directory.GetFiles(structSat.strLocationSatelliteExe, "*.*", SearchOption.AllDirectories))
+                        {
+                            newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.GetFileName(strCurrentFileToCopyPath));
+                        }
+                    }
+                    else if (File.Exists(structSat.strLocationSatelliteExe))
+                    {
+                        newZipFile.CreateEntryFromFile(structSat.strLocationSatelliteExe, Path.Combine(structSat.strKitFolderName, Path.GetFileName(structSat.strLocationSatelliteExe)));
+                    }
+                }
+
+
             }
 
             return blnValidReturn;

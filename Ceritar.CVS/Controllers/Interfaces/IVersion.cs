@@ -24,6 +24,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         string GetLocation_TTApp();
         bool GetIsDemo();
         bool GetIncludeScriptsOnRefresh();
+        structClientAppVersion GetSelectedClient();
         List<structClientAppVersion> GetClientsList();
         List<structClientSatVersion> GetClientSatellitesList();
     }

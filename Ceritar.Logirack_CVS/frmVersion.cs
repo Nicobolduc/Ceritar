@@ -220,6 +220,23 @@ namespace Ceritar.Logirack_CVS
             return chkIncludeScripts.Checked;
         }
 
+        structClientAppVersion IVersion.GetSelectedClient()
+        {
+            structClientAppVersion structCAV = new structClientAppVersion();
+
+            structCAV.Action = clsApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdClients[grdClients.Row, mintGrdClients_Action_col]);
+            structCAV.blnInstalled = Convert.ToBoolean(grdClients[grdClients.Row, mintGrdClients_Installed_col]);
+            structCAV.blnIsCurrentVersion = Convert.ToBoolean(grdClients[grdClients.Row, mintGrdClients_IsCurrentVersion_col]);
+            structCAV.strCeritarClient_Name = mcGrdClients[grdClients.Row, mintGrdClients_CeC_Name_col];
+            Int32.TryParse(mcGrdClients[grdClients.Row, mintGrdClients_CeC_NRI_col], out structCAV.intCeritarClient_NRI);
+            Int32.TryParse(mcGrdClients[grdClients.Row, mintGrdClients_CAV_NRI_col], out structCAV.intClientAppVersion_NRI);
+            structCAV.intClientAppVersion_TS = Int32.Parse(mcGrdClients[grdClients.Row, mintGrdClients_CAV_TS_col]);
+            structCAV.strLicense = grdClients[grdClients.Row, mintGrdClients_License_col].ToString();
+            structCAV.strLocationReportExe = mcGrdClients[grdClients.Row, mintGrdClients_LocationReportExe_col];
+
+            return structCAV;
+        }
+
 #endregion
         
         

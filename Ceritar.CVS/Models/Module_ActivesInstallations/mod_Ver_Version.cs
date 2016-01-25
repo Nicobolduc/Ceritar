@@ -294,7 +294,11 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 {
                     case sclsConstants.DML_Mode.INSERT_MODE:
 
-                        if (string.IsNullOrEmpty(_strLocation_APP_CHANGEMENT) || !File.Exists(_strLocation_APP_CHANGEMENT))
+                        if (_blnIsDemo)
+                        {
+                            blnValidReturn = true;
+                        }
+                        else if (string.IsNullOrEmpty(_strLocation_APP_CHANGEMENT) || !File.Exists(_strLocation_APP_CHANGEMENT))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY);
                         }
