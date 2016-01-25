@@ -238,6 +238,11 @@ namespace Ceritar.CVS.Controllers
                             if (!string.IsNullOrEmpty(mcView.GetLocation_Release()) && mcView.GetLocation_Release() != currentFolderInfos.FullName)
                             {
                                 blnValidReturn = clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, mstrReleaseValidExtensions);
+
+                                //TODO: Find an other solution for this
+                                string[] reportExe = Directory.GetFiles(currentFolderInfos.FullName, "*RPT.exe", SearchOption.TopDirectoryOnly);
+
+                                if (reportExe.Length > 0) File.Delete(reportExe[0]);
                             }
                             else
                             {
@@ -672,7 +677,7 @@ namespace Ceritar.CVS.Controllers
         /// <param name="vintTemplate_NRI">Le NRI du gabarit à utiliser.</param>
         /// <param name="vintCeritarClient_NRI">Le client à qui le kit est destiné.</param>
         /// <param name="vstrExportLocation">L'endroit ou générer le fichier zip.</param>
-        /// <returns>Une valeur indiquant si la génération s'est effectuée avec succès.</returns>
+        /// <returns>Une valeur indiquant si l'exportation s'est effectuée avec succès.</returns>
         public bool blnExportVersionInstallationKit(int vintTemplate_NRI, int vintCeritarClient_NRI, string vstrExportLocation)
         {
             bool blnValidReturn = false;
@@ -687,7 +692,6 @@ namespace Ceritar.CVS.Controllers
             
             try
             {
-
 
 
                 currentFolderInfos = new DirectoryInfo(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES +
@@ -823,17 +827,31 @@ namespace Ceritar.CVS.Controllers
                 if (blnValidReturn) mcActionResult.SetValid();
             }
 
-            //Creates a new, blank zip file to work with - the file will be
-            //finalized when the using statement completes
-            using (ZipArchive newZipFile = ZipFile.Open("Installation Kit " + mcView.GetVersionNo(), ZipArchiveMode.Create))
-            {
-                //Here are two hard-coded files that we will be adding to the zip
-                //file.  If you don't have these files in your system, this will
-                //fail.  Either create them or change the file names.
-                newZipFile.CreateEntryFromFile(@"C:\Temp\File1.txt", "File1.txt");
-                newZipFile.CreateEntryFromFile(@"C:\Temp\File2.txt", "File2.txt", CompressionLevel.Fastest);
+            //TESTS
+            string strNewZipFileLocation = @"C:\Users\Nic-Bolduc\Desktop\Installation Kit.zip";
+            string strReleaseLocation = @"C:\Users\Nic-Bolduc\Desktop\SVR-CERITAR-01\Developpement\InstallationsActives\Logirack Transport\V_375\_APP_COMPIL\Release";
+            string strReportLocation = @"C:\Users\Nic-Bolduc\Desktop\Kit exemple\LogirackTransport_RPT.exe";
+            string strCaptionsAndMenusLocation = @"C:\Users\Nic-Bolduc\Desktop\SVR-CERITAR-01\Developpement\InstallationsActives\Logirack Transport\V_375\_APP_COMPIL\TTApp";
+            string strCurrentScriptFolderLocation = "";
 
-                //newZipFile.CreateEntry
+            if (File.Exists(strNewZipFileLocation))
+            {
+                File.Delete(strNewZipFileLocation);
+            }
+
+            //Create the new archive file and add all the folders to it.
+            using (ZipArchive newZipFile = ZipFile.Open(strNewZipFileLocation, ZipArchiveMode.Create))
+            {
+                //Add the release folder with the report application to the zip archive.
+                foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strReleaseLocation, "*.*", SearchOption.AllDirectories))
+                {
+                    newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine("Release", Path.GetFileName(strCurrentFileToCopyPath)));
+                }
+                newZipFile.CreateEntryFromFile(strReportLocation, Path.Combine("Release", Path.GetFileName(strReportLocation)));
+
+                //Add the TTApp to the Zip archive.
+                File.SetAttributes(strCaptionsAndMenusLocation, FileAttributes.Normal);
+                newZipFile.CreateEntryFromFile(strCaptionsAndMenusLocation, Path.Combine("TTApp", Path.GetFileName(strCaptionsAndMenusLocation)));
             }
 
             return blnValidReturn;

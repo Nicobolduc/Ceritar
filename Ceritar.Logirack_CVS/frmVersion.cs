@@ -547,7 +547,11 @@ namespace Ceritar.Logirack_CVS
 
                     if (blnValidReturn)
                     {
+                        Cursor.Current = Cursors.WaitCursor;
+
                         blnValidReturn = mcCtrVersion.blnExportVersionInstallationKit((int)cboTemplates.SelectedValue, intCeritarClient_NRI, txtTemp.Text);
+
+                        Cursor.Current = Cursors.Default;
                     }
                 }
             }

@@ -10,6 +10,7 @@ namespace Ceritar.CVS
     {
         private static string _strRoot_DB_UPGRADE_SCRIPTS_Dir;
         private static string _strRoot_INSTALLATIONS_ACTIVES_Dir;
+        private static string _strReleaseFolderName = "Release";
         private static string _strCaptionsAndMenusFileName;
         private const string _strVersionNumberPrefix = "V_";
         private const string _strRevisionNumberPrefix = "R_";
@@ -61,6 +62,11 @@ namespace Ceritar.CVS
 
                 return _strCaptionsAndMenusFileName;
             }
+        }
+
+        public static string GetReleaseFolderName
+        {
+            get { return sclsAppConfigs._strReleaseFolderName; }
         }
 
         public static string GetVersionNumberPrefix
