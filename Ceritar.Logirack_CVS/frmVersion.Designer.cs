@@ -61,6 +61,7 @@
             this.grdRevisions = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.tabVersion = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.chkIncludeScripts = new System.Windows.Forms.CheckBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.grdSatellite = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.txtReleasePath = new System.Windows.Forms.TextBox();
@@ -75,7 +76,6 @@
             this.tab = new System.Windows.Forms.TabControl();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.chkIncludeScripts = new System.Windows.Forms.CheckBox();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.groupBox1.SuspendLayout();
             this.tabRevision.SuspendLayout();
@@ -411,6 +411,7 @@
             this.grdRevisions.StyleInfo = resources.GetString("grdRevisions.StyleInfo");
             this.grdRevisions.TabIndex = 14;
             this.grdRevisions.Tag = "20";
+            this.grdRevisions.DoubleClick += new System.EventHandler(this.grdRevisions_DoubleClick);
             // 
             // tabVersion
             // 
@@ -447,6 +448,16 @@
             this.groupBox5.TabIndex = 63;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Actions";
+            // 
+            // chkIncludeScripts
+            // 
+            this.chkIncludeScripts.AutoSize = true;
+            this.chkIncludeScripts.Location = new System.Drawing.Point(6, 58);
+            this.chkIncludeScripts.Name = "chkIncludeScripts";
+            this.chkIncludeScripts.Size = new System.Drawing.Size(91, 17);
+            this.chkIncludeScripts.TabIndex = 63;
+            this.chkIncludeScripts.Text = "Inclure scripts";
+            this.chkIncludeScripts.UseVisualStyleBackColor = true;
             // 
             // groupBox4
             // 
@@ -587,16 +598,6 @@
             this.tab.SelectedIndex = 0;
             this.tab.Size = new System.Drawing.Size(814, 386);
             this.tab.TabIndex = 10;
-            // 
-            // chkIncludeScripts
-            // 
-            this.chkIncludeScripts.AutoSize = true;
-            this.chkIncludeScripts.Location = new System.Drawing.Point(6, 58);
-            this.chkIncludeScripts.Name = "chkIncludeScripts";
-            this.chkIncludeScripts.Size = new System.Drawing.Size(91, 17);
-            this.chkIncludeScripts.TabIndex = 63;
-            this.chkIncludeScripts.Text = "Inclure scripts";
-            this.chkIncludeScripts.UseVisualStyleBackColor = true;
             // 
             // formController
             // 

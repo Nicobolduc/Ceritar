@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 using Ceritar.CVS.Controllers;
@@ -19,11 +21,11 @@ namespace Ceritar.Logirack_CVS
         //Columns grdRevModifs
         private const short mintGrdRevMod_Action_col = 1;
         private const short mintGrdRevMod_RevM_NRI_col = 2;
-        private const short mintGrdRevMod_RevM_TS_col = 3;
-        private const short mintGrdRevMod_RevM_ChangeDesc_col = 4;
+        private const short mintGrdRevMod_RevM_ChangeDesc_col = 3;
 
         //Classes
         private clsC1FlexGridWrapper mcGrdRevModifs;
+        private Ceritar.CVS.clsActionResults mcActionResults;
 
         //Public working variables
         public int mintVersion_NRI;
@@ -45,29 +47,19 @@ namespace Ceritar.Logirack_CVS
 
 #region "Interfaces functions"
 
-        int CVS.Controllers.Interfaces.IRevision.GetCeritarApplication_NRI()
-        {
-            throw new NotImplementedException();
-        }
-
-        string CVS.Controllers.Interfaces.IRevision.GetCeritarApplication_Name()
-        {
-            return mstrCeritarApplication_Name;
-        }
-
         string CVS.Controllers.Interfaces.IRevision.GetCompiledBy()
         {
-            throw new NotImplementedException();
+            return txtCreatedBy.Text;
         }
 
         string CVS.Controllers.Interfaces.IRevision.GetCreationDate()
         {
-            throw new NotImplementedException();
+            return dtpCreation.Value.ToString();
         }
 
         sclsConstants.DML_Mode CVS.Controllers.Interfaces.IRevision.GetDML_Action()
         {
-            throw new NotImplementedException();
+            return formController.FormMode;
         }
 
         string CVS.Controllers.Interfaces.IRevision.GetLocation_Release()
@@ -80,24 +72,24 @@ namespace Ceritar.Logirack_CVS
             return txtScriptsPath.Text;
         }
 
-        ushort CVS.Controllers.Interfaces.IRevision.GetRevisionNo()
+        byte CVS.Controllers.Interfaces.IRevision.GetRevisionNo()
         {
-            return UInt16.Parse(txtRevisionNo.Text);
+            return byte.Parse(txtRevisionNo.Text);
         }
 
         int CVS.Controllers.Interfaces.IRevision.GetRevision_NRI()
         {
-            throw new NotImplementedException();
+            return formController.Item_NRI;
         }
 
         int CVS.Controllers.Interfaces.IRevision.GetRevision_TS()
         {
-            throw new NotImplementedException();
+            return mintRevision_TS;
         }
 
         int CVS.Controllers.Interfaces.IRevision.GetTemplateSource_NRI()
         {
-            throw new NotImplementedException();
+            return (int)cboTemplates.SelectedValue;
         }
 
         ushort CVS.Controllers.Interfaces.IRevision.GetVersionNo()
@@ -108,6 +100,36 @@ namespace Ceritar.Logirack_CVS
         ctlFormController IFormController.GetFormController()
         {
             return formController;
+        }
+
+        int CVS.Controllers.Interfaces.IRevision.GetCeritarClient_NRI()
+        {
+            return (int)cboClients.SelectedValue;
+        }
+
+        System.Collections.Generic.List<string> CVS.Controllers.Interfaces.IRevision.GetModificationsList()
+        {
+            List<string> lstModifications = new List<string>();
+
+            for (int intRowIndex = 1; intRowIndex < grdRevModifs.Rows.Count; intRowIndex++)
+            {
+                if (mcGrdRevModifs[intRowIndex, mintGrdRevMod_Action_col] != sclsConstants.DML_Mode.DELETE_MODE.ToString())
+                {
+                    lstModifications.Add(mcGrdRevModifs[intRowIndex, mintGrdRevMod_RevM_ChangeDesc_col]);
+                }
+            }
+
+            return lstModifications;
+        }
+
+        int CVS.Controllers.Interfaces.IRevision.GetVersion_NRI()
+        {
+            return mintVersion_NRI;
+        }
+
+        string CVS.Controllers.Interfaces.IRevision.GetCeritarApplication_Name()
+        {
+            return mstrCeritarApplication_Name;
         }
 
 #endregion
@@ -122,54 +144,24 @@ namespace Ceritar.Logirack_CVS
 
             try
             {
-                sqlRecord = clsSQL.ADOSelect(mcCtrRevision.strGetDataLoad_SQL(formController.Item_NRI));
+                sqlRecord = clsSQL.ADOSelect(mcCtrRevision.strGetDataLoad_SQL(mintVersion_NRI));
 
                 if (sqlRecord.Read())
                 {
-                    UInt16.TryParse(sqlRecord["Rev_TS"].ToString(), out mintRevision_TS);
-
-                    //txtCompiledBy.Text = sqlRecord["Ver_CompiledBy"].ToString();
-                    txtVersionNo.Text = sqlRecord["Rev_No"].ToString();
-
-                    //dtpCreation.Value = DateTime.Parse(sqlRecord["Ver_DtCreation"].ToString());
-
-                    cboClients.SelectedValue = Int32.Parse(sqlRecord["CeC_NRI"].ToString());
-                    cboTemplates.SelectedValue = Int32.Parse(sqlRecord["Tpl_NRI"].ToString());
-
-                    blnValidReturn = true;
-                }
-
-                dtpCreation.CustomFormat = clsApp.GetAppController.str_GetServerDateTimeFormat;
-
-                return blnValidReturn;
-            }
-            catch (Exception ex)
-            {
-                blnValidReturn = false;
-                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
-            }
-            finally
-            {
-                if (sqlRecord != null) sqlRecord.Dispose();
-            }
-
-            return blnValidReturn;
-        }
-
-        private bool pfblnNewVersionData_Load()
-        {
-            bool blnValidReturn = false;
-            SqlDataReader sqlRecord = null;
-
-            try
-            {
-                sqlRecord = clsSQL.ADOSelect(mcCtrRevision.strGetData_NewVersion(mintVersion_NRI));
-
-                if (sqlRecord.Read())
-                {
-                    txtRevisionNo.Text = sqlRecord["NewRevisionNo"].ToString();
+                    txtRevisionNo.Text = sqlRecord["RevisionNo"].ToString();
                     txtVersionNo.Text = sqlRecord["Ver_No"].ToString();
                     mstrCeritarApplication_Name = sqlRecord["CeA_Name"].ToString();
+
+                    if (formController.FormMode != sclsConstants.DML_Mode.INSERT_MODE)
+                    {
+                        UInt16.TryParse(sqlRecord["Rev_TS"].ToString(), out mintRevision_TS);
+
+                        txtReleasePath.Text = sqlRecord["Rev_Location_Exe"].ToString();
+                        txtScriptsPath.Text = sqlRecord["Rev_Location_Scripts"].ToString();
+
+                        cboClients.SelectedValue = Int32.Parse(sqlRecord["CeC_NRI"].ToString());
+                        cboTemplates.SelectedValue = Int32.Parse(sqlRecord["Tpl_NRI"].ToString());
+                    }
 
                     blnValidReturn = true;
                 }
@@ -236,6 +228,48 @@ namespace Ceritar.Logirack_CVS
             }
         }
 
+        private void ShowOpenFileDialog(string vstrExtensionsFilter, Object rControl, string vstrInitialDirectory = "", bool vblnShowFile = false)
+        {
+            DialogResult dialogResult;
+
+            try
+            {
+                if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE || formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
+                {
+                    if (vblnShowFile && vstrInitialDirectory != "")
+                    {
+                        openFileDialog.FileName = vstrInitialDirectory;
+
+                        vstrInitialDirectory = Path.GetDirectoryName(vstrInitialDirectory);
+                    }
+                    else
+                    {
+                        openFileDialog.FileName = string.Empty;
+
+                        vstrInitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                    }
+
+                    openFileDialog.InitialDirectory = vstrInitialDirectory;
+                    openFileDialog.Multiselect = false;
+                    openFileDialog.Filter = vstrExtensionsFilter;
+
+                    dialogResult = openFileDialog.ShowDialog();
+
+                    if (dialogResult == System.Windows.Forms.DialogResult.OK)
+                    {
+                        if (rControl.GetType() == typeof(TextBox))
+                        {
+                            ((TextBox)rControl).Text = openFileDialog.FileName;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+        }
+
 #endregion
 
 
@@ -250,11 +284,7 @@ namespace Ceritar.Logirack_CVS
             else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrRevision.strGetClients_SQL(), "CeC_NRI", "CeC_Name", true, ref cboClients))
             { }
             else if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE)
-            {
-                cboTemplates.SelectedIndex = (cboTemplates.Items.Count > 0 ? 0 : -1);
-
-                blnValidReturn = pfblnNewVersionData_Load();
-            }
+            { }
             else if (!pfblnData_Load())
             { }
             else if (!pfblnGrdRevModifs_Load())
@@ -269,12 +299,56 @@ namespace Ceritar.Logirack_CVS
 
         private void formController_ValidateForm(ValidateFormEventArgs eventArgs)
         {
+            mcActionResults = mcCtrRevision.Validate();
 
+            if (!mcActionResults.IsValid)
+            {
+                clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
+
+                switch ((ctr_Revision.ErrorCode_Rev)mcActionResults.GetErrorCode)
+                {
+                    case ctr_Revision.ErrorCode_Rev.CERITAR_CLIENT_MANDATORY:
+
+                        cboClients.Focus();
+                        cboClients.DroppedDown = true;
+                        break;
+
+                    case ctr_Revision.ErrorCode_Rev.EXE_OR_SCRIPT_MANDATORY:
+
+                        btnSelectExecutableFilePath.Focus();  
+                        break;
+
+                    case ctr_Revision.ErrorCode_Rev.MODIFICATION_LIST_MANDATORY:
+
+                        btnGrdRevAdd.Focus();
+                        grdRevModifs.Row = mcActionResults.RowInError;
+                        break;
+
+                    case ctr_Revision.ErrorCode_Rev.TEMPLATE_MANDATORY:
+
+                        cboTemplates.Focus();
+                        cboTemplates.DroppedDown = true;
+                        break;
+                }
+            }
+            else
+            {
+                //Do nothing
+            }
+
+            eventArgs.IsValid = mcActionResults.IsValid;
         }
 
         private void formController_SaveData(SaveDataEventArgs eventArgs)
         {
+            mcActionResults = mcCtrRevision.Save();
 
+            if (!mcActionResults.IsValid)
+            {
+                clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
+            }
+            //formController.Item_NRI = mcActionResults.GetNewItem_NRI;//TODO gestion des NRI en insert
+            eventArgs.SaveSuccessful = mcActionResults.IsValid;
         }
 
         private void grdRevModifs_DoubleClick(object sender, EventArgs e)
@@ -286,6 +360,8 @@ namespace Ceritar.Logirack_CVS
                     case mintGrdRevMod_RevM_ChangeDesc_col:
 
                         grdRevModifs.StartEditing();
+
+                        formController.ChangeMade = true;
                         break;
                 }
             }
@@ -300,6 +376,58 @@ namespace Ceritar.Logirack_CVS
         {
             ShowFolderBrowserDialog(ref txtScriptsPath);
         }
+
+        private void btnSelectExecutableFolderPath_Click(object sender, EventArgs e)
+        {
+            ShowFolderBrowserDialog(ref txtReleasePath);
+        }
+
+        private void btnSelectScriptsFilePath_Click(object sender, EventArgs e)
+        {
+            ShowOpenFileDialog("Scripts (*.sql)|*.sql|(*.txt)|*.txt", txtScriptsPath, txtScriptsPath.Text, true);
+        }
+
+        private void btnSelectExecutableFilePath_Click(object sender, EventArgs e)
+        {
+            ShowOpenFileDialog("Executable (*.exe)|*.exe", txtReleasePath, txtReleasePath.Text, true);
+        }
+
+        private void btnShowScriptsFolder_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtScriptsPath.Text))
+            {
+                if ((File.GetAttributes(txtScriptsPath.Text) & FileAttributes.Directory) == FileAttributes.Directory)
+                {
+                    if (Directory.Exists(txtScriptsPath.Text))
+                    {
+                        System.Diagnostics.Process.Start(txtScriptsPath.Text);
+                    }
+                }
+                else if (File.Exists(txtScriptsPath.Text))
+                {
+                    System.Diagnostics.Process.Start("explorer.exe", "/select, " + txtScriptsPath.Text);
+                }
+            }
+        }
+
+        private void btnShowExecutableFolder_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtReleasePath.Text))
+            {
+                if ((File.GetAttributes(txtReleasePath.Text) & FileAttributes.Directory) == FileAttributes.Directory)
+                {
+                    if (Directory.Exists(txtReleasePath.Text))
+                    {
+                        System.Diagnostics.Process.Start(txtReleasePath.Text);
+                    }
+                }
+                else if (File.Exists(txtReleasePath.Text))
+                {
+                    System.Diagnostics.Process.Start("explorer.exe", "/select, " + txtReleasePath.Text);
+                }
+            }
+        }
+
 
     }
 }

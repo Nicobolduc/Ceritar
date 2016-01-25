@@ -85,21 +85,20 @@ namespace Ceritar.CVS.Controllers
                 mcModTemplate.TemplatType = (mod_Tpl_HierarchyTemplate.TemplateType)mcView.GetTemplateType_NRI();
                 mcModTemplate.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
 
-                //if (mcModTemplate.TemplatType == mod_Tpl_HierarchyTemplate.TemplateType.Version)
-                //{
-                    structRacine = mcView.GetRacineSystem();
 
-                    mcModTemplate.RacineSystem = new mod_Folder();
-                    mcModTemplate.RacineSystem.DML_Action = structRacine.Action;
-                    mcModTemplate.RacineSystem.HierarchyComponent_NRI = structRacine.intHierarchyComponent_NRI;
-                    mcModTemplate.RacineSystem.HierarchyComponent_TS = structRacine.intHierarchyComponent_TS;
-                    mcModTemplate.RacineSystem.NameOnDisk = structRacine.strName;
-                    mcModTemplate.RacineSystem.Template_NRI = mcModTemplate.Template_NRI;
-                    mcModTemplate.RacineSystem.ParentComponent = new mod_Folder();
-                    mcModTemplate.RacineSystem.ParentComponent.HierarchyComponent_NRI = structRacine.Parent_NRI;
-                    ((mod_Folder)mcModTemplate.RacineSystem).Type = structRacine.FolderType;
-                    ((mod_Folder)mcModTemplate.RacineSystem).NodeLevel = structRacine.intNodeLevel;
-                //}
+                structRacine = mcView.GetRacineSystem();
+
+                mcModTemplate.RacineSystem = new mod_Folder();
+                mcModTemplate.RacineSystem.DML_Action = structRacine.Action;
+                mcModTemplate.RacineSystem.HierarchyComponent_NRI = structRacine.intHierarchyComponent_NRI;
+                mcModTemplate.RacineSystem.HierarchyComponent_TS = structRacine.intHierarchyComponent_TS;
+                mcModTemplate.RacineSystem.NameOnDisk = structRacine.strName;
+                mcModTemplate.RacineSystem.Template_NRI = mcModTemplate.Template_NRI;
+                mcModTemplate.RacineSystem.ParentComponent = new mod_Folder();
+                mcModTemplate.RacineSystem.ParentComponent.HierarchyComponent_NRI = structRacine.Parent_NRI;
+                ((mod_Folder)mcModTemplate.RacineSystem).Type = structRacine.FolderType;
+                ((mod_Folder)mcModTemplate.RacineSystem).NodeLevel = structRacine.intNodeLevel;
+
 
                 lstHiCo = mcView.GetHierarchyComponentList();
 
@@ -139,7 +138,7 @@ namespace Ceritar.CVS.Controllers
                     cPreviousFolder = cCurrentFolder;
                 }
                 
-                mcActionResult = mcModTemplate.Validate(); //TODO Valider hierarchy
+                mcActionResult = mcModTemplate.Validate();
 
                 if (mcActionResult.IsValid && mcModTemplate.RacineSystem != null)
                 {

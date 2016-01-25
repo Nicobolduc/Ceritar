@@ -90,7 +90,6 @@ namespace Ceritar.Logirack_CVS
             return mintTpl_TS;
         }
 
-
         structHierarchyComponent ITemplate.GetRacineSystem()
         {
             structHierarchyComponent structHiCo = new structHierarchyComponent();
@@ -104,7 +103,7 @@ namespace Ceritar.Logirack_CVS
             }
             else
             {
-                return structHiCo;
+                intLastSystemRow = 1;
             }
 
             if (intLastSystemRow > 0)

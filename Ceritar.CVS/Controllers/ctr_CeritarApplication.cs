@@ -95,7 +95,8 @@ namespace Ceritar.CVS.Controllers
             {
                 mcSQL = new clsSQL();
                 
-                if (mcSQL.bln_BeginTransaction()){
+                if (mcSQL.bln_BeginTransaction())
+                {
 
                     mcModCerApp.SetcSQL = mcSQL;
 

@@ -319,7 +319,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
                     { }
                     else if (!mcSQL.bln_AddField("ApM_Desc", _lstModules[intIndex], clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                     { }
-                    else if (!mcSQL.bln_AddField("CeA_NRI", _intCeritarApplication_NRI, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                    else if (!mcSQL.bln_AddField("CeA_NRI", _intCeritarApplication_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
                     { }
                     else if (!mcSQL.bln_ADOInsert("AppModule", out intDML_OutParam))
                     { }

@@ -480,7 +480,7 @@ namespace Ceritar.TT3LightDLL.Classes
             return strReturnValue;
         }
 
-        public static bool bln_CheckReferenceIntegrity(string vstrForeignTableName, string vstrForeignKeyName, int vintForeignKeyValue)
+        public static bool bln_CheckReferenceIntegrity(string vstrForeignTableName, string vstrForeignKeyName, int vintForeignKeyValue, params string[] vlstTablesToIgnore)
         {
             bool blnValidReturn = false;
             string strSQL = string.Empty;
@@ -523,19 +523,19 @@ namespace Ceritar.TT3LightDLL.Classes
                 //OSQL -S BOLDUC-PC\SVR_SQL -E 
                 //sp_password NULL, '1234', 'sa' GO
 
-//                rcSQLConnection = new SqlConnection(@"Persist Security Info=False;
-//                                                      User ID=sa;
-//                                                      Password=1234;
-//                                                      Initial Catalog=Logirack_CVS_Dev;
-//                                                      Data Source=localhost\SVR_SQL;
-//                                                      MultipleActiveResultSets=True");
-
                 rcSQLConnection = new SqlConnection(@"Persist Security Info=False;
-                                                                        User ID=sa;
-                                                                        Password=1234;
-                                                                        Initial Catalog=Logirack_CVS_Dev;
-                                                                        Data Source=24.200.162.199\SVR_SQL;
-                                                                        MultipleActiveResultSets=True");
+                                                      User ID=sa;
+                                                      Password=1234;
+                                                      Initial Catalog=Logirack_CVS_Dev;
+                                                      Data Source=localhost\SVR_SQL;
+                                                      MultipleActiveResultSets=True");
+
+//                rcSQLConnection = new SqlConnection(@"Persist Security Info=False;
+//                                                                        User ID=sa;
+//                                                                        Password=1234;
+//                                                                        Initial Catalog=Logirack_CVS_Dev;
+//                                                                        Data Source=24.200.162.199\SVR_SQL;
+//                                                                        MultipleActiveResultSets=True");
 
                 rcSQLConnection.Open();
             }

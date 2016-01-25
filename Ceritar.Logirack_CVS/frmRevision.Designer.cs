@@ -40,6 +40,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.btnShowScriptsFolder = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtCreatedBy = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.txtRevisionNo = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -50,11 +52,14 @@
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.toolTips = new System.Windows.Forms.ToolTip(this.components);
             this.btnSelectScriptsFolderPath = new System.Windows.Forms.Button();
-            this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.btnSelectScriptsFilePath = new System.Windows.Forms.Button();
+            this.btnSelectExecutableFilePath = new System.Windows.Forms.Button();
             this.btnGenerate = new System.Windows.Forms.Button();
             this.btnSelectExecutableFolderPath = new System.Windows.Forms.Button();
-            this.txtReleasePath = new System.Windows.Forms.TextBox();
             this.btnShowExecutableFolder = new System.Windows.Forms.Button();
+            this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.txtReleasePath = new System.Windows.Forms.TextBox();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -64,6 +69,7 @@
             // 
             this.dtpCreation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.dtpCreation.CustomFormat = "MM-dd-yy";
+            this.dtpCreation.Enabled = false;
             this.dtpCreation.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpCreation.Location = new System.Drawing.Point(409, 16);
             this.dtpCreation.Name = "dtpCreation";
@@ -82,26 +88,29 @@
             // txtScriptsPath
             // 
             this.txtScriptsPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtScriptsPath.Location = new System.Drawing.Point(52, 314);
+            this.txtScriptsPath.Location = new System.Drawing.Point(83, 340);
             this.txtScriptsPath.Name = "txtScriptsPath";
             this.txtScriptsPath.ReadOnly = true;
-            this.txtScriptsPath.Size = new System.Drawing.Size(524, 26);
+            this.txtScriptsPath.Size = new System.Drawing.Size(608, 26);
             this.txtScriptsPath.TabIndex = 65;
             // 
             // groupBox3
             // 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.btnGrdRevDel);
             this.groupBox3.Controls.Add(this.btnGrdRevAdd);
             this.groupBox3.Controls.Add(this.grdRevModifs);
             this.groupBox3.Location = new System.Drawing.Point(5, 113);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(815, 189);
+            this.groupBox3.Size = new System.Drawing.Size(815, 216);
             this.groupBox3.TabIndex = 63;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Livrables / Modifications inclus";
             // 
             // btnGrdRevDel
             // 
+            this.btnGrdRevDel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnGrdRevDel.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevDel.Image")));
             this.btnGrdRevDel.Location = new System.Drawing.Point(774, 59);
@@ -112,6 +121,7 @@
             // 
             // btnGrdRevAdd
             // 
+            this.btnGrdRevAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnGrdRevAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevAdd.Image")));
             this.btnGrdRevAdd.Location = new System.Drawing.Point(774, 18);
@@ -122,19 +132,21 @@
             // 
             // grdRevModifs
             // 
+            this.grdRevModifs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.grdRevModifs.AutoSearch = C1.Win.C1FlexGrid.AutoSearchEnum.FromTop;
             this.grdRevModifs.ColumnInfo = resources.GetString("grdRevModifs.ColumnInfo");
             this.grdRevModifs.ExtendLastCol = true;
             this.grdRevModifs.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grdRevModifs.Location = new System.Drawing.Point(6, 18);
             this.grdRevModifs.Name = "grdRevModifs";
-            this.grdRevModifs.Rows.Count = 10;
+            this.grdRevModifs.Rows.Count = 1;
             this.grdRevModifs.Rows.DefaultSize = 18;
             this.grdRevModifs.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdRevModifs.Size = new System.Drawing.Size(762, 166);
+            this.grdRevModifs.Size = new System.Drawing.Size(762, 192);
             this.grdRevModifs.StyleInfo = resources.GetString("grdRevModifs.StyleInfo");
             this.grdRevModifs.TabIndex = 14;
-            this.grdRevModifs.Tag = "1";
+            this.grdRevModifs.Tag = "28";
             this.grdRevModifs.DoubleClick += new System.EventHandler(this.grdRevModifs_DoubleClick);
             // 
             // label2
@@ -149,15 +161,18 @@
             // 
             this.btnShowScriptsFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowScriptsFolder.BackgroundImage")));
             this.btnShowScriptsFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowScriptsFolder.Location = new System.Drawing.Point(582, 308);
+            this.btnShowScriptsFolder.Location = new System.Drawing.Point(697, 334);
             this.btnShowScriptsFolder.Name = "btnShowScriptsFolder";
             this.btnShowScriptsFolder.Size = new System.Drawing.Size(40, 40);
             this.btnShowScriptsFolder.TabIndex = 64;
             this.toolTips.SetToolTip(this.btnShowScriptsFolder, "Consulter les scripts");
             this.btnShowScriptsFolder.UseVisualStyleBackColor = true;
+            this.btnShowScriptsFolder.Click += new System.EventHandler(this.btnShowScriptsFolder_Click);
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.txtCreatedBy);
+            this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.txtRevisionNo);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label1);
@@ -174,6 +189,23 @@
             this.groupBox1.TabIndex = 68;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Informations";
+            // 
+            // txtCreatedBy
+            // 
+            this.txtCreatedBy.Location = new System.Drawing.Point(409, 46);
+            this.txtCreatedBy.Name = "txtCreatedBy";
+            this.txtCreatedBy.ReadOnly = true;
+            this.txtCreatedBy.Size = new System.Drawing.Size(90, 20);
+            this.txtCreatedBy.TabIndex = 72;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(314, 49);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(50, 13);
+            this.label4.TabIndex = 71;
+            this.label4.Text = "Créé par:";
             // 
             // txtRevisionNo
             // 
@@ -237,10 +269,11 @@
             // 
             this.formController.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.formController.ChangeMade = false;
             this.formController.FormIsLoading = false;
             this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.NO_MODE;
             this.formController.Item_NRI = 0;
-            this.formController.Location = new System.Drawing.Point(1, 398);
+            this.formController.Location = new System.Drawing.Point(1, 422);
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
             this.formController.Size = new System.Drawing.Size(822, 33);
@@ -251,62 +284,97 @@
             // 
             // btnSelectScriptsFolderPath
             // 
-            this.btnSelectScriptsFolderPath.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnSelectScriptsFolderPath.BackgroundImage")));
             this.btnSelectScriptsFolderPath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnSelectScriptsFolderPath.Location = new System.Drawing.Point(16, 313);
+            this.btnSelectScriptsFolderPath.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectScriptsFolderPath.Image")));
+            this.btnSelectScriptsFolderPath.Location = new System.Drawing.Point(47, 339);
             this.btnSelectScriptsFolderPath.Name = "btnSelectScriptsFolderPath";
             this.btnSelectScriptsFolderPath.Size = new System.Drawing.Size(30, 30);
             this.btnSelectScriptsFolderPath.TabIndex = 70;
-            this.toolTips.SetToolTip(this.btnSelectScriptsFolderPath, "Sélectionner les scripts");
+            this.toolTips.SetToolTip(this.btnSelectScriptsFolderPath, "Sélectionner un dossier de scripts");
             this.btnSelectScriptsFolderPath.UseVisualStyleBackColor = true;
             this.btnSelectScriptsFolderPath.Click += new System.EventHandler(this.btnSelectScriptsFolderPath_Click);
             // 
+            // btnSelectScriptsFilePath
+            // 
+            this.btnSelectScriptsFilePath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnSelectScriptsFilePath.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectScriptsFilePath.Image")));
+            this.btnSelectScriptsFilePath.Location = new System.Drawing.Point(11, 339);
+            this.btnSelectScriptsFilePath.Name = "btnSelectScriptsFilePath";
+            this.btnSelectScriptsFilePath.Size = new System.Drawing.Size(30, 30);
+            this.btnSelectScriptsFilePath.TabIndex = 75;
+            this.toolTips.SetToolTip(this.btnSelectScriptsFilePath, "Sélectionner un script");
+            this.btnSelectScriptsFilePath.UseVisualStyleBackColor = true;
+            this.btnSelectScriptsFilePath.Click += new System.EventHandler(this.btnSelectScriptsFilePath_Click);
+            // 
+            // btnSelectExecutableFilePath
+            // 
+            this.btnSelectExecutableFilePath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnSelectExecutableFilePath.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectExecutableFilePath.Image")));
+            this.btnSelectExecutableFilePath.Location = new System.Drawing.Point(11, 383);
+            this.btnSelectExecutableFilePath.Name = "btnSelectExecutableFilePath";
+            this.btnSelectExecutableFilePath.Size = new System.Drawing.Size(30, 30);
+            this.btnSelectExecutableFilePath.TabIndex = 76;
+            this.toolTips.SetToolTip(this.btnSelectExecutableFilePath, "Sélectionner un fichier exécutable");
+            this.btnSelectExecutableFilePath.UseVisualStyleBackColor = true;
+            this.btnSelectExecutableFilePath.Click += new System.EventHandler(this.btnSelectExecutableFilePath_Click);
+            // 
             // btnGenerate
             // 
-            this.btnGenerate.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGenerate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGenerate.BackgroundImage")));
             this.btnGenerate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnGenerate.Location = new System.Drawing.Point(779, 353);
+            this.btnGenerate.Location = new System.Drawing.Point(779, 378);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(40, 40);
             this.btnGenerate.TabIndex = 71;
+            this.toolTips.SetToolTip(this.btnGenerate, "Mettre à jour la version");
             this.btnGenerate.UseVisualStyleBackColor = true;
             this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
             // 
             // btnSelectExecutableFolderPath
             // 
-            this.btnSelectExecutableFolderPath.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnSelectExecutableFolderPath.BackgroundImage")));
             this.btnSelectExecutableFolderPath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnSelectExecutableFolderPath.Location = new System.Drawing.Point(16, 357);
+            this.btnSelectExecutableFolderPath.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectExecutableFolderPath.Image")));
+            this.btnSelectExecutableFolderPath.Location = new System.Drawing.Point(47, 383);
             this.btnSelectExecutableFolderPath.Name = "btnSelectExecutableFolderPath";
             this.btnSelectExecutableFolderPath.Size = new System.Drawing.Size(30, 30);
             this.btnSelectExecutableFolderPath.TabIndex = 74;
+            this.toolTips.SetToolTip(this.btnSelectExecutableFolderPath, "Sélectionner un dossier de Release");
             this.btnSelectExecutableFolderPath.UseVisualStyleBackColor = true;
-            // 
-            // txtReleasePath
-            // 
-            this.txtReleasePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtReleasePath.Location = new System.Drawing.Point(52, 359);
-            this.txtReleasePath.Name = "txtReleasePath";
-            this.txtReleasePath.ReadOnly = true;
-            this.txtReleasePath.Size = new System.Drawing.Size(524, 26);
-            this.txtReleasePath.TabIndex = 73;
+            this.btnSelectExecutableFolderPath.Click += new System.EventHandler(this.btnSelectExecutableFolderPath_Click);
             // 
             // btnShowExecutableFolder
             // 
             this.btnShowExecutableFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowExecutableFolder.BackgroundImage")));
             this.btnShowExecutableFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowExecutableFolder.Location = new System.Drawing.Point(582, 352);
+            this.btnShowExecutableFolder.Location = new System.Drawing.Point(697, 378);
             this.btnShowExecutableFolder.Name = "btnShowExecutableFolder";
             this.btnShowExecutableFolder.Size = new System.Drawing.Size(40, 40);
             this.btnShowExecutableFolder.TabIndex = 72;
+            this.toolTips.SetToolTip(this.btnShowExecutableFolder, "Consulter l\'exécutable");
             this.btnShowExecutableFolder.UseVisualStyleBackColor = true;
+            this.btnShowExecutableFolder.Click += new System.EventHandler(this.btnShowExecutableFolder_Click);
+            // 
+            // txtReleasePath
+            // 
+            this.txtReleasePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtReleasePath.Location = new System.Drawing.Point(83, 385);
+            this.txtReleasePath.Name = "txtReleasePath";
+            this.txtReleasePath.ReadOnly = true;
+            this.txtReleasePath.Size = new System.Drawing.Size(608, 26);
+            this.txtReleasePath.TabIndex = 73;
+            // 
+            // openFileDialog
+            // 
+            this.openFileDialog.FileName = "openFileDialog1";
             // 
             // frmRevision
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(824, 432);
+            this.ClientSize = new System.Drawing.Size(824, 456);
+            this.Controls.Add(this.btnSelectExecutableFilePath);
+            this.Controls.Add(this.btnSelectScriptsFilePath);
             this.Controls.Add(this.btnSelectExecutableFolderPath);
             this.Controls.Add(this.txtReleasePath);
             this.Controls.Add(this.btnShowExecutableFolder);
@@ -359,6 +427,11 @@
         private System.Windows.Forms.Button btnSelectExecutableFolderPath;
         private System.Windows.Forms.TextBox txtReleasePath;
         private System.Windows.Forms.Button btnShowExecutableFolder;
+        private System.Windows.Forms.Button btnSelectScriptsFilePath;
+        private System.Windows.Forms.Button btnSelectExecutableFilePath;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.TextBox txtCreatedBy;
+        private System.Windows.Forms.Label label4;
 
     }
 }

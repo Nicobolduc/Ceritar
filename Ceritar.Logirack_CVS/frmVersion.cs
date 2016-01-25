@@ -1049,10 +1049,12 @@ namespace Ceritar.Logirack_CVS
         {
             if (mcGrdRevisions.bln_RowEditIsValid())
             {
-                int intItem_NRI = (int)grdRevisions[grdRevisions.Row, mintGrdRev_Rev_NRI_col];
-                frmRevision frmVersion = new frmRevision();
+                int intItem_NRI = Int32.Parse(mcGrdRevisions[grdRevisions.Row, mintGrdRev_Rev_NRI_col]);
+                frmRevision frmRevision = new frmRevision();
 
-                frmVersion.formController.ShowForm(sclsConstants.DML_Mode.DELETE_MODE, ref intItem_NRI, true);
+                frmRevision.mintVersion_NRI = formController.Item_NRI;
+
+                frmRevision.formController.ShowForm(sclsConstants.DML_Mode.DELETE_MODE, ref intItem_NRI, true);
 
                 pfblnGrdRevisions_Load();
             }
@@ -1215,6 +1217,21 @@ namespace Ceritar.Logirack_CVS
                 DialogResult msgResult = clsApp.GetAppController.ShowMessage(mintMSG_ChangesWillBeLostOnRowChange, MessageBoxButtons.YesNo);
 
                 if (msgResult == DialogResult.No) e.Cancel = true;
+            }
+        }
+
+        private void grdRevisions_DoubleClick(object sender, EventArgs e)
+        {
+            if (mcGrdRevisions.bln_RowEditIsValid())
+            {
+                int intRevision_NRI = Int32.Parse(mcGrdRevisions[grdRevisions.Row, mintGrdRev_Rev_NRI_col]);
+                frmRevision frmRevision = new frmRevision();
+
+                frmRevision.mintVersion_NRI = formController.Item_NRI;
+
+                frmRevision.formController.ShowForm(sclsConstants.DML_Mode.UPDATE_MODE, ref intRevision_NRI, true);
+
+                pfblnGrdRevisions_Load();
             }
         }
 

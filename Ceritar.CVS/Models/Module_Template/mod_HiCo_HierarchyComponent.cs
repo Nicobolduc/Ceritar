@@ -216,13 +216,10 @@ namespace Ceritar.CVS.Models.Module_Template
             {
                 if (!mcSQL.bln_AddField("HiCo_Name", _strNameOnDisk, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
+                else if (!mcSQL.bln_AddField("HiCo_Parent_NRI", _cParentComponent._intHierarchyComponent_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                { }
                 else
                 {
-                    if (_cParentComponent != null && _cParentComponent._intHierarchyComponent_NRI > 0)
-                    {
-                        mcSQL.bln_AddField("HiCo_Parent_NRI", _cParentComponent._intHierarchyComponent_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE);
-                    }
-
                     blnValidReturn = true;
                 }
             }

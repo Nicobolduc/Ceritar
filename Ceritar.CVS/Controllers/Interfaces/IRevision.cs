@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Ceritar.TT3LightDLL.Static_Classes;
 
 namespace Ceritar.CVS.Controllers.Interfaces
@@ -10,16 +11,18 @@ namespace Ceritar.CVS.Controllers.Interfaces
     public interface IRevision
     {
         sclsConstants.DML_Mode GetDML_Action();
+        int GetVersion_NRI();
         int GetRevision_NRI();
         int GetRevision_TS();
-        string GetCreationDate();
-        string GetCompiledBy();
-        ushort GetVersionNo();
-        ushort GetRevisionNo();
-        int GetCeritarApplication_NRI();
-        string GetCeritarApplication_Name();
         int GetTemplateSource_NRI();
+        string GetCeritarApplication_Name();
+        int GetCeritarClient_NRI();
+        string GetCreationDate();
+        string GetCompiledBy();       
+        ushort GetVersionNo();
+        byte GetRevisionNo();         
         string GetLocation_Release();
         string GetLocation_Scripts();
+        List<string> GetModificationsList();
     }
 }
