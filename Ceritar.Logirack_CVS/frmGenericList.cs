@@ -98,7 +98,7 @@ namespace Ceritar.Logirack_CVS
 
                     case sclsConstants.DML_Mode.CONSULT_MODE:
                     case sclsConstants.DML_Mode.DELETE_MODE:
-                        sclsWinControls_Utilities.DisableAllFormControls((Form)frmToOpen, null, null);
+                        //sclsWinControls_Utilities.DisableAllFormControls((Form)frmToOpen, null, null);
 
                         frmToOpen.GetFormController().ShowForm(vFormMode, ref intItem_NRI, mblnChildFormIsModal);
 

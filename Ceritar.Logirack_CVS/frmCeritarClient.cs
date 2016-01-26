@@ -84,6 +84,11 @@ namespace Ceritar.Logirack_CVS
             return this.formController;
         }
 
+        bool ICeritarClient.GetIsActive()
+        {
+            return chkActive.Checked;
+        }
+
 #endregion
 
 
@@ -184,6 +189,41 @@ namespace Ceritar.Logirack_CVS
             }
         }
 
+        private void formController_ValidateForm(ValidateFormEventArgs eventArgs)
+        {
+            mcActionResults = mcCtrCeritarClient.Validate();
+
+            if (!mcActionResults.IsValid)
+            {
+                clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
+
+                switch ((ctr_CeritarClient.ErrorCode_CeC)mcActionResults.GetErrorCode)
+                {
+                    case ctr_CeritarClient.ErrorCode_CeC.NAME_MANDATORY:
+
+                        txtName.Focus();
+                        txtName.SelectAll();
+
+                        break;
+                }
+            }
+
+            eventArgs.IsValid = mcActionResults.IsValid;
+        }
+
+        private void formController_SaveData(SaveDataEventArgs eventArgs)
+        {
+            mcActionResults = mcCtrCeritarClient.Save();
+
+            if (!mcActionResults.IsValid)
+            {
+                clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
+            }
+
+            if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE) formController.Item_NRI = mcActionResults.GetNewItem_NRI;
+
+            eventArgs.SaveSuccessful = mcActionResults.IsValid;
+        }
 
     }
 }

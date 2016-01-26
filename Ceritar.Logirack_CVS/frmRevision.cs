@@ -281,9 +281,7 @@ namespace Ceritar.Logirack_CVS
             { }
             else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrRevision.strGetTemplates_SQL(), "Tpl_NRI", "Tpl_Name", false, ref cboTemplates))
             { }
-            else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrRevision.strGetClients_SQL(), "CeC_NRI", "CeC_Name", true, ref cboClients))
-            { }
-            else if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE)
+            else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrRevision.strGetClients_SQL(), "CeC_NRI", "CeC_Name", false, ref cboClients))
             { }
             else if (!pfblnData_Load())
             { }
@@ -341,13 +339,22 @@ namespace Ceritar.Logirack_CVS
 
         private void formController_SaveData(SaveDataEventArgs eventArgs)
         {
-            mcActionResults = mcCtrRevision.Save();
+            bool blnValidReturn = false;
+
+            blnValidReturn = mcCtrRevision.blnBuildRevisionHierarchy((int)cboTemplates.SelectedValue);
+
+            if (blnValidReturn)
+            {
+                mcActionResults = mcCtrRevision.Save();
+
+                if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE) formController.Item_NRI = mcActionResults.GetNewItem_NRI; //TODO Autre facon
+            }
 
             if (!mcActionResults.IsValid)
             {
                 clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
             }
-            //formController.Item_NRI = mcActionResults.GetNewItem_NRI;//TODO gestion des NRI en insert
+
             eventArgs.SaveSuccessful = mcActionResults.IsValid;
         }
 
@@ -394,16 +401,13 @@ namespace Ceritar.Logirack_CVS
 
         private void btnShowScriptsFolder_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(txtScriptsPath.Text))
+            if (File.Exists(txtScriptsPath.Text) || Directory.Exists(txtScriptsPath.Text))
             {
                 if ((File.GetAttributes(txtScriptsPath.Text) & FileAttributes.Directory) == FileAttributes.Directory)
                 {
-                    if (Directory.Exists(txtScriptsPath.Text))
-                    {
-                        System.Diagnostics.Process.Start(txtScriptsPath.Text);
-                    }
+                    System.Diagnostics.Process.Start(txtScriptsPath.Text);
                 }
-                else if (File.Exists(txtScriptsPath.Text))
+                else
                 {
                     System.Diagnostics.Process.Start("explorer.exe", "/select, " + txtScriptsPath.Text);
                 }
@@ -412,16 +416,13 @@ namespace Ceritar.Logirack_CVS
 
         private void btnShowExecutableFolder_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(txtReleasePath.Text))
+            if (File.Exists(txtReleasePath.Text) || Directory.Exists(txtReleasePath.Text))
             {
                 if ((File.GetAttributes(txtReleasePath.Text) & FileAttributes.Directory) == FileAttributes.Directory)
                 {
-                    if (Directory.Exists(txtReleasePath.Text))
-                    {
-                        System.Diagnostics.Process.Start(txtReleasePath.Text);
-                    }
+                    System.Diagnostics.Process.Start(txtReleasePath.Text);
                 }
-                else if (File.Exists(txtReleasePath.Text))
+                else
                 {
                     System.Diagnostics.Process.Start("explorer.exe", "/select, " + txtReleasePath.Text);
                 }

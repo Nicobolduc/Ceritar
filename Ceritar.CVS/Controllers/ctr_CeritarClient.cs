@@ -19,16 +19,14 @@ namespace Ceritar.CVS.Controllers
 
         public enum ErrorCode_CeC
         {
-            NAME_MANDATORY = 1,
-            IS_ACTIVE_MANDATORY = 2,
-            APPLICATION_LIST_MANDATORY = 4
+            NAME_MANDATORY = 1
         }
 
         public ctr_CeritarClient(Interfaces.ICeritarClient rView)
         {
             mcModCerClient = new Models.Module_Configuration.mod_CeC_CeritarClient();
-            mcView = rView;
 
+            mcView = rView;
         }
 
         public clsActionResults Validate()
@@ -37,7 +35,13 @@ namespace Ceritar.CVS.Controllers
             {
                 mcModCerClient = new Models.Module_Configuration.mod_CeC_CeritarClient();
 
+                mcModCerClient.CeritarClient_NRI = mcView.GetCerClient_NRI();
+                mcModCerClient.CeritarClient_TS = mcView.GetCerClient_TS();
+                mcModCerClient.CompanyName = mcView.GetName();
+                mcModCerClient.DML_Action = mcView.GetDML_Mode();
+                mcModCerClient.IsActive = mcView.GetIsActive();
 
+                mcActionResult = mcModCerClient.Validate();
             }
             catch (Exception ex)
             {
@@ -48,6 +52,34 @@ namespace Ceritar.CVS.Controllers
             return mcActionResult;
         }
 
+        public clsActionResults Save()
+        {
+            try
+            {
+                mcSQL = new clsSQL();
+
+                if (mcSQL.bln_BeginTransaction())
+                {
+                    mcModCerClient.SetcSQL = mcSQL;
+
+                    mcModCerClient.blnSave();
+
+                    mcActionResult = mcModCerClient.ActionResults;
+                }
+            }
+            catch (Exception ex)
+            {
+                mcActionResult.SetInvalid(sclsConstants.Error_Message.ERROR_UNHANDLED, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                mcSQL.bln_EndTransaction(mcActionResult.IsValid);
+                mcSQL = null;
+            }
+
+            return mcActionResult;
+        }
 
 #region "SQL Queries"
         

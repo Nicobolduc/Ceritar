@@ -316,7 +316,9 @@ namespace Ceritar.Logirack_CVS
             {
                 clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
             }
-            //formController.Item_NRI = mcActionResults.GetNewItem_NRI;//TODO gestion des NRI en insert
+
+            if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE) formController.Item_NRI = mcActionResults.GetNewItem_NRI;
+
             eventArgs.SaveSuccessful = mcActionResults.IsValid;
         }
 

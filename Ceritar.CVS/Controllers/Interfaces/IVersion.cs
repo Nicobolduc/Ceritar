@@ -42,6 +42,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         public string strLicense;
         public string strCeritarClient_Name;
         public string strLocationReportExe;
+        public string strLocationScriptsRoot;
         public int intCeritarClient_NRI;
     }
 

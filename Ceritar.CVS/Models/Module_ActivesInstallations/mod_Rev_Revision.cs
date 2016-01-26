@@ -276,6 +276,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         else
                         {
                             mcActionResults.SetNewItem_NRI = _intRevision_NRI;
+
                             blnValidReturn = true;
                         }
 

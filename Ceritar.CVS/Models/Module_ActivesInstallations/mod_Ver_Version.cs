@@ -41,6 +41,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private const int mintMSG_VersionNo_UniqueAndBiggerPrevious = 18;
         private const int mintMSG_CantDeleteVersionIfUsed = 22;
         private const int mintMSG_CantInstallDemoInProd = 24;
+        private const int mintMSG_SCRIPS_NOT_FOUND = 29;
 
         //Working variables
         private bool mblnIncludeScriptsOnRefresh = false;
@@ -323,6 +324,13 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                                         mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.REPORT_MANDATORY);
                                         blnValidReturn = false;
                                     }
+
+                                    if (string.IsNullOrEmpty(client.LocationScriptsRoot) || !Directory.Exists(client.LocationScriptsRoot))
+                                    {
+                                        mcActionResults.SetInvalid(mintMSG_SCRIPS_NOT_FOUND, ctr_Version.ErrorCode_Ver.SCRIPTS_MANDATORY, client.CeritarClient.CompanyName);
+                                        blnValidReturn = false;
+                                    }
+
                                     if (!blnValidReturn) break;
                                 }
                             }
@@ -354,13 +362,22 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                             {
                                 blnValidReturn = true;
 
-                                foreach (mod_CAV_ClientAppVersion client in LstClientsUsing)
+                                for (int intIndex = 0; intIndex < LstClientsUsing.Count; intIndex++)
                                 {
-                                    if (!string.IsNullOrEmpty(client.LocationReportExe) && !File.Exists(client.LocationReportExe))
+                                    if (!string.IsNullOrEmpty(LstClientsUsing[intIndex].LocationReportExe) && !File.Exists(LstClientsUsing[intIndex].LocationReportExe))
                                     {
+                                        mcActionResults.RowInError = intIndex + 1;
                                         mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.REPORT_MANDATORY);
                                         blnValidReturn = false;
                                     }
+
+                                    if (blnValidReturn && (string.IsNullOrEmpty(LstClientsUsing[intIndex].LocationScriptsRoot) || !Directory.Exists(LstClientsUsing[intIndex].LocationScriptsRoot)))
+                                    {
+                                        //mcActionResults.SetInvalid(mintMSG_SCRIPS_NOT_FOUND, ctr_Version.ErrorCode_Ver.SCRIPTS_MANDATORY, LstClientsUsing[intIndex].CeritarClient.CompanyName);
+                                        //blnValidReturn = false;
+                                        //TODO: A revoir
+                                    }
+
                                     if (!blnValidReturn) break;
                                 }
                             }
@@ -385,6 +402,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 mcActionResults.SetInvalid(sclsConstants.Error_Message.ERROR_UNHANDLED, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
                 sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
+
+            if (blnValidReturn) mcActionResults.SetValid();
 
             return blnValidReturn;
         }
@@ -412,6 +431,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         else
                         {
                             mcActionResults.SetNewItem_NRI = _intVersion_NRI;
+
                             blnValidReturn = true;
                         }
 

@@ -14,6 +14,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
     {
         int GetCerClient_NRI();
         int GetCerClient_TS();
+        bool GetIsActive();
         string GetName();
         List<int> GetLstCerApplication();
         Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode GetDML_Mode();

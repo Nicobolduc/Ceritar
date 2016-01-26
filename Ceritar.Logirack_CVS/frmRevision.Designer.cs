@@ -82,7 +82,7 @@
             this.cboClients.FormattingEnabled = true;
             this.cboClients.Location = new System.Drawing.Point(68, 46);
             this.cboClients.Name = "cboClients";
-            this.cboClients.Size = new System.Drawing.Size(203, 21);
+            this.cboClients.Size = new System.Drawing.Size(225, 21);
             this.cboClients.TabIndex = 59;
             // 
             // txtScriptsPath
@@ -106,7 +106,7 @@
             this.groupBox3.Size = new System.Drawing.Size(815, 216);
             this.groupBox3.TabIndex = 63;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Livrables / Modifications inclus";
+            this.groupBox3.Text = "Livrables couverts / Modifications incluses";
             // 
             // btnGrdRevDel
             // 
@@ -209,15 +209,16 @@
             // 
             // txtRevisionNo
             // 
-            this.txtRevisionNo.Location = new System.Drawing.Point(213, 19);
+            this.txtRevisionNo.Location = new System.Drawing.Point(235, 19);
             this.txtRevisionNo.Name = "txtRevisionNo";
             this.txtRevisionNo.ReadOnly = true;
             this.txtRevisionNo.Size = new System.Drawing.Size(58, 20);
             this.txtRevisionNo.TabIndex = 70;
+            this.txtRevisionNo.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(134, 22);
+            this.label3.Location = new System.Drawing.Point(157, 22);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(72, 17);
             this.label3.TabIndex = 69;
@@ -245,8 +246,9 @@
             this.txtVersionNo.Location = new System.Drawing.Point(68, 19);
             this.txtVersionNo.Name = "txtVersionNo";
             this.txtVersionNo.ReadOnly = true;
-            this.txtVersionNo.Size = new System.Drawing.Size(60, 20);
+            this.txtVersionNo.Size = new System.Drawing.Size(83, 20);
             this.txtVersionNo.TabIndex = 65;
+            this.txtVersionNo.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // cboTemplates
             // 
@@ -254,7 +256,7 @@
             this.cboTemplates.FormattingEnabled = true;
             this.cboTemplates.Location = new System.Drawing.Point(68, 75);
             this.cboTemplates.Name = "cboTemplates";
-            this.cboTemplates.Size = new System.Drawing.Size(203, 21);
+            this.cboTemplates.Size = new System.Drawing.Size(225, 21);
             this.cboTemplates.TabIndex = 50;
             // 
             // label6
@@ -329,6 +331,7 @@
             this.btnGenerate.TabIndex = 71;
             this.toolTips.SetToolTip(this.btnGenerate, "Mettre à jour la version");
             this.btnGenerate.UseVisualStyleBackColor = true;
+            this.btnGenerate.Visible = false;
             this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
             // 
             // btnSelectExecutableFolderPath

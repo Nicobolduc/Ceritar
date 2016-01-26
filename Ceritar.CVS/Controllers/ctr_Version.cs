@@ -22,7 +22,6 @@ namespace Ceritar.CVS.Controllers
         private mod_Ver_Version mcModVersion;
         private clsActionResults mcActionResult;
         private clsSQL mcSQL;
-        private string[] mstrReleaseValidExtensions = { ".dll", ".config", ".exe" };
         
         public enum ErrorCode_Ver
         {
@@ -38,7 +37,8 @@ namespace Ceritar.CVS.Controllers
             VERSION_NO_UNIQUE_AND_BIGGER_PREVIOUS = 10,
             REPORT_MANDATORY = 11,
             CANT_DELETE_USED_VERSION = 12,
-            DEMO_CANT_BE_INSTALLED = 13
+            DEMO_CANT_BE_INSTALLED = 13,
+            SCRIPTS_MANDATORY = 14
         }
 
         public clsActionResults GetActionResult
@@ -66,6 +66,8 @@ namespace Ceritar.CVS.Controllers
                 if (mcActionResult.IsValid)
                 {
                     mcModVersion.blnValidateHierarchyBuildFiles();
+
+                    mcActionResult = mcModVersion.ActionResults;
                 }
             }
             catch (Exception ex)
@@ -137,9 +139,39 @@ namespace Ceritar.CVS.Controllers
 
                 blnValidReturn = pfblnFeedModelWithView();
 
-                if (blnValidReturn & mcModVersion.blnValidateHierarchyBuildFiles())
+                if (blnValidReturn)
                 {
-                    blnValidReturn = blnBuildVersionHierarchy(mcView.GetTemplateSource_NRI());
+                    mcModVersion.LstClientsUsing.Clear();
+
+                    structClientAppVersion structCAV = mcView.GetSelectedClient();
+                    mod_CAV_ClientAppVersion cCAV = new mod_CAV_ClientAppVersion();
+                    cCAV.DML_Action = structCAV.Action;
+                    cCAV.ClientAppVersion_NRI = structCAV.intClientAppVersion_NRI;
+                    cCAV.ClientAppVersion_TS = structCAV.intClientAppVersion_TS;
+                    cCAV.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
+                    cCAV.Installed = structCAV.blnInstalled;
+                    cCAV.IsCurrentVersion = structCAV.blnIsCurrentVersion;
+                    cCAV.License = structCAV.strLicense;
+                    cCAV.Version_NRI = mcView.GetVersion_NRI();
+                    cCAV.LocationReportExe = structCAV.strLocationReportExe;
+                    cCAV.LocationScriptsRoot = structCAV.strLocationScriptsRoot;
+
+                    cCAV.CeritarClient = new Models.Module_Configuration.mod_CeC_CeritarClient();
+                    cCAV.CeritarClient.CeritarClient_NRI = structCAV.intCeritarClient_NRI;
+                    cCAV.CeritarClient.CompanyName = structCAV.strCeritarClient_Name;
+
+                    mcModVersion.LstClientsUsing.Add(cCAV);
+
+                    blnValidReturn = mcModVersion.blnValidateHierarchyBuildFiles();
+
+                    if (blnValidReturn)
+                    {
+                        blnValidReturn = blnBuildVersionHierarchy(mcView.GetTemplateSource_NRI());
+                    }
+                    else
+                    {
+                        mcActionResult = mcModVersion.ActionResults;
+                    }
                 }
             }
             catch (Exception ex)
@@ -237,7 +269,7 @@ namespace Ceritar.CVS.Controllers
 
                             if (!string.IsNullOrEmpty(mcView.GetLocation_Release()) && mcView.GetLocation_Release() != currentFolderInfos.FullName)
                             {
-                                blnValidReturn = clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, mstrReleaseValidExtensions);
+                                blnValidReturn = clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseValidExtensions);
 
                                 //TODO: Find an other solution for this
                                 string[] reportExe = Directory.GetFiles(currentFolderInfos.FullName, "*RPT.exe", SearchOption.TopDirectoryOnly);
@@ -346,23 +378,23 @@ namespace Ceritar.CVS.Controllers
             ushort intActiveVersionInProd;
             ushort intCurrentFolder_VersionNo;
             string[] lstVersionsFolders;
-            List<structClientAppVersion> lstClients;
+            List<mod_CAV_ClientAppVersion> lstCAV = mcModVersion.LstClientsUsing;
 
             try
             {
-                lstClients = mcView.GetClientsList();
+                blnValidReturn = true;
 
-                foreach (structClientAppVersion structClient in lstClients)
+                foreach (mod_CAV_ClientAppVersion cCAV in lstCAV)
                 {
-                    if (structClient.Action == sclsConstants.DML_Mode.INSERT_MODE | mcView.GetIncludeScriptsOnRefresh())
+                    if (cCAV.DML_Action == sclsConstants.DML_Mode.INSERT_MODE | mcView.GetIncludeScriptsOnRefresh())
                     {
                         if (mcSQL == null)
                         {
-                            intActiveVersionInProd = UInt16.Parse(clsSQL.str_ADOSingleLookUp("ISNULL(MAX(Version.Ver_No), 0)", "ClientAppVersion INNER JOIN Version ON Version.Ver_NRI = ClientAppVersion.Ver_NRI", "ClientAppVersion.CAV_IsCurrentVersion = 1 AND Version.CeA_NRI = " + mcView.GetCeritarApplication_NRI() + " AND ClientAppVersion.CeC_NRI = " + structClient.intCeritarClient_NRI));
+                            intActiveVersionInProd = UInt16.Parse(clsSQL.str_ADOSingleLookUp("ISNULL(MAX(Version.Ver_No), 0)", "ClientAppVersion INNER JOIN Version ON Version.Ver_NRI = ClientAppVersion.Ver_NRI", "ClientAppVersion.CAV_IsCurrentVersion = 1 AND Version.CeA_NRI = " + mcView.GetCeritarApplication_NRI() + " AND ClientAppVersion.CeC_NRI = " + cCAV.CeritarClient.CeritarClient_NRI));
                         }
                         else
                         {
-                            intActiveVersionInProd = UInt16.Parse(mcSQL.str_ADOSingleLookUp_Trans("ISNULL(MAX(Version.Ver_No), 0)", "ClientAppVersion INNER JOIN Version ON Version.Ver_NRI = ClientAppVersion.Ver_NRI", "ClientAppVersion.CAV_IsCurrentVersion = 1 AND Version.CeA_NRI = " + mcView.GetCeritarApplication_NRI() + " AND ClientAppVersion.CeC_NRI = " + structClient.intCeritarClient_NRI));
+                            intActiveVersionInProd = UInt16.Parse(mcSQL.str_ADOSingleLookUp_Trans("ISNULL(MAX(Version.Ver_No), 0)", "ClientAppVersion INNER JOIN Version ON Version.Ver_NRI = ClientAppVersion.Ver_NRI", "ClientAppVersion.CAV_IsCurrentVersion = 1 AND Version.CeA_NRI = " + mcView.GetCeritarApplication_NRI() + " AND ClientAppVersion.CeC_NRI = " + cCAV.CeritarClient.CeritarClient_NRI));
                         }
 
                         lstVersionsFolders = Directory.GetDirectories(Path.Combine(sclsAppConfigs.GetRoot_DB_UPGRADE_SCRIPTS, mcView.GetCeritarApplication_Name()));
@@ -375,15 +407,18 @@ namespace Ceritar.CVS.Controllers
                             {
                                 clsApp.GetAppController.blnCopyFolderContent(strCurrentVersionFolderToCopy_Path,
                                                                              Path.Combine(vstrDestinationFolderPath,
-                                                                                          structClient.strCeritarClient_Name,
+                                                                                          cCAV.CeritarClient.CompanyName,
                                                                                           sclsAppConfigs.GetVersionNumberPrefix + intCurrentFolder_VersionNo.ToString()),
                                                                              true,
                                                                              true);
 
-                                //Copy all client's specific scripts
-                                if (Directory.Exists(Path.Combine(strCurrentVersionFolderToCopy_Path, structClient.strCeritarClient_Name)))
+                                cCAV.DML_Action = sclsConstants.DML_Mode.UPDATE_MODE;
+                                cCAV.LocationScriptsRoot = Path.Combine(vstrDestinationFolderPath, cCAV.CeritarClient.CompanyName);
+
+                                //Copy all client's specific scripts at the end of the current folder
+                                if (Directory.Exists(Path.Combine(strCurrentVersionFolderToCopy_Path, cCAV.CeritarClient.CompanyName)))
                                 {
-                                    string[] lstSpecificScripts = Directory.GetFiles(Path.Combine(strCurrentVersionFolderToCopy_Path, structClient.strCeritarClient_Name));
+                                    string[] lstSpecificScripts = Directory.GetFiles(Path.Combine(strCurrentVersionFolderToCopy_Path, cCAV.CeritarClient.CompanyName));
                                     string strNewScriptName = string.Empty;
                                     int intNewScriptNumber = 0;
 
@@ -399,7 +434,7 @@ namespace Ceritar.CVS.Controllers
                                         strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
 
                                         File.Copy(lstSpecificScripts[intIndex], Path.Combine(vstrDestinationFolderPath,
-                                                                                             structClient.strCeritarClient_Name,
+                                                                                             cCAV.CeritarClient.CompanyName,
                                                                                              sclsAppConfigs.GetVersionNumberPrefix + intCurrentFolder_VersionNo.ToString(),
                                                                                              strNewScriptName), true
                                                  );
@@ -415,10 +450,23 @@ namespace Ceritar.CVS.Controllers
                                 //Do nothing
                             }
                         }
+
+                        //Ce segment de code sert à sauvegarder le nouveau path du dossier racine des scripts
+                        if (cCAV.DML_Action == sclsConstants.DML_Mode.UPDATE_MODE)
+                        {
+                            cCAV.SetcSQL = mcSQL;
+
+                            blnValidReturn = cCAV.blnSave();
+                        }
+                        else
+                        {
+                            blnValidReturn = true;
+                        }
+                        
+
+                        if (!blnValidReturn) break;
                     }
                 }
-
-                blnValidReturn = true;
             }
             catch (FileNotFoundException exPath)
             {
@@ -627,12 +675,16 @@ namespace Ceritar.CVS.Controllers
                     cCAV.ClientAppVersion_NRI = structCAV.intClientAppVersion_NRI;
                     cCAV.ClientAppVersion_TS = structCAV.intClientAppVersion_TS;
                     cCAV.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
-                    cCAV.CeritarClient_NRI = structCAV.intCeritarClient_NRI;
                     cCAV.Installed = structCAV.blnInstalled;
                     cCAV.IsCurrentVersion = structCAV.blnIsCurrentVersion;
                     cCAV.License = structCAV.strLicense;
                     cCAV.Version_NRI = mcView.GetVersion_NRI();
                     cCAV.LocationReportExe = structCAV.strLocationReportExe;
+                    cCAV.LocationScriptsRoot = structCAV.strLocationScriptsRoot;
+
+                    cCAV.CeritarClient = new Models.Module_Configuration.mod_CeC_CeritarClient();
+                    cCAV.CeritarClient.CeritarClient_NRI = structCAV.intCeritarClient_NRI;
+                    cCAV.CeritarClient.CompanyName = structCAV.strCeritarClient_Name;
 
                     mcModVersion.LstClientsUsing.Add(cCAV);
                 }
@@ -684,194 +736,79 @@ namespace Ceritar.CVS.Controllers
             string strSQL = string.Empty;
             string strFolderName = string.Empty;
             string strVersionFolderRoot = string.Empty;
-            int intPreviousFolderLevel = -1;
-            SqlDataReader cSQLReader = null;
-            DirectoryInfo currentFolderInfos = null;
-
-            strSQL = pfstrGetTemplateHierarchy_SQL(vintTemplate_NRI);
-            
-            //try
-            //{
-
-
-            //    currentFolderInfos = new DirectoryInfo(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES +
-            //                                            (sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Substring(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Length - 1, 1) == "\\" ? "" : "\\")
-            //                                            );
-
-            //    cSQLReader = clsSQL.ADOSelect(strSQL);
-
-            //    while (cSQLReader.Read())
-            //    {
-            //        switch (Int32.Parse(cSQLReader["FoT_NRI"].ToString()))
-            //        {
-            //            case (int)ctr_Template.FolderType.Version_Number:
-
-            //                strFolderName = sclsAppConfigs.GetVersionNumberPrefix + mcView.GetVersionNo().ToString();
-
-            //                strVersionFolderRoot = Path.Combine(currentFolderInfos.FullName, strFolderName);
-
-            //                break;
-
-            //            default:
-
-            //                strFolderName = cSQLReader["HiCo_Name"].ToString();
-            //                break;
-            //        }
-
-            //        if (Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString()) > intPreviousFolderLevel) //On entre dans un sous-dossier
-            //        {
-            //            currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.FullName, strFolderName));
-            //        }
-            //        else if (Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString()) < intPreviousFolderLevel) //On recule pour revenir au dossier du niveau courant
-            //        {
-            //            int intNbLevelBack = intPreviousFolderLevel - Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString());
-
-            //            while (intNbLevelBack > 0)
-            //            {
-            //                currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.Parent.Parent.FullName, strFolderName));
-
-            //                intNbLevelBack--;
-            //            }
-            //        }
-            //        else //On recule d'un niveau pour revenir au dossier d'avant
-            //        {
-            //            currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.Parent.FullName, strFolderName));
-            //        }
-
-            //        if (Directory.Exists(currentFolderInfos.FullName))
-            //        {
-
-            //            switch (Int32.Parse(cSQLReader["FoT_NRI"].ToString()))
-            //            {
-            //                case (int)ctr_Template.FolderType.Release:
-
-            //                    if (!string.IsNullOrEmpty(mcView.GetLocation_Release()) && mcView.GetLocation_Release() != currentFolderInfos.FullName)
-            //                    {
-            //                        blnValidReturn = clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, mstrReleaseValidExtensions);
-            //                    }
-            //                    else
-            //                    {
-            //                        blnValidReturn = true;
-            //                    }
-
-            //                    if (blnValidReturn)
-            //                    {
-            //                        mcModVersion.Location_Release = currentFolderInfos.FullName;
-            //                    }
-
-            //                    break;
-
-            //                case (int)ctr_Template.FolderType.CaptionsAndMenus:
-
-            //                    mcModVersion.Location_CaptionsAndMenus = Path.Combine(currentFolderInfos.FullName, sclsAppConfigs.GetCaptionsAndMenusFileName);
-
-            //                    if (!string.IsNullOrEmpty(mcView.GetLocation_TTApp()) && mcModVersion.Location_CaptionsAndMenus != mcView.GetLocation_TTApp())
-            //                    {
-            //                        File.Copy(mcView.GetLocation_TTApp(), Path.Combine(currentFolderInfos.FullName, sclsAppConfigs.GetCaptionsAndMenusFileName), true);
-            //                    }
-
-            //                    blnValidReturn = true;
-
-            //                    break;
-
-            //                case (int)ctr_Template.FolderType.Scripts:
-
-            //                    blnValidReturn = pfblnCopyAllScriptsForClients(currentFolderInfos.FullName);
-
-            //                    break;
-
-            //                case (int)ctr_Template.FolderType.Version_Number:
-
-            //                    mcModVersion.Location_APP_CHANGEMENT = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_APP_CHANGEMENT()));
-
-            //                    if (!string.IsNullOrEmpty(mcView.GetLocation_APP_CHANGEMENT()) && mcModVersion.Location_APP_CHANGEMENT != mcView.GetLocation_APP_CHANGEMENT())
-            //                    {
-            //                        File.Copy(mcView.GetLocation_APP_CHANGEMENT(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_APP_CHANGEMENT())), true);
-            //                    }
-
-            //                    blnValidReturn = true;
-
-            //                    break;
-
-            //                case (int)ctr_Template.FolderType.Report:
-
-            //                    blnValidReturn = pfblnCopyAllReportsForClients(currentFolderInfos.FullName);
-
-            //                    break;
-
-            //                default:
-            //                    blnValidReturn = true;
-            //                    break;
-            //            }
-            //        }
-
-            //        intPreviousFolderLevel = Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString());
-
-            //        if (!blnValidReturn) break;
-            //    }
-            //}
-            //catch (FileNotFoundException exPath)
-            //{
-            //    blnValidReturn = false;
-            //    mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exPath.FileName);
-            //}
-            //catch (Exception ex)
-            //{
-            //    blnValidReturn = false;
-            //    sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
-            //}
-            //finally
-            //{
-            //    if (cSQLReader != null) cSQLReader.Dispose();
-
-            //    if (blnValidReturn) mcActionResult.SetValid();
-            //}
-
-            //TESTS
             string strNewZipFileLocation = vstrExportFolderLocation + @"\Installation Kit " + mcView.GetVersionNo().ToString() + @".zip";
             string strReleaseLocation = mcView.GetLocation_Release();
             string strReportLocation = mcView.GetSelectedClient().strLocationReportExe;
             string strCaptionsAndMenusLocation = mcView.GetLocation_TTApp();
-            string strCurrentScriptFolderLocation = "";
+            string strCurrentScriptFolderLocation = mcView.GetSelectedClient().strLocationScriptsRoot;
 
-            if (File.Exists(strNewZipFileLocation))
+            try
             {
-                File.Delete(strNewZipFileLocation);
-            }
-
-            //Create the new archive file and add all the folders to it.
-            using (ZipArchive newZipFile = ZipFile.Open(strNewZipFileLocation, ZipArchiveMode.Create))
-            {
-                //Add the release folder with the report application to the zip archive.
-                foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strReleaseLocation, "*.*", SearchOption.AllDirectories))
+                if (File.Exists(strNewZipFileLocation))
                 {
-                    newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
+                    File.Delete(strNewZipFileLocation);
                 }
-                newZipFile.CreateEntryFromFile(strReportLocation, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strReportLocation)));
 
-                //Add the TTApp to the Zip archive.
-                    //File.SetAttributes(strCaptionsAndMenusLocation, FileAttributes.Normal);
-                newZipFile.CreateEntryFromFile(strCaptionsAndMenusLocation, Path.Combine(sclsAppConfigs.GetCaptionsAndMenusFileName, Path.GetFileName(strCaptionsAndMenusLocation)));
-
-                //Add every satellites applications to the zip archive.
-                List<structClientSatVersion> lstSatellites = mcView.GetClientSatellitesList();
-
-                foreach (structClientSatVersion structSat in lstSatellites)
+                //Create the new archive file and add all the folders to it.
+                using (ZipArchive newZipFile = ZipFile.Open(strNewZipFileLocation, ZipArchiveMode.Create))
                 {
-                    if (structSat.blnExeIsFolder && Directory.Exists(structSat.strLocationSatelliteExe))
+                    //Add the release folder with the report application to the zip archive.
+                    foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strReleaseLocation, "*.*", SearchOption.AllDirectories))
                     {
-                        foreach (string strCurrentFileToCopyPath in Directory.GetFiles(structSat.strLocationSatelliteExe, "*.*", SearchOption.AllDirectories))
+                        newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
+                    }
+                    newZipFile.CreateEntryFromFile(strReportLocation, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strReportLocation)));
+
+                    //Add the TTApp to the Zip archive.
+                    //File.SetAttributes(strCaptionsAndMenusLocation, FileAttributes.Normal);
+                    newZipFile.CreateEntryFromFile(strCaptionsAndMenusLocation, Path.Combine(new DirectoryInfo(strCaptionsAndMenusLocation).Parent.Name, Path.GetFileName(strCaptionsAndMenusLocation)));
+                
+                    //Add every satellites applications to the zip archive.
+                    List<structClientSatVersion> lstSatellites = mcView.GetClientSatellitesList();
+
+                    foreach (structClientSatVersion structSat in lstSatellites)
+                    {
+                        if (structSat.blnExeIsFolder && Directory.Exists(structSat.strLocationSatelliteExe))
                         {
-                            newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.GetFileName(strCurrentFileToCopyPath));
+                            foreach (string strCurrentFileToCopyPath in Directory.GetFiles(structSat.strLocationSatelliteExe, "*.*", SearchOption.AllDirectories))
+                            {
+                                newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(structSat.strKitFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
+                            }
+                        }
+                        else if (File.Exists(structSat.strLocationSatelliteExe))
+                        {
+                            newZipFile.CreateEntryFromFile(structSat.strLocationSatelliteExe, Path.Combine(structSat.strKitFolderName, Path.GetFileName(structSat.strLocationSatelliteExe)));
                         }
                     }
-                    else if (File.Exists(structSat.strLocationSatelliteExe))
+
+                    //Add all scripts folder to the zip archive.
+                    string[] lstScriptsFoldersPath = Directory.GetDirectories(strCurrentScriptFolderLocation);
+
+                    foreach (string strCurrentScriptsFolder in lstScriptsFoldersPath)
                     {
-                        newZipFile.CreateEntryFromFile(structSat.strLocationSatelliteExe, Path.Combine(structSat.strKitFolderName, Path.GetFileName(structSat.strLocationSatelliteExe)));
+                        foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strCurrentScriptsFolder, "*.*", SearchOption.TopDirectoryOnly))
+                        {
+                            newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetScriptsFolderName, new DirectoryInfo(strCurrentScriptsFolder).Name, Path.GetFileName(strCurrentFileToCopyPath)));
+                        }
                     }
                 }
 
+                blnValidReturn = true;
+            }
+            catch (FileNotFoundException exPath)
+            {
+                blnValidReturn = false;
+                mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exPath.FileName);
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
 
+            if (!blnValidReturn)
+            {
+                File.Delete(strNewZipFileLocation);
             }
 
             return blnValidReturn;
@@ -888,7 +825,7 @@ namespace Ceritar.CVS.Controllers
                 {
                     blnValidReturn = false;
 
-                    if (!string.IsNullOrEmpty(cCSV.Location_Exe))
+                    if (File.Exists(cCSV.Location_Exe) || Directory.Exists(cCSV.Location_Exe))
                     {
                         currentFolderInfos = new DirectoryInfo(Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES +
                                                                         (sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Substring(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Length - 1, 1) == "\\" ? "" : "\\"),
@@ -900,13 +837,11 @@ namespace Ceritar.CVS.Controllers
 
                         if (!Directory.Exists(currentFolderInfos.FullName)) currentFolderInfos.Create();
 
-                        FileAttributes locationAttributes = File.GetAttributes(cCSV.Location_Exe);
-
-                        if ((locationAttributes & FileAttributes.Directory) == FileAttributes.Directory) //Executable is a folder
+                        if ((File.GetAttributes(cCSV.Location_Exe) & FileAttributes.Directory) == FileAttributes.Directory) //Executable is a folder
                         {
                             if (cCSV.Location_Exe != currentFolderInfos.FullName)
                             {
-                                clsApp.GetAppController.blnCopyFolderContent(cCSV.Location_Exe, currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, mstrReleaseValidExtensions);
+                                clsApp.GetAppController.blnCopyFolderContent(cCSV.Location_Exe, currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseValidExtensions);
 
                                 cCSV.Location_Exe = currentFolderInfos.FullName;
                             }
@@ -1034,10 +969,11 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        ClientAppVersion.CAV_IsCurrentVersion, " + Environment.NewLine;
             strSQL = strSQL + "        ClientAppVersion.CAV_ReportExe_Location, " + Environment.NewLine;
             strSQL = strSQL + "        ClientAppVersion.CAV_License, " + Environment.NewLine;
-            strSQL = strSQL + "        SelCol = 0 " + Environment.NewLine;
+            strSQL = strSQL + "        SelCol = 0, " + Environment.NewLine;
+            strSQL = strSQL + "        ClientAppVersion.CAV_ScriptsRoot_Location " + Environment.NewLine;
 
             strSQL = strSQL + " FROM ClientAppVersion " + Environment.NewLine;
-            strSQL = strSQL + "     INNER JOIN CerClient ON CerClient.CeC_NRI = ClientAppVersion.CeC_NRI " + Environment.NewLine;
+            strSQL = strSQL + "     INNER JOIN CerClient ON CerClient.CeC_NRI = ClientAppVersion.CeC_NRI AND CerClient.CeC_IsActive = 1 " + Environment.NewLine;
 
             strSQL = strSQL + " WHERE ClientAppVersion.Ver_NRI = " + vintVersion_NRI + Environment.NewLine;
 
@@ -1133,7 +1069,7 @@ namespace Ceritar.CVS.Controllers
 
             strSQL = strSQL + " FROM CerClient " + Environment.NewLine;
 
-            strSQL = strSQL + " WHERE CerClient.CeC_NRI NOT IN (" + vstrCeritarClientToIgnore + ")" + Environment.NewLine;
+            strSQL = strSQL + " WHERE CerClient.CeC_NRI NOT IN (" + vstrCeritarClientToIgnore + ") AND CerClient.CeC_IsActive = 1 " + Environment.NewLine;
 
             strSQL = strSQL + " ORDER BY CerClient.CeC_Name " + Environment.NewLine;
 

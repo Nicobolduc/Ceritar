@@ -291,11 +291,10 @@ namespace Ceritar.CVS.Models.Module_Template
                         { }
                         else if (!mcSQL.bln_ADOInsert("Template", out _intTemplate_NRI))
                         { }
-                        //else if (!pfblnLists_Save())
-                        //{ }
                         else
                         {
                             mcActionResults.SetNewItem_NRI = _intTemplate_NRI;
+
                             blnValidReturn = true;
                         }
 
@@ -307,8 +306,6 @@ namespace Ceritar.CVS.Models.Module_Template
                         { }
                         else if (!mcSQL.bln_ADOUpdate("Template", "Template.Tpl_NRI = " + _intTemplate_NRI))
                         { }
-                        //else if (!pfblnLists_Save())
-                        //{ }
                         else
                         {
                             blnValidReturn = true;
@@ -318,8 +315,6 @@ namespace Ceritar.CVS.Models.Module_Template
 
                     case sclsConstants.DML_Mode.DELETE_MODE:
 
-                        //if (!pfblnLists_Save())
-                        //{ }
                         if (!mcSQL.bln_ADODelete("Template", "Template.Tpl_NRI = " + _intTemplate_NRI))
                         { }
                         else

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Ceritar.CVS.Models.Module_Configuration;
 using Ceritar.TT3LightDLL.Classes;
 using Ceritar.TT3LightDLL.Static_Classes;
 
@@ -18,7 +19,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private bool _blnInstalled;
         private string _strLicense;
         private string _strLocationReportExe;
-        private int _intCeritarClient_NRI;
+        private string _strLocationScriptsRoot;
+        private mod_CeC_CeritarClient _cCeritarClient;
         private int _intCeritarApplication_NRI;
         private int _intVersion_NRI;
 
@@ -60,10 +62,10 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { _strLicense = value; }
         }
 
-        internal int CeritarClient_NRI
+        internal mod_CeC_CeritarClient CeritarClient
         {
-            get { return _intCeritarClient_NRI; }
-            set { _intCeritarClient_NRI = value; }
+            get { return _cCeritarClient; }
+            set { _cCeritarClient = value; }
         }
 
         internal int CeritarApplication_NRI
@@ -100,6 +102,12 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { _strLocationReportExe = value; }
         }
 
+        internal string LocationScriptsRoot
+        {
+            get { return _strLocationScriptsRoot; }
+            set { _strLocationScriptsRoot = value; }
+        }
+
 #endregion
 
 
@@ -119,7 +127,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                     case sclsConstants.DML_Mode.INSERT_MODE:
 
-                        if (_intCeritarClient_NRI <= 0)
+                        if (_cCeritarClient.CeritarClient_NRI <= 0)
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, Ceritar.CVS.Controllers.ctr_Version.ErrorCode_Ver.CLIENT_NAME_MANDATORY);
                         }
@@ -140,7 +148,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                     case sclsConstants.DML_Mode.UPDATE_MODE:
 
-                        if (_intCeritarClient_NRI <= 0)
+                        if (_cCeritarClient.CeritarClient_NRI <= 0)
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, Ceritar.CVS.Controllers.ctr_Version.ErrorCode_Ver.CLIENT_NAME_MANDATORY);
                         }
@@ -272,7 +280,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 { }
                 else if (!mcSQL.bln_AddField("CAV_Installed", _blnInstalled, clsSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("CeC_NRI", _intCeritarClient_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("CeC_NRI", _cCeritarClient.CeritarClient_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("CeA_NRI", _intCeritarApplication_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
@@ -281,6 +289,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 else if (!mcSQL.bln_AddField("CAV_License", _strLicense, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("CAV_ReportExe_Location", _strLocationReportExe, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                { }
+                else if (!mcSQL.bln_AddField("CAV_ScriptsRoot_Location", _strLocationScriptsRoot, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
                 else
                 {

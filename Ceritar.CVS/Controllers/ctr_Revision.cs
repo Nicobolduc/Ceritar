@@ -119,28 +119,185 @@ namespace Ceritar.CVS.Controllers
         public bool blnBuildRevisionHierarchy(int vintTemplate_NRI)
         {
             bool blnValidReturn = false;
-            SqlCommand cSQLCmd = default(SqlCommand);
+            string strSQL = string.Empty;
+            string strFolderName = string.Empty;
+            string strRevisionFolderRoot = string.Empty;
+            int intPreviousFolderLevel = -1;
             SqlDataReader cSQLReader = null;
             DirectoryInfo currentFolderInfos = null;
 
             mcActionResult.SetDefault();
 
+            strSQL = strSQL + " WITH LstHierarchyComp " + Environment.NewLine;
+            strSQL = strSQL + " AS " + Environment.NewLine;
+            strSQL = strSQL + " ( " + Environment.NewLine;
+            strSQL = strSQL + "     SELECT *, " + Environment.NewLine;
+            strSQL = strSQL + " 		   CAST(0 AS varbinary(max)) AS Level " + Environment.NewLine;
+            strSQL = strSQL + " 	FROM HierarchyComp  " + Environment.NewLine;
+            strSQL = strSQL + " 	WHERE 1 = 1 " + Environment.NewLine;
+            strSQL = strSQL + "       AND HiCo_Parent_NRI IS NULL " + Environment.NewLine;
+
+            strSQL = strSQL + "     UNION ALL " + Environment.NewLine;
+
+            strSQL = strSQL + "     SELECT HiCo_Childrens.*, " + Environment.NewLine;
+            strSQL = strSQL + " 		   Level + CAST(HiCo_Childrens.HiCo_NRI AS varbinary(max)) AS Level " + Environment.NewLine;
+            strSQL = strSQL + " 	FROM HierarchyComp HiCo_Childrens  " + Environment.NewLine;
+            strSQL = strSQL + " 		INNER JOIN LstHierarchyComp on HiCo_Childrens.HiCo_Parent_NRI = LstHierarchyComp.HiCo_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 	WHERE HiCo_Childrens.HiCo_Parent_NRI IS NOT NULL " + Environment.NewLine;
+            strSQL = strSQL + " ) " + Environment.NewLine;
+
+            strSQL = strSQL + " SELECT  LstHierarchyComp.HiCo_Name, " + Environment.NewLine;
+            strSQL = strSQL + "    		LstHierarchyComp.HiCo_NodeLevel, " + Environment.NewLine;
+            strSQL = strSQL + "    		LstHierarchyComp.FoT_NRI " + Environment.NewLine;
+
+            strSQL = strSQL + " FROM LstHierarchyComp " + Environment.NewLine;
+            strSQL = strSQL + " 	INNER JOIN FolderType ON FolderType.FoT_NRI = LstHierarchyComp.FoT_NRI " + Environment.NewLine;
+
+            strSQL = strSQL + " WHERE LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
+
+            strSQL = strSQL + " ORDER BY Level " + Environment.NewLine;
+
             try
             {
-                //TODO Use template
-                currentFolderInfos = new DirectoryInfo(Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES, 
-                                                                    mcView.GetCeritarApplication_Name(), 
-                                                                    sclsAppConfigs.GetVersionNumberPrefix + mcView.GetVersionNo().ToString(), 
-                                                                    sclsAppConfigs.GetRevisionNumberPrefix + mcView.GetRevisionNo().ToString()));
+                currentFolderInfos = new DirectoryInfo(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES +
+                                                        (sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Substring(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Length - 1, 1) == "\\" ? "" : "\\")
+                                                      );
 
-                if (!string.IsNullOrEmpty(mcView.GetLocation_Scripts()))
-                {
-                    clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Scripts(), Path.Combine(currentFolderInfos.FullName, "Scripts"), true, true);
-                }
+                cSQLReader = clsSQL.ADOSelect(strSQL);
 
-                if (!string.IsNullOrEmpty(mcView.GetLocation_Release()))
+                while (cSQLReader.Read())
                 {
-                    clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Scripts(), Path.Combine(currentFolderInfos.FullName, "Release"), true, true);
+                    switch (Int32.Parse(cSQLReader["FoT_NRI"].ToString()))
+                    {
+                        case (int)ctr_Template.FolderType.Version_Number:
+
+                            strFolderName = sclsAppConfigs.GetVersionNumberPrefix + mcView.GetVersionNo().ToString();
+
+                            strRevisionFolderRoot = Path.Combine(currentFolderInfos.FullName, strFolderName);
+                                                        
+                            break;
+
+                        case (int)ctr_Template.FolderType.Revision_Number:
+
+                            strFolderName = sclsAppConfigs.GetRevisionNumberPrefix + mcView.GetRevisionNo().ToString();
+
+                            strRevisionFolderRoot = Path.Combine(currentFolderInfos.FullName, strFolderName);
+
+                            if (mcView.GetDML_Action() == sclsConstants.DML_Mode.DELETE_MODE) //On supprime toute la hierarchie existante et on sort
+                            {
+                                blnValidReturn = pfblnDeleteRevisionHierarchy(strRevisionFolderRoot);
+
+                                return blnValidReturn;
+                            }
+
+                            break;
+
+                        default:
+
+                            strFolderName = cSQLReader["HiCo_Name"].ToString();
+                            break;
+                    }
+
+                    if (Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString()) > intPreviousFolderLevel) //On entre dans un sous-dossier
+                    {
+                        currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.FullName, strFolderName));
+                    }
+                    else if (Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString()) < intPreviousFolderLevel) //On recule pour revenir au dossier du niveau courant
+                    {
+                        int intNbLevelBack = intPreviousFolderLevel - Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString());
+
+                        while (intNbLevelBack > 0)
+                        {
+                            currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.Parent.Parent.FullName, strFolderName));
+
+                            intNbLevelBack--;
+                        }
+                    }
+                    else //On recule d'un niveau pour revenir au dossier d'avant
+                    {
+                        currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.Parent.FullName, strFolderName));
+                    }
+
+                    //if (!Directory.Exists(currentFolderInfos.FullName))
+                    //{
+                    //    currentFolderInfos.Create();
+                    //}
+
+                    switch (Int32.Parse(cSQLReader["FoT_NRI"].ToString()))
+                    {
+                        case (int)ctr_Template.FolderType.Release:
+
+                            if ((File.Exists(mcView.GetLocation_Release()) || Directory.Exists(mcView.GetLocation_Release())) && mcView.GetLocation_Release() != currentFolderInfos.FullName)
+                            {
+                                if (!Directory.Exists(currentFolderInfos.FullName))
+                                {
+                                    currentFolderInfos.Create();
+                                }
+
+                                if ((File.GetAttributes(mcView.GetLocation_Release()) & FileAttributes.Directory) == FileAttributes.Directory)
+                                {
+                                    blnValidReturn = clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseValidExtensions);
+
+                                    //TODO: Find an other solution for this
+                                    string[] reportExe = Directory.GetFiles(currentFolderInfos.FullName, "*RPT.exe", SearchOption.TopDirectoryOnly);
+
+                                    if (reportExe.Length > 0) File.Delete(reportExe[0]);
+
+                                    mcModRevision.Path_Release = currentFolderInfos.FullName;
+                                }
+                                else
+                                {
+                                    File.Copy(mcView.GetLocation_Release(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Release())));
+
+                                    mcModRevision.Path_Release = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Release()));
+                                }
+                            }
+                            else
+                            {
+                                blnValidReturn = true;
+                            }
+
+                            break;
+
+                        case (int)ctr_Template.FolderType.Scripts:
+
+                            if ((File.Exists(mcView.GetLocation_Scripts()) || Directory.Exists(mcView.GetLocation_Scripts())) && mcView.GetLocation_Scripts() != currentFolderInfos.FullName)
+                            {
+                                if (!Directory.Exists(currentFolderInfos.FullName))
+                                {
+                                    currentFolderInfos.Create();
+                                }
+
+                                if ((File.GetAttributes(mcView.GetLocation_Scripts()) & FileAttributes.Directory) == FileAttributes.Directory)
+                                {
+                                    clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Scripts(), currentFolderInfos.FullName, true, true);
+
+                                    mcModRevision.Path_Scripts = currentFolderInfos.FullName;
+                                }
+                                else
+                                {
+                                    File.Copy(mcView.GetLocation_Scripts(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Scripts())));
+
+                                    mcModRevision.Path_Scripts = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Scripts()));
+                                }
+                            }
+                            
+                            break;
+
+                        case (int)ctr_Template.FolderType.Report:
+
+                            //blnValidReturn = pfblnCopyAllReportsForClients(currentFolderInfos.FullName);
+
+                            break;
+
+                        default:
+                            blnValidReturn = true;
+                            break;
+                    }
+
+                    intPreviousFolderLevel = Int32.Parse(cSQLReader["HiCo_NodeLevel"].ToString());
+
+                    if (!blnValidReturn) break;
                 }
 
                 mcActionResult.SetValid();
@@ -165,6 +322,38 @@ namespace Ceritar.CVS.Controllers
             return blnValidReturn;
         }
 
+        /// <summary>
+        /// Efface toute la hierarchy de dossiers et son contenu du disque pour la révision données. Supprime le dossier racine également.
+        /// </summary>
+        /// <param name="vstrRevisionFolderRoot">Le chemin du répertoire à supprimer</param>
+        /// <returns></returns>
+        private bool pfblnDeleteRevisionHierarchy(string vstrRevisionFolderRoot)
+        {
+            bool blnValidReturn = false;
+
+            try
+            {
+                System.Diagnostics.Process process = new System.Diagnostics.Process();
+                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+
+                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                startInfo.FileName = "cmd.exe";
+                startInfo.Arguments = @"/C RMDIR """ + vstrRevisionFolderRoot + @""" /S /Q";
+
+                process.StartInfo = startInfo;
+                process.Start();
+                process.WaitForExit();
+                
+                blnValidReturn = true;
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnValidReturn;
+        }
 
 #region "SQL Queries"
 
@@ -239,6 +428,8 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        CerClient.CeC_Name " + Environment.NewLine;
 
             strSQL = strSQL + " FROM CerClient " + Environment.NewLine;
+
+            strSQL = strSQL + " WHERE CerClient.CeC_IsActive = 1 " + Environment.NewLine;
 
             strSQL = strSQL + " ORDER BY CerClient.CeC_Name " + Environment.NewLine;
 

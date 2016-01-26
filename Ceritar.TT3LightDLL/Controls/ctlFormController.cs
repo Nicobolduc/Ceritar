@@ -164,6 +164,15 @@ namespace Ceritar.TT3LightDLL.Controls
 
                 mfrmParent = this.FindForm();
 
+                switch (FormMode)
+                {
+                    case sclsConstants.DML_Mode.DELETE_MODE:
+
+                        sclsWinControls_Utilities.DisableAllFormControls(mfrmParent, null, null);
+
+                        break;
+                }
+
                 SetControlDisplay();
 
                 LoadLinkedFormData();
@@ -346,13 +355,11 @@ namespace Ceritar.TT3LightDLL.Controls
 
             if (validationEvent.IsValid)
             {
-
                 if (SaveData != null)
                     SaveData(saveEvent);
 
                 if (saveEvent.SaveSuccessful)
                 {
-
                     ChangeMade = false;
 
                     switch (mintFormMode)

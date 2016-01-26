@@ -361,6 +361,25 @@ namespace Ceritar.TT3LightDLL.Classes
 		    return blnIsEmpty;
 	    }
 
+        public bool bln_CellIsChecked(int vintRow, int vintCol)
+        {
+            bool blnIsChecked = false;
+
+            try
+            {
+                if (mGrdFlex.Cols[vintCol].DataType == typeof(bool) && (this[vintRow, vintCol] == "1" || this[vintRow, vintCol].ToUpper() == "TRUE"))
+                {
+                    blnIsChecked = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnIsChecked;
+        }
+
 	    public bool bln_CurrentCellIsEmpty()
 	    {
 		    bool blnIsEmpty = true;
