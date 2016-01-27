@@ -67,7 +67,7 @@ namespace Ceritar.TT3LightDLL.Static_Classes
 
         public static void DisableAllFormControls(Form rForm, TabPage rTabPage, Control rControl)
         {
-            System.Windows.Forms.Control.ControlCollection controlCollection = default(System.Windows.Forms.Control.ControlCollection);
+            Control.ControlCollection controlCollection = default(Control.ControlCollection);
 
             try
             {

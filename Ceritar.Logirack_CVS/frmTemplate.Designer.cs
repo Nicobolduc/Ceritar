@@ -41,9 +41,9 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.btnMoveRight = new System.Windows.Forms.Button();
             this.btnMoveLeft = new System.Windows.Forms.Button();
-            this.btnAddChild = new System.Windows.Forms.Button();
+            this.AddSibbling = new System.Windows.Forms.Button();
             this.btnDeleteRow = new System.Windows.Forms.Button();
-            this.btnAddSibbling = new System.Windows.Forms.Button();
+            this.btnAddChild = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cboFolderType = new System.Windows.Forms.ComboBox();
             this.grdTemplate = new C1.Win.C1FlexGrid.C1FlexGrid();
@@ -119,6 +119,7 @@
             // 
             this.formController.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.formController.ChangeMade = false;
             this.formController.FormIsLoading = false;
             this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.NO_MODE;
             this.formController.Item_NRI = 0;
@@ -158,18 +159,18 @@
             this.btnMoveLeft.UseVisualStyleBackColor = true;
             this.btnMoveLeft.Click += new System.EventHandler(this.btnMoveLeft_Click);
             // 
-            // btnAddChild
+            // AddSibbling
             // 
-            this.btnAddChild.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddChild.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnAddChild.BackgroundImage")));
-            this.btnAddChild.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnAddChild.Location = new System.Drawing.Point(633, 50);
-            this.btnAddChild.Name = "btnAddChild";
-            this.btnAddChild.Size = new System.Drawing.Size(25, 25);
-            this.btnAddChild.TabIndex = 28;
-            this.toolTip.SetToolTip(this.btnAddChild, "Ajouter un noeud");
-            this.btnAddChild.UseVisualStyleBackColor = true;
-            this.btnAddChild.Click += new System.EventHandler(this.btnAddChild_Click);
+            this.AddSibbling.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.AddSibbling.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("AddSibbling.BackgroundImage")));
+            this.AddSibbling.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.AddSibbling.Location = new System.Drawing.Point(633, 50);
+            this.AddSibbling.Name = "AddSibbling";
+            this.AddSibbling.Size = new System.Drawing.Size(25, 25);
+            this.AddSibbling.TabIndex = 28;
+            this.toolTip.SetToolTip(this.AddSibbling, "Ajouter un noeud");
+            this.AddSibbling.UseVisualStyleBackColor = true;
+            this.AddSibbling.Click += new System.EventHandler(this.btnAddChild_Click);
             // 
             // btnDeleteRow
             // 
@@ -183,27 +184,27 @@
             this.toolTip.SetToolTip(this.btnDeleteRow, "Supprimer la ligne");
             this.btnDeleteRow.UseVisualStyleBackColor = true;
             // 
-            // btnAddSibbling
+            // btnAddChild
             // 
-            this.btnAddSibbling.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddSibbling.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnAddSibbling.BackgroundImage")));
-            this.btnAddSibbling.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnAddSibbling.Location = new System.Drawing.Point(633, 19);
-            this.btnAddSibbling.Name = "btnAddSibbling";
-            this.btnAddSibbling.Size = new System.Drawing.Size(25, 25);
-            this.btnAddSibbling.TabIndex = 33;
-            this.toolTip.SetToolTip(this.btnAddSibbling, "Ajouter un enfant");
-            this.btnAddSibbling.UseVisualStyleBackColor = true;
-            this.btnAddSibbling.Click += new System.EventHandler(this.cmdAddSibbling_Click);
+            this.btnAddChild.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAddChild.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnAddChild.BackgroundImage")));
+            this.btnAddChild.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnAddChild.Location = new System.Drawing.Point(633, 19);
+            this.btnAddChild.Name = "btnAddChild";
+            this.btnAddChild.Size = new System.Drawing.Size(25, 25);
+            this.btnAddChild.TabIndex = 33;
+            this.toolTip.SetToolTip(this.btnAddChild, "Ajouter un enfant");
+            this.btnAddChild.UseVisualStyleBackColor = true;
+            this.btnAddChild.Click += new System.EventHandler(this.cmdAddSibbling_Click);
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.btnAddSibbling);
+            this.groupBox1.Controls.Add(this.btnAddChild);
             this.groupBox1.Controls.Add(this.btnDeleteRow);
             this.groupBox1.Controls.Add(this.cboFolderType);
             this.groupBox1.Controls.Add(this.btnMoveRight);
             this.groupBox1.Controls.Add(this.btnMoveLeft);
-            this.groupBox1.Controls.Add(this.btnAddChild);
+            this.groupBox1.Controls.Add(this.AddSibbling);
             this.groupBox1.Controls.Add(this.grdTemplate);
             this.groupBox1.Location = new System.Drawing.Point(6, 92);
             this.groupBox1.Name = "groupBox1";
@@ -282,10 +283,10 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnMoveRight;
         private System.Windows.Forms.Button btnMoveLeft;
-        private System.Windows.Forms.Button btnAddChild;
+        private System.Windows.Forms.Button AddSibbling;
         public C1.Win.C1FlexGrid.C1FlexGrid grdTemplate;
         private System.Windows.Forms.ComboBox cboFolderType;
         private System.Windows.Forms.Button btnDeleteRow;
-        private System.Windows.Forms.Button btnAddSibbling;
+        private System.Windows.Forms.Button btnAddChild;
     }
 }

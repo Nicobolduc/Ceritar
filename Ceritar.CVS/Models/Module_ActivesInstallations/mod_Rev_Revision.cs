@@ -33,6 +33,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private sclsConstants.DML_Mode mintDML_Action;
         private clsSQL mcSQL;
 
+        //Messages
+        private const int mintMSG_CantDeleteRevisionIfNotLast = 30;
         //Working variables
 
 
@@ -208,6 +210,10 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         if (!clsSQL.bln_CheckReferenceIntegrity("Revision", "Rev_NRI", _intRevision_NRI))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_REFERENCE_INTEGRITY, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
+                        }
+                        else if (!string.IsNullOrEmpty(clsSQL.str_ADOSingleLookUp("Rev_NRI", "Revision", "Rev_No > " + _intRevision_Number)))
+                        {
+                            mcActionResults.SetInvalid(mintMSG_CantDeleteRevisionIfNotLast, ctr_Revision.ErrorCode_Rev.CANT_DELETE_NOT_LAST_REVISION);
                         }
                         else
                         {
@@ -393,8 +399,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 { }
                 else if (!mcSQL.bln_AddField("Ver_NRI", _cVersion.Version_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
-                //else if (!mcSQL.bln_AddField("Rev_DtCreation", _strCreationDate, clsSQL.MySQL_FieldTypes.DATETIME_TYPE)) //TODO
-                //{ }
+                else if (!mcSQL.bln_AddField("Rev_DtCreation", _strCreationDate, clsSQL.MySQL_FieldTypes.DATETIME_TYPE)) 
+                { }
                 else if (!mcSQL.bln_AddField("TTU_NRI", clsApp.GetAppController.cUser.GetUser_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("CeC_NRI", _cCeritarClient.CeritarClient_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))

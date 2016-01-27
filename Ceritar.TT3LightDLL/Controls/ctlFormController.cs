@@ -326,7 +326,6 @@ namespace Ceritar.TT3LightDLL.Controls
         {
             if (mblnShowButtonQuitOnly)
             {
-
                 imgFormMode.Visible = false;
                 btnCancel.Visible = false;
                 btnApply.Visible = false;

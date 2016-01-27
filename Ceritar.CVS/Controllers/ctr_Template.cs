@@ -27,8 +27,7 @@ namespace Ceritar.CVS.Controllers
             Scripts = 5,
             Report = 6,
             Version_Number = 7,
-            Revision_Number = 8,
-            Other = 9
+            Revision_Number = 8
         }
 
         public enum TemplateType
@@ -433,7 +432,9 @@ namespace Ceritar.CVS.Controllers
 
             strSQL = strSQL + " FROM FolderType " + Environment.NewLine;
 
-            strSQL = strSQL + " WHERE FolderType.FoT_NRI NOT IN (" + (int)ctr_Template.FolderType.Ceritar_Application + ")" + Environment.NewLine;
+            strSQL = strSQL + " WHERE FolderType.FoT_NRI NOT IN (" + (int)ctr_Template.FolderType.Ceritar_Application + "," + Environment.NewLine
+                                                                   + (int)ctr_Template.FolderType.Version_Number + "," + Environment.NewLine
+                                                                   + (int)ctr_Template.FolderType.Revision_Number + ")" + Environment.NewLine;
 
             strSQL = strSQL + " ORDER BY FolderType.FoT_NRI " + Environment.NewLine;
 

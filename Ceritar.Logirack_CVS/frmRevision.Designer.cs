@@ -68,12 +68,12 @@
             // dtpCreation
             // 
             this.dtpCreation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.dtpCreation.CustomFormat = "MM-dd-yy";
+            this.dtpCreation.CustomFormat = "MM-dd-yyyy hh:mm";
             this.dtpCreation.Enabled = false;
             this.dtpCreation.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpCreation.Location = new System.Drawing.Point(409, 16);
             this.dtpCreation.Name = "dtpCreation";
-            this.dtpCreation.Size = new System.Drawing.Size(90, 20);
+            this.dtpCreation.Size = new System.Drawing.Size(132, 20);
             this.dtpCreation.TabIndex = 67;
             // 
             // cboClients
@@ -84,14 +84,15 @@
             this.cboClients.Name = "cboClients";
             this.cboClients.Size = new System.Drawing.Size(225, 21);
             this.cboClients.TabIndex = 59;
+            this.cboClients.SelectedIndexChanged += new System.EventHandler(this.cboClients_SelectedIndexChanged);
             // 
             // txtScriptsPath
             // 
-            this.txtScriptsPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtScriptsPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtScriptsPath.Location = new System.Drawing.Point(83, 340);
             this.txtScriptsPath.Name = "txtScriptsPath";
             this.txtScriptsPath.ReadOnly = true;
-            this.txtScriptsPath.Size = new System.Drawing.Size(608, 26);
+            this.txtScriptsPath.Size = new System.Drawing.Size(608, 22);
             this.txtScriptsPath.TabIndex = 65;
             // 
             // groupBox3
@@ -185,7 +186,7 @@
             this.groupBox1.Controls.Add(this.cboClients);
             this.groupBox1.Location = new System.Drawing.Point(5, 5);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(505, 102);
+            this.groupBox1.Size = new System.Drawing.Size(547, 102);
             this.groupBox1.TabIndex = 68;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Informations";
@@ -195,7 +196,7 @@
             this.txtCreatedBy.Location = new System.Drawing.Point(409, 46);
             this.txtCreatedBy.Name = "txtCreatedBy";
             this.txtCreatedBy.ReadOnly = true;
-            this.txtCreatedBy.Size = new System.Drawing.Size(90, 20);
+            this.txtCreatedBy.Size = new System.Drawing.Size(132, 20);
             this.txtCreatedBy.TabIndex = 72;
             // 
             // label4
@@ -360,11 +361,11 @@
             // 
             // txtReleasePath
             // 
-            this.txtReleasePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtReleasePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtReleasePath.Location = new System.Drawing.Point(83, 385);
             this.txtReleasePath.Name = "txtReleasePath";
             this.txtReleasePath.ReadOnly = true;
-            this.txtReleasePath.Size = new System.Drawing.Size(608, 26);
+            this.txtReleasePath.Size = new System.Drawing.Size(608, 22);
             this.txtReleasePath.TabIndex = 73;
             // 
             // openFileDialog

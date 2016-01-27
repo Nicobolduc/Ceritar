@@ -116,16 +116,16 @@
             // 
             // txtCreatedBy
             // 
-            this.txtCreatedBy.Location = new System.Drawing.Point(707, 45);
+            this.txtCreatedBy.Location = new System.Drawing.Point(666, 45);
             this.txtCreatedBy.Name = "txtCreatedBy";
             this.txtCreatedBy.ReadOnly = true;
-            this.txtCreatedBy.Size = new System.Drawing.Size(91, 20);
+            this.txtCreatedBy.Size = new System.Drawing.Size(132, 20);
             this.txtCreatedBy.TabIndex = 74;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(615, 48);
+            this.label6.Location = new System.Drawing.Point(574, 48);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(50, 13);
             this.label6.TabIndex = 73;
@@ -134,7 +134,7 @@
             // chkDemoVersion
             // 
             this.chkDemoVersion.AutoSize = true;
-            this.chkDemoVersion.Location = new System.Drawing.Point(452, 48);
+            this.chkDemoVersion.Location = new System.Drawing.Point(446, 48);
             this.chkDemoVersion.Name = "chkDemoVersion";
             this.chkDemoVersion.Size = new System.Drawing.Size(54, 17);
             this.chkDemoVersion.TabIndex = 4;
@@ -145,7 +145,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(615, 22);
+            this.label2.Location = new System.Drawing.Point(574, 22);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(89, 13);
             this.label2.TabIndex = 69;
@@ -154,12 +154,12 @@
             // dtpCreation
             // 
             this.dtpCreation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.dtpCreation.CustomFormat = "MM-dd-yy";
+            this.dtpCreation.CustomFormat = "MM-dd-yyyy hh:mm";
             this.dtpCreation.Enabled = false;
             this.dtpCreation.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpCreation.Location = new System.Drawing.Point(707, 19);
+            this.dtpCreation.Location = new System.Drawing.Point(666, 19);
             this.dtpCreation.Name = "dtpCreation";
-            this.dtpCreation.Size = new System.Drawing.Size(91, 20);
+            this.dtpCreation.Size = new System.Drawing.Size(132, 20);
             this.dtpCreation.TabIndex = 53;
             // 
             // label5
@@ -190,7 +190,7 @@
             // 
             // txtVersionNo
             // 
-            this.txtVersionNo.Location = new System.Drawing.Point(380, 46);
+            this.txtVersionNo.Location = new System.Drawing.Point(374, 46);
             this.txtVersionNo.MaxLength = 10;
             this.txtVersionNo.Name = "txtVersionNo";
             this.txtVersionNo.Size = new System.Drawing.Size(66, 20);
@@ -209,7 +209,7 @@
             // 
             // txtCompiledBy
             // 
-            this.txtCompiledBy.Location = new System.Drawing.Point(380, 19);
+            this.txtCompiledBy.Location = new System.Drawing.Point(374, 19);
             this.txtCompiledBy.Name = "txtCompiledBy";
             this.txtCompiledBy.Size = new System.Drawing.Size(182, 20);
             this.txtCompiledBy.TabIndex = 2;
@@ -512,38 +512,38 @@
             // 
             // txtReleasePath
             // 
-            this.txtReleasePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtReleasePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtReleasePath.Location = new System.Drawing.Point(43, 321);
             this.txtReleasePath.Name = "txtReleasePath";
             this.txtReleasePath.ReadOnly = true;
-            this.txtReleasePath.Size = new System.Drawing.Size(611, 26);
+            this.txtReleasePath.Size = new System.Drawing.Size(611, 22);
             this.txtReleasePath.TabIndex = 60;
             // 
             // txtTTAppPath
             // 
-            this.txtTTAppPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtTTAppPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtTTAppPath.Location = new System.Drawing.Point(43, 275);
             this.txtTTAppPath.Name = "txtTTAppPath";
             this.txtTTAppPath.ReadOnly = true;
-            this.txtTTAppPath.Size = new System.Drawing.Size(611, 26);
+            this.txtTTAppPath.Size = new System.Drawing.Size(611, 22);
             this.txtTTAppPath.TabIndex = 58;
             // 
             // txtWordAppChangePath
             // 
-            this.txtWordAppChangePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtWordAppChangePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtWordAppChangePath.Location = new System.Drawing.Point(43, 229);
             this.txtWordAppChangePath.Name = "txtWordAppChangePath";
             this.txtWordAppChangePath.ReadOnly = true;
-            this.txtWordAppChangePath.Size = new System.Drawing.Size(611, 26);
+            this.txtWordAppChangePath.Size = new System.Drawing.Size(611, 22);
             this.txtWordAppChangePath.TabIndex = 57;
             // 
             // txtExcelAppChangePath
             // 
-            this.txtExcelAppChangePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtExcelAppChangePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtExcelAppChangePath.Location = new System.Drawing.Point(43, 183);
             this.txtExcelAppChangePath.Name = "txtExcelAppChangePath";
             this.txtExcelAppChangePath.ReadOnly = true;
-            this.txtExcelAppChangePath.Size = new System.Drawing.Size(611, 26);
+            this.txtExcelAppChangePath.Size = new System.Drawing.Size(611, 22);
             this.txtExcelAppChangePath.TabIndex = 56;
             // 
             // groupBox2

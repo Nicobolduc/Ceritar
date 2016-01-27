@@ -338,7 +338,7 @@ namespace Ceritar.CVS.Controllers
 
                 if (blnValidReturn)
                 {
-                    blnValidReturn = pfblnUpdateSatellitesAndLocations();
+                    blnValidReturn = pfblnCopyAllSatellitesAndUpdateLocations();
                 }
             }
             catch (FileNotFoundException exPath)
@@ -814,7 +814,7 @@ namespace Ceritar.CVS.Controllers
             return blnValidReturn;
         }
 
-        private bool pfblnUpdateSatellitesAndLocations()
+        private bool pfblnCopyAllSatellitesAndUpdateLocations()
         {
             bool blnValidReturn = false;
             DirectoryInfo currentFolderInfos = null;
@@ -828,11 +828,12 @@ namespace Ceritar.CVS.Controllers
                     if (File.Exists(cCSV.Location_Exe) || Directory.Exists(cCSV.Location_Exe))
                     {
                         currentFolderInfos = new DirectoryInfo(Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES +
-                                                                        (sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Substring(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Length - 1, 1) == "\\" ? "" : "\\"),
-                                                                        cCSV.CeritarSatelliteApp.Name,
-                                                                        cCSV.CeritarClient.CompanyName,
-                                                                        sclsAppConfigs.GetVersionNumberPrefix + mcModVersion.VersionNo.ToString()
-                                                                        )
+                                                                            (sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Substring(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Length - 1, 1) == "\\" ? "" : "\\"),
+                                                                            cCSV.CeritarSatelliteApp.Name,
+                                                                            cCSV.CeritarClient.CompanyName,
+                                                                            sclsAppConfigs.GetVersionNumberPrefix + mcModVersion.VersionNo.ToString(),
+                                                                            "Kit"
+                                                                           )
                                                     );
 
                         if (!Directory.Exists(currentFolderInfos.FullName)) currentFolderInfos.Create();
@@ -857,10 +858,10 @@ namespace Ceritar.CVS.Controllers
                         }
 
                         cCSV.SetcSQL = mcSQL;
-                        cCSV.DML_Action = (mcModVersion.DML_Action == sclsConstants.DML_Mode.INSERT_MODE ? sclsConstants.DML_Mode.UPDATE_MODE : cCSV.DML_Action);
+                        cCSV.DML_Action = cCSV.ClientSatVersion_NRI == 0 ? sclsConstants.DML_Mode.INSERT_MODE : sclsConstants.DML_Mode.UPDATE_MODE;
 
                         blnValidReturn = cCSV.blnSave();
-
+                        
                         if (!blnValidReturn)
                         {
                             mcActionResult = mcModVersion.ActionResults;
@@ -1017,7 +1018,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " SELECT Revision.Rev_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_TS, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_No, " + Environment.NewLine;
-            strSQL = strSQL + "        NULL " + Environment.NewLine;
+            strSQL = strSQL + "        Revision.Rev_DtCreation " + Environment.NewLine;
 
             strSQL = strSQL + " FROM Revision " + Environment.NewLine;
 

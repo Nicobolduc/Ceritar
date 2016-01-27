@@ -20,9 +20,23 @@ namespace Ceritar.TT3LightDLL.Classes
         private SqlConnection mcSQLConnection;
         private clsUser mctrlUser;
         private System.Text.RegularExpressions.Regex mcStringCleaner = new System.Text.RegularExpressions.Regex("'", System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant | System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-
+        private string mstrServerDateFormat = string.Empty;
         private static clsApp _myUniqueInstance;
 
+
+#region "Constructors"
+
+        private clsApp()
+        {
+            mctrlUser = new clsUser();
+
+            clsSQL.OpenSQLServerConnection(ref mcSQLConnection);
+        }
+
+#endregion
+
+
+#region "Properties"
 
         public static clsApp GetAppController
         {
@@ -36,9 +50,6 @@ namespace Ceritar.TT3LightDLL.Classes
                 return _myUniqueInstance;
             }
         }
-
-
-#region "Properties"
 
         public SqlConnection SQLConnection
         {
@@ -94,30 +105,22 @@ namespace Ceritar.TT3LightDLL.Classes
 
         public string str_GetServerTimeFormat
         {
-            get { return "HH:mm:ss"; }
+            get { return "hh:mm"; }
         }
 
         public string str_GetServerDateFormat
         {
-            get { return "yyyy-MM-dd"; }
+            get { return "MM-dd-yyyy"; }
         }
 
         public string str_GetServerDateTimeFormat
         {
-            get { return "yyyy-MM-dd HH:mm:ss"; }
-        }
+            get 
+            {
+                if (mstrServerDateFormat == string.Empty) mstrServerDateFormat = clsSQL.str_ADOSingleLookUp("TTP_Value", "TTParam", "TTP_Name = 'Server date format'");
 
-#endregion
-
-
-#region "Constructors"
-
-
-        private clsApp()
-        {
-            mctrlUser = new clsUser();
-
-            clsSQL.OpenSQLServerConnection(ref mcSQLConnection);
+                return mstrServerDateFormat; 
+            }
         }
 
 #endregion
@@ -280,6 +283,19 @@ namespace Ceritar.TT3LightDLL.Classes
             }
 
             return blnValidReturn;
+        }
+
+        public void setAttributesToNormal(DirectoryInfo vRootDirectory) 
+        {
+            foreach (DirectoryInfo currentSubDir in vRootDirectory.GetDirectories())
+            {
+                setAttributesToNormal(currentSubDir);
+            }
+
+            foreach (FileInfo filePath in vRootDirectory.GetFiles()) 
+            {
+                filePath.Attributes = FileAttributes.Normal;
+            }
         }
 
 #endregion

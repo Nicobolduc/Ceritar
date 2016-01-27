@@ -26,7 +26,8 @@ namespace Ceritar.CVS.Controllers
             TEMPLATE_MANDATORY = 3,
             VERSION_MANDATORY = 4,
             CERITAR_CLIENT_MANDATORY = 5,
-            EXE_OR_SCRIPT_MANDATORY = 6
+            EXE_OR_SCRIPT_MANDATORY = 6,
+            CANT_DELETE_NOT_LAST_REVISION = 7
         }
 
         public ctr_Revision(Interfaces.IRevision rView)
@@ -218,36 +219,37 @@ namespace Ceritar.CVS.Controllers
                         currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.Parent.FullName, strFolderName));
                     }
 
-                    //if (!Directory.Exists(currentFolderInfos.FullName))
-                    //{
-                    //    currentFolderInfos.Create();
-                    //}
-
                     switch (Int32.Parse(cSQLReader["FoT_NRI"].ToString()))
                     {
                         case (int)ctr_Template.FolderType.Release:
 
-                            if ((File.Exists(mcView.GetLocation_Release()) || Directory.Exists(mcView.GetLocation_Release())) && mcView.GetLocation_Release() != currentFolderInfos.FullName)
+                            if ((File.Exists(mcView.GetLocation_Release()) || Directory.Exists(mcView.GetLocation_Release())))
                             {
-                                if (!Directory.Exists(currentFolderInfos.FullName))
-                                {
-                                    currentFolderInfos.Create();
-                                }
-
                                 if ((File.GetAttributes(mcView.GetLocation_Release()) & FileAttributes.Directory) == FileAttributes.Directory)
                                 {
-                                    blnValidReturn = clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseValidExtensions);
+                                    if (mcView.GetLocation_Release() != currentFolderInfos.FullName)
+                                    {
+                                        if (Directory.Exists(currentFolderInfos.FullName)) Directory.Delete(currentFolderInfos.FullName, true);
 
-                                    //TODO: Find an other solution for this
-                                    string[] reportExe = Directory.GetFiles(currentFolderInfos.FullName, "*RPT.exe", SearchOption.TopDirectoryOnly);
+                                        currentFolderInfos.Create();
 
-                                    if (reportExe.Length > 0) File.Delete(reportExe[0]);
+                                        blnValidReturn = clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseValidExtensions);
 
-                                    mcModRevision.Path_Release = currentFolderInfos.FullName;
+                                        //TODO: Find an other solution for this
+                                        string[] reportExe = Directory.GetFiles(currentFolderInfos.FullName, "*RPT.exe", SearchOption.TopDirectoryOnly);
+
+                                        if (reportExe.Length > 0) File.Delete(reportExe[0]);
+
+                                        mcModRevision.Path_Release = currentFolderInfos.FullName;
+                                    }
                                 }
-                                else
+                                else if (mcView.GetLocation_Release() != Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Release())))
                                 {
-                                    File.Copy(mcView.GetLocation_Release(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Release())));
+                                    if (Directory.Exists(currentFolderInfos.FullName)) Directory.Delete(currentFolderInfos.FullName, true);
+
+                                    currentFolderInfos.Create();
+
+                                    File.Copy(mcView.GetLocation_Release(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Release())), true);
 
                                     mcModRevision.Path_Release = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Release()));
                                 }
@@ -261,21 +263,32 @@ namespace Ceritar.CVS.Controllers
 
                         case (int)ctr_Template.FolderType.Scripts:
 
-                            if ((File.Exists(mcView.GetLocation_Scripts()) || Directory.Exists(mcView.GetLocation_Scripts())) && mcView.GetLocation_Scripts() != currentFolderInfos.FullName)
+                            if ((File.Exists(mcView.GetLocation_Scripts()) || Directory.Exists(mcView.GetLocation_Scripts())))
                             {
-                                if (!Directory.Exists(currentFolderInfos.FullName))
-                                {
-                                    currentFolderInfos.Create();
-                                }
-
                                 if ((File.GetAttributes(mcView.GetLocation_Scripts()) & FileAttributes.Directory) == FileAttributes.Directory)
                                 {
-                                    clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Scripts(), currentFolderInfos.FullName, true, true);
+                                    if (mcView.GetLocation_Scripts() != currentFolderInfos.FullName)
+                                    {
+                                        if (Directory.Exists(currentFolderInfos.FullName)) Directory.Delete(currentFolderInfos.FullName, true);
 
-                                    mcModRevision.Path_Scripts = currentFolderInfos.FullName;
+                                        currentFolderInfos.Create();
+
+                                        clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Scripts(), currentFolderInfos.FullName, true, true);
+
+                                        mcModRevision.Path_Scripts = currentFolderInfos.FullName;
+                                    }
                                 }
-                                else
+                                else if (mcView.GetLocation_Scripts() != Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Scripts())))
                                 {
+                                    if (Directory.Exists(currentFolderInfos.FullName))
+                                    {
+                                        clsApp.GetAppController.setAttributesToNormal(new DirectoryInfo(currentFolderInfos.FullName));
+
+                                        Directory.Delete(currentFolderInfos.FullName, true);
+                                    }
+
+                                    currentFolderInfos.Create();
+
                                     File.Copy(mcView.GetLocation_Scripts(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Scripts())));
 
                                     mcModRevision.Path_Scripts = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Scripts()));
@@ -357,7 +370,7 @@ namespace Ceritar.CVS.Controllers
 
 #region "SQL Queries"
 
-        public string strGetDataLoad_SQL(int vintVersion_NRI)
+        public string strGetDataLoad_SQL(int vintVersion_NRI, int vintRevision_NRI)
         {
             string strSQL = string.Empty;
             string strNewRevisionNo = string.Empty;
@@ -378,9 +391,12 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        CerClient.CeC_NRI " + Environment.NewLine;
                 
             strSQL = strSQL + " FROM Version " + Environment.NewLine;
+
             strSQL = strSQL + "     LEFT JOIN Revision " + Environment.NewLine;
             strSQL = strSQL + "         INNER JOIN CerClient ON CerClient.CeC_NRI = Revision.CeC_NRI " + Environment.NewLine;
             strSQL = strSQL + "     ON Revision.Ver_NRI = Version.Ver_NRI " + Environment.NewLine;
+            strSQL = strSQL + "     AND Revision.Rev_NRI = " + vintRevision_NRI + Environment.NewLine;
+
             strSQL = strSQL + "     INNER JOIN CerApp ON CerApp.CeA_NRI = Version.CeA_NRI " + Environment.NewLine;
             //strSQL = strSQL + "     INNER JOIN TTUser ON TTUser.TTU_NRI = Revision.TTU_NRI " + Environment.NewLine;
 

@@ -41,7 +41,9 @@ namespace Ceritar.Logirack_CVS
 
             mcCtrRevision = new ctr_Revision(this);
 
-            mcGrdRevModifs = new clsC1FlexGridWrapper();       
+            mcGrdRevModifs = new clsC1FlexGridWrapper();
+
+            dtpCreation.Value = DateTime.Now;
         }
 
 
@@ -54,7 +56,7 @@ namespace Ceritar.Logirack_CVS
 
         string CVS.Controllers.Interfaces.IRevision.GetCreationDate()
         {
-            return dtpCreation.Value.ToString();
+            return dtpCreation.Value.ToString(clsApp.GetAppController.str_GetServerDateTimeFormat);
         }
 
         sclsConstants.DML_Mode CVS.Controllers.Interfaces.IRevision.GetDML_Action()
@@ -144,7 +146,7 @@ namespace Ceritar.Logirack_CVS
 
             try
             {
-                sqlRecord = clsSQL.ADOSelect(mcCtrRevision.strGetDataLoad_SQL(mintVersion_NRI));
+                sqlRecord = clsSQL.ADOSelect(mcCtrRevision.strGetDataLoad_SQL(mintVersion_NRI, formController.Item_NRI));
 
                 if (sqlRecord.Read())
                 {
@@ -161,6 +163,8 @@ namespace Ceritar.Logirack_CVS
 
                         cboClients.SelectedValue = Int32.Parse(sqlRecord["CeC_NRI"].ToString());
                         cboTemplates.SelectedValue = Int32.Parse(sqlRecord["Tpl_NRI"].ToString());
+
+                        dtpCreation.Value = DateTime.Parse(sqlRecord["Rev_DtCreation"].ToString());
                     }
 
                     blnValidReturn = true;
@@ -261,6 +265,8 @@ namespace Ceritar.Logirack_CVS
                         {
                             ((TextBox)rControl).Text = openFileDialog.FileName;
                         }
+
+                        formController.ChangeMade = true;
                     }
                 }
             }
@@ -426,6 +432,14 @@ namespace Ceritar.Logirack_CVS
                 {
                     System.Diagnostics.Process.Start("explorer.exe", "/select, " + txtReleasePath.Text);
                 }
+            }
+        }
+
+        private void cboClients_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!formController.FormIsLoading)
+            {
+                formController.ChangeMade = true;
             }
         }
 

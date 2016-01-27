@@ -49,7 +49,7 @@ namespace Ceritar.Logirack_CVS
         //Columns grdRev
         private const short mintGrdRev_Rev_NRI_col = 1;
         private const short mintGrdRev_Rev_TS_col = 2;
-        private const short mintGrdRev_Description_col = 3;
+        private const short mintGrdRev_Number_col = 3;
         private const short mintGrdRev_CreationDate_col = 4;
 
         //Tab pages
@@ -86,7 +86,7 @@ namespace Ceritar.Logirack_CVS
             mcGrdRevisions = new clsC1FlexGridWrapper();
             mcGrdRevisions.SetGridDisplay +=mcGrdRevisions_SetGridDisplay;
 
-            dtpCreation.CustomFormat = clsApp.GetAppController.str_GetServerDateTimeFormat;
+            dtpCreation.Value = DateTime.Now;
         }
        
 
@@ -158,7 +158,7 @@ namespace Ceritar.Logirack_CVS
 
         string IVersion.GetCreationDate()
         {
-            return dtpCreation.Value.ToString();
+            return dtpCreation.Value.ToString(clsApp.GetAppController.str_GetServerDateTimeFormat);
         }
 
         List<structClientAppVersion> IVersion.GetClientsList()
@@ -306,6 +306,19 @@ namespace Ceritar.Logirack_CVS
             try
             {
                 blnValidReturn = mcGrdRevisions.bln_FillData(mcCtrVersion.strGetListe_Revisions_SQL(formController.Item_NRI));
+
+                if (grdRevisions.Rows.Count > 1)
+                {
+                    btnGrdRevDel.Enabled = true;
+                    btnGrdRevUpdate.Enabled = true;
+
+                    grdRevisions.Row = grdRevisions.Rows.Count - 1;
+                }
+                else
+                {
+                    btnGrdRevDel.Enabled = false;
+                    btnGrdRevUpdate.Enabled = false;
+                }
             }
             catch (Exception ex)
             {
@@ -351,7 +364,7 @@ namespace Ceritar.Logirack_CVS
                     txtReleasePath.Text = sqlRecord["Ver_Release_Location"].ToString();
                     txtTTAppPath.Text = sqlRecord["Ver_CaptionsAndMenus_Location"].ToString();
 
-                    //dtpCreation.Value = DateTime.Parse(sqlRecord["Ver_DtCreation"].ToString());
+                    dtpCreation.Value = DateTime.Parse(sqlRecord["Ver_DtCreation"].ToString());
 
                     cboApplications.SelectedValue = Int32.Parse(sqlRecord["CeA_NRI"].ToString());
                     cboTemplates.SelectedValue = Int32.Parse(sqlRecord["Tpl_NRI"].ToString());
@@ -360,8 +373,6 @@ namespace Ceritar.Logirack_CVS
 
                     blnValidReturn = true;
                 }
-
-                dtpCreation.CustomFormat = clsApp.GetAppController.str_GetServerDateTimeFormat;
 
                 return blnValidReturn;
             }
@@ -387,6 +398,7 @@ namespace Ceritar.Logirack_CVS
                 btnLocationReport.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
                 btnLocationReport.Image = ((System.Drawing.Image)(Properties.Resources.ellipsis));
                 btnLocationReport.UseVisualStyleBackColor = true;
+                btnLocationReport.FlatStyle = FlatStyle.Flat;
 
                 btnLocationReport.Click += btnReplaceReportExe_Click;
             }
@@ -643,7 +655,7 @@ namespace Ceritar.Logirack_CVS
 
         void mcGrdRevisions_SetGridDisplay()
         {
-            grdRevisions.Cols[mintGrdRev_Description_col].Width = 220;
+            grdRevisions.Cols[mintGrdRev_Number_col].Width = 150;
         }
 
         private void formController_LoadData(LoadDataEventArgs eventArgs)
@@ -848,16 +860,19 @@ namespace Ceritar.Logirack_CVS
                 {
                     case mintGrdClients_CeC_Name_col:
 
-                        string strListOfClientSelected = string.Empty;
-
-                        for (int intRowIdx = 1; intRowIdx < grdClients.Rows.Count; intRowIdx++)
+                        if (mcGrdClients[grdClients.Row, mintGrdClients_Action_col] == sclsConstants.DML_Mode.INSERT_MODE.ToString())
                         {
-                            strListOfClientSelected = strListOfClientSelected + (strListOfClientSelected == string.Empty ? mcGrdClients[intRowIdx, mintGrdClients_CeC_NRI_col] : "," + Conversion.Val(mcGrdClients[intRowIdx, mintGrdClients_CeC_NRI_col]));
-                        }
-                        
-                        sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetClients_SQL(strListOfClientSelected), "CeC_NRI", "Cec_Name", false, ref cboClients);
+                            string strListOfClientSelected = string.Empty;
 
-                        grdClients.StartEditing();
+                            for (int intRowIdx = 1; intRowIdx < grdClients.Rows.Count; intRowIdx++)
+                            {
+                                strListOfClientSelected = strListOfClientSelected + (strListOfClientSelected == string.Empty ? mcGrdClients[intRowIdx, mintGrdClients_CeC_NRI_col] : "," + Conversion.Val(mcGrdClients[intRowIdx, mintGrdClients_CeC_NRI_col]));
+                            }
+
+                            sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetClients_SQL(strListOfClientSelected), "CeC_NRI", "Cec_Name", false, ref cboClients);
+
+                            grdClients.StartEditing();
+                        }
 
                         break;
 
@@ -998,11 +1013,19 @@ namespace Ceritar.Logirack_CVS
 
                 case sclsConstants.DML_Mode.UPDATE_MODE:
 
+                    tab.TabPages[mintTab_Revision].Enabled = true;
+
+                    btnGenerate.Enabled = true;
                     btnExportInstallationKit.Enabled = false;
+                    btnGrdRevAdd.Enabled = true;
+
                     cboApplications.Enabled = false;
                     cboTemplates.Enabled = false;
-                    txtCompiledBy.Enabled = false;
+
+                    txtCompiledBy.ReadOnly = true;
                     txtVersionNo.ReadOnly = true;
+
+                    chkIncludeScripts.Enabled = true;
 
                     break;
 
@@ -1081,6 +1104,8 @@ namespace Ceritar.Logirack_CVS
                 frmVersion.formController.ShowForm(sclsConstants.DML_Mode.INSERT_MODE, ref intNewItem_NRI, true);
 
                 pfblnGrdRevisions_Load();
+
+                grdRevisions.Row = grdRevisions.Rows.Count - 1;
             }
         }
 
@@ -1096,6 +1121,8 @@ namespace Ceritar.Logirack_CVS
                 frmRevision.formController.ShowForm(sclsConstants.DML_Mode.DELETE_MODE, ref intItem_NRI, true);
 
                 pfblnGrdRevisions_Load();
+
+                grdRevisions.Row = grdRevisions.Rows.Count - 1;
             }
         }
 
@@ -1163,8 +1190,6 @@ namespace Ceritar.Logirack_CVS
 
                 if (!string.IsNullOrEmpty(txtTemp.Text))
                 {
-                    mblnGrdSatellitesChangeMade = true;
-
                     if (mcGrdSatelliteApps.bln_CellIsEmpty(grdSatellite.Row, mintGrdSat_CSV_NRI_col) & mcGrdSatelliteApps[grdSatellite.Row, mintGrdSat_CSV_LocationExe_col] != txtTemp.Text)
                     {
                         grdSatellite[grdSatellite.Row, mintGrdSat_Action_col] = sclsConstants.DML_Mode.INSERT_MODE;
@@ -1282,6 +1307,8 @@ namespace Ceritar.Logirack_CVS
             if (mcGrdRevisions.bln_RowEditIsValid())
             {
                 int intRevision_NRI = Int32.Parse(mcGrdRevisions[grdRevisions.Row, mintGrdRev_Rev_NRI_col]);
+                int intSelectedRow = grdRevisions.Row;
+
                 frmRevision frmRevision = new frmRevision();
 
                 frmRevision.mintVersion_NRI = formController.Item_NRI;
@@ -1289,6 +1316,8 @@ namespace Ceritar.Logirack_CVS
                 frmRevision.formController.ShowForm(sclsConstants.DML_Mode.UPDATE_MODE, ref intRevision_NRI, true);
 
                 pfblnGrdRevisions_Load();
+
+                grdRevisions.Row = intSelectedRow >= 1 ? intSelectedRow : grdRevisions.Rows.Count - 1; ;
             }
         }
 

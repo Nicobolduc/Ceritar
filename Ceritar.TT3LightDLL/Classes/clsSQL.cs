@@ -242,7 +242,7 @@ namespace Ceritar.TT3LightDLL.Classes
                             break;
 
                         case clsSQL.MySQL_FieldTypes.DATETIME_TYPE:
-                            vstrValue = String.Format(clsApp.GetAppController.str_GetServerDateTimeFormat, Convert.ToDateTime(vstrValue));
+                            //vstrValue = Convert.ToDateTime(vstrValue).ToString(clsApp.GetAppController.str_GetServerDateTimeFormat);
                             vstrValue = clsApp.GetAppController.str_FixStringForSQL(vstrValue);
 
                             break;
