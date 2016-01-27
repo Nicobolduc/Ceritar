@@ -136,7 +136,7 @@ namespace Ceritar.TT3LightDLL.Classes
             try
             {
 
-                clsSQL.str_ADOSingleLookUp("ApC_Text", "AppCaption", "ApC_ID = " + Convert.ToString(rControl.Tag));
+                clsSQL.str_ADOSingleLookUp("TTAC_Text", "TTAppCaption", "TTAC_NRI = " + Convert.ToString(rControl.Tag));
 
             }
             catch (Exception ex)
@@ -154,7 +154,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
             try
             {
-                strCaption = clsSQL.str_ADOSingleLookUp("ApC_Text", "AppCaption", "ApC_No = " + intCaptionID.ToString() + " AND ApL_NRI = " + intLanguage);
+                strCaption = clsSQL.str_ADOSingleLookUp("TTAC_Text", "TTAppCaption", "TTAC_No = " + intCaptionID.ToString() + " AND ApL_NRI = " + intLanguage);
 
             }
             catch (Exception ex)
