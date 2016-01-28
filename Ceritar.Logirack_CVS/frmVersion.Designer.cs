@@ -337,8 +337,8 @@
             // 
             // btnGrdRevDel
             // 
-            this.btnGrdRevDel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGrdRevDel.BackgroundImage")));
             this.btnGrdRevDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnGrdRevDel.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevDel.Image")));
             this.btnGrdRevDel.Location = new System.Drawing.Point(370, 103);
             this.btnGrdRevDel.Name = "btnGrdRevDel";
             this.btnGrdRevDel.Size = new System.Drawing.Size(35, 35);

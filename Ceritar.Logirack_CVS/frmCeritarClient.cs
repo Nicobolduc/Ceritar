@@ -200,6 +200,7 @@ namespace Ceritar.Logirack_CVS
                 switch ((ctr_CeritarClient.ErrorCode_CeC)mcActionResults.GetErrorCode)
                 {
                     case ctr_CeritarClient.ErrorCode_CeC.NAME_MANDATORY:
+                    case ctr_CeritarClient.ErrorCode_CeC.NAME_INVALID:
 
                         txtName.Focus();
                         txtName.SelectAll();

@@ -3,6 +3,8 @@ using Ceritar.TT3LightDLL.Static_Classes;
 using Ceritar.TT3LightDLL.Classes;
 using Ceritar.CVS.Controllers;
 using System;
+using System.IO;
+using System.Linq;
 
 namespace Ceritar.CVS.Models.Module_Configuration
 {
@@ -17,6 +19,9 @@ namespace Ceritar.CVS.Models.Module_Configuration
         private int _intCeritarClient_TS;
         private string _strCompanyName;
         private bool _blnIsActive;
+
+        //Messages
+        private const int mintMSG_InvalidName = 34;
 
         //mod_IBase
         private clsActionResults mcActionResults = new clsActionResults();
@@ -88,6 +93,10 @@ namespace Ceritar.CVS.Models.Module_Configuration
                         if (string.IsNullOrEmpty(_strCompanyName))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_CeritarClient.ErrorCode_CeC.NAME_MANDATORY);
+                        }
+                        else if (Path.GetInvalidFileNameChars().Where(x => _strCompanyName.Contains(x)).Count() > 0 || _strCompanyName == "con")
+                        {
+                            mcActionResults.SetInvalid(mintMSG_InvalidName, ctr_CeritarClient.ErrorCode_CeC.NAME_INVALID);
                         }
                         else if (!clsSQL.bln_ADOValid_TS("CerClient", "CeC_NRI", _intCeritarClient_NRI, "CeC_TS", _intCeritarClient_TS))
                         {

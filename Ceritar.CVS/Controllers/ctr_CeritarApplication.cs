@@ -23,10 +23,12 @@ namespace Ceritar.CVS.Controllers
         public enum ErrorCode_CeA
         {
             NAME_MANDATORY = 1,
-            DESCRIPTION_MANDATORY = 2,
-            DOMAIN_MANDATORY = 3,
-            MODULES_LIST_MANDATORY = 4,
-            SATELLITE_LIST_MANDATORY = 5 
+            NAME_INVALID = 2,
+            DESCRIPTION_MANDATORY = 3,
+            DOMAIN_MANDATORY = 4,
+            MODULES_LIST_MANDATORY = 5,
+            SATELLITE_LIST_MANDATORY = 6,
+            SATELLITE_NAME_INVALID = 7
         }
 
         public enum ErrorCode_CSA

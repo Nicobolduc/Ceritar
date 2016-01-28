@@ -22,7 +22,7 @@ namespace Ceritar.Logirack_CVS
         private int mintSelectedRow = 1;
         private string mstrFormToOpenName = string.Empty;
         private bool mblnChildFormIsModal = false;
-        private sclsGenList.GeneralLists_ID mListToOpen;       
+        private sclsGenList.GeneralLists_ID mListToOpen;
 
         //Private class members
         private clsC1FlexGridWrapper mcGrdList;

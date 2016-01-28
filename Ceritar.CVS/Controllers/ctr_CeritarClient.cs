@@ -19,7 +19,8 @@ namespace Ceritar.CVS.Controllers
 
         public enum ErrorCode_CeC
         {
-            NAME_MANDATORY = 1
+            NAME_MANDATORY = 1,
+            NAME_INVALID = 2
         }
 
         public ctr_CeritarClient(Interfaces.ICeritarClient rView)

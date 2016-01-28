@@ -177,6 +177,7 @@
             this.cboDomain.Name = "cboDomain";
             this.cboDomain.Size = new System.Drawing.Size(185, 21);
             this.cboDomain.TabIndex = 2;
+            this.cboDomain.SelectedIndexChanged += new System.EventHandler(this.cboDomain_SelectedIndexChanged);
             // 
             // label2
             // 

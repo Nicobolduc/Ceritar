@@ -27,6 +27,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private string _strLocation_Release;
         private string _strLocation_Scripts;
         private string _strCreationDate;
+        
 
         //mod_IBase
         private clsActionResults mcActionResults = new clsActionResults();
@@ -141,10 +142,6 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                     case sclsConstants.DML_Mode.INSERT_MODE:
 
-                        //if (string.IsNullOrEmpty(_strCreationDate))
-                        //{
-                        //    mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.COMPILED_BY_MANDATORY);
-                        //}
                         if (_lstModifications == null || _lstModifications.Count == 0)
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.MODIFICATION_LIST_MANDATORY);
@@ -211,7 +208,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_REFERENCE_INTEGRITY, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
                         }
-                        else if (!string.IsNullOrEmpty(clsSQL.str_ADOSingleLookUp("Rev_NRI", "Revision", "Rev_No > " + _intRevision_Number)))
+                        else if (!string.IsNullOrEmpty(clsSQL.str_ADOSingleLookUp("Rev_NRI", "Revision", "Rev_No > " + _intRevision_Number + " AND Revision.Ver_NRI = " + _cVersion.Version_NRI)))
                         {
                             mcActionResults.SetInvalid(mintMSG_CantDeleteRevisionIfNotLast, ctr_Revision.ErrorCode_Rev.CANT_DELETE_NOT_LAST_REVISION);
                         }
@@ -223,7 +220,10 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         break;
                 }
 
-                pfblnListModifications_Validate();
+                if (mcActionResults.IsValid)
+                {
+                    pfblnListModifications_Validate();
+                }
             }
             catch (System.Exception ex)
             {

@@ -515,6 +515,7 @@ namespace Ceritar.TT3LightDLL.Classes
 	    public void SetColType_CheckBox(int vintColumnIndex)
 	    {
 		    mGrdFlex.Cols[vintColumnIndex].DataType = typeof(bool);
+            mGrdFlex.Cols[vintColumnIndex].Width = 20;
             mGrdFlex.Cols[vintColumnIndex].Style.TextAlign = TextAlignEnum.CenterCenter;
 	    }
 

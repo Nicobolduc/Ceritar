@@ -3,6 +3,8 @@ using Ceritar.TT3LightDLL.Static_Classes;
 using Ceritar.TT3LightDLL.Classes;
 using Ceritar.CVS.Controllers;
 using System;
+using System.Linq;
+using System.IO;
 
 namespace Ceritar.CVS.Models.Module_Configuration
 {
@@ -20,6 +22,9 @@ namespace Ceritar.CVS.Models.Module_Configuration
         private AppDomain _domain_NRI;
         private List<string> _lstModules;
         private List<mod_CSA_CeritarSatelliteApp> _lstSatelliteApps;
+
+        //Messages
+        private const int mintMSG_InvalidName = 32;
 
         public enum AppDomain
         {
@@ -124,6 +129,10 @@ namespace Ceritar.CVS.Models.Module_Configuration
                         if (string.IsNullOrEmpty(_strName))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_CeritarApplication.ErrorCode_CeA.NAME_MANDATORY);
+                        }
+                        else if (Path.GetInvalidFileNameChars().Where(x => _strName.Contains(x)).Count() > 0 || _strName == "con")
+                        {
+                            mcActionResults.SetInvalid(mintMSG_InvalidName, ctr_CeritarApplication.ErrorCode_CeA.NAME_INVALID);
                         }
                         else if (string.IsNullOrEmpty(_strDescription))
                         {
@@ -362,6 +371,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
                 for (int intIndex = 0; intIndex < _lstSatelliteApps.Count; intIndex++)
                 {
                     _lstSatelliteApps[intIndex].SetcSQL = mcSQL;
+                    _lstSatelliteApps[intIndex].CeritarApp_NRI = _intCeritarApplication_NRI;
 
                     blnValidReturn = _lstSatelliteApps[intIndex].blnSave();
 

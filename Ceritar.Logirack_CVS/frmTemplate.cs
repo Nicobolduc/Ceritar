@@ -407,6 +407,9 @@ namespace Ceritar.Logirack_CVS
                                 )
                         {
                             AddSibbling.Enabled = true;
+                            btnMoveLeft.Enabled = true;
+                            btnMoveRight.Enabled = true;
+                            btnDeleteRow.Enabled = true;
                         }
                     }
 
@@ -706,6 +709,7 @@ namespace Ceritar.Logirack_CVS
                         break;
 
                     case ctr_Template.ErrorCode_Tpl.NAME_MANDATORY:
+                    case ctr_Template.ErrorCode_Tpl.TEMPLATE_NAME_UNIQUE:
 
                         txtName.Focus();
                         txtName.SelectAll();
@@ -730,6 +734,11 @@ namespace Ceritar.Logirack_CVS
                             case ctr_Template.ErrorCode_HiCo.NAME_ON_DISK_MANDATORY:
 
                                 grdTemplate.Row = grdTemplate.FindRow(string.Empty, 1, mintGrdTpl_HiCo_Name_col, false, true, false);
+                                break;
+
+                            case ctr_Template.ErrorCode_HiCo.NAME_ON_DISK_INVALID:
+
+                                grdTemplate.Row = mcActionResults.RowInError;
                                 break;
                         }
                         break;

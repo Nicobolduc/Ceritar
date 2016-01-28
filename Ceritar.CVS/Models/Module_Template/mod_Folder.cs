@@ -3,6 +3,8 @@ using Ceritar.TT3LightDLL.Static_Classes;
 using Ceritar.TT3LightDLL.Classes;
 using Ceritar.CVS.Controllers;
 using System;
+using System.IO;
+using System.Linq;
 
 namespace Ceritar.CVS.Models.Module_Template
 {
@@ -16,6 +18,9 @@ namespace Ceritar.CVS.Models.Module_Template
         private List<mod_HiCo_HierarchyComponent> _lstChildrensComponents;
         private ushort _intNodeLevel;
 
+        //Messages
+        private const int mintMSG_InvalidName = 32;
+        private const int mintMSG_InvalidNodeLevel = 33;
 
         //Working variables
 
@@ -75,10 +80,18 @@ namespace Ceritar.CVS.Models.Module_Template
                             {
                                 mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Template.ErrorCode_HiCo.FOLDER_TYPE_MANDATORY);
                             }
+                            else if (Path.GetInvalidFileNameChars().Where(x => this._strNameOnDisk.Contains(x)).Count() > 0 || this._strNameOnDisk == "con")
+                            {
+                                mcActionResults.SetInvalid(mintMSG_InvalidName, ctr_Template.ErrorCode_HiCo.NAME_ON_DISK_INVALID);
+                            }
                             else if (!clsSQL.bln_ADOValid_TS("HierarchyComp", "HiCo_NRI", _intHierarchyComponent_NRI, "HiCo_TS", _intHierarchyComponent_TS))
                             {
                                 mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_TIMESTAMP, clsActionResults.BaseErrorCode.INVALID_TIMESTAMP);
                             }
+                            //else if (LstChildrensComponents.Count > 0 && LstChildrensComponents[0].GetType() == typeof(mod_Folder) && _intNodeLevel + 1 < ((mod_Folder)LstChildrensComponents[0]).NodeLevel)
+                            //{
+                            //    mcActionResults.SetInvalid(mintMSG_InvalidNodeLevel, ctr_Template.ErrorCode_HiCo.INVALID_NODE_LEVEL);
+                            //}
                             else
                             {
                                 mcActionResults.SetValid();
@@ -118,14 +131,29 @@ namespace Ceritar.CVS.Models.Module_Template
         private bool pfblnChildrens_Validate()
         {
             bool blnValidReturn = true;
+            int intRowIndex = 6;
 
             try
             {
                 foreach (mod_Folder cHiCo in LstChildrensComponents)
                 {
-                    mcActionResults = cHiCo.Validate();
+                    if (LstChildrensComponents.Count > 0 && LstChildrensComponents[0].GetType() == typeof(mod_Folder) && _intNodeLevel + 1 < ((mod_Folder)LstChildrensComponents[0]).NodeLevel)
+                    {
+                        mcActionResults.SetInvalid(mintMSG_InvalidNodeLevel, ctr_Template.ErrorCode_HiCo.INVALID_NODE_LEVEL);
+                    }
+                    else
+                    {
+                        mcActionResults = cHiCo.Validate();
+                    }
 
-                    if (!blnValidReturn || !mcActionResults.IsValid) break;
+                    if (!blnValidReturn || !mcActionResults.IsValid)
+                    {
+                        //TODO: not working
+                        mcActionResults.RowInError = mcActionResults.RowInError <= intRowIndex ? intRowIndex : mcActionResults.RowInError;
+                        break;
+                    }
+
+                    intRowIndex++;
                 }
             }
             catch (Exception ex)
@@ -170,7 +198,6 @@ namespace Ceritar.CVS.Models.Module_Template
                         { }
                         else
                         {
-                            mcActionResults.SetNewItem_NRI = _intHierarchyComponent_NRI;
                             blnValidReturn = true;
                         }
 

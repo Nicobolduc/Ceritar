@@ -268,6 +268,7 @@ namespace Ceritar.Logirack_CVS
                         break;
 
                     case ctr_CeritarApplication.ErrorCode_CeA.NAME_MANDATORY:
+                    case ctr_CeritarApplication.ErrorCode_CeA.NAME_INVALID:
 
                         txtName.Focus();
                         txtName.SelectAll();
@@ -285,6 +286,7 @@ namespace Ceritar.Logirack_CVS
                         break;
 
                     case ctr_CeritarApplication.ErrorCode_CeA.SATELLITE_LIST_MANDATORY:
+                    case ctr_CeritarApplication.ErrorCode_CeA.SATELLITE_NAME_INVALID:
 
                         grdSatApp.Row = mcActionResults.RowInError;
 
@@ -396,6 +398,14 @@ namespace Ceritar.Logirack_CVS
         private void grdAppSat_Validated(object sender, EventArgs e)
         {
             formController.ChangeMade = true;
+        }
+
+        private void cboDomain_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!formController.FormIsLoading)
+            {
+                formController.ChangeMade = true;
+            }
         }
 
     }

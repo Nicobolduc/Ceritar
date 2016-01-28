@@ -47,13 +47,16 @@ namespace Ceritar.CVS.Controllers
             HIERARCHY_MANDATORY = 3,
             CERITAR_APPLICATION_MANDATORY = 4,
             UNIQUE_DEFAULT_TEMPLATE = 5,
-            ONLY_NORMAL_AND_OTHER_FOLDERTYPE_MULTIPLE = 6
+            ONLY_NORMAL_AND_OTHER_FOLDERTYPE_MULTIPLE = 6,
+            TEMPLATE_NAME_UNIQUE = 7
         }
 
         public enum ErrorCode_HiCo
         {
             NAME_ON_DISK_MANDATORY = 10,
-            FOLDER_TYPE_MANDATORY = 11
+            FOLDER_TYPE_MANDATORY = 11,
+            NAME_ON_DISK_INVALID = 12,
+            INVALID_NODE_LEVEL = 13
         }
 
 #endregion

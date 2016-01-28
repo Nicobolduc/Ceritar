@@ -62,9 +62,9 @@
             this.btnAdd.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnAdd.BackgroundImage")));
             this.btnAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnAdd.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
-            this.btnAdd.Location = new System.Drawing.Point(536, 105);
+            this.btnAdd.Location = new System.Drawing.Point(536, 110);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(35, 35);
+            this.btnAdd.Size = new System.Drawing.Size(40, 40);
             this.btnAdd.TabIndex = 14;
             this.toolTip.SetToolTip(this.btnAdd, "Ajouter");
             this.btnAdd.UseVisualStyleBackColor = true;
@@ -72,11 +72,11 @@
             // 
             // btnConsult
             // 
-            this.btnConsult.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnConsult.BackgroundImage")));
             this.btnConsult.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnConsult.Image = ((System.Drawing.Image)(resources.GetObject("btnConsult.Image")));
             this.btnConsult.Location = new System.Drawing.Point(536, 64);
             this.btnConsult.Name = "btnConsult";
-            this.btnConsult.Size = new System.Drawing.Size(35, 35);
+            this.btnConsult.Size = new System.Drawing.Size(40, 40);
             this.btnConsult.TabIndex = 15;
             this.toolTip.SetToolTip(this.btnConsult, "Consulter");
             this.btnConsult.UseVisualStyleBackColor = true;
@@ -84,11 +84,11 @@
             // 
             // btnDelete
             // 
-            this.btnDelete.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnDelete.BackgroundImage")));
             this.btnDelete.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnDelete.Location = new System.Drawing.Point(536, 187);
+            this.btnDelete.Image = ((System.Drawing.Image)(resources.GetObject("btnDelete.Image")));
+            this.btnDelete.Location = new System.Drawing.Point(536, 202);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(35, 35);
+            this.btnDelete.Size = new System.Drawing.Size(40, 40);
             this.btnDelete.TabIndex = 16;
             this.toolTip.SetToolTip(this.btnDelete, "Supprimer");
             this.btnDelete.UseVisualStyleBackColor = true;
@@ -96,11 +96,11 @@
             // 
             // btnUpdate
             // 
-            this.btnUpdate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnUpdate.BackgroundImage")));
             this.btnUpdate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnUpdate.Location = new System.Drawing.Point(536, 146);
+            this.btnUpdate.Image = ((System.Drawing.Image)(resources.GetObject("btnUpdate.Image")));
+            this.btnUpdate.Location = new System.Drawing.Point(536, 156);
             this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(35, 35);
+            this.btnUpdate.Size = new System.Drawing.Size(40, 40);
             this.btnUpdate.TabIndex = 17;
             this.toolTip.SetToolTip(this.btnUpdate, "Modifier");
             this.btnUpdate.UseVisualStyleBackColor = true;
@@ -117,13 +117,14 @@
             // 
             this.formController.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.formController.ChangeMade = false;
             this.formController.FormIsLoading = false;
             this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.NO_MODE;
             this.formController.Item_NRI = 0;
             this.formController.Location = new System.Drawing.Point(5, 569);
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = true;
-            this.formController.Size = new System.Drawing.Size(574, 33);
+            this.formController.Size = new System.Drawing.Size(576, 33);
             this.formController.TabIndex = 10;
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
             // 
@@ -135,7 +136,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(579, 602);
+            this.ClientSize = new System.Drawing.Size(581, 602);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnDelete);

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 using Ceritar.TT3LightDLL.Classes;
 using Ceritar.TT3LightDLL.Static_Classes;
@@ -19,6 +21,9 @@ namespace Ceritar.CVS.Models.Module_Configuration
         private string _strKitFolderName;
         private int _intCeritarApp_NRI;
         private bool _blnExeIsFolder;
+
+        //Messages
+        private const int mintMSG_InvalidName = 32;
 
         //Working variables
         private clsActionResults mcActionResults = new clsActionResults();
@@ -103,9 +108,17 @@ namespace Ceritar.CVS.Models.Module_Configuration
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_CeritarApplication.ErrorCode_CSA.NAME_MANDATORY);
                         }
-                        if (string.IsNullOrEmpty(_strKitFolderName))
+                        else if (Path.GetInvalidFileNameChars().Where(x => _strName.Contains(x)).Count() > 0 || _strName == "con")
+                        {
+                            mcActionResults.SetInvalid(mintMSG_InvalidName, ctr_CeritarApplication.ErrorCode_CeA.SATELLITE_NAME_INVALID);
+                        }
+                        else if (string.IsNullOrEmpty(_strKitFolderName))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_CeritarApplication.ErrorCode_CSA.KIT_FOLDER_NAME_MANDATORY);
+                        }
+                        else if (Path.GetInvalidFileNameChars().Where(x => _strKitFolderName.Contains(x)).Count() > 0 || _strKitFolderName == "con")
+                        {
+                            mcActionResults.SetInvalid(mintMSG_InvalidName, ctr_CeritarApplication.ErrorCode_CeA.SATELLITE_NAME_INVALID);
                         }
                         else
                         {
