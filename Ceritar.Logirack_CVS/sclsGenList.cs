@@ -193,7 +193,7 @@ namespace Ceritar.Logirack_CVS
                 strSQL = strSQL + vstrWhere + Environment.NewLine;
             }
 
-            strSQL = strSQL + "  ORDER BY CerApp.CeA_Name, Version.Ver_No " + Environment.NewLine;
+            strSQL = strSQL + "  ORDER BY CerApp.CeA_Name, Version.Ver_No DESC " + Environment.NewLine;
 
             return strSQL;
         }

@@ -220,10 +220,11 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_TIMESTAMP, clsActionResults.BaseErrorCode.INVALID_TIMESTAMP);
                         }
-                        else if (!string.IsNullOrEmpty(clsSQL.str_ADOSingleLookUp("Ver_NRI", "Version", "CeA_NRI = " + _cCerApplication.CeritarApplication_NRI +  " AND Ver_No >= " + clsApp.GetAppController.str_FixStringForSQL(_intVersionNo.ToString()))))
-                        {
-                            mcActionResults.SetInvalid(mintMSG_VersionNo_UniqueAndBiggerPrevious, ctr_Version.ErrorCode_Ver.VERSION_NO_UNIQUE_AND_BIGGER_PREVIOUS);
-                        }
+                            //TODO: Il faut valider que le numero n'est pas plus petit pour un client donné ou les clients inclus
+                        //else if (!string.IsNullOrEmpty(clsSQL.str_ADOSingleLookUp("Ver_NRI", "Version", "CeA_NRI = " + _cCerApplication.CeritarApplication_NRI +  " AND Ver_No >= " + clsApp.GetAppController.str_FixStringForSQL(_intVersionNo.ToString()))))
+                        //{
+                        //    mcActionResults.SetInvalid(mintMSG_VersionNo_UniqueAndBiggerPrevious, ctr_Version.ErrorCode_Ver.VERSION_NO_UNIQUE_AND_BIGGER_PREVIOUS);
+                        //}
                         else
                         {
                             mcActionResults.SetValid();
