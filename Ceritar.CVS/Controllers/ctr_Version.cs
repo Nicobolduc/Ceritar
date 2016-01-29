@@ -1018,9 +1018,15 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " SELECT Revision.Rev_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_TS, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_No, " + Environment.NewLine;
+            strSQL = strSQL + "        CerClient.CeC_Name, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_DtCreation " + Environment.NewLine;
 
             strSQL = strSQL + " FROM Revision " + Environment.NewLine;
+
+            strSQL = strSQL + "     INNER JOIN CerClient ON CerClient.CeC_NRI = Revision.CeC_NRI " + Environment.NewLine;
+            //strSQL = strSQL + "     INNER JOIN Version " + Environment.NewLine;
+            //strSQL = strSQL + "         INNER JOIN CerApp ON CerApp.CeA_NRI = Version.CeA_NRI " + Environment.NewLine;
+            //strSQL = strSQL + "     ON Version.Ver_NRI = Revision.Ver_NRI " + Environment.NewLine;
 
             strSQL = strSQL + " WHERE Revision.Ver_NRI = " + vintVersion_NRI + Environment.NewLine;
 

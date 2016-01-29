@@ -50,7 +50,8 @@ namespace Ceritar.Logirack_CVS
         private const short mintGrdRev_Rev_NRI_col = 1;
         private const short mintGrdRev_Rev_TS_col = 2;
         private const short mintGrdRev_Number_col = 3;
-        private const short mintGrdRev_CreationDate_col = 4;
+        private const short mintGrdRev_CeritarClientName_col = 4;
+        private const short mintGrdRev_CreationDate_col = 5;
 
         //Tab pages
         private const short mintTab_Version = 0;
@@ -655,7 +656,8 @@ namespace Ceritar.Logirack_CVS
 
         void mcGrdRevisions_SetGridDisplay()
         {
-            grdRevisions.Cols[mintGrdRev_Number_col].Width = 150;
+            grdRevisions.Cols[mintGrdRev_Number_col].Width = 60;
+            grdRevisions.Cols[mintGrdRev_CeritarClientName_col].Width = 150;
         }
 
         private void formController_LoadData(LoadDataEventArgs eventArgs)
