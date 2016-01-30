@@ -46,6 +46,9 @@
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.grdSatApp = new C1.Win.C1FlexGrid.C1FlexGrid();
+            this.chkReportAppExternal = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtReportAppExternal = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdModules)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -92,7 +95,7 @@
             this.groupBox1.Controls.Add(this.btnGrdModDel);
             this.groupBox1.Controls.Add(this.btnGrdModAdd);
             this.groupBox1.Controls.Add(this.grdModules);
-            this.groupBox1.Location = new System.Drawing.Point(5, 285);
+            this.groupBox1.Location = new System.Drawing.Point(5, 311);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(401, 167);
             this.groupBox1.TabIndex = 12;
@@ -195,7 +198,7 @@
             this.formController.FormIsLoading = false;
             this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.CONSULT_MODE;
             this.formController.Item_NRI = 0;
-            this.formController.Location = new System.Drawing.Point(-5, 456);
+            this.formController.Location = new System.Drawing.Point(-5, 482);
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
             this.formController.Size = new System.Drawing.Size(413, 33);
@@ -208,12 +211,15 @@
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.chkReportAppExternal);
+            this.groupBox2.Controls.Add(this.txtReportAppExternal);
+            this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.btnGrdSatDel);
             this.groupBox2.Controls.Add(this.btnGrdSatAdd);
             this.groupBox2.Controls.Add(this.grdSatApp);
             this.groupBox2.Location = new System.Drawing.Point(5, 112);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(401, 167);
+            this.groupBox2.Size = new System.Drawing.Size(401, 193);
             this.groupBox2.TabIndex = 16;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Liste des applications satellites";
@@ -239,11 +245,39 @@
             this.grdSatApp.DoubleClick += new System.EventHandler(this.grdAppSat_DoubleClick);
             this.grdSatApp.Validated += new System.EventHandler(this.grdAppSat_Validated);
             // 
+            // chkReportAppExternal
+            // 
+            this.chkReportAppExternal.Location = new System.Drawing.Point(170, 170);
+            this.chkReportAppExternal.Name = "chkReportAppExternal";
+            this.chkReportAppExternal.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.chkReportAppExternal.Size = new System.Drawing.Size(16, 17);
+            this.chkReportAppExternal.TabIndex = 3;
+            this.chkReportAppExternal.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkReportAppExternal.UseVisualStyleBackColor = true;
+            this.chkReportAppExternal.CheckedChanged += new System.EventHandler(this.chkReportAppExternal_CheckedChanged);
+            // 
+            // label3
+            // 
+            this.label3.Location = new System.Drawing.Point(3, 170);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(168, 17);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Nom du Exe externe des rapports:";
+            // 
+            // txtReportAppExternal
+            // 
+            this.txtReportAppExternal.Location = new System.Drawing.Point(189, 167);
+            this.txtReportAppExternal.MaxLength = 75;
+            this.txtReportAppExternal.Name = "txtReportAppExternal";
+            this.txtReportAppExternal.ReadOnly = true;
+            this.txtReportAppExternal.Size = new System.Drawing.Size(174, 20);
+            this.txtReportAppExternal.TabIndex = 4;
+            // 
             // frmCeritarApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(410, 489);
+            this.ClientSize = new System.Drawing.Size(410, 515);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cboDomain);
@@ -262,6 +296,7 @@
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdModules)).EndInit();
             this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdSatApp)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -286,5 +321,8 @@
         private System.Windows.Forms.Button btnGrdSatDel;
         private System.Windows.Forms.Button btnGrdSatAdd;
         public C1.Win.C1FlexGrid.C1FlexGrid grdSatApp;
+        private System.Windows.Forms.TextBox txtReportAppExternal;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.CheckBox chkReportAppExternal;
     }
 }

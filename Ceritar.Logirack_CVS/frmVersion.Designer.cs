@@ -337,9 +337,10 @@
             // 
             // btnGrdRevDel
             // 
+            this.btnGrdRevDel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnGrdRevDel.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevDel.Image")));
-            this.btnGrdRevDel.Location = new System.Drawing.Point(370, 103);
+            this.btnGrdRevDel.Location = new System.Drawing.Point(570, 103);
             this.btnGrdRevDel.Name = "btnGrdRevDel";
             this.btnGrdRevDel.Size = new System.Drawing.Size(35, 35);
             this.btnGrdRevDel.TabIndex = 16;
@@ -349,9 +350,10 @@
             // 
             // btnGrdRevAdd
             // 
+            this.btnGrdRevAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevAdd.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGrdRevAdd.BackgroundImage")));
             this.btnGrdRevAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnGrdRevAdd.Location = new System.Drawing.Point(370, 21);
+            this.btnGrdRevAdd.Location = new System.Drawing.Point(570, 21);
             this.btnGrdRevAdd.Name = "btnGrdRevAdd";
             this.btnGrdRevAdd.Size = new System.Drawing.Size(35, 35);
             this.btnGrdRevAdd.TabIndex = 15;
@@ -387,13 +389,14 @@
             // 
             // btnGrdRevUpdate
             // 
+            this.btnGrdRevUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevUpdate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnGrdRevUpdate.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevUpdate.Image")));
-            this.btnGrdRevUpdate.Location = new System.Drawing.Point(370, 62);
+            this.btnGrdRevUpdate.Location = new System.Drawing.Point(570, 62);
             this.btnGrdRevUpdate.Name = "btnGrdRevUpdate";
             this.btnGrdRevUpdate.Size = new System.Drawing.Size(35, 35);
             this.btnGrdRevUpdate.TabIndex = 17;
-            this.toolTip.SetToolTip(this.btnGrdRevUpdate, "Créer une révision");
+            this.toolTip.SetToolTip(this.btnGrdRevUpdate, "Modifier une révision");
             this.btnGrdRevUpdate.UseVisualStyleBackColor = true;
             this.btnGrdRevUpdate.Click += new System.EventHandler(this.btnGrdRevUpdate_Click);
             // 
@@ -416,13 +419,15 @@
             this.groupBox3.Controls.Add(this.grdRevisions);
             this.groupBox3.Location = new System.Drawing.Point(6, 3);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(414, 351);
+            this.groupBox3.Size = new System.Drawing.Size(612, 351);
             this.groupBox3.TabIndex = 15;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Liste des révisions";
             // 
             // grdRevisions
             // 
+            this.grdRevisions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.grdRevisions.AutoSearch = C1.Win.C1FlexGrid.AutoSearchEnum.FromTop;
             this.grdRevisions.ColumnInfo = resources.GetString("grdRevisions.ColumnInfo");
             this.grdRevisions.ExtendLastCol = true;
@@ -432,7 +437,7 @@
             this.grdRevisions.Rows.Count = 6;
             this.grdRevisions.Rows.DefaultSize = 18;
             this.grdRevisions.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdRevisions.Size = new System.Drawing.Size(358, 324);
+            this.grdRevisions.Size = new System.Drawing.Size(558, 324);
             this.grdRevisions.StyleInfo = resources.GetString("grdRevisions.StyleInfo");
             this.grdRevisions.TabIndex = 14;
             this.grdRevisions.Tag = "20";

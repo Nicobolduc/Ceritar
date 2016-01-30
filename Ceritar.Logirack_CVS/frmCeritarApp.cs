@@ -133,6 +133,11 @@ namespace Ceritar.Logirack_CVS
             return lstSatelliteApp;
         }
 
+        string ICeritarApp.GetExternalReportAppName()
+        {
+            return chkReportAppExternal.Checked ? txtReportAppExternal.Text : string.Empty;
+        }
+
 #endregion
 
 
@@ -186,7 +191,22 @@ namespace Ceritar.Logirack_CVS
                     UInt16.TryParse(sqlRecord["CeA_TS"].ToString(), out mintCerApp_TS);
                     txtName.Text = sqlRecord["CeA_Name"].ToString();
                     txtDescription.Text = sqlRecord["CeA_Desc"].ToString();
+                    txtReportAppExternal.Text = sqlRecord["CeA_ExternalRPTAppName"].ToString();
                     cboDomain.SelectedValue = Int32.Parse(sqlRecord["ApD_NRI"].ToString());
+
+                    if (!string.IsNullOrEmpty(txtReportAppExternal.Text))
+                    {
+                        chkReportAppExternal.Checked = true;
+
+                        if (formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
+                        {
+                            txtReportAppExternal.ReadOnly = false;
+                        }
+                    }
+                    else
+                    {
+                        chkReportAppExternal.Checked = false;
+                    }
 
                     blnValidReturn = true;
                 }
@@ -408,6 +428,15 @@ namespace Ceritar.Logirack_CVS
             }
         }
 
+        private void chkReportAppExternal_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!formController.FormIsLoading)
+            {
+                txtReportAppExternal.ReadOnly = !chkReportAppExternal.Checked;
+
+                formController.ChangeMade = true;
+            }
+        }
     }
 }
 

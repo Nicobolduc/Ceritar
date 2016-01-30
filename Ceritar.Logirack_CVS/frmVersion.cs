@@ -51,7 +51,8 @@ namespace Ceritar.Logirack_CVS
         private const short mintGrdRev_Rev_TS_col = 2;
         private const short mintGrdRev_Number_col = 3;
         private const short mintGrdRev_CeritarClientName_col = 4;
-        private const short mintGrdRev_CreationDate_col = 5;
+        private const short mintGrdRev_CeritarApplicationName_col = 5;
+        private const short mintGrdRev_CreationDate_col = 6;
 
         //Tab pages
         private const short mintTab_Version = 0;
@@ -198,7 +199,7 @@ namespace Ceritar.Logirack_CVS
                 structCSV = new structClientSatVersion();
 
                 structCSV.Action = clsApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdSatellite[intRowIndex, mintGrdSat_Action_col]);
-                structCSV.intCeritarAppSat_NRI = Int32.Parse(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_NRI_col]);
+                structCSV.intCeritarSatelliteApp_NRI = Int32.Parse(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_NRI_col]);
                 structCSV.intCeritarClient_NRI = Int32.Parse(mcGrdClients[grdClients.Row, mintGrdClients_CeC_NRI_col]);
                 Int32.TryParse(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSV_NRI_col], out structCSV.intClientSatVersion_NRI);
                 structCSV.strCeritarClient_Name = mcGrdClients[grdClients.Row, mintGrdClients_CeC_Name_col];
@@ -658,6 +659,7 @@ namespace Ceritar.Logirack_CVS
         {
             grdRevisions.Cols[mintGrdRev_Number_col].Width = 60;
             grdRevisions.Cols[mintGrdRev_CeritarClientName_col].Width = 150;
+            grdRevisions.Cols[mintGrdRev_CeritarApplicationName_col].Width = 200;
         }
 
         private void formController_LoadData(LoadDataEventArgs eventArgs)

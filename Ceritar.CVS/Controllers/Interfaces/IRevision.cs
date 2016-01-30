@@ -24,7 +24,9 @@ namespace Ceritar.CVS.Controllers.Interfaces
         byte GetRevisionNo();         
         string GetLocation_Release();
         string GetLocation_Scripts();
+        int GetSelectedSatellitteApp_NRI();
         string GetSelectedSatellitteApp_Name();
+        bool GetExeIsExternalReport();
         List<string> GetModificationsList();
     }
 }

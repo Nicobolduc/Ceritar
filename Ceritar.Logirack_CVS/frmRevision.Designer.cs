@@ -63,6 +63,7 @@
             this.grdSatellites = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.chkExeIsRPT = new System.Windows.Forms.CheckBox();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -94,10 +95,10 @@
             // txtScriptsPath
             // 
             this.txtScriptsPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtScriptsPath.Location = new System.Drawing.Point(83, 357);
+            this.txtScriptsPath.Location = new System.Drawing.Point(83, 359);
             this.txtScriptsPath.Name = "txtScriptsPath";
             this.txtScriptsPath.ReadOnly = true;
-            this.txtScriptsPath.Size = new System.Drawing.Size(608, 22);
+            this.txtScriptsPath.Size = new System.Drawing.Size(594, 22);
             this.txtScriptsPath.TabIndex = 65;
             // 
             // groupBox3
@@ -122,7 +123,7 @@
             this.btnGrdRevDel.Location = new System.Drawing.Point(774, 59);
             this.btnGrdRevDel.Name = "btnGrdRevDel";
             this.btnGrdRevDel.Size = new System.Drawing.Size(35, 35);
-            this.btnGrdRevDel.TabIndex = 2;
+            this.btnGrdRevDel.TabIndex = 1;
             this.btnGrdRevDel.UseVisualStyleBackColor = true;
             // 
             // btnGrdRevAdd
@@ -151,7 +152,7 @@
             this.grdRevModifs.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
             this.grdRevModifs.Size = new System.Drawing.Size(762, 185);
             this.grdRevModifs.StyleInfo = resources.GetString("grdRevModifs.StyleInfo");
-            this.grdRevModifs.TabIndex = 1;
+            this.grdRevModifs.TabIndex = 2;
             this.grdRevModifs.Tag = "28";
             this.grdRevModifs.DoubleClick += new System.EventHandler(this.grdRevModifs_DoubleClick);
             // 
@@ -167,7 +168,7 @@
             // 
             this.btnShowScriptsFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowScriptsFolder.BackgroundImage")));
             this.btnShowScriptsFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowScriptsFolder.Location = new System.Drawing.Point(697, 351);
+            this.btnShowScriptsFolder.Location = new System.Drawing.Point(680, 350);
             this.btnShowScriptsFolder.Name = "btnShowScriptsFolder";
             this.btnShowScriptsFolder.Size = new System.Drawing.Size(40, 40);
             this.btnShowScriptsFolder.TabIndex = 4;
@@ -339,7 +340,7 @@
             // 
             this.btnShowExecutableFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowExecutableFolder.BackgroundImage")));
             this.btnShowExecutableFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowExecutableFolder.Location = new System.Drawing.Point(697, 395);
+            this.btnShowExecutableFolder.Location = new System.Drawing.Point(680, 395);
             this.btnShowExecutableFolder.Name = "btnShowExecutableFolder";
             this.btnShowExecutableFolder.Size = new System.Drawing.Size(40, 40);
             this.btnShowExecutableFolder.TabIndex = 5;
@@ -353,7 +354,7 @@
             this.txtReleasePath.Location = new System.Drawing.Point(83, 404);
             this.txtReleasePath.Name = "txtReleasePath";
             this.txtReleasePath.ReadOnly = true;
-            this.txtReleasePath.Size = new System.Drawing.Size(608, 22);
+            this.txtReleasePath.Size = new System.Drawing.Size(594, 22);
             this.txtReleasePath.TabIndex = 73;
             // 
             // openFileDialog
@@ -368,7 +369,7 @@
             this.groupBox4.Size = new System.Drawing.Size(276, 127);
             this.groupBox4.TabIndex = 77;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "La révision est pour l\'application sattellite suivante";
+            this.groupBox4.Text = "La révision est pour l\'application sattellite suivante:";
             // 
             // grdSatellites
             // 
@@ -402,7 +403,7 @@
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
             this.formController.Size = new System.Drawing.Size(822, 33);
-            this.formController.TabIndex = 7;
+            this.formController.TabIndex = 8;
             this.formController.SetReadRights += new Ceritar.TT3LightDLL.Controls.ctlFormController.SetReadRightsEventHandler(this.formController_SetReadRights);
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
@@ -411,19 +412,31 @@
             // checkBox1
             // 
             this.checkBox1.Enabled = false;
-            this.checkBox1.Location = new System.Drawing.Point(743, 396);
+            this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox1.Location = new System.Drawing.Point(726, 396);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(80, 36);
-            this.checkBox1.TabIndex = 78;
-            this.checkBox1.Text = "Release inclut RPT";
+            this.checkBox1.Size = new System.Drawing.Size(108, 17);
+            this.checkBox1.TabIndex = 6;
+            this.checkBox1.Text = "Release + RPT";
             this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // chkExeIsRPT
+            // 
+            this.chkExeIsRPT.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkExeIsRPT.Location = new System.Drawing.Point(726, 418);
+            this.chkExeIsRPT.Name = "chkExeIsRPT";
+            this.chkExeIsRPT.Size = new System.Drawing.Size(108, 17);
+            this.chkExeIsRPT.TabIndex = 7;
+            this.chkExeIsRPT.Text = "RPT seulement";
+            this.chkExeIsRPT.UseVisualStyleBackColor = true;
+            this.chkExeIsRPT.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // frmRevision
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(824, 472);
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.chkExeIsRPT);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.btnSelectExecutableFilePath);
             this.Controls.Add(this.btnSelectScriptsFilePath);
@@ -437,6 +450,7 @@
             this.Controls.Add(this.txtScriptsPath);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.btnShowScriptsFolder);
+            this.Controls.Add(this.checkBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -489,6 +503,7 @@
         private System.Windows.Forms.GroupBox groupBox4;
         public C1.Win.C1FlexGrid.C1FlexGrid grdSatellites;
         private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox chkExeIsRPT;
 
     }
 }

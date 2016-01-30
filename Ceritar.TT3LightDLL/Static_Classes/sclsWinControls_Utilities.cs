@@ -89,13 +89,17 @@ namespace Ceritar.TT3LightDLL.Static_Classes
                     switch (objControl.GetType().Name)
                     {
                         case "Button":
-                        case "TextBox":
                         case "CheckBox":
                         case "RadioButton":
                         case "DateTimePicker":
                         case "ListView":
                         case "ComboBox":
                             objControl.Enabled = false;
+
+                            break;
+
+                        case "TextBox":
+                            ((TextBox)objControl).ReadOnly = true;
 
                             break;
 

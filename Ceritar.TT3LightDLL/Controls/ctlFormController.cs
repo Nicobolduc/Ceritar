@@ -167,6 +167,7 @@ namespace Ceritar.TT3LightDLL.Controls
                 switch (FormMode)
                 {
                     case sclsConstants.DML_Mode.DELETE_MODE:
+                    case sclsConstants.DML_Mode.CONSULT_MODE:
 
                         sclsWinControls_Utilities.DisableAllFormControls(mfrmParent, null, null);
 

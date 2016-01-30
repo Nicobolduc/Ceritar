@@ -48,13 +48,13 @@ namespace Ceritar.CVS.Controllers
             List<structCeritarSatelliteApp> lstSatelliteApps;
             mod_CSA_CeritarSatelliteApp cCSA;
 
-            mcModCerApp = new mod_CeA_CeritarApplication();
-
             try
             {
+                mcModCerApp = new mod_CeA_CeritarApplication();
                 mcModCerApp.CeritarApplication_NRI = mcView.GetCerApp_NRI();
                 mcModCerApp.Name = mcView.GetName();
                 mcModCerApp.Description = mcView.GetDescription();
+                mcModCerApp.ExternalReportAppName = mcView.GetExternalReportAppName();
                 mcModCerApp.LstModules = mcView.GetLstModules();
                 mcModCerApp.DML_Action = mcView.GetDML_Mode();
                 mcModCerApp.Domaine_NRI = (mod_CeA_CeritarApplication.AppDomain)mcView.GetDomain_NRI();
@@ -140,7 +140,8 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " SELECT CerApp.CeA_TS, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_Name, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_Desc, " + Environment.NewLine;
-            strSQL = strSQL + "        CerApp.ApD_NRI " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.ApD_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.CeA_ExternalRPTAppName " + Environment.NewLine;
 
             strSQL = strSQL + " FROM CerApp " + Environment.NewLine;
 

@@ -54,7 +54,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         public sclsConstants.DML_Mode Action;
         public int intClientSatVersion_NRI;
         public int intCeritarClient_NRI;
-        public int intCeritarAppSat_NRI;
+        public int intCeritarSatelliteApp_NRI;
         public string strCeritarClient_Name;
         public string strCeritarSatelliteApp_Name;
         public string strLocationSatelliteExe;

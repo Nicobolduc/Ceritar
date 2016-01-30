@@ -705,7 +705,7 @@ namespace Ceritar.CVS.Controllers
 
                     cCSV.CeritarSatelliteApp = new Models.Module_Configuration.mod_CSA_CeritarSatelliteApp();
                     cCSV.CeritarSatelliteApp.Name = structCSV.strCeritarSatelliteApp_Name;
-                    cCSV.CeritarSatelliteApp.CeritarSatelliteApp_NRI = structCSV.intCeritarAppSat_NRI;
+                    cCSV.CeritarSatelliteApp.CeritarSatelliteApp_NRI = structCSV.intCeritarSatelliteApp_NRI;
                     cCSV.CeritarSatelliteApp.ExeIsFolder = structCSV.blnExeIsFolder;
                     cCSV.CeritarSatelliteApp.KitFolderName = structCSV.strKitFolderName;
 
@@ -737,8 +737,9 @@ namespace Ceritar.CVS.Controllers
             string strFolderName = string.Empty;
             string strVersionFolderRoot = string.Empty;
             string strNewZipFileLocation = vstrExportFolderLocation + @"\Installation Kit " + mcView.GetVersionNo().ToString() + @".zip";
-            string strReleaseLocation = mcView.GetLocation_Release();
-            string strReportLocation = mcView.GetSelectedClient().strLocationReportExe;
+            string strReleaseLocation = string.Empty;
+            string strLocationSatelliteExe = string.Empty;
+            string strReportLocation = string.Empty;
             string strCaptionsAndMenusLocation = mcView.GetLocation_TTApp();
             string strCurrentScriptFolderLocation = mcView.GetSelectedClient().strLocationScriptsRoot;
 
@@ -749,7 +750,14 @@ namespace Ceritar.CVS.Controllers
                     File.Delete(strNewZipFileLocation);
                 }
 
+                //Get the release folder location to copy (from the version kit or from the latest revision)
+                strReleaseLocation = clsSQL.str_ADOSingleLookUp("TOP 1 Rev_Location_Exe", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Rev_Location_Exe IS NOT NULL AND Revision.CSA_NRI IS NULL AND Revision.Rev_ExeIsReport = 0 ORDER BY Revision.Rev_No DESC");
+
+                strReleaseLocation = strReleaseLocation == string.Empty ? mcView.GetLocation_Release() : strReleaseLocation;
+
                 //Create the new archive file and add all the folders to it.
+                if (File.Exists(strNewZipFileLocation)) File.Delete(strNewZipFileLocation);
+
                 using (ZipArchive newZipFile = ZipFile.Open(strNewZipFileLocation, ZipArchiveMode.Create))
                 {
                     //Add the release folder with the report application to the zip archive.
@@ -757,10 +765,16 @@ namespace Ceritar.CVS.Controllers
                     {
                         newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
                     }
-                    newZipFile.CreateEntryFromFile(strReportLocation, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strReportLocation)));
 
-                    //Add the TTApp to the Zip archive.
-                    //File.SetAttributes(strCaptionsAndMenusLocation, FileAttributes.Normal);
+                    //Get the release folder location to copy (from the version kit or from the latest revision)
+                    strReportLocation = clsSQL.str_ADOSingleLookUp("TOP 1 Rev_Location_Exe", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Rev_Location_Exe IS NOT NULL AND Revision.Rev_ExeIsReport = 1 ORDER BY Revision.Rev_No DESC");
+
+                    strReportLocation = strReportLocation == string.Empty ? mcView.GetSelectedClient().strLocationReportExe : strReportLocation;
+
+                    //Add the external report application to the zip archive
+                    newZipFile.CreateEntryFromFile(strReportLocation, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strReportLocation)));
+                    
+                    //Add the TTApp to the zip archive.
                     newZipFile.CreateEntryFromFile(strCaptionsAndMenusLocation, Path.Combine(new DirectoryInfo(strCaptionsAndMenusLocation).Parent.Name, Path.GetFileName(strCaptionsAndMenusLocation)));
                 
                     //Add every satellites applications to the zip archive.
@@ -768,16 +782,21 @@ namespace Ceritar.CVS.Controllers
 
                     foreach (structClientSatVersion structSat in lstSatellites)
                     {
-                        if (structSat.blnExeIsFolder && Directory.Exists(structSat.strLocationSatelliteExe))
+                        //Get the executable folder location to copy (from the version kit or from the latest revision)
+                        strLocationSatelliteExe = clsSQL.str_ADOSingleLookUp("TOP 1 Rev_Location_Exe", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Rev_Location_Exe IS NOT NULL AND Revision.CSA_NRI = " + structSat.intCeritarSatelliteApp_NRI + " ORDER BY Revision.Rev_No DESC");
+
+                        strLocationSatelliteExe = strLocationSatelliteExe == string.Empty ? structSat.strLocationSatelliteExe : strLocationSatelliteExe;
+
+                        if (structSat.blnExeIsFolder && Directory.Exists(strLocationSatelliteExe))
                         {
-                            foreach (string strCurrentFileToCopyPath in Directory.GetFiles(structSat.strLocationSatelliteExe, "*.*", SearchOption.AllDirectories))
+                            foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strLocationSatelliteExe, "*.*", SearchOption.AllDirectories))
                             {
                                 newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(structSat.strKitFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
                             }
                         }
-                        else if (File.Exists(structSat.strLocationSatelliteExe))
+                        else if (File.Exists(strLocationSatelliteExe))
                         {
-                            newZipFile.CreateEntryFromFile(structSat.strLocationSatelliteExe, Path.Combine(structSat.strKitFolderName, Path.GetFileName(structSat.strLocationSatelliteExe)));
+                            newZipFile.CreateEntryFromFile(strLocationSatelliteExe, Path.Combine(structSat.strKitFolderName, Path.GetFileName(strLocationSatelliteExe)));
                         }
                     }
 
@@ -1019,14 +1038,27 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        Revision.Rev_TS, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_No, " + Environment.NewLine;
             strSQL = strSQL + "        CerClient.CeC_Name, " + Environment.NewLine;
+            strSQL = strSQL + "        AppName = CASE WHEN CerSatApp.CSA_NRI IS NOT NULL THEN CerSatApp.CSA_Name " + Environment.NewLine;
+            strSQL = strSQL + " 					  WHEN Revision.Rev_ExeIsReport = 1 THEN CerApp.CeA_ExternalRPTAppName " + Environment.NewLine;
+            strSQL = strSQL + " 					  WHEN CerApp.CeA_NRI IS NOT NULL AND Revision.Rev_Location_Exe IS NOT NULL THEN CerApp.CeA_Name " + Environment.NewLine;
+            strSQL = strSQL + " 					  ELSE '' " + Environment.NewLine;
+            strSQL = strSQL + " 				 END +  " + Environment.NewLine;
+            strSQL = strSQL + " 				 CASE WHEN Revision.Rev_Location_Scripts IS NOT NULL  " + Environment.NewLine;
+            strSQL = strSQL + " 				      THEN CASE WHEN Revision.Rev_Location_Exe IS NOT NULL  " + Environment.NewLine;
+            strSQL = strSQL + " 								THEN ' + '  " + Environment.NewLine;
+            strSQL = strSQL + " 								ELSE ''  " + Environment.NewLine;
+            strSQL = strSQL + " 						   END + 'Scripts'  " + Environment.NewLine;
+            strSQL = strSQL + " 					  ELSE ''  " + Environment.NewLine;
+            strSQL = strSQL + " 				 END, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_DtCreation " + Environment.NewLine;
 
             strSQL = strSQL + " FROM Revision " + Environment.NewLine;
 
             strSQL = strSQL + "     INNER JOIN CerClient ON CerClient.CeC_NRI = Revision.CeC_NRI " + Environment.NewLine;
-            //strSQL = strSQL + "     INNER JOIN Version " + Environment.NewLine;
-            //strSQL = strSQL + "         INNER JOIN CerApp ON CerApp.CeA_NRI = Version.CeA_NRI " + Environment.NewLine;
-            //strSQL = strSQL + "     ON Version.Ver_NRI = Revision.Ver_NRI " + Environment.NewLine;
+            strSQL = strSQL + "     INNER JOIN Version " + Environment.NewLine;
+            strSQL = strSQL + "         INNER JOIN CerApp ON CerApp.CeA_NRI = Version.CeA_NRI " + Environment.NewLine;
+            strSQL = strSQL + "     ON Version.Ver_NRI = Revision.Ver_NRI " + Environment.NewLine;
+            strSQL = strSQL + "     LEFT JOIN CerSatApp ON CerSatApp.CSA_NRI = Revision.CSA_NRI " + Environment.NewLine;
 
             strSQL = strSQL + " WHERE Revision.Ver_NRI = " + vintVersion_NRI + Environment.NewLine;
 

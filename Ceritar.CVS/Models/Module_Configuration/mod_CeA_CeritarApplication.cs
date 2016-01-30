@@ -19,6 +19,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
         private int _intCeritarApplication_TS;
         private string _strName;
         private string _strDescription;
+        private string _strExternalReportAppName;
         private AppDomain _domain_NRI;
         private List<string> _lstModules;
         private List<mod_CSA_CeritarSatelliteApp> _lstSatelliteApps;
@@ -44,13 +45,13 @@ namespace Ceritar.CVS.Models.Module_Configuration
 
 #region "Properties"
 
-        public int CeritarApplication_NRI
+        internal int CeritarApplication_NRI
         {
             get { return _intCeritarApplication_NRI; }
             set { _intCeritarApplication_NRI = value; }
         }
 
-        public int CeritarApplication_TS
+        internal int CeritarApplication_TS
         {
             get { return _intCeritarApplication_TS; }
             set { _intCeritarApplication_TS = value; }
@@ -78,6 +79,12 @@ namespace Ceritar.CVS.Models.Module_Configuration
         {
             get { return _lstModules; }
             set { _lstModules = value; }
+        }
+
+        internal string ExternalReportAppName
+        {
+            get { return _strExternalReportAppName; }
+            set { _strExternalReportAppName = value; }
         }
 
         internal List<mod_CSA_CeritarSatelliteApp> LstCeritarSatelliteApps
@@ -288,6 +295,8 @@ namespace Ceritar.CVS.Models.Module_Configuration
                 else if (!mcSQL.bln_AddField("CeA_Desc", _strDescription, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("ApD_NRI", (int)_domain_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                { }
+                else if (!mcSQL.bln_AddField("CeA_ExternalRPTAppName", _strExternalReportAppName, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
                 else {
                     blnValidReturn = true;

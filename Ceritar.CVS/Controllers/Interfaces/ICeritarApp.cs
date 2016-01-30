@@ -15,6 +15,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         int GetDomain_NRI();
         string GetName();
         string GetDescription();
+        string GetExternalReportAppName();
         List<string> GetLstModules();
         List<structCeritarSatelliteApp> GetLstAppSatellites();
         Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode GetDML_Mode();

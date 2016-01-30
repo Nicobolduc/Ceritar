@@ -162,6 +162,24 @@ namespace Ceritar.Logirack_CVS
             return strSatelliteAppName;
         }
 
+        int CVS.Controllers.Interfaces.IRevision.GetSelectedSatellitteApp_NRI()
+        {
+            int intSatelliteApp_NRI = 0;
+
+            for (int intRowIndex = 0; intRowIndex < grdSatellites.Rows.Count; intRowIndex++)
+            {
+                if (mcGrdSatellites.bln_CellIsChecked(intRowIndex, mintGrdSat_CSA_Sel_col))
+                    Int32.TryParse(mcGrdSatellites[intRowIndex, mintGrdSat_CSA_NRI_col], out intSatelliteApp_NRI);
+            }
+
+            return intSatelliteApp_NRI;
+        }
+
+        bool CVS.Controllers.Interfaces.IRevision.GetExeIsExternalReport()
+        {
+            return chkExeIsRPT.Checked;
+        }
+
 #endregion
 
 
@@ -193,6 +211,20 @@ namespace Ceritar.Logirack_CVS
                         cboTemplates.SelectedValue = Int32.Parse(sqlRecord["Tpl_NRI"].ToString());
 
                         dtpCreation.Value = DateTime.Parse(sqlRecord["Rev_DtCreation"].ToString());
+
+                        chkExeIsRPT.Checked = Convert.ToBoolean(sqlRecord["Rev_ExeIsReport"].ToString());
+
+                        if (chkExeIsRPT.Checked)
+                        {
+                            pfblnGrdSatellites_UncheckAll();
+                            btnSelectExecutableFolderPath.Enabled = false;
+                            grdSatellites.Enabled = false;
+                        }
+                        else
+                        {
+                            grdSatellites.Enabled = true;
+                            btnSelectExecutableFolderPath.Enabled = true;
+                        }
                     }
 
                     blnValidReturn = true;
@@ -239,6 +271,26 @@ namespace Ceritar.Logirack_CVS
             try
             {
                 blnValidReturn = mcGrdSatellites.bln_FillData(mcCtrRevision.strGetListe_SatelliteApps_SQL());
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnValidReturn;
+        }
+
+        private bool pfblnGrdSatellites_UncheckAll()
+        {
+            bool blnValidReturn = true;
+
+            try
+            {
+                for (int intRowIndex = 1; intRowIndex < grdSatellites.Rows.Count; intRowIndex++)
+                {
+                    grdSatellites[intRowIndex, mintGrdSat_CSA_Sel_col] = "0";
+                }
             }
             catch (Exception ex)
             {
@@ -382,6 +434,11 @@ namespace Ceritar.Logirack_CVS
 
                         cboTemplates.Focus();
                         cboTemplates.DroppedDown = true;
+                        break;
+
+                    case ctr_Revision.ErrorCode_Rev.REPORT_EXE_MANDATORY:
+
+                        btnSelectExecutableFilePath.Focus();
                         break;
                 }
             }
@@ -537,7 +594,30 @@ namespace Ceritar.Logirack_CVS
 
                     mcGrdSatellites.GridIsLoading = false;
 
+                    formController.ChangeMade = true;
+
                     break;
+            }
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!formController.FormIsLoading)
+            {
+                formController.ChangeMade = true;
+
+                if (chkExeIsRPT.Checked)
+                {
+                    pfblnGrdSatellites_UncheckAll();
+                    grdSatellites.Enabled = false;
+                    btnSelectExecutableFolderPath.Enabled = false;                    
+                }
+                else
+                {
+                    txtReleasePath.Text = string.Empty;
+                    grdSatellites.Enabled = true;
+                    btnSelectExecutableFolderPath.Enabled = true;
+                }
             }
         }
 
