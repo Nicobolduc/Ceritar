@@ -79,6 +79,7 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
+            this.label7 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.tabRevision.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -647,11 +648,23 @@
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.Green;
+            this.label7.Location = new System.Drawing.Point(40, 488);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(537, 20);
+            this.label7.TabIndex = 51;
+            this.label7.Text = "DB_UpgradeScripts et Installations_Actives sont synchronisés";
+            // 
             // frmVersion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(821, 515);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.formController);
             this.Controls.Add(this.tab);
@@ -676,6 +689,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.grdClients)).EndInit();
             this.tab.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -730,5 +744,6 @@
         private System.Windows.Forms.Button btnGrdRevUpdate;
         private System.Windows.Forms.TextBox txtCreatedBy;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
     }
 }

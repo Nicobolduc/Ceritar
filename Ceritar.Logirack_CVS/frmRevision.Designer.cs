@@ -64,6 +64,7 @@
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.chkExeIsRPT = new System.Windows.Forms.CheckBox();
+            this.btnExportInstallationKit = new System.Windows.Forms.Button();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -108,6 +109,7 @@
             this.groupBox3.Controls.Add(this.btnGrdRevDel);
             this.groupBox3.Controls.Add(this.btnGrdRevAdd);
             this.groupBox3.Controls.Add(this.grdRevModifs);
+            this.groupBox3.Controls.Add(this.btnGenerate);
             this.groupBox3.Location = new System.Drawing.Point(5, 138);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(815, 208);
@@ -315,7 +317,7 @@
             this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGenerate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGenerate.BackgroundImage")));
             this.btnGenerate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnGenerate.Location = new System.Drawing.Point(779, 352);
+            this.btnGenerate.Location = new System.Drawing.Point(769, 162);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(40, 40);
             this.btnGenerate.TabIndex = 6;
@@ -431,11 +433,24 @@
             this.chkExeIsRPT.UseVisualStyleBackColor = true;
             this.chkExeIsRPT.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
+            // btnExportInstallationKit
+            // 
+            this.btnExportInstallationKit.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnExportInstallationKit.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnExportInstallationKit.BackgroundImage")));
+            this.btnExportInstallationKit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnExportInstallationKit.Location = new System.Drawing.Point(762, 354);
+            this.btnExportInstallationKit.Name = "btnExportInstallationKit";
+            this.btnExportInstallationKit.Size = new System.Drawing.Size(35, 35);
+            this.btnExportInstallationKit.TabIndex = 78;
+            this.toolTips.SetToolTip(this.btnExportInstallationKit, "Exporter la révision");
+            this.btnExportInstallationKit.UseVisualStyleBackColor = true;
+            // 
             // frmRevision
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(824, 472);
+            this.Controls.Add(this.btnExportInstallationKit);
             this.Controls.Add(this.chkExeIsRPT);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.btnSelectExecutableFilePath);
@@ -443,7 +458,6 @@
             this.Controls.Add(this.btnSelectExecutableFolderPath);
             this.Controls.Add(this.txtReleasePath);
             this.Controls.Add(this.btnShowExecutableFolder);
-            this.Controls.Add(this.btnGenerate);
             this.Controls.Add(this.btnSelectScriptsFolderPath);
             this.Controls.Add(this.formController);
             this.Controls.Add(this.groupBox1);
@@ -504,6 +518,7 @@
         public C1.Win.C1FlexGrid.C1FlexGrid grdSatellites;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.CheckBox chkExeIsRPT;
+        private System.Windows.Forms.Button btnExportInstallationKit;
 
     }
 }
