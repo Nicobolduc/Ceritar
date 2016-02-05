@@ -183,6 +183,8 @@ namespace Ceritar.Logirack_CVS
                 btnConsult.Enabled = true;
             }
 
+            btnAdd.Enabled = true;
+
             return blnValidReturn;
         }
 

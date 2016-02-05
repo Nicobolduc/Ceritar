@@ -935,6 +935,11 @@ namespace Ceritar.Logirack_CVS
             if (!formController.FormIsLoading)
             {
                 formController.ChangeMade = true;
+
+                mcGrdSatelliteApps.ClearGrid();
+
+                grdClients[grdClients.Row, mintGrdClients_CeC_NRI_col] = null;
+                grdClients[grdClients.Row, mintGrdClients_CeC_Name_col] = null;
             }
         }
 

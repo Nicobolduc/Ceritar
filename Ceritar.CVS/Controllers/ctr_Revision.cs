@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using Ceritar.TT3LightDLL.Static_Classes;
@@ -134,6 +135,7 @@ namespace Ceritar.CVS.Controllers
             string strFolderName = string.Empty;
             string strRevisionFolderRoot = string.Empty;
             string strSatelliteApp_RevisionLocation = string.Empty;
+            string strRevAllScripts_Location = string.Empty;
             int intPreviousFolderLevel = -1;
             SqlDataReader cSQLReader = null;
             DirectoryInfo currentFolderInfos = null;
@@ -305,12 +307,16 @@ namespace Ceritar.CVS.Controllers
 
                         case (int)ctr_Template.FolderType.Scripts:
 
+                            bool blnScriptsChanged = false;
+
                             if ((File.Exists(mcView.GetLocation_Scripts()) || Directory.Exists(mcView.GetLocation_Scripts())))
                             {
                                 if ((File.GetAttributes(mcView.GetLocation_Scripts()) & FileAttributes.Directory) == FileAttributes.Directory)
                                 {
                                     if (mcView.GetLocation_Scripts() != currentFolderInfos.FullName)
                                     {
+                                        clsApp.GetAppController.setAttributesToNormal(new DirectoryInfo(currentFolderInfos.FullName));
+
                                         if (Directory.Exists(currentFolderInfos.FullName)) Directory.Delete(currentFolderInfos.FullName, true);
 
                                         currentFolderInfos.Create();
@@ -318,6 +324,8 @@ namespace Ceritar.CVS.Controllers
                                         clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Scripts(), currentFolderInfos.FullName, true, true);
 
                                         mcModRevision.Path_Scripts = currentFolderInfos.FullName;
+
+                                        blnScriptsChanged = true;
                                     }
                                 }
                                 else if (mcView.GetLocation_Scripts() != Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Scripts())))
@@ -334,9 +342,60 @@ namespace Ceritar.CVS.Controllers
                                     File.Copy(mcView.GetLocation_Scripts(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Scripts())));
 
                                     mcModRevision.Path_Scripts = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Scripts()));
+
+                                    blnScriptsChanged = true;
                                 }
                             }
-                            
+
+                            //Ajout dans Rev_AllScripts
+                            List<string> lstExistingScripts;
+                            List<string> lstTempScripts;
+                            string[] lstScriptsToCopy;
+                            string strNewScriptName = string.Empty;
+                            int intNewScriptNumber = 1;
+                            int intPlaceHolder = 0;
+
+                            if (!string.IsNullOrEmpty(mcView.GetLocation_Scripts()) & blnScriptsChanged)
+                            {
+                                strRevAllScripts_Location = Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES, mcView.GetCeritarApplication_Name(), sclsAppConfigs.GetVersionNumberPrefix +  mcModRevision.Version.VersionNo.ToString(), sclsAppConfigs.GetRevisionAllScriptFolderName);
+
+                                if (!Directory.Exists(strRevAllScripts_Location)) Directory.CreateDirectory(strRevAllScripts_Location);
+
+                                if ((File.GetAttributes(mcModRevision.Path_Scripts) & FileAttributes.Directory) == FileAttributes.Directory)
+                                {
+                                    lstTempScripts = Directory.GetFiles(mcModRevision.Path_Scripts, "*.*", SearchOption.TopDirectoryOnly).OrderBy(f => f).ToList<string>();
+                                }
+                                else
+                                {
+                                    lstTempScripts = Directory.GetFiles(new FileInfo(mcModRevision.Path_Scripts).Directory.FullName, "*.*", SearchOption.TopDirectoryOnly).OrderBy(f => f).ToList<string>();
+                                }
+
+                                lstScriptsToCopy = lstTempScripts.ToArray();
+
+                                lstExistingScripts = Directory.GetFiles(strRevAllScripts_Location).OrderBy(f => f).ToList<string>();
+
+                                if (lstExistingScripts.Count > 0)
+                                {
+                                    intNewScriptNumber = Int32.Parse(new String(Path.GetFileName(lstExistingScripts[lstExistingScripts.Count - 1]).TakeWhile(Char.IsDigit).ToArray())) + 1;
+                                }
+                                
+                                foreach (string strCurrentFile in lstScriptsToCopy)
+                                {
+                                    strNewScriptName = Path.GetFileName(strCurrentFile);
+
+                                    if (Int32.TryParse(strNewScriptName.Substring(0, strNewScriptName.IndexOf("_")), out intPlaceHolder))
+                                    {
+                                        strNewScriptName = strNewScriptName.Substring(strNewScriptName.IndexOf("_") + 1);
+                                    }
+
+                                    strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
+
+                                    File.Copy(strCurrentFile, Path.Combine(strRevAllScripts_Location, strNewScriptName), false);
+
+                                    intNewScriptNumber++;
+                                }
+                            }
+
                             break;
 
                         case (int)ctr_Template.FolderType.Report:

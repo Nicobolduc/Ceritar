@@ -37,6 +37,7 @@
             this.btnGrdRevDel = new System.Windows.Forms.Button();
             this.btnGrdRevAdd = new System.Windows.Forms.Button();
             this.grdRevModifs = new C1.Win.C1FlexGrid.C1FlexGrid();
+            this.btnGenerate = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.btnShowScriptsFolder = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -53,9 +54,9 @@
             this.btnSelectScriptsFolderPath = new System.Windows.Forms.Button();
             this.btnSelectScriptsFilePath = new System.Windows.Forms.Button();
             this.btnSelectExecutableFilePath = new System.Windows.Forms.Button();
-            this.btnGenerate = new System.Windows.Forms.Button();
             this.btnSelectExecutableFolderPath = new System.Windows.Forms.Button();
             this.btnShowExecutableFolder = new System.Windows.Forms.Button();
+            this.btnExportInstallationKit = new System.Windows.Forms.Button();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.txtReleasePath = new System.Windows.Forms.TextBox();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
@@ -64,7 +65,6 @@
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.chkExeIsRPT = new System.Windows.Forms.CheckBox();
-            this.btnExportInstallationKit = new System.Windows.Forms.Button();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -122,7 +122,7 @@
             this.btnGrdRevDel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnGrdRevDel.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevDel.Image")));
-            this.btnGrdRevDel.Location = new System.Drawing.Point(774, 59);
+            this.btnGrdRevDel.Location = new System.Drawing.Point(774, 58);
             this.btnGrdRevDel.Name = "btnGrdRevDel";
             this.btnGrdRevDel.Size = new System.Drawing.Size(35, 35);
             this.btnGrdRevDel.TabIndex = 1;
@@ -133,7 +133,7 @@
             this.btnGrdRevAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnGrdRevAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevAdd.Image")));
-            this.btnGrdRevAdd.Location = new System.Drawing.Point(774, 18);
+            this.btnGrdRevAdd.Location = new System.Drawing.Point(774, 17);
             this.btnGrdRevAdd.Name = "btnGrdRevAdd";
             this.btnGrdRevAdd.Size = new System.Drawing.Size(35, 35);
             this.btnGrdRevAdd.TabIndex = 0;
@@ -157,6 +157,20 @@
             this.grdRevModifs.TabIndex = 2;
             this.grdRevModifs.Tag = "28";
             this.grdRevModifs.DoubleClick += new System.EventHandler(this.grdRevModifs_DoubleClick);
+            // 
+            // btnGenerate
+            // 
+            this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnGenerate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGenerate.BackgroundImage")));
+            this.btnGenerate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnGenerate.Location = new System.Drawing.Point(769, 162);
+            this.btnGenerate.Name = "btnGenerate";
+            this.btnGenerate.Size = new System.Drawing.Size(40, 40);
+            this.btnGenerate.TabIndex = 6;
+            this.toolTips.SetToolTip(this.btnGenerate, "Mettre à jour la version");
+            this.btnGenerate.UseVisualStyleBackColor = true;
+            this.btnGenerate.Visible = false;
+            this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
             // 
             // label2
             // 
@@ -312,20 +326,6 @@
             this.btnSelectExecutableFilePath.UseVisualStyleBackColor = true;
             this.btnSelectExecutableFilePath.Click += new System.EventHandler(this.btnSelectExecutableFilePath_Click);
             // 
-            // btnGenerate
-            // 
-            this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGenerate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGenerate.BackgroundImage")));
-            this.btnGenerate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnGenerate.Location = new System.Drawing.Point(769, 162);
-            this.btnGenerate.Name = "btnGenerate";
-            this.btnGenerate.Size = new System.Drawing.Size(40, 40);
-            this.btnGenerate.TabIndex = 6;
-            this.toolTips.SetToolTip(this.btnGenerate, "Mettre à jour la version");
-            this.btnGenerate.UseVisualStyleBackColor = true;
-            this.btnGenerate.Visible = false;
-            this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
-            // 
             // btnSelectExecutableFolderPath
             // 
             this.btnSelectExecutableFolderPath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
@@ -349,6 +349,18 @@
             this.toolTips.SetToolTip(this.btnShowExecutableFolder, "Consulter l\'exécutable");
             this.btnShowExecutableFolder.UseVisualStyleBackColor = true;
             this.btnShowExecutableFolder.Click += new System.EventHandler(this.btnShowExecutableFolder_Click);
+            // 
+            // btnExportInstallationKit
+            // 
+            this.btnExportInstallationKit.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnExportInstallationKit.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnExportInstallationKit.BackgroundImage")));
+            this.btnExportInstallationKit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnExportInstallationKit.Location = new System.Drawing.Point(762, 354);
+            this.btnExportInstallationKit.Name = "btnExportInstallationKit";
+            this.btnExportInstallationKit.Size = new System.Drawing.Size(35, 35);
+            this.btnExportInstallationKit.TabIndex = 78;
+            this.toolTips.SetToolTip(this.btnExportInstallationKit, "Exporter la révision");
+            this.btnExportInstallationKit.UseVisualStyleBackColor = true;
             // 
             // txtReleasePath
             // 
@@ -432,18 +444,6 @@
             this.chkExeIsRPT.Text = "RPT seulement";
             this.chkExeIsRPT.UseVisualStyleBackColor = true;
             this.chkExeIsRPT.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
-            // 
-            // btnExportInstallationKit
-            // 
-            this.btnExportInstallationKit.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnExportInstallationKit.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnExportInstallationKit.BackgroundImage")));
-            this.btnExportInstallationKit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnExportInstallationKit.Location = new System.Drawing.Point(762, 354);
-            this.btnExportInstallationKit.Name = "btnExportInstallationKit";
-            this.btnExportInstallationKit.Size = new System.Drawing.Size(35, 35);
-            this.btnExportInstallationKit.TabIndex = 78;
-            this.toolTips.SetToolTip(this.btnExportInstallationKit, "Exporter la révision");
-            this.btnExportInstallationKit.UseVisualStyleBackColor = true;
             // 
             // frmRevision
             // 

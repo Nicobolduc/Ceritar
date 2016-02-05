@@ -12,6 +12,7 @@ namespace Ceritar.CVS
         private static string _strRoot_INSTALLATIONS_ACTIVES_Dir;
         private static string _strScriptsFolderName = "Scripts";
         private static string _strReleaseFolderName = "Release";
+        private static string _strRevisionAllScriptFolderName = "Rev_AllScripts";
         private static string _strCaptionsAndMenusFileName;
         private static string[] _strReleaseValidExtensions = { ".dll", ".config", ".exe" };
         private const string _strVersionNumberPrefix = "V_";
@@ -31,7 +32,7 @@ namespace Ceritar.CVS
         {
             get
             {
-                if (string.IsNullOrEmpty(_strRoot_DB_UPGRADE_SCRIPTS_Dir))
+                if (string.IsNullOrEmpty(_strRoot_DB_UPGRADE_SCRIPTS_Dir) || !System.IO.Directory.Exists(_strRoot_DB_UPGRADE_SCRIPTS_Dir))
                 {
                     _strRoot_DB_UPGRADE_SCRIPTS_Dir = clsSQL.str_ADOSingleLookUp("TTP_Value", "TTParam", "TTP_NRI = " + (int)CONFIG_TYPE.PATH_DB_UPGRADE_SCRIPTS);
                 }
@@ -44,7 +45,7 @@ namespace Ceritar.CVS
         {
             get
             {
-                if (string.IsNullOrEmpty(_strRoot_INSTALLATIONS_ACTIVES_Dir))
+                if (string.IsNullOrEmpty(_strRoot_INSTALLATIONS_ACTIVES_Dir) || !System.IO.Directory.Exists(_strRoot_INSTALLATIONS_ACTIVES_Dir))
                 {
                     _strRoot_INSTALLATIONS_ACTIVES_Dir = clsSQL.str_ADOSingleLookUp("TTP_Value", "TTParam", "TTP_NRI = " + (int)CONFIG_TYPE.PATH_INSTALLATIONS_ACTIVES);
                 }
@@ -64,6 +65,11 @@ namespace Ceritar.CVS
 
                 return _strCaptionsAndMenusFileName;
             }
+        }
+
+        public static string GetRevisionAllScriptFolderName
+        {
+            get { return sclsAppConfigs._strRevisionAllScriptFolderName; }
         }
 
         public static string GetScriptsFolderName
