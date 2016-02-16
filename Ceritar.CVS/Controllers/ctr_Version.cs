@@ -473,6 +473,11 @@ namespace Ceritar.CVS.Controllers
                 blnValidReturn = false;
                 mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exPath.FileName);
             }
+            catch (DirectoryNotFoundException exDir)
+            {
+                blnValidReturn = false;
+                mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exDir.TargetSite.Name);
+            }
             catch (Exception ex)
             {
                 blnValidReturn = false;
@@ -655,17 +660,20 @@ namespace Ceritar.CVS.Controllers
                 mcModVersion.Version_TS = mcView.GetVersion_TS();
                 mcModVersion.VersionNo = mcView.GetVersionNo();
                 mcModVersion.CompiledBy = mcView.GetCompiledBy();
-                mcModVersion.CerApplication = new Ceritar.CVS.Models.Module_Configuration.mod_CeA_CeritarApplication();
-                mcModVersion.CerApplication.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
                 mcModVersion.Location_APP_CHANGEMENT = mcView.GetLocation_APP_CHANGEMENT();
                 mcModVersion.Location_Release = mcView.GetLocation_Release();
                 mcModVersion.Location_CaptionsAndMenus = mcView.GetLocation_TTApp();
-                mcModVersion.TemplateSource = new Models.Module_Template.mod_Tpl_HierarchyTemplate();
-                mcModVersion.TemplateSource.Template_NRI = mcView.GetTemplateSource_NRI();
                 mcModVersion.CreationDate = mcView.GetCreationDate();
                 mcModVersion.IsDemo = mcView.GetIsDemo();
                 mcModVersion.IncludeScriptsOnRefresh = mcView.GetIncludeScriptsOnRefresh();
 
+                mcModVersion.CerApplication = new Ceritar.CVS.Models.Module_Configuration.mod_CeA_CeritarApplication();
+                mcModVersion.CerApplication.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
+                mcModVersion.CerApplication.ExternalReportAppName = clsSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + mcModVersion.CerApplication.CeritarApplication_NRI);
+
+                mcModVersion.TemplateSource = new Models.Module_Template.mod_Tpl_HierarchyTemplate();
+                mcModVersion.TemplateSource.Template_NRI = mcView.GetTemplateSource_NRI();
+                
                 lstStructCAV = mcView.GetClientsList();
 
                 foreach (structClientAppVersion structCAV in lstStructCAV)
@@ -742,6 +750,7 @@ namespace Ceritar.CVS.Controllers
             string strReportLocation = string.Empty;
             string strCaptionsAndMenusLocation = mcView.GetLocation_TTApp();
             string strCurrentScriptFolderLocation = mcView.GetSelectedClient().strLocationScriptsRoot;
+            string strRevAllScripts_Location = string.Empty;
 
             try
             {
@@ -809,6 +818,17 @@ namespace Ceritar.CVS.Controllers
                         {
                             newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetScriptsFolderName, new DirectoryInfo(strCurrentScriptsFolder).Name, Path.GetFileName(strCurrentFileToCopyPath)));
                         }
+                    }
+
+                    //Add the Rev_AllScripts folder if it exists
+                    strRevAllScripts_Location = Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES, mcView.GetCeritarApplication_Name(), sclsAppConfigs.GetVersionNumberPrefix + mcView.GetVersionNo().ToString(), sclsAppConfigs.GetRevisionAllScriptFolderName);
+
+                    if (Directory.Exists(strRevAllScripts_Location))
+                    {
+                        foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strRevAllScripts_Location, "*.*", SearchOption.TopDirectoryOnly))
+                        {
+                            newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetScriptsFolderName, sclsAppConfigs.GetRevisionAllScriptFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
+                        }   
                     }
                 }
 
@@ -1081,7 +1101,7 @@ namespace Ceritar.CVS.Controllers
             return strSQL;
         }
 
-        public string strGetTemplates_SQL()
+        public string strGetTemplates_SQL(int vintCerApplication_NRI = 0)
         {
             string strSQL = string.Empty;
 
@@ -1092,6 +1112,11 @@ namespace Ceritar.CVS.Controllers
 
             strSQL = strSQL + " WHERE Template.TeT_NRI = " + (int)ctr_Template.TemplateType.VERSION + Environment.NewLine;
 
+            if (vintCerApplication_NRI > 0)
+            {
+                strSQL = strSQL + "   AND Template.CeA_NRI = " + vintCerApplication_NRI + Environment.NewLine;
+            }
+            
             strSQL = strSQL + " ORDER BY Template.Tpl_ByDefault DESC, Template.Tpl_Name " + Environment.NewLine;
 
             return strSQL;

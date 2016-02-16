@@ -45,7 +45,7 @@ namespace Ceritar.CVS.Models.Module_Template
         private int mintScriptsFolderCount = 0;
         private int mintVersionNoFolderCount = 0;
         private int mintReportFolderCount = 0;
-        private const int mintMinMaxFolderType = 4; //Release, CaptionsAndMenus, Report, Scripts
+        private int mintMinMaxFolderType = 5; //Release, CaptionsAndMenus, Report (if not external), Scripts, Version No
 
 
 #region "Properties"
@@ -135,6 +135,11 @@ namespace Ceritar.CVS.Models.Module_Template
                     case sclsConstants.DML_Mode.INSERT_MODE:
                     case sclsConstants.DML_Mode.UPDATE_MODE:
 
+                        //On verifie si l'application des rapports est obligatoire
+                        string strExternalReportAppName = clsSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + _intCeritarApplication_NRI);
+
+                        mintMinMaxFolderType -= (int)(string.IsNullOrEmpty(strExternalReportAppName) ? 1 : 0);
+
                         if (string.IsNullOrEmpty(_strTemplateName))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Template.ErrorCode_Tpl.NAME_MANDATORY);
@@ -161,7 +166,7 @@ namespace Ceritar.CVS.Models.Module_Template
                         }
                         else if (!pfblnValidateFolderTypes((mod_Folder)_cRootSystem) || 
                                  ((int)_templateType == (int)ctr_Template.TemplateType.VERSION &&
-                                  (mintCaptionsAndMenusFolderCount + mintReportFolderCount + mintScriptsFolderCount + mintReleaseFolderCount + mintVersionNoFolderCount) != 5)
+                                  (mintCaptionsAndMenusFolderCount + mintReportFolderCount + mintScriptsFolderCount + mintReleaseFolderCount + mintVersionNoFolderCount) != mintMinMaxFolderType)
                                 )
                         {
                             mcActionResults.SetInvalid(mintMSG_VersionFolderTypeRules, ctr_Template.ErrorCode_Tpl.ONLY_NORMAL_AND_OTHER_FOLDERTYPE_MULTIPLE);

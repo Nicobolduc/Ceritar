@@ -28,6 +28,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private string _strLocation_Release;
         private string _strLocation_Scripts;
         private string _strCreationDate;
+        private string _strCreatedBy;
         private bool _blnExeIsExternalReport;
         
         //mod_IBase
@@ -76,6 +77,12 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         {
             get { return _cCreatedByUser; }
             set { _cCreatedByUser = value; }
+        }
+
+        internal string CreatedBy
+        {
+            get { return _strCreatedBy; }
+            set { _strCreatedBy = value; }
         }
 
         internal mod_CeC_CeritarClient CeritarClient
@@ -182,6 +189,10 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         else if (string.IsNullOrEmpty(_strLocation_Release) & string.IsNullOrEmpty(_strLocation_Scripts))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.EXE_OR_SCRIPT_MANDATORY);
+                        }
+                        else if (string.IsNullOrEmpty(_strCreatedBy) & string.IsNullOrEmpty(_strCreatedBy))
+                        {
+                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.CREATED_BY_MANDATORY);
                         }
                         else if (!clsSQL.bln_ADOValid_TS("Revision", "Rev_NRI", _intRevision_NRI, "Rev_TS", _intRevision_TS))
                         {
@@ -431,6 +442,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 else if (!mcSQL.bln_AddField("Rev_Location_Exe", _strLocation_Release, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("Rev_Location_Scripts", _strLocation_Scripts, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                { }
+                else if (!mcSQL.bln_AddField("Rev_CreatedBy", _strCreatedBy, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("CSA_NRI", _cSatelliteApp.CeritarSatelliteApp_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }

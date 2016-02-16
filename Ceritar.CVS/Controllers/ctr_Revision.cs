@@ -30,7 +30,8 @@ namespace Ceritar.CVS.Controllers
             CERITAR_CLIENT_MANDATORY = 5,
             EXE_OR_SCRIPT_MANDATORY = 6,
             CANT_DELETE_NOT_LAST_REVISION = 7,
-            REPORT_EXE_MANDATORY = 8
+            REPORT_EXE_MANDATORY = 8,
+            CREATED_BY_MANDATORY = 9
         }
 
         public ctr_Revision(Interfaces.IRevision rView)
@@ -51,6 +52,7 @@ namespace Ceritar.CVS.Controllers
                 mcModRevision.DML_Action = mcView.GetDML_Action();
                 mcModRevision.Revision_Number = mcView.GetRevisionNo();
                 mcModRevision.CreationDate = mcView.GetCreationDate();
+                mcModRevision.CreatedBy = mcView.GetCreatedBy();
                 mcModRevision.LstModifications = mcView.GetModificationsList();
                 mcModRevision.Path_Release = mcView.GetLocation_Release();
                 mcModRevision.Path_Scripts = mcView.GetLocation_Scripts();
@@ -315,10 +317,13 @@ namespace Ceritar.CVS.Controllers
                                 {
                                     if (mcView.GetLocation_Scripts() != currentFolderInfos.FullName)
                                     {
-                                        clsApp.GetAppController.setAttributesToNormal(new DirectoryInfo(currentFolderInfos.FullName));
+                                        if (Directory.Exists(currentFolderInfos.FullName))
+                                        {
+                                            clsApp.GetAppController.setAttributesToNormal(new DirectoryInfo(currentFolderInfos.FullName));
 
-                                        if (Directory.Exists(currentFolderInfos.FullName)) Directory.Delete(currentFolderInfos.FullName, true);
-
+                                            Directory.Delete(currentFolderInfos.FullName, true);
+                                        }
+                                        
                                         currentFolderInfos.Create();
 
                                         clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Scripts(), currentFolderInfos.FullName, true, true);
@@ -488,6 +493,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        Revision.Rev_Location_Exe, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_Location_Scripts, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_ExeIsReport, " + Environment.NewLine;
+            strSQL = strSQL + "        Revision.Rev_CreatedBy, " + Environment.NewLine;
             strSQL = strSQL + "        RevisionNo = CASE WHEN Revision.Rev_NRI IS NULL THEN " + clsApp.GetAppController.str_FixStringForSQL(strNewRevisionNo) + " ELSE Revision.Rev_No END, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_Name, " + Environment.NewLine;
             strSQL = strSQL + "        CerClient.CeC_NRI " + Environment.NewLine;

@@ -128,9 +128,9 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(574, 48);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(50, 13);
+            this.label6.Size = new System.Drawing.Size(44, 13);
             this.label6.TabIndex = 73;
-            this.label6.Text = "Créé par:";
+            this.label6.Text = "Usager:";
             // 
             // chkDemoVersion
             // 
@@ -212,7 +212,7 @@
             // 
             this.txtCompiledBy.Location = new System.Drawing.Point(374, 19);
             this.txtCompiledBy.Name = "txtCompiledBy";
-            this.txtCompiledBy.Size = new System.Drawing.Size(182, 20);
+            this.txtCompiledBy.Size = new System.Drawing.Size(198, 20);
             this.txtCompiledBy.TabIndex = 2;
             this.txtCompiledBy.TextChanged += new System.EventHandler(this.txtCompiledBy_TextChanged);
             // 
@@ -237,7 +237,7 @@
             // toolTip
             // 
             this.toolTip.AutoPopDelay = 5000;
-            this.toolTip.InitialDelay = 250;
+            this.toolTip.InitialDelay = 50;
             this.toolTip.ReshowDelay = 100;
             // 
             // btnShowExecutable
@@ -247,7 +247,7 @@
             this.btnShowExecutable.Location = new System.Drawing.Point(660, 314);
             this.btnShowExecutable.Name = "btnShowExecutable";
             this.btnShowExecutable.Size = new System.Drawing.Size(40, 40);
-            this.btnShowExecutable.TabIndex = 21;
+            this.btnShowExecutable.TabIndex = 7;
             this.toolTip.SetToolTip(this.btnShowExecutable, "Consulter l\'exécutable");
             this.btnShowExecutable.UseVisualStyleBackColor = true;
             this.btnShowExecutable.Click += new System.EventHandler(this.btnShowExecutable_Click);
@@ -259,7 +259,7 @@
             this.btnShowAccess.Location = new System.Drawing.Point(660, 269);
             this.btnShowAccess.Name = "btnShowAccess";
             this.btnShowAccess.Size = new System.Drawing.Size(40, 40);
-            this.btnShowAccess.TabIndex = 20;
+            this.btnShowAccess.TabIndex = 6;
             this.toolTip.SetToolTip(this.btnShowAccess, "Consulter TTApp");
             this.btnShowAccess.UseVisualStyleBackColor = true;
             this.btnShowAccess.Click += new System.EventHandler(this.btnShowAccess_Click);
@@ -271,7 +271,7 @@
             this.btnShowWord.Location = new System.Drawing.Point(660, 223);
             this.btnShowWord.Name = "btnShowWord";
             this.btnShowWord.Size = new System.Drawing.Size(40, 40);
-            this.btnShowWord.TabIndex = 19;
+            this.btnShowWord.TabIndex = 5;
             this.toolTip.SetToolTip(this.btnShowWord, "Consulter App_Changements.docx");
             this.btnShowWord.UseVisualStyleBackColor = true;
             this.btnShowWord.Click += new System.EventHandler(this.btnShowWord_Click);
@@ -283,7 +283,7 @@
             this.btnShowExcel.Location = new System.Drawing.Point(660, 177);
             this.btnShowExcel.Name = "btnShowExcel";
             this.btnShowExcel.Size = new System.Drawing.Size(40, 40);
-            this.btnShowExcel.TabIndex = 18;
+            this.btnShowExcel.TabIndex = 4;
             this.toolTip.SetToolTip(this.btnShowExcel, "Consulter App_Changements.xls");
             this.btnShowExcel.UseVisualStyleBackColor = true;
             this.btnShowExcel.Click += new System.EventHandler(this.btnShowExcel_Click);
@@ -295,7 +295,7 @@
             this.btnReplaceAppChangeXLS.Location = new System.Drawing.Point(7, 181);
             this.btnReplaceAppChangeXLS.Name = "btnReplaceAppChangeXLS";
             this.btnReplaceAppChangeXLS.Size = new System.Drawing.Size(30, 30);
-            this.btnReplaceAppChangeXLS.TabIndex = 13;
+            this.btnReplaceAppChangeXLS.TabIndex = 0;
             this.toolTip.SetToolTip(this.btnReplaceAppChangeXLS, "Sélectionner le App_Changements");
             this.btnReplaceAppChangeXLS.UseVisualStyleBackColor = true;
             this.btnReplaceAppChangeXLS.Click += new System.EventHandler(this.btnReplaceAppChangeXLS_Click);
@@ -307,7 +307,7 @@
             this.btnReplaceAppChangeDOC.Location = new System.Drawing.Point(7, 228);
             this.btnReplaceAppChangeDOC.Name = "btnReplaceAppChangeDOC";
             this.btnReplaceAppChangeDOC.Size = new System.Drawing.Size(30, 30);
-            this.btnReplaceAppChangeDOC.TabIndex = 14;
+            this.btnReplaceAppChangeDOC.TabIndex = 1;
             this.toolTip.SetToolTip(this.btnReplaceAppChangeDOC, "Sélectionner le App_Changements");
             this.btnReplaceAppChangeDOC.UseVisualStyleBackColor = true;
             this.btnReplaceAppChangeDOC.Click += new System.EventHandler(this.btnReplaceAppChangeDOC_Click);
@@ -319,7 +319,7 @@
             this.btnReplaceTTApp.Location = new System.Drawing.Point(7, 274);
             this.btnReplaceTTApp.Name = "btnReplaceTTApp";
             this.btnReplaceTTApp.Size = new System.Drawing.Size(30, 30);
-            this.btnReplaceTTApp.TabIndex = 15;
+            this.btnReplaceTTApp.TabIndex = 2;
             this.toolTip.SetToolTip(this.btnReplaceTTApp, "Sélectionner le TTApp");
             this.btnReplaceTTApp.UseVisualStyleBackColor = true;
             this.btnReplaceTTApp.Click += new System.EventHandler(this.btnReplaceTTApp_Click);
@@ -331,7 +331,7 @@
             this.btnReplaceExecutable.Location = new System.Drawing.Point(7, 319);
             this.btnReplaceExecutable.Name = "btnReplaceExecutable";
             this.btnReplaceExecutable.Size = new System.Drawing.Size(30, 30);
-            this.btnReplaceExecutable.TabIndex = 16;
+            this.btnReplaceExecutable.TabIndex = 3;
             this.toolTip.SetToolTip(this.btnReplaceExecutable, "Sélectionner l\'exécutable");
             this.btnReplaceExecutable.UseVisualStyleBackColor = true;
             this.btnReplaceExecutable.Click += new System.EventHandler(this.btnReplaceExecutable_Click);
@@ -344,7 +344,7 @@
             this.btnGrdRevDel.Location = new System.Drawing.Point(570, 103);
             this.btnGrdRevDel.Name = "btnGrdRevDel";
             this.btnGrdRevDel.Size = new System.Drawing.Size(35, 35);
-            this.btnGrdRevDel.TabIndex = 16;
+            this.btnGrdRevDel.TabIndex = 17;
             this.toolTip.SetToolTip(this.btnGrdRevDel, "Supprimer une révision");
             this.btnGrdRevDel.UseVisualStyleBackColor = true;
             this.btnGrdRevDel.Click += new System.EventHandler(this.btnGrdRevDel_Click);
@@ -367,10 +367,10 @@
             this.btnGenerate.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnGenerate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGenerate.BackgroundImage")));
             this.btnGenerate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnGenerate.Location = new System.Drawing.Point(27, 16);
+            this.btnGenerate.Location = new System.Drawing.Point(28, 16);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(40, 40);
-            this.btnGenerate.TabIndex = 62;
+            this.btnGenerate.TabIndex = 0;
             this.toolTip.SetToolTip(this.btnGenerate, "Mettre à jour la hierarchie");
             this.btnGenerate.UseVisualStyleBackColor = true;
             this.btnGenerate.Click += new System.EventHandler(this.btnCreate_Click);
@@ -378,12 +378,12 @@
             // btnExportInstallationKit
             // 
             this.btnExportInstallationKit.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnExportInstallationKit.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnExportInstallationKit.BackgroundImage")));
             this.btnExportInstallationKit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnExportInstallationKit.Image = ((System.Drawing.Image)(resources.GetObject("btnExportInstallationKit.Image")));
             this.btnExportInstallationKit.Location = new System.Drawing.Point(395, 126);
             this.btnExportInstallationKit.Name = "btnExportInstallationKit";
             this.btnExportInstallationKit.Size = new System.Drawing.Size(35, 35);
-            this.btnExportInstallationKit.TabIndex = 64;
+            this.btnExportInstallationKit.TabIndex = 3;
             this.toolTip.SetToolTip(this.btnExportInstallationKit, "Exporter un kit d\'installation");
             this.btnExportInstallationKit.UseVisualStyleBackColor = true;
             this.btnExportInstallationKit.Click += new System.EventHandler(this.btnExportInstallationKit_Click);
@@ -396,7 +396,7 @@
             this.btnGrdRevUpdate.Location = new System.Drawing.Point(570, 62);
             this.btnGrdRevUpdate.Name = "btnGrdRevUpdate";
             this.btnGrdRevUpdate.Size = new System.Drawing.Size(35, 35);
-            this.btnGrdRevUpdate.TabIndex = 17;
+            this.btnGrdRevUpdate.TabIndex = 16;
             this.toolTip.SetToolTip(this.btnGrdRevUpdate, "Modifier une révision");
             this.btnGrdRevUpdate.UseVisualStyleBackColor = true;
             this.btnGrdRevUpdate.Click += new System.EventHandler(this.btnGrdRevUpdate_Click);
@@ -471,11 +471,11 @@
             // 
             // groupBox5
             // 
-            this.groupBox5.Controls.Add(this.chkIncludeScripts);
             this.groupBox5.Controls.Add(this.btnGenerate);
-            this.groupBox5.Location = new System.Drawing.Point(706, 275);
+            this.groupBox5.Controls.Add(this.chkIncludeScripts);
+            this.groupBox5.Location = new System.Drawing.Point(706, 276);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(94, 79);
+            this.groupBox5.Size = new System.Drawing.Size(97, 79);
             this.groupBox5.TabIndex = 63;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Actions";
@@ -483,10 +483,10 @@
             // chkIncludeScripts
             // 
             this.chkIncludeScripts.AutoSize = true;
-            this.chkIncludeScripts.Location = new System.Drawing.Point(6, 58);
+            this.chkIncludeScripts.Location = new System.Drawing.Point(4, 59);
             this.chkIncludeScripts.Name = "chkIncludeScripts";
             this.chkIncludeScripts.Size = new System.Drawing.Size(91, 17);
-            this.chkIncludeScripts.TabIndex = 63;
+            this.chkIncludeScripts.TabIndex = 1;
             this.chkIncludeScripts.Text = "Inclure scripts";
             this.chkIncludeScripts.UseVisualStyleBackColor = true;
             // 
@@ -513,7 +513,7 @@
             this.grdSatellite.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
             this.grdSatellite.Size = new System.Drawing.Size(340, 144);
             this.grdSatellite.StyleInfo = resources.GetString("grdSatellite.StyleInfo");
-            this.grdSatellite.TabIndex = 2;
+            this.grdSatellite.TabIndex = 0;
             this.grdSatellite.Tag = "26";
             // 
             // txtReleasePath
@@ -584,7 +584,7 @@
             this.btnGrdClientsDel.Location = new System.Drawing.Point(395, 58);
             this.btnGrdClientsDel.Name = "btnGrdClientsDel";
             this.btnGrdClientsDel.Size = new System.Drawing.Size(35, 35);
-            this.btnGrdClientsDel.TabIndex = 12;
+            this.btnGrdClientsDel.TabIndex = 2;
             this.btnGrdClientsDel.UseVisualStyleBackColor = true;
             this.btnGrdClientsDel.Click += new System.EventHandler(this.btnGrdClientsDel_Click);
             // 
@@ -595,7 +595,7 @@
             this.btnGrdClientsAdd.Location = new System.Drawing.Point(395, 17);
             this.btnGrdClientsAdd.Name = "btnGrdClientsAdd";
             this.btnGrdClientsAdd.Size = new System.Drawing.Size(35, 35);
-            this.btnGrdClientsAdd.TabIndex = 11;
+            this.btnGrdClientsAdd.TabIndex = 0;
             this.btnGrdClientsAdd.UseVisualStyleBackColor = true;
             // 
             // grdClients
@@ -611,7 +611,7 @@
             this.grdClients.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
             this.grdClients.Size = new System.Drawing.Size(383, 144);
             this.grdClients.StyleInfo = resources.GetString("grdClients.StyleInfo");
-            this.grdClients.TabIndex = 2;
+            this.grdClients.TabIndex = 1;
             this.grdClients.Tag = "15";
             this.grdClients.BeforeRowColChange += new C1.Win.C1FlexGrid.RangeEventHandler(this.grdClients_BeforeRowColChange);
             this.grdClients.AfterRowColChange += new C1.Win.C1FlexGrid.RangeEventHandler(this.grdClients_AfterRowColChange);
@@ -628,7 +628,7 @@
             this.tab.Name = "tab";
             this.tab.SelectedIndex = 0;
             this.tab.Size = new System.Drawing.Size(814, 386);
-            this.tab.TabIndex = 10;
+            this.tab.TabIndex = 0;
             // 
             // formController
             // 
@@ -642,7 +642,7 @@
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
             this.formController.Size = new System.Drawing.Size(820, 33);
-            this.formController.TabIndex = 50;
+            this.formController.TabIndex = 1;
             this.formController.SetReadRights += new Ceritar.TT3LightDLL.Controls.ctlFormController.SetReadRightsEventHandler(this.formController_SetReadRights);
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);

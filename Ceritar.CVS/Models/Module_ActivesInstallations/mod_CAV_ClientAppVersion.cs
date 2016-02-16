@@ -127,6 +127,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                     case sclsConstants.DML_Mode.INSERT_MODE:
 
+                        string strExternalReportAppName = clsSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + _intCeritarApplication_NRI);
+
                         if (_cCeritarClient.CeritarClient_NRI <= 0)
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, Ceritar.CVS.Controllers.ctr_Version.ErrorCode_Ver.CLIENT_NAME_MANDATORY);
@@ -135,7 +137,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION);
                         }
-                        else if (string.IsNullOrEmpty(_strLocationReportExe))
+                        else if (string.IsNullOrEmpty(_strLocationReportExe) & !string.IsNullOrEmpty(strExternalReportAppName))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, Ceritar.CVS.Controllers.ctr_Version.ErrorCode_Ver.REPORT_MANDATORY);
                         }

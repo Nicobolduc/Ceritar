@@ -320,7 +320,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                                 foreach (mod_CAV_ClientAppVersion client in LstClientsUsing)
                                 {
-                                    if (string.IsNullOrEmpty(client.LocationReportExe) || !File.Exists(client.LocationReportExe))
+                                    if (!string.IsNullOrEmpty(_cCerApplication.ExternalReportAppName) && (string.IsNullOrEmpty(client.LocationReportExe) || !File.Exists(client.LocationReportExe)))
                                     {
                                         mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.REPORT_MANDATORY);
                                         blnValidReturn = false;

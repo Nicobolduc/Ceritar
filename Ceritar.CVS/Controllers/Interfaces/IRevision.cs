@@ -19,7 +19,8 @@ namespace Ceritar.CVS.Controllers.Interfaces
         string GetCeritarClient_Name();
         int GetCeritarClient_NRI();
         string GetCreationDate();
-        string GetCompiledBy();       
+        string GetCompiledBy();
+        string GetCreatedBy();
         ushort GetVersionNo();
         byte GetRevisionNo();         
         string GetLocation_Release();

@@ -296,7 +296,15 @@ namespace Ceritar.Logirack_CVS
 
                     case ctr_CeritarApplication.ErrorCode_CeA.MODULES_LIST_MANDATORY:
 
-                        grdModules.Row = mcActionResults.RowInError;
+                        if (grdModules.Rows.Count > 1)
+                        {
+                            grdModules.Row = mcActionResults.RowInError;
+                        } 
+                        else 
+                        {
+                            btnGrdModAdd.Focus();
+                        }
+                        
                         break;
 
                     case ctr_CeritarApplication.ErrorCode_CeA.DOMAIN_MANDATORY:

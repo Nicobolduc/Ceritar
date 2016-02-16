@@ -180,6 +180,11 @@ namespace Ceritar.Logirack_CVS
             return chkExeIsRPT.Checked;
         }
 
+        string CVS.Controllers.Interfaces.IRevision.GetCreatedBy()
+        {
+            return txtCreatedBy.Text;
+        }
+
 #endregion
 
 
@@ -206,6 +211,7 @@ namespace Ceritar.Logirack_CVS
 
                         txtReleasePath.Text = sqlRecord["Rev_Location_Exe"].ToString();
                         txtScriptsPath.Text = sqlRecord["Rev_Location_Scripts"].ToString();
+                        txtCreatedBy.Text = sqlRecord["Rev_CreatedBy"].ToString();
 
                         cboClients.SelectedValue = Int32.Parse(sqlRecord["CeC_NRI"].ToString());
                         cboTemplates.SelectedValue = Int32.Parse(sqlRecord["Tpl_NRI"].ToString());
@@ -440,6 +446,11 @@ namespace Ceritar.Logirack_CVS
 
                         btnSelectExecutableFilePath.Focus();
                         break;
+
+                    case ctr_Revision.ErrorCode_Rev.CREATED_BY_MANDATORY:
+
+                        txtCreatedBy.Focus();
+                        break;
                 }
             }
             else
@@ -518,12 +529,16 @@ namespace Ceritar.Logirack_CVS
 
         private void btnSelectScriptsFilePath_Click(object sender, EventArgs e)
         {
-            ShowOpenFileDialog("Scripts (*.sql)|*.sql|(*.txt)|*.txt", txtScriptsPath, txtScriptsPath.Text, true);
+            string strInitialDirectory = formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE ? txtScriptsPath.Text : string.Empty;
+
+            ShowOpenFileDialog("Scripts (*.sql)|*.sql|(*.txt)|*.txt", txtScriptsPath, strInitialDirectory, true);
         }
 
         private void btnSelectExecutableFilePath_Click(object sender, EventArgs e)
         {
-            ShowOpenFileDialog("Executable (*.exe)|*.exe", txtReleasePath, txtReleasePath.Text, true);
+            string strInitialDirectory = formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE ? txtReleasePath.Text : string.Empty;
+
+            ShowOpenFileDialog("Executable (*.exe)|*.exe", txtReleasePath, strInitialDirectory, true);
         }
 
         private void btnShowScriptsFolder_Click(object sender, EventArgs e)
@@ -573,6 +588,7 @@ namespace Ceritar.Logirack_CVS
                 case (int)sclsConstants.DML_Mode.UPDATE_MODE:
 
                     cboTemplates.Enabled = false;
+                    txtCreatedBy.Enabled = false;
 
                     break;
             }
@@ -618,6 +634,14 @@ namespace Ceritar.Logirack_CVS
                     grdSatellites.Enabled = true;
                     btnSelectExecutableFolderPath.Enabled = true;
                 }
+            }
+        }
+
+        private void txtCreatedBy_TextChanged(object sender, EventArgs e)
+        {
+            if (!formController.FormIsLoading) 
+            {
+                formController.ChangeMade = true;
             }
         }
 

@@ -502,7 +502,7 @@ namespace Ceritar.Logirack_CVS
             }         
         }
 
-        private void ShowFolderBrowserDialog(ref TextBox rtxtAffected)
+        private void ShowFolderBrowserDialog(ref TextBox rtxtAffected, string vstrDialogDescription = "")
         {
             DialogResult dialogResult;
 
@@ -511,6 +511,7 @@ namespace Ceritar.Logirack_CVS
                 if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE || formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
                 {
                     folderBrowserDialog.ShowNewFolderButton = false;
+                    folderBrowserDialog.Description = vstrDialogDescription;
 
                     if (!string.IsNullOrEmpty(rtxtAffected.Text))
                     {
@@ -572,7 +573,7 @@ namespace Ceritar.Logirack_CVS
 
             try
             {
-                ShowFolderBrowserDialog(ref txtTemp);
+                ShowFolderBrowserDialog(ref txtTemp, "Sélectionnez l'emplacement où sauvegarder l'archive.");
 
                 intSelectedRow = grdClients.FindRow(true, 1, mintGrdClients_Selection_col, false);
 
@@ -782,8 +783,11 @@ namespace Ceritar.Logirack_CVS
 
                     case ctr_Version.ErrorCode_Ver.REPORT_MANDATORY:
 
-                        ((HostedCellControl)mcGrdClients.LstHostedCellControls[mcActionResults.RowInError - 1]).GetCellControl.Focus();
-
+                        if (mcActionResults.RowInError > 0 & grdClients.Rows.Count > 1)
+                        {
+                            ((HostedCellControl)mcGrdClients.LstHostedCellControls[mcActionResults.RowInError - 1]).GetCellControl.Focus();
+                        }
+                        
                         break;
 
                     case ctr_Version.ErrorCode_Ver.DEMO_CANT_BE_INSTALLED:
@@ -932,14 +936,19 @@ namespace Ceritar.Logirack_CVS
 
         private void cboApplications_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!formController.FormIsLoading)
+            if (!formController.FormIsLoading & mcGrdClients.bln_RowEditIsValid())
             {
                 formController.ChangeMade = true;
 
                 mcGrdSatelliteApps.ClearGrid();
 
                 grdClients[grdClients.Row, mintGrdClients_CeC_NRI_col] = null;
-                grdClients[grdClients.Row, mintGrdClients_CeC_Name_col] = null;
+                grdClients[grdClients.Row, mintGrdClients_CeC_Name_col] = null; 
+            }
+
+            if (cboApplications.SelectedIndex >= 0 & !formController.FormIsLoading)
+            {
+                sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetTemplates_SQL(Int32.Parse(cboApplications.SelectedValue.ToString())), "Tpl_NRI", "Tpl_Name", false, ref cboTemplates);
             }
         }
 
@@ -1265,7 +1274,14 @@ namespace Ceritar.Logirack_CVS
         {
             if (!string.IsNullOrEmpty(txtExcelAppChangePath.Text) && File.Exists(txtExcelAppChangePath.Text))
             {
-                System.Diagnostics.Process.Start(txtExcelAppChangePath.Text);
+                try
+                {
+                    System.Diagnostics.Process.Start(txtExcelAppChangePath.Text);
+                }
+                catch (Exception ex)
+                {
+                    sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+                }               
             }
         }
 
@@ -1283,7 +1299,14 @@ namespace Ceritar.Logirack_CVS
             {
                 if (File.Exists(txtTTAppPath.Text))
                 {
-                    System.Diagnostics.Process.Start("explorer.exe", "/select, " + txtTTAppPath.Text);
+                    try
+                    {
+                        System.Diagnostics.Process.Start("explorer.exe", "/select, " + txtTTAppPath.Text);
+                    }
+                    catch (Exception ex)
+                    {
+                        sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+                    }
                 }
             }
         }

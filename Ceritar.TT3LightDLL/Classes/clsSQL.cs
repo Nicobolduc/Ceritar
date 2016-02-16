@@ -522,13 +522,19 @@ namespace Ceritar.TT3LightDLL.Classes
             {
                 //OSQL -S BOLDUC-PC\SVR_SQL -E 
                 //sp_password NULL, '1234', 'sa' GO
-
                 rcSQLConnection = new SqlConnection(@"Persist Security Info=False;
-                                                      User ID=sa;
-                                                      Password=1234;
-                                                      Initial Catalog=Logirack_CVS_Dev;
-                                                      Data Source=localhost\SVR_SQL;
+                                                      User ID=ltuser;
+                                                      Password=ltuser;
+                                                      Initial Catalog=Logirack_CVS;
+                                                      Data Source=SVR-SQL14;
                                                       MultipleActiveResultSets=True");
+
+//                rcSQLConnection = new SqlConnection(@"Persist Security Info=False;
+//                                                      User ID=sa;
+//                                                      Password=1234;
+//                                                      Initial Catalog=Logirack_CVS_Dev;
+//                                                      Data Source=localhost\SVR_SQL;
+//                                                      MultipleActiveResultSets=True");
 
 //                rcSQLConnection = new SqlConnection(@"Persist Security Info=False;
 //                                                                        User ID=sa;
