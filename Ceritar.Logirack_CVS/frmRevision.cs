@@ -38,7 +38,9 @@ namespace Ceritar.Logirack_CVS
         public int mintVersion_NRI;
 
         //Working Variables     
+        private int mstrCeritarApplication_NRI;
         private string mstrCeritarApplication_Name;
+        private string mstrCeritarApplication_RPT_Name;
         private ushort mintRevision_TS;
 
 
@@ -144,6 +146,11 @@ namespace Ceritar.Logirack_CVS
             return mintVersion_NRI;
         }
 
+        int CVS.Controllers.Interfaces.IRevision.GetCeritarApplication_NRI()
+        {
+            return mstrCeritarApplication_NRI;
+        }
+
         string CVS.Controllers.Interfaces.IRevision.GetCeritarApplication_Name()
         {
             return mstrCeritarApplication_Name;
@@ -180,6 +187,11 @@ namespace Ceritar.Logirack_CVS
             return chkExeIsRPT.Checked;
         }
 
+        bool CVS.Controllers.Interfaces.IRevision.GetExeWithExternalReport()
+        {
+            return chkExeAndRpt.Checked;
+        }
+
         string CVS.Controllers.Interfaces.IRevision.GetCreatedBy()
         {
             return txtCreatedBy.Text;
@@ -203,7 +215,9 @@ namespace Ceritar.Logirack_CVS
                 {
                     txtRevisionNo.Text = sqlRecord["RevisionNo"].ToString();
                     txtVersionNo.Text = sqlRecord["Ver_No"].ToString();
+                    mstrCeritarApplication_NRI = Int32.Parse(sqlRecord["CeA_NRI"].ToString());
                     mstrCeritarApplication_Name = sqlRecord["CeA_Name"].ToString();
+                    mstrCeritarApplication_RPT_Name = sqlRecord["CeA_ExternalRPTAppName"].ToString();
 
                     if (formController.FormMode != sclsConstants.DML_Mode.INSERT_MODE)
                     {
@@ -219,19 +233,25 @@ namespace Ceritar.Logirack_CVS
                         dtpCreation.Value = DateTime.Parse(sqlRecord["Rev_DtCreation"].ToString());
 
                         chkExeIsRPT.Checked = Convert.ToBoolean(sqlRecord["Rev_ExeIsReport"].ToString());
+                        chkExeAndRpt.Checked = Convert.ToBoolean(sqlRecord["Rev_ExeWithReport"].ToString());
 
                         if (chkExeIsRPT.Checked)
                         {
                             pfblnGrdSatellites_UncheckAll();
                             btnSelectExecutableFolderPath.Enabled = false;
                             grdSatellites.Enabled = false;
+                            chkExeAndRpt.Enabled = false;
                         }
                         else
                         {
                             grdSatellites.Enabled = true;
                             btnSelectExecutableFolderPath.Enabled = true;
+                            chkExeAndRpt.Enabled = true;
                         }
                     }
+
+                    chkExeAndRpt.Visible = !string.IsNullOrEmpty(mstrCeritarApplication_RPT_Name);
+                    chkExeIsRPT.Visible = !string.IsNullOrEmpty(mstrCeritarApplication_RPT_Name);
 
                     blnValidReturn = true;
                 }
@@ -465,7 +485,7 @@ namespace Ceritar.Logirack_CVS
         {
             bool blnValidReturn = false;
 
-            if (formController.FormMode != sclsConstants.DML_Mode.DELETE_MODE)
+            if (formController.FormMode != sclsConstants.DML_Mode.DELETE_MODE || true)
             {
                 blnValidReturn = mcCtrRevision.blnBuildRevisionHierarchy((int)cboTemplates.SelectedValue);
             }
@@ -622,11 +642,14 @@ namespace Ceritar.Logirack_CVS
             {
                 formController.ChangeMade = true;
 
+                chkExeAndRpt.Enabled = !chkExeIsRPT.Checked;
+
                 if (chkExeIsRPT.Checked)
                 {
                     pfblnGrdSatellites_UncheckAll();
                     grdSatellites.Enabled = false;
-                    btnSelectExecutableFolderPath.Enabled = false;                    
+                    btnSelectExecutableFolderPath.Enabled = false;
+                    chkExeAndRpt.Checked = false;
                 }
                 else
                 {
@@ -641,6 +664,20 @@ namespace Ceritar.Logirack_CVS
         {
             if (!formController.FormIsLoading) 
             {
+                formController.ChangeMade = true;
+            }
+        }
+
+        private void chkExeAndRpt_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!formController.FormIsLoading)
+            {
+                chkExeIsRPT.Enabled = !chkExeAndRpt.Checked;
+
+                if (chkExeAndRpt.Checked)
+                {
+                    chkExeIsRPT.Checked = false;
+                }
                 formController.ChangeMade = true;
             }
         }

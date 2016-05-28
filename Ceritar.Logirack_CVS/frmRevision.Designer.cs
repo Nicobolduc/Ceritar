@@ -32,14 +32,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmRevision));
             this.dtpCreation = new System.Windows.Forms.DateTimePicker();
             this.cboClients = new System.Windows.Forms.ComboBox();
-            this.txtScriptsPath = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.btnGrdRevDel = new System.Windows.Forms.Button();
             this.btnGrdRevAdd = new System.Windows.Forms.Button();
             this.grdRevModifs = new C1.Win.C1FlexGrid.C1FlexGrid();
-            this.btnGenerate = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.btnShowScriptsFolder = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.txtCreatedBy = new System.Windows.Forms.TextBox();
             this.txtRevisionNo = new System.Windows.Forms.TextBox();
@@ -51,25 +48,38 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.toolTips = new System.Windows.Forms.ToolTip(this.components);
-            this.btnSelectScriptsFolderPath = new System.Windows.Forms.Button();
+            this.btnExportRevision = new System.Windows.Forms.Button();
             this.btnSelectScriptsFilePath = new System.Windows.Forms.Button();
+            this.btnSelectScriptsFolderPath = new System.Windows.Forms.Button();
+            this.btnShowScriptsFolder = new System.Windows.Forms.Button();
             this.btnSelectExecutableFilePath = new System.Windows.Forms.Button();
             this.btnSelectExecutableFolderPath = new System.Windows.Forms.Button();
             this.btnShowExecutableFolder = new System.Windows.Forms.Button();
-            this.btnExportInstallationKit = new System.Windows.Forms.Button();
+            this.btnSelectFilePath = new System.Windows.Forms.Button();
+            this.btnSelectFolderPath = new System.Windows.Forms.Button();
+            this.chkExeIsRPT = new System.Windows.Forms.CheckBox();
+            this.chkExeAndRpt = new System.Windows.Forms.CheckBox();
+            this.btnGenerate = new System.Windows.Forms.Button();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.txtReleasePath = new System.Windows.Forms.TextBox();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.grdSatellites = new C1.Win.C1FlexGrid.C1FlexGrid();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.chkExeIsRPT = new System.Windows.Forms.CheckBox();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.txtScriptsPath = new System.Windows.Forms.TextBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.txtReleasePath = new System.Windows.Forms.TextBox();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdSatellites)).BeginInit();
+            this.groupBox2.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
             // dtpCreation
@@ -93,15 +103,6 @@
             this.cboClients.TabIndex = 2;
             this.cboClients.SelectedIndexChanged += new System.EventHandler(this.cboClients_SelectedIndexChanged);
             // 
-            // txtScriptsPath
-            // 
-            this.txtScriptsPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtScriptsPath.Location = new System.Drawing.Point(77, 362);
-            this.txtScriptsPath.Name = "txtScriptsPath";
-            this.txtScriptsPath.ReadOnly = true;
-            this.txtScriptsPath.Size = new System.Drawing.Size(594, 22);
-            this.txtScriptsPath.TabIndex = 65;
-            // 
             // groupBox3
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -109,10 +110,9 @@
             this.groupBox3.Controls.Add(this.btnGrdRevDel);
             this.groupBox3.Controls.Add(this.btnGrdRevAdd);
             this.groupBox3.Controls.Add(this.grdRevModifs);
-            this.groupBox3.Controls.Add(this.btnGenerate);
             this.groupBox3.Location = new System.Drawing.Point(5, 138);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(815, 208);
+            this.groupBox3.Size = new System.Drawing.Size(828, 208);
             this.groupBox3.TabIndex = 63;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Livrables couverts / Modifications incluses";
@@ -122,7 +122,7 @@
             this.btnGrdRevDel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnGrdRevDel.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevDel.Image")));
-            this.btnGrdRevDel.Location = new System.Drawing.Point(774, 58);
+            this.btnGrdRevDel.Location = new System.Drawing.Point(787, 58);
             this.btnGrdRevDel.Name = "btnGrdRevDel";
             this.btnGrdRevDel.Size = new System.Drawing.Size(35, 35);
             this.btnGrdRevDel.TabIndex = 2;
@@ -133,7 +133,7 @@
             this.btnGrdRevAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnGrdRevAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevAdd.Image")));
-            this.btnGrdRevAdd.Location = new System.Drawing.Point(774, 17);
+            this.btnGrdRevAdd.Location = new System.Drawing.Point(787, 17);
             this.btnGrdRevAdd.Name = "btnGrdRevAdd";
             this.btnGrdRevAdd.Size = new System.Drawing.Size(35, 35);
             this.btnGrdRevAdd.TabIndex = 0;
@@ -152,25 +152,11 @@
             this.grdRevModifs.Rows.Count = 1;
             this.grdRevModifs.Rows.DefaultSize = 18;
             this.grdRevModifs.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdRevModifs.Size = new System.Drawing.Size(762, 185);
+            this.grdRevModifs.Size = new System.Drawing.Size(775, 185);
             this.grdRevModifs.StyleInfo = resources.GetString("grdRevModifs.StyleInfo");
             this.grdRevModifs.TabIndex = 1;
             this.grdRevModifs.Tag = "28";
             this.grdRevModifs.DoubleClick += new System.EventHandler(this.grdRevModifs_DoubleClick);
-            // 
-            // btnGenerate
-            // 
-            this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGenerate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGenerate.BackgroundImage")));
-            this.btnGenerate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnGenerate.Location = new System.Drawing.Point(769, 162);
-            this.btnGenerate.Name = "btnGenerate";
-            this.btnGenerate.Size = new System.Drawing.Size(40, 40);
-            this.btnGenerate.TabIndex = 3;
-            this.toolTips.SetToolTip(this.btnGenerate, "Mettre à jour la version");
-            this.btnGenerate.UseVisualStyleBackColor = true;
-            this.btnGenerate.Visible = false;
-            this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
             // 
             // label2
             // 
@@ -179,18 +165,6 @@
             this.label2.Size = new System.Drawing.Size(62, 17);
             this.label2.TabIndex = 60;
             this.label2.Text = "Client:";
-            // 
-            // btnShowScriptsFolder
-            // 
-            this.btnShowScriptsFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowScriptsFolder.BackgroundImage")));
-            this.btnShowScriptsFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowScriptsFolder.Location = new System.Drawing.Point(674, 353);
-            this.btnShowScriptsFolder.Name = "btnShowScriptsFolder";
-            this.btnShowScriptsFolder.Size = new System.Drawing.Size(40, 40);
-            this.btnShowScriptsFolder.TabIndex = 4;
-            this.toolTips.SetToolTip(this.btnShowScriptsFolder, "Consulter les scripts");
-            this.btnShowScriptsFolder.UseVisualStyleBackColor = true;
-            this.btnShowScriptsFolder.Click += new System.EventHandler(this.btnShowScriptsFolder_Click);
             // 
             // groupBox1
             // 
@@ -295,38 +269,62 @@
             this.toolTips.InitialDelay = 50;
             this.toolTips.ReshowDelay = 100;
             // 
-            // btnSelectScriptsFolderPath
+            // btnExportRevision
             // 
-            this.btnSelectScriptsFolderPath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnSelectScriptsFolderPath.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectScriptsFolderPath.Image")));
-            this.btnSelectScriptsFolderPath.Location = new System.Drawing.Point(41, 357);
-            this.btnSelectScriptsFolderPath.Name = "btnSelectScriptsFolderPath";
-            this.btnSelectScriptsFolderPath.Size = new System.Drawing.Size(30, 30);
-            this.btnSelectScriptsFolderPath.TabIndex = 1;
-            this.toolTips.SetToolTip(this.btnSelectScriptsFolderPath, "Sélectionner un dossier de scripts");
-            this.btnSelectScriptsFolderPath.UseVisualStyleBackColor = true;
-            this.btnSelectScriptsFolderPath.Click += new System.EventHandler(this.btnSelectScriptsFolderPath_Click);
+            this.btnExportRevision.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnExportRevision.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnExportRevision.BackgroundImage")));
+            this.btnExportRevision.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnExportRevision.Location = new System.Drawing.Point(790, 521);
+            this.btnExportRevision.Name = "btnExportRevision";
+            this.btnExportRevision.Size = new System.Drawing.Size(40, 40);
+            this.btnExportRevision.TabIndex = 8;
+            this.toolTips.SetToolTip(this.btnExportRevision, "Exporter la révision");
+            this.btnExportRevision.UseVisualStyleBackColor = true;
             // 
             // btnSelectScriptsFilePath
             // 
             this.btnSelectScriptsFilePath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnSelectScriptsFilePath.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectScriptsFilePath.Image")));
-            this.btnSelectScriptsFilePath.Location = new System.Drawing.Point(5, 357);
+            this.btnSelectScriptsFilePath.Location = new System.Drawing.Point(8, 21);
             this.btnSelectScriptsFilePath.Name = "btnSelectScriptsFilePath";
             this.btnSelectScriptsFilePath.Size = new System.Drawing.Size(30, 30);
-            this.btnSelectScriptsFilePath.TabIndex = 0;
+            this.btnSelectScriptsFilePath.TabIndex = 66;
             this.toolTips.SetToolTip(this.btnSelectScriptsFilePath, "Sélectionner un script");
             this.btnSelectScriptsFilePath.UseVisualStyleBackColor = true;
             this.btnSelectScriptsFilePath.Click += new System.EventHandler(this.btnSelectScriptsFilePath_Click);
+            // 
+            // btnSelectScriptsFolderPath
+            // 
+            this.btnSelectScriptsFolderPath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnSelectScriptsFolderPath.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectScriptsFolderPath.Image")));
+            this.btnSelectScriptsFolderPath.Location = new System.Drawing.Point(44, 21);
+            this.btnSelectScriptsFolderPath.Name = "btnSelectScriptsFolderPath";
+            this.btnSelectScriptsFolderPath.Size = new System.Drawing.Size(30, 30);
+            this.btnSelectScriptsFolderPath.TabIndex = 67;
+            this.toolTips.SetToolTip(this.btnSelectScriptsFolderPath, "Sélectionner un dossier de scripts");
+            this.btnSelectScriptsFolderPath.UseVisualStyleBackColor = true;
+            this.btnSelectScriptsFolderPath.Click += new System.EventHandler(this.btnSelectScriptsFolderPath_Click);
+            // 
+            // btnShowScriptsFolder
+            // 
+            this.btnShowScriptsFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowScriptsFolder.BackgroundImage")));
+            this.btnShowScriptsFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnShowScriptsFolder.Location = new System.Drawing.Point(780, 14);
+            this.btnShowScriptsFolder.Name = "btnShowScriptsFolder";
+            this.btnShowScriptsFolder.Size = new System.Drawing.Size(40, 40);
+            this.btnShowScriptsFolder.TabIndex = 68;
+            this.toolTips.SetToolTip(this.btnShowScriptsFolder, "Consulter les scripts");
+            this.btnShowScriptsFolder.UseVisualStyleBackColor = true;
+            this.btnShowScriptsFolder.Click += new System.EventHandler(this.btnShowScriptsFolder_Click);
             // 
             // btnSelectExecutableFilePath
             // 
             this.btnSelectExecutableFilePath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnSelectExecutableFilePath.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectExecutableFilePath.Image")));
-            this.btnSelectExecutableFilePath.Location = new System.Drawing.Point(5, 403);
+            this.btnSelectExecutableFilePath.Location = new System.Drawing.Point(8, 21);
             this.btnSelectExecutableFilePath.Name = "btnSelectExecutableFilePath";
             this.btnSelectExecutableFilePath.Size = new System.Drawing.Size(30, 30);
-            this.btnSelectExecutableFilePath.TabIndex = 2;
+            this.btnSelectExecutableFilePath.TabIndex = 74;
             this.toolTips.SetToolTip(this.btnSelectExecutableFilePath, "Sélectionner un fichier exécutable");
             this.btnSelectExecutableFilePath.UseVisualStyleBackColor = true;
             this.btnSelectExecutableFilePath.Click += new System.EventHandler(this.btnSelectExecutableFilePath_Click);
@@ -335,10 +333,10 @@
             // 
             this.btnSelectExecutableFolderPath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnSelectExecutableFolderPath.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectExecutableFolderPath.Image")));
-            this.btnSelectExecutableFolderPath.Location = new System.Drawing.Point(41, 403);
+            this.btnSelectExecutableFolderPath.Location = new System.Drawing.Point(44, 21);
             this.btnSelectExecutableFolderPath.Name = "btnSelectExecutableFolderPath";
             this.btnSelectExecutableFolderPath.Size = new System.Drawing.Size(30, 30);
-            this.btnSelectExecutableFolderPath.TabIndex = 3;
+            this.btnSelectExecutableFolderPath.TabIndex = 75;
             this.toolTips.SetToolTip(this.btnSelectExecutableFolderPath, "Sélectionner un dossier de Release");
             this.btnSelectExecutableFolderPath.UseVisualStyleBackColor = true;
             this.btnSelectExecutableFolderPath.Click += new System.EventHandler(this.btnSelectExecutableFolderPath_Click);
@@ -347,34 +345,75 @@
             // 
             this.btnShowExecutableFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowExecutableFolder.BackgroundImage")));
             this.btnShowExecutableFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowExecutableFolder.Location = new System.Drawing.Point(674, 398);
+            this.btnShowExecutableFolder.Location = new System.Drawing.Point(780, 16);
             this.btnShowExecutableFolder.Name = "btnShowExecutableFolder";
             this.btnShowExecutableFolder.Size = new System.Drawing.Size(40, 40);
-            this.btnShowExecutableFolder.TabIndex = 5;
+            this.btnShowExecutableFolder.TabIndex = 76;
             this.toolTips.SetToolTip(this.btnShowExecutableFolder, "Consulter l\'exécutable");
             this.btnShowExecutableFolder.UseVisualStyleBackColor = true;
             this.btnShowExecutableFolder.Click += new System.EventHandler(this.btnShowExecutableFolder_Click);
             // 
-            // btnExportInstallationKit
+            // btnSelectFilePath
             // 
-            this.btnExportInstallationKit.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnExportInstallationKit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnExportInstallationKit.Image = ((System.Drawing.Image)(resources.GetObject("btnExportInstallationKit.Image")));
-            this.btnExportInstallationKit.Location = new System.Drawing.Point(785, 444);
-            this.btnExportInstallationKit.Name = "btnExportInstallationKit";
-            this.btnExportInstallationKit.Size = new System.Drawing.Size(35, 35);
-            this.btnExportInstallationKit.TabIndex = 8;
-            this.toolTips.SetToolTip(this.btnExportInstallationKit, "Exporter la révision");
-            this.btnExportInstallationKit.UseVisualStyleBackColor = true;
+            this.btnSelectFilePath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnSelectFilePath.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectFilePath.Image")));
+            this.btnSelectFilePath.Location = new System.Drawing.Point(103, 16);
+            this.btnSelectFilePath.Name = "btnSelectFilePath";
+            this.btnSelectFilePath.Size = new System.Drawing.Size(30, 30);
+            this.btnSelectFilePath.TabIndex = 75;
+            this.toolTips.SetToolTip(this.btnSelectFilePath, "Sélectionner un fichier");
+            this.btnSelectFilePath.UseVisualStyleBackColor = true;
             // 
-            // txtReleasePath
+            // btnSelectFolderPath
             // 
-            this.txtReleasePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtReleasePath.Location = new System.Drawing.Point(77, 407);
-            this.txtReleasePath.Name = "txtReleasePath";
-            this.txtReleasePath.ReadOnly = true;
-            this.txtReleasePath.Size = new System.Drawing.Size(594, 22);
-            this.txtReleasePath.TabIndex = 73;
+            this.btnSelectFolderPath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnSelectFolderPath.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectFolderPath.Image")));
+            this.btnSelectFolderPath.Location = new System.Drawing.Point(263, 15);
+            this.btnSelectFolderPath.Name = "btnSelectFolderPath";
+            this.btnSelectFolderPath.Size = new System.Drawing.Size(30, 30);
+            this.btnSelectFolderPath.TabIndex = 76;
+            this.toolTips.SetToolTip(this.btnSelectFolderPath, "Sélectionner un dossier");
+            this.btnSelectFolderPath.UseVisualStyleBackColor = true;
+            // 
+            // chkExeIsRPT
+            // 
+            this.chkExeIsRPT.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkExeIsRPT.Location = new System.Drawing.Point(10, 62);
+            this.chkExeIsRPT.Name = "chkExeIsRPT";
+            this.chkExeIsRPT.Size = new System.Drawing.Size(123, 17);
+            this.chkExeIsRPT.TabIndex = 78;
+            this.chkExeIsRPT.Text = "Rapports seulement";
+            this.toolTips.SetToolTip(this.chkExeIsRPT, "Cocher cette case si la révision ne contient pas le release de l\'application prin" +
+        "cipale, mais seulement l\'exécutable des rapports");
+            this.chkExeIsRPT.UseVisualStyleBackColor = true;
+            this.chkExeIsRPT.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            // 
+            // chkExeAndRpt
+            // 
+            this.chkExeAndRpt.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkExeAndRpt.Location = new System.Drawing.Point(136, 62);
+            this.chkExeAndRpt.Name = "chkExeAndRpt";
+            this.chkExeAndRpt.Size = new System.Drawing.Size(137, 17);
+            this.chkExeAndRpt.TabIndex = 77;
+            this.chkExeAndRpt.Text = "Application + rapports";
+            this.toolTips.SetToolTip(this.chkExeAndRpt, "Le dossier Release de l\'application principale inclut également l\'application des" +
+        " rapports");
+            this.chkExeAndRpt.UseVisualStyleBackColor = true;
+            this.chkExeAndRpt.CheckedChanged += new System.EventHandler(this.chkExeAndRpt_CheckedChanged);
+            // 
+            // btnGenerate
+            // 
+            this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnGenerate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGenerate.BackgroundImage")));
+            this.btnGenerate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnGenerate.Location = new System.Drawing.Point(739, 521);
+            this.btnGenerate.Name = "btnGenerate";
+            this.btnGenerate.Size = new System.Drawing.Size(40, 40);
+            this.btnGenerate.TabIndex = 81;
+            this.toolTips.SetToolTip(this.btnGenerate, "Mettre à jour la version");
+            this.btnGenerate.UseVisualStyleBackColor = true;
+            this.btnGenerate.Visible = false;
+            this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
             // 
             // openFileDialog
             // 
@@ -382,10 +421,12 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox4.Controls.Add(this.grdSatellites);
             this.groupBox4.Location = new System.Drawing.Point(544, 5);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(276, 127);
+            this.groupBox4.Size = new System.Drawing.Size(289, 127);
             this.groupBox4.TabIndex = 77;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "La révision est pour l\'application sattellite suivante:";
@@ -404,33 +445,11 @@
             this.grdSatellites.Rows.Count = 1;
             this.grdSatellites.Rows.DefaultSize = 18;
             this.grdSatellites.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdSatellites.Size = new System.Drawing.Size(269, 107);
+            this.grdSatellites.Size = new System.Drawing.Size(282, 107);
             this.grdSatellites.StyleInfo = resources.GetString("grdSatellites.StyleInfo");
             this.grdSatellites.TabIndex = 0;
             this.grdSatellites.Tag = "35";
             this.grdSatellites.DoubleClick += new System.EventHandler(this.grdSatellites_DoubleClick);
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.Enabled = false;
-            this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox1.Location = new System.Drawing.Point(725, 399);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(108, 17);
-            this.checkBox1.TabIndex = 6;
-            this.checkBox1.Text = "Release + RPT";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // chkExeIsRPT
-            // 
-            this.chkExeIsRPT.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkExeIsRPT.Location = new System.Drawing.Point(725, 421);
-            this.chkExeIsRPT.Name = "chkExeIsRPT";
-            this.chkExeIsRPT.Size = new System.Drawing.Size(108, 17);
-            this.chkExeIsRPT.TabIndex = 7;
-            this.chkExeIsRPT.Text = "RPT seulement";
-            this.chkExeIsRPT.UseVisualStyleBackColor = true;
-            this.chkExeIsRPT.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // formController
             // 
@@ -440,36 +459,111 @@
             this.formController.FormIsLoading = false;
             this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.NO_MODE;
             this.formController.Item_NRI = 0;
-            this.formController.Location = new System.Drawing.Point(1, 481);
+            this.formController.Location = new System.Drawing.Point(1, 572);
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
-            this.formController.Size = new System.Drawing.Size(822, 33);
+            this.formController.Size = new System.Drawing.Size(835, 33);
             this.formController.TabIndex = 9;
             this.formController.SetReadRights += new Ceritar.TT3LightDLL.Controls.ctlFormController.SetReadRightsEventHandler(this.formController_SetReadRights);
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.btnSelectScriptsFilePath);
+            this.groupBox2.Controls.Add(this.btnSelectScriptsFolderPath);
+            this.groupBox2.Controls.Add(this.txtScriptsPath);
+            this.groupBox2.Controls.Add(this.btnShowScriptsFolder);
+            this.groupBox2.Location = new System.Drawing.Point(5, 352);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(828, 63);
+            this.groupBox2.TabIndex = 78;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Scripts";
+            // 
+            // txtScriptsPath
+            // 
+            this.txtScriptsPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtScriptsPath.Location = new System.Drawing.Point(80, 26);
+            this.txtScriptsPath.Name = "txtScriptsPath";
+            this.txtScriptsPath.ReadOnly = true;
+            this.txtScriptsPath.Size = new System.Drawing.Size(694, 22);
+            this.txtScriptsPath.TabIndex = 69;
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox5.Controls.Add(this.chkExeIsRPT);
+            this.groupBox5.Controls.Add(this.btnSelectExecutableFilePath);
+            this.groupBox5.Controls.Add(this.btnSelectExecutableFolderPath);
+            this.groupBox5.Controls.Add(this.txtReleasePath);
+            this.groupBox5.Controls.Add(this.btnShowExecutableFolder);
+            this.groupBox5.Controls.Add(this.chkExeAndRpt);
+            this.groupBox5.Location = new System.Drawing.Point(5, 421);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(828, 85);
+            this.groupBox5.TabIndex = 79;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Application principale exécutable";
+            // 
+            // txtReleasePath
+            // 
+            this.txtReleasePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtReleasePath.Location = new System.Drawing.Point(80, 25);
+            this.txtReleasePath.Name = "txtReleasePath";
+            this.txtReleasePath.ReadOnly = true;
+            this.txtReleasePath.Size = new System.Drawing.Size(694, 22);
+            this.txtReleasePath.TabIndex = 79;
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox6.Controls.Add(this.label8);
+            this.groupBox6.Controls.Add(this.label4);
+            this.groupBox6.Controls.Add(this.btnSelectFolderPath);
+            this.groupBox6.Controls.Add(this.btnSelectFilePath);
+            this.groupBox6.Location = new System.Drawing.Point(5, 512);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(303, 55);
+            this.groupBox6.TabIndex = 80;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Documents divers";
+            // 
+            // label8
+            // 
+            this.label8.Location = new System.Drawing.Point(157, 24);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(100, 17);
+            this.label8.TabIndex = 78;
+            this.label8.Text = "Ajouter un dossier :";
+            // 
+            // label4
+            // 
+            this.label4.Location = new System.Drawing.Point(6, 24);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(100, 17);
+            this.label4.TabIndex = 77;
+            this.label4.Text = "Ajouter un fichier :";
+            // 
             // frmRevision
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(824, 515);
-            this.Controls.Add(this.btnExportInstallationKit);
-            this.Controls.Add(this.chkExeIsRPT);
+            this.ClientSize = new System.Drawing.Size(837, 606);
+            this.Controls.Add(this.btnGenerate);
+            this.Controls.Add(this.groupBox5);
+            this.Controls.Add(this.groupBox6);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.btnExportRevision);
             this.Controls.Add(this.groupBox4);
-            this.Controls.Add(this.btnSelectExecutableFilePath);
-            this.Controls.Add(this.btnSelectScriptsFilePath);
-            this.Controls.Add(this.btnSelectExecutableFolderPath);
-            this.Controls.Add(this.txtReleasePath);
-            this.Controls.Add(this.btnShowExecutableFolder);
-            this.Controls.Add(this.btnSelectScriptsFolderPath);
             this.Controls.Add(this.formController);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.txtScriptsPath);
             this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.btnShowScriptsFolder);
-            this.Controls.Add(this.checkBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -482,8 +576,12 @@
             this.groupBox1.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdSatellites)).EndInit();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -491,13 +589,11 @@
 
         private System.Windows.Forms.DateTimePicker dtpCreation;
         private System.Windows.Forms.ComboBox cboClients;
-        private System.Windows.Forms.TextBox txtScriptsPath;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button btnGrdRevDel;
         private System.Windows.Forms.Button btnGrdRevAdd;
         public C1.Win.C1FlexGrid.C1FlexGrid grdRevModifs;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button btnShowScriptsFolder;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox txtVersionNo;
         private System.Windows.Forms.Label label6;
@@ -508,22 +604,31 @@
         private System.Windows.Forms.TextBox txtRevisionNo;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ToolTip toolTips;
-        private System.Windows.Forms.Button btnSelectScriptsFolderPath;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
-        private System.Windows.Forms.Button btnGenerate;
-        private System.Windows.Forms.Button btnSelectExecutableFolderPath;
-        private System.Windows.Forms.TextBox txtReleasePath;
-        private System.Windows.Forms.Button btnShowExecutableFolder;
-        private System.Windows.Forms.Button btnSelectScriptsFilePath;
-        private System.Windows.Forms.Button btnSelectExecutableFilePath;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.GroupBox groupBox4;
         public C1.Win.C1FlexGrid.C1FlexGrid grdSatellites;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.CheckBox chkExeIsRPT;
-        private System.Windows.Forms.Button btnExportInstallationKit;
+        private System.Windows.Forms.Button btnExportRevision;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox txtCreatedBy;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button btnSelectScriptsFilePath;
+        private System.Windows.Forms.Button btnSelectScriptsFolderPath;
+        private System.Windows.Forms.TextBox txtScriptsPath;
+        private System.Windows.Forms.Button btnShowScriptsFolder;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.CheckBox chkExeIsRPT;
+        private System.Windows.Forms.Button btnSelectExecutableFilePath;
+        private System.Windows.Forms.Button btnSelectExecutableFolderPath;
+        private System.Windows.Forms.TextBox txtReleasePath;
+        private System.Windows.Forms.Button btnShowExecutableFolder;
+        private System.Windows.Forms.CheckBox chkExeAndRpt;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button btnSelectFolderPath;
+        private System.Windows.Forms.Button btnSelectFilePath;
+        private System.Windows.Forms.Button btnGenerate;
 
     }
 }

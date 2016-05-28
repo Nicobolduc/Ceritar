@@ -15,6 +15,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         int GetRevision_NRI();
         int GetRevision_TS();
         int GetTemplateSource_NRI();
+        int GetCeritarApplication_NRI();
         string GetCeritarApplication_Name();
         string GetCeritarClient_Name();
         int GetCeritarClient_NRI();
@@ -28,6 +29,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         int GetSelectedSatellitteApp_NRI();
         string GetSelectedSatellitteApp_Name();
         bool GetExeIsExternalReport();
+        bool GetExeWithExternalReport();
         List<string> GetModificationsList();
     }
 }

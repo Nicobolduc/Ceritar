@@ -24,7 +24,7 @@ namespace Ceritar.Logirack_CVS
 
         private void main()
         {
-
+            sclsGenList.ShowGenList(sclsGenList.GeneralLists_ID.VERSION_REVISION_LIST_NRI);
         }
 
         private void fileToolStripMenuItem_Click(object sender, EventArgs e)

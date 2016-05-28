@@ -22,6 +22,9 @@ namespace Ceritar.CVS.Controllers
         private mod_Ver_Version mcModVersion;
         private clsActionResults mcActionResult;
         private clsSQL mcSQL;
+
+        //Working variables
+        private bool mblnUpdateSelectedClientOnly = false;
         
         public enum ErrorCode_Ver
         {
@@ -143,6 +146,8 @@ namespace Ceritar.CVS.Controllers
                 {
                     mcModVersion.LstClientsUsing.Clear();
 
+                    mblnUpdateSelectedClientOnly = true;
+
                     structClientAppVersion structCAV = mcView.GetSelectedClient();
                     mod_CAV_ClientAppVersion cCAV = new mod_CAV_ClientAppVersion();
                     cCAV.DML_Action = structCAV.Action;
@@ -225,7 +230,7 @@ namespace Ceritar.CVS.Controllers
 
                             if (mcView.GetDML_Action() == sclsConstants.DML_Mode.DELETE_MODE) //On supprime toute la hierarchie existante et on sort
                             {
-                                blnValidReturn = pfblnDeleteVersionHierarchy(strVersionFolderRoot);
+                                //blnValidReturn = pfblnDeleteVersionHierarchy(strVersionFolderRoot);
 
                                 return blnValidReturn;
                             }
@@ -359,7 +364,7 @@ namespace Ceritar.CVS.Controllers
 
                 if (!blnValidReturn && mcModVersion.DML_Action == sclsConstants.DML_Mode.INSERT_MODE)
                 {
-                    pfblnDeleteVersionHierarchy(strVersionFolderRoot);
+                    //pfblnDeleteVersionHierarchy(strVersionFolderRoot);
                 }
             }
 
@@ -401,7 +406,7 @@ namespace Ceritar.CVS.Controllers
 
                         foreach (string strCurrentVersionFolderToCopy_Path in lstVersionsFolders)
                         {
-                            intCurrentFolder_VersionNo = UInt16.Parse(Regex.Replace(new DirectoryInfo(strCurrentVersionFolderToCopy_Path).Name, @"[^0-9]+", ""));
+                            UInt16.TryParse(Regex.Replace(new DirectoryInfo(strCurrentVersionFolderToCopy_Path).Name, @"[^0-9]+", ""), out intCurrentFolder_VersionNo);
 
                             if (intCurrentFolder_VersionNo > intActiveVersionInProd & intCurrentFolder_VersionNo <= mcView.GetVersionNo())
                             {
@@ -501,7 +506,16 @@ namespace Ceritar.CVS.Controllers
 
             try
             {
-                lstClients = mcView.GetClientsList();
+                if (mblnUpdateSelectedClientOnly)
+                {
+                    lstClients = new List<structClientAppVersion>();
+                    lstClients.Add(mcView.GetSelectedClient());
+                }
+                else
+                {
+                    lstClients = mcView.GetClientsList();
+                }
+                
 
                 foreach (structClientAppVersion structClient in lstClients)
                 {
@@ -744,7 +758,8 @@ namespace Ceritar.CVS.Controllers
             string strSQL = string.Empty;
             string strFolderName = string.Empty;
             string strVersionFolderRoot = string.Empty;
-            string strNewZipFileLocation = vstrExportFolderLocation + @"\Installation Kit " + mcView.GetVersionNo().ToString() + @".zip";
+            string strCeritarClientName = string.Empty;
+            string strNewZipFileLocation = string.Empty;
             string strReleaseLocation = string.Empty;
             string strLocationSatelliteExe = string.Empty;
             string strReportLocation = string.Empty;
@@ -754,6 +769,10 @@ namespace Ceritar.CVS.Controllers
 
             try
             {
+                strCeritarClientName = clsSQL.str_ADOSingleLookUp("CeC_Name", "CerClient", "CeC_NRI = " + vintCeritarClient_NRI);
+
+                strNewZipFileLocation = vstrExportFolderLocation + @"\Installation Kit " + mcView.GetVersionNo().ToString() + " - " + strCeritarClientName + @".zip";
+
                 if (File.Exists(strNewZipFileLocation))
                 {
                     File.Delete(strNewZipFileLocation);
@@ -987,9 +1006,12 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        Version.Ver_AppChange_Location, " + Environment.NewLine;
             strSQL = strSQL + "        Version.Ver_Release_Location, " + Environment.NewLine;
             strSQL = strSQL + "        Version.Ver_CaptionsAndMenus_Location, " + Environment.NewLine;
-            strSQL = strSQL + "        Version.Ver_IsDemo " + Environment.NewLine;
+            strSQL = strSQL + "        Version.Ver_IsDemo, " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.CeA_ExternalRPTAppName " + Environment.NewLine;
 
             strSQL = strSQL + " FROM Version " + Environment.NewLine;
+
+            strSQL = strSQL + "     INNER JOIN CerApp ON CerApp.CeA_NRI = Version.CeA_NRI " + Environment.NewLine;
 
             strSQL = strSQL + " WHERE Version.Ver_NRI = " + vintVersion_NRI + Environment.NewLine;
 
@@ -1039,7 +1061,7 @@ namespace Ceritar.CVS.Controllers
 
             strSQL = strSQL + "     LEFT JOIN ClientSatVersion  " + Environment.NewLine;
             strSQL = strSQL + " 		INNER JOIN Version ON Version.Ver_NRI = ClientSatVersion.Ver_NRI  " + Environment.NewLine;
-            strSQL = strSQL + " 	ON ClientSatVersion.Ver_NRI = Version.Ver_NRI  " + Environment.NewLine;
+            strSQL = strSQL + " 	ON ClientSatVersion.Ver_NRI = " + vintVersion_NRI + Environment.NewLine;
             strSQL = strSQL + "    AND ClientSatVersion.CSA_NRI = CerSatApp.CSA_NRI  " + Environment.NewLine;
             strSQL = strSQL + "    AND ClientSatVersion.CeC_NRI = " + vintCeritarClient_NRI + Environment.NewLine;
 

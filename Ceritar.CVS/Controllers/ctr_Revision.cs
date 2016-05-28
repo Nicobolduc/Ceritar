@@ -59,6 +59,7 @@ namespace Ceritar.CVS.Controllers
                 mcModRevision.Revision_NRI = mcView.GetRevision_NRI();
                 mcModRevision.Revision_TS = mcView.GetRevision_TS();
                 mcModRevision.ExeIsExternalReport = mcView.GetExeIsExternalReport();
+                mcModRevision.ExeWithExternalReport = mcView.GetExeWithExternalReport();
 
                 mcModRevision.CeritarClient = new Models.Module_Configuration.mod_CeC_CeritarClient();
                 mcModRevision.CeritarClient.CeritarClient_NRI = mcView.GetCeritarClient_NRI();
@@ -78,6 +79,10 @@ namespace Ceritar.CVS.Controllers
                 mcModRevision.SatelliteApp.CeritarSatelliteApp_NRI = mcView.GetSelectedSatellitteApp_NRI();
                 mcModRevision.SatelliteApp.Name = mcView.GetSelectedSatellitteApp_Name();
 
+                mcModRevision.Version.CerApplication = new mod_CeA_CeritarApplication();
+                mcModRevision.Version.CerApplication.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
+                mcModRevision.Version.CerApplication.Name = mcView.GetCeritarApplication_Name();
+                mcModRevision.Version.CerApplication.ExternalReportAppName = clsSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + mcModRevision.Version.CerApplication.CeritarApplication_NRI);
 
                 mcActionResult = mcModRevision.Validate();
             }
@@ -138,6 +143,7 @@ namespace Ceritar.CVS.Controllers
             string strRevisionFolderRoot = string.Empty;
             string strSatelliteApp_RevisionLocation = string.Empty;
             string strRevAllScripts_Location = string.Empty;
+            string strRevisionFolderName_InfosSupp = string.Empty;
             int intPreviousFolderLevel = -1;
             SqlDataReader cSQLReader = null;
             DirectoryInfo currentFolderInfos = null;
@@ -196,6 +202,12 @@ namespace Ceritar.CVS.Controllers
                         case (int)ctr_Template.FolderType.Revision_Number:
 
                             strFolderName = sclsAppConfigs.GetRevisionNumberPrefix + mcView.GetRevisionNo().ToString();
+
+                            strRevisionFolderName_InfosSupp = (string.IsNullOrEmpty(mcModRevision.Path_Release) || mcModRevision.ExeIsExternalReport ? string.Empty : " EXE");
+                            strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (mcModRevision.ExeIsExternalReport || mcView.GetExeWithExternalReport() ? (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " RPT" : string.Empty);
+                            strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (string.IsNullOrEmpty(mcModRevision.Path_Scripts) ? string.Empty : (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " SCRIPTS");
+
+                            strFolderName = strFolderName + strRevisionFolderName_InfosSupp;
 
                             strRevisionFolderRoot = Path.Combine(currentFolderInfos.FullName, strFolderName);
 
@@ -261,10 +273,16 @@ namespace Ceritar.CVS.Controllers
 
                                         blnValidReturn = clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseValidExtensions);
 
-                                        /*//TODO: Use checkbox in the screen
-                                        string[] reportExe = Directory.GetFiles(currentFolderInfos.FullName, "*RPT.exe", SearchOption.TopDirectoryOnly);
-                                        
-                                        if (reportExe.Length > 0) File.Delete(reportExe[0]);*/
+                                        if (!mcView.GetExeWithExternalReport() && !mcView.GetExeIsExternalReport())
+                                        {
+                                            string strExternalReport_AppName = mcModRevision.Version.CerApplication.ExternalReportAppName;
+
+                                            strExternalReport_AppName = (string.IsNullOrEmpty(strExternalReport_AppName) ? "*RPT.exe" : strExternalReport_AppName);
+
+                                            string[] reportExe = Directory.GetFiles(currentFolderInfos.FullName, strExternalReport_AppName, SearchOption.TopDirectoryOnly);
+
+                                            if (reportExe.Length > 0) File.Delete(reportExe[0]);
+                                        }
 
                                         mcModRevision.Path_Release = currentFolderInfos.FullName;
 
@@ -388,7 +406,7 @@ namespace Ceritar.CVS.Controllers
                                 {
                                     strNewScriptName = Path.GetFileName(strCurrentFile);
 
-                                    if (Int32.TryParse(strNewScriptName.Substring(0, strNewScriptName.IndexOf("_")), out intPlaceHolder))
+                                    if (strNewScriptName.Contains('_') && Int32.TryParse(strNewScriptName.Substring(0, strNewScriptName.IndexOf("_")), out intPlaceHolder))
                                     {
                                         strNewScriptName = strNewScriptName.Substring(strNewScriptName.IndexOf("_") + 1);
                                     }
@@ -449,20 +467,26 @@ namespace Ceritar.CVS.Controllers
         private bool pfblnDeleteRevisionHierarchy(string vstrRevisionFolderRoot)
         {
             bool blnValidReturn = false;
+            System.Windows.Forms.DialogResult answer;
 
             try
             {
-                System.Diagnostics.Process process = new System.Diagnostics.Process();
-                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-
-                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                startInfo.FileName = "cmd.exe";
-                startInfo.Arguments = @"/C RMDIR """ + vstrRevisionFolderRoot + @""" /S /Q";
-
-                process.StartInfo = startInfo;
-                process.Start();
-                process.WaitForExit();
+                answer = System.Windows.Forms.MessageBox.Show("Voulez-vous supprimer le répertoire à l'emplacement suivant : " + vstrRevisionFolderRoot, "Attention", System.Windows.Forms.MessageBoxButtons.YesNo);
                 
+                if (answer == System.Windows.Forms.DialogResult.Yes)
+                {
+                    System.Diagnostics.Process process = new System.Diagnostics.Process();
+                    System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                    //TODO UPADTE REV ALL SCRIPTS
+                    startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                    startInfo.FileName = "cmd.exe";
+                    startInfo.Arguments = @"/C RMDIR """ + vstrRevisionFolderRoot + @""" /S /Q";
+
+                    process.StartInfo = startInfo;
+                    process.Start();
+                    process.WaitForExit();
+                }
+    
                 blnValidReturn = true;
             }
             catch (Exception ex)
@@ -493,9 +517,12 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        Revision.Rev_Location_Exe, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_Location_Scripts, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_ExeIsReport, " + Environment.NewLine;
+            strSQL = strSQL + "        Revision.Rev_ExeWithReport, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_CreatedBy, " + Environment.NewLine;
             strSQL = strSQL + "        RevisionNo = CASE WHEN Revision.Rev_NRI IS NULL THEN " + clsApp.GetAppController.str_FixStringForSQL(strNewRevisionNo) + " ELSE Revision.Rev_No END, " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.CeA_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_Name, " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.CeA_ExternalRPTAppName, " + Environment.NewLine;
             strSQL = strSQL + "        CerClient.CeC_NRI " + Environment.NewLine;
                 
             strSQL = strSQL + " FROM Version " + Environment.NewLine;

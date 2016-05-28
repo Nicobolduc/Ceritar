@@ -67,6 +67,7 @@ namespace Ceritar.Logirack_CVS
         //Working variables
         private ushort mintVersion_TS;
         private bool mblnGrdSatellitesChangeMade;
+        private string mstrExternalApplicationName;
         
         //Messages
         private int mintMSG_ChangesWillBeLostOnRowChange = 27;
@@ -373,6 +374,8 @@ namespace Ceritar.Logirack_CVS
 
                     chkDemoVersion.Checked = Convert.ToBoolean(sqlRecord["Ver_IsDemo"]);
 
+                    mstrExternalApplicationName = sqlRecord["CeA_ExternalRPTAppName"].ToString();
+
                     blnValidReturn = true;
                 }
 
@@ -590,6 +593,11 @@ namespace Ceritar.Logirack_CVS
 
                         blnValidReturn = mcCtrVersion.blnExportVersionInstallationKit((int)cboTemplates.SelectedValue, intCeritarClient_NRI, txtTemp.Text);
 
+                        if (blnValidReturn)
+                        {
+                            MessageBox.Show("Export effectué avec succès!" + Environment.NewLine + "À l'emplacement suivant : " + txtTemp.Text, "Message" ,MessageBoxButtons.OK);
+                        }
+
                         Cursor.Current = Cursors.Default;
                     }
                 }
@@ -617,6 +625,8 @@ namespace Ceritar.Logirack_CVS
             grdClients.Cols[mintGrdClients_IsCurrentVersion_col].DataType = typeof(bool);
             grdClients.Cols[mintGrdClients_Installed_col].DataType = typeof(bool);
             grdClients.Cols[mintGrdClients_Selection_col].DataType = typeof(bool);
+
+            grdClients.Cols[mintGrdClients_LocationReportExe_col].Visible = !string.IsNullOrEmpty(mstrExternalApplicationName);
 
             if (grdClients.Rows.Count > 1)
             {
@@ -949,6 +959,10 @@ namespace Ceritar.Logirack_CVS
             if (cboApplications.SelectedIndex >= 0 & !formController.FormIsLoading)
             {
                 sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetTemplates_SQL(Int32.Parse(cboApplications.SelectedValue.ToString())), "Tpl_NRI", "Tpl_Name", false, ref cboTemplates);
+
+                mstrExternalApplicationName = clsSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + cboApplications.SelectedValue.ToString());
+
+                grdClients.Cols[mintGrdClients_LocationReportExe_col].Visible = !string.IsNullOrEmpty(mstrExternalApplicationName);
             }
         }
 
@@ -1119,7 +1133,7 @@ namespace Ceritar.Logirack_CVS
                 frmRevision frmVersion = new frmRevision();
 
                 frmVersion.mintVersion_NRI = formController.Item_NRI;
-                frmVersion.formController.ShowForm(sclsConstants.DML_Mode.INSERT_MODE, ref intNewItem_NRI, true);
+                frmVersion.formController.ShowForm(this, sclsConstants.DML_Mode.INSERT_MODE, ref intNewItem_NRI, false, true);
 
                 pfblnGrdRevisions_Load();
 
@@ -1136,7 +1150,7 @@ namespace Ceritar.Logirack_CVS
 
                 frmRevision.mintVersion_NRI = formController.Item_NRI;
 
-                frmRevision.formController.ShowForm(sclsConstants.DML_Mode.DELETE_MODE, ref intItem_NRI, true);
+                frmRevision.formController.ShowForm(this, sclsConstants.DML_Mode.DELETE_MODE, ref intItem_NRI, false,true);
 
                 pfblnGrdRevisions_Load();
 
@@ -1345,7 +1359,7 @@ namespace Ceritar.Logirack_CVS
 
                 frmRevision.mintVersion_NRI = formController.Item_NRI;
 
-                frmRevision.formController.ShowForm(sclsConstants.DML_Mode.UPDATE_MODE, ref intRevision_NRI, true);
+                frmRevision.formController.ShowForm(this, sclsConstants.DML_Mode.UPDATE_MODE, ref intRevision_NRI, false, true);
 
                 pfblnGrdRevisions_Load();
 

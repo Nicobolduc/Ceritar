@@ -445,6 +445,14 @@ namespace Ceritar.Logirack_CVS
                 formController.ChangeMade = true;
             }
         }
+
+        private void txtReportAppExternal_TextChanged(object sender, EventArgs e)
+        {
+            if (!formController.FormIsLoading)
+            {
+                formController.ChangeMade = true;
+            }
+        }
     }
 }
 

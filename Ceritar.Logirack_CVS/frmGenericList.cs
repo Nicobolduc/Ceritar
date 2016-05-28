@@ -87,12 +87,12 @@ namespace Ceritar.Logirack_CVS
                 {
                     case sclsConstants.DML_Mode.INSERT_MODE:
                         intItem_NRI = 0;
-                        frmToOpen.GetFormController().ShowForm(vFormMode, ref intItem_NRI, mblnChildFormIsModal);
+                        frmToOpen.GetFormController().ShowForm(this, vFormMode, ref intItem_NRI, mblnChildFormIsModal);
                         
                         break;
 
                     case sclsConstants.DML_Mode.UPDATE_MODE:
-                        frmToOpen.GetFormController().ShowForm(vFormMode, ref intItem_NRI, mblnChildFormIsModal);
+                        frmToOpen.GetFormController().ShowForm(this, vFormMode, ref intItem_NRI, mblnChildFormIsModal);
        
                         break;
 
@@ -100,7 +100,7 @@ namespace Ceritar.Logirack_CVS
                     case sclsConstants.DML_Mode.DELETE_MODE:
                         //sclsWinControls_Utilities.DisableAllFormControls((Form)frmToOpen, null, null);
 
-                        frmToOpen.GetFormController().ShowForm(vFormMode, ref intItem_NRI, mblnChildFormIsModal);
+                        frmToOpen.GetFormController().ShowForm(this, vFormMode, ref intItem_NRI, mblnChildFormIsModal);
 
                         break;
                 }

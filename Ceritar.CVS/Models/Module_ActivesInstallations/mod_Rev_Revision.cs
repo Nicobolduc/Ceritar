@@ -30,6 +30,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private string _strCreationDate;
         private string _strCreatedBy;
         private bool _blnExeIsExternalReport;
+        private bool _blnExeWithExternalReport;
         
         //mod_IBase
         private clsActionResults mcActionResults = new clsActionResults();
@@ -143,6 +144,12 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { _blnExeIsExternalReport = value; }
         }
 
+        internal bool ExeWithExternalReport
+        {
+            get { return _blnExeWithExternalReport; }
+            set { _blnExeWithExternalReport = value; }
+        }
+
 #endregion
 
 
@@ -182,7 +189,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.CERITAR_CLIENT_MANDATORY);
                         }
-                        else if (_blnExeIsExternalReport && string.IsNullOrEmpty(_strLocation_Release))
+                        else if ((_blnExeIsExternalReport || _blnExeWithExternalReport) && string.IsNullOrEmpty(_strLocation_Release))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.REPORT_EXE_MANDATORY);
                         }
@@ -219,7 +226,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.EXE_OR_SCRIPT_MANDATORY);
                         }
-                        else if (_blnExeIsExternalReport && string.IsNullOrEmpty(_strLocation_Release))
+                        else if ((_blnExeIsExternalReport || _blnExeWithExternalReport) && string.IsNullOrEmpty(_strLocation_Release))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.REPORT_EXE_MANDATORY);
                         }
@@ -448,6 +455,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 else if (!mcSQL.bln_AddField("CSA_NRI", _cSatelliteApp.CeritarSatelliteApp_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("Rev_ExeIsReport", _blnExeIsExternalReport, clsSQL.MySQL_FieldTypes.BIT_TYPE))
+                { }
+                else if (!mcSQL.bln_AddField("Rev_ExeWithReport", _blnExeWithExternalReport, clsSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
                 else
                 {

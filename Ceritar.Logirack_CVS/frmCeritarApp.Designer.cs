@@ -45,10 +45,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.grdSatApp = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.chkReportAppExternal = new System.Windows.Forms.CheckBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.txtReportAppExternal = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.grdSatApp = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdModules)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -224,6 +224,35 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Liste des applications satellites";
             // 
+            // chkReportAppExternal
+            // 
+            this.chkReportAppExternal.Location = new System.Drawing.Point(170, 170);
+            this.chkReportAppExternal.Name = "chkReportAppExternal";
+            this.chkReportAppExternal.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.chkReportAppExternal.Size = new System.Drawing.Size(16, 17);
+            this.chkReportAppExternal.TabIndex = 3;
+            this.chkReportAppExternal.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkReportAppExternal.UseVisualStyleBackColor = true;
+            this.chkReportAppExternal.CheckedChanged += new System.EventHandler(this.chkReportAppExternal_CheckedChanged);
+            // 
+            // txtReportAppExternal
+            // 
+            this.txtReportAppExternal.Location = new System.Drawing.Point(189, 167);
+            this.txtReportAppExternal.MaxLength = 75;
+            this.txtReportAppExternal.Name = "txtReportAppExternal";
+            this.txtReportAppExternal.ReadOnly = true;
+            this.txtReportAppExternal.Size = new System.Drawing.Size(174, 20);
+            this.txtReportAppExternal.TabIndex = 4;
+            this.txtReportAppExternal.TextChanged += new System.EventHandler(this.txtReportAppExternal_TextChanged);
+            // 
+            // label3
+            // 
+            this.label3.Location = new System.Drawing.Point(3, 170);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(168, 17);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Nom du Exe externe des rapports:";
+            // 
             // grdSatApp
             // 
             this.grdSatApp.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -244,34 +273,6 @@
             this.grdSatApp.Tag = "25";
             this.grdSatApp.DoubleClick += new System.EventHandler(this.grdAppSat_DoubleClick);
             this.grdSatApp.Validated += new System.EventHandler(this.grdAppSat_Validated);
-            // 
-            // chkReportAppExternal
-            // 
-            this.chkReportAppExternal.Location = new System.Drawing.Point(170, 170);
-            this.chkReportAppExternal.Name = "chkReportAppExternal";
-            this.chkReportAppExternal.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.chkReportAppExternal.Size = new System.Drawing.Size(16, 17);
-            this.chkReportAppExternal.TabIndex = 3;
-            this.chkReportAppExternal.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkReportAppExternal.UseVisualStyleBackColor = true;
-            this.chkReportAppExternal.CheckedChanged += new System.EventHandler(this.chkReportAppExternal_CheckedChanged);
-            // 
-            // label3
-            // 
-            this.label3.Location = new System.Drawing.Point(3, 170);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(168, 17);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Nom du Exe externe des rapports:";
-            // 
-            // txtReportAppExternal
-            // 
-            this.txtReportAppExternal.Location = new System.Drawing.Point(189, 167);
-            this.txtReportAppExternal.MaxLength = 75;
-            this.txtReportAppExternal.Name = "txtReportAppExternal";
-            this.txtReportAppExternal.ReadOnly = true;
-            this.txtReportAppExternal.Size = new System.Drawing.Size(174, 20);
-            this.txtReportAppExternal.TabIndex = 4;
             // 
             // frmCeritarApp
             // 

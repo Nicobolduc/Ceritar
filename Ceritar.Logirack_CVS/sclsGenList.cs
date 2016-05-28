@@ -89,7 +89,7 @@ namespace Ceritar.Logirack_CVS
                     frmGenList.Text = frmGenList.Text + strListGenTitle;
                     frmGenList.MdiParent = mdiGeneral.ActiveForm;
 
-                    frmGenList.formController.ShowForm(sclsConstants.DML_Mode.CONSULT_MODE, ref intItem_NRI);
+                    frmGenList.formController.ShowForm(frmGenList, sclsConstants.DML_Mode.CONSULT_MODE, ref intItem_NRI);
 
                     //if (mdiGeneral.GetGenListChildCount == 0)
                     //{

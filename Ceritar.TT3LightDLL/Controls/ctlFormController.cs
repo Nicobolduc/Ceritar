@@ -23,6 +23,7 @@ namespace Ceritar.TT3LightDLL.Controls
         private bool mblnShowButtonQuitOnly;
 
         private System.Windows.Forms.Form mfrmParent;
+        private System.Windows.Forms.Form mfrmCallingForm;
 
         //Public Events
         public delegate void BeNotifyEventHandler(BeNotifyEventArgs eventArgs);
@@ -49,6 +50,7 @@ namespace Ceritar.TT3LightDLL.Controls
             this.HandleDestroyed += ctlFormController_HandleDestroyed;
             this.PropertyChanged += ctlFormController_PropertyChanged;
 
+            
         }
 
         ~ctlFormController()
@@ -152,7 +154,7 @@ namespace Ceritar.TT3LightDLL.Controls
 
 #region Functions / Subs
 
-        public void ShowForm(sclsConstants.DML_Mode vintFormMode, ref int rintItem_ID, bool vblnIsModal = false)
+        public void ShowForm(IWin32Window vintParentHandle, sclsConstants.DML_Mode vintFormMode, ref int rintItem_ID, bool vblnIsModal = false, bool vblnDisableParent =false)
         {
 
             mintFormMode = vintFormMode;
@@ -182,7 +184,22 @@ namespace Ceritar.TT3LightDLL.Controls
                 {
                     if (!vblnIsModal)
                     {
-                        mfrmParent.Show();
+                        if (mfrmParent.MdiParent != null)
+                        {
+                            mfrmParent.Show();
+                        }
+                        else
+                        {
+                            if (vblnDisableParent)
+                            {
+                                mfrmCallingForm = (Form)Form.FromHandle(vintParentHandle.Handle);
+                                mfrmCallingForm.Enabled = false;
+
+                                mfrmParent.FormClosed += mfrmParent_FormClosed;
+                            }
+                            
+                            mfrmParent.Show(vintParentHandle);
+                        }
                     }
                     else
                     {
@@ -190,8 +207,8 @@ namespace Ceritar.TT3LightDLL.Controls
                         mfrmParent.ShowInTaskbar = false;
 
                         this.Cursor = System.Windows.Forms.Cursors.Default;
-     
-                        mfrmParent.ShowDialog();
+
+                        mfrmParent.ShowDialog(vintParentHandle);
                     }
 
                     rintItem_ID = mintItem_ID;
@@ -323,6 +340,16 @@ namespace Ceritar.TT3LightDLL.Controls
 
 #endregion
 
+        void mfrmParent_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (mfrmCallingForm != null)
+            {
+                mfrmCallingForm.Enabled = true;
+                mfrmCallingForm.Focus();
+                mfrmCallingForm.BringToFront();
+            }
+        }
+
         void ctlFormController_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (mblnShowButtonQuitOnly)
@@ -443,7 +470,7 @@ namespace Ceritar.TT3LightDLL.Controls
         
         private void ctlFormController_HandleDestroyed(Object sender, EventArgs e)
         {
-            NotifyCaller(new NotifyCallerEventArgs());
+            //NotifyCaller(new NotifyCallerEventArgs());
         }
     }
 

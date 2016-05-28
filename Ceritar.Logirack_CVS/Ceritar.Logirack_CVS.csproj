@@ -38,6 +38,9 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Test.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="C1.Win.C1FlexGrid.2">
       <HintPath>..\Libs DLL\C1.Win.C1FlexGrid.2.dll</HintPath>
@@ -157,7 +160,9 @@
       <Name>Ceritar.TT3LightDLL</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Test.ico" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ellipsis.png" />
   </ItemGroup>
