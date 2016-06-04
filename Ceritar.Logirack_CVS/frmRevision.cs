@@ -7,13 +7,15 @@ using Ceritar.CVS.Controllers;
 using Ceritar.TT3LightDLL.Controls;
 using Ceritar.TT3LightDLL.Static_Classes;
 using Ceritar.TT3LightDLL.Classes;
+using Ceritar.CVS.Controllers.Interfaces;
+using C1.Win.C1FlexGrid;
 
 namespace Ceritar.Logirack_CVS
 {
     /// <summary>
     /// Cette classe contient les fonctions et évènements de la vue permettant de définir les révisions d'une version.
     /// </summary>
-    public partial class frmRevision : Form, IFormController, Ceritar.CVS.Controllers.Interfaces.IRevision
+    public partial class frmRevision : Form, IFormController, IRevision
     {
         //Controller
         private ctr_Revision mcCtrRevision;
@@ -27,7 +29,10 @@ namespace Ceritar.Logirack_CVS
         private const short mintGrdSat_Action_col = 1;
         private const short mintGrdSat_CSA_NRI_col = 2;
         private const short mintGrdSat_CSA_Name_col = 3;
-        private const short mintGrdSat_CSA_Sel_col = 4;
+        private const short mintGrdSat_SRe_NRI_col = 4;
+        private const short mintGrdSat_CSA_ExeLocation_col = 5;
+        private const short mintGrdSat_CSA_ExeIsFolder_col = 6;
+        private const short mintGrdSat_CSA_ExportFolderName_col = 7;
 
         //Classes
         private clsC1FlexGridWrapper mcGrdRevModifs;
@@ -42,6 +47,7 @@ namespace Ceritar.Logirack_CVS
         private string mstrCeritarApplication_Name;
         private string mstrCeritarApplication_RPT_Name;
         private ushort mintRevision_TS;
+        private bool mblnAppExeLocation_Changed;
 
 
         public frmRevision()
@@ -61,52 +67,52 @@ namespace Ceritar.Logirack_CVS
 
 #region "Interfaces functions"
 
-        string CVS.Controllers.Interfaces.IRevision.GetCompiledBy()
+        string IRevision.GetCompiledBy()
         {
             return txtCreatedBy.Text;
         }
 
-        string CVS.Controllers.Interfaces.IRevision.GetCreationDate()
+        string IRevision.GetCreationDate()
         {
             return dtpCreation.Value.ToString(clsApp.GetAppController.str_GetServerDateTimeFormat);
         }
 
-        sclsConstants.DML_Mode CVS.Controllers.Interfaces.IRevision.GetDML_Action()
+        sclsConstants.DML_Mode IRevision.GetDML_Action()
         {
             return formController.FormMode;
         }
 
-        string CVS.Controllers.Interfaces.IRevision.GetLocation_Release()
+        string IRevision.GetLocation_Release()
         {
             return txtReleasePath.Text;
         }
 
-        string CVS.Controllers.Interfaces.IRevision.GetLocation_Scripts()
+        string IRevision.GetLocation_Scripts()
         {
             return txtScriptsPath.Text;
         }
 
-        byte CVS.Controllers.Interfaces.IRevision.GetRevisionNo()
+        byte IRevision.GetRevisionNo()
         {
             return byte.Parse(txtRevisionNo.Text);
         }
 
-        int CVS.Controllers.Interfaces.IRevision.GetRevision_NRI()
+        int IRevision.GetRevision_NRI()
         {
             return formController.Item_NRI;
         }
 
-        int CVS.Controllers.Interfaces.IRevision.GetRevision_TS()
+        int IRevision.GetRevision_TS()
         {
             return mintRevision_TS;
         }
 
-        int CVS.Controllers.Interfaces.IRevision.GetTemplateSource_NRI()
+        int IRevision.GetTemplateSource_NRI()
         {
             return (int)(cboTemplates.SelectedValue == null ? 0 : cboTemplates.SelectedValue);
         }
 
-        ushort CVS.Controllers.Interfaces.IRevision.GetVersionNo()
+        ushort IRevision.GetVersionNo()
         {
             return UInt16.Parse(txtVersionNo.Text);
         }
@@ -116,17 +122,17 @@ namespace Ceritar.Logirack_CVS
             return formController;
         }
 
-        int CVS.Controllers.Interfaces.IRevision.GetCeritarClient_NRI()
+        int IRevision.GetCeritarClient_NRI()
         {
             return (int)(cboClients.SelectedValue == null ? 0 : cboClients.SelectedValue);
         }
 
-        string CVS.Controllers.Interfaces.IRevision.GetCeritarClient_Name()
+        string IRevision.GetCeritarClient_Name()
         {
             return cboClients.GetItemText(cboClients.SelectedItem);
         }
 
-        System.Collections.Generic.List<string> CVS.Controllers.Interfaces.IRevision.GetModificationsList()
+        System.Collections.Generic.List<string> IRevision.GetModificationsList()
         {
             List<string> lstModifications = new List<string>();
 
@@ -141,58 +147,58 @@ namespace Ceritar.Logirack_CVS
             return lstModifications;
         }
 
-        int CVS.Controllers.Interfaces.IRevision.GetVersion_NRI()
+        int IRevision.GetVersion_NRI()
         {
             return mintVersion_NRI;
         }
 
-        int CVS.Controllers.Interfaces.IRevision.GetCeritarApplication_NRI()
+        int IRevision.GetCeritarApplication_NRI()
         {
             return mstrCeritarApplication_NRI;
         }
 
-        string CVS.Controllers.Interfaces.IRevision.GetCeritarApplication_Name()
+        string IRevision.GetCeritarApplication_Name()
         {
             return mstrCeritarApplication_Name;
         }
 
-        string CVS.Controllers.Interfaces.IRevision.GetSelectedSatellitteApp_Name()
+        List<structSatRevision> IRevision.GetRevisionSatelliteList()
         {
-            string strSatelliteAppName = string.Empty;
+            List<structSatRevision> lstSatelliteApps = new List<structSatRevision>();
+            structSatRevision structSRe;
 
-            for (int intRowIndex = 0; intRowIndex < grdSatellites.Rows.Count; intRowIndex++)
+            for (int intRowIndex = 1; intRowIndex < grdSatellites.Rows.Count; intRowIndex++)
             {
-                if (mcGrdSatellites.bln_CellIsChecked(intRowIndex, mintGrdSat_CSA_Sel_col)) 
-                    strSatelliteAppName = mcGrdSatellites[intRowIndex, mintGrdSat_CSA_Name_col];
+                if (!string.IsNullOrEmpty(mcGrdSatellites[intRowIndex, mintGrdSat_CSA_ExeLocation_col]))
+                {
+                    structSRe = new structSatRevision();
+
+                    structSRe.Action = clsApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdSatellites[intRowIndex, mintGrdSat_Action_col]);
+                    structSRe.intCeritarSatelliteApp_NRI = Int32.Parse(mcGrdSatellites[intRowIndex, mintGrdSat_CSA_NRI_col]);
+                    Int32.TryParse(mcGrdSatellites[intRowIndex, mintGrdSat_SRe_NRI_col], out structSRe.intSatRevision_NRI);
+                    structSRe.strLocationSatelliteExe = mcGrdSatellites[intRowIndex, mintGrdSat_CSA_ExeLocation_col];
+                    structSRe.strCeritarSatelliteApp_Name = mcGrdSatellites[intRowIndex, mintGrdSat_CSA_Name_col];
+                    structSRe.blnExeIsFolder = Convert.ToBoolean(mcGrdSatellites[intRowIndex, mintGrdSat_CSA_ExeIsFolder_col]);
+                    structSRe.strExportFolderName = mcGrdSatellites[intRowIndex, mintGrdSat_CSA_ExportFolderName_col];
+
+                    lstSatelliteApps.Add(structSRe);
+                }
             }
 
-            return strSatelliteAppName;
+            return lstSatelliteApps;
         }
 
-        int CVS.Controllers.Interfaces.IRevision.GetSelectedSatellitteApp_NRI()
-        {
-            int intSatelliteApp_NRI = 0;
-
-            for (int intRowIndex = 0; intRowIndex < grdSatellites.Rows.Count; intRowIndex++)
-            {
-                if (mcGrdSatellites.bln_CellIsChecked(intRowIndex, mintGrdSat_CSA_Sel_col))
-                    Int32.TryParse(mcGrdSatellites[intRowIndex, mintGrdSat_CSA_NRI_col], out intSatelliteApp_NRI);
-            }
-
-            return intSatelliteApp_NRI;
-        }
-
-        bool CVS.Controllers.Interfaces.IRevision.GetExeIsExternalReport()
+        bool IRevision.GetExeIsExternalReport()
         {
             return chkExeIsRPT.Checked;
         }
 
-        bool CVS.Controllers.Interfaces.IRevision.GetExeWithExternalReport()
+        bool IRevision.GetExeWithExternalReport()
         {
             return chkExeAndRpt.Checked;
         }
 
-        string CVS.Controllers.Interfaces.IRevision.GetCreatedBy()
+        string IRevision.GetCreatedBy()
         {
             return txtCreatedBy.Text;
         }
@@ -237,7 +243,6 @@ namespace Ceritar.Logirack_CVS
 
                         if (chkExeIsRPT.Checked)
                         {
-                            pfblnGrdSatellites_UncheckAll();
                             btnSelectExecutableFolderPath.Enabled = false;
                             grdSatellites.Enabled = false;
                             chkExeAndRpt.Enabled = false;
@@ -307,26 +312,6 @@ namespace Ceritar.Logirack_CVS
             return blnValidReturn;
         }
 
-        private bool pfblnGrdSatellites_UncheckAll()
-        {
-            bool blnValidReturn = true;
-
-            try
-            {
-                for (int intRowIndex = 1; intRowIndex < grdSatellites.Rows.Count; intRowIndex++)
-                {
-                    grdSatellites[intRowIndex, mintGrdSat_CSA_Sel_col] = "0";
-                }
-            }
-            catch (Exception ex)
-            {
-                blnValidReturn = false;
-                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
-            }
-
-            return blnValidReturn;
-        }
-
         private void ShowFolderBrowserDialog(ref TextBox txtAffected)
         {
             DialogResult dialogResult;
@@ -335,9 +320,9 @@ namespace Ceritar.Logirack_CVS
             {
                 folderBrowserDialog.ShowNewFolderButton = false;
 
-                if (txtAffected.Name == txtReleasePath.Name && !string.IsNullOrEmpty(txtReleasePath.Text))
+                if (!string.IsNullOrEmpty(txtAffected.Text))
                 {
-                    folderBrowserDialog.SelectedPath = txtReleasePath.Text;
+                    folderBrowserDialog.SelectedPath = txtAffected.Text;
                 }
                 else
                 {
@@ -351,6 +336,8 @@ namespace Ceritar.Logirack_CVS
                     txtAffected.Text = folderBrowserDialog.SelectedPath;
 
                     formController.ChangeMade = true;
+
+                    if (txtAffected.Name == txtReleasePath.Name) mblnAppExeLocation_Changed = true;
                 }
             }
         }
@@ -387,6 +374,26 @@ namespace Ceritar.Logirack_CVS
                         if (rControl.GetType() == typeof(TextBox))
                         {
                             ((TextBox)rControl).Text = openFileDialog.FileName;
+
+                            if (((TextBox)rControl).Name == txtReleasePath.Name) mblnAppExeLocation_Changed = true;
+                        }
+
+                        if (rControl.GetType() == typeof(C1FlexGrid))
+                        {
+                            if (((C1FlexGrid)rControl).Name == grdSatellites.Name)
+                            {
+                                if (mcGrdSatellites.bln_CellIsEmpty(grdSatellites.Row, mintGrdSat_SRe_NRI_col) & mcGrdSatellites[grdSatellites.Row, mintGrdSat_CSA_ExeLocation_col] != openFileDialog.FileName)
+                                {
+                                    grdSatellites[grdSatellites.Row, mintGrdSat_Action_col] = sclsConstants.DML_Mode.INSERT_MODE;
+                                }
+                                else if (mcGrdSatellites[grdSatellites.Row, mintGrdSat_CSA_ExeLocation_col] != openFileDialog.FileName)
+                                {
+                                    grdSatellites[grdSatellites.Row, mintGrdSat_Action_col] = sclsConstants.DML_Mode.UPDATE_MODE;
+                                }
+
+                                ((C1FlexGrid)rControl)[grdSatellites.Row, mintGrdSat_CSA_ExeLocation_col] = openFileDialog.FileName;
+                                ((HostedCellControl)mcGrdSatellites.LstHostedCellControls[grdSatellites.Row - 1]).GetCellControl.BackColor = System.Drawing.Color.Yellow;
+                            }
                         }
 
                         formController.ChangeMade = true;
@@ -399,6 +406,69 @@ namespace Ceritar.Logirack_CVS
             }
         }
 
+        private Button pfblnGetNewLocationSatelliteExeButton()
+        {
+            Button btnLocationSatExe = new Button();
+
+            try
+            {
+                btnLocationSatExe.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+                btnLocationSatExe.Image = ((System.Drawing.Image)(Properties.Resources.ellipsis));
+                btnLocationSatExe.UseVisualStyleBackColor = true;
+
+                btnLocationSatExe.Click += btnReplaceSatelliteExe_Click;
+            }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return btnLocationSatExe;
+        }
+
+        private void btnReplaceSatelliteExe_Click(object sender, EventArgs e)
+        {
+            TextBox txtTemp = new TextBox();
+            mcGrdSatellites.GridIsLoading = true;
+
+            foreach (HostedCellControl control in mcGrdSatellites.LstHostedCellControls)
+            {
+                if (control.GetCellControl.Handle == ((Button)sender).Handle)
+                {
+                    grdSatellites.Row = control.GetRowLinked.Index;
+                }
+            }
+
+            if (mcGrdSatellites[grdSatellites.Row, mintGrdSat_CSA_ExeIsFolder_col] == "True")
+            {
+                txtTemp.Text = mcGrdSatellites[grdSatellites.Row, mintGrdSat_CSA_ExeLocation_col];
+
+                ShowFolderBrowserDialog(ref txtTemp);
+
+                if (!string.IsNullOrEmpty(txtTemp.Text))
+                {
+                    if (mcGrdSatellites[grdSatellites.Row, mintGrdSat_CSA_ExeLocation_col] != txtTemp.Text)
+                    {
+                        grdSatellites[grdSatellites.Row, mintGrdSat_Action_col] = sclsConstants.DML_Mode.INSERT_MODE;
+                    }
+                    else if (mcGrdSatellites[grdSatellites.Row, mintGrdSat_CSA_ExeLocation_col] != txtTemp.Text)
+                    {
+                        grdSatellites[grdSatellites.Row, mintGrdSat_Action_col] = sclsConstants.DML_Mode.UPDATE_MODE;
+                    }
+
+                    grdSatellites[grdSatellites.Row, mintGrdSat_CSA_ExeLocation_col] = txtTemp.Text;
+
+                    ((HostedCellControl)mcGrdSatellites.LstHostedCellControls[grdSatellites.Row - 1]).GetCellControl.BackColor = System.Drawing.Color.Yellow;
+                }
+            }
+            else
+            {
+                ShowOpenFileDialog("Executables (*.exe)|*.exe", grdSatellites, mcGrdSatellites[grdSatellites.Row, mintGrdSat_CSA_ExeLocation_col], true);
+            }
+
+            mcGrdSatellites.GridIsLoading = false;
+        }
+
 #endregion
 
 
@@ -406,6 +476,10 @@ namespace Ceritar.Logirack_CVS
         {
             bool blnValidReturn = false;
             Button btnPlaceHolder = null;
+
+            mblnAppExeLocation_Changed = false;
+
+            mcGrdSatellites.LstHostedCellControls = new List<HostedCellControl>();
 
             if (!mcGrdRevModifs.bln_Init(ref grdRevModifs, ref btnGrdRevAdd, ref btnGrdRevDel))
             { }
@@ -485,14 +559,14 @@ namespace Ceritar.Logirack_CVS
         {
             bool blnValidReturn = false;
 
-            if (formController.FormMode != sclsConstants.DML_Mode.DELETE_MODE || true)
+           /* if (formController.FormMode != sclsConstants.DML_Mode.DELETE_MODE || true)
             {
                 blnValidReturn = mcCtrRevision.blnBuildRevisionHierarchy((int)cboTemplates.SelectedValue);
             }
             else
-            {
+            {*/
                 blnValidReturn = true;
-            }
+            //}
             
             if (blnValidReturn)
             {
@@ -527,9 +601,21 @@ namespace Ceritar.Logirack_CVS
 
         void mcGrdSatellites_SetGridDisplay()
         {
-            grdSatellites.Cols[mintGrdSat_CSA_Name_col].Width = 220;
+            grdSatellites.Cols[mintGrdSat_CSA_Name_col].Width = 200;
+            grdSatellites.Cols[mintGrdSat_CSA_ExeLocation_col].Width = 42;
 
-            mcGrdSatellites.SetColType_CheckBox(mintGrdSat_CSA_Sel_col);
+            if (grdSatellites.Rows.Count > 1)
+            {
+                for (int intRowIndex = 1; intRowIndex < grdSatellites.Rows.Count; intRowIndex++)
+                {
+                    mcGrdSatellites.LstHostedCellControls.Add(new HostedCellControl(grdSatellites, pfblnGetNewLocationSatelliteExeButton(), intRowIndex, mintGrdSat_CSA_ExeLocation_col));
+
+                    if (!mcGrdSatellites.bln_CellIsEmpty(intRowIndex, mintGrdSat_CSA_ExeLocation_col))
+                    {
+                        mcGrdSatellites.LstHostedCellControls[intRowIndex - 1].GetCellControl.BackColor = System.Drawing.Color.Yellow;
+                    }
+                }
+            }
         }
 
         private void btnGenerate_Click(object sender, EventArgs e)
@@ -614,29 +700,29 @@ namespace Ceritar.Logirack_CVS
             }
         }
 
-        private void grdSatellites_DoubleClick(object sender, EventArgs e)
-        {
-            switch (grdSatellites.Col)
-            {
-                case mintGrdSat_CSA_Sel_col:
+        //private void grdSatellites_DoubleClick(object sender, EventArgs e)
+        //{
+        //    switch (grdSatellites.Col)
+        //    {
+        //        case mintGrdSat_CSA_Sel_col:
 
-                    mcGrdSatellites.GridIsLoading = true;
+        //            mcGrdSatellites.GridIsLoading = true;
 
-                    int intSelectedRow = grdSatellites.FindRow("true", 1, mintGrdSat_CSA_Sel_col, false, true, false);
+        //            int intSelectedRow = grdSatellites.FindRow("true", 1, mintGrdSat_CSA_Sel_col, false, true, false);
 
-                    if (intSelectedRow >= 1 & intSelectedRow != grdSatellites.Row) mcGrdSatellites[intSelectedRow, mintGrdSat_CSA_Sel_col] = "0";
+        //            if (intSelectedRow >= 1 & intSelectedRow != grdSatellites.Row) mcGrdSatellites[intSelectedRow, mintGrdSat_CSA_Sel_col] = "0";
 
-                    mcGrdSatellites[grdSatellites.Row, mintGrdSat_CSA_Sel_col] = (mcGrdSatellites[grdSatellites.Row, mintGrdSat_CSA_Sel_col] == "0" ? "1" : "0");
+        //            mcGrdSatellites[grdSatellites.Row, mintGrdSat_CSA_Sel_col] = (mcGrdSatellites[grdSatellites.Row, mintGrdSat_CSA_Sel_col] == "0" ? "1" : "0");
 
-                    mcGrdSatellites.GridIsLoading = false;
+        //            mcGrdSatellites.GridIsLoading = false;
 
-                    formController.ChangeMade = true;
+        //            formController.ChangeMade = true;
 
-                    break;
-            }
-        }
+        //            break;
+        //    }
+        //}
 
-        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        private void chkExeIsRPT_CheckedChanged(object sender, EventArgs e)
         {
             if (!formController.FormIsLoading)
             {
@@ -646,7 +732,6 @@ namespace Ceritar.Logirack_CVS
 
                 if (chkExeIsRPT.Checked)
                 {
-                    pfblnGrdSatellites_UncheckAll();
                     grdSatellites.Enabled = false;
                     btnSelectExecutableFolderPath.Enabled = false;
                     chkExeAndRpt.Checked = false;
@@ -681,6 +766,17 @@ namespace Ceritar.Logirack_CVS
                 formController.ChangeMade = true;
             }
         }
+
+        private void chkExeAndRpt_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            //TODO
+        }
+         //e.Cancel = true;
+
+         //   if (mblnAppExeLocation_Changed || formController.FormMode != sclsConstants.DML_Mode.UPDATE_MODE)
+         //   {
+         //       e.Cancel = false;
+         //   }
 
     }
 }

@@ -470,7 +470,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                         break;
 
-                    default:
+                    default: //Lorsqu'on ne modifie pas la version, mais ses composants
 
                         if (!pfblnListClients_Save())
                         { }
@@ -653,7 +653,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
         private bool pfblnListClientSatelliteApps_Save()
         {
-            bool blnValidReturn = false;
+            bool blnValidReturn = true;
 
             try
             {
@@ -661,6 +661,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 {
                     for (int intIndex = 0; intIndex < _lstClientSatelliteApps.Count; intIndex++)
                     {
+                        blnValidReturn = false;
+
                         _lstClientSatelliteApps[intIndex].SetcSQL = mcSQL;
                         _lstClientSatelliteApps[intIndex].Version_NRI = _intVersion_NRI;
 

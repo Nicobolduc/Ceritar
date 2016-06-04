@@ -50,7 +50,7 @@ namespace Ceritar.CVS
                     _strRoot_INSTALLATIONS_ACTIVES_Dir = clsSQL.str_ADOSingleLookUp("TTP_Value", "TTParam", "TTP_NRI = " + (int)CONFIG_TYPE.PATH_INSTALLATIONS_ACTIVES);
                 }
 
-                return _strRoot_INSTALLATIONS_ACTIVES_Dir;
+                return System.IO.Path.Combine(_strRoot_INSTALLATIONS_ACTIVES_Dir + (_strRoot_INSTALLATIONS_ACTIVES_Dir.Substring(_strRoot_INSTALLATIONS_ACTIVES_Dir.Length - 1, 1) == "\\" ? "" : "\\"));
             }
         }
 

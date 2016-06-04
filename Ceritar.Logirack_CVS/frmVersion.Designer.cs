@@ -58,12 +58,13 @@
             this.btnGenerate = new System.Windows.Forms.Button();
             this.btnExportInstallationKit = new System.Windows.Forms.Button();
             this.btnGrdRevUpdate = new System.Windows.Forms.Button();
+            this.chkIncludeScripts = new System.Windows.Forms.CheckBox();
             this.tabRevision = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnRefresh = new Ceritar.TT3LightDLL.Controls.ctlRefresh();
             this.grdRevisions = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.tabVersion = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.chkIncludeScripts = new System.Windows.Forms.CheckBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.grdSatellite = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.txtReleasePath = new System.Windows.Forms.TextBox();
@@ -236,7 +237,7 @@
             // 
             // toolTip
             // 
-            this.toolTip.AutoPopDelay = 5000;
+            this.toolTip.AutoPopDelay = 10000;
             this.toolTip.InitialDelay = 50;
             this.toolTip.ReshowDelay = 100;
             // 
@@ -341,7 +342,7 @@
             this.btnGrdRevDel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnGrdRevDel.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevDel.Image")));
-            this.btnGrdRevDel.Location = new System.Drawing.Point(570, 103);
+            this.btnGrdRevDel.Location = new System.Drawing.Point(752, 103);
             this.btnGrdRevDel.Name = "btnGrdRevDel";
             this.btnGrdRevDel.Size = new System.Drawing.Size(35, 35);
             this.btnGrdRevDel.TabIndex = 17;
@@ -354,7 +355,7 @@
             this.btnGrdRevAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevAdd.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGrdRevAdd.BackgroundImage")));
             this.btnGrdRevAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnGrdRevAdd.Location = new System.Drawing.Point(570, 21);
+            this.btnGrdRevAdd.Location = new System.Drawing.Point(752, 21);
             this.btnGrdRevAdd.Name = "btnGrdRevAdd";
             this.btnGrdRevAdd.Size = new System.Drawing.Size(35, 35);
             this.btnGrdRevAdd.TabIndex = 15;
@@ -371,7 +372,7 @@
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(40, 40);
             this.btnGenerate.TabIndex = 0;
-            this.toolTip.SetToolTip(this.btnGenerate, "Mettre à jour la hierarchie");
+            this.toolTip.SetToolTip(this.btnGenerate, "Mettre à jour les installations actives sans resauvegarder tout l\'écran");
             this.btnGenerate.UseVisualStyleBackColor = true;
             this.btnGenerate.Click += new System.EventHandler(this.btnCreate_Click);
             // 
@@ -393,13 +394,24 @@
             this.btnGrdRevUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevUpdate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnGrdRevUpdate.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevUpdate.Image")));
-            this.btnGrdRevUpdate.Location = new System.Drawing.Point(570, 62);
+            this.btnGrdRevUpdate.Location = new System.Drawing.Point(752, 62);
             this.btnGrdRevUpdate.Name = "btnGrdRevUpdate";
             this.btnGrdRevUpdate.Size = new System.Drawing.Size(35, 35);
             this.btnGrdRevUpdate.TabIndex = 16;
             this.toolTip.SetToolTip(this.btnGrdRevUpdate, "Modifier une révision");
             this.btnGrdRevUpdate.UseVisualStyleBackColor = true;
             this.btnGrdRevUpdate.Click += new System.EventHandler(this.btnGrdRevUpdate_Click);
+            // 
+            // chkIncludeScripts
+            // 
+            this.chkIncludeScripts.AutoSize = true;
+            this.chkIncludeScripts.Location = new System.Drawing.Point(4, 59);
+            this.chkIncludeScripts.Name = "chkIncludeScripts";
+            this.chkIncludeScripts.Size = new System.Drawing.Size(91, 17);
+            this.chkIncludeScripts.TabIndex = 1;
+            this.chkIncludeScripts.Text = "Inclure scripts";
+            this.toolTip.SetToolTip(this.chkIncludeScripts, "Reconstruit la structures des scripts à partir de DB_UPGRADE_SCRIPTS");
+            this.chkIncludeScripts.UseVisualStyleBackColor = true;
             // 
             // tabRevision
             // 
@@ -414,19 +426,29 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btnRefresh);
             this.groupBox3.Controls.Add(this.btnGrdRevUpdate);
             this.groupBox3.Controls.Add(this.btnGrdRevDel);
             this.groupBox3.Controls.Add(this.btnGrdRevAdd);
             this.groupBox3.Controls.Add(this.grdRevisions);
-            this.groupBox3.Location = new System.Drawing.Point(6, 3);
+            this.groupBox3.Location = new System.Drawing.Point(6, 4);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(612, 351);
+            this.groupBox3.Size = new System.Drawing.Size(794, 351);
             this.groupBox3.TabIndex = 15;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Liste des révisions";
             // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Location = new System.Drawing.Point(752, 310);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(35, 35);
+            this.btnRefresh.TabIndex = 19;
+            this.btnRefresh.Click += new Ceritar.TT3LightDLL.Controls.ctlRefresh.ClickEventHandler(this.btnRefresh_Click);
+            // 
             // grdRevisions
             // 
+            this.grdRevisions.AllowSorting = C1.Win.C1FlexGrid.AllowSortingEnum.None;
             this.grdRevisions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grdRevisions.AutoSearch = C1.Win.C1FlexGrid.AutoSearchEnum.FromTop;
@@ -438,7 +460,8 @@
             this.grdRevisions.Rows.Count = 6;
             this.grdRevisions.Rows.DefaultSize = 18;
             this.grdRevisions.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdRevisions.Size = new System.Drawing.Size(558, 324);
+            this.grdRevisions.ShowSort = false;
+            this.grdRevisions.Size = new System.Drawing.Size(740, 324);
             this.grdRevisions.StyleInfo = resources.GetString("grdRevisions.StyleInfo");
             this.grdRevisions.TabIndex = 14;
             this.grdRevisions.Tag = "20";
@@ -479,16 +502,6 @@
             this.groupBox5.TabIndex = 63;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Actions";
-            // 
-            // chkIncludeScripts
-            // 
-            this.chkIncludeScripts.AutoSize = true;
-            this.chkIncludeScripts.Location = new System.Drawing.Point(4, 59);
-            this.chkIncludeScripts.Name = "chkIncludeScripts";
-            this.chkIncludeScripts.Size = new System.Drawing.Size(91, 17);
-            this.chkIncludeScripts.TabIndex = 1;
-            this.chkIncludeScripts.Text = "Inclure scripts";
-            this.chkIncludeScripts.UseVisualStyleBackColor = true;
             // 
             // groupBox4
             // 
@@ -745,5 +758,6 @@
         private System.Windows.Forms.TextBox txtCreatedBy;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
+        private TT3LightDLL.Controls.ctlRefresh btnRefresh;
     }
 }

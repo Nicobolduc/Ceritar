@@ -70,7 +70,7 @@ namespace Ceritar.CVS.Controllers
                     cCSA.DML_Action = structCSA.Action;
                     cCSA.ExeIsFolder = structCSA.blnExeIsFolder;
                     cCSA.Name = structCSA.strSatelliteApp_Name;
-                    cCSA.KitFolderName = structCSA.strKitExport_FolderName;
+                    cCSA.ExportFolderName = structCSA.strKitExport_FolderName;
 
                     mcModCerApp.LstCeritarSatelliteApps.Add(cCSA);
                 }

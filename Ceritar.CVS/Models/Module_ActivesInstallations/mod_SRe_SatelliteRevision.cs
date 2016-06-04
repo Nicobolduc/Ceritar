@@ -1,31 +1,24 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
 using System.Collections.Generic;
+using Ceritar.CVS.Models.Module_Configuration;
 using Ceritar.TT3LightDLL.Classes;
 using Ceritar.TT3LightDLL.Static_Classes;
-using Ceritar.CVS.Controllers;
 
-namespace Ceritar.CVS.Models.Module_Configuration
+namespace Ceritar.CVS.Models.Module_ActivesInstallations
 {
     /// <summary>
-    /// Cette classe représente le modèle objet d'une application satellite de Ceritar.
-    /// CSA représente le préfixe des colonnes de la table "CerSatApp" correspondant au modèle dans la base de données.
+    /// Cette classe représente le modèle objet pour une application satellite d'une révision.
+    /// SRe représente le préfixe des colonnes de la table "SatRevision" correspondant au modèle dans la base de données.
     /// </summary>
-    internal class mod_CSA_CeritarSatelliteApp
+    internal class mod_SRe_SatelliteRevision
     {
         //Model attributes
-        private int _intCeritarSatelliteApp_NRI;
-        private int _intCeritarSatelliteApp_TS;
-        private string _strName;
-        private string _strExportFolderName;
-        private int _intCeritarApp_NRI;
-        private bool _blnExeIsFolder;
+        private int _intSatRevision_NRI;
+        private mod_Rev_Revision _cRevision;
+        private mod_CSA_CeritarSatelliteApp _cCeritarSatelliteApp;
+        private string _strLocation_Exe;
 
-        //Messages
-        private const int mintMSG_InvalidName = 32;
-
-        //Working variables
+        //mod_IBase
         private clsActionResults mcActionResults = new clsActionResults();
         private sclsConstants.DML_Mode mintDML_Action;
         private clsSQL mcSQL;
@@ -33,45 +26,28 @@ namespace Ceritar.CVS.Models.Module_Configuration
 
 #region "Properties"
 
-        internal int CeritarSatelliteApp_NRI
+        internal int SatRevision_NRI
         {
-            get { return _intCeritarSatelliteApp_NRI; }
-            set { _intCeritarSatelliteApp_NRI = value; }
+            get { return _intSatRevision_NRI; }
+            set { _intSatRevision_NRI = value; }
         }
 
-        internal int CeritarSatelliteApp_TS
+        internal mod_Rev_Revision Revision
         {
-            get { return _intCeritarSatelliteApp_TS; }
-            set { _intCeritarSatelliteApp_TS = value; }
+            get { return _cRevision; }
+            set { _cRevision = value; }
         }
 
-        internal string Name
+        internal mod_CSA_CeritarSatelliteApp CeritarSatelliteApp
         {
-            get { return _strName; }
-            set { _strName = value; }
+            get { return _cCeritarSatelliteApp; }
+            set { _cCeritarSatelliteApp = value; }
         }
 
-        internal string ExportFolderName
+        internal string Location_Exe
         {
-            get { return _strExportFolderName; }
-            set { _strExportFolderName = value; }
-        }
-
-        internal int CeritarApp_NRI
-        {
-            get { return _intCeritarApp_NRI; }
-            set { _intCeritarApp_NRI = value; }
-        }
-
-        internal bool ExeIsFolder
-        {
-            get { return _blnExeIsFolder; }
-            set { _blnExeIsFolder = value; }
-        }
-
-        internal clsActionResults ActionResults
-        {
-            get { return mcActionResults; }
+            get { return _strLocation_Exe; }
+            set { _strLocation_Exe = value; }
         }
 
         internal sclsConstants.DML_Mode DML_Action
@@ -84,7 +60,12 @@ namespace Ceritar.CVS.Models.Module_Configuration
         {
             set { mcSQL = value; }
         }
-        
+
+        internal clsActionResults ActionResults
+        {
+            get { return mcActionResults; }
+        }
+
 #endregion
 
 
@@ -97,39 +78,26 @@ namespace Ceritar.CVS.Models.Module_Configuration
                 switch (mintDML_Action)
                 {
                     case sclsConstants.DML_Mode.NO_MODE:
+
                         mcActionResults.SetValid();
 
                         break;
 
                     case sclsConstants.DML_Mode.INSERT_MODE:
-                    case sclsConstants.DML_Mode.UPDATE_MODE:
 
-                        if (string.IsNullOrEmpty(_strName))
-                        {
-                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_CeritarApplication.ErrorCode_CSA.NAME_MANDATORY);
-                        }
-                        else if (Path.GetInvalidFileNameChars().Where(x => _strName.Contains(x)).Count() > 0 || _strName == "con")
-                        {
-                            mcActionResults.SetInvalid(mintMSG_InvalidName, ctr_CeritarApplication.ErrorCode_CeA.SATELLITE_NAME_INVALID);
-                        }
-                        else if (string.IsNullOrEmpty(_strExportFolderName))
-                        {
-                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_CeritarApplication.ErrorCode_CSA.KIT_FOLDER_NAME_MANDATORY);
-                        }
-                        else if (Path.GetInvalidFileNameChars().Where(x => _strExportFolderName.Contains(x)).Count() > 0 || _strExportFolderName == "con")
-                        {
-                            mcActionResults.SetInvalid(mintMSG_InvalidName, ctr_CeritarApplication.ErrorCode_CeA.SATELLITE_NAME_INVALID);
-                        }
-                        else
-                        {
-                            mcActionResults.SetValid();
-                        }
+                        mcActionResults.SetValid();
 
                         break;
 
-                    case sclsConstants.DML_Mode.DELETE_MODE:
+                    case sclsConstants.DML_Mode.UPDATE_MODE:
 
-                        if (!clsSQL.bln_CheckReferenceIntegrity("CerSatApp", "CSA_NRI", _intCeritarSatelliteApp_NRI))
+                        mcActionResults.SetValid();
+
+                        break;
+
+                    case sclsConstants.DML_Mode.DELETE_MODE: //TODO
+
+                        if (!clsSQL.bln_CheckReferenceIntegrity("SRe_NRI", "SRe_NRI", _intSatRevision_NRI))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_REFERENCE_INTEGRITY, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
                         }
@@ -162,13 +130,12 @@ namespace Ceritar.CVS.Models.Module_Configuration
                 {
                     case sclsConstants.DML_Mode.INSERT_MODE:
 
-                        if (!pfblnCeA_AddFields())
+                        if (!pfblnSRe_AddFields())
                         { }
-                        else if (!mcSQL.bln_ADOInsert("CerSatApp", out _intCeritarSatelliteApp_NRI))
+                        else if (!mcSQL.bln_ADOInsert("SatRevision", out _intSatRevision_NRI))
                         { }
                         else
                         {
-                            mcActionResults.SetNewItem_NRI = _intCeritarSatelliteApp_NRI; //TODO chagner ca
                             blnValidReturn = true;
                         }
 
@@ -176,9 +143,9 @@ namespace Ceritar.CVS.Models.Module_Configuration
 
                     case sclsConstants.DML_Mode.UPDATE_MODE:
 
-                        if (!pfblnCeA_AddFields())
+                        if (!pfblnSRe_AddFields())
                         { }
-                        else if (!mcSQL.bln_ADOUpdate("CerSatApp", "CerSatApp.CSA_NRI = " + _intCeritarSatelliteApp_NRI))
+                        else if (!mcSQL.bln_ADOUpdate("SatRevision", "SatRevision.SRe_NRI = " + _intSatRevision_NRI))
                         { }
                         else
                         {
@@ -189,7 +156,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
 
                     case sclsConstants.DML_Mode.DELETE_MODE:
 
-                        if (!mcSQL.bln_ADODelete("CerSatApp", "CerSatApp.CSA_NRI = " + _intCeritarSatelliteApp_NRI))
+                        if (!mcSQL.bln_ADODelete("SatRevision", "SatRevision.SRe_NRI = " + _intSatRevision_NRI))
                         { }
                         else
                         {
@@ -224,7 +191,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
             return blnValidReturn;
         }
 
-        private bool pfblnCeA_AddFields()
+        private bool pfblnSRe_AddFields()
         {
             bool blnValidReturn = false;
 
@@ -232,13 +199,11 @@ namespace Ceritar.CVS.Models.Module_Configuration
             {
                 if (!mcSQL.bln_RefreshFields())
                 { }
-                else if (!mcSQL.bln_AddField("CSA_Name", _strName, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (!mcSQL.bln_AddField("Rev_NRI", _cRevision.Revision_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("CSA_KitFolderName", _strExportFolderName, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (!mcSQL.bln_AddField("CSA_NRI", _cCeritarSatelliteApp.CeritarSatelliteApp_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("CeA_NRI", _intCeritarApp_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
-                { }
-                else if (!mcSQL.bln_AddField("CSA_ExeIsFolder", _blnExeIsFolder, clsSQL.MySQL_FieldTypes.BIT_TYPE))
+                else if (!mcSQL.bln_AddField("SRe_Exe_Location", _strLocation_Exe, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
                 else
                 {

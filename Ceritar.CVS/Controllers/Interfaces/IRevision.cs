@@ -26,10 +26,23 @@ namespace Ceritar.CVS.Controllers.Interfaces
         byte GetRevisionNo();         
         string GetLocation_Release();
         string GetLocation_Scripts();
-        int GetSelectedSatellitteApp_NRI();
-        string GetSelectedSatellitteApp_Name();
         bool GetExeIsExternalReport();
         bool GetExeWithExternalReport();
         List<string> GetModificationsList();
+        List<structSatRevision> GetRevisionSatelliteList();
+    }
+
+    /// <summary>
+    /// Cette structure représente les informations contenues dans une grille qui permet la sélection des Exe pour des applications satellites d'une révision.
+    /// </summary>
+    public struct structSatRevision
+    {
+        public sclsConstants.DML_Mode Action;
+        public int intSatRevision_NRI;
+        public int intCeritarSatelliteApp_NRI;
+        public string strCeritarSatelliteApp_Name;
+        public string strLocationSatelliteExe;
+        public string strExportFolderName;
+        public bool blnExeIsFolder;
     }
 }

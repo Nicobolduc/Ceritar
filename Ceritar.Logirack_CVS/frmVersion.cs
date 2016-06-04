@@ -51,7 +51,7 @@ namespace Ceritar.Logirack_CVS
         private const short mintGrdRev_Rev_TS_col = 2;
         private const short mintGrdRev_Number_col = 3;
         private const short mintGrdRev_CeritarClientName_col = 4;
-        private const short mintGrdRev_CeritarApplicationName_col = 5;
+        private const short mintGrdRev_Description_col = 5;
         private const short mintGrdRev_CreationDate_col = 6;
 
         //Tab pages
@@ -166,7 +166,7 @@ namespace Ceritar.Logirack_CVS
 
         List<structClientAppVersion> IVersion.GetClientsList()
         {
-            List<structClientAppVersion> lstClient_NRI = new List<structClientAppVersion>();
+            List<structClientAppVersion> lstClient = new List<structClientAppVersion>();
             structClientAppVersion structCAV;
 
             for (int intRowIndex = 1; intRowIndex < grdClients.Rows.Count; intRowIndex++)
@@ -184,15 +184,15 @@ namespace Ceritar.Logirack_CVS
                 structCAV.strLocationReportExe = mcGrdClients[intRowIndex, mintGrdClients_LocationReportExe_col];
                 structCAV.strLocationScriptsRoot = mcGrdClients[intRowIndex, mintGrdClients_LocationScriptsRoot_col] == "" ? System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop) : mcGrdClients[intRowIndex, mintGrdClients_LocationScriptsRoot_col];
 
-                lstClient_NRI.Add(structCAV);
+                lstClient.Add(structCAV);
             }
 
-            return lstClient_NRI;
+            return lstClient;
         }
 
         List<structClientSatVersion> IVersion.GetClientSatellitesList()
         {
-            List<structClientSatVersion> lstSatelliteApps_NRI = new List<structClientSatVersion>();
+            List<structClientSatVersion> lstSatelliteApps = new List<structClientSatVersion>();
             structClientSatVersion structCSV;
 
             for (int intRowIndex = 1; intRowIndex < grdSatellite.Rows.Count; intRowIndex++)
@@ -209,10 +209,10 @@ namespace Ceritar.Logirack_CVS
                 structCSV.strKitFolderName = mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_KitFolderName_col];
                 structCSV.blnExeIsFolder = Convert.ToBoolean(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_ExeIsFolder_col]);
 
-                lstSatelliteApps_NRI.Add(structCSV);
+                lstSatelliteApps.Add(structCSV);
             }
 
-            return lstSatelliteApps_NRI;
+            return lstSatelliteApps;
         }
 
         bool IVersion.GetIsDemo()
@@ -670,7 +670,7 @@ namespace Ceritar.Logirack_CVS
         {
             grdRevisions.Cols[mintGrdRev_Number_col].Width = 60;
             grdRevisions.Cols[mintGrdRev_CeritarClientName_col].Width = 150;
-            grdRevisions.Cols[mintGrdRev_CeritarApplicationName_col].Width = 200;
+            grdRevisions.Cols[mintGrdRev_Description_col].Width = 400;
         }
 
         private void formController_LoadData(LoadDataEventArgs eventArgs)
@@ -1370,6 +1370,11 @@ namespace Ceritar.Logirack_CVS
         private void btnGrdRevUpdate_Click(object sender, EventArgs e)
         {
             grdRevisions_DoubleClick(grdRevisions, new EventArgs());
+        }
+
+        private void btnRefresh_Click()
+        {
+            pfblnGrdRevisions_Load();
         }
 
     }

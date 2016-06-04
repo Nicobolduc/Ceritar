@@ -96,12 +96,12 @@ namespace Ceritar.CVS.Controllers
 
                     blnValidReturn = mcModVersion.blnSave();
 
-                    mcActionResult = mcModVersion.ActionResults;
-
-                    if (blnValidReturn & mcActionResult.IsValid)
+                    if (blnValidReturn & mcModVersion.ActionResults.IsValid)
                     {
                         blnValidReturn = blnBuildVersionHierarchy(mcModVersion.TemplateSource.Template_NRI);
                     }
+
+                    mcActionResult = mcModVersion.ActionResults;
                 }
             }
             catch (Exception ex)
@@ -212,9 +212,7 @@ namespace Ceritar.CVS.Controllers
 
             try
             {
-                currentFolderInfos = new DirectoryInfo(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES +
-                                                        (sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Substring(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Length - 1, 1) == "\\" ? "" : "\\")
-                                                        );
+                currentFolderInfos = new DirectoryInfo(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES);
 
                 cSQLReader = clsSQL.ADOSelect(strSQL);
 
@@ -276,7 +274,7 @@ namespace Ceritar.CVS.Controllers
                             {
                                 blnValidReturn = clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseValidExtensions);
 
-                                //TODO: Find an other solution for this
+                                //TODO: Apply the other solution for this
                                 string[] reportExe = Directory.GetFiles(currentFolderInfos.FullName, "*RPT.exe", SearchOption.TopDirectoryOnly);
 
                                 if (reportExe.Length > 0) File.Delete(reportExe[0]);
@@ -579,12 +577,11 @@ namespace Ceritar.CVS.Controllers
 
                 foreach (mod_CSV_ClientSatVersion cCSV in lstSatellites)
                 {
-                    vstrVersionFolderRoot = Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES +
-                                                    (sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Substring(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Length - 1, 1) == "\\" ? "" : "\\"),
-                                                    cCSV.CeritarSatelliteApp.Name,
-                                                    cCSV.CeritarClient.CompanyName,
-                                                    sclsAppConfigs.GetVersionNumberPrefix + mcModVersion.VersionNo.ToString()
-                                                   );
+                    vstrVersionFolderRoot = Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES,
+                                                         cCSV.CeritarSatelliteApp.Name,
+                                                         cCSV.CeritarClient.CompanyName,
+                                                         sclsAppConfigs.GetVersionNumberPrefix + mcModVersion.VersionNo.ToString()
+                                                       );
 
                     process = new System.Diagnostics.Process();
                     startInfo = new System.Diagnostics.ProcessStartInfo();
@@ -621,6 +618,8 @@ namespace Ceritar.CVS.Controllers
 
             try
             {
+                //N.B.: FAIT LORS DE LA COPIE DES FICHIERS PAR FITLRES
+
                 //strCommands = @"/C SET folder=""" + vstrReleaseFolderLocation + @"""";
                 //strCommands = strCommands + @" & del /s /f /q %folder%\*.xml";
                 //strCommands = strCommands + @" & del /s /f /q %folder%\*.pdb";
@@ -729,7 +728,7 @@ namespace Ceritar.CVS.Controllers
                     cCSV.CeritarSatelliteApp.Name = structCSV.strCeritarSatelliteApp_Name;
                     cCSV.CeritarSatelliteApp.CeritarSatelliteApp_NRI = structCSV.intCeritarSatelliteApp_NRI;
                     cCSV.CeritarSatelliteApp.ExeIsFolder = structCSV.blnExeIsFolder;
-                    cCSV.CeritarSatelliteApp.KitFolderName = structCSV.strKitFolderName;
+                    cCSV.CeritarSatelliteApp.ExportFolderName = structCSV.strKitFolderName;
 
                     mcModVersion.LstClientSatelliteApps.Add(cCSV);
                 }
@@ -779,7 +778,7 @@ namespace Ceritar.CVS.Controllers
                 }
 
                 //Get the release folder location to copy (from the version kit or from the latest revision)
-                strReleaseLocation = clsSQL.str_ADOSingleLookUp("TOP 1 Rev_Location_Exe", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Rev_Location_Exe IS NOT NULL AND Revision.CSA_NRI IS NULL AND Revision.Rev_ExeIsReport = 0 ORDER BY Revision.Rev_No DESC");
+                strReleaseLocation = clsSQL.str_ADOSingleLookUp("TOP 1 Rev_Location_Exe", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Rev_Location_Exe IS NOT NULL AND Revision.Rev_ExeIsReport = 0 ORDER BY Revision.Rev_No DESC");
 
                 strReleaseLocation = strReleaseLocation == string.Empty ? mcView.GetLocation_Release() : strReleaseLocation;
 
@@ -811,7 +810,7 @@ namespace Ceritar.CVS.Controllers
                     foreach (structClientSatVersion structSat in lstSatellites)
                     {
                         //Get the executable folder location to copy (from the version kit or from the latest revision)
-                        strLocationSatelliteExe = clsSQL.str_ADOSingleLookUp("TOP 1 Rev_Location_Exe", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Rev_Location_Exe IS NOT NULL AND Revision.CSA_NRI = " + structSat.intCeritarSatelliteApp_NRI + " ORDER BY Revision.Rev_No DESC");
+                        strLocationSatelliteExe = clsSQL.str_ADOSingleLookUp("TOP 1 SatRevision.SRe_Location_Exe", "Revision INNER JOIN SatRevision ON SatRevision.Rev_NRI = Revision.Rev_NRI", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND SatRevision.SRe_Location_Exe IS NOT NULL AND SatRevision.CSA_NRI = " + structSat.intCeritarSatelliteApp_NRI + " ORDER BY Revision.Rev_No DESC");
 
                         strLocationSatelliteExe = strLocationSatelliteExe == string.Empty ? structSat.strLocationSatelliteExe : strLocationSatelliteExe;
 
@@ -872,6 +871,10 @@ namespace Ceritar.CVS.Controllers
             return blnValidReturn;
         }
 
+        /// <summary>
+        /// Copie les exécutables des applications satellites dans leurs dossiers respectifs dans les installations actives.
+        /// </summary>
+        /// <returns>Vrai si tout s'est bien passé.</returns>
         private bool pfblnCopyAllSatellitesAndUpdateLocations()
         {
             bool blnValidReturn = false;
@@ -885,14 +888,13 @@ namespace Ceritar.CVS.Controllers
 
                     if (File.Exists(cCSV.Location_Exe) || Directory.Exists(cCSV.Location_Exe))
                     {
-                        currentFolderInfos = new DirectoryInfo(Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES +
-                                                                            (sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Substring(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES.Length - 1, 1) == "\\" ? "" : "\\"),
+                        currentFolderInfos = new DirectoryInfo(Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES,
                                                                             cCSV.CeritarSatelliteApp.Name,
                                                                             cCSV.CeritarClient.CompanyName,
                                                                             sclsAppConfigs.GetVersionNumberPrefix + mcModVersion.VersionNo.ToString(),
                                                                             "Kit"
                                                                            )
-                                                    );
+                                                             );
 
                         if (!Directory.Exists(currentFolderInfos.FullName)) currentFolderInfos.Create();
 
@@ -1080,18 +1082,26 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        Revision.Rev_TS, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_No, " + Environment.NewLine;
             strSQL = strSQL + "        CerClient.CeC_Name, " + Environment.NewLine;
-            strSQL = strSQL + "        AppName = CASE WHEN CerSatApp.CSA_NRI IS NOT NULL THEN CerSatApp.CSA_Name " + Environment.NewLine;
-            strSQL = strSQL + " 					  WHEN Revision.Rev_ExeIsReport = 1 THEN CerApp.CeA_ExternalRPTAppName " + Environment.NewLine;
-            strSQL = strSQL + " 					  WHEN CerApp.CeA_NRI IS NOT NULL AND Revision.Rev_Location_Exe IS NOT NULL THEN CerApp.CeA_Name " + Environment.NewLine;
-            strSQL = strSQL + " 					  ELSE '' " + Environment.NewLine;
-            strSQL = strSQL + " 				 END +  " + Environment.NewLine;
+            strSQL = strSQL + "        AppName = CASE WHEN Revision.Rev_Location_Exe IS NOT NULL THEN CerApp.CeA_Name " + Environment.NewLine;
+            strSQL = strSQL + " 					  ELSE '' END + " + Environment.NewLine;
+            strSQL = strSQL + " 				 CASE WHEN Revision.Rev_ExeIsReport = 1 OR Revision.Rev_ExeWithReport = 1 " + Environment.NewLine;
+            strSQL = strSQL + " 				      THEN CASE WHEN Revision.Rev_Location_Exe IS NOT NULL " + Environment.NewLine;
+            strSQL = strSQL + " 								THEN ' + '  " + Environment.NewLine;
+            strSQL = strSQL + " 								ELSE ''  " + Environment.NewLine;
+            strSQL = strSQL + " 						   END + 'RPT' " + Environment.NewLine;
+            strSQL = strSQL + " 					  ELSE '' END + " + Environment.NewLine;
+            strSQL = strSQL + " 				 CASE WHEN EXISTS (SELECT * FROM SatRevision WHERE SatRevision.Rev_NRI = Revision.Rev_NRI) " + Environment.NewLine;
+            strSQL = strSQL + " 				      THEN CASE WHEN (Revision.Rev_ExeIsReport = 1 OR Revision.Rev_ExeWithReport = 1) OR (CerApp.CeA_NRI IS NOT NULL) " + Environment.NewLine;
+            strSQL = strSQL + " 								THEN ' + '  " + Environment.NewLine;
+            strSQL = strSQL + " 								ELSE ''  " + Environment.NewLine;
+            strSQL = strSQL + " 						   END + STUFF((SELECT ', ' + CONVERT(VARCHAR(100), CSA.CSA_Name) FROM SatRevision INNER JOIN CerSatApp CSA ON CSA.CSA_NRI = SatRevision.CSA_NRI FOR XML PATH('')), 1, 1, '') " + Environment.NewLine;
+            strSQL = strSQL + " 					  ELSE '' END + " + Environment.NewLine;
             strSQL = strSQL + " 				 CASE WHEN Revision.Rev_Location_Scripts IS NOT NULL  " + Environment.NewLine;
-            strSQL = strSQL + " 				      THEN CASE WHEN Revision.Rev_Location_Exe IS NOT NULL  " + Environment.NewLine;
+            strSQL = strSQL + " 				      THEN CASE WHEN EXISTS (SELECT * FROM SatRevision WHERE SatRevision.Rev_NRI = Revision.Rev_NRI) OR (Revision.Rev_ExeIsReport = 1 OR Revision.Rev_ExeWithReport = 1) OR Revision.Rev_Location_Exe IS NOT NULL " + Environment.NewLine;
             strSQL = strSQL + " 								THEN ' + '  " + Environment.NewLine;
             strSQL = strSQL + " 								ELSE ''  " + Environment.NewLine;
             strSQL = strSQL + " 						   END + 'Scripts'  " + Environment.NewLine;
-            strSQL = strSQL + " 					  ELSE ''  " + Environment.NewLine;
-            strSQL = strSQL + " 				 END, " + Environment.NewLine;
+            strSQL = strSQL + " 					  ELSE '' END, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_DtCreation " + Environment.NewLine;
 
             strSQL = strSQL + " FROM Revision " + Environment.NewLine;
@@ -1100,7 +1110,6 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "     INNER JOIN Version " + Environment.NewLine;
             strSQL = strSQL + "         INNER JOIN CerApp ON CerApp.CeA_NRI = Version.CeA_NRI " + Environment.NewLine;
             strSQL = strSQL + "     ON Version.Ver_NRI = Revision.Ver_NRI " + Environment.NewLine;
-            strSQL = strSQL + "     LEFT JOIN CerSatApp ON CerSatApp.CSA_NRI = Revision.CSA_NRI " + Environment.NewLine;
 
             strSQL = strSQL + " WHERE Revision.Ver_NRI = " + vintVersion_NRI + Environment.NewLine;
 

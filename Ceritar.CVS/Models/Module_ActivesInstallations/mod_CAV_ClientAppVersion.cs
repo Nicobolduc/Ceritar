@@ -228,7 +228,14 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         { }
                         else
                         {
-                            blnValidReturn = true;
+                            if (_blnIsCurrentVersion)
+                            {
+                                blnValidReturn = mcSQL.bln_ADOExecute("UPDATE ClientAppVersion SET CAV_IsCurrentVersion = 0 WHERE ClientAppVersion.CeC_NRI = " + _cCeritarClient.CeritarClient_NRI + " AND ClientAppVersion.Ver_NRI <> " + Version_NRI);
+                            }
+                            else
+                            {
+                                blnValidReturn = true;
+                            }
                         }
 
                         break;

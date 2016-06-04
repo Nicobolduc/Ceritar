@@ -55,6 +55,7 @@
     <Compile Include="Controllers\Interfaces\ITemplate.cs" />
     <Compile Include="Controllers\Interfaces\IVersion.cs" />
     <Compile Include="Models\Module_ActivesInstallations\mod_CSV_ClientSatVersion.cs" />
+    <Compile Include="Models\Module_ActivesInstallations\mod_SRe_SatelliteRevision.cs" />
     <Compile Include="Models\Module_Configuration\mod_CAS_CeritarSatelliteApp.cs" />
     <Compile Include="Models\Module_Template\mod_Folder.cs" />
     <Compile Include="sclsAppConfigs.cs" />

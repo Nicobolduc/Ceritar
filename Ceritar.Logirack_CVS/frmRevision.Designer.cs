@@ -88,9 +88,9 @@
             this.dtpCreation.CustomFormat = "MM-dd-yyyy hh:mm";
             this.dtpCreation.Enabled = false;
             this.dtpCreation.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpCreation.Location = new System.Drawing.Point(408, 19);
+            this.dtpCreation.Location = new System.Drawing.Point(394, 19);
             this.dtpCreation.Name = "dtpCreation";
-            this.dtpCreation.Size = new System.Drawing.Size(118, 20);
+            this.dtpCreation.Size = new System.Drawing.Size(132, 20);
             this.dtpCreation.TabIndex = 4;
             // 
             // cboClients
@@ -272,8 +272,8 @@
             // btnExportRevision
             // 
             this.btnExportRevision.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExportRevision.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnExportRevision.BackgroundImage")));
             this.btnExportRevision.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnExportRevision.Image = ((System.Drawing.Image)(resources.GetObject("btnExportRevision.Image")));
             this.btnExportRevision.Location = new System.Drawing.Point(790, 521);
             this.btnExportRevision.Name = "btnExportRevision";
             this.btnExportRevision.Size = new System.Drawing.Size(40, 40);
@@ -386,7 +386,7 @@
             this.toolTips.SetToolTip(this.chkExeIsRPT, "Cocher cette case si la révision ne contient pas le release de l\'application prin" +
         "cipale, mais seulement l\'exécutable des rapports");
             this.chkExeIsRPT.UseVisualStyleBackColor = true;
-            this.chkExeIsRPT.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            this.chkExeIsRPT.CheckedChanged += new System.EventHandler(this.chkExeIsRPT_CheckedChanged);
             // 
             // chkExeAndRpt
             // 
@@ -449,7 +449,6 @@
             this.grdSatellites.StyleInfo = resources.GetString("grdSatellites.StyleInfo");
             this.grdSatellites.TabIndex = 0;
             this.grdSatellites.Tag = "35";
-            this.grdSatellites.DoubleClick += new System.EventHandler(this.grdSatellites_DoubleClick);
             // 
             // formController
             // 
@@ -523,10 +522,10 @@
             // 
             this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox6.Controls.Add(this.btnSelectFilePath);
             this.groupBox6.Controls.Add(this.label8);
             this.groupBox6.Controls.Add(this.label4);
             this.groupBox6.Controls.Add(this.btnSelectFolderPath);
-            this.groupBox6.Controls.Add(this.btnSelectFilePath);
             this.groupBox6.Location = new System.Drawing.Point(5, 512);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(303, 55);
@@ -546,7 +545,7 @@
             // 
             this.label4.Location = new System.Drawing.Point(6, 24);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(100, 17);
+            this.label4.Size = new System.Drawing.Size(93, 17);
             this.label4.TabIndex = 77;
             this.label4.Text = "Ajouter un fichier :";
             // 

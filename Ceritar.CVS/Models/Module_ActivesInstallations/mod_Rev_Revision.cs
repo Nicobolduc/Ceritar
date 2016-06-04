@@ -23,7 +23,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private mod_Ver_Version _cVersion;
         private mod_TTU_User _cCreatedByUser;
         private mod_CeC_CeritarClient _cCeritarClient;
-        private mod_CSA_CeritarSatelliteApp _cSatelliteApp;
+        private List<mod_SRe_SatelliteRevision> _lstSatelliteRevisions;
         private List<string> _lstModifications;
         private string _strLocation_Release;
         private string _strLocation_Scripts;
@@ -92,10 +92,19 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { _cCeritarClient = value; }
         }
 
-        internal mod_CSA_CeritarSatelliteApp SatelliteApp
+        internal List<mod_SRe_SatelliteRevision> LstSatelliteRevisions
         {
-            get { return _cSatelliteApp; }
-            set { _cSatelliteApp = value; }
+            get
+            {
+                if (_lstSatelliteRevisions == null)
+                {
+
+                    _lstSatelliteRevisions = new List<mod_SRe_SatelliteRevision>();
+                }
+
+                return _lstSatelliteRevisions;
+            }
+            set { _lstSatelliteRevisions = value; }
         }
 
         internal List<string> LstModifications
@@ -193,7 +202,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.REPORT_EXE_MANDATORY);
                         }
-                        else if (string.IsNullOrEmpty(_strLocation_Release) & string.IsNullOrEmpty(_strLocation_Scripts))
+                        else if (string.IsNullOrEmpty(_strLocation_Release) & string.IsNullOrEmpty(_strLocation_Scripts) & LstSatelliteRevisions.Count == 0)
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.EXE_OR_SCRIPT_MANDATORY);
                         }
@@ -222,7 +231,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.CERITAR_CLIENT_MANDATORY);
                         }
-                        else if (string.IsNullOrEmpty(_strLocation_Release) & string.IsNullOrEmpty(_strLocation_Scripts))
+                        else if (string.IsNullOrEmpty(_strLocation_Release) & string.IsNullOrEmpty(_strLocation_Scripts) & LstSatelliteRevisions.Count == 0)
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.EXE_OR_SCRIPT_MANDATORY);
                         }
@@ -318,6 +327,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         { }
                         else if (!pfblnListModifications_Save())
                         { }
+                        else if (!pfblnListSatelliteRevisions_Save())
+                        { }
                         else
                         {
                             mcActionResults.SetNewItem_NRI = _intRevision_NRI;
@@ -335,6 +346,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         { }
                         else if (!pfblnListModifications_Save())
                         { }
+                        else if (!pfblnListSatelliteRevisions_Save())
+                        { }
                         else
                         {
                             blnValidReturn = true;
@@ -345,6 +358,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                     case sclsConstants.DML_Mode.DELETE_MODE:
 
                         if (!mcSQL.bln_ADODelete("RevModifs", "RevModifs.Rev_NRI = " + _intRevision_NRI))
+                        { }
+                        else if (!pfblnListSatelliteRevisions_Save())
                         { }
                         else if (!mcSQL.bln_ADODelete("Revision", "Revision.Rev_NRI = " + _intRevision_NRI))
                         { }
@@ -426,6 +441,54 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             return blnValidReturn;
         }
 
+        private bool pfblnListSatelliteRevisions_Save()
+        {
+            bool blnValidReturn = true;
+
+            try
+            {
+                if (mintDML_Action != sclsConstants.DML_Mode.DELETE_MODE)
+                {
+                    for (int intIndex = 0; intIndex < _lstSatelliteRevisions.Count; intIndex++)
+                    {
+                        blnValidReturn = false;
+
+                        _lstSatelliteRevisions[intIndex].SetcSQL = mcSQL;
+                        _lstSatelliteRevisions[intIndex].Revision = (_lstSatelliteRevisions[intIndex].Revision == null ? new mod_Rev_Revision() : _lstSatelliteRevisions[intIndex].Revision);
+                        _lstSatelliteRevisions[intIndex].Revision.Revision_NRI = _intRevision_NRI;
+
+                        blnValidReturn = _lstSatelliteRevisions[intIndex].blnSave();
+
+                        mcActionResults = _lstSatelliteRevisions[intIndex].ActionResults;
+
+                        if (!blnValidReturn) break;
+                    }
+                }
+                else
+                {
+                    blnValidReturn = mcSQL.bln_ADODelete("SatRevision", "SatRevision.Rev_NRI = " + _intRevision_NRI);
+                }
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                if (!blnValidReturn & mcActionResults.IsValid)
+                {
+                    mcActionResults.SetInvalid(sclsConstants.Error_Message.ERROR_SAVE_MSG, clsActionResults.BaseErrorCode.ERROR_SAVE);
+                }
+                else if (blnValidReturn & !mcActionResults.IsValid)
+                {
+                    blnValidReturn = false;
+                }
+            }
+
+            return blnValidReturn;
+        }
+
         private bool pfblnRev_AddFields()
         {
             bool blnValidReturn = false;
@@ -452,11 +515,48 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 { }
                 else if (!mcSQL.bln_AddField("Rev_CreatedBy", _strCreatedBy, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("CSA_NRI", _cSatelliteApp.CeritarSatelliteApp_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
-                { }
                 else if (!mcSQL.bln_AddField("Rev_ExeIsReport", _blnExeIsExternalReport, clsSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("Rev_ExeWithReport", _blnExeWithExternalReport, clsSQL.MySQL_FieldTypes.BIT_TYPE))
+                { }
+                else
+                {
+                    blnValidReturn = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                if (!blnValidReturn & mcActionResults.IsValid)
+                {
+                    mcActionResults.SetInvalid(sclsConstants.Error_Message.ERROR_SAVE_MSG, clsActionResults.BaseErrorCode.ERROR_SAVE);
+                }
+                else if (blnValidReturn & !mcActionResults.IsValid)
+                {
+                    blnValidReturn = false;
+                }
+            }
+
+            return blnValidReturn;
+        }
+
+        internal bool blnUpdateFilesLocations()
+        {
+            bool blnValidReturn = false;
+
+            try
+            {
+                if (!mcSQL.bln_RefreshFields())
+                { }
+                else if (!mcSQL.bln_AddField("Rev_Location_Exe", _strLocation_Release, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                { }
+                else if (!mcSQL.bln_AddField("Rev_Location_Scripts", _strLocation_Scripts, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                { }
+                else if (!mcSQL.bln_ADOUpdate("Revision", "Revision.Rev_NRI = " + _intRevision_NRI))
                 { }
                 else
                 {
