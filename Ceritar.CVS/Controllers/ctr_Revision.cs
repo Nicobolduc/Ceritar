@@ -227,13 +227,26 @@ namespace Ceritar.CVS.Controllers
 
                         case (int)ctr_Template.FolderType.Revision_Number:
 
+                            string strSatelliteExeLocation = string.Empty;
                             string[] strLstCurrentDirectory = Directory.GetDirectories(currentFolderInfos.FullName, sclsAppConfigs.GetRevisionNumberPrefix + mcView.GetRevisionNo().ToString() + " *");
 
                             strFolderName = sclsAppConfigs.GetRevisionNumberPrefix + mcView.GetRevisionNo().ToString();
 
-                            strRevisionFolderName_InfosSupp = (string.IsNullOrEmpty(mcModRevision.Path_Release) || mcModRevision.ExeIsExternalReport ? string.Empty : " EXE");
+                            strRevisionFolderName_InfosSupp = (string.IsNullOrEmpty(mcModRevision.Path_Release) || mcModRevision.ExeIsExternalReport ? string.Empty : " Exe");
                             strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (mcModRevision.ExeIsExternalReport || mcView.GetExeWithExternalReport() ? (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " RPT" : string.Empty);
                             strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (string.IsNullOrEmpty(mcModRevision.Path_Scripts) ? string.Empty : (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " SCRIPTS");
+
+                            for (int intIndex = 0; intIndex < mcModRevision.LstSatelliteRevisions.Count; intIndex++)
+                            {
+                                if (!string.IsNullOrEmpty(mcModRevision.LstSatelliteRevisions[intIndex].Location_Exe))
+                                {
+                                    strSatelliteExeLocation = mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExportFolderName;
+
+                                    strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (string.IsNullOrEmpty(strSatelliteExeLocation) ? string.Empty : (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " " + strSatelliteExeLocation);
+
+                                    strSatelliteExeLocation = string.Empty;
+                                }
+                            }
 
                             strFolderName = strFolderName + strRevisionFolderName_InfosSupp;
 
@@ -283,6 +296,9 @@ namespace Ceritar.CVS.Controllers
                     {
                         case (int)ctr_Template.FolderType.Release:
 
+                            blnValidReturn = true;
+
+                            //Gestion du Exe de l'application principale ou des rapports
                             if ((File.Exists(mcView.GetLocation_Release()) || Directory.Exists(mcView.GetLocation_Release())))
                             {
                                 if ((File.GetAttributes(mcView.GetLocation_Release()) & FileAttributes.Directory) == FileAttributes.Directory)
@@ -319,32 +335,29 @@ namespace Ceritar.CVS.Controllers
 
                                     mcModRevision.Path_Release = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Release()));
                                 }
+                            }
 
-                                //Gestion des applications satellites. On les copie ici au même niveau que le Release
-                                if (blnValidReturn && mcModRevision.LstSatelliteRevisions.Count > 0)
+                            //Gestion des applications satellites. On les copie ici au même niveau que le Release
+                            if (blnValidReturn && mcModRevision.LstSatelliteRevisions.Count > 0)
+                            {
+                                string strDestinationFolder = string.Empty;
+
+                                for (int intIndex = 0; intIndex < mcModRevision.LstSatelliteRevisions.Count; intIndex++)
                                 {
-                                    string strDestinationFolder = string.Empty;
+                                    strDestinationFolder = currentFolderInfos.Parent.FullName;
 
-                                    for (int intIndex = 0; intIndex < mcModRevision.LstSatelliteRevisions.Count; intIndex++)
-                                    {
-                                        strDestinationFolder = currentFolderInfos.Parent.FullName;
+                                    strDestinationFolder = Path.Combine(strDestinationFolder, mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExportFolderName);
 
-                                        strDestinationFolder = Path.Combine(strDestinationFolder, mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExportFolderName);
+                                    blnValidReturn = pfblnCopyAndSaveSatelliteLocation(mcModRevision.LstSatelliteRevisions[intIndex], strDestinationFolder, false);
 
-                                        blnValidReturn = pfblnCopyAndSaveSatelliteLocation(mcModRevision.LstSatelliteRevisions[intIndex], strDestinationFolder, false);
-
-                                        if (!blnValidReturn) break;
-                                    }
-                                }
-                                else
-                                {
-                                    //Do nothing
+                                    if (!blnValidReturn) break;
                                 }
                             }
                             else
                             {
-                                blnValidReturn = true;
+                                //Do nothing
                             }
+
 
                             break;
 

@@ -47,7 +47,7 @@ namespace Ceritar.Logirack_CVS
         private string mstrCeritarApplication_Name;
         private string mstrCeritarApplication_RPT_Name;
         private ushort mintRevision_TS;
-        private bool mblnAppExeLocation_Changed;
+        private bool mblnAppExeLocationExistsOnLoad;
 
 
         public frmRevision()
@@ -190,12 +190,12 @@ namespace Ceritar.Logirack_CVS
 
         bool IRevision.GetExeIsExternalReport()
         {
-            return chkExeIsRPT.Checked;
+            return optRptOnly.Checked;
         }
 
         bool IRevision.GetExeWithExternalReport()
         {
-            return chkExeAndRpt.Checked;
+            return optExeAndRpt.Checked;
         }
 
         string IRevision.GetCreatedBy()
@@ -230,6 +230,9 @@ namespace Ceritar.Logirack_CVS
                         UInt16.TryParse(sqlRecord["Rev_TS"].ToString(), out mintRevision_TS);
 
                         txtReleasePath.Text = sqlRecord["Rev_Location_Exe"].ToString();
+
+                        mblnAppExeLocationExistsOnLoad = !string.IsNullOrEmpty(txtReleasePath.Text);
+
                         txtScriptsPath.Text = sqlRecord["Rev_Location_Scripts"].ToString();
                         txtCreatedBy.Text = sqlRecord["Rev_CreatedBy"].ToString();
 
@@ -238,25 +241,25 @@ namespace Ceritar.Logirack_CVS
 
                         dtpCreation.Value = DateTime.Parse(sqlRecord["Rev_DtCreation"].ToString());
 
-                        chkExeIsRPT.Checked = Convert.ToBoolean(sqlRecord["Rev_ExeIsReport"].ToString());
-                        chkExeAndRpt.Checked = Convert.ToBoolean(sqlRecord["Rev_ExeWithReport"].ToString());
+                        optRptOnly.Checked = Convert.ToBoolean(sqlRecord["Rev_ExeIsReport"].ToString());
+                        optExeAndRpt.Checked = Convert.ToBoolean(sqlRecord["Rev_ExeWithReport"].ToString());
 
-                        if (chkExeIsRPT.Checked)
+                        if (optRptOnly.Checked)
                         {
                             btnSelectExecutableFolderPath.Enabled = false;
-                            grdSatellites.Enabled = false;
-                            chkExeAndRpt.Enabled = false;
+                        }
+                        else if (optExeAndRpt.Checked)
+                        {
+                            btnSelectExecutableFolderPath.Enabled = true;
                         }
                         else
                         {
-                            grdSatellites.Enabled = true;
-                            btnSelectExecutableFolderPath.Enabled = true;
-                            chkExeAndRpt.Enabled = true;
+                            optExeOnly.Checked = true;
                         }
                     }
 
-                    chkExeAndRpt.Visible = !string.IsNullOrEmpty(mstrCeritarApplication_RPT_Name);
-                    chkExeIsRPT.Visible = !string.IsNullOrEmpty(mstrCeritarApplication_RPT_Name);
+                    optExeAndRpt.Visible = !string.IsNullOrEmpty(mstrCeritarApplication_RPT_Name);
+                    optRptOnly.Visible = !string.IsNullOrEmpty(mstrCeritarApplication_RPT_Name);
 
                     blnValidReturn = true;
                 }
@@ -336,8 +339,6 @@ namespace Ceritar.Logirack_CVS
                     txtAffected.Text = folderBrowserDialog.SelectedPath;
 
                     formController.ChangeMade = true;
-
-                    if (txtAffected.Name == txtReleasePath.Name) mblnAppExeLocation_Changed = true;
                 }
             }
         }
@@ -374,8 +375,6 @@ namespace Ceritar.Logirack_CVS
                         if (rControl.GetType() == typeof(TextBox))
                         {
                             ((TextBox)rControl).Text = openFileDialog.FileName;
-
-                            if (((TextBox)rControl).Name == txtReleasePath.Name) mblnAppExeLocation_Changed = true;
                         }
 
                         if (rControl.GetType() == typeof(C1FlexGrid))
@@ -477,7 +476,7 @@ namespace Ceritar.Logirack_CVS
             bool blnValidReturn = false;
             Button btnPlaceHolder = null;
 
-            mblnAppExeLocation_Changed = false;
+            mblnAppExeLocationExistsOnLoad = false;
 
             mcGrdSatellites.LstHostedCellControls = new List<HostedCellControl>();
 
@@ -722,29 +721,6 @@ namespace Ceritar.Logirack_CVS
         //    }
         //}
 
-        private void chkExeIsRPT_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!formController.FormIsLoading)
-            {
-                formController.ChangeMade = true;
-
-                chkExeAndRpt.Enabled = !chkExeIsRPT.Checked;
-
-                if (chkExeIsRPT.Checked)
-                {
-                    grdSatellites.Enabled = false;
-                    btnSelectExecutableFolderPath.Enabled = false;
-                    chkExeAndRpt.Checked = false;
-                }
-                else
-                {
-                    txtReleasePath.Text = string.Empty;
-                    grdSatellites.Enabled = true;
-                    btnSelectExecutableFolderPath.Enabled = true;
-                }
-            }
-        }
-
         private void txtCreatedBy_TextChanged(object sender, EventArgs e)
         {
             if (!formController.FormIsLoading) 
@@ -753,30 +729,51 @@ namespace Ceritar.Logirack_CVS
             }
         }
 
-        private void chkExeAndRpt_CheckedChanged(object sender, EventArgs e)
+        private void optExeAndRpt_CheckedChanged(object sender, EventArgs e)
         {
             if (!formController.FormIsLoading)
             {
-                chkExeIsRPT.Enabled = !chkExeAndRpt.Checked;
-
-                if (chkExeAndRpt.Checked)
-                {
-                    chkExeIsRPT.Checked = false;
-                }
                 formController.ChangeMade = true;
+
+                if (mblnAppExeLocationExistsOnLoad)
+                {
+                    txtReleasePath.Text = string.Empty;
+                    mblnAppExeLocationExistsOnLoad = false;
+                }
             }
         }
 
-        private void chkExeAndRpt_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        private void optRptOnly_CheckedChanged(object sender, EventArgs e)
         {
-            //TODO
-        }
-         //e.Cancel = true;
+            if (!formController.FormIsLoading)
+            {
+                formController.ChangeMade = true;
 
-         //   if (mblnAppExeLocation_Changed || formController.FormMode != sclsConstants.DML_Mode.UPDATE_MODE)
-         //   {
-         //       e.Cancel = false;
-         //   }
+                if (optRptOnly.Checked)
+                {
+                    btnSelectExecutableFolderPath.Enabled = false;
+                }
+                else
+                {
+                    btnSelectExecutableFolderPath.Enabled = true;
+                }
+
+                if (mblnAppExeLocationExistsOnLoad)
+                {
+                    txtReleasePath.Text = string.Empty;
+                    mblnAppExeLocationExistsOnLoad = false;
+                }
+            }
+        }
+
+        private void optExeOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!formController.FormIsLoading && mblnAppExeLocationExistsOnLoad)
+            {
+                txtReleasePath.Text = string.Empty;
+                mblnAppExeLocationExistsOnLoad = false;
+            }
+        }
 
     }
 }

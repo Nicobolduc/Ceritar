@@ -57,8 +57,6 @@
             this.btnShowExecutableFolder = new System.Windows.Forms.Button();
             this.btnSelectFilePath = new System.Windows.Forms.Button();
             this.btnSelectFolderPath = new System.Windows.Forms.Button();
-            this.chkExeIsRPT = new System.Windows.Forms.CheckBox();
-            this.chkExeAndRpt = new System.Windows.Forms.CheckBox();
             this.btnGenerate = new System.Windows.Forms.Button();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
@@ -68,7 +66,10 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtScriptsPath = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.optExeOnly = new System.Windows.Forms.RadioButton();
+            this.optExeAndRpt = new System.Windows.Forms.RadioButton();
             this.txtReleasePath = new System.Windows.Forms.TextBox();
+            this.optRptOnly = new System.Windows.Forms.RadioButton();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -375,32 +376,6 @@
             this.toolTips.SetToolTip(this.btnSelectFolderPath, "Sélectionner un dossier");
             this.btnSelectFolderPath.UseVisualStyleBackColor = true;
             // 
-            // chkExeIsRPT
-            // 
-            this.chkExeIsRPT.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkExeIsRPT.Location = new System.Drawing.Point(10, 62);
-            this.chkExeIsRPT.Name = "chkExeIsRPT";
-            this.chkExeIsRPT.Size = new System.Drawing.Size(123, 17);
-            this.chkExeIsRPT.TabIndex = 78;
-            this.chkExeIsRPT.Text = "Rapports seulement";
-            this.toolTips.SetToolTip(this.chkExeIsRPT, "Cocher cette case si la révision ne contient pas le release de l\'application prin" +
-        "cipale, mais seulement l\'exécutable des rapports");
-            this.chkExeIsRPT.UseVisualStyleBackColor = true;
-            this.chkExeIsRPT.CheckedChanged += new System.EventHandler(this.chkExeIsRPT_CheckedChanged);
-            // 
-            // chkExeAndRpt
-            // 
-            this.chkExeAndRpt.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkExeAndRpt.Location = new System.Drawing.Point(136, 62);
-            this.chkExeAndRpt.Name = "chkExeAndRpt";
-            this.chkExeAndRpt.Size = new System.Drawing.Size(137, 17);
-            this.chkExeAndRpt.TabIndex = 77;
-            this.chkExeAndRpt.Text = "Application + rapports";
-            this.toolTips.SetToolTip(this.chkExeAndRpt, "Le dossier Release de l\'application principale inclut également l\'application des" +
-        " rapports");
-            this.chkExeAndRpt.UseVisualStyleBackColor = true;
-            this.chkExeAndRpt.CheckedChanged += new System.EventHandler(this.chkExeAndRpt_CheckedChanged);
-            // 
             // btnGenerate
             // 
             this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -496,18 +471,41 @@
             // 
             this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox5.Controls.Add(this.chkExeIsRPT);
+            this.groupBox5.Controls.Add(this.optExeOnly);
+            this.groupBox5.Controls.Add(this.optExeAndRpt);
             this.groupBox5.Controls.Add(this.btnSelectExecutableFilePath);
             this.groupBox5.Controls.Add(this.btnSelectExecutableFolderPath);
             this.groupBox5.Controls.Add(this.txtReleasePath);
             this.groupBox5.Controls.Add(this.btnShowExecutableFolder);
-            this.groupBox5.Controls.Add(this.chkExeAndRpt);
+            this.groupBox5.Controls.Add(this.optRptOnly);
             this.groupBox5.Location = new System.Drawing.Point(5, 421);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(828, 85);
             this.groupBox5.TabIndex = 79;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Application principale exécutable";
+            this.groupBox5.Text = "Exécutable(s) de l\'application principale";
+            // 
+            // optExeOnly
+            // 
+            this.optExeOnly.Checked = true;
+            this.optExeOnly.Location = new System.Drawing.Point(8, 60);
+            this.optExeOnly.Name = "optExeOnly";
+            this.optExeOnly.Size = new System.Drawing.Size(143, 20);
+            this.optExeOnly.TabIndex = 82;
+            this.optExeOnly.TabStop = true;
+            this.optExeOnly.Text = "Exécutable seulement";
+            this.optExeOnly.UseVisualStyleBackColor = true;
+            this.optExeOnly.CheckedChanged += new System.EventHandler(this.optExeOnly_CheckedChanged);
+            // 
+            // optExeAndRpt
+            // 
+            this.optExeAndRpt.Location = new System.Drawing.Point(302, 60);
+            this.optExeAndRpt.Name = "optExeAndRpt";
+            this.optExeAndRpt.Size = new System.Drawing.Size(175, 20);
+            this.optExeAndRpt.TabIndex = 81;
+            this.optExeAndRpt.Text = "Exécutable + Rapports externe";
+            this.optExeAndRpt.UseVisualStyleBackColor = true;
+            this.optExeAndRpt.CheckedChanged += new System.EventHandler(this.optExeAndRpt_CheckedChanged);
             // 
             // txtReleasePath
             // 
@@ -517,6 +515,16 @@
             this.txtReleasePath.ReadOnly = true;
             this.txtReleasePath.Size = new System.Drawing.Size(694, 22);
             this.txtReleasePath.TabIndex = 79;
+            // 
+            // optRptOnly
+            // 
+            this.optRptOnly.Location = new System.Drawing.Point(157, 60);
+            this.optRptOnly.Name = "optRptOnly";
+            this.optRptOnly.Size = new System.Drawing.Size(125, 20);
+            this.optRptOnly.TabIndex = 80;
+            this.optRptOnly.Text = "Rapports seulement";
+            this.optRptOnly.UseVisualStyleBackColor = true;
+            this.optRptOnly.CheckedChanged += new System.EventHandler(this.optRptOnly_CheckedChanged);
             // 
             // groupBox6
             // 
@@ -616,18 +624,19 @@
         private System.Windows.Forms.TextBox txtScriptsPath;
         private System.Windows.Forms.Button btnShowScriptsFolder;
         private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.CheckBox chkExeIsRPT;
         private System.Windows.Forms.Button btnSelectExecutableFilePath;
         private System.Windows.Forms.Button btnSelectExecutableFolderPath;
         private System.Windows.Forms.TextBox txtReleasePath;
         private System.Windows.Forms.Button btnShowExecutableFolder;
-        private System.Windows.Forms.CheckBox chkExeAndRpt;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnSelectFolderPath;
         private System.Windows.Forms.Button btnSelectFilePath;
         private System.Windows.Forms.Button btnGenerate;
+        private System.Windows.Forms.RadioButton optExeOnly;
+        private System.Windows.Forms.RadioButton optExeAndRpt;
+        private System.Windows.Forms.RadioButton optRptOnly;
 
     }
 }

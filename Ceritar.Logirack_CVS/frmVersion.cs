@@ -41,10 +41,11 @@ namespace Ceritar.Logirack_CVS
         private const short mintGrdSat_CSA_NRI_col = 2;
         private const short mintGrdSat_CSA_TS_col = 3;
         private const short mintGrdSat_CSA_Name_col = 4;
-        private const short mintGrdSat_CSA_KitFolderName_col = 5;
-        private const short mintGrdSat_CSA_ExeIsFolder_col = 6;
-        private const short mintGrdSat_CSV_NRI_col = 7;
-        private const short mintGrdSat_CSV_LocationExe_col = 8;
+        private const short mintGrdSat_CSA_LatestExe_col = 5;
+        private const short mintGrdSat_CSA_KitFolderName_col = 6;
+        private const short mintGrdSat_CSA_ExeIsFolder_col = 7;
+        private const short mintGrdSat_CSV_NRI_col = 8;
+        private const short mintGrdSat_CSV_LocationExe_col = 9;
 
         //Columns grdRev
         private const short mintGrdRev_Rev_NRI_col = 1;
@@ -649,8 +650,9 @@ namespace Ceritar.Logirack_CVS
 
         void mcGrdSatelliteApps_SetGridDisplay()
         {
-            grdSatellite.Cols[mintGrdSat_CSA_Name_col].Width = 240;
-            grdSatellite.Cols[mintGrdSat_CSV_LocationExe_col].Width = 42;
+            grdSatellite.Cols[mintGrdSat_CSA_Name_col].Width = 210;
+            grdSatellite.Cols[mintGrdSat_CSA_LatestExe_col].Width = 75;
+            grdSatellite.Cols[mintGrdSat_CSV_LocationExe_col].Width = 17;
 
             if (grdSatellite.Rows.Count > 1)
             {

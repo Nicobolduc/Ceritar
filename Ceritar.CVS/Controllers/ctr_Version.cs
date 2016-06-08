@@ -1054,6 +1054,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        CerSatApp.CSA_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        CerSatApp.CSA_TS, " + Environment.NewLine;
             strSQL = strSQL + "        CerSatApp.CSA_Name, " + Environment.NewLine;
+            strSQL = strSQL + "        LatestExe = CASE WHEN TRevision.Rev_No IS NOT NULL THEN 'Revision '+ CONVERT(VARCHAR, TRevision.Rev_No) ELSE 'Kit ' + Version.Ver_No END, " + Environment.NewLine;
             strSQL = strSQL + "        CerSatApp.CSA_KitFolderName, " + Environment.NewLine;
             strSQL = strSQL + "        CerSatApp.CSA_ExeIsFolder, " + Environment.NewLine;
             strSQL = strSQL + "        ClientSatVersion.CSV_NRI, " + Environment.NewLine;
@@ -1063,6 +1064,11 @@ namespace Ceritar.CVS.Controllers
 
             strSQL = strSQL + "     LEFT JOIN ClientSatVersion  " + Environment.NewLine;
             strSQL = strSQL + " 		INNER JOIN Version ON Version.Ver_NRI = ClientSatVersion.Ver_NRI  " + Environment.NewLine;
+            strSQL = strSQL + " 	        LEFT JOIN ( SELECT MAX(Revision.Rev_No) AS Rev_No, Revision.Ver_NRI, Revision.CeC_NRI, SatRevision.CSA_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 	                    FROM Revision " + Environment.NewLine;
+            strSQL = strSQL + " 	                        LEFT JOIN SatRevision ON SatRevision.Rev_NRI = Revision.Rev_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 	                    GROUP BY Revision.Ver_NRI, Revision.CeC_NRI, SatRevision.CSA_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 	                  ) As TRevision ON TRevision.Ver_NRI = ClientSatVersion.Ver_NRI AND ClientSatVersion.CSA_NRI = TRevision.CSA_NRI AND TRevision.CeC_NRI = ClientSatVersion.CeC_NRI " + Environment.NewLine;
             strSQL = strSQL + " 	ON ClientSatVersion.Ver_NRI = " + vintVersion_NRI + Environment.NewLine;
             strSQL = strSQL + "    AND ClientSatVersion.CSA_NRI = CerSatApp.CSA_NRI  " + Environment.NewLine;
             strSQL = strSQL + "    AND ClientSatVersion.CeC_NRI = " + vintCeritarClient_NRI + Environment.NewLine;
@@ -1091,10 +1097,10 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " 						   END + 'RPT' " + Environment.NewLine;
             strSQL = strSQL + " 					  ELSE '' END + " + Environment.NewLine;
             strSQL = strSQL + " 				 CASE WHEN EXISTS (SELECT * FROM SatRevision WHERE SatRevision.Rev_NRI = Revision.Rev_NRI) " + Environment.NewLine;
-            strSQL = strSQL + " 				      THEN CASE WHEN (Revision.Rev_ExeIsReport = 1 OR Revision.Rev_ExeWithReport = 1) OR (CerApp.CeA_NRI IS NOT NULL) " + Environment.NewLine;
+            strSQL = strSQL + " 				      THEN CASE WHEN (Revision.Rev_ExeIsReport = 1 OR Revision.Rev_ExeWithReport = 1) OR (Revision.Rev_Location_Exe IS NOT NULL) " + Environment.NewLine;
             strSQL = strSQL + " 								THEN ' + '  " + Environment.NewLine;
             strSQL = strSQL + " 								ELSE ''  " + Environment.NewLine;
-            strSQL = strSQL + " 						   END + STUFF((SELECT ', ' + CONVERT(VARCHAR(100), CSA.CSA_Name) FROM SatRevision INNER JOIN CerSatApp CSA ON CSA.CSA_NRI = SatRevision.CSA_NRI FOR XML PATH('')), 1, 1, '') " + Environment.NewLine;
+            strSQL = strSQL + " 						   END + STUFF((SELECT ', ' + CONVERT(VARCHAR(100), CSA.CSA_Name) FROM SatRevision INNER JOIN CerSatApp CSA ON CSA.CSA_NRI = SatRevision.CSA_NRI WHERE SatRevision.Rev_NRI = Revision.Rev_NRI FOR XML PATH('')), 1, 1, '') " + Environment.NewLine;
             strSQL = strSQL + " 					  ELSE '' END + " + Environment.NewLine;
             strSQL = strSQL + " 				 CASE WHEN Revision.Rev_Location_Scripts IS NOT NULL  " + Environment.NewLine;
             strSQL = strSQL + " 				      THEN CASE WHEN EXISTS (SELECT * FROM SatRevision WHERE SatRevision.Rev_NRI = Revision.Rev_NRI) OR (Revision.Rev_ExeIsReport = 1 OR Revision.Rev_ExeWithReport = 1) OR Revision.Rev_Location_Exe IS NOT NULL " + Environment.NewLine;
