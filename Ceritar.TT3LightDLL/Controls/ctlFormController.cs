@@ -190,15 +190,17 @@ namespace Ceritar.TT3LightDLL.Controls
                         }
                         else
                         {
+                            mfrmCallingForm = (Form)Form.FromHandle(vintParentHandle.Handle);
+
                             if (vblnDisableParent)
                             {
-                                mfrmCallingForm = (Form)Form.FromHandle(vintParentHandle.Handle);
                                 mfrmCallingForm.Enabled = false;
-
+    
                                 mfrmParent.FormClosed += mfrmParent_FormClosed;
                             }
-                            
-                            mfrmParent.Show(vintParentHandle);
+
+                            mfrmParent.MdiParent = mfrmCallingForm.MdiParent;
+                            mfrmParent.Show();
                         }
                     }
                     else

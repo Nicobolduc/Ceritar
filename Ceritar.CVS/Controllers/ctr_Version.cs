@@ -23,6 +23,9 @@ namespace Ceritar.CVS.Controllers
         private clsActionResults mcActionResult;
         private clsSQL mcSQL;
 
+        //Messages
+        private const int mintMSG_BuildSuccess = 37;
+
         //Working variables
         private bool mblnUpdateSelectedClientOnly = false;
         
@@ -184,10 +187,6 @@ namespace Ceritar.CVS.Controllers
                 blnValidReturn = false;
                 sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
-            finally
-            {
-                if (blnValidReturn) mcActionResult.SetValid();
-            }
 
             return blnValidReturn;
         }
@@ -319,6 +318,19 @@ namespace Ceritar.CVS.Controllers
                                 File.Copy(mcView.GetLocation_APP_CHANGEMENT(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_APP_CHANGEMENT())), true);
                             }
 
+                            //Ajout des documents divers
+                            if (!Directory.Exists(currentFolderInfos.FullName)) currentFolderInfos.Create();
+
+                            if (!string.IsNullOrEmpty(mcView.GetLocation_VariousFile()))
+                            {
+                                File.Copy(mcView.GetLocation_VariousFile(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_VariousFile())), true);
+                            }
+
+                            if (!string.IsNullOrEmpty(mcView.GetLocation_VariousFolder()))
+                            {
+                                clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_VariousFolder(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_VariousFolder())), true, true);
+                            }
+
                             blnValidReturn = true;
 
                             break;
@@ -326,6 +338,12 @@ namespace Ceritar.CVS.Controllers
                         case (int)ctr_Template.FolderType.Report:
 
                             blnValidReturn = pfblnCopyAllReportsForClients(currentFolderInfos.FullName);
+
+                            break;
+
+                        case (int)ctr_Template.FolderType.Normal:
+
+                            //Do nothing
 
                             break;
 
@@ -358,7 +376,7 @@ namespace Ceritar.CVS.Controllers
             {
                 if (cSQLReader != null) cSQLReader.Dispose();
 
-                if (blnValidReturn) mcActionResult.SetValid();
+                if (blnValidReturn) mcActionResult.SetValid(mintMSG_BuildSuccess);
 
                 if (!blnValidReturn && mcModVersion.DML_Action == sclsConstants.DML_Mode.INSERT_MODE)
                 {

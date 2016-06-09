@@ -660,7 +660,7 @@
         Hh69pId6AAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="btnSelectFilePath.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="btnSelectVariousFilePath.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
         YQUAAAAGYktHRAAAAAAAAPlDu38AAAAJdnBBZwAAABgAAAAYAHhMpaYAAAAldEVYdGNyZWF0ZS1kYXRl
@@ -695,7 +695,7 @@
         Ts8//+ykeImnJzX1IATxFz9p179JvhNSAAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="btnSelectFolderPath.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="btnSelectVariousFolderPath.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
         YQUAAASJSURBVEhLzZP5T5NnAMf5D/gT/GGZJlsyM4gIyWZ1mwgxjkyChOJGjGYR5nRccokwhHE4Bbah

@@ -21,6 +21,9 @@ namespace Ceritar.CVS.Controllers
         private clsActionResults mcActionResult;
         private clsSQL mcSQL;
 
+        //Messages
+        private const int mintMSG_BuildSuccess = 37;
+
         public enum ErrorCode_Rev
         {
             MODIFICATION_LIST_MANDATORY = 1,
@@ -117,6 +120,7 @@ namespace Ceritar.CVS.Controllers
         public clsActionResults Save()
         {
             bool blnValidReturn = false;
+            int intSuccessMessage = 0;
 
             try
             {
@@ -138,7 +142,11 @@ namespace Ceritar.CVS.Controllers
                         }
                     }
 
+                    intSuccessMessage = mcActionResult.SuccessMessage_NRI;
+
                     mcActionResult = mcModRevision.ActionResults;
+
+                    mcActionResult.SuccessMessage_NRI = intSuccessMessage;
                 }
             }
             catch (Exception ex)
@@ -358,7 +366,6 @@ namespace Ceritar.CVS.Controllers
                                 //Do nothing
                             }
 
-
                             break;
 
                         case (int)ctr_Template.FolderType.Scripts:
@@ -463,6 +470,23 @@ namespace Ceritar.CVS.Controllers
 
                             break;
 
+                        case (int)ctr_Template.FolderType.Normal:
+
+                            //Ajout des documents divers
+                            if (!Directory.Exists(currentFolderInfos.FullName)) currentFolderInfos.Create();
+
+                            if (!string.IsNullOrEmpty(mcView.GetLocation_VariousFile()))
+                            {
+                                File.Copy(mcView.GetLocation_VariousFile(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_VariousFile())), true);
+                            }
+
+                            if (!string.IsNullOrEmpty(mcView.GetLocation_VariousFolder()))
+                            {
+                                clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_VariousFolder(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_VariousFolder())), true, true);
+                            }
+
+                            break;
+
                         default:
                             blnValidReturn = true;
                             break;
@@ -507,7 +531,7 @@ namespace Ceritar.CVS.Controllers
             {
                 if (cSQLReader != null) cSQLReader.Dispose();
 
-                if (blnValidReturn) mcActionResult.SetValid();
+                if (blnValidReturn) mcActionResult.SetValid(mintMSG_BuildSuccess);
             }
 
             return blnValidReturn;

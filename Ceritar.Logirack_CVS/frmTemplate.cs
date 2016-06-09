@@ -685,7 +685,7 @@ namespace Ceritar.Logirack_CVS
 
             if (!mcActionResults.IsValid)
             {
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
+                clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
             }
 
             if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE) formController.Item_NRI = mcActionResults.GetNewItem_NRI;
@@ -699,7 +699,7 @@ namespace Ceritar.Logirack_CVS
 
             if (!mcActionResults.IsValid)
             {
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
+                clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
 
                 switch ((ctr_Template.ErrorCode_Tpl)mcActionResults.GetErrorCode)
                 {

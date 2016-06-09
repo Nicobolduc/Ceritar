@@ -22,6 +22,8 @@ namespace Ceritar.CVS.Controllers.Interfaces
         string GetLocation_APP_CHANGEMENT();
         string GetLocation_Release();
         string GetLocation_TTApp();
+        string GetLocation_VariousFile();
+        string GetLocation_VariousFolder();
         bool GetIsDemo();
         bool GetIncludeScriptsOnRefresh();
         structClientAppVersion GetSelectedClient();

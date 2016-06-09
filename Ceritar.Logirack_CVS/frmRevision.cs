@@ -46,6 +46,8 @@ namespace Ceritar.Logirack_CVS
         private int mstrCeritarApplication_NRI;
         private string mstrCeritarApplication_Name;
         private string mstrCeritarApplication_RPT_Name;
+        private string mstrVariousFileLocation;
+        private string mstrVariousFolderLocation;
         private ushort mintRevision_TS;
         private bool mblnAppExeLocationExistsOnLoad;
 
@@ -201,6 +203,16 @@ namespace Ceritar.Logirack_CVS
         string IRevision.GetCreatedBy()
         {
             return txtCreatedBy.Text;
+        }
+
+        string IRevision.GetLocation_VariousFile()
+        {
+            return mstrVariousFileLocation;
+        }
+
+        string IRevision.GetLocation_VariousFolder()
+        {
+            return mstrVariousFolderLocation;
         }
 
 #endregion
@@ -480,6 +492,11 @@ namespace Ceritar.Logirack_CVS
 
             mcGrdSatellites.LstHostedCellControls = new List<HostedCellControl>();
 
+            mstrVariousFileLocation = string.Empty;
+            mstrVariousFolderLocation = string.Empty;
+            btnSelectVariousFilePath.BackColor = System.Drawing.SystemColors.Control;
+            btnSelectVariousFolderPath.BackColor = System.Drawing.SystemColors.Control;
+
             if (!mcGrdRevModifs.bln_Init(ref grdRevModifs, ref btnGrdRevAdd, ref btnGrdRevDel))
             { }
             if (!mcGrdSatellites.bln_Init(ref grdSatellites, ref btnPlaceHolder, ref btnPlaceHolder))
@@ -508,7 +525,7 @@ namespace Ceritar.Logirack_CVS
 
             if (!mcActionResults.IsValid)
             {
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
+                clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
 
                 switch ((ctr_Revision.ErrorCode_Rev)mcActionResults.GetErrorCode)
                 {
@@ -576,7 +593,11 @@ namespace Ceritar.Logirack_CVS
 
             if (!mcActionResults.IsValid)
             {
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI);
+                clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
+            }
+            else
+            {
+                if (mcActionResults.SuccessMessage_NRI > 0) clsApp.GetAppController.ShowMessage(mcActionResults.SuccessMessage_NRI);
             }
 
             eventArgs.SaveSuccessful = mcActionResults.IsValid;
@@ -690,10 +711,19 @@ namespace Ceritar.Logirack_CVS
         {
             switch ((int)formController.FormMode)
             {
+                case (int)sclsConstants.DML_Mode.INSERT_MODE:
+
+                    btnSelectVariousFilePath.Enabled = false;
+                    btnSelectVariousFolderPath.Enabled = false;
+
+                    break;
+
                 case (int)sclsConstants.DML_Mode.UPDATE_MODE:
 
                     cboTemplates.Enabled = false;
                     txtCreatedBy.Enabled = false;
+                    btnSelectVariousFilePath.Enabled = true;
+                    btnSelectVariousFolderPath.Enabled = true;
 
                     break;
             }
@@ -773,6 +803,30 @@ namespace Ceritar.Logirack_CVS
                 txtReleasePath.Text = string.Empty;
                 mblnAppExeLocationExistsOnLoad = false;
             }
+        }
+
+        private void btnSelectVariousFilePath_Click(object sender, EventArgs e)
+        {
+            TextBox txtPlaceHolder = new TextBox();
+
+            ShowOpenFileDialog("Executable (*.*)|*.*", txtPlaceHolder, mstrVariousFileLocation, true);
+
+            mstrVariousFileLocation = txtPlaceHolder.Text;
+
+            if (!string.IsNullOrEmpty(mstrVariousFileLocation)) btnSelectVariousFilePath.BackColor = System.Drawing.Color.Yellow;
+        }
+
+        private void btnSelectVariousFolderPath_Click(object sender, EventArgs e)
+        {
+            TextBox txtPlaceHolder = new TextBox();
+
+            txtPlaceHolder.Text = mstrVariousFolderLocation;
+
+            ShowFolderBrowserDialog(ref txtPlaceHolder);
+
+            mstrVariousFolderLocation = txtPlaceHolder.Text;
+
+            if (!string.IsNullOrEmpty(mstrVariousFolderLocation)) btnSelectVariousFolderPath.BackColor = System.Drawing.Color.Yellow;
         }
 
     }

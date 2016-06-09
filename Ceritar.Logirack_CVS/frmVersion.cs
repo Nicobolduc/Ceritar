@@ -69,6 +69,8 @@ namespace Ceritar.Logirack_CVS
         private ushort mintVersion_TS;
         private bool mblnGrdSatellitesChangeMade;
         private string mstrExternalApplicationName;
+        private string mstrVariousFileLocation;
+        private string mstrVariousFolderLocation;
         
         //Messages
         private int mintMSG_ChangesWillBeLostOnRowChange = 27;
@@ -242,6 +244,16 @@ namespace Ceritar.Logirack_CVS
             structCAV.strLocationScriptsRoot = mcGrdClients[grdClients.Row, mintGrdClients_LocationScriptsRoot_col];
 
             return structCAV;
+        }
+
+        string IVersion.GetLocation_VariousFile()
+        {
+            return mstrVariousFileLocation;
+        }
+
+        string IVersion.GetLocation_VariousFolder()
+        {
+            return mstrVariousFolderLocation;
         }
 
 #endregion
@@ -682,6 +694,11 @@ namespace Ceritar.Logirack_CVS
 
             mcGrdClients.LstHostedCellControls = new List<HostedCellControl>();
             mcGrdSatelliteApps.LstHostedCellControls = new List<HostedCellControl>();
+
+            mstrVariousFileLocation = string.Empty;
+            mstrVariousFolderLocation = string.Empty;
+            btnSelectVariousFilePath.BackColor = System.Drawing.SystemColors.Control;
+            btnSelectVariousFolderPath.BackColor = System.Drawing.SystemColors.Control;
             
             if (!mcGrdClients.bln_Init(ref grdClients, ref btnGrdClientsAdd, ref btnGrdClientsDel))
             { }
@@ -725,7 +742,7 @@ namespace Ceritar.Logirack_CVS
 
             if (!mcActionResults.IsValid)
             {
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI, MessageBoxButtons.OK, mcActionResults.GetLstParams);
+                clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI, MessageBoxButtons.OK, mcActionResults.GetLstParams);
 
                 switch ((ctr_Version.ErrorCode_Ver)mcActionResults.GetErrorCode)
                 {
@@ -819,7 +836,7 @@ namespace Ceritar.Logirack_CVS
 
             if (!mcActionResults.IsValid)
             {
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI, MessageBoxButtons.OK, mcActionResults.GetLstParams);
+                clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI, MessageBoxButtons.OK, mcActionResults.GetLstParams);
 
                 switch ((ctr_Version.ErrorCode_Ver)mcActionResults.GetErrorCode)
                 {
@@ -841,6 +858,10 @@ namespace Ceritar.Logirack_CVS
 
                         break;
                 }
+            }
+            else if (mcActionResults.GetErrorMessage_NRI > 0)
+            {
+                clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI, MessageBoxButtons.OK);
             }
 
             if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE) formController.Item_NRI = mcActionResults.GetNewItem_NRI;
@@ -1038,6 +1059,8 @@ namespace Ceritar.Logirack_CVS
 
                     btnGenerate.Enabled = false;
                     btnExportInstallationKit.Enabled = false;
+                    btnSelectVariousFilePath.Enabled = false;
+                    btnSelectVariousFolderPath.Enabled = false;
 
                     chkIncludeScripts.Enabled = false;
 
@@ -1052,6 +1075,8 @@ namespace Ceritar.Logirack_CVS
                     btnGenerate.Enabled = true;
                     btnExportInstallationKit.Enabled = false;
                     btnGrdRevAdd.Enabled = true;
+                    btnSelectVariousFilePath.Enabled = true;
+                    btnSelectVariousFolderPath.Enabled = true;
 
                     cboApplications.Enabled = false;
                     cboTemplates.Enabled = false;
@@ -1083,7 +1108,7 @@ namespace Ceritar.Logirack_CVS
 
                 if (!mcActionResults.IsValid)
                 {
-                    clsApp.GetAppController.ShowMessage(mcActionResults.GetMessage_NRI, MessageBoxButtons.OK, mcActionResults.GetLstParams);
+                    clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI, MessageBoxButtons.OK, mcActionResults.GetLstParams);
 
                     switch ((ctr_Version.ErrorCode_Ver)mcActionResults.GetErrorCode)
                     {
@@ -1117,6 +1142,8 @@ namespace Ceritar.Logirack_CVS
                     formController.FormIsLoading = true;
                     formController_LoadData(new LoadDataEventArgs(formController.Item_NRI));
                     formController.FormIsLoading = false; //TODO METHOD 
+
+                    if (mcActionResults.SuccessMessage_NRI > 0) clsApp.GetAppController.ShowMessage(mcActionResults.SuccessMessage_NRI);
                 }
 
                 this.Cursor = Cursors.Default;
@@ -1377,6 +1404,30 @@ namespace Ceritar.Logirack_CVS
         private void btnRefresh_Click()
         {
             pfblnGrdRevisions_Load();
+        }
+
+        private void btnSelectVariousFilePath_Click(object sender, EventArgs e)
+        {
+            TextBox txtPlaceHolder = new TextBox();
+
+            ShowOpenFileDialog("Executable (*.*)|*.*", txtPlaceHolder, mstrVariousFileLocation, true);
+
+            mstrVariousFileLocation = txtPlaceHolder.Text;
+
+            if (!string.IsNullOrEmpty(mstrVariousFileLocation)) btnSelectVariousFilePath.BackColor = System.Drawing.Color.Yellow;
+        }
+
+        private void btnSelectVariousFolderPath_Click(object sender, EventArgs e)
+        {
+            TextBox txtPlaceHolder = new TextBox();
+
+            txtPlaceHolder.Text = mstrVariousFolderLocation;
+
+            ShowFolderBrowserDialog(ref txtPlaceHolder);
+
+            mstrVariousFolderLocation = txtPlaceHolder.Text;
+
+            if (!string.IsNullOrEmpty(mstrVariousFolderLocation)) btnSelectVariousFolderPath.BackColor = System.Drawing.Color.Yellow;
         }
 
     }

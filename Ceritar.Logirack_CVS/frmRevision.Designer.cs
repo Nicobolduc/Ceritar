@@ -55,14 +55,13 @@
             this.btnSelectExecutableFilePath = new System.Windows.Forms.Button();
             this.btnSelectExecutableFolderPath = new System.Windows.Forms.Button();
             this.btnShowExecutableFolder = new System.Windows.Forms.Button();
-            this.btnSelectFilePath = new System.Windows.Forms.Button();
-            this.btnSelectFolderPath = new System.Windows.Forms.Button();
+            this.btnSelectVariousFilePath = new System.Windows.Forms.Button();
+            this.btnSelectVariousFolderPath = new System.Windows.Forms.Button();
             this.btnGenerate = new System.Windows.Forms.Button();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.grdSatellites = new C1.Win.C1FlexGrid.C1FlexGrid();
-            this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtScriptsPath = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
@@ -73,6 +72,7 @@
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -354,27 +354,29 @@
             this.btnShowExecutableFolder.UseVisualStyleBackColor = true;
             this.btnShowExecutableFolder.Click += new System.EventHandler(this.btnShowExecutableFolder_Click);
             // 
-            // btnSelectFilePath
+            // btnSelectVariousFilePath
             // 
-            this.btnSelectFilePath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnSelectFilePath.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectFilePath.Image")));
-            this.btnSelectFilePath.Location = new System.Drawing.Point(103, 16);
-            this.btnSelectFilePath.Name = "btnSelectFilePath";
-            this.btnSelectFilePath.Size = new System.Drawing.Size(30, 30);
-            this.btnSelectFilePath.TabIndex = 75;
-            this.toolTips.SetToolTip(this.btnSelectFilePath, "Sélectionner un fichier");
-            this.btnSelectFilePath.UseVisualStyleBackColor = true;
+            this.btnSelectVariousFilePath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnSelectVariousFilePath.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectVariousFilePath.Image")));
+            this.btnSelectVariousFilePath.Location = new System.Drawing.Point(103, 16);
+            this.btnSelectVariousFilePath.Name = "btnSelectVariousFilePath";
+            this.btnSelectVariousFilePath.Size = new System.Drawing.Size(30, 30);
+            this.btnSelectVariousFilePath.TabIndex = 75;
+            this.toolTips.SetToolTip(this.btnSelectVariousFilePath, "Permet de copier un fichier quelconque dans le dossier racine de la version");
+            this.btnSelectVariousFilePath.UseVisualStyleBackColor = true;
+            this.btnSelectVariousFilePath.Click += new System.EventHandler(this.btnSelectVariousFilePath_Click);
             // 
-            // btnSelectFolderPath
+            // btnSelectVariousFolderPath
             // 
-            this.btnSelectFolderPath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnSelectFolderPath.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectFolderPath.Image")));
-            this.btnSelectFolderPath.Location = new System.Drawing.Point(263, 15);
-            this.btnSelectFolderPath.Name = "btnSelectFolderPath";
-            this.btnSelectFolderPath.Size = new System.Drawing.Size(30, 30);
-            this.btnSelectFolderPath.TabIndex = 76;
-            this.toolTips.SetToolTip(this.btnSelectFolderPath, "Sélectionner un dossier");
-            this.btnSelectFolderPath.UseVisualStyleBackColor = true;
+            this.btnSelectVariousFolderPath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnSelectVariousFolderPath.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectVariousFolderPath.Image")));
+            this.btnSelectVariousFolderPath.Location = new System.Drawing.Point(263, 15);
+            this.btnSelectVariousFolderPath.Name = "btnSelectVariousFolderPath";
+            this.btnSelectVariousFolderPath.Size = new System.Drawing.Size(30, 30);
+            this.btnSelectVariousFolderPath.TabIndex = 76;
+            this.toolTips.SetToolTip(this.btnSelectVariousFolderPath, "Permet de copier un dossier quelconque dans le dossier racine de la version");
+            this.btnSelectVariousFolderPath.UseVisualStyleBackColor = true;
+            this.btnSelectVariousFolderPath.Click += new System.EventHandler(this.btnSelectVariousFolderPath_Click);
             // 
             // btnGenerate
             // 
@@ -424,24 +426,6 @@
             this.grdSatellites.StyleInfo = resources.GetString("grdSatellites.StyleInfo");
             this.grdSatellites.TabIndex = 0;
             this.grdSatellites.Tag = "35";
-            // 
-            // formController
-            // 
-            this.formController.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.formController.ChangeMade = false;
-            this.formController.FormIsLoading = false;
-            this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.NO_MODE;
-            this.formController.Item_NRI = 0;
-            this.formController.Location = new System.Drawing.Point(1, 572);
-            this.formController.Name = "formController";
-            this.formController.ShowButtonQuitOnly = false;
-            this.formController.Size = new System.Drawing.Size(835, 33);
-            this.formController.TabIndex = 9;
-            this.formController.SetReadRights += new Ceritar.TT3LightDLL.Controls.ctlFormController.SetReadRightsEventHandler(this.formController_SetReadRights);
-            this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
-            this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
-            this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
             // 
             // groupBox2
             // 
@@ -530,10 +514,10 @@
             // 
             this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox6.Controls.Add(this.btnSelectFilePath);
+            this.groupBox6.Controls.Add(this.btnSelectVariousFilePath);
             this.groupBox6.Controls.Add(this.label8);
             this.groupBox6.Controls.Add(this.label4);
-            this.groupBox6.Controls.Add(this.btnSelectFolderPath);
+            this.groupBox6.Controls.Add(this.btnSelectVariousFolderPath);
             this.groupBox6.Location = new System.Drawing.Point(5, 512);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(303, 55);
@@ -556,6 +540,24 @@
             this.label4.Size = new System.Drawing.Size(93, 17);
             this.label4.TabIndex = 77;
             this.label4.Text = "Ajouter un fichier :";
+            // 
+            // formController
+            // 
+            this.formController.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.formController.ChangeMade = false;
+            this.formController.FormIsLoading = false;
+            this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.NO_MODE;
+            this.formController.Item_NRI = 0;
+            this.formController.Location = new System.Drawing.Point(1, 572);
+            this.formController.Name = "formController";
+            this.formController.ShowButtonQuitOnly = false;
+            this.formController.Size = new System.Drawing.Size(835, 33);
+            this.formController.TabIndex = 9;
+            this.formController.SetReadRights += new Ceritar.TT3LightDLL.Controls.ctlFormController.SetReadRightsEventHandler(this.formController_SetReadRights);
+            this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
+            this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
+            this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
             // 
             // frmRevision
             // 
@@ -631,8 +633,8 @@
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button btnSelectFolderPath;
-        private System.Windows.Forms.Button btnSelectFilePath;
+        private System.Windows.Forms.Button btnSelectVariousFolderPath;
+        private System.Windows.Forms.Button btnSelectVariousFilePath;
         private System.Windows.Forms.Button btnGenerate;
         private System.Windows.Forms.RadioButton optExeOnly;
         private System.Windows.Forms.RadioButton optExeAndRpt;

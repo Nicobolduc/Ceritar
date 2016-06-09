@@ -26,6 +26,8 @@ namespace Ceritar.CVS.Controllers.Interfaces
         byte GetRevisionNo();         
         string GetLocation_Release();
         string GetLocation_Scripts();
+        string GetLocation_VariousFile();
+        string GetLocation_VariousFolder();
         bool GetExeIsExternalReport();
         bool GetExeWithExternalReport();
         List<string> GetModificationsList();
