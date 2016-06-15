@@ -259,7 +259,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                     case sclsConstants.DML_Mode.DELETE_MODE:
 
-                        if (!string.IsNullOrEmpty(clsSQL.str_ADOSingleLookUp("CAV_NRI", "ClientAppVersion", "(CAV_Installed = 1 OR CAV_IsCurrentVersion = 1) AND CeA_NRI = " + _cCerApplication.CeritarApplication_NRI + " AND Ver_NRI = " + _intVersion_NRI)))
+                        if (!string.IsNullOrEmpty(clsSQL.str_ADOSingleLookUp("CAV_NRI", "ClientAppVersion", "(CAV_DtInstalledProd IS NOT NULL OR CAV_IsCurrentVersion = 1) AND CeA_NRI = " + _cCerApplication.CeritarApplication_NRI + " AND Ver_NRI = " + _intVersion_NRI)))
                         {
                             mcActionResults.SetInvalid(mintMSG_CantDeleteVersionIfUsed, ctr_Version.ErrorCode_Ver.CANT_DELETE_USED_VERSION);
                         }
@@ -577,7 +577,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                             break;
                         }
-                        else if (_blnIsDemo && (LstClientsUsing[intIndex].Installed | LstClientsUsing[intIndex].IsCurrentVersion))
+                        else if (_blnIsDemo && (!string.IsNullOrEmpty(LstClientsUsing[intIndex].DateInstalled) | LstClientsUsing[intIndex].IsCurrentVersion))
                         {
                             mcActionResults.SetInvalid(mintMSG_CantInstallDemoInProd, ctr_Version.ErrorCode_Ver.DEMO_CANT_BE_INSTALLED);
 

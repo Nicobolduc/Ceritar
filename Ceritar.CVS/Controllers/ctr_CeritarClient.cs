@@ -109,7 +109,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "     INNER JOIN CerApp ON CerApp.CeA_NRI = ClientAppVersion.CeA_NRI " + Environment.NewLine;
 
             strSQL = strSQL + " WHERE ClientAppVersion.CeC_NRI = " + vintCeC_NRI + Environment.NewLine;
-            strSQL = strSQL + "   AND ClientAppVersion.CAV_Installed = 1 " + Environment.NewLine;
+            strSQL = strSQL + "   AND ClientAppVersion.CAV_DtInstalledProd IS NOT NULL " + Environment.NewLine;
 
             strSQL = strSQL + " GROUP BY CerApp.CeA_NRI, CerApp.CeA_Name " + Environment.NewLine;
             

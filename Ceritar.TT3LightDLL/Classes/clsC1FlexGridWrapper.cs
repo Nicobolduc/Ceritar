@@ -79,7 +79,7 @@ namespace Ceritar.TT3LightDLL.Classes
             {
                 string objItem = null;
 
-                if ((vintRow <= mGrdFlex.Rows.Count - 1 & vintCol <= mGrdFlex.Cols.Count - 1))
+                if (vintRow > 0 && vintRow <= mGrdFlex.Rows.Count - 1 && vintCol > 0 && vintCol <= mGrdFlex.Cols.Count - 1)
                 {
                     if (mGrdFlex[vintRow, vintCol] != null)
                     {

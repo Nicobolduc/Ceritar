@@ -180,9 +180,9 @@ namespace Ceritar.TT3LightDLL.Classes
             return Convert.ToDateTime(String.Format(str_GetServerDateFormat, Convert.ToDateTime(String.Format(str_GetServerDateTimeFormat, Convert.ToDateTime(vdtDateToSet)) + " 00:00:00")));
         }
 
-        public System.DateTime GetFormatedDate(string vdtToFormat)
+        public string str_GetServerFormatedDate(string vstrDateToFormat)
         {
-            return DateTime.ParseExact(vdtToFormat, str_GetUserDateFormat, System.Globalization.CultureInfo.InvariantCulture);
+            return String.Format("{0:" + str_GetServerDateFormat + "}", DateTime.Parse(vstrDateToFormat));
         }
 
         public DialogResult ShowMessage(int vintCaption_NRI, MessageBoxButtons vmsgType = MessageBoxButtons.OK, params string[] vlstMsgParam)

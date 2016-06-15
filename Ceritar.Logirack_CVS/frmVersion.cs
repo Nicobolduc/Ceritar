@@ -35,6 +35,7 @@ namespace Ceritar.Logirack_CVS
         private const short mintGrdClients_License_col = 9;
         private const short mintGrdClients_Selection_col = 10;
         private const short mintGrdClients_LocationScriptsRoot_col = 11;
+        private const short mintGrdClients_DateInstalled_col = 12;
 
         //Columns grdSatellites
         private const short mintGrdSat_Action_col = 1;
@@ -177,7 +178,7 @@ namespace Ceritar.Logirack_CVS
                 structCAV = new structClientAppVersion();
 
                 structCAV.Action = clsApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdClients[intRowIndex, mintGrdClients_Action_col]);
-                structCAV.blnInstalled = Convert.ToBoolean(grdClients[intRowIndex, mintGrdClients_Installed_col]);
+                structCAV.strDateInstalled = (Convert.ToBoolean(grdClients[intRowIndex, mintGrdClients_Installed_col]) ? DateTime.Now.ToString() : string.Empty);
                 structCAV.blnIsCurrentVersion = Convert.ToBoolean(grdClients[intRowIndex, mintGrdClients_IsCurrentVersion_col]);
                 structCAV.strCeritarClient_Name = mcGrdClients[intRowIndex, mintGrdClients_CeC_Name_col];
                 Int32.TryParse(mcGrdClients[intRowIndex, mintGrdClients_CeC_NRI_col], out structCAV.intCeritarClient_NRI);
@@ -233,7 +234,7 @@ namespace Ceritar.Logirack_CVS
             structClientAppVersion structCAV = new structClientAppVersion();
 
             structCAV.Action = clsApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdClients[grdClients.Row, mintGrdClients_Action_col]);
-            structCAV.blnInstalled = Convert.ToBoolean(grdClients[grdClients.Row, mintGrdClients_Installed_col]);
+            structCAV.strDateInstalled = (Convert.ToBoolean(grdClients[grdClients.Row, mintGrdClients_Installed_col]) ? DateTime.Now.ToString() : string.Empty);
             structCAV.blnIsCurrentVersion = Convert.ToBoolean(grdClients[grdClients.Row, mintGrdClients_IsCurrentVersion_col]);
             structCAV.strCeritarClient_Name = mcGrdClients[grdClients.Row, mintGrdClients_CeC_Name_col];
             Int32.TryParse(mcGrdClients[grdClients.Row, mintGrdClients_CeC_NRI_col], out structCAV.intCeritarClient_NRI);
@@ -1061,6 +1062,7 @@ namespace Ceritar.Logirack_CVS
                     btnExportInstallationKit.Enabled = false;
                     btnSelectVariousFilePath.Enabled = false;
                     btnSelectVariousFolderPath.Enabled = false;
+                    btnShowRootFolder.Enabled = false;
 
                     chkIncludeScripts.Enabled = false;
 
@@ -1077,6 +1079,7 @@ namespace Ceritar.Logirack_CVS
                     btnGrdRevAdd.Enabled = true;
                     btnSelectVariousFilePath.Enabled = true;
                     btnSelectVariousFolderPath.Enabled = true;
+                    btnShowRootFolder.Enabled = true;
 
                     cboApplications.Enabled = false;
                     cboTemplates.Enabled = false;
@@ -1428,6 +1431,38 @@ namespace Ceritar.Logirack_CVS
             mstrVariousFolderLocation = txtPlaceHolder.Text;
 
             if (!string.IsNullOrEmpty(mstrVariousFolderLocation)) btnSelectVariousFolderPath.BackColor = System.Drawing.Color.Yellow;
+        }
+
+        private void grdClients_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (!formController.FormIsLoading && grdClients.MouseRow > 0 && grdClients.MouseRow < grdClients.Rows.Count)
+            {
+                switch (grdClients.Col)
+                {
+                    case mintGrdClients_Installed_col:
+
+                        if (!string.IsNullOrEmpty(mcGrdClients[grdClients.MouseRow, mintGrdClients_DateInstalled_col]))
+                        {
+                            toolTip.Show(clsApp.GetAppController.str_GetServerFormatedDate(mcGrdClients[grdClients.MouseRow, mintGrdClients_DateInstalled_col]), grdClients, e.Location.X + 5, e.Location.Y - 10, 1000);
+                        }
+                           
+                        break;
+                }
+            }
+        }
+
+        private void btnShowRootFolder_Click(object sender, EventArgs e)
+        {
+            string strRootFolder = mcCtrVersion.str_GetActiveInstallations_Path((int)cboTemplates.SelectedValue, txtVersionNo.Text);
+
+            try
+            {
+                System.Diagnostics.Process.Start(@strRootFolder);
+            }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
         }
 
     }

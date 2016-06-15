@@ -59,6 +59,8 @@
             this.btnShowAccess = new System.Windows.Forms.Button();
             this.btnShowWord = new System.Windows.Forms.Button();
             this.btnShowExcel = new System.Windows.Forms.Button();
+            this.btnSelectVariousFilePath = new System.Windows.Forms.Button();
+            this.btnSelectVariousFolderPath = new System.Windows.Forms.Button();
             this.tabRevision = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.btnRefresh = new Ceritar.TT3LightDLL.Controls.ctlRefresh();
@@ -70,10 +72,8 @@
             this.txtWordAppChangePath = new System.Windows.Forms.TextBox();
             this.txtExcelAppChangePath = new System.Windows.Forms.TextBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.btnSelectVariousFilePath = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.btnSelectVariousFolderPath = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.grdSatellite = new C1.Win.C1FlexGrid.C1FlexGrid();
@@ -87,6 +87,7 @@
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.label7 = new System.Windows.Forms.Label();
+            this.btnShowRootFolder = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.tabRevision.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -421,6 +422,30 @@
             this.btnShowExcel.UseVisualStyleBackColor = true;
             this.btnShowExcel.Click += new System.EventHandler(this.btnShowExcel_Click);
             // 
+            // btnSelectVariousFilePath
+            // 
+            this.btnSelectVariousFilePath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnSelectVariousFilePath.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectVariousFilePath.Image")));
+            this.btnSelectVariousFilePath.Location = new System.Drawing.Point(103, 16);
+            this.btnSelectVariousFilePath.Name = "btnSelectVariousFilePath";
+            this.btnSelectVariousFilePath.Size = new System.Drawing.Size(30, 30);
+            this.btnSelectVariousFilePath.TabIndex = 75;
+            this.toolTip.SetToolTip(this.btnSelectVariousFilePath, "Permet de copier un fichier quelconque dans le dossier racine de la version");
+            this.btnSelectVariousFilePath.UseVisualStyleBackColor = true;
+            this.btnSelectVariousFilePath.Click += new System.EventHandler(this.btnSelectVariousFilePath_Click);
+            // 
+            // btnSelectVariousFolderPath
+            // 
+            this.btnSelectVariousFolderPath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnSelectVariousFolderPath.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectVariousFolderPath.Image")));
+            this.btnSelectVariousFolderPath.Location = new System.Drawing.Point(263, 15);
+            this.btnSelectVariousFolderPath.Name = "btnSelectVariousFolderPath";
+            this.btnSelectVariousFolderPath.Size = new System.Drawing.Size(30, 30);
+            this.btnSelectVariousFolderPath.TabIndex = 76;
+            this.toolTip.SetToolTip(this.btnSelectVariousFolderPath, "Permet de copier un dossier quelconque dans le dossier racine de la version");
+            this.btnSelectVariousFolderPath.UseVisualStyleBackColor = true;
+            this.btnSelectVariousFolderPath.Click += new System.EventHandler(this.btnSelectVariousFolderPath_Click);
+            // 
             // tabRevision
             // 
             this.tabRevision.Controls.Add(this.groupBox3);
@@ -477,6 +502,7 @@
             // 
             // tabVersion
             // 
+            this.tabVersion.Controls.Add(this.btnShowRootFolder);
             this.tabVersion.Controls.Add(this.groupBox7);
             this.tabVersion.Controls.Add(this.groupBox6);
             this.tabVersion.Controls.Add(this.groupBox5);
@@ -562,18 +588,6 @@
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Documents divers";
             // 
-            // btnSelectVariousFilePath
-            // 
-            this.btnSelectVariousFilePath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnSelectVariousFilePath.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectVariousFilePath.Image")));
-            this.btnSelectVariousFilePath.Location = new System.Drawing.Point(103, 16);
-            this.btnSelectVariousFilePath.Name = "btnSelectVariousFilePath";
-            this.btnSelectVariousFilePath.Size = new System.Drawing.Size(30, 30);
-            this.btnSelectVariousFilePath.TabIndex = 75;
-            this.toolTip.SetToolTip(this.btnSelectVariousFilePath, "Permet de copier un fichier quelconque dans le dossier racine de la version");
-            this.btnSelectVariousFilePath.UseVisualStyleBackColor = true;
-            this.btnSelectVariousFilePath.Click += new System.EventHandler(this.btnSelectVariousFilePath_Click);
-            // 
             // label8
             // 
             this.label8.Location = new System.Drawing.Point(157, 24);
@@ -590,23 +604,11 @@
             this.label9.TabIndex = 77;
             this.label9.Text = "Ajouter un fichier :";
             // 
-            // btnSelectVariousFolderPath
-            // 
-            this.btnSelectVariousFolderPath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnSelectVariousFolderPath.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectVariousFolderPath.Image")));
-            this.btnSelectVariousFolderPath.Location = new System.Drawing.Point(263, 15);
-            this.btnSelectVariousFolderPath.Name = "btnSelectVariousFolderPath";
-            this.btnSelectVariousFolderPath.Size = new System.Drawing.Size(30, 30);
-            this.btnSelectVariousFolderPath.TabIndex = 76;
-            this.toolTip.SetToolTip(this.btnSelectVariousFolderPath, "Permet de copier un dossier quelconque dans le dossier racine de la version");
-            this.btnSelectVariousFolderPath.UseVisualStyleBackColor = true;
-            this.btnSelectVariousFolderPath.Click += new System.EventHandler(this.btnSelectVariousFolderPath_Click);
-            // 
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.btnGenerate);
             this.groupBox5.Controls.Add(this.chkIncludeScripts);
-            this.groupBox5.Location = new System.Drawing.Point(706, 380);
+            this.groupBox5.Location = new System.Drawing.Point(703, 379);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(97, 79);
             this.groupBox5.TabIndex = 63;
@@ -703,6 +705,7 @@
             this.grdClients.BeforeRowColChange += new C1.Win.C1FlexGrid.RangeEventHandler(this.grdClients_BeforeRowColChange);
             this.grdClients.AfterRowColChange += new C1.Win.C1FlexGrid.RangeEventHandler(this.grdClients_AfterRowColChange);
             this.grdClients.DoubleClick += new System.EventHandler(this.grdClients_DoubleClick);
+            this.grdClients.MouseMove += new System.Windows.Forms.MouseEventHandler(this.grdClients_MouseMove);
             // 
             // tab
             // 
@@ -747,6 +750,18 @@
             this.label7.Size = new System.Drawing.Size(537, 20);
             this.label7.TabIndex = 51;
             this.label7.Text = "DB_UpgradeScripts et Installations_Actives sont synchronisés";
+            // 
+            // btnShowRootFolder
+            // 
+            this.btnShowRootFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowRootFolder.BackgroundImage")));
+            this.btnShowRootFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnShowRootFolder.Location = new System.Drawing.Point(637, 395);
+            this.btnShowRootFolder.Name = "btnShowRootFolder";
+            this.btnShowRootFolder.Size = new System.Drawing.Size(40, 40);
+            this.btnShowRootFolder.TabIndex = 83;
+            this.toolTip.SetToolTip(this.btnShowRootFolder, "Accéder à la racine de la version");
+            this.btnShowRootFolder.UseVisualStyleBackColor = true;
+            this.btnShowRootFolder.Click += new System.EventHandler(this.btnShowRootFolder_Click);
             // 
             // frmVersion
             // 
@@ -843,5 +858,6 @@
         private System.Windows.Forms.Button btnShowAccess;
         private System.Windows.Forms.Button btnShowWord;
         private System.Windows.Forms.Button btnShowExcel;
+        private System.Windows.Forms.Button btnShowRootFolder;
     }
 }

@@ -715,6 +715,7 @@ namespace Ceritar.Logirack_CVS
 
                     btnSelectVariousFilePath.Enabled = false;
                     btnSelectVariousFolderPath.Enabled = false;
+                    btnShowRootFolder.Enabled = false;
 
                     break;
 
@@ -724,6 +725,7 @@ namespace Ceritar.Logirack_CVS
                     txtCreatedBy.Enabled = false;
                     btnSelectVariousFilePath.Enabled = true;
                     btnSelectVariousFolderPath.Enabled = true;
+                    btnShowRootFolder.Enabled = true;
 
                     break;
             }
@@ -828,6 +830,20 @@ namespace Ceritar.Logirack_CVS
 
             if (!string.IsNullOrEmpty(mstrVariousFolderLocation)) btnSelectVariousFolderPath.BackColor = System.Drawing.Color.Yellow;
         }
+
+        private void btnShowRootFolder_Click(object sender, EventArgs e)
+        {
+        //    string strRootFolder = mcCtrRevision.str_GetActiveInstallations_Path((int)cboTemplates.SelectedValue, txtVersionNo.Text);
+
+        //    try
+        //    {
+        //        System.Diagnostics.Process.Start(@strRootFolder);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+        //    }
+        //}
 
     }
 }

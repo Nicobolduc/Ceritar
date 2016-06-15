@@ -16,7 +16,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private int _intClientAppVersion_NRI;
         private int _intClientAppVersion_TS;
         private bool _blnIsCurrentVersion;
-        private bool _blnInstalled;
+        private string _strDateInstalled;
         private string _strLicense;
         private string _strLocationReportExe;
         private string _strLocationScriptsRoot;
@@ -50,10 +50,10 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { _blnIsCurrentVersion = value; }
         }
 
-        internal bool Installed
+        internal string DateInstalled
         {
-            get { return _blnInstalled; }
-            set { _blnInstalled = value; }
+            get { return _strDateInstalled; }
+            set { _strDateInstalled = value; }
         }
 
         internal string License
@@ -287,7 +287,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 { }
                 else if (!mcSQL.bln_AddField("CAV_IsCurrentVersion", _blnIsCurrentVersion, clsSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("CAV_Installed", _blnInstalled, clsSQL.MySQL_FieldTypes.BIT_TYPE))
+                else if (!mcSQL.bln_AddField("CAV_DtInstalledProd", _strDateInstalled, clsSQL.MySQL_FieldTypes.DATETIME_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("CeC_NRI", _cCeritarClient.CeritarClient_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }

@@ -157,7 +157,7 @@ namespace Ceritar.CVS.Controllers
                     cCAV.ClientAppVersion_NRI = structCAV.intClientAppVersion_NRI;
                     cCAV.ClientAppVersion_TS = structCAV.intClientAppVersion_TS;
                     cCAV.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
-                    cCAV.Installed = structCAV.blnInstalled;
+                    cCAV.DateInstalled = structCAV.strDateInstalled;
                     cCAV.IsCurrentVersion = structCAV.blnIsCurrentVersion;
                     cCAV.License = structCAV.strLicense;
                     cCAV.Version_NRI = mcView.GetVersion_NRI();
@@ -714,7 +714,7 @@ namespace Ceritar.CVS.Controllers
                     cCAV.ClientAppVersion_NRI = structCAV.intClientAppVersion_NRI;
                     cCAV.ClientAppVersion_TS = structCAV.intClientAppVersion_TS;
                     cCAV.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
-                    cCAV.Installed = structCAV.blnInstalled;
+                    cCAV.DateInstalled = structCAV.strDateInstalled;
                     cCAV.IsCurrentVersion = structCAV.blnIsCurrentVersion;
                     cCAV.License = structCAV.strLicense;
                     cCAV.Version_NRI = mcView.GetVersion_NRI();
@@ -976,6 +976,56 @@ namespace Ceritar.CVS.Controllers
             return blnValidReturn;
         }
 
+        public string str_GetActiveInstallations_Path(int vintTemplate_NRI, string vstrVersion_No)
+        {
+            string strSQL = string.Empty;
+            string strPath = string.Empty;
+            SqlDataReader sqlRecord = null;
+
+            strSQL = strSQL + " WITH LstHierarchyComp " + Environment.NewLine;
+            strSQL = strSQL + " AS " + Environment.NewLine;
+            strSQL = strSQL + " ( " + Environment.NewLine;
+            strSQL = strSQL + "     SELECT *, " + Environment.NewLine;
+            strSQL = strSQL + " 		   CAST(0 AS varbinary(max)) AS Level " + Environment.NewLine;
+            strSQL = strSQL + " 	FROM HierarchyComp  " + Environment.NewLine;
+            strSQL = strSQL + " 	WHERE HiCo_Parent_NRI IS NULL " + Environment.NewLine;
+
+            strSQL = strSQL + "     UNION ALL " + Environment.NewLine;
+
+            strSQL = strSQL + "     SELECT HiCo_Childrens.*, " + Environment.NewLine;
+            strSQL = strSQL + " 		   Level + CAST(HiCo_Childrens.HiCo_NRI AS varbinary(max)) AS Level " + Environment.NewLine;
+            strSQL = strSQL + " 	FROM HierarchyComp HiCo_Childrens  " + Environment.NewLine;
+            strSQL = strSQL + " 		INNER JOIN LstHierarchyComp on HiCo_Childrens.HiCo_Parent_NRI = LstHierarchyComp.HiCo_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 	WHERE HiCo_Childrens.HiCo_Parent_NRI IS NOT NULL " + Environment.NewLine;
+            strSQL = strSQL + " ) " + Environment.NewLine;
+
+            strSQL = strSQL + " SELECT Path = TTParam.TTP_Value + " + Environment.NewLine;
+            strSQL = strSQL + "               (SELECT '/' + CONVERT(VARCHAR(300), REPLACE(LstHierarchyComp.HiCo_Name, '_XXX', " + clsApp.GetAppController.str_FixStringForSQL("_" + vstrVersion_No) + ")) " + Environment.NewLine;
+            strSQL = strSQL + "                FROM LstHierarchyComp " + Environment.NewLine;
+            strSQL = strSQL + "                    INNER JOIN FolderType ON FolderType.FoT_NRI = LstHierarchyComp.FoT_NRI " + Environment.NewLine;
+
+            strSQL = strSQL + "                WHERE LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
+            strSQL = strSQL + "                  AND FolderType.FoT_Modifiable = 0 " + Environment.NewLine;
+
+            strSQL = strSQL + "                ORDER BY Level FOR XML PATH('') ) " + Environment.NewLine;
+
+            strSQL = strSQL + " FROM TTParam " + Environment.NewLine;
+
+            strSQL = strSQL + " WHERE TTParam.TTP_Name = 'InstallationsActives' " + Environment.NewLine;
+
+            sqlRecord = clsSQL.ADOSelect(strSQL);
+
+            if (sqlRecord.Read())
+            {
+                strPath = sqlRecord["Path"].ToString();
+            }
+
+            return strPath;
+        }
+
+
+#region "SQL Queries"
+
         private string pfstrGetTemplateHierarchy_SQL(int vintTemplate_NRI)
         {
             string strSQL = string.Empty;
@@ -1009,9 +1059,6 @@ namespace Ceritar.CVS.Controllers
 
             return strSQL;
         }
-
-
-#region "SQL Queries"
 
         public string strGetDataLoad_SQL(int vintVersion_NRI)
         {
@@ -1047,12 +1094,13 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        ClientAppVersion.CAV_TS, " + Environment.NewLine;
             strSQL = strSQL + "        CerClient.CeC_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        CerClient.CeC_Name, " + Environment.NewLine;
-            strSQL = strSQL + "        ClientAppVersion.CAV_Installed, " + Environment.NewLine;
+            strSQL = strSQL + "        CAV_Installed = CASE WHEN ClientAppVersion.CAV_DtInstalledProd IS NOT NULL THEN 1 ELSE 0 END, " + Environment.NewLine;
             strSQL = strSQL + "        ClientAppVersion.CAV_IsCurrentVersion, " + Environment.NewLine;
             strSQL = strSQL + "        ClientAppVersion.CAV_ReportExe_Location, " + Environment.NewLine;
             strSQL = strSQL + "        ClientAppVersion.CAV_License, " + Environment.NewLine;
             strSQL = strSQL + "        SelCol = 0, " + Environment.NewLine;
-            strSQL = strSQL + "        ClientAppVersion.CAV_ScriptsRoot_Location " + Environment.NewLine;
+            strSQL = strSQL + "        ClientAppVersion.CAV_ScriptsRoot_Location, " + Environment.NewLine;
+            strSQL = strSQL + "        ClientAppVersion.CAV_DtInstalledProd " + Environment.NewLine;
 
             strSQL = strSQL + " FROM ClientAppVersion " + Environment.NewLine;
             strSQL = strSQL + "     INNER JOIN CerClient ON CerClient.CeC_NRI = ClientAppVersion.CeC_NRI AND CerClient.CeC_IsActive = 1 " + Environment.NewLine;

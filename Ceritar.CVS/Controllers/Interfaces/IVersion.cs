@@ -40,7 +40,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         public int intClientAppVersion_NRI;
         public int intClientAppVersion_TS;
         public bool blnIsCurrentVersion;
-        public bool blnInstalled;
+        public string strDateInstalled;
         public string strLicense;
         public string strCeritarClient_Name;
         public string strLocationReportExe;

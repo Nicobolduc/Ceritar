@@ -73,6 +73,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
+            this.btnShowRootFolder = new System.Windows.Forms.Button();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -383,7 +384,7 @@
             this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGenerate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGenerate.BackgroundImage")));
             this.btnGenerate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnGenerate.Location = new System.Drawing.Point(739, 521);
+            this.btnGenerate.Location = new System.Drawing.Point(741, 521);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(40, 40);
             this.btnGenerate.TabIndex = 81;
@@ -559,11 +560,23 @@
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
             // 
+            // btnShowRootFolder
+            // 
+            this.btnShowRootFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowRootFolder.BackgroundImage")));
+            this.btnShowRootFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnShowRootFolder.Location = new System.Drawing.Point(693, 521);
+            this.btnShowRootFolder.Name = "btnShowRootFolder";
+            this.btnShowRootFolder.Size = new System.Drawing.Size(40, 40);
+            this.btnShowRootFolder.TabIndex = 84;
+            this.btnShowRootFolder.UseVisualStyleBackColor = true;
+            this.btnShowRootFolder.Click += new System.EventHandler(this.btnShowRootFolder_Click);
+            // 
             // frmRevision
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(837, 606);
+            this.Controls.Add(this.btnShowRootFolder);
             this.Controls.Add(this.btnGenerate);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox6);
@@ -639,6 +652,7 @@
         private System.Windows.Forms.RadioButton optExeOnly;
         private System.Windows.Forms.RadioButton optExeAndRpt;
         private System.Windows.Forms.RadioButton optRptOnly;
+        private System.Windows.Forms.Button btnShowRootFolder;
 
     }
 }

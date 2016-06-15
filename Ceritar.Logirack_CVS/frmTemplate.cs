@@ -786,17 +786,20 @@ namespace Ceritar.Logirack_CVS
                 grdTemplate[grdTemplate.Row, mintGrdTpl_HiCo_FolderType_NRI_col] = cboCell.SelectedValue;
                 grdTemplate[grdTemplate.Row, mintGrdTpl_HiCo_FolderType_col] = cboCell.GetItemText(cboCell.SelectedItem);
 
-                switch ((int)cboFolderType.SelectedValue)
+                if (cboFolderType.SelectedValue != null)
                 {
-                    case (int)ctr_Template.FolderType.Version_Number:
+                    switch ((int)cboFolderType.SelectedValue)
+                    {
+                        case (int)ctr_Template.FolderType.Version_Number:
 
-                        grdTemplate[grdTemplate.Row, mintGrdTpl_HiCo_Name_col] = Ceritar.CVS.sclsAppConfigs.GetVersionNumberPrefix + "XXX";
-                        break;
+                            grdTemplate[grdTemplate.Row, mintGrdTpl_HiCo_Name_col] = Ceritar.CVS.sclsAppConfigs.GetVersionNumberPrefix + "XXX";
+                            break;
 
-                    case (int)ctr_Template.FolderType.Revision_Number:
+                        case (int)ctr_Template.FolderType.Revision_Number:
 
-                        grdTemplate[grdTemplate.Row, mintGrdTpl_HiCo_Name_col] = Ceritar.CVS.sclsAppConfigs.GetRevisionNumberPrefix + "XX";
-                        break;
+                            grdTemplate[grdTemplate.Row, mintGrdTpl_HiCo_Name_col] = Ceritar.CVS.sclsAppConfigs.GetRevisionNumberPrefix + "XX";
+                            break;
+                    }
                 }
             }
         }

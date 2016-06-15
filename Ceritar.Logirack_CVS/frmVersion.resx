@@ -1176,12 +1176,6 @@
         hxDAcggBrEYj+j+/5nkh+HsVawAAAABJRU5ErkJggg==
 </value>
   </data>
-  <data name="grdRevisions.ColumnInfo" xml:space="preserve">
-    <value>4,1,0,0,0,90,Columns:0{Width:5;}	1{Width:94;Caption:"Test";StyleFixed:"Font:Microsoft Sans Serif, 8.25pt, style=Bold;Margins:1, 0, 0, 0;TextAlign:CenterCenter;TextEffect:Flat;TextDirection:Normal;Trimming:None;";}	2{Width:113;Caption:"Longitude";}	3{Caption:"Sél.";}	</value>
-  </data>
-  <data name="grdRevisions.StyleInfo" xml:space="preserve">
-    <value>Normal{Font:Tahoma, 8.25pt;}	Alternate{}	Fixed{BackColor:Control;ForeColor:ControlText;Border:Flat,1,ControlDark,Both;BackgroundImageLayout:Hide;}	Highlight{BackColor:Highlight;ForeColor:HighlightText;}	Focus{}	Editor{}	Search{BackColor:Highlight;ForeColor:HighlightText;}	Frozen{BackColor:Beige;}	NewRow{ForeColor:GrayText;}	EmptyArea{BackColor:AppWorkspace;Border:Flat,1,ControlDarkDark,Both;}	SelectedColumnHeader{}	SelectedRowHeader{}	GrandTotal{BackColor:Black;ForeColor:White;}	Subtotal0{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal1{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal2{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal3{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal4{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal5{BackColor:ControlDarkDark;ForeColor:White;}	FilterEditor{}	FirstCustomStyle{}	</value>
-  </data>
   <data name="btnSelectVariousFilePath.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
@@ -1240,6 +1234,68 @@
         was1GZFTXILiHyug0OrQ73KRsB5SujE3Pw9blwOJWRkIPcfc/dD+SpT5+YSrDso8u7AQBaXl+OlBWQ51
         zzMLCr03CouRnv8dkm9moeTOF+A/jNx7uG/Sn5lXVLHi6G6fqG2Uscjl5DK8JuGZUeqi0F37az/zf6wr
         6Zlkz4v+HXNKIceOsUIYxynza3TT/0l+fr8DVjAFnR7vnEYAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="grdRevisions.ColumnInfo" xml:space="preserve">
+    <value>4,1,0,0,0,90,Columns:0{Width:5;}	1{Width:94;Caption:"Test";StyleFixed:"Font:Microsoft Sans Serif, 8.25pt, style=Bold;Margins:1, 0, 0, 0;TextAlign:CenterCenter;TextEffect:Flat;TextDirection:Normal;Trimming:None;";}	2{Width:113;Caption:"Longitude";}	3{Caption:"Sél.";}	</value>
+  </data>
+  <data name="grdRevisions.StyleInfo" xml:space="preserve">
+    <value>Normal{Font:Tahoma, 8.25pt;}	Alternate{}	Fixed{BackColor:Control;ForeColor:ControlText;Border:Flat,1,ControlDark,Both;BackgroundImageLayout:Hide;}	Highlight{BackColor:Highlight;ForeColor:HighlightText;}	Focus{}	Editor{}	Search{BackColor:Highlight;ForeColor:HighlightText;}	Frozen{BackColor:Beige;}	NewRow{ForeColor:GrayText;}	EmptyArea{BackColor:AppWorkspace;Border:Flat,1,ControlDarkDark,Both;}	SelectedColumnHeader{}	SelectedRowHeader{}	GrandTotal{BackColor:Black;ForeColor:White;}	Subtotal0{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal1{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal2{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal3{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal4{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal5{BackColor:ControlDarkDark;ForeColor:White;}	FilterEditor{}	FirstCustomStyle{}	</value>
+  </data>
+  <data name="btnShowRootFolder.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAusSURBVFhHrZZ5VFNnGoeviKNtFZdaT1u72Tqt1Wqttupppx3rqW21WiutgisqFZWlSBBQQGWT
+        gIgSIOxbCEkg+0oSQshOFoEkJCFhkV0QAbUzSK3G+861pmemnVanZ/qc8yb/3Ly/5773+74b5D8xdg4j
+        zT0jXpLm7sVsrXMjW9f2AUfftoRvbF8outw1R9rSPUPR2j+1a+AmAgDIvUnw/PJPQNDahyhs/YjC3j9T
+        au6JFpk6mxkau6pEaqoulppyK+qbz5IVlhCqyrazRmPfwNQ5VrIbnYu4etczPINrZq2xY1qdsXOKRNiF
+        SNWdnq5/AL6lFxE2X0FELVfmcY0dRIbOdadG7ZjMFxlHEimyrvhKqSOJJm9NY6ovX+TpVLkio6hQ0kQt
+        kbXkVMgtCWRFazBZYfOtlFs/wGoZpcH2PK/RNf3BpBrMPZ6URyCw9CB0vQthmTrmVakdOaUyy0Rlg/VO
+        tar1NoGrGw7OobcFZJCsAZlUayCBaQ0pENhOlNc54ikKRwpDa8vgGswEoUlPFDfJCiTNnILa5rxyiflv
+        7T1jU5iqNk/KIxBYexGSyo5QdG1zi+rMhCy+6R8FYhMmYL5HV1t+LBOJbtGF2SNU/qXBfDqx53xVccfZ
+        8sq2k6U19phyrj2WLHGcocnbEukqVwpT24Gn62wElnGf2THkRRJbPCmPgGnuRrJqLyNEmXluOkd/KbFa
+        /X0mV/tDuczgJjU0oRSpBLU1592/6rzgHnReuNvblnWnw547YTUX3tKbysbkjZSRWi1riK0UDFBk4v5C
+        QX1bEU+7V2cZ9qqSNHtSHgHXfgWJoSqQRLZuTmhZ3YUjBaJbp6n1PxBFaneBpBElSWRgs1LQAWcROugs
+        gOH2fPR6Zz56oycfvdVbgN7sK7x/s7/MPd5HujvSTbrb1UYbbGnm7pcrG71MJpEn5REo+68i4ZUy5Axb
+        MycgT5DxZXrNjcN57MlUpsR9ka9AK6R10NPDg6tdFHCZC2CwqwqGr9TAgKsahjqrYayHjI5dKUaH2rLR
+        0Q4C3OzOvz7QmneIXXrKy6G75El5BOr+a8hxigxJ4GrnHCgUZGzCU2/syKy6jatguOOpAjRfKIDBQS6M
+        DdBBK0+HTns+TIxzYKhXDC67Bga7ddDvqIQWRTKYFWfgqi1ztLclM7A691svqyLZk/IItP0jSAxdgZzl
+        amcfKhZkfHGeNr7jUtXt0FKa+3gFAyVwuJgABxOohjpBElhNF+H2OB2GewVgMiigq8MBHWYq6MXxoBFE
+        wZUm/Gh3U0YgozAIE0jypDyGOI4KOcvXzA4sE2RszaSN+xGqboeVYwIkOprF5fwkMIoJSPmJYDZkYgI1
+        0N/JBKmYBVbLZXA2kaGxNhbUvEjoNKaMdpnSA5mF33pZGhI8CY8hnqdCEkSa2YdJgvPbsmjj/rlVt78j
+        0dwRZDpK+Fmgn4IJJIAFE5gYo0GPiwocViWYjFpwmCqgUXQKVNwI6DAkj3YZ8YHMvENelvoznoTHcFqo
+        QhLFmtlBVYL0r3JpN3blk2+HV1HdOAomwMMEBjCBPjLIBGfBarwAE6NV0NdOBhGf+pOA3VAGOlEMJhAO
+        HfqE0U7DuUBG3kEvsyzek/AYzoiUSLJE43OEKkj3zafe2FNEnjxOpbgjq2tQguDBBNgwhgnUYwKtpgyY
+        uF4BPU4S8LgUMOjVYNOXgE54AlScUOhoPDPa0ZgcSEjeO3XIlIAERoQh677e60n6Hc6KFUhyndrnaA0/
+        /esiyo29pZWTETVV7hP0apQgZGMCLGwCJJALT4PNlAYTI6XQ7igHEoMGKo0CrI2FoBXgQMkOhnZd3Khd
+        lXB4d6Df9Jc37JzyIPyxAgnSBiSlXuVzjMFL+6a0anxfBWkSxyC7oxg0NPuBwAADrveWQoMwDuwmPEwM
+        F0K7vQTKMQGFugEs2nzQ8I+DgnUUXNpToy3y+GObdvvPfHvrrr+s9d3jjdVPIti3J/FXJNTLkXMKpU8w
+        i4vfUV45vq+yfDKSRXJHsaiYAAMG+mhwvTsfFMKT0GZKgYkhIrS35gKFWQEqlRzMGiJoeOGYwBFwak+O
+        GqSxoeu/8Xt61Ze7Zq3ZvvtJrB6ITH0g8u42//8WSWyQI6kqpU8Il4PfWUka308pnYzklLujOGQ0W4Bt
+        uW4SjHRmg0oYAy5TEkxcJYCjKROKK/JAoZCBWZ0LGm4YJnAYE4gZUwlP4lZ/vu3FFZ/7Lnj3S7+57321
+        a+Ya391PYMHTsPJa6/urR5KklCGpmgafED4Lv5NSNh5AK56M5JW6o7gV2ASo0NdVDNfaM0CNLbT2y2dh
+        YuACdDRfACqtGNQPJoAJqDkh0MA4CB063IRDG0fNSP/2s1UbNy1+65MtC9/Z7PvM6q0752B3PxObxow1
+        2/dM80Q/JElVh6Rq5T6hQgbej1YyHlBTMBnJL3RH80qxCZCht50Ig7YkUAnCoavpNEz0p0FnUzoIuJXY
+        LlCBRZMNjYIQUND3o126sPsjbefHGvixueu3fPL+a+s+XrJ0/WeLlmMiKzdtn4+J+Ly3zX+6J/ohSWox
+        kqqT+YTWVqf60QvHAxjEyUgB0R3NL8IEyqHLdgFa5DiQ0o9AnyUerjlToJ6fBvQaMlw2asCuz8YWXyQY
+        BAfRNmUwjPWy72nqcrkfffbRFy+9s27t4rUfrnz9/Y/ffPOjja8s/func5d9/PlUT/RDErW1SKpe6hMq
+        oaT6MfPGA1iESZww2x0lzMPOgRJobzkHCnYQCKmHYNAaC+3GRKgoyQQmgwlWswFbFznYSygDrPLjYJYc
+        QoevCO7W1+aJ1q5ft2vhW6s/fWXlmvWLVq1b89KKdxcvWPTXmdNnzpriiX5Ikk6A4PXiWaFScqofO3t8
+        P/viJE500X1CmI0S+IXgakrAFlgg1FIPYgLR4Gw8DWXFmcBmc7D/CiZMgADDrlKwKeOgpXYPOtTJvlvL
+        vSR75/3VQc8uWbHzhWVvb3329aVr5jz3wgIvb29vT+y/SWrkIXiDaFaYjJTkz8ka2cfJmIioPX/vhOgi
+        dhTnoS5THCiZB0BCC4Crlkiwa05BQS4eGNgE7K1GcGHH85CzCFqVp6BJ6If2OZn3OPQM5fI1KyMWLF56
+        YP7Lr21+au7Tr3l5T/vl4vuZWDUdOa1hPhUqK8Pt4l+y+HHSeoJFqd9HijLcWbwccBpPgpK1D+pq9sFV
+        83GwqaIhNysZqqoo2CPQg8uQDkNtedCqiAEtdwcqbqDfy8pP0yxdtTxm9vMv+82Y6bMai5mH1S9H/zO4
+        BjISraR6h9SVbNwnymL7clMNe/nJzu+Eaf/M4hFQpyEaVbH2gpy+F4bMYahDHY0W559Hq7F3RatFDw59
+        GmprIqJ6aRSqYW1BmZxzPyanRzQsWf56oPeTPiunTPGag8V4PUz7DWI01UiQhIgcl1f4HJYSg/yF58W+
+        vATDQT6++yI3645T/6DxXlTJ2I0Ot4SgTm30fRqZ6BZLpKjL0QSt2hRULMbfZzJw9+prtnwvpPipE2M3
+        n3h18cI3sPa/3HK/B05JQj6ihSNh8uIXD0kJZ3aIUpQ7uakt6RzCuNMQdVfF2DPUULNr7FrLMdShDLtR
+        kJPcKhKJr7Y7W36waRLvKGsPXc+pDu5MrTzRnJYTe2TH1x/Onz17utfu3R96Ev4HcMoK5JSGNiW4vuCt
+        AGlGrh8/XR9Pz7VbtTHtMqo/vSZvO2Go+Vi7XR7oDArYEJuSkhre3NRINMjwhXyab/hJRsSe4OqioMgi
+        /rKEo4CcyK33dP4DhMgLEJyC5B0kJ2w4VEtgHK0s40tECfGSKv8DUUc+eLPPGHzQoTiMP7Zv9drnnntx
+        Hp/Hmc+iZi7IStn0RCAH7x3OpM8IJvKxgwaQIxkST9c/AE5OQo5pLiEh2uwnv5OU+R2trDkTTSx7Q0ba
+        6bNj8wqvKzrcdKcq7Gl6of9vb6k/g7jOXOwTkDgJa3YEhfdqQJZwBo5MR5AVww8v+L9BkH8B7TxmP3H/
+        2YMAAAAASUVORK5CYII=
 </value>
   </data>
   <data name="grdSatellite.StyleInfo" xml:space="preserve">
