@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -46,9 +47,9 @@ namespace Ceritar.CVS.Controllers
             mcActionResult = new clsActionResults();
         }
 
-        public clsActionResults Validate()
+        private bool pfblnFeedModelWithView()
         {
-            mcModRevision = new mod_Rev_Revision();
+            bool blnValidReturn = false;
             List<Interfaces.structSatRevision> lstStructSRe;
             mod_SRe_SatelliteRevision cSRe;
 
@@ -105,6 +106,25 @@ namespace Ceritar.CVS.Controllers
                 mcModRevision.Version.CerApplication.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
                 mcModRevision.Version.CerApplication.Name = mcView.GetCeritarApplication_Name();
                 mcModRevision.Version.CerApplication.ExternalReportAppName = clsSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + mcModRevision.Version.CerApplication.CeritarApplication_NRI);
+
+                blnValidReturn = true;
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnValidReturn;
+        }
+
+        public clsActionResults Validate()
+        {
+            mcModRevision = new mod_Rev_Revision();
+            
+            try
+            {
+                pfblnFeedModelWithView();
 
                 mcActionResult = mcModRevision.Validate();
             }
@@ -179,7 +199,6 @@ namespace Ceritar.CVS.Controllers
             string strFolderName = string.Empty;
             string strRevisionFolderRoot = string.Empty;
             string strRevAllScripts_Location = string.Empty;
-            string strRevisionFolderName_InfosSupp = string.Empty;
             int intPreviousFolderLevel = -1;
             SqlDataReader cSQLReader = null;
             DirectoryInfo currentFolderInfos = null;
@@ -235,28 +254,9 @@ namespace Ceritar.CVS.Controllers
 
                         case (int)ctr_Template.FolderType.Revision_Number:
 
-                            string strSatelliteExeLocation = string.Empty;
                             string[] strLstCurrentDirectory = Directory.GetDirectories(currentFolderInfos.FullName, sclsAppConfigs.GetRevisionNumberPrefix + mcView.GetRevisionNo().ToString() + " *");
 
-                            strFolderName = sclsAppConfigs.GetRevisionNumberPrefix + mcView.GetRevisionNo().ToString();
-
-                            strRevisionFolderName_InfosSupp = (string.IsNullOrEmpty(mcModRevision.Path_Release) || mcModRevision.ExeIsExternalReport ? string.Empty : " Exe");
-                            strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (mcModRevision.ExeIsExternalReport || mcView.GetExeWithExternalReport() ? (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " RPT" : string.Empty);
-                            strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (string.IsNullOrEmpty(mcModRevision.Path_Scripts) ? string.Empty : (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " SCRIPTS");
-
-                            for (int intIndex = 0; intIndex < mcModRevision.LstSatelliteRevisions.Count; intIndex++)
-                            {
-                                if (!string.IsNullOrEmpty(mcModRevision.LstSatelliteRevisions[intIndex].Location_Exe))
-                                {
-                                    strSatelliteExeLocation = mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExportFolderName;
-
-                                    strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (string.IsNullOrEmpty(strSatelliteExeLocation) ? string.Empty : (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " " + strSatelliteExeLocation);
-
-                                    strSatelliteExeLocation = string.Empty;
-                                }
-                            }
-
-                            strFolderName = strFolderName + strRevisionFolderName_InfosSupp;
+                            strFolderName = pfstrGetRevisionFolderName();
 
                             strRevisionFolderRoot = Path.Combine(currentFolderInfos.FullName, strFolderName);
 
@@ -319,6 +319,7 @@ namespace Ceritar.CVS.Controllers
 
                                         blnValidReturn = clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseValidExtensions);
 
+                                        //Supprime l'application des rapports externe au besoin
                                         if (!mcView.GetExeWithExternalReport() && !mcView.GetExeIsExternalReport())
                                         {
                                             string strExternalReport_AppName = mcModRevision.Version.CerApplication.ExternalReportAppName;
@@ -356,7 +357,7 @@ namespace Ceritar.CVS.Controllers
 
                                     strDestinationFolder = Path.Combine(strDestinationFolder, mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExportFolderName);
 
-                                    blnValidReturn = pfblnCopyAndSaveSatelliteLocation(mcModRevision.LstSatelliteRevisions[intIndex], strDestinationFolder, false);
+                                    blnValidReturn = pfblnCopyAndSaveSatelliteLocation(mcModRevision.LstSatelliteRevisions[intIndex], strDestinationFolder, true);
 
                                     if (!blnValidReturn) break;
                                 }
@@ -378,7 +379,7 @@ namespace Ceritar.CVS.Controllers
                                 {
                                     if (mcView.GetLocation_Scripts() != currentFolderInfos.FullName)
                                     {
-                                        if (Directory.Exists(currentFolderInfos.FullName))
+                                        if (!mcView.GetIfScriptsAreToAppend() && Directory.Exists(currentFolderInfos.FullName))
                                         {
                                             clsApp.GetAppController.setAttributesToNormal(new DirectoryInfo(currentFolderInfos.FullName));
 
@@ -396,19 +397,19 @@ namespace Ceritar.CVS.Controllers
                                 }
                                 else if (mcView.GetLocation_Scripts() != Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Scripts())))
                                 {
-                                    if (Directory.Exists(currentFolderInfos.FullName))
+                                    if (!mcView.GetIfScriptsAreToAppend() && Directory.Exists(currentFolderInfos.FullName))
                                     {
                                         clsApp.GetAppController.setAttributesToNormal(new DirectoryInfo(currentFolderInfos.FullName));
 
-                                        Directory.Delete(currentFolderInfos.FullName, false);
+                                        Directory.Delete(currentFolderInfos.FullName, true);
                                     }
 
                                     currentFolderInfos.Create();
 
-                                    File.Copy(mcView.GetLocation_Scripts(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Scripts())));
+                                    File.Copy(mcView.GetLocation_Scripts(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Scripts())), true);
 
                                     mcModRevision.Path_Scripts = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Scripts()));
-
+                                    
                                     blnScriptsChanged = true;
                                 }
                             }
@@ -429,6 +430,8 @@ namespace Ceritar.CVS.Controllers
 
                                 if ((File.GetAttributes(mcModRevision.Path_Scripts) & FileAttributes.Directory) == FileAttributes.Directory)
                                 {
+                                    clsApp.GetAppController.setAttributesToNormal(new DirectoryInfo(mcModRevision.Path_Scripts));
+
                                     lstTempScripts = Directory.GetFiles(mcModRevision.Path_Scripts, "*.*", SearchOption.TopDirectoryOnly).OrderBy(f => f).ToList<string>();
                                 }
                                 else
@@ -444,6 +447,8 @@ namespace Ceritar.CVS.Controllers
                                 {
                                     intNewScriptNumber = Int32.Parse(new String(Path.GetFileName(lstExistingScripts[lstExistingScripts.Count - 1]).TakeWhile(Char.IsDigit).ToArray())) + 1;
                                 }
+
+                                clsApp.GetAppController.setAttributesToNormal(new DirectoryInfo(strRevAllScripts_Location));
                                 
                                 foreach (string strCurrentFile in lstScriptsToCopy)
                                 {
@@ -456,7 +461,7 @@ namespace Ceritar.CVS.Controllers
 
                                     strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
 
-                                    File.Copy(strCurrentFile, Path.Combine(strRevAllScripts_Location, strNewScriptName), false);
+                                    File.Copy(strCurrentFile, Path.Combine(strRevAllScripts_Location, strNewScriptName), true);
 
                                     intNewScriptNumber++;
                                 }
@@ -511,7 +516,7 @@ namespace Ceritar.CVS.Controllers
                                                                sclsAppConfigs.GetRevisionNumberPrefix + mcModRevision.Revision_Number.ToString()
                                                               );
 
-                        blnValidReturn = pfblnCopyAndSaveSatelliteLocation(mcModRevision.LstSatelliteRevisions[intIndex], strDestinationFolder, true);
+                        blnValidReturn = pfblnCopyAndSaveSatelliteLocation(mcModRevision.LstSatelliteRevisions[intIndex], strDestinationFolder, false);
 
                         if (!blnValidReturn) break;
                     }
@@ -535,6 +540,89 @@ namespace Ceritar.CVS.Controllers
             }
 
             return blnValidReturn;
+        }
+
+        private string pfstrGetRevisionFolderName()
+        {
+            string strFolderName = string.Empty;
+            string strSatelliteExeLocation = string.Empty;
+            string strRevisionFolderName_InfosSupp = string.Empty;
+
+            strFolderName = sclsAppConfigs.GetRevisionNumberPrefix + mcView.GetRevisionNo().ToString();
+
+            strRevisionFolderName_InfosSupp = (string.IsNullOrEmpty(mcModRevision.Path_Release) || mcModRevision.ExeIsExternalReport ? string.Empty : " Exe");
+            strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (mcModRevision.ExeIsExternalReport || mcView.GetExeWithExternalReport() ? (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " RPT" : string.Empty);
+            strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (string.IsNullOrEmpty(mcModRevision.Path_Scripts) ? string.Empty : (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " SCRIPTS");
+
+            for (int intIndex = 0; intIndex < mcModRevision.LstSatelliteRevisions.Count; intIndex++)
+            {
+                if (!string.IsNullOrEmpty(mcModRevision.LstSatelliteRevisions[intIndex].Location_Exe))
+                {
+                    strSatelliteExeLocation = mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExportFolderName;
+
+                    strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (string.IsNullOrEmpty(strSatelliteExeLocation) ? string.Empty : (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " " + strSatelliteExeLocation);
+
+                    strSatelliteExeLocation = string.Empty;
+                }
+            }
+
+            strFolderName = strFolderName + strRevisionFolderName_InfosSupp;
+
+            return strFolderName;
+        }
+
+        public string str_GetRevisionFolderPath(int vintTemplate_NRI, string vstrVersion_No)
+        {
+            string strSQL = string.Empty;
+            string strPath = string.Empty;
+            SqlDataReader sqlRecord = null;
+
+            mcModRevision = new mod_Rev_Revision();
+
+            if (pfblnFeedModelWithView())
+            {
+                strSQL = strSQL + " WITH LstHierarchyComp " + Environment.NewLine;
+                strSQL = strSQL + " AS " + Environment.NewLine;
+                strSQL = strSQL + " ( " + Environment.NewLine;
+                strSQL = strSQL + "     SELECT *, " + Environment.NewLine;
+                strSQL = strSQL + " 		   CAST(0 AS varbinary(max)) AS Level " + Environment.NewLine;
+                strSQL = strSQL + " 	FROM HierarchyComp  " + Environment.NewLine;
+                strSQL = strSQL + " 	WHERE HiCo_Parent_NRI IS NULL " + Environment.NewLine;
+
+                strSQL = strSQL + "     UNION ALL " + Environment.NewLine;
+
+                strSQL = strSQL + "     SELECT HiCo_Childrens.*, " + Environment.NewLine;
+                strSQL = strSQL + " 		   Level + CAST(HiCo_Childrens.HiCo_NRI AS varbinary(max)) AS Level " + Environment.NewLine;
+                strSQL = strSQL + " 	FROM HierarchyComp HiCo_Childrens  " + Environment.NewLine;
+                strSQL = strSQL + " 		INNER JOIN LstHierarchyComp on HiCo_Childrens.HiCo_Parent_NRI = LstHierarchyComp.HiCo_NRI " + Environment.NewLine;
+                strSQL = strSQL + " 	WHERE HiCo_Childrens.HiCo_Parent_NRI IS NOT NULL " + Environment.NewLine;
+                strSQL = strSQL + " ) " + Environment.NewLine;
+
+                strSQL = strSQL + " SELECT Path = TTParam.TTP_Value + " + Environment.NewLine;
+                strSQL = strSQL + "               (SELECT '/' + CONVERT(VARCHAR(300), REPLACE(LstHierarchyComp.HiCo_Name, '_XXX', " + clsApp.GetAppController.str_FixStringForSQL("_" + vstrVersion_No) + ")) " + Environment.NewLine;
+                strSQL = strSQL + "                FROM LstHierarchyComp " + Environment.NewLine;
+                strSQL = strSQL + "                    INNER JOIN FolderType ON FolderType.FoT_NRI = LstHierarchyComp.FoT_NRI " + Environment.NewLine;
+
+                strSQL = strSQL + "                WHERE LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
+                strSQL = strSQL + "                  AND FolderType.FoT_Modifiable = 0 " + Environment.NewLine;
+
+                strSQL = strSQL + "                ORDER BY Level FOR XML PATH('') ) " + Environment.NewLine;
+
+                strSQL = strSQL + " FROM TTParam " + Environment.NewLine;
+
+                strSQL = strSQL + " WHERE TTParam.TTP_Name = 'InstallationsActives' " + Environment.NewLine;
+
+                sqlRecord = clsSQL.ADOSelect(strSQL);
+
+                if (sqlRecord.Read())
+                {
+                    strPath = sqlRecord["Path"].ToString();
+
+                    strPath = strPath.Replace(sclsAppConfigs.GetRevisionNumberPrefix + "XX", pfstrGetRevisionFolderName());
+                }
+            }
+
+            return strPath;
         }
 
         /// <summary>
@@ -654,6 +742,114 @@ namespace Ceritar.CVS.Controllers
             return blnValidReturn;
         }
 
+        public bool blnExportRevisionKit(string vstrExportFolderLocation)
+        {
+            bool blnValidReturn = false;
+            string strSQL = string.Empty;
+            string strFolderName = string.Empty;
+            string strVersionFolderRoot = string.Empty;
+            string strCeritarClientName = string.Empty;
+            string strNewZipFileLocation = string.Empty;
+            string strReleaseLocation = string.Empty;
+            string strLocationSatelliteExe = string.Empty;
+            string strReportLocation = string.Empty;
+            string strCurrentScriptFolderLocation = string.Empty;
+
+            try
+            {
+                strCeritarClientName = mcView.GetCeritarClient_Name();
+
+                strNewZipFileLocation = Path.Combine(vstrExportFolderLocation, mcView.GetCeritarApplication_Name() + @" Revision " + mcView.GetRevisionNo().ToString() + " - " + strCeritarClientName + @".zip");
+
+                //Create the new archive file and add all the folders to it.
+                if (File.Exists(strNewZipFileLocation)) File.Delete(strNewZipFileLocation);
+
+                using (ZipArchive newZipFile = ZipFile.Open(strNewZipFileLocation, ZipArchiveMode.Create))
+                {
+                    //Add the release folder with the report application to the zip archive.
+                    //Get the release folder location to copy
+                    strReleaseLocation = mcView.GetLocation_Release();
+
+                    if (!string.IsNullOrEmpty(strReleaseLocation))
+                    {
+                        foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strReleaseLocation, "*.*", SearchOption.AllDirectories))
+                        {
+                            newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
+                        }
+                    }             
+
+                    //Get the report folder location to copy 
+                    if (mcView.GetExeIsExternalReport())
+                    {
+                        strReportLocation = mcView.GetLocation_Release();
+
+                        //Add the external report application to the zip archive
+                        newZipFile.CreateEntryFromFile(strReportLocation, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strReportLocation)));
+                    }
+                    
+                    //Add every satellites applications to the zip archive.
+                    List<Interfaces.structSatRevision> lstSatellites = mcView.GetRevisionSatelliteList();
+
+                    foreach (Interfaces.structSatRevision structSat in lstSatellites)
+                    {
+                        //Get the executable folder location to copy (from the version kit or from the latest revision)
+                        strLocationSatelliteExe = clsSQL.str_ADOSingleLookUp("TOP 1 SatRevision.SRe_Exe_Location", "Revision INNER JOIN SatRevision ON SatRevision.Rev_NRI = Revision.Rev_NRI", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND SatRevision.SRe_Exe_Location IS NOT NULL AND SatRevision.CSA_NRI = " + structSat.intCeritarSatelliteApp_NRI + " ORDER BY Revision.Rev_No DESC");
+
+                        strLocationSatelliteExe = strLocationSatelliteExe == string.Empty ? structSat.strLocationSatelliteExe : strLocationSatelliteExe;
+
+                        if (structSat.blnExeIsFolder && Directory.Exists(strLocationSatelliteExe))
+                        {
+                            foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strLocationSatelliteExe, "*.*", SearchOption.AllDirectories))
+                            {
+                                newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(structSat.strExportFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
+                            }
+                        }
+                        else if (File.Exists(strLocationSatelliteExe))
+                        {
+                            newZipFile.CreateEntryFromFile(strLocationSatelliteExe, Path.Combine(structSat.strExportFolderName, Path.GetFileName(strLocationSatelliteExe)));
+                        }
+                    }
+
+                    //Add all scripts folder to the zip archive.
+                    strCurrentScriptFolderLocation = mcView.GetLocation_Scripts();
+            
+                    if (!string.IsNullOrEmpty(strCurrentScriptFolderLocation))
+                    {
+                        if ((File.GetAttributes(strCurrentScriptFolderLocation) & FileAttributes.Directory) == FileAttributes.Directory)
+                        {
+                            foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strCurrentScriptFolderLocation, "*.*", SearchOption.TopDirectoryOnly))
+                            {
+                                newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetScriptsFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
+                            }
+                        }
+                        else
+                        {
+                            newZipFile.CreateEntryFromFile(strCurrentScriptFolderLocation, Path.Combine(sclsAppConfigs.GetScriptsFolderName, Path.GetFileName(strCurrentScriptFolderLocation)), CompressionLevel.NoCompression);
+                        }
+                    }          
+                }
+
+                blnValidReturn = true;
+            }
+            catch (FileNotFoundException exPath)
+            {
+                blnValidReturn = false;
+                mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exPath.FileName);
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            if (!blnValidReturn)
+            {
+                File.Delete(strNewZipFileLocation);
+            }
+
+            return blnValidReturn;
+        }
+
 #region "SQL Queries"
 
         public string strGetDataLoad_SQL(int vintVersion_NRI, int vintRevision_NRI)
@@ -754,7 +950,7 @@ namespace Ceritar.CVS.Controllers
         {
             string strSQL = string.Empty;
 
-            strSQL = strSQL + " SELECT Action = '" + sclsConstants.DML_Mode.NO_MODE + "', " + Environment.NewLine;
+            strSQL = strSQL + " SELECT Action = CASE WHEN SatRevision.SRe_NRI IS NULL THEN '" + sclsConstants.DML_Mode.NO_MODE + "' ELSE '" + sclsConstants.DML_Mode.UPDATE_MODE + "' END," + Environment.NewLine;
             strSQL = strSQL + "        CerSatApp.CSA_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        CerSatApp.CSA_Name, " + Environment.NewLine;
             strSQL = strSQL + "        SatRevision.SRe_NRI, " + Environment.NewLine;

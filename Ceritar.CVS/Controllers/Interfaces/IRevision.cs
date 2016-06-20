@@ -30,6 +30,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         string GetLocation_VariousFolder();
         bool GetExeIsExternalReport();
         bool GetExeWithExternalReport();
+        bool GetIfScriptsAreToAppend();
         List<string> GetModificationsList();
         List<structSatRevision> GetRevisionSatelliteList();
     }

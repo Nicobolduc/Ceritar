@@ -872,26 +872,42 @@ namespace Ceritar.Logirack_CVS
 
         private void btnReplaceAppChangeDOC_Click(object sender, EventArgs e)
         {
+            string strPreviousLocation = txtWordAppChangePath.Text;
+
             ShowOpenFileDialog("Word Documents (.docx)|*.docx", txtWordAppChangePath, txtWordAppChangePath.Text, true);
 
             if (!string.IsNullOrEmpty(txtWordAppChangePath.Text)) txtExcelAppChangePath.Text = string.Empty;
+
+            if (!strPreviousLocation.Equals(txtWordAppChangePath.Text)) btnGenerate_Blink(true);
         }
 
         private void btnReplaceAppChangeXLS_Click(object sender, EventArgs e)
         {
+            string strPreviousLocation = txtExcelAppChangePath.Text;
+
             ShowOpenFileDialog("Excel|*.xls|Excel 2010|*.xlsx", txtExcelAppChangePath, txtExcelAppChangePath.Text, true);
 
             if (!string.IsNullOrEmpty(txtExcelAppChangePath.Text)) txtWordAppChangePath.Text = string.Empty;
+
+            if (!strPreviousLocation.Equals(txtExcelAppChangePath.Text)) btnGenerate_Blink(true);
         }
 
         private void btnReplaceTTApp_Click(object sender, EventArgs e)
         {
+            string strPreviousLocation = txtTTAppPath.Text;
+
             ShowOpenFileDialog("Access files (*.mdb)|*.mdb", txtTTAppPath, (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE ? txtTTAppPath.Text : string.Empty), true);
+
+            if (!strPreviousLocation.Equals(txtTTAppPath.Text)) btnGenerate_Blink(true);
         }
 
         private void btnReplaceExecutable_Click(object sender, EventArgs e)
         {
+            string strPreviousLocation = txtReleasePath.Text;
+
             ShowFolderBrowserDialog(ref txtReleasePath);
+
+            if (!strPreviousLocation.Equals(txtReleasePath.Text)) btnGenerate_Blink(true);
         }
 
         private void grdClients_DoubleClick(object sender, EventArgs e)
@@ -1052,8 +1068,26 @@ namespace Ceritar.Logirack_CVS
             vblnCancel = mblnGrdSatellitesChangeMade;
         }
 
+        private void btnGenerate_Blink(bool vblnDoBlinking)
+        {
+            if (vblnDoBlinking)
+            {
+                tmrGenerateBlink.Start();
+                
+                btnGenerate.BackColor = System.Drawing.Color.Yellow;
+            }
+            else
+            {
+                tmrGenerateBlink.Stop();
+
+                btnGenerate.BackColor = System.Drawing.SystemColors.Control;
+            }
+        }
+
         private void formController_SetReadRights()
         {
+            tmrGenerateBlink.Stop();
+
             switch (formController.FormMode)
             {
                 case sclsConstants.DML_Mode.INSERT_MODE:
@@ -1202,6 +1236,7 @@ namespace Ceritar.Logirack_CVS
 
         private void btnReplaceReportExe_Click(object sender, EventArgs e)
         {
+            string strPreviousLocation = string.Empty;
             int intClickedRow = 0;
             DialogResult msgResult = DialogResult.Yes;
 
@@ -1226,8 +1261,11 @@ namespace Ceritar.Logirack_CVS
             {
                 grdClients.Row = intClickedRow;
                 mblnGrdSatellitesChangeMade = false;
+                strPreviousLocation = mcGrdClients[grdClients.Row, mintGrdClients_LocationReportExe_col];
 
                 ShowOpenFileDialog("LogirackTransport RPT (*.exe)|*.exe", grdClients, mcGrdClients[grdClients.Row, mintGrdClients_LocationReportExe_col], true);
+
+                if (!strPreviousLocation.Equals(mcGrdClients[grdClients.Row, mintGrdClients_LocationReportExe_col])) btnGenerate_Blink(true);
             }
 
             mcGrdClients.GridIsLoading = false;
@@ -1237,6 +1275,7 @@ namespace Ceritar.Logirack_CVS
         {
             TextBox txtTemp = new TextBox();
             mcGrdSatelliteApps.GridIsLoading = true;
+            string strPreviousLocation = string.Empty;
 
             foreach (HostedCellControl control in mcGrdSatelliteApps.LstHostedCellControls)
             {
@@ -1248,6 +1287,7 @@ namespace Ceritar.Logirack_CVS
 
             if (mcGrdSatelliteApps[grdSatellite.Row, mintGrdSat_CSA_ExeIsFolder_col] == "True")
             {
+                strPreviousLocation = mcGrdSatelliteApps[grdSatellite.Row, mintGrdSat_CSV_LocationExe_col];
                 txtTemp.Text = mcGrdSatelliteApps[grdSatellite.Row, mintGrdSat_CSV_LocationExe_col];
 
                 ShowFolderBrowserDialog(ref txtTemp);
@@ -1273,8 +1313,12 @@ namespace Ceritar.Logirack_CVS
             }
             else
             {
+                strPreviousLocation = mcGrdSatelliteApps[grdSatellite.Row, mintGrdSat_CSV_LocationExe_col];
+
                 ShowOpenFileDialog("Executables (*.exe)|*.exe", grdSatellite, mcGrdSatelliteApps[grdSatellite.Row, mintGrdSat_CSV_LocationExe_col], true);
             }
+
+            if (!strPreviousLocation.Equals(mcGrdSatelliteApps[grdSatellite.Row, mintGrdSat_CSV_LocationExe_col])) btnGenerate_Blink(true);
             
             mcGrdSatelliteApps.GridIsLoading = false;
         }
@@ -1411,6 +1455,7 @@ namespace Ceritar.Logirack_CVS
 
         private void btnSelectVariousFilePath_Click(object sender, EventArgs e)
         {
+            string strPreviousLocation = mstrVariousFileLocation;
             TextBox txtPlaceHolder = new TextBox();
 
             ShowOpenFileDialog("Executable (*.*)|*.*", txtPlaceHolder, mstrVariousFileLocation, true);
@@ -1418,10 +1463,13 @@ namespace Ceritar.Logirack_CVS
             mstrVariousFileLocation = txtPlaceHolder.Text;
 
             if (!string.IsNullOrEmpty(mstrVariousFileLocation)) btnSelectVariousFilePath.BackColor = System.Drawing.Color.Yellow;
+
+            if (!strPreviousLocation.Equals(mstrVariousFileLocation)) btnGenerate_Blink(true);
         }
 
         private void btnSelectVariousFolderPath_Click(object sender, EventArgs e)
         {
+            string strPreviousLocation = mstrVariousFolderLocation;
             TextBox txtPlaceHolder = new TextBox();
 
             txtPlaceHolder.Text = mstrVariousFolderLocation;
@@ -1431,6 +1479,8 @@ namespace Ceritar.Logirack_CVS
             mstrVariousFolderLocation = txtPlaceHolder.Text;
 
             if (!string.IsNullOrEmpty(mstrVariousFolderLocation)) btnSelectVariousFolderPath.BackColor = System.Drawing.Color.Yellow;
+
+            if (!strPreviousLocation.Equals(mstrVariousFolderLocation)) btnGenerate_Blink(true);
         }
 
         private void grdClients_MouseMove(object sender, MouseEventArgs e)
@@ -1453,7 +1503,7 @@ namespace Ceritar.Logirack_CVS
 
         private void btnShowRootFolder_Click(object sender, EventArgs e)
         {
-            string strRootFolder = mcCtrVersion.str_GetActiveInstallations_Path((int)cboTemplates.SelectedValue, txtVersionNo.Text);
+            string strRootFolder = mcCtrVersion.str_GetVersionFolderPath((int)cboTemplates.SelectedValue, txtVersionNo.Text);
 
             try
             {
@@ -1462,6 +1512,18 @@ namespace Ceritar.Logirack_CVS
             catch (Exception ex)
             {
                 sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+        }
+
+        private void tmrGenerateBlink_Tick(object sender, EventArgs e)
+        {
+            if (btnGenerate.BackColor == System.Drawing.Color.Yellow)
+            {
+                btnGenerate.BackColor = System.Drawing.SystemColors.Control;
+            }
+            else
+            {
+                btnGenerate.BackColor = System.Drawing.Color.Yellow;
             }
         }
 

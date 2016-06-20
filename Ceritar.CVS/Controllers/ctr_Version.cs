@@ -790,11 +790,6 @@ namespace Ceritar.CVS.Controllers
 
                 strNewZipFileLocation = vstrExportFolderLocation + @"\Installation Kit " + mcView.GetVersionNo().ToString() + " - " + strCeritarClientName + @".zip";
 
-                if (File.Exists(strNewZipFileLocation))
-                {
-                    File.Delete(strNewZipFileLocation);
-                }
-
                 //Get the release folder location to copy (from the version kit or from the latest revision)
                 strReleaseLocation = clsSQL.str_ADOSingleLookUp("TOP 1 Rev_Location_Exe", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Rev_Location_Exe IS NOT NULL AND Revision.Rev_ExeIsReport = 0 ORDER BY Revision.Rev_No DESC");
 
@@ -811,7 +806,7 @@ namespace Ceritar.CVS.Controllers
                         newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
                     }
 
-                    //Get the release folder location to copy (from the version kit or from the latest revision)
+                    //Get the report folder location to copy (from the version kit or from the latest revision)
                     strReportLocation = clsSQL.str_ADOSingleLookUp("TOP 1 Rev_Location_Exe", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Rev_Location_Exe IS NOT NULL AND Revision.Rev_ExeIsReport = 1 ORDER BY Revision.Rev_No DESC");
 
                     strReportLocation = strReportLocation == string.Empty ? mcView.GetSelectedClient().strLocationReportExe : strReportLocation;
@@ -828,7 +823,7 @@ namespace Ceritar.CVS.Controllers
                     foreach (structClientSatVersion structSat in lstSatellites)
                     {
                         //Get the executable folder location to copy (from the version kit or from the latest revision)
-                        strLocationSatelliteExe = clsSQL.str_ADOSingleLookUp("TOP 1 SatRevision.SRe_Location_Exe", "Revision INNER JOIN SatRevision ON SatRevision.Rev_NRI = Revision.Rev_NRI", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND SatRevision.SRe_Location_Exe IS NOT NULL AND SatRevision.CSA_NRI = " + structSat.intCeritarSatelliteApp_NRI + " ORDER BY Revision.Rev_No DESC");
+                        strLocationSatelliteExe = clsSQL.str_ADOSingleLookUp("TOP 1 SatRevision.SRe_Exe_Location", "Revision INNER JOIN SatRevision ON SatRevision.Rev_NRI = Revision.Rev_NRI", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND SatRevision.SRe_Exe_Location IS NOT NULL AND SatRevision.CSA_NRI = " + structSat.intCeritarSatelliteApp_NRI + " ORDER BY Revision.Rev_No DESC");
 
                         strLocationSatelliteExe = strLocationSatelliteExe == string.Empty ? structSat.strLocationSatelliteExe : strLocationSatelliteExe;
 
@@ -976,7 +971,7 @@ namespace Ceritar.CVS.Controllers
             return blnValidReturn;
         }
 
-        public string str_GetActiveInstallations_Path(int vintTemplate_NRI, string vstrVersion_No)
+        public string str_GetVersionFolderPath(int vintTemplate_NRI, string vstrVersion_No)
         {
             string strSQL = string.Empty;
             string strPath = string.Empty;

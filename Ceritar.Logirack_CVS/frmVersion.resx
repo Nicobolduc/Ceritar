@@ -1236,12 +1236,6 @@
         6Zlkz4v+HXNKIceOsUIYxynza3TT/0l+fr8DVjAFnR7vnEYAAAAASUVORK5CYII=
 </value>
   </data>
-  <data name="grdRevisions.ColumnInfo" xml:space="preserve">
-    <value>4,1,0,0,0,90,Columns:0{Width:5;}	1{Width:94;Caption:"Test";StyleFixed:"Font:Microsoft Sans Serif, 8.25pt, style=Bold;Margins:1, 0, 0, 0;TextAlign:CenterCenter;TextEffect:Flat;TextDirection:Normal;Trimming:None;";}	2{Width:113;Caption:"Longitude";}	3{Caption:"Sél.";}	</value>
-  </data>
-  <data name="grdRevisions.StyleInfo" xml:space="preserve">
-    <value>Normal{Font:Tahoma, 8.25pt;}	Alternate{}	Fixed{BackColor:Control;ForeColor:ControlText;Border:Flat,1,ControlDark,Both;BackgroundImageLayout:Hide;}	Highlight{BackColor:Highlight;ForeColor:HighlightText;}	Focus{}	Editor{}	Search{BackColor:Highlight;ForeColor:HighlightText;}	Frozen{BackColor:Beige;}	NewRow{ForeColor:GrayText;}	EmptyArea{BackColor:AppWorkspace;Border:Flat,1,ControlDarkDark,Both;}	SelectedColumnHeader{}	SelectedRowHeader{}	GrandTotal{BackColor:Black;ForeColor:White;}	Subtotal0{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal1{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal2{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal3{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal4{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal5{BackColor:ControlDarkDark;ForeColor:White;}	FilterEditor{}	FirstCustomStyle{}	</value>
-  </data>
   <data name="btnShowRootFolder.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
@@ -1298,6 +1292,12 @@
         2YMAAAAASUVORK5CYII=
 </value>
   </data>
+  <data name="grdRevisions.ColumnInfo" xml:space="preserve">
+    <value>4,1,0,0,0,90,Columns:0{Width:5;}	1{Width:94;Caption:"Test";StyleFixed:"Font:Microsoft Sans Serif, 8.25pt, style=Bold;Margins:1, 0, 0, 0;TextAlign:CenterCenter;TextEffect:Flat;TextDirection:Normal;Trimming:None;";}	2{Width:113;Caption:"Longitude";}	3{Caption:"Sél.";}	</value>
+  </data>
+  <data name="grdRevisions.StyleInfo" xml:space="preserve">
+    <value>Normal{Font:Tahoma, 8.25pt;}	Alternate{}	Fixed{BackColor:Control;ForeColor:ControlText;Border:Flat,1,ControlDark,Both;BackgroundImageLayout:Hide;}	Highlight{BackColor:Highlight;ForeColor:HighlightText;}	Focus{}	Editor{}	Search{BackColor:Highlight;ForeColor:HighlightText;}	Frozen{BackColor:Beige;}	NewRow{ForeColor:GrayText;}	EmptyArea{BackColor:AppWorkspace;Border:Flat,1,ControlDarkDark,Both;}	SelectedColumnHeader{}	SelectedRowHeader{}	GrandTotal{BackColor:Black;ForeColor:White;}	Subtotal0{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal1{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal2{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal3{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal4{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal5{BackColor:ControlDarkDark;ForeColor:White;}	FilterEditor{}	FirstCustomStyle{}	</value>
+  </data>
   <data name="grdSatellite.StyleInfo" xml:space="preserve">
     <value>Normal{Font:Tahoma, 8.25pt;}	Alternate{}	Fixed{BackColor:Control;ForeColor:ControlText;Border:Flat,1,ControlDark,Both;BackgroundImageLayout:Hide;}	Highlight{BackColor:Highlight;ForeColor:HighlightText;}	Focus{}	Editor{}	Search{BackColor:Highlight;ForeColor:HighlightText;}	Frozen{BackColor:Beige;}	NewRow{ForeColor:GrayText;}	EmptyArea{BackColor:AppWorkspace;Border:Flat,1,ControlDarkDark,Both;}	SelectedColumnHeader{}	SelectedRowHeader{}	GrandTotal{BackColor:Black;ForeColor:White;}	Subtotal0{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal1{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal2{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal3{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal4{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal5{BackColor:ControlDarkDark;ForeColor:White;}	FilterEditor{}	FirstCustomStyle{}	</value>
   </data>
@@ -1327,6 +1327,9 @@
   </metadata>
   <metadata name="folderBrowserDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>240, 17</value>
+  </metadata>
+  <metadata name="tmrGenerateBlink.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>403, 17</value>
   </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

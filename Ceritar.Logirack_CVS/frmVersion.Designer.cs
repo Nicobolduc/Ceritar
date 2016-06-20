@@ -61,6 +61,7 @@
             this.btnShowExcel = new System.Windows.Forms.Button();
             this.btnSelectVariousFilePath = new System.Windows.Forms.Button();
             this.btnSelectVariousFolderPath = new System.Windows.Forms.Button();
+            this.btnShowRootFolder = new System.Windows.Forms.Button();
             this.tabRevision = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.btnRefresh = new Ceritar.TT3LightDLL.Controls.ctlRefresh();
@@ -87,7 +88,7 @@
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.label7 = new System.Windows.Forms.Label();
-            this.btnShowRootFolder = new System.Windows.Forms.Button();
+            this.tmrGenerateBlink = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             this.tabRevision.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -446,6 +447,18 @@
             this.btnSelectVariousFolderPath.UseVisualStyleBackColor = true;
             this.btnSelectVariousFolderPath.Click += new System.EventHandler(this.btnSelectVariousFolderPath_Click);
             // 
+            // btnShowRootFolder
+            // 
+            this.btnShowRootFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowRootFolder.BackgroundImage")));
+            this.btnShowRootFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnShowRootFolder.Location = new System.Drawing.Point(637, 395);
+            this.btnShowRootFolder.Name = "btnShowRootFolder";
+            this.btnShowRootFolder.Size = new System.Drawing.Size(40, 40);
+            this.btnShowRootFolder.TabIndex = 83;
+            this.toolTip.SetToolTip(this.btnShowRootFolder, "Accéder à la racine de la version");
+            this.btnShowRootFolder.UseVisualStyleBackColor = true;
+            this.btnShowRootFolder.Click += new System.EventHandler(this.btnShowRootFolder_Click);
+            // 
             // tabRevision
             // 
             this.tabRevision.Controls.Add(this.groupBox3);
@@ -751,17 +764,10 @@
             this.label7.TabIndex = 51;
             this.label7.Text = "DB_UpgradeScripts et Installations_Actives sont synchronisés";
             // 
-            // btnShowRootFolder
+            // tmrGenerateBlink
             // 
-            this.btnShowRootFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowRootFolder.BackgroundImage")));
-            this.btnShowRootFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowRootFolder.Location = new System.Drawing.Point(637, 395);
-            this.btnShowRootFolder.Name = "btnShowRootFolder";
-            this.btnShowRootFolder.Size = new System.Drawing.Size(40, 40);
-            this.btnShowRootFolder.TabIndex = 83;
-            this.toolTip.SetToolTip(this.btnShowRootFolder, "Accéder à la racine de la version");
-            this.btnShowRootFolder.UseVisualStyleBackColor = true;
-            this.btnShowRootFolder.Click += new System.EventHandler(this.btnShowRootFolder_Click);
+            this.tmrGenerateBlink.Interval = 1000;
+            this.tmrGenerateBlink.Tick += new System.EventHandler(this.tmrGenerateBlink_Tick);
             // 
             // frmVersion
             // 
@@ -859,5 +865,6 @@
         private System.Windows.Forms.Button btnShowWord;
         private System.Windows.Forms.Button btnShowExcel;
         private System.Windows.Forms.Button btnShowRootFolder;
+        private System.Windows.Forms.Timer tmrGenerateBlink;
     }
 }

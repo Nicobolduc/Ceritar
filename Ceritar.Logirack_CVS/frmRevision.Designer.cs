@@ -58,6 +58,7 @@
             this.btnSelectVariousFilePath = new System.Windows.Forms.Button();
             this.btnSelectVariousFolderPath = new System.Windows.Forms.Button();
             this.btnGenerate = new System.Windows.Forms.Button();
+            this.btnShowRootFolder = new System.Windows.Forms.Button();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
@@ -73,7 +74,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
-            this.btnShowRootFolder = new System.Windows.Forms.Button();
+            this.chkAddScripts = new System.Windows.Forms.CheckBox();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -267,7 +268,7 @@
             // 
             // toolTips
             // 
-            this.toolTips.AutoPopDelay = 5000;
+            this.toolTips.AutoPopDelay = 10000;
             this.toolTips.InitialDelay = 50;
             this.toolTips.ReshowDelay = 100;
             // 
@@ -276,12 +277,13 @@
             this.btnExportRevision.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExportRevision.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnExportRevision.Image = ((System.Drawing.Image)(resources.GetObject("btnExportRevision.Image")));
-            this.btnExportRevision.Location = new System.Drawing.Point(790, 521);
+            this.btnExportRevision.Location = new System.Drawing.Point(790, 541);
             this.btnExportRevision.Name = "btnExportRevision";
             this.btnExportRevision.Size = new System.Drawing.Size(40, 40);
             this.btnExportRevision.TabIndex = 8;
             this.toolTips.SetToolTip(this.btnExportRevision, "Exporter la révision");
             this.btnExportRevision.UseVisualStyleBackColor = true;
+            this.btnExportRevision.Click += new System.EventHandler(this.btnExportRevision_Click);
             // 
             // btnSelectScriptsFilePath
             // 
@@ -384,7 +386,7 @@
             this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGenerate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGenerate.BackgroundImage")));
             this.btnGenerate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnGenerate.Location = new System.Drawing.Point(741, 521);
+            this.btnGenerate.Location = new System.Drawing.Point(741, 541);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(40, 40);
             this.btnGenerate.TabIndex = 81;
@@ -392,6 +394,19 @@
             this.btnGenerate.UseVisualStyleBackColor = true;
             this.btnGenerate.Visible = false;
             this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
+            // 
+            // btnShowRootFolder
+            // 
+            this.btnShowRootFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnShowRootFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowRootFolder.BackgroundImage")));
+            this.btnShowRootFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnShowRootFolder.Location = new System.Drawing.Point(693, 541);
+            this.btnShowRootFolder.Name = "btnShowRootFolder";
+            this.btnShowRootFolder.Size = new System.Drawing.Size(40, 40);
+            this.btnShowRootFolder.TabIndex = 84;
+            this.toolTips.SetToolTip(this.btnShowRootFolder, "Accéder à la racine de la révision");
+            this.btnShowRootFolder.UseVisualStyleBackColor = true;
+            this.btnShowRootFolder.Click += new System.EventHandler(this.btnShowRootFolder_Click);
             // 
             // openFileDialog
             // 
@@ -432,13 +447,14 @@
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.chkAddScripts);
             this.groupBox2.Controls.Add(this.btnSelectScriptsFilePath);
             this.groupBox2.Controls.Add(this.btnSelectScriptsFolderPath);
             this.groupBox2.Controls.Add(this.txtScriptsPath);
             this.groupBox2.Controls.Add(this.btnShowScriptsFolder);
             this.groupBox2.Location = new System.Drawing.Point(5, 352);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(828, 63);
+            this.groupBox2.Size = new System.Drawing.Size(828, 83);
             this.groupBox2.TabIndex = 78;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Scripts";
@@ -454,7 +470,7 @@
             // 
             // groupBox5
             // 
-            this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox5.Controls.Add(this.optExeOnly);
             this.groupBox5.Controls.Add(this.optExeAndRpt);
@@ -463,7 +479,7 @@
             this.groupBox5.Controls.Add(this.txtReleasePath);
             this.groupBox5.Controls.Add(this.btnShowExecutableFolder);
             this.groupBox5.Controls.Add(this.optRptOnly);
-            this.groupBox5.Location = new System.Drawing.Point(5, 421);
+            this.groupBox5.Location = new System.Drawing.Point(5, 441);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(828, 85);
             this.groupBox5.TabIndex = 79;
@@ -513,13 +529,12 @@
             // 
             // groupBox6
             // 
-            this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox6.Controls.Add(this.btnSelectVariousFilePath);
             this.groupBox6.Controls.Add(this.label8);
             this.groupBox6.Controls.Add(this.label4);
             this.groupBox6.Controls.Add(this.btnSelectVariousFolderPath);
-            this.groupBox6.Location = new System.Drawing.Point(5, 512);
+            this.groupBox6.Location = new System.Drawing.Point(5, 532);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(303, 55);
             this.groupBox6.TabIndex = 80;
@@ -550,7 +565,7 @@
             this.formController.FormIsLoading = false;
             this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.NO_MODE;
             this.formController.Item_NRI = 0;
-            this.formController.Location = new System.Drawing.Point(1, 572);
+            this.formController.Location = new System.Drawing.Point(1, 592);
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
             this.formController.Size = new System.Drawing.Size(835, 33);
@@ -560,22 +575,23 @@
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
             // 
-            // btnShowRootFolder
+            // chkAddScripts
             // 
-            this.btnShowRootFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowRootFolder.BackgroundImage")));
-            this.btnShowRootFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowRootFolder.Location = new System.Drawing.Point(693, 521);
-            this.btnShowRootFolder.Name = "btnShowRootFolder";
-            this.btnShowRootFolder.Size = new System.Drawing.Size(40, 40);
-            this.btnShowRootFolder.TabIndex = 84;
-            this.btnShowRootFolder.UseVisualStyleBackColor = true;
-            this.btnShowRootFolder.Click += new System.EventHandler(this.btnShowRootFolder_Click);
+            this.chkAddScripts.AutoSize = true;
+            this.chkAddScripts.Location = new System.Drawing.Point(9, 59);
+            this.chkAddScripts.Name = "chkAddScripts";
+            this.chkAddScripts.Size = new System.Drawing.Size(221, 17);
+            this.chkAddScripts.TabIndex = 70;
+            this.chkAddScripts.Text = "Ajouter le(s) script(s) au répertoire courant";
+            this.toolTips.SetToolTip(this.chkAddScripts, "Le script, ou les scripts du dossier, sélectionné(s) seront ajoutés à la suite de" +
+        "s scripts existant.");
+            this.chkAddScripts.UseVisualStyleBackColor = true;
             // 
             // frmRevision
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(837, 606);
+            this.ClientSize = new System.Drawing.Size(837, 626);
             this.Controls.Add(this.btnShowRootFolder);
             this.Controls.Add(this.btnGenerate);
             this.Controls.Add(this.groupBox5);
@@ -653,6 +669,7 @@
         private System.Windows.Forms.RadioButton optExeAndRpt;
         private System.Windows.Forms.RadioButton optRptOnly;
         private System.Windows.Forms.Button btnShowRootFolder;
+        private System.Windows.Forms.CheckBox chkAddScripts;
 
     }
 }

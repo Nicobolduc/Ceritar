@@ -182,6 +182,7 @@ namespace Ceritar.Logirack_CVS
                     structSRe.strCeritarSatelliteApp_Name = mcGrdSatellites[intRowIndex, mintGrdSat_CSA_Name_col];
                     structSRe.blnExeIsFolder = Convert.ToBoolean(mcGrdSatellites[intRowIndex, mintGrdSat_CSA_ExeIsFolder_col]);
                     structSRe.strExportFolderName = mcGrdSatellites[intRowIndex, mintGrdSat_CSA_ExportFolderName_col];
+                    structSRe.intSatRevision_NRI = Int32.Parse(mcGrdSatellites[intRowIndex, mintGrdSat_SRe_NRI_col]);
 
                     lstSatelliteApps.Add(structSRe);
                 }
@@ -213,6 +214,11 @@ namespace Ceritar.Logirack_CVS
         string IRevision.GetLocation_VariousFolder()
         {
             return mstrVariousFolderLocation;
+        }
+
+        bool IRevision.GetIfScriptsAreToAppend()
+        {
+            return chkAddScripts.Checked;
         }
 
 #endregion
@@ -327,13 +333,14 @@ namespace Ceritar.Logirack_CVS
             return blnValidReturn;
         }
 
-        private void ShowFolderBrowserDialog(ref TextBox txtAffected)
+        private void ShowFolderBrowserDialog(ref TextBox txtAffected, string vstrDialogDescription = "", bool vblnChangeMade = true)
         {
             DialogResult dialogResult;
 
             if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE || formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
             {
                 folderBrowserDialog.ShowNewFolderButton = false;
+                folderBrowserDialog.Description = vstrDialogDescription;
 
                 if (!string.IsNullOrEmpty(txtAffected.Text))
                 {
@@ -350,7 +357,7 @@ namespace Ceritar.Logirack_CVS
                 {
                     txtAffected.Text = folderBrowserDialog.SelectedPath;
 
-                    formController.ChangeMade = true;
+                    formController.ChangeMade = vblnChangeMade;
                 }
             }
         }
@@ -458,7 +465,7 @@ namespace Ceritar.Logirack_CVS
 
                 if (!string.IsNullOrEmpty(txtTemp.Text))
                 {
-                    if (mcGrdSatellites[grdSatellites.Row, mintGrdSat_CSA_ExeLocation_col] != txtTemp.Text)
+                    if (mcGrdSatellites[grdSatellites.Row, mintGrdSat_CSA_ExeLocation_col] != txtTemp.Text && mcGrdSatellites.bln_CellIsEmpty(grdSatellites.Row, mintGrdSat_SRe_NRI_col))
                     {
                         grdSatellites[grdSatellites.Row, mintGrdSat_Action_col] = sclsConstants.DML_Mode.INSERT_MODE;
                     }
@@ -478,6 +485,38 @@ namespace Ceritar.Logirack_CVS
             }
 
             mcGrdSatellites.GridIsLoading = false;
+        }
+
+        private bool pfblnExportRevisionKit()
+        {
+            bool blnValidReturn = false;
+            TextBox txtTemp = new TextBox();
+
+            try
+            {
+                ShowFolderBrowserDialog(ref txtTemp, "Sélectionnez l'emplacement où sauvegarder l'archive.", false);
+
+                if (!string.IsNullOrEmpty(txtTemp.Text))
+                {
+                    Cursor.Current = Cursors.WaitCursor;
+
+                    blnValidReturn = mcCtrRevision.blnExportRevisionKit(txtTemp.Text);
+
+                    if (blnValidReturn)
+                    {
+                        MessageBox.Show("Export effectué avec succès!" + Environment.NewLine + "À l'emplacement suivant : " + txtTemp.Text, "Message", MessageBoxButtons.OK);
+                    }
+
+                    Cursor.Current = Cursors.Default;
+                }
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnValidReturn;
         }
 
 #endregion
@@ -833,17 +872,22 @@ namespace Ceritar.Logirack_CVS
 
         private void btnShowRootFolder_Click(object sender, EventArgs e)
         {
-        //    string strRootFolder = mcCtrRevision.str_GetActiveInstallations_Path((int)cboTemplates.SelectedValue, txtVersionNo.Text);
+            string strRootFolder = mcCtrRevision.str_GetRevisionFolderPath((int)cboTemplates.SelectedValue, txtVersionNo.Text);
 
-        //    try
-        //    {
-        //        System.Diagnostics.Process.Start(@strRootFolder);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
-        //    }
-        //}
+            try
+            {
+                System.Diagnostics.Process.Start(@strRootFolder);
+            }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+        }
+
+        private void btnExportRevision_Click(object sender, EventArgs e)
+        {
+            pfblnExportRevisionKit();
+        }
 
     }
 }
