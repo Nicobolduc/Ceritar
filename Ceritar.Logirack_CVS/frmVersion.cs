@@ -75,6 +75,7 @@ namespace Ceritar.Logirack_CVS
         
         //Messages
         private int mintMSG_ChangesWillBeLostOnRowChange = 27;
+        private int mintMSG_ApplicationNotExistsInSystem = 38;
 
         public frmVersion()
         {
@@ -255,6 +256,11 @@ namespace Ceritar.Logirack_CVS
         string IVersion.GetLocation_VariousFolder()
         {
             return mstrVariousFolderLocation;
+        }
+
+        string IVersion.GetLatestVersionNo()
+        {
+            return clsApp.GetAppController.ShowInputMessage(mintMSG_ApplicationNotExistsInSystem);
         }
 
 #endregion
@@ -1070,7 +1076,7 @@ namespace Ceritar.Logirack_CVS
 
         private void btnGenerate_Blink(bool vblnDoBlinking)
         {
-            if (vblnDoBlinking)
+            if (vblnDoBlinking && formController.FormMode != sclsConstants.DML_Mode.INSERT_MODE)
             {
                 tmrGenerateBlink.Start();
                 
@@ -1524,6 +1530,20 @@ namespace Ceritar.Logirack_CVS
             else
             {
                 btnGenerate.BackColor = System.Drawing.Color.Yellow;
+            }
+        }
+
+        private void btnShowDB_UpgradeScripts_Click(object sender, EventArgs e)
+        {
+            string strRootFolder = Path.Combine(CVS.sclsAppConfigs.GetRoot_DB_UPGRADE_SCRIPTS, (cboApplications.SelectedIndex >= 0 ? cboApplications.GetItemText(cboApplications.SelectedItem) : string.Empty));
+
+            try
+            {
+                System.Diagnostics.Process.Start(@strRootFolder);
+            }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
         }
 

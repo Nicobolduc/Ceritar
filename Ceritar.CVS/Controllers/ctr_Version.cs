@@ -378,6 +378,8 @@ namespace Ceritar.CVS.Controllers
 
                 if (blnValidReturn) mcActionResult.SetValid(mintMSG_BuildSuccess);
 
+                if (!blnValidReturn && mcActionResult.IsValid) mcActionResult.SetInvalid(sclsConstants.Error_Message.ERROR_SAVE_MSG, clsActionResults.BaseErrorCode.ERROR_SAVE);
+
                 if (!blnValidReturn && mcModVersion.DML_Action == sclsConstants.DML_Mode.INSERT_MODE)
                 {
                     //pfblnDeleteVersionHierarchy(strVersionFolderRoot);
@@ -396,7 +398,7 @@ namespace Ceritar.CVS.Controllers
         private bool pfblnCopyAllScriptsForClients(string vstrDestinationFolderPath)
         {
             bool blnValidReturn = false;
-            ushort intActiveVersionInProd;
+            ushort intPreviousActiveVersionInProd;
             ushort intCurrentFolder_VersionNo;
             string[] lstVersionsFolders;
             List<mod_CAV_ClientAppVersion> lstCAV = mcModVersion.LstClientsUsing;
@@ -411,12 +413,19 @@ namespace Ceritar.CVS.Controllers
                     {
                         if (mcSQL == null)
                         {
-                            intActiveVersionInProd = UInt16.Parse(clsSQL.str_ADOSingleLookUp("ISNULL(MAX(Version.Ver_No), 0)", "ClientAppVersion INNER JOIN Version ON Version.Ver_NRI = ClientAppVersion.Ver_NRI", "ClientAppVersion.CAV_IsCurrentVersion = 1 AND Version.CeA_NRI = " + mcView.GetCeritarApplication_NRI() + " AND ClientAppVersion.CeC_NRI = " + cCAV.CeritarClient.CeritarClient_NRI));
+                            intPreviousActiveVersionInProd = UInt16.Parse(clsSQL.str_ADOSingleLookUp("ISNULL(MAX(Version.Ver_No), 0)", "ClientAppVersion INNER JOIN Version ON Version.Ver_NRI = ClientAppVersion.Ver_NRI", "ClientAppVersion.CAV_DtInstalledProd IS NOT NULL AND Version.Ver_No <" + mcView.GetVersionNo() + " AND Version.CeA_NRI = " + mcView.GetCeritarApplication_NRI() + " AND ClientAppVersion.CeC_NRI = " + cCAV.CeritarClient.CeritarClient_NRI));
                         }
                         else
                         {
-                            intActiveVersionInProd = UInt16.Parse(mcSQL.str_ADOSingleLookUp_Trans("ISNULL(MAX(Version.Ver_No), 0)", "ClientAppVersion INNER JOIN Version ON Version.Ver_NRI = ClientAppVersion.Ver_NRI", "ClientAppVersion.CAV_IsCurrentVersion = 1 AND Version.CeA_NRI = " + mcView.GetCeritarApplication_NRI() + " AND ClientAppVersion.CeC_NRI = " + cCAV.CeritarClient.CeritarClient_NRI));
+                            intPreviousActiveVersionInProd = UInt16.Parse(mcSQL.str_ADOSingleLookUp_Trans("ISNULL(MAX(Version.Ver_No), 0)", "ClientAppVersion INNER JOIN Version ON Version.Ver_NRI = ClientAppVersion.Ver_NRI", "ClientAppVersion.CAV_DtInstalledProd IS NOT NULL AND Version.Ver_No <" + mcView.GetVersionNo() + " AND Version.CeA_NRI = " + mcView.GetCeritarApplication_NRI() + " AND ClientAppVersion.CeC_NRI = " + cCAV.CeritarClient.CeritarClient_NRI));
                         }
+
+                        if (intPreviousActiveVersionInProd <= 0)
+                        {
+                            UInt16.TryParse(mcView.GetLatestVersionNo(), out intPreviousActiveVersionInProd);
+                        }
+
+                        if (intPreviousActiveVersionInProd <= 0) blnValidReturn = false;
 
                         lstVersionsFolders = Directory.GetDirectories(Path.Combine(sclsAppConfigs.GetRoot_DB_UPGRADE_SCRIPTS, mcView.GetCeritarApplication_Name()));
 
@@ -424,7 +433,7 @@ namespace Ceritar.CVS.Controllers
                         {
                             UInt16.TryParse(Regex.Replace(new DirectoryInfo(strCurrentVersionFolderToCopy_Path).Name, @"[^0-9]+", ""), out intCurrentFolder_VersionNo);
 
-                            if (intCurrentFolder_VersionNo > intActiveVersionInProd & intCurrentFolder_VersionNo <= mcView.GetVersionNo())
+                            if (blnValidReturn && intCurrentFolder_VersionNo > intPreviousActiveVersionInProd && intCurrentFolder_VersionNo <= mcView.GetVersionNo())
                             {
                                 clsApp.GetAppController.blnCopyFolderContent(strCurrentVersionFolderToCopy_Path,
                                                                              Path.Combine(vstrDestinationFolderPath,
@@ -435,11 +444,11 @@ namespace Ceritar.CVS.Controllers
 
                                 cCAV.DML_Action = sclsConstants.DML_Mode.UPDATE_MODE;
                                 cCAV.LocationScriptsRoot = Path.Combine(vstrDestinationFolderPath, cCAV.CeritarClient.CompanyName);
-
+                                
                                 //Copy all client's specific scripts at the end of the current folder
-                                if (Directory.Exists(Path.Combine(strCurrentVersionFolderToCopy_Path, cCAV.CeritarClient.CompanyName)))
+                                if (Directory.GetDirectories(strCurrentVersionFolderToCopy_Path, cCAV.CeritarClient.CompanyName + "*", SearchOption.TopDirectoryOnly).Length > 0)
                                 {
-                                    string[] lstSpecificScripts = Directory.GetFiles(Path.Combine(strCurrentVersionFolderToCopy_Path, cCAV.CeritarClient.CompanyName));
+                                    string[] lstSpecificScripts = Directory.GetFiles(Directory.GetDirectories(strCurrentVersionFolderToCopy_Path, cCAV.CeritarClient.CompanyName + "*", SearchOption.TopDirectoryOnly)[0]);
                                     string strNewScriptName = string.Empty;
                                     int intNewScriptNumber = 0;
 
@@ -470,20 +479,17 @@ namespace Ceritar.CVS.Controllers
                             {
                                 //Do nothing
                             }
+
+                            if (!blnValidReturn) break;
                         }
 
                         //Ce segment de code sert à sauvegarder le nouveau path du dossier racine des scripts
-                        if (cCAV.DML_Action == sclsConstants.DML_Mode.UPDATE_MODE)
+                        if (blnValidReturn & cCAV.DML_Action == sclsConstants.DML_Mode.UPDATE_MODE)
                         {
                             cCAV.SetcSQL = mcSQL;
 
                             blnValidReturn = cCAV.blnSave();
-                        }
-                        else
-                        {
-                            blnValidReturn = true;
-                        }
-                        
+                        }      
 
                         if (!blnValidReturn) break;
                     }

@@ -225,6 +225,46 @@ namespace Ceritar.TT3LightDLL.Classes
             return msgResult;
         }
 
+        public String ShowInputMessage(int vintCaption_NRI, string vstrTitle = "Attention", string vstrDefaultInput = "", params string[] vlstMsgParam)
+        {
+            string strMessage = string.Empty;
+            int intParamCpt = 1;
+            string msgResult = string.Empty;
+
+            try
+            {
+                strMessage = _myUniqueInstance.str_GetCaption(vintCaption_NRI, mctrlUser.GetUserLanguage);
+
+                if ((vlstMsgParam != null))
+                {
+
+                    foreach (string strParam in vlstMsgParam)
+                    {
+
+                        if (strMessage.Contains("@" + intParamCpt.ToString()))
+                        {
+                            strMessage = strMessage.Replace("@" + intParamCpt.ToString(), strParam);
+
+                            intParamCpt += 1;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                msgResult = Microsoft.VisualBasic.Interaction.InputBox(strMessage, vstrTitle, vstrDefaultInput);
+
+            }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return msgResult;
+        }
+
         public T ConvertToEnum<T>(object vobjValue)
         {
             T enumVal = (T)Enum.Parse(typeof(T), vobjValue.ToString());

@@ -89,6 +89,7 @@
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.label7 = new System.Windows.Forms.Label();
             this.tmrGenerateBlink = new System.Windows.Forms.Timer(this.components);
+            this.btnShowDB_UpgradeScripts = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.tabRevision.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -515,6 +516,7 @@
             // 
             // tabVersion
             // 
+            this.tabVersion.Controls.Add(this.btnShowDB_UpgradeScripts);
             this.tabVersion.Controls.Add(this.btnShowRootFolder);
             this.tabVersion.Controls.Add(this.groupBox7);
             this.tabVersion.Controls.Add(this.groupBox6);
@@ -769,6 +771,18 @@
             this.tmrGenerateBlink.Interval = 1000;
             this.tmrGenerateBlink.Tick += new System.EventHandler(this.tmrGenerateBlink_Tick);
             // 
+            // btnShowDB_UpgradeScripts
+            // 
+            this.btnShowDB_UpgradeScripts.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowDB_UpgradeScripts.BackgroundImage")));
+            this.btnShowDB_UpgradeScripts.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnShowDB_UpgradeScripts.Location = new System.Drawing.Point(591, 395);
+            this.btnShowDB_UpgradeScripts.Name = "btnShowDB_UpgradeScripts";
+            this.btnShowDB_UpgradeScripts.Size = new System.Drawing.Size(40, 40);
+            this.btnShowDB_UpgradeScripts.TabIndex = 84;
+            this.toolTip.SetToolTip(this.btnShowDB_UpgradeScripts, "Accéder à DB_UpgradeScripts");
+            this.btnShowDB_UpgradeScripts.UseVisualStyleBackColor = true;
+            this.btnShowDB_UpgradeScripts.Click += new System.EventHandler(this.btnShowDB_UpgradeScripts_Click);
+            // 
             // frmVersion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -866,5 +880,6 @@
         private System.Windows.Forms.Button btnShowExcel;
         private System.Windows.Forms.Button btnShowRootFolder;
         private System.Windows.Forms.Timer tmrGenerateBlink;
+        private System.Windows.Forms.Button btnShowDB_UpgradeScripts;
     }
 }

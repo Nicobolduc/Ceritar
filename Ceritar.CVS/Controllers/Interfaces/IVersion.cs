@@ -26,6 +26,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         string GetLocation_VariousFolder();
         bool GetIsDemo();
         bool GetIncludeScriptsOnRefresh();
+        string GetLatestVersionNo();
         structClientAppVersion GetSelectedClient();
         List<structClientAppVersion> GetClientsList();
         List<structClientSatVersion> GetClientSatellitesList();
