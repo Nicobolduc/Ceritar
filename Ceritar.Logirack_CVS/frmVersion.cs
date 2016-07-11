@@ -839,6 +839,8 @@ namespace Ceritar.Logirack_CVS
 
         private void formController_SaveData(SaveDataEventArgs eventArgs)
         {
+            Cursor.Current = Cursors.WaitCursor;
+
             mcActionResults = mcCtrVersion.Save();
 
             if (!mcActionResults.IsValid)
@@ -874,6 +876,8 @@ namespace Ceritar.Logirack_CVS
             if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE) formController.Item_NRI = mcActionResults.GetNewItem_NRI;
 
             eventArgs.SaveSuccessful = mcActionResults.IsValid;
+
+            Cursor.Current = Cursors.Default;
         }
 
         private void btnReplaceAppChangeDOC_Click(object sender, EventArgs e)
@@ -1143,7 +1147,7 @@ namespace Ceritar.Logirack_CVS
         {
             if (!formController.ChangeMade)
             {
-                this.Cursor = Cursors.WaitCursor;
+                Cursor.Current = Cursors.WaitCursor;
 
                 mcCtrVersion.blnUpdateVersionHierarchy();
 
@@ -1182,6 +1186,7 @@ namespace Ceritar.Logirack_CVS
                 }
                 else
                 {
+                    btnGenerate_Blink(false);
                     formController.FormIsLoading = true;
                     formController_LoadData(new LoadDataEventArgs(formController.Item_NRI));
                     formController.FormIsLoading = false; //TODO METHOD 
@@ -1189,7 +1194,7 @@ namespace Ceritar.Logirack_CVS
                     if (mcActionResults.SuccessMessage_NRI > 0) clsApp.GetAppController.ShowMessage(mcActionResults.SuccessMessage_NRI);
                 }
 
-                this.Cursor = Cursors.Default;
+                Cursor.Current = Cursors.Default;
             }
             else
             {

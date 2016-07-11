@@ -120,13 +120,17 @@ namespace Ceritar.CVS.Controllers
 
         public clsActionResults Validate()
         {
+            bool blnValidReturn = false;
             mcModRevision = new mod_Rev_Revision();
             
             try
             {
-                pfblnFeedModelWithView();
+                blnValidReturn = pfblnFeedModelWithView();
 
-                mcActionResult = mcModRevision.Validate();
+                if (blnValidReturn)
+                {
+                    mcActionResult = mcModRevision.Validate();
+                }
             }
             catch (Exception ex)
             {
@@ -300,6 +304,7 @@ namespace Ceritar.CVS.Controllers
                         currentFolderInfos = new DirectoryInfo(Path.Combine(currentFolderInfos.Parent.FullName, strFolderName));
                     }
 
+                    //Construction du répertoire courant
                     switch (Int32.Parse(cSQLReader["FoT_NRI"].ToString()))
                     {
                         case (int)ctr_Template.FolderType.Release:
@@ -344,6 +349,11 @@ namespace Ceritar.CVS.Controllers
 
                                     mcModRevision.Path_Release = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Release()));
                                 }
+                            }
+                            else if ((File.Exists(currentFolderInfos.FullName) || Directory.Exists(currentFolderInfos.FullName)) && mcView.GetLocation_Release() != currentFolderInfos.FullName)
+                            {
+                                //Met a jour le path si le contenu de la revision change, mais pas le release
+                                mcModRevision.Path_Release = currentFolderInfos.FullName;
                             }
 
                             //Gestion des applications satellites. On les copie ici au même niveau que le Release
@@ -412,6 +422,11 @@ namespace Ceritar.CVS.Controllers
                                     
                                     blnScriptsChanged = true;
                                 }
+                            } 
+                            else if ((File.Exists(currentFolderInfos.FullName) || Directory.Exists(currentFolderInfos.FullName)) && mcView.GetLocation_Scripts() != currentFolderInfos.FullName)
+                            {
+                                //Met a jour le path si le contenu de la revision change, mais pas les scripts
+                                mcModRevision.Path_Scripts = currentFolderInfos.FullName;
                             }
 
                             //Ajout dans Rev_AllScripts
@@ -478,7 +493,7 @@ namespace Ceritar.CVS.Controllers
                         case (int)ctr_Template.FolderType.Normal:
 
                             //Ajout des documents divers
-                            if (!Directory.Exists(currentFolderInfos.FullName)) currentFolderInfos.Create();
+                            if ((!string.IsNullOrEmpty(mcView.GetLocation_VariousFile()) || !string.IsNullOrEmpty(mcView.GetLocation_VariousFolder())) && !Directory.Exists(currentFolderInfos.FullName)) currentFolderInfos.Create();
 
                             if (!string.IsNullOrEmpty(mcView.GetLocation_VariousFile()))
                             {
@@ -633,7 +648,7 @@ namespace Ceritar.CVS.Controllers
         /// <returns>Vrai si tout s'est bien passé.</returns>
         private bool pfblnCopyAndSaveSatelliteLocation(mod_SRe_SatelliteRevision rcSatRevision, string vstrDestinationFolder, bool vblnSaveLocationToDB = false)
         {
-            bool blnValidReturn = false;
+            bool blnValidReturn = true;
             DirectoryInfo currentFolderInfos = null;
 
             try
@@ -662,27 +677,23 @@ namespace Ceritar.CVS.Controllers
                             rcSatRevision.Location_Exe = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(rcSatRevision.Location_Exe));
                         }
                     }
-
-                    if (vblnSaveLocationToDB)
-                    {
-                        rcSatRevision.SetcSQL = (mcSQL == null ? new clsSQL() : mcSQL);
-                        rcSatRevision.DML_Action = rcSatRevision.SatRevision_NRI == 0 ? sclsConstants.DML_Mode.INSERT_MODE : sclsConstants.DML_Mode.UPDATE_MODE;
-
-                        blnValidReturn = rcSatRevision.blnSave(); //Pour update le chemin ou la sauvegarde est faite
-
-                        if (!blnValidReturn)
-                        {
-                            mcActionResult = mcModRevision.ActionResults;
-                        }
-                    }
-                    else
-                    {
-                        blnValidReturn = true;
-                    }
                 }
-                else
+                else if ((File.Exists(vstrDestinationFolder) || Directory.Exists(vstrDestinationFolder)) && rcSatRevision.Location_Exe != vstrDestinationFolder)
                 {
-                    blnValidReturn = true;
+                    rcSatRevision.Location_Exe = vstrDestinationFolder;
+                }
+
+                if (vblnSaveLocationToDB)
+                {
+                    rcSatRevision.SetcSQL = (mcSQL == null ? new clsSQL() : mcSQL);
+                    rcSatRevision.DML_Action = rcSatRevision.SatRevision_NRI == 0 ? sclsConstants.DML_Mode.INSERT_MODE : sclsConstants.DML_Mode.UPDATE_MODE;
+
+                    blnValidReturn = rcSatRevision.blnSave(); //Pour update le chemin ou la sauvegarde est faite
+
+                    if (!blnValidReturn)
+                    {
+                        mcActionResult = mcModRevision.ActionResults;
+                    }
                 }
             }
             catch (FileNotFoundException exPath)

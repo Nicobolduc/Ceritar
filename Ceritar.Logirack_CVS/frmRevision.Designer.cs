@@ -59,6 +59,7 @@
             this.btnSelectVariousFolderPath = new System.Windows.Forms.Button();
             this.btnGenerate = new System.Windows.Forms.Button();
             this.btnShowRootFolder = new System.Windows.Forms.Button();
+            this.chkAddScripts = new System.Windows.Forms.CheckBox();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
@@ -74,7 +75,6 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
-            this.chkAddScripts = new System.Windows.Forms.CheckBox();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -398,8 +398,8 @@
             // btnShowRootFolder
             // 
             this.btnShowRootFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnShowRootFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowRootFolder.BackgroundImage")));
             this.btnShowRootFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnShowRootFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnShowRootFolder.Image")));
             this.btnShowRootFolder.Location = new System.Drawing.Point(693, 541);
             this.btnShowRootFolder.Name = "btnShowRootFolder";
             this.btnShowRootFolder.Size = new System.Drawing.Size(40, 40);
@@ -407,6 +407,18 @@
             this.toolTips.SetToolTip(this.btnShowRootFolder, "Accéder à la racine de la révision");
             this.btnShowRootFolder.UseVisualStyleBackColor = true;
             this.btnShowRootFolder.Click += new System.EventHandler(this.btnShowRootFolder_Click);
+            // 
+            // chkAddScripts
+            // 
+            this.chkAddScripts.AutoSize = true;
+            this.chkAddScripts.Location = new System.Drawing.Point(9, 59);
+            this.chkAddScripts.Name = "chkAddScripts";
+            this.chkAddScripts.Size = new System.Drawing.Size(221, 17);
+            this.chkAddScripts.TabIndex = 70;
+            this.chkAddScripts.Text = "Ajouter le(s) script(s) au répertoire courant";
+            this.toolTips.SetToolTip(this.chkAddScripts, "Le(s) script(s) du dossier, sélectionné(s) seront ajoutés à la suite des scripts " +
+        "existant. Sinon ceux existant sont supprimés.");
+            this.chkAddScripts.UseVisualStyleBackColor = true;
             // 
             // openFileDialog
             // 
@@ -465,6 +477,7 @@
             this.txtScriptsPath.Location = new System.Drawing.Point(80, 26);
             this.txtScriptsPath.Name = "txtScriptsPath";
             this.txtScriptsPath.ReadOnly = true;
+            this.txtScriptsPath.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.txtScriptsPath.Size = new System.Drawing.Size(694, 22);
             this.txtScriptsPath.TabIndex = 69;
             // 
@@ -514,6 +527,7 @@
             this.txtReleasePath.Location = new System.Drawing.Point(80, 25);
             this.txtReleasePath.Name = "txtReleasePath";
             this.txtReleasePath.ReadOnly = true;
+            this.txtReleasePath.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.txtReleasePath.Size = new System.Drawing.Size(694, 22);
             this.txtReleasePath.TabIndex = 79;
             // 
@@ -574,18 +588,6 @@
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
-            // 
-            // chkAddScripts
-            // 
-            this.chkAddScripts.AutoSize = true;
-            this.chkAddScripts.Location = new System.Drawing.Point(9, 59);
-            this.chkAddScripts.Name = "chkAddScripts";
-            this.chkAddScripts.Size = new System.Drawing.Size(221, 17);
-            this.chkAddScripts.TabIndex = 70;
-            this.chkAddScripts.Text = "Ajouter le(s) script(s) au répertoire courant";
-            this.toolTips.SetToolTip(this.chkAddScripts, "Le script, ou les scripts du dossier, sélectionné(s) seront ajoutés à la suite de" +
-        "s scripts existant.");
-            this.chkAddScripts.UseVisualStyleBackColor = true;
             // 
             // frmRevision
             // 

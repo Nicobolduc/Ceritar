@@ -182,8 +182,12 @@ namespace Ceritar.Logirack_CVS
                     structSRe.strCeritarSatelliteApp_Name = mcGrdSatellites[intRowIndex, mintGrdSat_CSA_Name_col];
                     structSRe.blnExeIsFolder = Convert.ToBoolean(mcGrdSatellites[intRowIndex, mintGrdSat_CSA_ExeIsFolder_col]);
                     structSRe.strExportFolderName = mcGrdSatellites[intRowIndex, mintGrdSat_CSA_ExportFolderName_col];
-                    structSRe.intSatRevision_NRI = Int32.Parse(mcGrdSatellites[intRowIndex, mintGrdSat_SRe_NRI_col]);
 
+                    if (!mcGrdSatellites.bln_CellIsEmpty(intRowIndex, mintGrdSat_SRe_NRI_col))
+                    {
+                        structSRe.intSatRevision_NRI = Int32.Parse(mcGrdSatellites[intRowIndex, mintGrdSat_SRe_NRI_col]);
+                    }
+                    
                     lstSatelliteApps.Add(structSRe);
                 }
             }
@@ -349,6 +353,7 @@ namespace Ceritar.Logirack_CVS
                 else
                 {
                     folderBrowserDialog.RootFolder = Environment.SpecialFolder.Desktop;
+                    folderBrowserDialog.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                 }
 
                 dialogResult = folderBrowserDialog.ShowDialog();
@@ -612,23 +617,11 @@ namespace Ceritar.Logirack_CVS
 
         private void formController_SaveData(SaveDataEventArgs eventArgs)
         {
-            bool blnValidReturn = false;
+            Cursor.Current = Cursors.WaitCursor;
 
-           /* if (formController.FormMode != sclsConstants.DML_Mode.DELETE_MODE || true)
-            {
-                blnValidReturn = mcCtrRevision.blnBuildRevisionHierarchy((int)cboTemplates.SelectedValue);
-            }
-            else
-            {*/
-                blnValidReturn = true;
-            //}
-            
-            if (blnValidReturn)
-            {
-                mcActionResults = mcCtrRevision.Save();
+            mcActionResults = mcCtrRevision.Save();
 
-                if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE) formController.Item_NRI = mcActionResults.GetNewItem_NRI;
-            }
+            if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE) formController.Item_NRI = mcActionResults.GetNewItem_NRI;
 
             if (!mcActionResults.IsValid)
             {
@@ -640,6 +633,8 @@ namespace Ceritar.Logirack_CVS
             }
 
             eventArgs.SaveSuccessful = mcActionResults.IsValid;
+
+            Cursor.Current = Cursors.Default;
         }
 
         private void grdRevModifs_DoubleClick(object sender, EventArgs e)
@@ -755,6 +750,7 @@ namespace Ceritar.Logirack_CVS
                     btnSelectVariousFilePath.Enabled = false;
                     btnSelectVariousFolderPath.Enabled = false;
                     btnShowRootFolder.Enabled = false;
+                    btnExportRevision.Enabled = false;
 
                     break;
 
@@ -765,6 +761,7 @@ namespace Ceritar.Logirack_CVS
                     btnSelectVariousFilePath.Enabled = true;
                     btnSelectVariousFolderPath.Enabled = true;
                     btnShowRootFolder.Enabled = true;
+                    btnExportRevision.Enabled = true;
 
                     break;
             }

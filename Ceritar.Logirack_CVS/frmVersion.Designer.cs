@@ -62,6 +62,7 @@
             this.btnSelectVariousFilePath = new System.Windows.Forms.Button();
             this.btnSelectVariousFolderPath = new System.Windows.Forms.Button();
             this.btnShowRootFolder = new System.Windows.Forms.Button();
+            this.btnShowDB_UpgradeScripts = new System.Windows.Forms.Button();
             this.tabRevision = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.btnRefresh = new Ceritar.TT3LightDLL.Controls.ctlRefresh();
@@ -89,7 +90,6 @@
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.label7 = new System.Windows.Forms.Label();
             this.tmrGenerateBlink = new System.Windows.Forms.Timer(this.components);
-            this.btnShowDB_UpgradeScripts = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.tabRevision.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -281,8 +281,8 @@
             // btnGenerate
             // 
             this.btnGenerate.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnGenerate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGenerate.BackgroundImage")));
             this.btnGenerate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnGenerate.Image = ((System.Drawing.Image)(resources.GetObject("btnGenerate.Image")));
             this.btnGenerate.Location = new System.Drawing.Point(28, 16);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(40, 40);
@@ -450,8 +450,8 @@
             // 
             // btnShowRootFolder
             // 
-            this.btnShowRootFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowRootFolder.BackgroundImage")));
             this.btnShowRootFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnShowRootFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnShowRootFolder.Image")));
             this.btnShowRootFolder.Location = new System.Drawing.Point(637, 395);
             this.btnShowRootFolder.Name = "btnShowRootFolder";
             this.btnShowRootFolder.Size = new System.Drawing.Size(40, 40);
@@ -459,6 +459,18 @@
             this.toolTip.SetToolTip(this.btnShowRootFolder, "Accéder à la racine de la version");
             this.btnShowRootFolder.UseVisualStyleBackColor = true;
             this.btnShowRootFolder.Click += new System.EventHandler(this.btnShowRootFolder_Click);
+            // 
+            // btnShowDB_UpgradeScripts
+            // 
+            this.btnShowDB_UpgradeScripts.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowDB_UpgradeScripts.BackgroundImage")));
+            this.btnShowDB_UpgradeScripts.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnShowDB_UpgradeScripts.Location = new System.Drawing.Point(591, 395);
+            this.btnShowDB_UpgradeScripts.Name = "btnShowDB_UpgradeScripts";
+            this.btnShowDB_UpgradeScripts.Size = new System.Drawing.Size(40, 40);
+            this.btnShowDB_UpgradeScripts.TabIndex = 84;
+            this.toolTip.SetToolTip(this.btnShowDB_UpgradeScripts, "Accéder à DB_UpgradeScripts");
+            this.btnShowDB_UpgradeScripts.UseVisualStyleBackColor = true;
+            this.btnShowDB_UpgradeScripts.Click += new System.EventHandler(this.btnShowDB_UpgradeScripts_Click);
             // 
             // tabRevision
             // 
@@ -558,6 +570,7 @@
             this.txtReleasePath.Location = new System.Drawing.Point(42, 159);
             this.txtReleasePath.Name = "txtReleasePath";
             this.txtReleasePath.ReadOnly = true;
+            this.txtReleasePath.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.txtReleasePath.Size = new System.Drawing.Size(699, 22);
             this.txtReleasePath.TabIndex = 72;
             // 
@@ -567,6 +580,7 @@
             this.txtTTAppPath.Location = new System.Drawing.Point(42, 114);
             this.txtTTAppPath.Name = "txtTTAppPath";
             this.txtTTAppPath.ReadOnly = true;
+            this.txtTTAppPath.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.txtTTAppPath.Size = new System.Drawing.Size(699, 22);
             this.txtTTAppPath.TabIndex = 71;
             // 
@@ -576,6 +590,7 @@
             this.txtWordAppChangePath.Location = new System.Drawing.Point(42, 68);
             this.txtWordAppChangePath.Name = "txtWordAppChangePath";
             this.txtWordAppChangePath.ReadOnly = true;
+            this.txtWordAppChangePath.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.txtWordAppChangePath.Size = new System.Drawing.Size(699, 22);
             this.txtWordAppChangePath.TabIndex = 70;
             // 
@@ -585,6 +600,7 @@
             this.txtExcelAppChangePath.Location = new System.Drawing.Point(42, 22);
             this.txtExcelAppChangePath.Name = "txtExcelAppChangePath";
             this.txtExcelAppChangePath.ReadOnly = true;
+            this.txtExcelAppChangePath.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.txtExcelAppChangePath.Size = new System.Drawing.Size(699, 22);
             this.txtExcelAppChangePath.TabIndex = 69;
             // 
@@ -770,18 +786,6 @@
             // 
             this.tmrGenerateBlink.Interval = 1000;
             this.tmrGenerateBlink.Tick += new System.EventHandler(this.tmrGenerateBlink_Tick);
-            // 
-            // btnShowDB_UpgradeScripts
-            // 
-            this.btnShowDB_UpgradeScripts.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowDB_UpgradeScripts.BackgroundImage")));
-            this.btnShowDB_UpgradeScripts.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowDB_UpgradeScripts.Location = new System.Drawing.Point(591, 395);
-            this.btnShowDB_UpgradeScripts.Name = "btnShowDB_UpgradeScripts";
-            this.btnShowDB_UpgradeScripts.Size = new System.Drawing.Size(40, 40);
-            this.btnShowDB_UpgradeScripts.TabIndex = 84;
-            this.toolTip.SetToolTip(this.btnShowDB_UpgradeScripts, "Accéder à DB_UpgradeScripts");
-            this.btnShowDB_UpgradeScripts.UseVisualStyleBackColor = true;
-            this.btnShowDB_UpgradeScripts.Click += new System.EventHandler(this.btnShowDB_UpgradeScripts_Click);
             // 
             // frmVersion
             // 

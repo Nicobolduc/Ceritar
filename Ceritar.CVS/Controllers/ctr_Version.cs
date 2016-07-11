@@ -319,7 +319,7 @@ namespace Ceritar.CVS.Controllers
                             }
 
                             //Ajout des documents divers
-                            if (!Directory.Exists(currentFolderInfos.FullName)) currentFolderInfos.Create();
+                            if ((!string.IsNullOrEmpty(mcView.GetLocation_VariousFile()) || !string.IsNullOrEmpty(mcView.GetLocation_VariousFolder())) && !Directory.Exists(currentFolderInfos.FullName)) currentFolderInfos.Create();
 
                             if (!string.IsNullOrEmpty(mcView.GetLocation_VariousFile()))
                             {

@@ -1130,7 +1130,7 @@
         gg==
 </value>
   </data>
-  <data name="btnShowRootFolder.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="btnShowRootFolder.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
         YQUAAAusSURBVFhHrZZ5VFNnGoeviKNtFZdaT1u72Tqt1Wqttupppx3rqW21WiutgisqFZWlSBBQQGWT
