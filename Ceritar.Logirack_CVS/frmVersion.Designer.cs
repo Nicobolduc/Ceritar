@@ -735,6 +735,7 @@
             this.grdClients.Tag = "15";
             this.grdClients.BeforeRowColChange += new C1.Win.C1FlexGrid.RangeEventHandler(this.grdClients_BeforeRowColChange);
             this.grdClients.AfterRowColChange += new C1.Win.C1FlexGrid.RangeEventHandler(this.grdClients_AfterRowColChange);
+            this.grdClients.Click += new System.EventHandler(this.grdClients_Click);
             this.grdClients.DoubleClick += new System.EventHandler(this.grdClients_DoubleClick);
             this.grdClients.MouseMove += new System.Windows.Forms.MouseEventHandler(this.grdClients_MouseMove);
             // 

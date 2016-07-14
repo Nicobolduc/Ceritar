@@ -66,16 +66,18 @@ namespace Ceritar.Logirack_CVS
         public clsC1FlexGridWrapper mcGrdRevisions;
         private Ceritar.CVS.clsActionResults mcActionResults;
 
+        //Messages
+        private int mintMSG_ChangesWillBeLostOnRowChange = 27;
+        private int mintMSG_ApplicationNotExistsInSystem = 38;
+
         //Working variables
         private ushort mintVersion_TS;
         private bool mblnGrdSatellitesChangeMade;
         private string mstrExternalApplicationName;
         private string mstrVariousFileLocation;
         private string mstrVariousFolderLocation;
+        private int mintGrdClient_SelectedRow = 1;
         
-        //Messages
-        private int mintMSG_ChangesWillBeLostOnRowChange = 27;
-        private int mintMSG_ApplicationNotExistsInSystem = 38;
 
         public frmVersion()
         {
@@ -735,6 +737,10 @@ namespace Ceritar.Logirack_CVS
             { }
             else
             {
+                formController.FormIsLoading = false;
+
+                grdClients.Row = mintGrdClient_SelectedRow;
+
                 blnValidReturn = true;
             }
       
@@ -840,6 +846,8 @@ namespace Ceritar.Logirack_CVS
         private void formController_SaveData(SaveDataEventArgs eventArgs)
         {
             Cursor.Current = Cursors.WaitCursor;
+
+            mintGrdClient_SelectedRow = grdClients.Row;
 
             mcActionResults = mcCtrVersion.Save();
 
@@ -1135,9 +1143,11 @@ namespace Ceritar.Logirack_CVS
 
                     break;
 
-                case sclsConstants.DML_Mode.DELETE_MODE:
+                case sclsConstants.DML_Mode.DELETE_MODE: case sclsConstants.DML_Mode.CONSULT_MODE:
 
                     btnGrdRevDel.Enabled = true;
+                    btnShowRootFolder.Enabled = true;
+                    btnShowDB_UpgradeScripts.Enabled = true;
 
                     break;
             }
@@ -1148,6 +1158,8 @@ namespace Ceritar.Logirack_CVS
             if (!formController.ChangeMade)
             {
                 Cursor.Current = Cursors.WaitCursor;
+
+                mintGrdClient_SelectedRow = grdClients.Row;
 
                 mcCtrVersion.blnUpdateVersionHierarchy();
 
@@ -1193,6 +1205,7 @@ namespace Ceritar.Logirack_CVS
 
                     if (mcActionResults.SuccessMessage_NRI > 0) clsApp.GetAppController.ShowMessage(mcActionResults.SuccessMessage_NRI);
                 }
+                grdClients.Row = mintGrdClient_SelectedRow;
 
                 Cursor.Current = Cursors.Default;
             }
@@ -1348,16 +1361,13 @@ namespace Ceritar.Logirack_CVS
 
         private void grdClients_AfterRowColChange(object sender, RangeEventArgs e)
         {
-            if (!formController.FormIsLoading)
+            if (!formController.FormIsLoading && mcGrdClients.bln_RowEditIsValid() & e.OldRange.r1 != e.NewRange.r2 & grdClients.Rows.Count > 1)
             {
-                if (mcGrdClients.bln_RowEditIsValid() & e.OldRange.r1 != e.NewRange.r2)
-                {
-                    pfblnGrdSatelliteApps_Load();
-                }
-                else
-                {
-                    //Do nothing
-                }
+                pfblnGrdSatelliteApps_Load();
+            }
+            else
+            {
+                //Do nothing
             }
 
             pfblnEnableDisable_btnGrdClientsDelete(e.NewRange.r1);
@@ -1546,9 +1556,17 @@ namespace Ceritar.Logirack_CVS
             {
                 System.Diagnostics.Process.Start(@strRootFolder);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+                clsApp.GetAppController.ShowMessage((int)sclsConstants.Validation_Message.INVALID_PATH, MessageBoxButtons.OK, strRootFolder);
+            }
+        }
+
+        private void grdClients_Click(object sender, EventArgs e)
+        {
+            if (!formController.FormIsLoading)
+            {
+                mintGrdClient_SelectedRow = grdClients.Row;
             }
         }
 

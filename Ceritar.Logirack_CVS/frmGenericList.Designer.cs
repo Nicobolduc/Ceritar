@@ -54,7 +54,7 @@
             this.grdList.Rows.DefaultSize = 18;
             this.grdList.Size = new System.Drawing.Size(525, 499);
             this.grdList.StyleInfo = resources.GetString("grdList.StyleInfo");
-            this.grdList.TabIndex = 9;
+            this.grdList.TabIndex = 0;
             this.grdList.DoubleClick += new System.EventHandler(this.grdList_DoubleClick);
             // 
             // btnAdd
@@ -65,7 +65,7 @@
             this.btnAdd.Location = new System.Drawing.Point(536, 110);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(40, 40);
-            this.btnAdd.TabIndex = 14;
+            this.btnAdd.TabIndex = 3;
             this.toolTip.SetToolTip(this.btnAdd, "Ajouter");
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
@@ -77,7 +77,7 @@
             this.btnConsult.Location = new System.Drawing.Point(536, 64);
             this.btnConsult.Name = "btnConsult";
             this.btnConsult.Size = new System.Drawing.Size(40, 40);
-            this.btnConsult.TabIndex = 15;
+            this.btnConsult.TabIndex = 2;
             this.toolTip.SetToolTip(this.btnConsult, "Consulter");
             this.btnConsult.UseVisualStyleBackColor = true;
             this.btnConsult.Click += new System.EventHandler(this.btnConsult_Click);
@@ -89,7 +89,7 @@
             this.btnDelete.Location = new System.Drawing.Point(536, 202);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(40, 40);
-            this.btnDelete.TabIndex = 16;
+            this.btnDelete.TabIndex = 5;
             this.toolTip.SetToolTip(this.btnDelete, "Supprimer");
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
@@ -101,7 +101,7 @@
             this.btnUpdate.Location = new System.Drawing.Point(536, 156);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(40, 40);
-            this.btnUpdate.TabIndex = 17;
+            this.btnUpdate.TabIndex = 4;
             this.toolTip.SetToolTip(this.btnUpdate, "Modifier");
             this.btnUpdate.UseVisualStyleBackColor = true;
             this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
@@ -111,7 +111,7 @@
             this.btnRefresh.Location = new System.Drawing.Point(536, 12);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(35, 35);
-            this.btnRefresh.TabIndex = 18;
+            this.btnRefresh.TabIndex = 1;
             // 
             // formController
             // 
@@ -125,7 +125,7 @@
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = true;
             this.formController.Size = new System.Drawing.Size(576, 33);
-            this.formController.TabIndex = 10;
+            this.formController.TabIndex = 6;
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
             // 
             // toolTip

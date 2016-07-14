@@ -726,7 +726,7 @@ namespace Ceritar.CVS.Controllers
 
             try
             {
-                answer = System.Windows.Forms.MessageBox.Show("Voulez-vous supprimer le répertoire à l'emplacement suivant : " + vstrRevisionFolderRoot, "Attention", System.Windows.Forms.MessageBoxButtons.YesNo);
+                answer = System.Windows.Forms.MessageBox.Show("Voulez-vous supprimer le répertoire à l'emplacement suivant : " + vstrRevisionFolderRoot, "Attention", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2);
                 
                 if (answer == System.Windows.Forms.DialogResult.Yes)
                 {

@@ -25,6 +25,7 @@ namespace Ceritar.CVS.Controllers
 
         //Messages
         private const int mintMSG_BuildSuccess = 37;
+        private const int mintMSG_GenerationCanceled = 39;
 
         //Working variables
         private bool mblnUpdateSelectedClientOnly = false;
@@ -227,7 +228,7 @@ namespace Ceritar.CVS.Controllers
 
                             if (mcView.GetDML_Action() == sclsConstants.DML_Mode.DELETE_MODE) //On supprime toute la hierarchie existante et on sort
                             {
-                                //blnValidReturn = pfblnDeleteVersionHierarchy(strVersionFolderRoot);
+                                blnValidReturn = pfblnDeleteVersionHierarchy(strVersionFolderRoot);
 
                                 return blnValidReturn;
                             }
@@ -400,6 +401,7 @@ namespace Ceritar.CVS.Controllers
             bool blnValidReturn = false;
             ushort intPreviousActiveVersionInProd;
             ushort intCurrentFolder_VersionNo;
+            string strActiveInstallation_Revision_Path = string.Empty;
             string[] lstVersionsFolders;
             List<mod_CAV_ClientAppVersion> lstCAV = mcModVersion.LstClientsUsing;
 
@@ -425,9 +427,18 @@ namespace Ceritar.CVS.Controllers
                             UInt16.TryParse(mcView.GetLatestVersionNo(), out intPreviousActiveVersionInProd);
                         }
 
-                        if (intPreviousActiveVersionInProd <= 0) blnValidReturn = false;
+                        if (intPreviousActiveVersionInProd <= 0)
+                        {
+                            mcActionResult.SetInvalid(mintMSG_GenerationCanceled, clsActionResults.BaseErrorCode.ERROR_SAVE);
+                            blnValidReturn = false;
+                        }
 
                         lstVersionsFolders = Directory.GetDirectories(Path.Combine(sclsAppConfigs.GetRoot_DB_UPGRADE_SCRIPTS, mcView.GetCeritarApplication_Name()));
+
+                        strActiveInstallation_Revision_Path = Path.Combine(vstrDestinationFolderPath, cCAV.CeritarClient.CompanyName);
+
+                        if (Directory.Exists(strActiveInstallation_Revision_Path)) { Directory.Delete(strActiveInstallation_Revision_Path, true); }
+
 
                         foreach (string strCurrentVersionFolderToCopy_Path in lstVersionsFolders)
                         {
@@ -435,10 +446,12 @@ namespace Ceritar.CVS.Controllers
 
                             if (blnValidReturn && intCurrentFolder_VersionNo > intPreviousActiveVersionInProd && intCurrentFolder_VersionNo <= mcView.GetVersionNo())
                             {
+                                strActiveInstallation_Revision_Path = Path.Combine(vstrDestinationFolderPath, 
+                                                                                   cCAV.CeritarClient.CompanyName, 
+                                                                                   sclsAppConfigs.GetVersionNumberPrefix + intCurrentFolder_VersionNo.ToString());
+
                                 clsApp.GetAppController.blnCopyFolderContent(strCurrentVersionFolderToCopy_Path,
-                                                                             Path.Combine(vstrDestinationFolderPath,
-                                                                                          cCAV.CeritarClient.CompanyName,
-                                                                                          sclsAppConfigs.GetVersionNumberPrefix + intCurrentFolder_VersionNo.ToString()),
+                                                                             strActiveInstallation_Revision_Path,
                                                                              true,
                                                                              true);
 
@@ -583,32 +596,16 @@ namespace Ceritar.CVS.Controllers
         {
             bool blnValidReturn = false;
             List<mod_CSV_ClientSatVersion> lstSatellites;
+            System.Windows.Forms.DialogResult answer;
 
             try
             {
-                System.Diagnostics.Process process = new System.Diagnostics.Process();
-                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                answer = System.Windows.Forms.MessageBox.Show("Voulez-vous supprimer le répertoire à l'emplacement suivant : " + vstrVersionFolderRoot, "Attention", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2);
 
-                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                startInfo.FileName = "cmd.exe";
-                startInfo.Arguments = @"/C RMDIR """ + vstrVersionFolderRoot + @""" /S /Q";
-
-                process.StartInfo = startInfo;
-                process.Start();
-                process.WaitForExit();
-
-                lstSatellites = mcModVersion.LstClientSatelliteApps;
-
-                foreach (mod_CSV_ClientSatVersion cCSV in lstSatellites)
+                if (answer == System.Windows.Forms.DialogResult.Yes)
                 {
-                    vstrVersionFolderRoot = Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES,
-                                                         cCSV.CeritarSatelliteApp.Name,
-                                                         cCSV.CeritarClient.CompanyName,
-                                                         sclsAppConfigs.GetVersionNumberPrefix + mcModVersion.VersionNo.ToString()
-                                                       );
-
-                    process = new System.Diagnostics.Process();
-                    startInfo = new System.Diagnostics.ProcessStartInfo();
+                    System.Diagnostics.Process process = new System.Diagnostics.Process();
+                    System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
 
                     startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                     startInfo.FileName = "cmd.exe";
@@ -617,7 +614,34 @@ namespace Ceritar.CVS.Controllers
                     process.StartInfo = startInfo;
                     process.Start();
                     process.WaitForExit();
-                }
+
+                    lstSatellites = mcModVersion.LstClientSatelliteApps;
+
+                    foreach (mod_CSV_ClientSatVersion cCSV in lstSatellites)
+                    {
+                        vstrVersionFolderRoot = Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES,
+                                                             cCSV.CeritarSatelliteApp.Name,
+                                                             cCSV.CeritarClient.CompanyName,
+                                                             sclsAppConfigs.GetVersionNumberPrefix + mcModVersion.VersionNo.ToString()
+                                                           );
+
+                        answer = System.Windows.Forms.MessageBox.Show("Voulez-vous supprimer le répertoire à l'emplacement suivant : " + vstrVersionFolderRoot, "Attention", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning ,System.Windows.Forms.MessageBoxDefaultButton.Button2);
+
+                        if (answer == System.Windows.Forms.DialogResult.Yes)
+                        {
+                            process = new System.Diagnostics.Process();
+                            startInfo = new System.Diagnostics.ProcessStartInfo();
+
+                            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                            startInfo.FileName = "cmd.exe";
+                            startInfo.Arguments = @"/C RMDIR """ + vstrVersionFolderRoot + @""" /S /Q";
+
+                            process.StartInfo = startInfo;
+                            process.Start();
+                            process.WaitForExit();
+                        }
+                    }
+                }        
 
                 blnValidReturn = true;
             }
