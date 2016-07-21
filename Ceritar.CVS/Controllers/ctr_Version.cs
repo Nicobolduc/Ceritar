@@ -464,15 +464,15 @@ namespace Ceritar.CVS.Controllers
                                     string[] lstSpecificScripts = Directory.GetFiles(Directory.GetDirectories(strCurrentVersionFolderToCopy_Path, cCAV.CeritarClient.CompanyName + "*", SearchOption.TopDirectoryOnly)[0]);
                                     string strNewScriptName = string.Empty;
                                     int intNewScriptNumber = 0;
+                                    List<string> lstScripts = Directory.GetFiles(strCurrentVersionFolderToCopy_Path).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();//.OrderBy(f => f).ToList<string>();
 
                                     for (int intIndex = 0; intIndex < lstSpecificScripts.Length; intIndex++)
                                     {
-                                        List<string> lstScripts = Directory.GetFiles(strCurrentVersionFolderToCopy_Path).OrderBy(f => f).ToList<string>();
-
                                         strNewScriptName = Path.GetFileName(lstSpecificScripts[intIndex]);
                                         strNewScriptName = strNewScriptName.Substring(strNewScriptName.IndexOf("_") + 1);
 
-                                        intNewScriptNumber = (intNewScriptNumber == 0 ? Int32.Parse(new String(Path.GetFileName(lstScripts[lstScripts.Count - 1]).TakeWhile(Char.IsDigit).ToArray())) + 1 : intNewScriptNumber + 1);
+                                        //Int32.Parse(new String(Path.GetFileName(lstScripts[lstScripts.Count - 1]).TakeWhile(Char.IsDigit).ToArray()))
+                                        intNewScriptNumber = (intNewScriptNumber == 0 ? lstScripts.Count : intNewScriptNumber + 1);
                                         
                                         strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
 

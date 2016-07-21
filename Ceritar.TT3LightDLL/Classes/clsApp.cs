@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace Ceritar.TT3LightDLL.Classes
 {
@@ -340,7 +341,17 @@ namespace Ceritar.TT3LightDLL.Classes
 
 #endregion
 
-
     }
 
+
+    public sealed class NaturalStringComparer : IComparer<String>
+    {
+        [DllImport("shlwapi.dll", CharSet = CharSet.Unicode)]
+        private static extern int StrCmpLogicalW(string psz1, string psz2);
+
+        int IComparer<String>.Compare(String a, String b)
+        {
+            return StrCmpLogicalW(a, b);
+        }
+    }
 }

@@ -382,6 +382,8 @@ namespace Ceritar.CVS.Controllers
                         case (int)ctr_Template.FolderType.Scripts:
 
                             bool blnScriptsChanged = false;
+                            int intNextScriptNo = 0;
+                            string strNewDestinationFileName = string.Empty;
 
                             if ((File.Exists(mcView.GetLocation_Scripts()) || Directory.Exists(mcView.GetLocation_Scripts())))
                             {
@@ -416,9 +418,13 @@ namespace Ceritar.CVS.Controllers
 
                                     currentFolderInfos.Create();
 
-                                    File.Copy(mcView.GetLocation_Scripts(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Scripts())), true);
+                                    strNewDestinationFileName = pfstrGetNewFileNameWithNumber(currentFolderInfos.FullName, mcView.GetLocation_Scripts(), ref intNextScriptNo);
 
-                                    mcModRevision.Path_Scripts = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Scripts()));
+                                    strNewDestinationFileName = Path.Combine(currentFolderInfos.FullName, strNewDestinationFileName);
+
+                                    File.Copy(mcView.GetLocation_Scripts(), strNewDestinationFileName, true);
+
+                                    mcModRevision.Path_Scripts = strNewDestinationFileName;
                                     
                                     blnScriptsChanged = true;
                                 }
@@ -447,38 +453,39 @@ namespace Ceritar.CVS.Controllers
                                 {
                                     clsApp.GetAppController.setAttributesToNormal(new DirectoryInfo(mcModRevision.Path_Scripts));
 
-                                    lstTempScripts = Directory.GetFiles(mcModRevision.Path_Scripts, "*.*", SearchOption.TopDirectoryOnly).OrderBy(f => f).ToList<string>();
+                                    lstTempScripts = Directory.GetFiles(mcModRevision.Path_Scripts, "*.*", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList(); // OrderBy(f => f).ToList<string>();
                                 }
                                 else
                                 {
-                                    lstTempScripts = Directory.GetFiles(new FileInfo(mcModRevision.Path_Scripts).Directory.FullName, "*.*", SearchOption.TopDirectoryOnly).OrderBy(f => f).ToList<string>();
+                                    lstTempScripts = Directory.GetFiles(new FileInfo(mcModRevision.Path_Scripts).Directory.FullName, "*.*", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
                                 }
 
                                 lstScriptsToCopy = lstTempScripts.ToArray();
 
-                                lstExistingScripts = Directory.GetFiles(strRevAllScripts_Location).OrderBy(f => f).ToList<string>();
+                                //lstExistingScripts = Directory.GetFiles(strRevAllScripts_Location).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
 
-                                if (lstExistingScripts.Count > 0)
-                                {
-                                    intNewScriptNumber = Int32.Parse(new String(Path.GetFileName(lstExistingScripts[lstExistingScripts.Count - 1]).TakeWhile(Char.IsDigit).ToArray())) + 1;
-                                }
+                                //if (lstExistingScripts.Count > 0)
+                                //{
+                                //    intNewScriptNumber = Int32.Parse(new String(Path.GetFileName(lstExistingScripts[lstExistingScripts.Count - 1]).TakeWhile(Char.IsDigit).ToArray())) + 1;
+                                //}
 
                                 clsApp.GetAppController.setAttributesToNormal(new DirectoryInfo(strRevAllScripts_Location));
                                 
                                 foreach (string strCurrentFile in lstScriptsToCopy)
                                 {
-                                    strNewScriptName = Path.GetFileName(strCurrentFile);
+                                    //strNewScriptName = Path.GetFileName(strCurrentFile);
 
-                                    if (strNewScriptName.Contains('_') && Int32.TryParse(strNewScriptName.Substring(0, strNewScriptName.IndexOf("_")), out intPlaceHolder))
-                                    {
-                                        strNewScriptName = strNewScriptName.Substring(strNewScriptName.IndexOf("_") + 1);
-                                    }
+                                    //if (strNewScriptName.Contains('_') && Int32.TryParse(strNewScriptName.Substring(0, strNewScriptName.IndexOf("_")), out intPlaceHolder))
+                                    //{
+                                    //    strNewScriptName = strNewScriptName.Substring(strNewScriptName.IndexOf("_") + 1);
+                                    //}
 
-                                    strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
+                                    //strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
+                                    strNewScriptName = pfstrGetNewFileNameWithNumber(strRevAllScripts_Location, strCurrentFile, ref intNewScriptNumber);
 
                                     File.Copy(strCurrentFile, Path.Combine(strRevAllScripts_Location, strNewScriptName), true);
 
-                                    intNewScriptNumber++;
+                                    //intNewScriptNumber++;
                                 }
                             }
 
@@ -557,31 +564,120 @@ namespace Ceritar.CVS.Controllers
             return blnValidReturn;
         }
 
+        /// <summary>
+        /// Retourne le nom du fichier avec son numéro préfixé. Ex.: DB_Exemple devient 01_DB_Exemple.
+        /// </summary>
+        /// <param name="vstrSourceScriptPath">Le chemin vers le script à analyser.</param>
+        /// <param name="rintNextScriptNumber">Le prochain numéro de script à utiliser.</param>
+        /// <returns>Le nom du nouveau fichier avec son numéro.</returns>
+        /// <remarks>La fonction considère que les scripts traités ont été triés par nom au préalable.</remarks>
+        private string pfstrGetNewFileNameWithNumber(string vstrDestinationFolderPath,string vstrSourceScriptPath, ref int rintNextScriptNumber)
+        {
+            string strNewScriptName = string.Empty;
+            int intNewScriptNumber = 0;
+            int intFirstUnderscoreIndex = 0;
+            int intLastDigitCharIndex = 0;
+            int intIntendedScriptNumber = 0;
+            List<string> lstExistingScripts;
+
+            try
+            {
+                if (rintNextScriptNumber <= 1)
+                {
+                    //On regarde le prochain numéro à utiliser dans le dossier de destination
+                    lstExistingScripts = Directory.GetFiles(vstrDestinationFolderPath).ToList();//.OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
+
+                    if (lstExistingScripts.Count > 0)
+                    {
+                        //Int32.TryParse(new String(Path.GetFileName(lstExistingScripts[lstExistingScripts.Count - 1]).TakeWhile(Char.IsDigit).ToArray()), out intNewScriptNumber);
+                        intNewScriptNumber = lstExistingScripts.Count;
+                    }
+
+                    intNewScriptNumber++;
+                    rintNextScriptNumber = intNewScriptNumber;
+                }
+
+                strNewScriptName = Path.GetFileName(vstrSourceScriptPath);
+
+                intFirstUnderscoreIndex = strNewScriptName.IndexOf("_");
+                intLastDigitCharIndex = new String(strNewScriptName.TakeWhile(Char.IsDigit).ToArray()).Length;
+
+                if (intFirstUnderscoreIndex < 4 && intFirstUnderscoreIndex > -1) //On ne peut jamais avoir un script # en haut de 999
+                {
+                    Int32.TryParse(strNewScriptName.Substring(0, intFirstUnderscoreIndex), out intIntendedScriptNumber);
+                    strNewScriptName = strNewScriptName.Substring(intFirstUnderscoreIndex + 1);      
+                }
+                else if (intLastDigitCharIndex < 1000) //Les premiers caractères pourraient être le numéro de script avec oubli d'ajouter un _
+                {
+                    Int32.TryParse(strNewScriptName.Substring(0, intLastDigitCharIndex), out intIntendedScriptNumber);
+                    strNewScriptName = strNewScriptName.Substring(intLastDigitCharIndex);
+                }
+                else
+                {
+                    //Do nothing, le script ne contient pas de numéro au début
+                }
+
+                if (rintNextScriptNumber < intIntendedScriptNumber)
+                {
+                    intNewScriptNumber = rintNextScriptNumber;
+                }
+                else if (rintNextScriptNumber > intIntendedScriptNumber)
+                {
+                    intNewScriptNumber = rintNextScriptNumber;
+                }
+                else
+                {
+                    //Do nothing, ils sont égaux
+                }
+
+                strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
+            }
+            catch (Exception ex)
+            {
+                mcActionResult.SetInvalid(sclsConstants.Error_Message.ERROR_UNHANDLED, clsActionResults.BaseErrorCode.UNHANDLED_ERROR);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                rintNextScriptNumber = intNewScriptNumber + 1;
+            }
+
+            return strNewScriptName;
+        }
+
         private string pfstrGetRevisionFolderName()
         {
             string strFolderName = string.Empty;
             string strSatelliteExeLocation = string.Empty;
             string strRevisionFolderName_InfosSupp = string.Empty;
 
-            strFolderName = sclsAppConfigs.GetRevisionNumberPrefix + mcView.GetRevisionNo().ToString();
-
-            strRevisionFolderName_InfosSupp = (string.IsNullOrEmpty(mcModRevision.Path_Release) || mcModRevision.ExeIsExternalReport ? string.Empty : " Exe");
-            strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (mcModRevision.ExeIsExternalReport || mcView.GetExeWithExternalReport() ? (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " RPT" : string.Empty);
-            strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (string.IsNullOrEmpty(mcModRevision.Path_Scripts) ? string.Empty : (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " SCRIPTS");
-
-            for (int intIndex = 0; intIndex < mcModRevision.LstSatelliteRevisions.Count; intIndex++)
+            try
             {
-                if (!string.IsNullOrEmpty(mcModRevision.LstSatelliteRevisions[intIndex].Location_Exe))
+                strFolderName = sclsAppConfigs.GetRevisionNumberPrefix + mcView.GetRevisionNo().ToString();
+
+                strRevisionFolderName_InfosSupp = (string.IsNullOrEmpty(mcModRevision.Path_Release) || mcModRevision.ExeIsExternalReport ? string.Empty : " Exe");
+                strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (mcModRevision.ExeIsExternalReport || mcView.GetExeWithExternalReport() ? (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " RPT" : string.Empty);
+                strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (string.IsNullOrEmpty(mcModRevision.Path_Scripts) ? string.Empty : (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " SCRIPTS");
+
+                for (int intIndex = 0; intIndex < mcModRevision.LstSatelliteRevisions.Count; intIndex++)
                 {
-                    strSatelliteExeLocation = mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExportFolderName;
+                    if (!string.IsNullOrEmpty(mcModRevision.LstSatelliteRevisions[intIndex].Location_Exe))
+                    {
+                        strSatelliteExeLocation = mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExportFolderName;
 
-                    strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (string.IsNullOrEmpty(strSatelliteExeLocation) ? string.Empty : (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " " + strSatelliteExeLocation);
+                        strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (string.IsNullOrEmpty(strSatelliteExeLocation) ? string.Empty : (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " " + strSatelliteExeLocation);
 
-                    strSatelliteExeLocation = string.Empty;
+                        strSatelliteExeLocation = string.Empty;
+                    }
                 }
-            }
 
-            strFolderName = strFolderName + strRevisionFolderName_InfosSupp;
+                strFolderName = strFolderName + strRevisionFolderName_InfosSupp;
+            }
+            catch (Exception ex)
+            {
+                mcActionResult.SetInvalid(sclsConstants.Error_Message.ERROR_UNHANDLED, clsActionResults.BaseErrorCode.UNHANDLED_ERROR);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }      
 
             return strFolderName;
         }
