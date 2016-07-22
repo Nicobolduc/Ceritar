@@ -384,6 +384,7 @@ namespace Ceritar.CVS.Controllers
 
                             bool blnScriptsChanged = false;
                             int intNextScriptNo = 0;
+                            int intNbScriptsAlreadyPresent = 0;
                             string strNewDestinationFileName = string.Empty;
                             List<string> lstScripts;
 
@@ -397,9 +398,18 @@ namespace Ceritar.CVS.Controllers
                                         {
                                             clsApp.GetAppController.setAttributesToNormal(new DirectoryInfo(currentFolderInfos.FullName));
 
+                                            if (mcModRevision.DML_Action != sclsConstants.DML_Mode.INSERT_MODE)
+                                            {
+                                                blnValidReturn = pfblnDeleteFrom_Rev_AllScripts(currentFolderInfos.FullName);
+                                            }
+
                                             Directory.Delete(currentFolderInfos.FullName, true);
                                         }
-                                        
+                                        else if (Directory.Exists(currentFolderInfos.FullName))
+                                        {
+                                            intNbScriptsAlreadyPresent = Directory.GetFiles(currentFolderInfos.FullName).Length;
+                                        }
+
                                         currentFolderInfos.Create();
 
                                         //clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Scripts(), currentFolderInfos.FullName, true, true);
@@ -425,7 +435,16 @@ namespace Ceritar.CVS.Controllers
                                     {
                                         clsApp.GetAppController.setAttributesToNormal(new DirectoryInfo(currentFolderInfos.FullName));
 
+                                        if (mcModRevision.DML_Action != sclsConstants.DML_Mode.INSERT_MODE)
+                                        {
+                                            blnValidReturn = pfblnDeleteFrom_Rev_AllScripts(currentFolderInfos.FullName);
+                                        }
+
                                         Directory.Delete(currentFolderInfos.FullName, true);
+                                    }
+                                    else if (Directory.Exists(currentFolderInfos.FullName))
+                                    {
+                                        intNbScriptsAlreadyPresent = Directory.GetFiles(currentFolderInfos.FullName).Length;
                                     }
 
                                     currentFolderInfos.Create();
@@ -448,8 +467,7 @@ namespace Ceritar.CVS.Controllers
                             }
 
                             //Ajout dans Rev_AllScripts
-                            List<string> lstTempScripts;
-                            string[] lstScriptsToCopy;
+                            List<string> lstScriptsToCopy;
                             string strNewScriptName = string.Empty;
                             int intNewScriptNumber = 0;
 
@@ -457,28 +475,29 @@ namespace Ceritar.CVS.Controllers
                             {
                                 strRevAllScripts_Location = Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES, mcView.GetCeritarApplication_Name(), sclsAppConfigs.GetVersionNumberPrefix +  mcModRevision.Version.VersionNo.ToString(), sclsAppConfigs.GetRevisionAllScriptFolderName);
 
-                                if (!Directory.Exists(strRevAllScripts_Location)) Directory.CreateDirectory(strRevAllScripts_Location);
+                                if (!Directory.Exists(strRevAllScripts_Location))
+                                {
+                                    Directory.CreateDirectory(strRevAllScripts_Location);
+                                }
 
                                 if ((File.GetAttributes(mcModRevision.Path_Scripts) & FileAttributes.Directory) == FileAttributes.Directory)
                                 {
                                     clsApp.GetAppController.setAttributesToNormal(new DirectoryInfo(mcModRevision.Path_Scripts));
 
-                                    lstTempScripts = Directory.GetFiles(mcModRevision.Path_Scripts, "*.*", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList(); // OrderBy(f => f).ToList<string>();
+                                    lstScriptsToCopy = Directory.GetFiles(mcModRevision.Path_Scripts, "*.*", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList(); // OrderBy(f => f).ToList<string>();
                                 }
                                 else
                                 {
-                                    lstTempScripts = Directory.GetFiles(new FileInfo(mcModRevision.Path_Scripts).Directory.FullName, "*.*", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
+                                    lstScriptsToCopy = Directory.GetFiles(new FileInfo(mcModRevision.Path_Scripts).Directory.FullName, "*.*", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
                                 }
 
-                                lstScriptsToCopy = lstTempScripts.ToArray();
-
                                 clsApp.GetAppController.setAttributesToNormal(new DirectoryInfo(strRevAllScripts_Location));
-                                
-                                foreach (string strCurrentFile in lstScriptsToCopy)
-                                {
-                                    strNewScriptName = pfstrGetNewFileNameWithNumber(strRevAllScripts_Location, strCurrentFile, ref intNewScriptNumber);
 
-                                    File.Copy(strCurrentFile, Path.Combine(strRevAllScripts_Location, strNewScriptName), true);
+                                for (int intIndex = intNbScriptsAlreadyPresent; intIndex < lstScriptsToCopy.Count; intIndex ++)
+                                {
+                                    strNewScriptName = pfstrGetNewFileNameWithNumber(strRevAllScripts_Location, lstScriptsToCopy[intIndex], ref intNewScriptNumber);
+
+                                    File.Copy(lstScriptsToCopy[intIndex], Path.Combine(strRevAllScripts_Location, strNewScriptName), true);
                                 }
                             }
 
@@ -804,7 +823,7 @@ namespace Ceritar.CVS.Controllers
                 
                 if (answer == System.Windows.Forms.DialogResult.Yes)
                 {
-                    blnValidReturn = pfblnDeleteFrom_Rev_AllScripts(vstrRevisionFolderRoot);
+                    blnValidReturn = pfblnDeleteFrom_Rev_AllScripts(mcView.GetLocation_Scripts());
 
                     if (blnValidReturn)
                     {
@@ -834,7 +853,7 @@ namespace Ceritar.CVS.Controllers
             return blnValidReturn;
         }
 
-        private bool pfblnDeleteFrom_Rev_AllScripts(string vstrRevisionFolderRoot)
+        private bool pfblnDeleteFrom_Rev_AllScripts(string vstrFolderWithFileToFindAndDelete)
         {
             bool blnValidReturn = false;
             int intFirstUnderscoreIndex = 0;
@@ -846,43 +865,50 @@ namespace Ceritar.CVS.Controllers
 
             try
             {
-                if ((File.GetAttributes(mcView.GetLocation_Scripts()) & FileAttributes.Directory) != FileAttributes.Directory)
+                if (!string.IsNullOrEmpty(vstrFolderWithFileToFindAndDelete))
                 {
-                    lstScripts = Directory.GetFiles(Path.GetDirectoryName(mcView.GetLocation_Scripts())).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
-                }
-                else
-                {
-                    lstScripts = Directory.GetFiles(mcView.GetLocation_Scripts()).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
-                }
-                
-
-                for (int intIndex = 0; intIndex < lstScripts.Count; intIndex++)
-                {
-                    strScriptToFindName = Path.GetFileName(lstScripts[intIndex]);
-
-                    intFirstUnderscoreIndex = strScriptToFindName.IndexOf("_");
-                    intLastDigitCharIndex = new String(strScriptToFindName.TakeWhile(Char.IsDigit).ToArray()).Length;
-
-                    if (intFirstUnderscoreIndex < 4 && intFirstUnderscoreIndex > -1) //On ne peut jamais avoir un script # en haut de 999
+                    if ((File.GetAttributes(vstrFolderWithFileToFindAndDelete) & FileAttributes.Directory) != FileAttributes.Directory)
                     {
-                        strScriptToFindName = strScriptToFindName.Substring(intFirstUnderscoreIndex + 1);
-                    }
-                    else if (intLastDigitCharIndex < 4) //Les premiers caractères pourraient être le numéro de script avec oubli d'ajouter un _
-                    {
-                        strScriptToFindName = strScriptToFindName.Substring(intLastDigitCharIndex);
+                        lstScripts = Directory.GetFiles(Path.GetDirectoryName(vstrFolderWithFileToFindAndDelete)).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
                     }
                     else
                     {
-                        //Do nothing, le script ne contient pas de numéro au début
+                        lstScripts = Directory.GetFiles(vstrFolderWithFileToFindAndDelete).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
                     }
 
-                    lstCorrespondingScriptsFounds = Directory.GetFiles(strRevAllScripts_Location, "*_" + strScriptToFindName, SearchOption.TopDirectoryOnly).ToList();//.Where(s => Regex.IsMatch(s, @"\d+(?:,\d{1,3})?")).ToList();
 
-                    if (lstCorrespondingScriptsFounds.Count > 0)
+                    for (int intIndex = 0; intIndex < lstScripts.Count; intIndex++)
                     {
-                        File.Delete(lstCorrespondingScriptsFounds[lstCorrespondingScriptsFounds.Count - 1]); //On supprime toujours la dernière version?
+                        strScriptToFindName = Path.GetFileName(lstScripts[intIndex]);
+
+                        intFirstUnderscoreIndex = strScriptToFindName.IndexOf("_");
+                        intLastDigitCharIndex = new String(strScriptToFindName.TakeWhile(Char.IsDigit).ToArray()).Length;
+
+                        if (intFirstUnderscoreIndex < 4 && intFirstUnderscoreIndex > -1) //On ne peut jamais avoir un script # en haut de 999
+                        {
+                            strScriptToFindName = strScriptToFindName.Substring(intFirstUnderscoreIndex + 1);
+                        }
+                        else if (intLastDigitCharIndex < 4) //Les premiers caractères pourraient être le numéro de script avec oubli d'ajouter un _
+                        {
+                            strScriptToFindName = strScriptToFindName.Substring(intLastDigitCharIndex);
+                        }
+                        else
+                        {
+                            //Do nothing, le script ne contient pas de numéro au début
+                        }
+
+                        lstCorrespondingScriptsFounds = Directory.GetFiles(strRevAllScripts_Location, "*_" + strScriptToFindName, SearchOption.TopDirectoryOnly).ToList();//.Where(s => Regex.IsMatch(s, @"\d+(?:,\d{1,3})?")).ToList();
+
+                        if (lstCorrespondingScriptsFounds.Count > 0)
+                        {
+                            File.Delete(lstCorrespondingScriptsFounds[lstCorrespondingScriptsFounds.Count - 1]); //On supprime toujours la dernière version?
+                        }
                     }
                 }
+                else
+                {
+                    //Do nothing, aucun script
+                }        
 
                 blnValidReturn = true;
             }
