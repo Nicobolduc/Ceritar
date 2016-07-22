@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ctlRefresh));
             this.btnRefresh = new System.Windows.Forms.Button();
             this.tmrBlink = new System.Windows.Forms.Timer(this.components);
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -36,7 +37,7 @@
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Image = global::Ceritar.TT3LightDLL.Properties.Resources.Refresh;
+            this.btnRefresh.Image = ((System.Drawing.Image)(resources.GetObject("btnRefresh.Image")));
             this.btnRefresh.Location = new System.Drawing.Point(0, 0);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(35, 35);
@@ -47,7 +48,7 @@
             // 
             // tmrBlink
             // 
-            this.tmrBlink.Interval = 1000;
+            this.tmrBlink.Interval = 800;
             this.tmrBlink.Tick += new System.EventHandler(this.tmrBlink_Tick);
             // 
             // toolTip

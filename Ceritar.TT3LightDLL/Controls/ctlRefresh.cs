@@ -54,7 +54,7 @@ namespace Ceritar.TT3LightDLL.Controls
         {
             tmrBlink.Stop();
 
-            //btnRefresh.Enabled = false;
+            btnRefresh.Image = Properties.Resources.ToRefresh;
 
             this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
 
@@ -67,12 +67,12 @@ namespace Ceritar.TT3LightDLL.Controls
         {
             if (mblnChangeImage)
             {
-                btnRefresh.Enabled = false;
+                btnRefresh.Image = Properties.Resources.ToRefresh;
                 mblnChangeImage = false;
             }
             else
             {
-                btnRefresh.Enabled = true;
+                btnRefresh.Image = Properties.Resources.Refresh;
                 mblnChangeImage = true;
             }
             

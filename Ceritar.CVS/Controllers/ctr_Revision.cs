@@ -8,6 +8,7 @@ using Ceritar.TT3LightDLL.Static_Classes;
 using Ceritar.TT3LightDLL.Classes;
 using Ceritar.CVS.Models.Module_ActivesInstallations;
 using Ceritar.CVS.Models.Module_Configuration;
+using System.Text.RegularExpressions;
 
 namespace Ceritar.CVS.Controllers
 {
@@ -384,6 +385,7 @@ namespace Ceritar.CVS.Controllers
                             bool blnScriptsChanged = false;
                             int intNextScriptNo = 0;
                             string strNewDestinationFileName = string.Empty;
+                            List<string> lstScripts;
 
                             if ((File.Exists(mcView.GetLocation_Scripts()) || Directory.Exists(mcView.GetLocation_Scripts())))
                             {
@@ -400,7 +402,17 @@ namespace Ceritar.CVS.Controllers
                                         
                                         currentFolderInfos.Create();
 
-                                        clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Scripts(), currentFolderInfos.FullName, true, true);
+                                        //clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Scripts(), currentFolderInfos.FullName, true, true);
+                                        lstScripts = Directory.GetFiles(mcView.GetLocation_Scripts()).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
+                                        
+                                        for (int intIndex = 0; intIndex < lstScripts.Count; intIndex++)
+                                        {
+                                            strNewDestinationFileName = pfstrGetNewFileNameWithNumber(currentFolderInfos.FullName, lstScripts[intIndex], ref intNextScriptNo);
+
+                                            strNewDestinationFileName = Path.Combine(currentFolderInfos.FullName, strNewDestinationFileName);
+
+                                            File.Copy(lstScripts[intIndex], strNewDestinationFileName, true);
+                                        }
 
                                         mcModRevision.Path_Scripts = currentFolderInfos.FullName;
 
@@ -424,7 +436,7 @@ namespace Ceritar.CVS.Controllers
 
                                     File.Copy(mcView.GetLocation_Scripts(), strNewDestinationFileName, true);
 
-                                    mcModRevision.Path_Scripts = strNewDestinationFileName;
+                                    mcModRevision.Path_Scripts = Path.GetDirectoryName(strNewDestinationFileName);
                                     
                                     blnScriptsChanged = true;
                                 }
@@ -436,12 +448,10 @@ namespace Ceritar.CVS.Controllers
                             }
 
                             //Ajout dans Rev_AllScripts
-                            List<string> lstExistingScripts;
                             List<string> lstTempScripts;
                             string[] lstScriptsToCopy;
                             string strNewScriptName = string.Empty;
-                            int intNewScriptNumber = 1;
-                            int intPlaceHolder = 0;
+                            int intNewScriptNumber = 0;
 
                             if (!string.IsNullOrEmpty(mcView.GetLocation_Scripts()) & blnScriptsChanged)
                             {
@@ -462,30 +472,13 @@ namespace Ceritar.CVS.Controllers
 
                                 lstScriptsToCopy = lstTempScripts.ToArray();
 
-                                //lstExistingScripts = Directory.GetFiles(strRevAllScripts_Location).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
-
-                                //if (lstExistingScripts.Count > 0)
-                                //{
-                                //    intNewScriptNumber = Int32.Parse(new String(Path.GetFileName(lstExistingScripts[lstExistingScripts.Count - 1]).TakeWhile(Char.IsDigit).ToArray())) + 1;
-                                //}
-
                                 clsApp.GetAppController.setAttributesToNormal(new DirectoryInfo(strRevAllScripts_Location));
                                 
                                 foreach (string strCurrentFile in lstScriptsToCopy)
                                 {
-                                    //strNewScriptName = Path.GetFileName(strCurrentFile);
-
-                                    //if (strNewScriptName.Contains('_') && Int32.TryParse(strNewScriptName.Substring(0, strNewScriptName.IndexOf("_")), out intPlaceHolder))
-                                    //{
-                                    //    strNewScriptName = strNewScriptName.Substring(strNewScriptName.IndexOf("_") + 1);
-                                    //}
-
-                                    //strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
                                     strNewScriptName = pfstrGetNewFileNameWithNumber(strRevAllScripts_Location, strCurrentFile, ref intNewScriptNumber);
 
                                     File.Copy(strCurrentFile, Path.Combine(strRevAllScripts_Location, strNewScriptName), true);
-
-                                    //intNewScriptNumber++;
                                 }
                             }
 
@@ -574,7 +567,6 @@ namespace Ceritar.CVS.Controllers
         private string pfstrGetNewFileNameWithNumber(string vstrDestinationFolderPath,string vstrSourceScriptPath, ref int rintNextScriptNumber)
         {
             string strNewScriptName = string.Empty;
-            int intNewScriptNumber = 0;
             int intFirstUnderscoreIndex = 0;
             int intLastDigitCharIndex = 0;
             int intIntendedScriptNumber = 0;
@@ -582,7 +574,7 @@ namespace Ceritar.CVS.Controllers
 
             try
             {
-                if (rintNextScriptNumber <= 1)
+                if (rintNextScriptNumber <= 0)
                 {
                     //On regarde le prochain numéro à utiliser dans le dossier de destination
                     lstExistingScripts = Directory.GetFiles(vstrDestinationFolderPath).ToList();//.OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
@@ -590,11 +582,10 @@ namespace Ceritar.CVS.Controllers
                     if (lstExistingScripts.Count > 0)
                     {
                         //Int32.TryParse(new String(Path.GetFileName(lstExistingScripts[lstExistingScripts.Count - 1]).TakeWhile(Char.IsDigit).ToArray()), out intNewScriptNumber);
-                        intNewScriptNumber = lstExistingScripts.Count;
+                        rintNextScriptNumber = lstExistingScripts.Count;
                     }
 
-                    intNewScriptNumber++;
-                    rintNextScriptNumber = intNewScriptNumber;
+                    rintNextScriptNumber++;
                 }
 
                 strNewScriptName = Path.GetFileName(vstrSourceScriptPath);
@@ -607,7 +598,7 @@ namespace Ceritar.CVS.Controllers
                     Int32.TryParse(strNewScriptName.Substring(0, intFirstUnderscoreIndex), out intIntendedScriptNumber);
                     strNewScriptName = strNewScriptName.Substring(intFirstUnderscoreIndex + 1);      
                 }
-                else if (intLastDigitCharIndex < 1000) //Les premiers caractères pourraient être le numéro de script avec oubli d'ajouter un _
+                else if (intLastDigitCharIndex < 4) //Les premiers caractères pourraient être le numéro de script avec oubli d'ajouter un _
                 {
                     Int32.TryParse(strNewScriptName.Substring(0, intLastDigitCharIndex), out intIntendedScriptNumber);
                     strNewScriptName = strNewScriptName.Substring(intLastDigitCharIndex);
@@ -617,20 +608,7 @@ namespace Ceritar.CVS.Controllers
                     //Do nothing, le script ne contient pas de numéro au début
                 }
 
-                if (rintNextScriptNumber < intIntendedScriptNumber)
-                {
-                    intNewScriptNumber = rintNextScriptNumber;
-                }
-                else if (rintNextScriptNumber > intIntendedScriptNumber)
-                {
-                    intNewScriptNumber = rintNextScriptNumber;
-                }
-                else
-                {
-                    //Do nothing, ils sont égaux
-                }
-
-                strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
+                strNewScriptName = rintNextScriptNumber.ToString("00") + "_" + strNewScriptName;
             }
             catch (Exception ex)
             {
@@ -639,7 +617,7 @@ namespace Ceritar.CVS.Controllers
             }
             finally
             {
-                rintNextScriptNumber = intNewScriptNumber + 1;
+                rintNextScriptNumber ++;
             }
 
             return strNewScriptName;
@@ -826,18 +804,86 @@ namespace Ceritar.CVS.Controllers
                 
                 if (answer == System.Windows.Forms.DialogResult.Yes)
                 {
-                    System.Diagnostics.Process process = new System.Diagnostics.Process();
-                    System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-                    //TODO UPADTE REV ALL SCRIPTS
-                    startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                    startInfo.FileName = "cmd.exe";
-                    startInfo.Arguments = @"/C RMDIR """ + vstrRevisionFolderRoot + @""" /S /Q";
+                    blnValidReturn = pfblnDeleteFrom_Rev_AllScripts(vstrRevisionFolderRoot);
 
-                    process.StartInfo = startInfo;
-                    process.Start();
-                    process.WaitForExit();
+                    if (blnValidReturn)
+                    {
+                        System.Diagnostics.Process process = new System.Diagnostics.Process();
+                        System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+
+                        startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                        startInfo.FileName = "cmd.exe";
+                        startInfo.Arguments = @"/C RMDIR """ + vstrRevisionFolderRoot + @""" /S /Q";
+
+                        process.StartInfo = startInfo;
+                        process.Start();
+                        process.WaitForExit();
+                    }
                 }
-    
+                else
+                {
+                    blnValidReturn = true;
+                }  
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnValidReturn;
+        }
+
+        private bool pfblnDeleteFrom_Rev_AllScripts(string vstrRevisionFolderRoot)
+        {
+            bool blnValidReturn = false;
+            int intFirstUnderscoreIndex = 0;
+            int intLastDigitCharIndex = 0;
+            string strScriptToFindName = string.Empty;
+            string strRevAllScripts_Location = Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES, mcView.GetCeritarApplication_Name(), sclsAppConfigs.GetVersionNumberPrefix +  mcModRevision.Version.VersionNo.ToString(), sclsAppConfigs.GetRevisionAllScriptFolderName);
+            List<string> lstScripts;
+            List<string> lstCorrespondingScriptsFounds;
+
+            try
+            {
+                if ((File.GetAttributes(mcView.GetLocation_Scripts()) & FileAttributes.Directory) != FileAttributes.Directory)
+                {
+                    lstScripts = Directory.GetFiles(Path.GetDirectoryName(mcView.GetLocation_Scripts())).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
+                }
+                else
+                {
+                    lstScripts = Directory.GetFiles(mcView.GetLocation_Scripts()).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
+                }
+                
+
+                for (int intIndex = 0; intIndex < lstScripts.Count; intIndex++)
+                {
+                    strScriptToFindName = Path.GetFileName(lstScripts[intIndex]);
+
+                    intFirstUnderscoreIndex = strScriptToFindName.IndexOf("_");
+                    intLastDigitCharIndex = new String(strScriptToFindName.TakeWhile(Char.IsDigit).ToArray()).Length;
+
+                    if (intFirstUnderscoreIndex < 4 && intFirstUnderscoreIndex > -1) //On ne peut jamais avoir un script # en haut de 999
+                    {
+                        strScriptToFindName = strScriptToFindName.Substring(intFirstUnderscoreIndex + 1);
+                    }
+                    else if (intLastDigitCharIndex < 4) //Les premiers caractères pourraient être le numéro de script avec oubli d'ajouter un _
+                    {
+                        strScriptToFindName = strScriptToFindName.Substring(intLastDigitCharIndex);
+                    }
+                    else
+                    {
+                        //Do nothing, le script ne contient pas de numéro au début
+                    }
+
+                    lstCorrespondingScriptsFounds = Directory.GetFiles(strRevAllScripts_Location, "*_" + strScriptToFindName, SearchOption.TopDirectoryOnly).ToList();//.Where(s => Regex.IsMatch(s, @"\d+(?:,\d{1,3})?")).ToList();
+
+                    if (lstCorrespondingScriptsFounds.Count > 0)
+                    {
+                        File.Delete(lstCorrespondingScriptsFounds[lstCorrespondingScriptsFounds.Count - 1]); //On supprime toujours la dernière version?
+                    }
+                }
+
                 blnValidReturn = true;
             }
             catch (Exception ex)

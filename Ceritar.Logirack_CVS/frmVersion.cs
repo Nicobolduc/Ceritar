@@ -1228,6 +1228,8 @@ namespace Ceritar.Logirack_CVS
                 pfblnGrdRevisions_Load();
 
                 grdRevisions.Row = grdRevisions.Rows.Count - 1;
+
+                btnRefresh.SetToRefresh = true;
             }
         }
 
@@ -1245,6 +1247,8 @@ namespace Ceritar.Logirack_CVS
                 pfblnGrdRevisions_Load();
 
                 grdRevisions.Row = grdRevisions.Rows.Count - 1;
+
+                btnRefresh.SetToRefresh = true;
             }
         }
 
@@ -1460,7 +1464,9 @@ namespace Ceritar.Logirack_CVS
 
                 pfblnGrdRevisions_Load();
 
-                grdRevisions.Row = intSelectedRow >= 1 ? intSelectedRow : grdRevisions.Rows.Count - 1; ;
+                grdRevisions.Row = intSelectedRow >= 1 ? intSelectedRow : grdRevisions.Rows.Count - 1;
+
+                btnRefresh.SetToRefresh = true;
             }
         }
 

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Ceritar.TT3LightDLL.Static_Classes;
 using Ceritar.TT3LightDLL.Classes;
+using System.Security.Principal;
 
 namespace Ceritar.Logirack_CVS
 {
@@ -17,6 +18,9 @@ namespace Ceritar.Logirack_CVS
     /// </summary>
     public partial class mdiGeneral : Form
     {
+        //Messages
+        private const int mintMSG_AdminRightWarning = 40;
+
         public mdiGeneral()
         {
             InitializeComponent();
@@ -24,7 +28,41 @@ namespace Ceritar.Logirack_CVS
 
         private void main()
         {
+            Application.ApplicationExit += new EventHandler(ApplicationExit);
+
+            if (!IsUserAdministrator())
+            {
+                clsApp.GetAppController.ShowMessage(mintMSG_AdminRightWarning);
+            }
+
             sclsGenList.ShowGenList(sclsGenList.GeneralLists_ID.VERSION_REVISION_LIST_NRI);
+        }
+
+        public static bool IsUserAdministrator()
+        {
+            bool blnIsAdmin;
+
+            try
+            {
+                WindowsIdentity user = WindowsIdentity.GetCurrent();
+                WindowsPrincipal principal = new WindowsPrincipal(user);
+                blnIsAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                blnIsAdmin = false;
+            }
+            catch (Exception)
+            {
+                blnIsAdmin = false;
+            }
+
+            return blnIsAdmin;
+        }
+
+        private void ApplicationExit(object sender, EventArgs e)
+        {
+            if (clsApp.GetAppController.SQLConnection != null) clsApp.GetAppController.SQLConnection.Close();
         }
 
         private void fileToolStripMenuItem_Click(object sender, EventArgs e)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
 namespace Ceritar.Logirack_CVS
 {
     static class Program
