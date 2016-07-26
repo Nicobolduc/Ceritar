@@ -11,7 +11,7 @@ using Ceritar.TT3LightDLL.Static_Classes;
 using Ceritar.CVS.Controllers.Interfaces;
 using Ceritar.CVS.Controllers;
 using System.Collections.Generic;
-
+using System.Threading;
 
 namespace Ceritar.Logirack_CVS
 {
@@ -845,47 +845,60 @@ namespace Ceritar.Logirack_CVS
 
         private void formController_SaveData(SaveDataEventArgs eventArgs)
         {
-            Cursor.Current = Cursors.WaitCursor;
+            frmWorkInProgress frmWorking = new frmWorkInProgress();
+            Thread newThread = null;
 
-            mintGrdClient_SelectedRow = grdClients.Row;
-
-            mcActionResults = mcCtrVersion.Save();
-
-            if (!mcActionResults.IsValid)
+            try
             {
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI, MessageBoxButtons.OK, mcActionResults.GetLstParams);
-
-                switch ((ctr_Version.ErrorCode_Ver)mcActionResults.GetErrorCode)
+                if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE)
                 {
-                    case ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY:
-
-                        btnReplaceAppChangeXLS.Focus();
-
-                        break;
-
-                    case ctr_Version.ErrorCode_Ver.RELEASE_MANDATORY:
-
-                        btnReplaceExecutable.Focus();
-
-                        break;
-
-                    case ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY:
-
-                        btnReplaceTTApp.Focus();
-
-                        break;
+                    newThread = new Thread(() => frmWorking.ShowDialog());
+                    newThread.Start();
                 }
+                
+                mintGrdClient_SelectedRow = grdClients.Row;
+
+                mcActionResults = mcCtrVersion.Save();
+
+                if (!mcActionResults.IsValid)
+                {
+                    clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI, MessageBoxButtons.OK, mcActionResults.GetLstParams);
+
+                    switch ((ctr_Version.ErrorCode_Ver)mcActionResults.GetErrorCode)
+                    {
+                        case ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY:
+
+                            btnReplaceAppChangeXLS.Focus();
+
+                            break;
+
+                        case ctr_Version.ErrorCode_Ver.RELEASE_MANDATORY:
+
+                            btnReplaceExecutable.Focus();
+
+                            break;
+
+                        case ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY:
+
+                            btnReplaceTTApp.Focus();
+
+                            break;
+                    }
+                }
+                else if (mcActionResults.GetErrorMessage_NRI > 0)
+                {
+                    clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI, MessageBoxButtons.OK);
+                }
+
+                if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE) formController.Item_NRI = mcActionResults.GetNewItem_NRI;
             }
-            else if (mcActionResults.GetErrorMessage_NRI > 0)
+            finally
             {
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI, MessageBoxButtons.OK);
+                if (newThread != null)
+                    newThread.Abort();
+
+                eventArgs.SaveSuccessful = mcActionResults.IsValid;
             }
-
-            if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE) formController.Item_NRI = mcActionResults.GetNewItem_NRI;
-
-            eventArgs.SaveSuccessful = mcActionResults.IsValid;
-
-            Cursor.Current = Cursors.Default;
         }
 
         private void btnReplaceAppChangeDOC_Click(object sender, EventArgs e)
@@ -1573,6 +1586,16 @@ namespace Ceritar.Logirack_CVS
             if (!formController.FormIsLoading)
             {
                 mintGrdClient_SelectedRow = grdClients.Row;
+            }
+        }
+
+        private void formController_BeNotify(BeNotifyEventArgs eventArgs)
+        {
+            switch (eventArgs.LstReceivedValues[0].ToString())
+            {
+                case "frmRevision":
+                    pfblnGrdRevisions_Load();
+                    break;
             }
         }
 

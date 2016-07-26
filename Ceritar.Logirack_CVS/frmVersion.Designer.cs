@@ -65,7 +65,6 @@
             this.btnShowDB_UpgradeScripts = new System.Windows.Forms.Button();
             this.tabRevision = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.btnRefresh = new Ceritar.TT3LightDLL.Controls.ctlRefresh();
             this.grdRevisions = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.tabVersion = new System.Windows.Forms.TabPage();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
@@ -87,9 +86,10 @@
             this.tab = new System.Windows.Forms.TabControl();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.label7 = new System.Windows.Forms.Label();
             this.tmrGenerateBlink = new System.Windows.Forms.Timer(this.components);
+            this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
+            this.btnRefresh = new Ceritar.TT3LightDLL.Controls.ctlRefresh();
             this.groupBox1.SuspendLayout();
             this.tabRevision.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -497,14 +497,6 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Liste des révisions";
             // 
-            // btnRefresh
-            // 
-            this.btnRefresh.Location = new System.Drawing.Point(752, 310);
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(35, 35);
-            this.btnRefresh.TabIndex = 19;
-            this.btnRefresh.Click += new Ceritar.TT3LightDLL.Controls.ctlRefresh.ClickEventHandler(this.btnRefresh_Click);
-            // 
             // grdRevisions
             // 
             this.grdRevisions.AllowSorting = C1.Win.C1FlexGrid.AllowSortingEnum.None;
@@ -752,24 +744,6 @@
             this.tab.Size = new System.Drawing.Size(814, 488);
             this.tab.TabIndex = 0;
             // 
-            // formController
-            // 
-            this.formController.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.formController.ChangeMade = false;
-            this.formController.FormIsLoading = false;
-            this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.CONSULT_MODE;
-            this.formController.Item_NRI = 0;
-            this.formController.Location = new System.Drawing.Point(-1, 583);
-            this.formController.Name = "formController";
-            this.formController.ShowButtonQuitOnly = false;
-            this.formController.Size = new System.Drawing.Size(820, 33);
-            this.formController.TabIndex = 1;
-            this.formController.SetReadRights += new Ceritar.TT3LightDLL.Controls.ctlFormController.SetReadRightsEventHandler(this.formController_SetReadRights);
-            this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
-            this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
-            this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
-            // 
             // label7
             // 
             this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -787,6 +761,33 @@
             // 
             this.tmrGenerateBlink.Interval = 1000;
             this.tmrGenerateBlink.Tick += new System.EventHandler(this.tmrGenerateBlink_Tick);
+            // 
+            // formController
+            // 
+            this.formController.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.formController.ChangeMade = false;
+            this.formController.FormIsLoading = false;
+            this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.CONSULT_MODE;
+            this.formController.Item_NRI = 0;
+            this.formController.Location = new System.Drawing.Point(-1, 583);
+            this.formController.Name = "formController";
+            this.formController.ShowButtonQuitOnly = false;
+            this.formController.Size = new System.Drawing.Size(820, 33);
+            this.formController.TabIndex = 1;
+            this.formController.BeNotify += new Ceritar.TT3LightDLL.Controls.ctlFormController.BeNotifyEventHandler(this.formController_BeNotify);
+            this.formController.SetReadRights += new Ceritar.TT3LightDLL.Controls.ctlFormController.SetReadRightsEventHandler(this.formController_SetReadRights);
+            this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
+            this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
+            this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Location = new System.Drawing.Point(752, 310);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(35, 35);
+            this.btnRefresh.TabIndex = 19;
+            this.btnRefresh.Click += new Ceritar.TT3LightDLL.Controls.ctlRefresh.ClickEventHandler(this.btnRefresh_Click);
             // 
             // frmVersion
             // 

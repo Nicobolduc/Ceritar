@@ -9,6 +9,7 @@ using Ceritar.TT3LightDLL.Static_Classes;
 using Ceritar.TT3LightDLL.Classes;
 using Ceritar.CVS.Controllers.Interfaces;
 using C1.Win.C1FlexGrid;
+using System.Threading;
 
 namespace Ceritar.Logirack_CVS
 {
@@ -617,24 +618,37 @@ namespace Ceritar.Logirack_CVS
 
         private void formController_SaveData(SaveDataEventArgs eventArgs)
         {
-            Cursor.Current = Cursors.WaitCursor;
+            frmWorkInProgress frmWorking = new frmWorkInProgress();
+            Thread newThread = null;
 
-            mcActionResults = mcCtrRevision.Save();
-
-            if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE) formController.Item_NRI = mcActionResults.GetNewItem_NRI;
-
-            if (!mcActionResults.IsValid)
+            try
             {
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
+                if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE)
+                {
+                    newThread = new Thread(() => frmWorking.ShowDialog());
+                    newThread.Start();
+                }
+
+                mcActionResults = mcCtrRevision.Save();
+
+                if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE) formController.Item_NRI = mcActionResults.GetNewItem_NRI;
+
+                if (!mcActionResults.IsValid)
+                {
+                    clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
+                }
+                else if (formController.FormMode != sclsConstants.DML_Mode.INSERT_MODE)
+                {
+                    if (mcActionResults.SuccessMessage_NRI > 0) clsApp.GetAppController.ShowMessage(mcActionResults.SuccessMessage_NRI);
+                }         
             }
-            else
+            finally
             {
-                if (mcActionResults.SuccessMessage_NRI > 0) clsApp.GetAppController.ShowMessage(mcActionResults.SuccessMessage_NRI);
-            }
+                if (newThread != null)
+                    newThread.Abort();
 
-            eventArgs.SaveSuccessful = mcActionResults.IsValid;
-
-            Cursor.Current = Cursors.Default;
+                eventArgs.SaveSuccessful = mcActionResults.IsValid;
+            }          
         }
 
         private void grdRevModifs_DoubleClick(object sender, EventArgs e)

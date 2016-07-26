@@ -98,6 +98,12 @@
     <Compile Include="frmVersion.Designer.cs">
       <DependentUpon>frmVersion.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmWorkInProgress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmWorkInProgress.Designer.cs">
+      <DependentUpon>frmWorkInProgress.cs</DependentUpon>
+    </Compile>
     <Compile Include="mdiGeneral.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -130,6 +136,9 @@
     <EmbeddedResource Include="frmVersion.resx">
       <DependentUpon>frmVersion.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmWorkInProgress.resx">
+      <DependentUpon>frmWorkInProgress.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="mdiGeneral.resx">
       <DependentUpon>mdiGeneral.cs</DependentUpon>

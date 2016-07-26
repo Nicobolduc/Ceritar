@@ -24,6 +24,7 @@ namespace Ceritar.TT3LightDLL.Controls
 
         private System.Windows.Forms.Form mfrmParent;
         private System.Windows.Forms.Form mfrmCallingForm;
+        private NotifyCallerEventArgs cNotifyCallerEventArgs;
 
         //Public Events
         public delegate void BeNotifyEventHandler(BeNotifyEventArgs eventArgs);
@@ -47,10 +48,8 @@ namespace Ceritar.TT3LightDLL.Controls
         {
             InitializeComponent();
             SubscribeToEvents();
-            this.HandleDestroyed += ctlFormController_HandleDestroyed;
-            this.PropertyChanged += ctlFormController_PropertyChanged;
 
-            
+            this.PropertyChanged += ctlFormController_PropertyChanged;
         }
 
         ~ctlFormController()
@@ -182,6 +181,8 @@ namespace Ceritar.TT3LightDLL.Controls
 
                 if (!mfrmParent.IsDisposed)
                 {
+                    mfrmParent.FormClosing += mfrmParent_FormClosing;
+
                     if (!vblnIsModal)
                     {
                         if (mfrmParent.MdiParent != null)
@@ -317,6 +318,12 @@ namespace Ceritar.TT3LightDLL.Controls
             }
         }
 
+        internal void CallBeNotify(BeNotifyEventArgs e)
+        {
+            if (BeNotify != null)
+                BeNotify(e);
+        }
+
         public bool pfblnValidate_Grids()
         {
             bool blnValidReturn = false;
@@ -342,6 +349,17 @@ namespace Ceritar.TT3LightDLL.Controls
 
 #endregion
 
+        void mfrmParent_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            cNotifyCallerEventArgs = new NotifyCallerEventArgs();
+            cNotifyCallerEventArgs.LstReceivedValues.Add(mfrmParent.Name);
+
+            if (NotifyCaller != null)
+            {
+                NotifyCaller(cNotifyCallerEventArgs);
+            }
+        }
+
         void mfrmParent_FormClosed(object sender, FormClosedEventArgs e)
         {
             if (mfrmCallingForm != null)
@@ -349,6 +367,8 @@ namespace Ceritar.TT3LightDLL.Controls
                 mfrmCallingForm.Enabled = true;
                 mfrmCallingForm.Focus();
                 mfrmCallingForm.BringToFront();
+
+                ((IFormController)mfrmCallingForm).GetFormController().CallBeNotify(new BeNotifyEventArgs(cNotifyCallerEventArgs.LstReceivedValues));
             }
         }
 
@@ -469,11 +489,6 @@ namespace Ceritar.TT3LightDLL.Controls
         //        End If
         //    Next
         //End Sub
-        
-        private void ctlFormController_HandleDestroyed(Object sender, EventArgs e)
-        {
-            //NotifyCaller(new NotifyCallerEventArgs());
-        }
     }
 
 
@@ -539,12 +554,21 @@ namespace Ceritar.TT3LightDLL.Controls
         {
             get
             {
-                return new List<object>();
+                if (_lstReceivedValues == null) _lstReceivedValues = new List<object>();
+
+                return _lstReceivedValues;
             }
             set
             {
                 _lstReceivedValues = value;
             }
+        }
+
+        public BeNotifyEventArgs() {}
+
+        public BeNotifyEventArgs(List<object> rlstParams)
+        {
+            _lstReceivedValues = rlstParams;
         }
     }
 
@@ -556,15 +580,24 @@ namespace Ceritar.TT3LightDLL.Controls
         {
             get
             {
-                return new List<object>();
+                if (_lstReceivedValues == null) _lstReceivedValues = new List<object>();
+
+                return _lstReceivedValues;
             }
             set
             {
                 _lstReceivedValues = value;
             }
         }
+
+        public NotifyCallerEventArgs() { }
+
+        public NotifyCallerEventArgs(List<object> rlstParams)
+        {
+            _lstReceivedValues = rlstParams;
+        }
     }
 
 #endregion
-
+    
 }
