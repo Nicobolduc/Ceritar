@@ -126,6 +126,7 @@
             this.formController.ShowButtonQuitOnly = true;
             this.formController.Size = new System.Drawing.Size(576, 33);
             this.formController.TabIndex = 6;
+            this.formController.BeNotify += new Ceritar.TT3LightDLL.Controls.ctlFormController.BeNotifyEventHandler(this.formController_BeNotify);
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
             // 
             // toolTip

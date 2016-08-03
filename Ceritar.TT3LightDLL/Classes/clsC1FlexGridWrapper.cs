@@ -281,8 +281,6 @@ namespace Ceritar.TT3LightDLL.Classes
 		    try {
                 mblnGridIsLoading = true;
 
-                //mlstHostedCellControls = new List<HostedCellControl>();
-
                 mGrdFlex.BeginUpdate();
 
                 sqlCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.SQLConnection);
@@ -291,7 +289,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
 			    myDataTable.Load(mySQLReader);
 
-                mGrdFlex.Rows.Count = 1;
+                ClearGrid();
 
                 if (mGrdFlex.Cols.Count != myDataTable.Columns.Count + 1)
                 {
@@ -313,9 +311,6 @@ namespace Ceritar.TT3LightDLL.Classes
                         mGrdFlex.AddItem(dataTableArray);
                     }
                 }
-
-                //Binded
-                //mGrdFlex.DataSource = myDataTable;
 
 			    mySQLReader.Dispose();
 

@@ -46,6 +46,7 @@ namespace Ceritar.Logirack_CVS
             {
                 WindowsIdentity user = WindowsIdentity.GetCurrent();
                 WindowsPrincipal principal = new WindowsPrincipal(user);
+
                 blnIsAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
             }
             catch (UnauthorizedAccessException)
@@ -86,7 +87,7 @@ namespace Ceritar.Logirack_CVS
 
         private void mdiGeneral_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (clsApp.GetAppController.SQLConnection != null) clsApp.GetAppController.SQLConnection.Dispose();
+           
         }
 
         private void mnuCerApp_Click(object sender, EventArgs e)

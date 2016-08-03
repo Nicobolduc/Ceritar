@@ -22,7 +22,7 @@
   </trustInfo>
 
   <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
-    <application>
+    <application ShutdownMode="OnExplicitShutdown">
       <!-- A list of all Windows versions that this application is designed to work with. 
       Windows will automatically select the most compatible environment.-->
 
@@ -37,7 +37,7 @@
 
       <!-- If your application is designed to work with Windows 8.1, uncomment the following supportedOS node-->
       <!--<supportedOS Id="{1f676c76-80e1-4239-95bb-83d0f6d0da78}"/>-->
-
+    
     </application>
   </compatibility>
 

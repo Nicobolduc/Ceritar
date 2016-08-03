@@ -472,7 +472,7 @@ namespace Ceritar.CVS.Controllers
                                         strNewScriptName = strNewScriptName.Substring(strNewScriptName.IndexOf("_") + 1);
 
                                         //Int32.Parse(new String(Path.GetFileName(lstScripts[lstScripts.Count - 1]).TakeWhile(Char.IsDigit).ToArray()))
-                                        intNewScriptNumber = (intNewScriptNumber == 0 ? lstScripts.Count : intNewScriptNumber + 1);
+                                        intNewScriptNumber = (intNewScriptNumber == 0 ? lstScripts.Count : intNewScriptNumber) + 1;
                                         
                                         strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
 

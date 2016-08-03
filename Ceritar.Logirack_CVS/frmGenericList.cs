@@ -305,5 +305,17 @@ namespace Ceritar.Logirack_CVS
         {
             return this.formController;
         }
+
+        private void formController_BeNotify(BeNotifyEventArgs eventArgs)
+        {
+             if (eventArgs.NewItemInserted)
+             {
+                 pfblnGrdList_Load();
+             }
+             else
+             {
+                 btnRefresh.SetToRefresh = true;
+             }   
+        }
     }
 }

@@ -677,7 +677,7 @@ namespace Ceritar.Logirack_CVS
                 for (int intRowIndex = 1; intRowIndex < grdSatellites.Rows.Count; intRowIndex++)
                 {
                     mcGrdSatellites.LstHostedCellControls.Add(new HostedCellControl(grdSatellites, pfblnGetNewLocationSatelliteExeButton(), intRowIndex, mintGrdSat_CSA_ExeLocation_col));
-
+                    
                     if (!mcGrdSatellites.bln_CellIsEmpty(intRowIndex, mintGrdSat_CSA_ExeLocation_col))
                     {
                         mcGrdSatellites.LstHostedCellControls[intRowIndex - 1].GetCellControl.BackColor = System.Drawing.Color.Yellow;
