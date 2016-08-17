@@ -42,6 +42,8 @@
             this.lblCurrentUser = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblDatabase = new System.Windows.Forms.ToolStripStatusLabel();
+            this.fenêtresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fermerToutesLesFenêtresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMain.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.SuspendLayout();
@@ -53,7 +55,8 @@
             this.mnuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuFile,
             this.muManagement,
-            this.mnuConfiguration});
+            this.mnuConfiguration,
+            this.fenêtresToolStripMenuItem});
             this.mnuMain.Location = new System.Drawing.Point(0, 0);
             this.mnuMain.Name = "mnuMain";
             this.mnuMain.Size = new System.Drawing.Size(1314, 29);
@@ -159,6 +162,21 @@
             this.lblDatabase.Size = new System.Drawing.Size(56, 20);
             this.lblDatabase.Text = "database";
             // 
+            // fenêtresToolStripMenuItem
+            // 
+            this.fenêtresToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fermerToutesLesFenêtresToolStripMenuItem});
+            this.fenêtresToolStripMenuItem.Name = "fenêtresToolStripMenuItem";
+            this.fenêtresToolStripMenuItem.Size = new System.Drawing.Size(81, 25);
+            this.fenêtresToolStripMenuItem.Text = "Fenêtres";
+            // 
+            // fermerToutesLesFenêtresToolStripMenuItem
+            // 
+            this.fermerToutesLesFenêtresToolStripMenuItem.Name = "fermerToutesLesFenêtresToolStripMenuItem";
+            this.fermerToutesLesFenêtresToolStripMenuItem.Size = new System.Drawing.Size(260, 26);
+            this.fermerToutesLesFenêtresToolStripMenuItem.Text = "Fermer toutes les fenêtres";
+            this.fermerToutesLesFenêtresToolStripMenuItem.Click += new System.EventHandler(this.fermerToutesLesFenêtresToolStripMenuItem_Click);
+            // 
             // mdiGeneral
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -197,5 +215,7 @@
         private System.Windows.Forms.ToolStripMenuItem mnuTemplate;
         private System.Windows.Forms.ToolStripMenuItem mnuLogOut;
         private System.Windows.Forms.ToolStripMenuItem clientCeritarToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fenêtresToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fermerToutesLesFenêtresToolStripMenuItem;
     }
 }

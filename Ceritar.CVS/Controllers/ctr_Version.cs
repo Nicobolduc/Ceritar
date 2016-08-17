@@ -1121,15 +1121,21 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        CerClient.CeC_Name, " + Environment.NewLine;
             strSQL = strSQL + "        CAV_Installed = CASE WHEN ClientAppVersion.CAV_DtInstalledProd IS NOT NULL THEN 1 ELSE 0 END, " + Environment.NewLine;
             strSQL = strSQL + "        ClientAppVersion.CAV_IsCurrentVersion, " + Environment.NewLine;
+            strSQL = strSQL + "        LatestExe = CASE WHEN TRevision.Rev_No IS NOT NULL THEN 'Revision '+ CONVERT(VARCHAR, TRevision.Rev_No) ELSE 'Kit ' + Version.Ver_No END, " + Environment.NewLine;
             strSQL = strSQL + "        ClientAppVersion.CAV_ReportExe_Location, " + Environment.NewLine;
             strSQL = strSQL + "        ClientAppVersion.CAV_License, " + Environment.NewLine;
             strSQL = strSQL + "        SelCol = 0, " + Environment.NewLine;
             strSQL = strSQL + "        ClientAppVersion.CAV_ScriptsRoot_Location, " + Environment.NewLine;
-            strSQL = strSQL + "        ClientAppVersion.CAV_DtInstalledProd " + Environment.NewLine;
+            strSQL = strSQL + "        ClientAppVersion.CAV_DtInstalledProd " + Environment.NewLine;   
 
             strSQL = strSQL + " FROM ClientAppVersion " + Environment.NewLine;
+            strSQL = strSQL + "     INNER JOIN Version ON Version.Ver_NRI = ClientAppVersion.Ver_NRI " + Environment.NewLine;
             strSQL = strSQL + "     INNER JOIN CerClient ON CerClient.CeC_NRI = ClientAppVersion.CeC_NRI AND CerClient.CeC_IsActive = 1 " + Environment.NewLine;
-
+            strSQL = strSQL + "     LEFT JOIN ( SELECT MAX(Revision.Rev_No) AS Rev_No, Revision.Ver_NRI, Revision.CeC_NRI " + Environment.NewLine;
+            strSQL = strSQL + "                 FROM Revision " + Environment.NewLine;
+            strSQL = strSQL + "                 WHERE Revision.Rev_ExeIsReport = 1 OR Revision.Rev_ExeWithReport = 1 " + Environment.NewLine;
+            strSQL = strSQL + "                 GROUP BY Revision.Ver_NRI, Revision.CeC_NRI " + Environment.NewLine;
+            strSQL = strSQL + "               ) As TRevision ON TRevision.Ver_NRI = ClientAppVersion.Ver_NRI AND TRevision.CeC_NRI = ClientAppVersion.CeC_NRI " + Environment.NewLine;
             strSQL = strSQL + " WHERE ClientAppVersion.Ver_NRI = " + vintVersion_NRI + Environment.NewLine;
 
             strSQL = strSQL + " ORDER BY CerClient.CeC_Name " + Environment.NewLine;

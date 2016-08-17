@@ -22,14 +22,17 @@ namespace Ceritar.TT3LightDLL.Classes
         private clsUser mctrlUser;
         private System.Text.RegularExpressions.Regex mcStringCleaner = new System.Text.RegularExpressions.Regex("'", System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant | System.Text.RegularExpressions.RegexOptions.IgnoreCase);
         private string mstrServerDateFormat = string.Empty;
+        private Form mfrmMdi = null;
         private static clsApp _myUniqueInstance;
-
+        
 
 #region "Constructors"
 
-        private clsApp()
+        private clsApp(Form rfrmMDI)
         {
             mctrlUser = new clsUser();
+
+            mfrmMdi = rfrmMDI;
 
             clsSQL.OpenSQLServerConnection(ref mcSQLConnection);
         }
@@ -43,11 +46,6 @@ namespace Ceritar.TT3LightDLL.Classes
         {
             get
             {
-                if (_myUniqueInstance == null)
-                {
-                    _myUniqueInstance = new clsApp();
-                }
-
                 return _myUniqueInstance;
             }
         }
@@ -60,6 +58,11 @@ namespace Ceritar.TT3LightDLL.Classes
         public clsUser cUser
         {
             get { return this.mctrlUser; }
+        }
+
+        public Form GetMDI
+        {
+            get { return mfrmMdi;  }
         }
 
         public string str_GetUserDateFormat
@@ -128,6 +131,11 @@ namespace Ceritar.TT3LightDLL.Classes
 
 
 #region "Functions / Subs"
+
+        public static void Instanciate(Form rfrmMDI)
+        {
+            _myUniqueInstance = new clsApp(rfrmMDI);
+        }
 
         public bool bln_CTLBindCaption(ref Control rControl)
         {

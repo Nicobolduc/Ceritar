@@ -14,6 +14,8 @@ namespace Ceritar.TT3LightDLL.Controls
     /// </summary>
     public partial class ctlFormController : System.Windows.Forms.UserControl, INotifyPropertyChanged
     {
+        //Public members
+        public bool mblnDisableBeNotify = false;
 
         //Private members
         private int mintItem_ID;
@@ -319,7 +321,7 @@ namespace Ceritar.TT3LightDLL.Controls
 
         internal void CallBeNotify(BeNotifyEventArgs e)
         {
-            if (BeNotify != null)
+            if (!mblnDisableBeNotify && BeNotify != null)
                 BeNotify(e);
         }
 

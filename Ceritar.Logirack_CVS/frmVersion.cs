@@ -31,11 +31,12 @@ namespace Ceritar.Logirack_CVS
         private const short mintGrdClients_CeC_Name_col = 5;
         private const short mintGrdClients_Installed_col = 6;
         private const short mintGrdClients_IsCurrentVersion_col = 7;
-        private const short mintGrdClients_LocationReportExe_col = 8;
-        private const short mintGrdClients_License_col = 9;
-        private const short mintGrdClients_Selection_col = 10;
-        private const short mintGrdClients_LocationScriptsRoot_col = 11;
-        private const short mintGrdClients_DateInstalled_col = 12;
+        private const short mintGrdClients_LatestRPTExe_col = 8;
+        private const short mintGrdClients_LocationReportExe_col = 9;
+        private const short mintGrdClients_License_col = 10;
+        private const short mintGrdClients_Selection_col = 11;
+        private const short mintGrdClients_LocationScriptsRoot_col = 12;
+        private const short mintGrdClients_DateInstalled_col = 13; 
 
         //Columns grdSatellites
         private const short mintGrdSat_Action_col = 1;
@@ -638,11 +639,12 @@ namespace Ceritar.Logirack_CVS
 
         void mcGrdClients_SetGridDisplay()
         {
-            grdClients.Cols[mintGrdClients_CeC_Name_col].Width = 210;
-            grdClients.Cols[mintGrdClients_Installed_col].Width = 48;
-            grdClients.Cols[mintGrdClients_IsCurrentVersion_col].Width = 50;
-            grdClients.Cols[mintGrdClients_LocationReportExe_col].Width = 42;
+            grdClients.Cols[mintGrdClients_CeC_Name_col].Width = 132;
+            grdClients.Cols[mintGrdClients_Installed_col].Width = 47;
+            grdClients.Cols[mintGrdClients_IsCurrentVersion_col].Width = 49;
+            grdClients.Cols[mintGrdClients_LocationReportExe_col].Width = 43;
             grdClients.Cols[mintGrdClients_Selection_col].Width = 20;
+            grdClients.Cols[mintGrdClients_LatestRPTExe_col].Width = 79;
 
             grdClients.Cols[mintGrdClients_IsCurrentVersion_col].DataType = typeof(bool);
             grdClients.Cols[mintGrdClients_Installed_col].DataType = typeof(bool);
@@ -739,7 +741,7 @@ namespace Ceritar.Logirack_CVS
             {
                 formController.FormIsLoading = false;
 
-                grdClients.Row = mintGrdClient_SelectedRow;
+                grdClients.Row = (mintGrdClient_SelectedRow >= grdClients.Rows.Count ? 1 : mintGrdClient_SelectedRow);
 
                 blnValidReturn = true;
             }

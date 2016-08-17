@@ -87,13 +87,13 @@ namespace Ceritar.Logirack_CVS
                 {
                     frmGenList.mstrGridSQL = strSQL;
                     frmGenList.Text = frmGenList.Text + strListGenTitle;
-                    frmGenList.MdiParent = mdiGeneral.ActiveForm;
+                    frmGenList.MdiParent = TT3LightDLL.Classes.clsApp.GetAppController.GetMDI;
 
                     frmGenList.formController.ShowForm(frmGenList, sclsConstants.DML_Mode.CONSULT_MODE, ref intItem_NRI);
-
+                   
                     //if (mdiGeneral.GetGenListChildCount == 0)
                     //{
-                    //    frmGenList.Location = new Point(0, 0);
+                        frmGenList.Location = new System.Drawing.Point(0, 0);
                     //}
                     //else
                     //{

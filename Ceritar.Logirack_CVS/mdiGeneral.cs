@@ -28,6 +28,8 @@ namespace Ceritar.Logirack_CVS
 
         private void main()
         {
+            clsApp.Instanciate(this);
+
             Application.ApplicationExit += new EventHandler(ApplicationExit);
 
             if (!IsUserAdministrator())
@@ -103,6 +105,20 @@ namespace Ceritar.Logirack_CVS
         private void clientCeritarToolStripMenuItem_Click(object sender, EventArgs e)
         {
             sclsGenList.ShowGenList(sclsGenList.GeneralLists_ID.CERITAR_CLIENT_LIST_NRI);
+        }
+
+        private void fermerToutesLesFenêtresToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.SuspendLayout();
+          
+            foreach (Form aForm in this.MdiChildren)
+            {
+                if (aForm is TT3LightDLL.Controls.IFormController) ((TT3LightDLL.Controls.IFormController)aForm).GetFormController().mblnDisableBeNotify = true;
+
+                aForm.Close();
+            }
+
+            this.ResumeLayout();
         }
     }
 }
