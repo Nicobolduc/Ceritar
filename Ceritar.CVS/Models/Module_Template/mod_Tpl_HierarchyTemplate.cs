@@ -261,7 +261,7 @@ namespace Ceritar.CVS.Models.Module_Template
                                     mintReleaseFolderCount++;
                                     break;
 
-                                case ctr_Template.FolderType.Report:
+                                case ctr_Template.FolderType.External_Report:
 
                                     mintReportFolderCount++;
                                     break;

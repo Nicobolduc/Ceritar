@@ -52,10 +52,11 @@ namespace Ceritar.Logirack_CVS
         //Columns grdRev
         private const short mintGrdRev_Rev_NRI_col = 1;
         private const short mintGrdRev_Rev_TS_col = 2;
-        private const short mintGrdRev_Number_col = 3;
-        private const short mintGrdRev_CeritarClientName_col = 4;
-        private const short mintGrdRev_Description_col = 5;
-        private const short mintGrdRev_CreationDate_col = 6;
+        private const short mintGrdRev_Rev_IsValid_col = 3;
+        private const short mintGrdRev_Number_col = 4;
+        private const short mintGrdRev_CeritarClientName_col = 5;
+        private const short mintGrdRev_Description_col = 6;
+        private const short mintGrdRev_CreationDate_col = 7;
 
         //Tab pages
         private const short mintTab_Version = 0;
@@ -328,9 +329,12 @@ namespace Ceritar.Logirack_CVS
         private bool pfblnGrdRevisions_Load()
         {
             bool blnValidReturn = false;
+            ctr_Revision cCtrRevision = new ctr_Revision(null);
 
             try
             {
+                grdRevisions.BeginUpdate();
+
                 blnValidReturn = mcGrdRevisions.bln_FillData(mcCtrVersion.strGetListe_Revisions_SQL(formController.Item_NRI));
 
                 if (grdRevisions.Rows.Count > 1)
@@ -339,6 +343,20 @@ namespace Ceritar.Logirack_CVS
                     btnGrdRevUpdate.Enabled = true;
 
                     grdRevisions.Row = grdRevisions.Rows.Count - 1;
+   
+                    grdRevisions.Cols[mintGrdRev_Rev_IsValid_col].ImageAlign = ImageAlignEnum.CenterTop;
+
+                    for (int intRowIndex = 1; intRowIndex < grdRevisions.Rows.Count; intRowIndex++)
+                    {
+                        if (cCtrRevision.blnRevisionPathIsValid(Convert.ToInt32(grdRevisions[intRowIndex, mintGrdRev_Rev_NRI_col])))
+                        {
+                            grdRevisions.SetCellImage(intRowIndex, mintGrdRev_Rev_IsValid_col, Properties.Resources.valid);
+                        }
+                        else
+                        {
+                            grdRevisions.SetCellImage(intRowIndex, mintGrdRev_Rev_IsValid_col, Properties.Resources.invalid);
+                        }                  
+                    }
                 }
                 else
                 {
@@ -351,6 +369,8 @@ namespace Ceritar.Logirack_CVS
                 blnValidReturn = false;
                 sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
+
+            grdRevisions.EndUpdate();
 
             return blnValidReturn;
         }
@@ -694,8 +714,9 @@ namespace Ceritar.Logirack_CVS
         void mcGrdRevisions_SetGridDisplay()
         {
             grdRevisions.Cols[mintGrdRev_Number_col].Width = 60;
+            grdRevisions.Cols[mintGrdRev_Rev_IsValid_col].Width = 35;
             grdRevisions.Cols[mintGrdRev_CeritarClientName_col].Width = 150;
-            grdRevisions.Cols[mintGrdRev_Description_col].Width = 400;
+            grdRevisions.Cols[mintGrdRev_Description_col].Width = 500;
         }
 
         private void formController_LoadData(LoadDataEventArgs eventArgs)
@@ -1383,6 +1404,8 @@ namespace Ceritar.Logirack_CVS
             if (!formController.FormIsLoading && mcGrdClients.bln_RowEditIsValid() & e.OldRange.r1 != e.NewRange.r2 & grdClients.Rows.Count > 1)
             {
                 pfblnGrdSatelliteApps_Load();
+
+                btnGenerate.Enabled = mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.INSERT_MODE.ToString();
             }
             else
             {

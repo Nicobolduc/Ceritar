@@ -65,8 +65,17 @@
             this.btnShowDB_UpgradeScripts = new System.Windows.Forms.Button();
             this.tabRevision = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnRefresh = new Ceritar.TT3LightDLL.Controls.ctlRefresh();
             this.grdRevisions = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.tabVersion = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.cboClients = new System.Windows.Forms.ComboBox();
+            this.btnGrdClientsDel = new System.Windows.Forms.Button();
+            this.btnGrdClientsAdd = new System.Windows.Forms.Button();
+            this.grdClients = new C1.Win.C1FlexGrid.C1FlexGrid();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.grdSatellite = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.txtReleasePath = new System.Windows.Forms.TextBox();
             this.txtTTAppPath = new System.Windows.Forms.TextBox();
@@ -76,37 +85,32 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.grdSatellite = new C1.Win.C1FlexGrid.C1FlexGrid();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.cboClients = new System.Windows.Forms.ComboBox();
-            this.btnGrdClientsDel = new System.Windows.Forms.Button();
-            this.btnGrdClientsAdd = new System.Windows.Forms.Button();
-            this.grdClients = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.tab = new System.Windows.Forms.TabControl();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.label7 = new System.Windows.Forms.Label();
             this.tmrGenerateBlink = new System.Windows.Forms.Timer(this.components);
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
-            this.btnRefresh = new Ceritar.TT3LightDLL.Controls.ctlRefresh();
             this.groupBox1.SuspendLayout();
             this.tabRevision.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevisions)).BeginInit();
             this.tabVersion.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.grdClients)).BeginInit();
+            this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.grdSatellite)).BeginInit();
             this.groupBox7.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.grdSatellite)).BeginInit();
-            this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.grdClients)).BeginInit();
             this.tab.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.txtCreatedBy);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.chkDemoVersion);
@@ -122,14 +126,15 @@
             this.groupBox1.Controls.Add(this.cboApplications);
             this.groupBox1.Location = new System.Drawing.Point(5, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(804, 73);
+            this.groupBox1.Size = new System.Drawing.Size(935, 73);
             this.groupBox1.TabIndex = 37;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Informations";
             // 
             // txtCreatedBy
             // 
-            this.txtCreatedBy.Location = new System.Drawing.Point(666, 45);
+            this.txtCreatedBy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtCreatedBy.Location = new System.Drawing.Point(797, 45);
             this.txtCreatedBy.Name = "txtCreatedBy";
             this.txtCreatedBy.ReadOnly = true;
             this.txtCreatedBy.Size = new System.Drawing.Size(132, 20);
@@ -137,8 +142,9 @@
             // 
             // label6
             // 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(574, 48);
+            this.label6.Location = new System.Drawing.Point(705, 48);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(44, 13);
             this.label6.TabIndex = 73;
@@ -157,8 +163,9 @@
             // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(574, 22);
+            this.label2.Location = new System.Drawing.Point(705, 22);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(89, 13);
             this.label2.TabIndex = 69;
@@ -170,7 +177,7 @@
             this.dtpCreation.CustomFormat = "MM-dd-yyyy hh:mm";
             this.dtpCreation.Enabled = false;
             this.dtpCreation.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpCreation.Location = new System.Drawing.Point(666, 19);
+            this.dtpCreation.Location = new System.Drawing.Point(797, 19);
             this.dtpCreation.Name = "dtpCreation";
             this.dtpCreation.Size = new System.Drawing.Size(132, 20);
             this.dtpCreation.TabIndex = 53;
@@ -257,7 +264,7 @@
             this.btnGrdRevDel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnGrdRevDel.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevDel.Image")));
-            this.btnGrdRevDel.Location = new System.Drawing.Point(752, 103);
+            this.btnGrdRevDel.Location = new System.Drawing.Point(883, 103);
             this.btnGrdRevDel.Name = "btnGrdRevDel";
             this.btnGrdRevDel.Size = new System.Drawing.Size(35, 35);
             this.btnGrdRevDel.TabIndex = 17;
@@ -270,7 +277,7 @@
             this.btnGrdRevAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevAdd.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGrdRevAdd.BackgroundImage")));
             this.btnGrdRevAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnGrdRevAdd.Location = new System.Drawing.Point(752, 21);
+            this.btnGrdRevAdd.Location = new System.Drawing.Point(883, 21);
             this.btnGrdRevAdd.Name = "btnGrdRevAdd";
             this.btnGrdRevAdd.Size = new System.Drawing.Size(35, 35);
             this.btnGrdRevAdd.TabIndex = 15;
@@ -293,10 +300,10 @@
             // 
             // btnExportInstallationKit
             // 
-            this.btnExportInstallationKit.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnExportInstallationKit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExportInstallationKit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnExportInstallationKit.Image = ((System.Drawing.Image)(resources.GetObject("btnExportInstallationKit.Image")));
-            this.btnExportInstallationKit.Location = new System.Drawing.Point(395, 126);
+            this.btnExportInstallationKit.Location = new System.Drawing.Point(421, 126);
             this.btnExportInstallationKit.Name = "btnExportInstallationKit";
             this.btnExportInstallationKit.Size = new System.Drawing.Size(35, 35);
             this.btnExportInstallationKit.TabIndex = 3;
@@ -309,7 +316,7 @@
             this.btnGrdRevUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevUpdate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnGrdRevUpdate.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevUpdate.Image")));
-            this.btnGrdRevUpdate.Location = new System.Drawing.Point(752, 62);
+            this.btnGrdRevUpdate.Location = new System.Drawing.Point(883, 62);
             this.btnGrdRevUpdate.Name = "btnGrdRevUpdate";
             this.btnGrdRevUpdate.Size = new System.Drawing.Size(35, 35);
             this.btnGrdRevUpdate.TabIndex = 16;
@@ -378,9 +385,10 @@
             // 
             // btnShowExecutable
             // 
+            this.btnShowExecutable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowExecutable.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowExecutable.BackgroundImage")));
             this.btnShowExecutable.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowExecutable.Location = new System.Drawing.Point(747, 150);
+            this.btnShowExecutable.Location = new System.Drawing.Point(878, 150);
             this.btnShowExecutable.Name = "btnShowExecutable";
             this.btnShowExecutable.Size = new System.Drawing.Size(40, 40);
             this.btnShowExecutable.TabIndex = 68;
@@ -390,9 +398,10 @@
             // 
             // btnShowAccess
             // 
+            this.btnShowAccess.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowAccess.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowAccess.BackgroundImage")));
             this.btnShowAccess.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowAccess.Location = new System.Drawing.Point(747, 105);
+            this.btnShowAccess.Location = new System.Drawing.Point(878, 105);
             this.btnShowAccess.Name = "btnShowAccess";
             this.btnShowAccess.Size = new System.Drawing.Size(40, 40);
             this.btnShowAccess.TabIndex = 67;
@@ -402,9 +411,10 @@
             // 
             // btnShowWord
             // 
+            this.btnShowWord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowWord.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowWord.BackgroundImage")));
             this.btnShowWord.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowWord.Location = new System.Drawing.Point(747, 59);
+            this.btnShowWord.Location = new System.Drawing.Point(878, 59);
             this.btnShowWord.Name = "btnShowWord";
             this.btnShowWord.Size = new System.Drawing.Size(40, 40);
             this.btnShowWord.TabIndex = 66;
@@ -414,9 +424,10 @@
             // 
             // btnShowExcel
             // 
+            this.btnShowExcel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowExcel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowExcel.BackgroundImage")));
             this.btnShowExcel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowExcel.Location = new System.Drawing.Point(747, 13);
+            this.btnShowExcel.Location = new System.Drawing.Point(878, 13);
             this.btnShowExcel.Name = "btnShowExcel";
             this.btnShowExcel.Size = new System.Drawing.Size(40, 40);
             this.btnShowExcel.TabIndex = 65;
@@ -450,9 +461,10 @@
             // 
             // btnShowRootFolder
             // 
+            this.btnShowRootFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowRootFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnShowRootFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnShowRootFolder.Image")));
-            this.btnShowRootFolder.Location = new System.Drawing.Point(637, 395);
+            this.btnShowRootFolder.Location = new System.Drawing.Point(768, 395);
             this.btnShowRootFolder.Name = "btnShowRootFolder";
             this.btnShowRootFolder.Size = new System.Drawing.Size(40, 40);
             this.btnShowRootFolder.TabIndex = 83;
@@ -462,9 +474,10 @@
             // 
             // btnShowDB_UpgradeScripts
             // 
+            this.btnShowDB_UpgradeScripts.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowDB_UpgradeScripts.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowDB_UpgradeScripts.BackgroundImage")));
             this.btnShowDB_UpgradeScripts.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowDB_UpgradeScripts.Location = new System.Drawing.Point(591, 395);
+            this.btnShowDB_UpgradeScripts.Location = new System.Drawing.Point(722, 395);
             this.btnShowDB_UpgradeScripts.Name = "btnShowDB_UpgradeScripts";
             this.btnShowDB_UpgradeScripts.Size = new System.Drawing.Size(40, 40);
             this.btnShowDB_UpgradeScripts.TabIndex = 84;
@@ -478,29 +491,42 @@
             this.tabRevision.Location = new System.Drawing.Point(4, 22);
             this.tabRevision.Name = "tabRevision";
             this.tabRevision.Padding = new System.Windows.Forms.Padding(3);
-            this.tabRevision.Size = new System.Drawing.Size(806, 462);
+            this.tabRevision.Size = new System.Drawing.Size(937, 462);
             this.tabRevision.TabIndex = 1;
             this.tabRevision.Text = "Révisions";
             this.tabRevision.UseVisualStyleBackColor = true;
             // 
             // groupBox3
             // 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.btnRefresh);
             this.groupBox3.Controls.Add(this.btnGrdRevUpdate);
             this.groupBox3.Controls.Add(this.btnGrdRevDel);
             this.groupBox3.Controls.Add(this.btnGrdRevAdd);
             this.groupBox3.Controls.Add(this.grdRevisions);
-            this.groupBox3.Location = new System.Drawing.Point(6, 4);
+            this.groupBox3.Location = new System.Drawing.Point(6, 5);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(794, 351);
+            this.groupBox3.Size = new System.Drawing.Size(925, 452);
             this.groupBox3.TabIndex = 15;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Liste des révisions";
             // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRefresh.Location = new System.Drawing.Point(883, 411);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(35, 35);
+            this.btnRefresh.TabIndex = 19;
+            this.btnRefresh.Click += new Ceritar.TT3LightDLL.Controls.ctlRefresh.ClickEventHandler(this.btnRefresh_Click);
+            // 
             // grdRevisions
             // 
             this.grdRevisions.AllowSorting = C1.Win.C1FlexGrid.AllowSortingEnum.None;
-            this.grdRevisions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.grdRevisions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grdRevisions.AutoSearch = C1.Win.C1FlexGrid.AutoSearchEnum.FromTop;
             this.grdRevisions.ColumnInfo = resources.GetString("grdRevisions.ColumnInfo");
@@ -512,7 +538,7 @@
             this.grdRevisions.Rows.DefaultSize = 18;
             this.grdRevisions.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
             this.grdRevisions.ShowSort = false;
-            this.grdRevisions.Size = new System.Drawing.Size(740, 324);
+            this.grdRevisions.Size = new System.Drawing.Size(871, 425);
             this.grdRevisions.StyleInfo = resources.GetString("grdRevisions.StyleInfo");
             this.grdRevisions.TabIndex = 14;
             this.grdRevisions.Tag = "20";
@@ -520,23 +546,149 @@
             // 
             // tabVersion
             // 
+            this.tabVersion.Controls.Add(this.tableLayoutPanel1);
             this.tabVersion.Controls.Add(this.btnShowDB_UpgradeScripts);
             this.tabVersion.Controls.Add(this.btnShowRootFolder);
             this.tabVersion.Controls.Add(this.groupBox7);
             this.tabVersion.Controls.Add(this.groupBox6);
             this.tabVersion.Controls.Add(this.groupBox5);
-            this.tabVersion.Controls.Add(this.groupBox4);
-            this.tabVersion.Controls.Add(this.groupBox2);
             this.tabVersion.Location = new System.Drawing.Point(4, 22);
             this.tabVersion.Name = "tabVersion";
             this.tabVersion.Padding = new System.Windows.Forms.Padding(3);
-            this.tabVersion.Size = new System.Drawing.Size(806, 462);
+            this.tabVersion.Size = new System.Drawing.Size(937, 462);
             this.tabVersion.TabIndex = 0;
             this.tabVersion.Text = "Version";
             this.tabVersion.UseVisualStyleBackColor = true;
             // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.groupBox2, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.groupBox4, 1, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(937, 173);
+            this.tableLayoutPanel1.TabIndex = 85;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.btnExportInstallationKit);
+            this.groupBox2.Controls.Add(this.cboClients);
+            this.groupBox2.Controls.Add(this.btnGrdClientsDel);
+            this.groupBox2.Controls.Add(this.btnGrdClientsAdd);
+            this.groupBox2.Controls.Add(this.grdClients);
+            this.groupBox2.Location = new System.Drawing.Point(3, 3);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(462, 167);
+            this.groupBox2.TabIndex = 14;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Clients à qui la version est destinée";
+            // 
+            // cboClients
+            // 
+            this.cboClients.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboClients.FormattingEnabled = true;
+            this.cboClients.Location = new System.Drawing.Point(37, 48);
+            this.cboClients.Name = "cboClients";
+            this.cboClients.Size = new System.Drawing.Size(169, 21);
+            this.cboClients.TabIndex = 15;
+            this.cboClients.Visible = false;
+            this.cboClients.SelectedIndexChanged += new System.EventHandler(this.cboClients_SelectedIndexChanged);
+            // 
+            // btnGrdClientsDel
+            // 
+            this.btnGrdClientsDel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnGrdClientsDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnGrdClientsDel.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdClientsDel.Image")));
+            this.btnGrdClientsDel.Location = new System.Drawing.Point(421, 58);
+            this.btnGrdClientsDel.Name = "btnGrdClientsDel";
+            this.btnGrdClientsDel.Size = new System.Drawing.Size(35, 35);
+            this.btnGrdClientsDel.TabIndex = 2;
+            this.btnGrdClientsDel.UseVisualStyleBackColor = true;
+            this.btnGrdClientsDel.Click += new System.EventHandler(this.btnGrdClientsDel_Click);
+            // 
+            // btnGrdClientsAdd
+            // 
+            this.btnGrdClientsAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnGrdClientsAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnGrdClientsAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdClientsAdd.Image")));
+            this.btnGrdClientsAdd.Location = new System.Drawing.Point(421, 17);
+            this.btnGrdClientsAdd.Name = "btnGrdClientsAdd";
+            this.btnGrdClientsAdd.Size = new System.Drawing.Size(35, 35);
+            this.btnGrdClientsAdd.TabIndex = 0;
+            this.btnGrdClientsAdd.UseVisualStyleBackColor = true;
+            // 
+            // grdClients
+            // 
+            this.grdClients.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.grdClients.AutoSearch = C1.Win.C1FlexGrid.AutoSearchEnum.FromTop;
+            this.grdClients.ColumnInfo = "1,1,0,0,0,90,Columns:0{Width:5;}\t";
+            this.grdClients.ExtendLastCol = true;
+            this.grdClients.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdClients.Location = new System.Drawing.Point(6, 17);
+            this.grdClients.Name = "grdClients";
+            this.grdClients.Rows.Count = 1;
+            this.grdClients.Rows.DefaultSize = 18;
+            this.grdClients.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
+            this.grdClients.Size = new System.Drawing.Size(411, 144);
+            this.grdClients.StyleInfo = resources.GetString("grdClients.StyleInfo");
+            this.grdClients.TabIndex = 1;
+            this.grdClients.Tag = "15";
+            this.grdClients.BeforeRowColChange += new C1.Win.C1FlexGrid.RangeEventHandler(this.grdClients_BeforeRowColChange);
+            this.grdClients.AfterRowColChange += new C1.Win.C1FlexGrid.RangeEventHandler(this.grdClients_AfterRowColChange);
+            this.grdClients.Click += new System.EventHandler(this.grdClients_Click);
+            this.grdClients.DoubleClick += new System.EventHandler(this.grdClients_DoubleClick);
+            this.grdClients.MouseMove += new System.Windows.Forms.MouseEventHandler(this.grdClients_MouseMove);
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox4.Controls.Add(this.grdSatellite);
+            this.groupBox4.Location = new System.Drawing.Point(471, 3);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(463, 167);
+            this.groupBox4.TabIndex = 62;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Applications satellites";
+            // 
+            // grdSatellite
+            // 
+            this.grdSatellite.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.grdSatellite.AutoSearch = C1.Win.C1FlexGrid.AutoSearchEnum.FromTop;
+            this.grdSatellite.ColumnInfo = "1,1,0,0,0,90,Columns:0{Width:5;}\t";
+            this.grdSatellite.ExtendLastCol = true;
+            this.grdSatellite.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdSatellite.Location = new System.Drawing.Point(6, 17);
+            this.grdSatellite.Name = "grdSatellite";
+            this.grdSatellite.Rows.Count = 1;
+            this.grdSatellite.Rows.DefaultSize = 18;
+            this.grdSatellite.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
+            this.grdSatellite.Size = new System.Drawing.Size(452, 144);
+            this.grdSatellite.StyleInfo = resources.GetString("grdSatellite.StyleInfo");
+            this.grdSatellite.TabIndex = 0;
+            this.grdSatellite.Tag = "26";
+            // 
             // groupBox7
             // 
+            this.groupBox7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox7.Controls.Add(this.btnReplaceExecutable);
             this.groupBox7.Controls.Add(this.btnReplaceTTApp);
             this.groupBox7.Controls.Add(this.btnReplaceAppChangeDOC);
@@ -551,55 +703,62 @@
             this.groupBox7.Controls.Add(this.btnShowExcel);
             this.groupBox7.Location = new System.Drawing.Point(6, 179);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(794, 195);
+            this.groupBox7.Size = new System.Drawing.Size(925, 195);
             this.groupBox7.TabIndex = 82;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Fichiers et documents obligatoires de l\'application principale";
             // 
             // txtReleasePath
             // 
+            this.txtReleasePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtReleasePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtReleasePath.Location = new System.Drawing.Point(42, 159);
             this.txtReleasePath.Name = "txtReleasePath";
             this.txtReleasePath.ReadOnly = true;
             this.txtReleasePath.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.txtReleasePath.Size = new System.Drawing.Size(699, 22);
+            this.txtReleasePath.Size = new System.Drawing.Size(830, 22);
             this.txtReleasePath.TabIndex = 72;
             // 
             // txtTTAppPath
             // 
+            this.txtTTAppPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTTAppPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtTTAppPath.Location = new System.Drawing.Point(42, 114);
             this.txtTTAppPath.Name = "txtTTAppPath";
             this.txtTTAppPath.ReadOnly = true;
             this.txtTTAppPath.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.txtTTAppPath.Size = new System.Drawing.Size(699, 22);
+            this.txtTTAppPath.Size = new System.Drawing.Size(830, 22);
             this.txtTTAppPath.TabIndex = 71;
             // 
             // txtWordAppChangePath
             // 
+            this.txtWordAppChangePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtWordAppChangePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtWordAppChangePath.Location = new System.Drawing.Point(42, 68);
             this.txtWordAppChangePath.Name = "txtWordAppChangePath";
             this.txtWordAppChangePath.ReadOnly = true;
             this.txtWordAppChangePath.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.txtWordAppChangePath.Size = new System.Drawing.Size(699, 22);
+            this.txtWordAppChangePath.Size = new System.Drawing.Size(830, 22);
             this.txtWordAppChangePath.TabIndex = 70;
             // 
             // txtExcelAppChangePath
             // 
+            this.txtExcelAppChangePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtExcelAppChangePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtExcelAppChangePath.Location = new System.Drawing.Point(42, 22);
             this.txtExcelAppChangePath.Name = "txtExcelAppChangePath";
             this.txtExcelAppChangePath.ReadOnly = true;
             this.txtExcelAppChangePath.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.txtExcelAppChangePath.Size = new System.Drawing.Size(699, 22);
+            this.txtExcelAppChangePath.Size = new System.Drawing.Size(830, 22);
             this.txtExcelAppChangePath.TabIndex = 69;
             // 
             // groupBox6
             // 
-            this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox6.Controls.Add(this.btnSelectVariousFilePath);
             this.groupBox6.Controls.Add(this.label8);
             this.groupBox6.Controls.Add(this.label9);
@@ -629,107 +788,15 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox5.Controls.Add(this.btnGenerate);
             this.groupBox5.Controls.Add(this.chkIncludeScripts);
-            this.groupBox5.Location = new System.Drawing.Point(703, 379);
+            this.groupBox5.Location = new System.Drawing.Point(834, 379);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(97, 79);
             this.groupBox5.TabIndex = 63;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Actions";
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.grdSatellite);
-            this.groupBox4.Location = new System.Drawing.Point(448, 6);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(352, 167);
-            this.groupBox4.TabIndex = 62;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Applications satellites";
-            // 
-            // grdSatellite
-            // 
-            this.grdSatellite.AutoSearch = C1.Win.C1FlexGrid.AutoSearchEnum.FromTop;
-            this.grdSatellite.ColumnInfo = "1,1,0,0,0,90,Columns:0{Width:5;}\t";
-            this.grdSatellite.ExtendLastCol = true;
-            this.grdSatellite.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdSatellite.Location = new System.Drawing.Point(6, 17);
-            this.grdSatellite.Name = "grdSatellite";
-            this.grdSatellite.Rows.Count = 1;
-            this.grdSatellite.Rows.DefaultSize = 18;
-            this.grdSatellite.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdSatellite.Size = new System.Drawing.Size(341, 144);
-            this.grdSatellite.StyleInfo = resources.GetString("grdSatellite.StyleInfo");
-            this.grdSatellite.TabIndex = 0;
-            this.grdSatellite.Tag = "26";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.btnExportInstallationKit);
-            this.groupBox2.Controls.Add(this.cboClients);
-            this.groupBox2.Controls.Add(this.btnGrdClientsDel);
-            this.groupBox2.Controls.Add(this.btnGrdClientsAdd);
-            this.groupBox2.Controls.Add(this.grdClients);
-            this.groupBox2.Location = new System.Drawing.Point(6, 6);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(436, 167);
-            this.groupBox2.TabIndex = 14;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Clients à qui la version est destinée";
-            // 
-            // cboClients
-            // 
-            this.cboClients.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboClients.FormattingEnabled = true;
-            this.cboClients.Location = new System.Drawing.Point(37, 48);
-            this.cboClients.Name = "cboClients";
-            this.cboClients.Size = new System.Drawing.Size(169, 21);
-            this.cboClients.TabIndex = 15;
-            this.cboClients.Visible = false;
-            this.cboClients.SelectedIndexChanged += new System.EventHandler(this.cboClients_SelectedIndexChanged);
-            // 
-            // btnGrdClientsDel
-            // 
-            this.btnGrdClientsDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnGrdClientsDel.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdClientsDel.Image")));
-            this.btnGrdClientsDel.Location = new System.Drawing.Point(395, 58);
-            this.btnGrdClientsDel.Name = "btnGrdClientsDel";
-            this.btnGrdClientsDel.Size = new System.Drawing.Size(35, 35);
-            this.btnGrdClientsDel.TabIndex = 2;
-            this.btnGrdClientsDel.UseVisualStyleBackColor = true;
-            this.btnGrdClientsDel.Click += new System.EventHandler(this.btnGrdClientsDel_Click);
-            // 
-            // btnGrdClientsAdd
-            // 
-            this.btnGrdClientsAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnGrdClientsAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdClientsAdd.Image")));
-            this.btnGrdClientsAdd.Location = new System.Drawing.Point(395, 17);
-            this.btnGrdClientsAdd.Name = "btnGrdClientsAdd";
-            this.btnGrdClientsAdd.Size = new System.Drawing.Size(35, 35);
-            this.btnGrdClientsAdd.TabIndex = 0;
-            this.btnGrdClientsAdd.UseVisualStyleBackColor = true;
-            // 
-            // grdClients
-            // 
-            this.grdClients.AutoSearch = C1.Win.C1FlexGrid.AutoSearchEnum.FromTop;
-            this.grdClients.ColumnInfo = "1,1,0,0,0,90,Columns:0{Width:5;}\t";
-            this.grdClients.ExtendLastCol = true;
-            this.grdClients.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdClients.Location = new System.Drawing.Point(6, 17);
-            this.grdClients.Name = "grdClients";
-            this.grdClients.Rows.Count = 1;
-            this.grdClients.Rows.DefaultSize = 18;
-            this.grdClients.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdClients.Size = new System.Drawing.Size(385, 144);
-            this.grdClients.StyleInfo = resources.GetString("grdClients.StyleInfo");
-            this.grdClients.TabIndex = 1;
-            this.grdClients.Tag = "15";
-            this.grdClients.BeforeRowColChange += new C1.Win.C1FlexGrid.RangeEventHandler(this.grdClients_BeforeRowColChange);
-            this.grdClients.AfterRowColChange += new C1.Win.C1FlexGrid.RangeEventHandler(this.grdClients_AfterRowColChange);
-            this.grdClients.Click += new System.EventHandler(this.grdClients_Click);
-            this.grdClients.DoubleClick += new System.EventHandler(this.grdClients_DoubleClick);
-            this.grdClients.MouseMove += new System.Windows.Forms.MouseEventHandler(this.grdClients_MouseMove);
             // 
             // tab
             // 
@@ -741,7 +808,7 @@
             this.tab.Location = new System.Drawing.Point(5, 85);
             this.tab.Name = "tab";
             this.tab.SelectedIndex = 0;
-            this.tab.Size = new System.Drawing.Size(814, 488);
+            this.tab.Size = new System.Drawing.Size(945, 488);
             this.tab.TabIndex = 0;
             // 
             // label7
@@ -770,10 +837,10 @@
             this.formController.FormIsLoading = false;
             this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.CONSULT_MODE;
             this.formController.Item_NRI = 0;
-            this.formController.Location = new System.Drawing.Point(-1, 583);
+            this.formController.Location = new System.Drawing.Point(-3, 582);
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
-            this.formController.Size = new System.Drawing.Size(820, 33);
+            this.formController.Size = new System.Drawing.Size(953, 33);
             this.formController.TabIndex = 1;
             this.formController.BeNotify += new Ceritar.TT3LightDLL.Controls.ctlFormController.BeNotifyEventHandler(this.formController_BeNotify);
             this.formController.SetReadRights += new Ceritar.TT3LightDLL.Controls.ctlFormController.SetReadRightsEventHandler(this.formController_SetReadRights);
@@ -781,26 +848,18 @@
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
             // 
-            // btnRefresh
-            // 
-            this.btnRefresh.Location = new System.Drawing.Point(752, 310);
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(35, 35);
-            this.btnRefresh.TabIndex = 19;
-            this.btnRefresh.Click += new Ceritar.TT3LightDLL.Controls.ctlRefresh.ClickEventHandler(this.btnRefresh_Click);
-            // 
             // frmVersion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(821, 617);
+            this.ClientSize = new System.Drawing.Size(952, 617);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.formController);
             this.Controls.Add(this.tab);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(968, 655);
             this.Name = "frmVersion";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Gestion de version";
@@ -810,15 +869,16 @@
             this.groupBox3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdRevisions)).EndInit();
             this.tabVersion.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.grdClients)).EndInit();
+            this.groupBox4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.grdSatellite)).EndInit();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
             this.groupBox6.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.grdSatellite)).EndInit();
-            this.groupBox2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.grdClients)).EndInit();
             this.tab.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -827,7 +887,6 @@
 
         #endregion
 
-        public TT3LightDLL.Controls.ctlFormController formController;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox cboTemplates;
@@ -887,5 +946,7 @@
         private System.Windows.Forms.Button btnShowRootFolder;
         private System.Windows.Forms.Timer tmrGenerateBlink;
         private System.Windows.Forms.Button btnShowDB_UpgradeScripts;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        public TT3LightDLL.Controls.ctlFormController formController;
     }
 }

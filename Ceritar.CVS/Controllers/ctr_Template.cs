@@ -25,7 +25,7 @@ namespace Ceritar.CVS.Controllers
             Release = 3,
             CaptionsAndMenus = 4,
             Scripts = 5,
-            Report = 6,
+            External_Report = 6,
             Version_Number = 7,
             Revision_Number = 8
         }

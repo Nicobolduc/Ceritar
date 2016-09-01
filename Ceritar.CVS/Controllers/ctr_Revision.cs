@@ -9,6 +9,7 @@ using Ceritar.TT3LightDLL.Classes;
 using Ceritar.CVS.Models.Module_ActivesInstallations;
 using Ceritar.CVS.Models.Module_Configuration;
 using System.Text.RegularExpressions;
+using Microsoft.VisualBasic;
 
 namespace Ceritar.CVS.Controllers
 {
@@ -259,7 +260,7 @@ namespace Ceritar.CVS.Controllers
 
                         case (int)ctr_Template.FolderType.Revision_Number:
 
-                            string[] strLstCurrentDirectory = Directory.GetDirectories(currentFolderInfos.FullName, sclsAppConfigs.GetRevisionNumberPrefix + mcView.GetRevisionNo().ToString() + " *");
+                            string[] strLstCurrentDirectory = Directory.GetDirectories(currentFolderInfos.FullName, sclsAppConfigs.GetRevisionNumberPrefix + mcView.GetRevisionNo().ToString() + "*");
 
                             strFolderName = pfstrGetRevisionFolderName();
 
@@ -268,6 +269,27 @@ namespace Ceritar.CVS.Controllers
                             if (strLstCurrentDirectory.Length == 1 && !strLstCurrentDirectory[0].ToString().Equals(strRevisionFolderRoot))
                             {
                                 Directory.Move(strLstCurrentDirectory[0].ToString(), strRevisionFolderRoot);
+
+                                pfblnDeleteDirectory(strLstCurrentDirectory[0].ToString());
+                            }
+                            else if (strLstCurrentDirectory.Length > 1)
+                            {
+                                for (int intIndex = 0; intIndex < strLstCurrentDirectory.Length; intIndex++)
+                                {
+                                    string strDirectoryName = new FileInfo(strLstCurrentDirectory[intIndex].ToString()).Name;
+                                    byte intVersion = 0;
+
+                                    Byte.TryParse(Regex.Replace(strDirectoryName, @"[^\d]+", String.Empty), out intVersion);
+
+                                    if (intVersion == mcView.GetRevisionNo() && !strLstCurrentDirectory[intIndex].ToString().Equals(strRevisionFolderRoot))
+                                    {
+                                        Directory.Move(strLstCurrentDirectory[intIndex].ToString(), strRevisionFolderRoot);
+
+                                        pfblnDeleteDirectory(strLstCurrentDirectory[intIndex].ToString());
+
+                                        break;
+                                    }
+                                }
                             }
 
                             if (mcView.GetDML_Action() == sclsConstants.DML_Mode.DELETE_MODE) //On supprime toute la hierarchie existante et on sort
@@ -312,51 +334,58 @@ namespace Ceritar.CVS.Controllers
 
                             blnValidReturn = true;
 
-                            //Gestion du Exe de l'application principale ou des rapports
-                            if ((File.Exists(mcView.GetLocation_Release()) || Directory.Exists(mcView.GetLocation_Release())))
+                            //Gestion du Exe de l'application principale ou des rapports si inclut
+                            if (!mcView.GetExeIsExternalReport())
                             {
-                                if ((File.GetAttributes(mcView.GetLocation_Release()) & FileAttributes.Directory) == FileAttributes.Directory)
+                                if ((File.Exists(mcView.GetLocation_Release()) || Directory.Exists(mcView.GetLocation_Release())))
                                 {
-                                    if (mcView.GetLocation_Release() != currentFolderInfos.FullName)
+                                    if ((File.GetAttributes(mcView.GetLocation_Release()) & FileAttributes.Directory) == FileAttributes.Directory)
+                                    {
+                                        if (mcView.GetLocation_Release() != currentFolderInfos.FullName)
+                                        {
+                                            if (Directory.Exists(currentFolderInfos.FullName)) Directory.Delete(currentFolderInfos.FullName, true);
+
+                                            currentFolderInfos.Create();
+
+                                            blnValidReturn = clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseValidExtensions);
+
+                                            //Supprime l'application des rapports externe au besoin
+                                            if (!mcView.GetExeWithExternalReport())
+                                            {
+                                                string strExternalReport_AppName = mcModRevision.Version.CerApplication.ExternalReportAppName;
+
+                                                strExternalReport_AppName = (string.IsNullOrEmpty(strExternalReport_AppName) ? "*RPT.exe" : strExternalReport_AppName);
+
+                                                string[] reportExe = Directory.GetFiles(currentFolderInfos.FullName, strExternalReport_AppName, SearchOption.TopDirectoryOnly);
+
+                                                if (reportExe.Length > 0) File.Delete(reportExe[0]);
+                                            }
+
+                                            mcModRevision.Path_Release = currentFolderInfos.FullName;
+                                        }
+                                    }
+                                    else if (mcView.GetLocation_Release() != Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Release())))
                                     {
                                         if (Directory.Exists(currentFolderInfos.FullName)) Directory.Delete(currentFolderInfos.FullName, true);
 
                                         currentFolderInfos.Create();
 
-                                        blnValidReturn = clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseValidExtensions);
+                                        File.Copy(mcView.GetLocation_Release(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Release())), true);
 
-                                        //Supprime l'application des rapports externe au besoin
-                                        if (!mcView.GetExeWithExternalReport() && !mcView.GetExeIsExternalReport())
-                                        {
-                                            string strExternalReport_AppName = mcModRevision.Version.CerApplication.ExternalReportAppName;
-
-                                            strExternalReport_AppName = (string.IsNullOrEmpty(strExternalReport_AppName) ? "*RPT.exe" : strExternalReport_AppName);
-
-                                            string[] reportExe = Directory.GetFiles(currentFolderInfos.FullName, strExternalReport_AppName, SearchOption.TopDirectoryOnly);
-
-                                            if (reportExe.Length > 0) File.Delete(reportExe[0]);
-                                        }
-
-                                        mcModRevision.Path_Release = currentFolderInfos.FullName;
+                                        mcModRevision.Path_Release = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Release()));
                                     }
                                 }
-                                else if (mcView.GetLocation_Release() != Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Release())))
+                                else if ((File.Exists(currentFolderInfos.FullName) || Directory.Exists(currentFolderInfos.FullName)) && mcView.GetLocation_Release() != currentFolderInfos.FullName)
                                 {
-                                    if (Directory.Exists(currentFolderInfos.FullName)) Directory.Delete(currentFolderInfos.FullName, true);
-
-                                    currentFolderInfos.Create();
-
-                                    File.Copy(mcView.GetLocation_Release(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Release())), true);
-
-                                    mcModRevision.Path_Release = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Release()));
+                                    //Met a jour le path si le contenu de la revision change, mais pas le release
+                                    mcModRevision.Path_Release = currentFolderInfos.FullName;
                                 }
                             }
-                            else if ((File.Exists(currentFolderInfos.FullName) || Directory.Exists(currentFolderInfos.FullName)) && mcView.GetLocation_Release() != currentFolderInfos.FullName)
+                            else
                             {
-                                //Met a jour le path si le contenu de la revision change, mais pas le release
-                                mcModRevision.Path_Release = currentFolderInfos.FullName;
+                                //Do nothing, pas de Release de l'application
                             }
-
+                            
                             //Gestion des applications satellites. On les copie ici au même niveau que le Release
                             if (blnValidReturn && mcModRevision.LstSatelliteRevisions.Count > 0)
                             {
@@ -503,9 +532,45 @@ namespace Ceritar.CVS.Controllers
 
                             break;
 
-                        case (int)ctr_Template.FolderType.Report:
+                        case (int)ctr_Template.FolderType.External_Report:
+                            
+                            blnValidReturn = true;
 
-                            //blnValidReturn = pfblnCopyAllReportsForClients(currentFolderInfos.FullName);
+                            //Gestion du Exe des rapports externes
+                            if (mcView.GetExeIsExternalReport())
+                            {
+                                if ((File.Exists(mcView.GetLocation_Release()) || Directory.Exists(mcView.GetLocation_Release())))
+                                {
+                                    if ((File.GetAttributes(mcView.GetLocation_Release()) & FileAttributes.Directory) == FileAttributes.Directory)
+                                    {
+                                        if (mcView.GetLocation_Release() != currentFolderInfos.FullName)
+                                        {
+                                            if (Directory.Exists(currentFolderInfos.FullName)) Directory.Delete(currentFolderInfos.FullName, true);
+
+                                            currentFolderInfos.Create();
+
+                                            blnValidReturn = clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseValidExtensions);
+
+                                            mcModRevision.Path_Release = currentFolderInfos.FullName;
+                                        }
+                                    }
+                                    else if (mcView.GetLocation_Release() != Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Release())))
+                                    {
+                                        if (Directory.Exists(currentFolderInfos.FullName)) Directory.Delete(currentFolderInfos.FullName, true);
+
+                                        currentFolderInfos.Create();
+
+                                        File.Copy(mcView.GetLocation_Release(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Release())), true);
+
+                                        mcModRevision.Path_Release = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Release()));
+                                    }
+                                }
+                                else if ((File.Exists(currentFolderInfos.FullName) || Directory.Exists(currentFolderInfos.FullName)) && mcView.GetLocation_Release() != currentFolderInfos.FullName)
+                                {
+                                    //Met a jour le path si le contenu de la revision change, mais pas le release
+                                    mcModRevision.Path_Release = currentFolderInfos.FullName;
+                                }
+                            } 
 
                             break;
 
@@ -642,29 +707,39 @@ namespace Ceritar.CVS.Controllers
             return strNewScriptName;
         }
 
-        private string pfstrGetRevisionFolderName()
+        private string pfstrGetRevisionFolderName(mod_Rev_Revision rcRevision = null)
         {
             string strFolderName = string.Empty;
-            string strSatelliteExeLocation = string.Empty;
+            string strSatelliteExeExportName = string.Empty;
             string strRevisionFolderName_InfosSupp = string.Empty;
+            mod_Rev_Revision cRevision = null;
+
+            if (rcRevision != null)
+            {
+                cRevision = rcRevision;
+            }
+            else
+            {
+                cRevision = mcModRevision;
+            }
 
             try
             {
-                strFolderName = sclsAppConfigs.GetRevisionNumberPrefix + mcView.GetRevisionNo().ToString();
+                strFolderName = sclsAppConfigs.GetRevisionNumberPrefix + cRevision.Revision_Number.ToString();
 
-                strRevisionFolderName_InfosSupp = (string.IsNullOrEmpty(mcModRevision.Path_Release) || mcModRevision.ExeIsExternalReport ? string.Empty : " Exe");
-                strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (mcModRevision.ExeIsExternalReport || mcView.GetExeWithExternalReport() ? (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " RPT" : string.Empty);
-                strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (string.IsNullOrEmpty(mcModRevision.Path_Scripts) ? string.Empty : (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " SCRIPTS");
+                strRevisionFolderName_InfosSupp = (string.IsNullOrEmpty(cRevision.Path_Release) || cRevision.ExeIsExternalReport ? string.Empty : " Exe");
+                strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (cRevision.ExeIsExternalReport || cRevision.ExeWithExternalReport ? (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " RPT" : string.Empty);
+                strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (string.IsNullOrEmpty(cRevision.Path_Scripts) ? string.Empty : (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " SCRIPTS");
 
-                for (int intIndex = 0; intIndex < mcModRevision.LstSatelliteRevisions.Count; intIndex++)
+                for (int intIndex = 0; intIndex < cRevision.LstSatelliteRevisions.Count; intIndex++)
                 {
-                    if (!string.IsNullOrEmpty(mcModRevision.LstSatelliteRevisions[intIndex].Location_Exe))
+                    if (!string.IsNullOrEmpty(cRevision.LstSatelliteRevisions[intIndex].Location_Exe))
                     {
-                        strSatelliteExeLocation = mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExportFolderName;
+                        strSatelliteExeExportName = cRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExportFolderName;
 
-                        strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (string.IsNullOrEmpty(strSatelliteExeLocation) ? string.Empty : (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " " + strSatelliteExeLocation);
+                        strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (string.IsNullOrEmpty(strSatelliteExeExportName) ? string.Empty : (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " " + strSatelliteExeExportName);
 
-                        strSatelliteExeLocation = string.Empty;
+                        strSatelliteExeExportName = string.Empty;
                     }
                 }
 
@@ -681,13 +756,36 @@ namespace Ceritar.CVS.Controllers
 
         public string str_GetRevisionFolderPath(int vintTemplate_NRI, string vstrVersion_No)
         {
+            string strPath = string.Empty;
+
+            strPath = str_GetRevisionRootFolderPath(vintTemplate_NRI, vstrVersion_No);
+
+            if (pfblnFeedModelWithView())
+            {
+                strPath = strPath.Replace(sclsAppConfigs.GetRevisionNumberPrefix + "XX", pfstrGetRevisionFolderName());
+            }
+
+            return strPath;
+        }
+
+        private string str_GetRevisionFolderPath(mod_Rev_Revision rcRevision = null)
+        {
+            string strPath = string.Empty;
+
+            strPath = str_GetRevisionRootFolderPath(rcRevision.TemplateSource.Template_NRI, rcRevision.Version.VersionNo.ToString());
+
+            strPath = strPath.Replace(sclsAppConfigs.GetRevisionNumberPrefix + "XX", pfstrGetRevisionFolderName(rcRevision));
+
+            return strPath;
+        }
+
+        private string str_GetRevisionRootFolderPath(int vintTemplate_NRI, string vstrVersion_No)
+        {
             string strSQL = string.Empty;
             string strPath = string.Empty;
             SqlDataReader sqlRecord = null;
 
-            mcModRevision = new mod_Rev_Revision();
-
-            if (pfblnFeedModelWithView())
+            try
             {
                 strSQL = strSQL + " WITH LstHierarchyComp " + Environment.NewLine;
                 strSQL = strSQL + " AS " + Environment.NewLine;
@@ -725,11 +823,17 @@ namespace Ceritar.CVS.Controllers
                 if (sqlRecord.Read())
                 {
                     strPath = sqlRecord["Path"].ToString();
-
-                    strPath = strPath.Replace(sclsAppConfigs.GetRevisionNumberPrefix + "XX", pfstrGetRevisionFolderName());
                 }
+            } catch (Exception ex)
+            {
+                mcActionResult.SetInvalid(sclsConstants.Error_Message.ERROR_UNHANDLED, clsActionResults.BaseErrorCode.UNHANDLED_ERROR);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
-
+            finally
+            {
+                if (sqlRecord != null) sqlRecord.Close();
+            }
+            
             return strPath;
         }
 
@@ -843,6 +947,54 @@ namespace Ceritar.CVS.Controllers
                 {
                     blnValidReturn = true;
                 }  
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnValidReturn;
+        }
+
+        /// <summary>
+        /// Envoie le répertoire à l'emplacement spécifié si désiré dans la corbeille.
+        /// </summary>
+        /// <param name="vstrRevisionFolderPath">Le chemin du répertoire à supprimer</param>
+        /// <returns></returns>
+        private bool pfblnDeleteDirectory(string vstrRevisionFolderPath, bool vblnAskBefore = false)
+        {
+            bool blnValidReturn = false;
+            System.Windows.Forms.DialogResult answer;
+
+            try
+            {
+                if (vblnAskBefore)
+                {
+                    answer = System.Windows.Forms.MessageBox.Show("Voulez-vous supprimer le répertoire à l'emplacement suivant : " + vstrRevisionFolderPath, "Attention", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                }
+                else
+                {
+                    answer = System.Windows.Forms.DialogResult.Yes;
+                }
+
+                if (answer == System.Windows.Forms.DialogResult.Yes)
+                {
+                    System.Diagnostics.Process process = new System.Diagnostics.Process();
+                    System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+
+                    startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                    startInfo.FileName = "cmd.exe";
+                    startInfo.Arguments = @"/C RMDIR """ + vstrRevisionFolderPath + @""" /S /Q";
+
+                    process.StartInfo = startInfo;
+                    process.Start();
+                    process.WaitForExit();
+                }
+                else
+                {
+                    blnValidReturn = true;
+                }
             }
             catch (Exception ex)
             {
@@ -1027,6 +1179,81 @@ namespace Ceritar.CVS.Controllers
             }
 
             return blnValidReturn;
+        }
+
+        public bool blnRevisionPathIsValid(int vintRev_NRI)
+        {
+            bool blnIsValid = false;
+            string strSQL = string.Empty;
+            string strRevisionFolderPath = string.Empty;
+            SqlDataReader sqlRecord = null;
+            mod_Rev_Revision cRevision = new mod_Rev_Revision();
+
+            try
+            {
+                strSQL = strSQL + " SELECT Revision.Rev_No, " + Environment.NewLine;
+                strSQL = strSQL + "        Revision.Rev_Location_Exe, " + Environment.NewLine;
+                strSQL = strSQL + "        Revision.Rev_ExeIsReport, " + Environment.NewLine;
+                strSQL = strSQL + "        Revision.Rev_ExeWithReport, " + Environment.NewLine;
+                strSQL = strSQL + "        Revision.Rev_Location_Scripts, " + Environment.NewLine;
+                strSQL = strSQL + "        Revision.Tpl_NRI, " + Environment.NewLine;
+                strSQL = strSQL + "        SatRevision.SRe_Exe_Location, " + Environment.NewLine;
+                strSQL = strSQL + "        CerSatApp.CSA_KitFolderName, " + Environment.NewLine;
+                strSQL = strSQL + "        Version.Ver_No " + Environment.NewLine;
+
+                strSQL = strSQL + " FROM Revision " + Environment.NewLine;
+                strSQL = strSQL + "     INNER JOIN Version ON Version.Ver_NRI = Revision.Ver_NRI " + Environment.NewLine;
+                strSQL = strSQL + "     LEFT JOIN SatRevision " + Environment.NewLine;
+                strSQL = strSQL + "         INNER JOIN CerSatApp ON CerSatApp.CSA_NRI = SatRevision.CSA_NRI " + Environment.NewLine;
+                strSQL = strSQL + "     ON SatRevision.Rev_NRI = Revision.Rev_NRI " + Environment.NewLine;
+
+                strSQL = strSQL + " WHERE Revision.Rev_NRI = " + vintRev_NRI + Environment.NewLine;
+
+                strSQL = strSQL + " --ORDER BY Ver_NRI, Rev_No ASC " + Environment.NewLine;
+
+                sqlRecord = clsSQL.ADOSelect(strSQL);
+
+                if (sqlRecord.Read())
+                {
+                    cRevision.Version = new mod_Ver_Version();
+                    cRevision.Version.VersionNo = UInt16.Parse(sqlRecord["Ver_No"].ToString());
+
+                    cRevision.Revision_Number = Byte.Parse(sqlRecord["Rev_No"].ToString());
+                    cRevision.Path_Release = sqlRecord["Rev_Location_Exe"].ToString();
+                    cRevision.ExeIsExternalReport = Convert.ToBoolean(sqlRecord["Rev_ExeIsReport"].ToString());
+                    cRevision.ExeWithExternalReport = Convert.ToBoolean(sqlRecord["Rev_ExeWithReport"].ToString());
+                    cRevision.Path_Scripts = sqlRecord["Rev_Location_Scripts"].ToString();
+
+                    cRevision.LstSatelliteRevisions.Add(new mod_SRe_SatelliteRevision());
+                    cRevision.LstSatelliteRevisions[0].Location_Exe = sqlRecord["SRe_Exe_Location"].ToString();
+
+                    cRevision.LstSatelliteRevisions[0].CeritarSatelliteApp = new mod_CSA_CeritarSatelliteApp();
+                    cRevision.LstSatelliteRevisions[0].CeritarSatelliteApp.ExportFolderName = sqlRecord["CSA_KitFolderName"].ToString();
+
+                    cRevision.TemplateSource = new Models.Module_Template.mod_Tpl_HierarchyTemplate();
+                    cRevision.TemplateSource.Template_NRI = Int32.Parse(sqlRecord["Tpl_NRI"].ToString());
+
+                    strRevisionFolderPath = str_GetRevisionFolderPath(cRevision);
+
+                    blnIsValid = Directory.Exists(strRevisionFolderPath);
+                }
+            }
+            catch (FileNotFoundException exPath)
+            {
+                blnIsValid = false;
+                mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exPath.FileName);
+            }
+            catch (Exception ex)
+            {
+                blnIsValid = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                if (sqlRecord != null) sqlRecord.Dispose();
+            }
+
+            return blnIsValid;
         }
 
 #region "SQL Queries"

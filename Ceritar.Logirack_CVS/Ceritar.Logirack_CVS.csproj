@@ -170,6 +170,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\valid.png" />
+    <None Include="Resources\invalid.png" />
     <Content Include="Test.ico" />
   </ItemGroup>
   <ItemGroup>

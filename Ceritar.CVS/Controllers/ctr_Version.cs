@@ -336,7 +336,7 @@ namespace Ceritar.CVS.Controllers
 
                             break;
 
-                        case (int)ctr_Template.FolderType.Report:
+                        case (int)ctr_Template.FolderType.External_Report:
 
                             blnValidReturn = pfblnCopyAllReportsForClients(currentFolderInfos.FullName);
 
@@ -1183,12 +1183,13 @@ namespace Ceritar.CVS.Controllers
 
             strSQL = strSQL + " SELECT Revision.Rev_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_TS, " + Environment.NewLine;
+            strSQL = strSQL + "        NULL As PathIsValid, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_No, " + Environment.NewLine;
             strSQL = strSQL + "        CerClient.CeC_Name, " + Environment.NewLine;
-            strSQL = strSQL + "        AppName = CASE WHEN Revision.Rev_Location_Exe IS NOT NULL THEN CerApp.CeA_Name " + Environment.NewLine;
+            strSQL = strSQL + "        AppName = CASE WHEN Revision.Rev_Location_Exe IS NOT NULL AND Revision.Rev_ExeIsReport = 0 THEN CerApp.CeA_Name " + Environment.NewLine;
             strSQL = strSQL + " 					  ELSE '' END + " + Environment.NewLine;
             strSQL = strSQL + " 				 CASE WHEN Revision.Rev_ExeIsReport = 1 OR Revision.Rev_ExeWithReport = 1 " + Environment.NewLine;
-            strSQL = strSQL + " 				      THEN CASE WHEN Revision.Rev_Location_Exe IS NOT NULL " + Environment.NewLine;
+            strSQL = strSQL + " 				      THEN CASE WHEN Revision.Rev_Location_Exe IS NOT NULL AND Revision.Rev_ExeIsReport = 0 " + Environment.NewLine;
             strSQL = strSQL + " 								THEN ' + '  " + Environment.NewLine;
             strSQL = strSQL + " 								ELSE ''  " + Environment.NewLine;
             strSQL = strSQL + " 						   END + 'RPT' " + Environment.NewLine;
