@@ -467,6 +467,7 @@ namespace Ceritar.Logirack_CVS
                 btnLocationSatExe.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
                 btnLocationSatExe.Image = ((System.Drawing.Image)(Properties.Resources.ellipsis));
                 btnLocationSatExe.UseVisualStyleBackColor = true;
+                btnLocationSatExe.FlatStyle = FlatStyle.Flat;
 
                 btnLocationSatExe.Click += btnReplaceSatelliteExe_Click;
             }
@@ -516,8 +517,11 @@ namespace Ceritar.Logirack_CVS
                         {
                             if (((C1FlexGrid)rControl).Name == grdClients.Name)
                             {
-                                ((C1FlexGrid)rControl)[grdClients.Row, mintGrdClients_LocationReportExe_col] = openFileDialog.FileName;
-                                ((HostedCellControl)mcGrdClients.LstHostedCellControls[grdClients.Row - 1]).GetCellControl.BackColor = System.Drawing.Color.Yellow;
+                                if (!mcGrdClients[grdClients.Row, mintGrdClients_LocationReportExe_col].Equals(openFileDialog.FileName))
+                                {
+                                    ((HostedCellControl)mcGrdClients.LstHostedCellControls[grdClients.Row - 1]).GetCellControl.BackColor = System.Drawing.Color.Yellow;
+                                    ((C1FlexGrid)rControl)[grdClients.Row, mintGrdClients_LocationReportExe_col] = openFileDialog.FileName;
+                                }
                             }
 
                             if (((C1FlexGrid)rControl).Name == grdSatellite.Name)
@@ -526,17 +530,20 @@ namespace Ceritar.Logirack_CVS
                                 {
                                     grdSatellite[grdSatellite.Row, mintGrdSat_Action_col] = sclsConstants.DML_Mode.INSERT_MODE;
 
+                                    ((HostedCellControl)mcGrdSatelliteApps.LstHostedCellControls[grdSatellite.Row - 1]).GetCellControl.BackColor = System.Drawing.Color.Yellow;
+
                                     mblnGrdSatellitesChangeMade = true;
                                 } 
                                 else if (mcGrdSatelliteApps[grdSatellite.Row, mintGrdSat_CSV_LocationExe_col] != openFileDialog.FileName)
                                 {
                                     grdSatellite[grdSatellite.Row, mintGrdSat_Action_col] = sclsConstants.DML_Mode.UPDATE_MODE;
 
+                                    ((HostedCellControl)mcGrdSatelliteApps.LstHostedCellControls[grdSatellite.Row - 1]).GetCellControl.BackColor = System.Drawing.Color.Yellow;
+
                                     mblnGrdSatellitesChangeMade = true;
                                 }
 
                                 ((C1FlexGrid)rControl)[grdSatellite.Row, mintGrdSat_CSV_LocationExe_col] = openFileDialog.FileName;
-                                ((HostedCellControl)mcGrdSatelliteApps.LstHostedCellControls[grdSatellite.Row - 1]).GetCellControl.BackColor = System.Drawing.Color.Yellow;
                             }
                         }
                     }
@@ -659,12 +666,12 @@ namespace Ceritar.Logirack_CVS
 
         void mcGrdClients_SetGridDisplay()
         {
-            grdClients.Cols[mintGrdClients_CeC_Name_col].Width = 132;
-            grdClients.Cols[mintGrdClients_Installed_col].Width = 47;
-            grdClients.Cols[mintGrdClients_IsCurrentVersion_col].Width = 49;
-            grdClients.Cols[mintGrdClients_LocationReportExe_col].Width = 43;
+            grdClients.Cols[mintGrdClients_CeC_Name_col].Width = 160;
+            grdClients.Cols[mintGrdClients_Installed_col].Width = 49;
+            grdClients.Cols[mintGrdClients_IsCurrentVersion_col].Width = 51;
+            grdClients.Cols[mintGrdClients_LocationReportExe_col].Width = 45;
             grdClients.Cols[mintGrdClients_Selection_col].Width = 20;
-            grdClients.Cols[mintGrdClients_LatestRPTExe_col].Width = 79;
+            grdClients.Cols[mintGrdClients_LatestRPTExe_col].Width = 90;
 
             grdClients.Cols[mintGrdClients_IsCurrentVersion_col].DataType = typeof(bool);
             grdClients.Cols[mintGrdClients_Installed_col].DataType = typeof(bool);
@@ -682,7 +689,20 @@ namespace Ceritar.Logirack_CVS
 
                     if (!mcGrdClients.bln_CellIsEmpty(intRowIndex, mintGrdClients_LocationReportExe_col))
                     {
-                        mcGrdClients.LstHostedCellControls[intRowIndex - 1].GetCellControl.BackColor = System.Drawing.Color.Yellow;
+                        //mcGrdClients.LstHostedCellControls[intRowIndex - 1].GetCellControl.BackColor = System.Drawing.Color.Yellow;
+
+                        if (Directory.Exists(mcGrdClients[intRowIndex, mintGrdClients_LocationReportExe_col]) || File.Exists(mcGrdClients[intRowIndex, mintGrdClients_LocationReportExe_col]))
+                        {
+                            ((Button)mcGrdClients.LstHostedCellControls[intRowIndex - 1].GetCellControl).BackColor = System.Drawing.Color.Lime;
+                        }
+                        else if (!string.IsNullOrEmpty(mcGrdClients[intRowIndex, mintGrdClients_LocationReportExe_col]))
+                        {
+                            ((Button)mcGrdClients.LstHostedCellControls[intRowIndex - 1].GetCellControl).BackColor = System.Drawing.Color.Red;
+                        }
+                        else
+                        {
+                            ((Button)mcGrdClients.LstHostedCellControls[intRowIndex - 1].GetCellControl).BackColor = System.Drawing.SystemColors.Control;
+                        }
                     }
                 }   
             }
@@ -705,7 +725,20 @@ namespace Ceritar.Logirack_CVS
 
                     if (!mcGrdSatelliteApps.bln_CellIsEmpty(intRowIndex, mintGrdSat_CSV_LocationExe_col))
                     {
-                        mcGrdSatelliteApps.LstHostedCellControls[intRowIndex - 1].GetCellControl.BackColor = System.Drawing.Color.Yellow;
+                        //mcGrdSatelliteApps.LstHostedCellControls[intRowIndex - 1].GetCellControl.BackColor = System.Drawing.Color.Yellow;
+
+                        if (Directory.Exists(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSV_LocationExe_col]) || File.Exists(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSV_LocationExe_col]))
+                        {
+                            ((Button)mcGrdSatelliteApps.LstHostedCellControls[intRowIndex - 1].GetCellControl).BackColor = System.Drawing.Color.Lime;
+                        }
+                        else if (!string.IsNullOrEmpty(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSV_LocationExe_col]))
+                        {
+                            ((Button)mcGrdSatelliteApps.LstHostedCellControls[intRowIndex - 1].GetCellControl).BackColor = System.Drawing.Color.Red;
+                        }
+                        else
+                        {
+                            ((Button)mcGrdSatelliteApps.LstHostedCellControls[intRowIndex - 1].GetCellControl).BackColor = System.Drawing.SystemColors.Control;
+                        }
                     }
                 }
             }
@@ -1362,17 +1395,20 @@ namespace Ceritar.Logirack_CVS
                     {
                         grdSatellite[grdSatellite.Row, mintGrdSat_Action_col] = sclsConstants.DML_Mode.INSERT_MODE;
 
+                        ((HostedCellControl)mcGrdSatelliteApps.LstHostedCellControls[grdSatellite.Row - 1]).GetCellControl.BackColor = System.Drawing.Color.Yellow;
+
                         mblnGrdSatellitesChangeMade = true;
                     }
                     else if (mcGrdSatelliteApps[grdSatellite.Row, mintGrdSat_CSV_LocationExe_col] != txtTemp.Text)
                     {
                         grdSatellite[grdSatellite.Row, mintGrdSat_Action_col] = sclsConstants.DML_Mode.UPDATE_MODE;
 
+                        ((HostedCellControl)mcGrdSatelliteApps.LstHostedCellControls[grdSatellite.Row - 1]).GetCellControl.BackColor = System.Drawing.Color.Yellow;
+
                         mblnGrdSatellitesChangeMade = true;
                     }
 
-                    grdSatellite[grdSatellite.Row, mintGrdSat_CSV_LocationExe_col] = txtTemp.Text;
-                    ((HostedCellControl)mcGrdSatelliteApps.LstHostedCellControls[grdSatellite.Row - 1]).GetCellControl.BackColor = System.Drawing.Color.Yellow;
+                    grdSatellite[grdSatellite.Row, mintGrdSat_CSV_LocationExe_col] = txtTemp.Text;        
                 }              
             }
             else
