@@ -79,6 +79,7 @@ namespace Ceritar.Logirack_CVS
         private string mstrVariousFileLocation;
         private string mstrVariousFolderLocation;
         private int mintGrdClient_SelectedRow = 1;
+        private int mintCreatedByUser_NRI;
         
 
         public frmVersion()
@@ -267,6 +268,11 @@ namespace Ceritar.Logirack_CVS
             return clsApp.GetAppController.ShowInputMessage(mintMSG_ApplicationNotExistsInSystem);
         }
 
+        int IVersion.GetCreatedByUser_NRI()
+        {
+            return (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE? clsApp.GetAppController.cUser.GetUser_NRI : mintCreatedByUser_NRI);
+        }
+
 #endregion
         
         
@@ -390,7 +396,9 @@ namespace Ceritar.Logirack_CVS
                 if (sqlRecord.Read())
                 {
                     UInt16.TryParse(sqlRecord["Ver_TS"].ToString(), out mintVersion_TS);
+                    Int32.TryParse(sqlRecord["TTU_NRI"].ToString(), out mintCreatedByUser_NRI);
 
+                    txtCreatedBy.Text = sqlRecord["TTU_Code"].ToString();
                     txtCompiledBy.Text = sqlRecord["Ver_CompiledBy"].ToString();
                     txtVersionNo.Text = sqlRecord["Ver_No"].ToString();
 

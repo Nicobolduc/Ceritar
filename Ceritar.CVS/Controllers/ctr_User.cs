@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Ceritar.TT3LightDLL.Classes;
+using Ceritar.TT3LightDLL.Static_Classes;
 using Ceritar.CVS.Models.Module_ActivesInstallations;
 
 namespace Ceritar.CVS.Controllers
@@ -10,12 +12,108 @@ namespace Ceritar.CVS.Controllers
     /// </summary>
     public class ctr_User
     {
-        private mod_TTU_User mcUser = null;
+        private Interfaces.IUser mcView;
+        private mod_TTU_User mcModUser = null;
+        private clsActionResults mcActionResult;
+        private clsSQL mcSQL;
+        
+        public enum ErrorCode_TTU
+        {
+            FIRST_NAME_MANDATORY = 1,
+            LAST_NAME_MANDATORY = 2,
+            CODE_MANDATORY = 3,
+            CODE_UNIQUE = 4,
+            EMAIL_INVALID = 5
+        }
 
 
-#region "Properties"
+        public ctr_User(Interfaces.IUser rView)
+        {
+            mcModUser = new mod_TTU_User();
+
+            mcView = rView;
+        }
+
+        public clsActionResults Validate()
+        {
+            try
+            {
+                mcModUser = new mod_TTU_User();
+
+                mcModUser.DML_Action = mcView.GetDML_Mode();
+                mcModUser.Email = mcView.GetEMail();
+                mcModUser.Firstname = mcView.GetFirstName();
+                mcModUser.Lastname = mcView.GetLastName();
+                mcModUser.Password = mcView.GetPassword();
+                mcModUser.User_NRI = mcView.GetUser_NRI();
+                mcModUser.User_TS = mcView.GetUser_TS();
+                mcModUser.UserCode = mcView.GetCode();
+
+                mcActionResult = mcModUser.Validate();
+            }
+            catch (Exception ex)
+            {
+                mcActionResult.SetInvalid(sclsConstants.Error_Message.ERROR_UNHANDLED, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return mcActionResult;
+        }
+
+        public clsActionResults Save()
+        {
+            try
+            {
+                mcSQL = new clsSQL();
+
+                if (mcSQL.bln_BeginTransaction())
+                {
+                    mcModUser.SetcSQL = mcSQL;
+
+                    mcModUser.blnSave();
+
+                    mcActionResult = mcModUser.ActionResults;
+                }
+            }
+            catch (Exception ex)
+            {
+                mcActionResult.SetInvalid(sclsConstants.Error_Message.ERROR_UNHANDLED, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                mcSQL.bln_EndTransaction(mcActionResult.IsValid);
+                mcSQL = null;
+            }
+
+            return mcActionResult;
+        }
 
 
+#region "SQL Queries"
+
+        public string strGetDataLoad_SQL(int vintTTUser_NRI)
+        {
+            string strSQL = string.Empty;
+
+            strSQL = strSQL + " " + Environment.NewLine;
+
+            return strSQL;
+        }
+
+        public string strGetApplications_SQL()
+        {
+            string strSQL = string.Empty;
+
+            strSQL = strSQL + " SELECT CerApp.CeA_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.CeA_Name " + Environment.NewLine;
+
+            strSQL = strSQL + " FROM CerApp " + Environment.NewLine;
+
+            strSQL = strSQL + " ORDER BY CerApp.CeA_Name " + Environment.NewLine;
+
+            return strSQL;
+        }
 
 #endregion
 

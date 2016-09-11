@@ -54,6 +54,7 @@
     <Compile Include="Controllers\Interfaces\ICeritarClient.cs" />
     <Compile Include="Controllers\Interfaces\IRevision.cs" />
     <Compile Include="Controllers\Interfaces\ITemplate.cs" />
+    <Compile Include="Controllers\Interfaces\IUser.cs" />
     <Compile Include="Controllers\Interfaces\IVersion.cs" />
     <Compile Include="Models\Module_ActivesInstallations\mod_CSV_ClientSatVersion.cs" />
     <Compile Include="Models\Module_ActivesInstallations\mod_SRe_SatelliteRevision.cs" />

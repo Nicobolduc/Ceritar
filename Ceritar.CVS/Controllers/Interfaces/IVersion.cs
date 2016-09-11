@@ -13,20 +13,22 @@ namespace Ceritar.CVS.Controllers.Interfaces
         sclsConstants.DML_Mode GetDML_Action();
         int GetVersion_NRI();
         int GetVersion_TS();
+        ushort GetVersionNo();
+        int GetCeritarApplication_NRI();       
+        int GetTemplateSource_NRI();
+        int GetCreatedByUser_NRI();
         string GetCreationDate();
         string GetCompiledBy();
-        ushort GetVersionNo();
-        int GetCeritarApplication_NRI();
         string GetCeritarApplication_Name();
-        int GetTemplateSource_NRI();
         string GetLocation_APP_CHANGEMENT();
         string GetLocation_Release();
         string GetLocation_TTApp();
         string GetLocation_VariousFile();
         string GetLocation_VariousFolder();
+        string GetLatestVersionNo();
         bool GetIsDemo();
         bool GetIncludeScriptsOnRefresh();
-        string GetLatestVersionNo();
+        
         structClientAppVersion GetSelectedClient();
         List<structClientAppVersion> GetClientsList();
         List<structClientSatVersion> GetClientSatellitesList();

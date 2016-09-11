@@ -734,6 +734,9 @@ namespace Ceritar.CVS.Controllers
 
                 mcModVersion.TemplateSource = new Models.Module_Template.mod_Tpl_HierarchyTemplate();
                 mcModVersion.TemplateSource.Template_NRI = mcView.GetTemplateSource_NRI();
+
+                mcModVersion.CreatedByUser = new mod_TTU_User();
+                mcModVersion.CreatedByUser.User_NRI = mcView.GetCreatedByUser_NRI();
                 
                 lstStructCAV = mcView.GetClientsList();
 
@@ -1099,11 +1102,14 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        Version.Ver_Release_Location, " + Environment.NewLine;
             strSQL = strSQL + "        Version.Ver_CaptionsAndMenus_Location, " + Environment.NewLine;
             strSQL = strSQL + "        Version.Ver_IsDemo, " + Environment.NewLine;
-            strSQL = strSQL + "        CerApp.CeA_ExternalRPTAppName " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.CeA_ExternalRPTAppName, " + Environment.NewLine;
+            strSQL = strSQL + "        Version.TTU_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        TTUser.TTU_Code " + Environment.NewLine;
 
             strSQL = strSQL + " FROM Version " + Environment.NewLine;
 
             strSQL = strSQL + "     INNER JOIN CerApp ON CerApp.CeA_NRI = Version.CeA_NRI " + Environment.NewLine;
+            strSQL = strSQL + "     INNER JOIN TTUser ON TTUser.TTU_NRI = Version.TTU_NRI " + Environment.NewLine;
 
             strSQL = strSQL + " WHERE Version.Ver_NRI = " + vintVersion_NRI + Environment.NewLine;
 

@@ -62,52 +62,58 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="frmCeritarApp.cs">
+    <Compile Include="Forms\frmCeritarApp.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmCeritarApp.Designer.cs">
+    <Compile Include="Forms\frmCeritarApp.Designer.cs">
       <DependentUpon>frmCeritarApp.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmCeritarClient.cs">
+    <Compile Include="Forms\frmCeritarClient.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmCeritarClient.Designer.cs">
+    <Compile Include="Forms\frmCeritarClient.Designer.cs">
       <DependentUpon>frmCeritarClient.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmGenericList.cs">
+    <Compile Include="Forms\frmGenericList.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmGenericList.Designer.cs">
+    <Compile Include="Forms\frmGenericList.Designer.cs">
       <DependentUpon>frmGenericList.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmRevision.cs">
+    <Compile Include="Forms\frmRevision.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmRevision.Designer.cs">
+    <Compile Include="Forms\frmRevision.Designer.cs">
       <DependentUpon>frmRevision.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmTemplate.cs">
+    <Compile Include="Forms\frmTemplate.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmTemplate.Designer.cs">
+    <Compile Include="Forms\frmTemplate.Designer.cs">
       <DependentUpon>frmTemplate.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmVersion.cs">
+    <Compile Include="Forms\frmUser.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmVersion.Designer.cs">
+    <Compile Include="Forms\frmUser.Designer.cs">
+      <DependentUpon>frmUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmVersion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmVersion.Designer.cs">
       <DependentUpon>frmVersion.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmWorkInProgress.cs">
+    <Compile Include="Forms\frmWorkInProgress.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmWorkInProgress.Designer.cs">
+    <Compile Include="Forms\frmWorkInProgress.Designer.cs">
       <DependentUpon>frmWorkInProgress.cs</DependentUpon>
     </Compile>
-    <Compile Include="mdiGeneral.cs">
+    <Compile Include="Forms\mdiGeneral.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="mdiGeneral.Designer.cs">
+    <Compile Include="Forms\mdiGeneral.Designer.cs">
       <DependentUpon>mdiGeneral.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -118,29 +124,32 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="sclsGenList.cs" />
-    <EmbeddedResource Include="frmCeritarApp.resx">
+    <EmbeddedResource Include="Forms\frmCeritarApp.resx">
       <DependentUpon>frmCeritarApp.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmCeritarClient.resx">
+    <EmbeddedResource Include="Forms\frmCeritarClient.resx">
       <DependentUpon>frmCeritarClient.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmGenericList.resx">
+    <EmbeddedResource Include="Forms\frmGenericList.resx">
       <DependentUpon>frmGenericList.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmRevision.resx">
+    <EmbeddedResource Include="Forms\frmRevision.resx">
       <DependentUpon>frmRevision.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmTemplate.resx">
+    <EmbeddedResource Include="Forms\frmTemplate.resx">
       <DependentUpon>frmTemplate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmVersion.resx">
+    <EmbeddedResource Include="Forms\frmUser.resx">
+      <DependentUpon>frmUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmVersion.resx">
       <DependentUpon>frmVersion.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmWorkInProgress.resx">
+    <EmbeddedResource Include="Forms\frmWorkInProgress.resx">
       <DependentUpon>frmWorkInProgress.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="mdiGeneral.resx">
+    <EmbeddedResource Include="Forms\mdiGeneral.resx">
       <DependentUpon>mdiGeneral.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
