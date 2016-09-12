@@ -1,4 +1,4 @@
-﻿namespace Ceritar.Logirack_CVS
+﻿namespace Ceritar.Logirack_CVS.Forms
 {
     partial class frmGenericList
     {
@@ -47,12 +47,13 @@
             this.grdList.ColumnInfo = "4,1,0,0,0,90,Columns:0{Width:5;}\t1{Width:94;Caption:\"Latitude\";}\t2{Width:113;Capt" +
     "ion:\"Longitude\";}\t3{Caption:\"Sél.\";}\t";
             this.grdList.ExtendLastCol = true;
-            this.grdList.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdList.Location = new System.Drawing.Point(5, 64);
+            this.grdList.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdList.Location = new System.Drawing.Point(6, 79);
+            this.grdList.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.grdList.Name = "grdList";
             this.grdList.Rows.Count = 2;
             this.grdList.Rows.DefaultSize = 18;
-            this.grdList.Size = new System.Drawing.Size(525, 499);
+            this.grdList.Size = new System.Drawing.Size(612, 618);
             this.grdList.StyleInfo = resources.GetString("grdList.StyleInfo");
             this.grdList.TabIndex = 0;
             this.grdList.DoubleClick += new System.EventHandler(this.grdList_DoubleClick);
@@ -62,9 +63,10 @@
             this.btnAdd.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnAdd.BackgroundImage")));
             this.btnAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnAdd.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
-            this.btnAdd.Location = new System.Drawing.Point(536, 110);
+            this.btnAdd.Location = new System.Drawing.Point(625, 135);
+            this.btnAdd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(40, 40);
+            this.btnAdd.Size = new System.Drawing.Size(47, 49);
             this.btnAdd.TabIndex = 3;
             this.toolTip.SetToolTip(this.btnAdd, "Ajouter");
             this.btnAdd.UseVisualStyleBackColor = true;
@@ -74,9 +76,10 @@
             // 
             this.btnConsult.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnConsult.Image = ((System.Drawing.Image)(resources.GetObject("btnConsult.Image")));
-            this.btnConsult.Location = new System.Drawing.Point(536, 64);
+            this.btnConsult.Location = new System.Drawing.Point(625, 79);
+            this.btnConsult.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnConsult.Name = "btnConsult";
-            this.btnConsult.Size = new System.Drawing.Size(40, 40);
+            this.btnConsult.Size = new System.Drawing.Size(47, 49);
             this.btnConsult.TabIndex = 2;
             this.toolTip.SetToolTip(this.btnConsult, "Consulter");
             this.btnConsult.UseVisualStyleBackColor = true;
@@ -86,9 +89,10 @@
             // 
             this.btnDelete.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnDelete.Image = ((System.Drawing.Image)(resources.GetObject("btnDelete.Image")));
-            this.btnDelete.Location = new System.Drawing.Point(536, 202);
+            this.btnDelete.Location = new System.Drawing.Point(625, 249);
+            this.btnDelete.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(40, 40);
+            this.btnDelete.Size = new System.Drawing.Size(47, 49);
             this.btnDelete.TabIndex = 5;
             this.toolTip.SetToolTip(this.btnDelete, "Supprimer");
             this.btnDelete.UseVisualStyleBackColor = true;
@@ -98,9 +102,10 @@
             // 
             this.btnUpdate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnUpdate.Image = ((System.Drawing.Image)(resources.GetObject("btnUpdate.Image")));
-            this.btnUpdate.Location = new System.Drawing.Point(536, 156);
+            this.btnUpdate.Location = new System.Drawing.Point(625, 192);
+            this.btnUpdate.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(40, 40);
+            this.btnUpdate.Size = new System.Drawing.Size(47, 49);
             this.btnUpdate.TabIndex = 4;
             this.toolTip.SetToolTip(this.btnUpdate, "Modifier");
             this.btnUpdate.UseVisualStyleBackColor = true;
@@ -108,9 +113,10 @@
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(536, 12);
+            this.btnRefresh.Location = new System.Drawing.Point(625, 15);
+            this.btnRefresh.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(35, 35);
+            this.btnRefresh.Size = new System.Drawing.Size(41, 43);
             this.btnRefresh.TabIndex = 1;
             // 
             // formController
@@ -121,10 +127,11 @@
             this.formController.FormIsLoading = false;
             this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.NO_MODE;
             this.formController.Item_NRI = 0;
-            this.formController.Location = new System.Drawing.Point(5, 569);
+            this.formController.Location = new System.Drawing.Point(6, 705);
+            this.formController.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = true;
-            this.formController.Size = new System.Drawing.Size(576, 33);
+            this.formController.Size = new System.Drawing.Size(672, 34);
             this.formController.TabIndex = 6;
             this.formController.BeNotify += new Ceritar.TT3LightDLL.Controls.ctlFormController.BeNotifyEventHandler(this.formController_BeNotify);
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
@@ -135,9 +142,9 @@
             // 
             // frmGenericList
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(581, 602);
+            this.ClientSize = new System.Drawing.Size(678, 741);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnDelete);
@@ -145,8 +152,10 @@
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.formController);
             this.Controls.Add(this.grdList);
+            this.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.Name = "frmGenericList";
             this.Text = "Liste générique";

@@ -13,7 +13,7 @@ using Ceritar.CVS.Controllers;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Ceritar.Logirack_CVS
+namespace Ceritar.Logirack_CVS.Forms
 {
     /// <summary>
     /// Cette classe contient les fonctions et évènements de la vue permettant de définir les versions d'une application.
@@ -270,7 +270,7 @@ namespace Ceritar.Logirack_CVS
 
         int IVersion.GetCreatedByUser_NRI()
         {
-            return (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE? clsApp.GetAppController.cUser.GetUser_NRI : mintCreatedByUser_NRI);
+            return (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE? clsApp.GetAppController.cUser.User_NRI : mintCreatedByUser_NRI);
         }
 
 #endregion

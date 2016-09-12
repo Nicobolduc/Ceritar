@@ -69,7 +69,7 @@ namespace Ceritar.TT3LightDLL.Classes
         {
             get
             {
-                switch (mctrlUser.GetUserLanguage)
+                switch (mctrlUser.UserLanguage)
                 {
                     case (short)sclsConstants.Language.FRENCH_QC:
                         // Return "dd-MM-yyyy"
@@ -91,7 +91,7 @@ namespace Ceritar.TT3LightDLL.Classes
         {
             get
             {
-                switch (mctrlUser.GetUserLanguage)
+                switch (mctrlUser.UserLanguage)
                 {
                     case (short)sclsConstants.Language.FRENCH_QC:
                         //Return "dd-MM-yyyy HH:mm:ss"
@@ -202,7 +202,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
             try
             {
-                strMessage = _myUniqueInstance.str_GetCaption(vintCaption_NRI, mctrlUser.GetUserLanguage);
+                strMessage = _myUniqueInstance.str_GetCaption(vintCaption_NRI, mctrlUser.UserLanguage);
 
                 if ((vlstMsgParam != null))
                 {
@@ -242,7 +242,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
             try
             {
-                strMessage = _myUniqueInstance.str_GetCaption(vintCaption_NRI, mctrlUser.GetUserLanguage);
+                strMessage = _myUniqueInstance.str_GetCaption(vintCaption_NRI, mctrlUser.UserLanguage);
 
                 if ((vlstMsgParam != null))
                 {

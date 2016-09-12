@@ -11,7 +11,7 @@ using Ceritar.CVS.Controllers.Interfaces;
 using System.Collections.Generic;
 using Ceritar.TT3LightDLL.Controls;
 
-namespace Ceritar.Logirack_CVS
+namespace Ceritar.Logirack_CVS.Forms
 {
     /// <summary>
     /// Cette classe contient les fonctions et évènements de la vue permettant de définir les clients de Ceritar.

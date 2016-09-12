@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using System.Reflection;
 using Ceritar.TT3LightDLL.Controls;
 
-namespace Ceritar.Logirack_CVS
+namespace Ceritar.Logirack_CVS.Forms
 {
     /// <summary>
     /// Cette classe permet d'afficher une liste représentant n'importe quel objet dans le système. Elle offre la possibilité de consulter, ajouter, modifier ou supprimer ces objets via
@@ -72,7 +72,7 @@ namespace Ceritar.Logirack_CVS
 
             try
             {
-                strFormName = typeof(mdiGeneral).Namespace + "." + mstrFormToOpenName;
+                strFormName = typeof(Forms.mdiGeneral).Namespace + "." + mstrFormToOpenName;
 
                 frmToOpen = (IFormController) System.Reflection.Assembly.GetEntryAssembly().CreateInstance(strFormName, true);
                 ((Form)frmToOpen).MdiParent = this.MdiParent;

@@ -41,9 +41,10 @@ namespace Ceritar.TT3LightDLL.Controls
             // 
             this.btnQuit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnQuit.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnQuit.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnQuit.Location = new System.Drawing.Point(246, 5);
             this.btnQuit.Name = "btnQuit";
-            this.btnQuit.Size = new System.Drawing.Size(75, 23);
+            this.btnQuit.Size = new System.Drawing.Size(75, 25);
             this.btnQuit.TabIndex = 22;
             this.btnQuit.Text = "Fermer";
             this.btnQuit.UseVisualStyleBackColor = true;
@@ -53,9 +54,10 @@ namespace Ceritar.TT3LightDLL.Controls
             // 
             this.btnApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnApply.Enabled = false;
-            this.btnApply.Location = new System.Drawing.Point(84, 5);
+            this.btnApply.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnApply.Location = new System.Drawing.Point(77, 5);
             this.btnApply.Name = "btnApply";
-            this.btnApply.Size = new System.Drawing.Size(75, 23);
+            this.btnApply.Size = new System.Drawing.Size(82, 25);
             this.btnApply.TabIndex = 21;
             this.btnApply.Text = "Enregistrer";
             this.btnApply.UseVisualStyleBackColor = true;
@@ -65,9 +67,10 @@ namespace Ceritar.TT3LightDLL.Controls
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.Enabled = false;
+            this.btnCancel.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancel.Location = new System.Drawing.Point(165, 5);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.Size = new System.Drawing.Size(75, 25);
             this.btnCancel.TabIndex = 23;
             this.btnCancel.Text = "Annuler";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -77,7 +80,7 @@ namespace Ceritar.TT3LightDLL.Controls
             // 
             this.imgFormMode.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.imgFormMode.Image = global::Ceritar.TT3LightDLL.Properties.Resources.AddItem;
-            this.imgFormMode.Location = new System.Drawing.Point(5, -1);
+            this.imgFormMode.Location = new System.Drawing.Point(5, 0);
             this.imgFormMode.Name = "imgFormMode";
             this.imgFormMode.Size = new System.Drawing.Size(36, 33);
             this.imgFormMode.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -91,7 +94,7 @@ namespace Ceritar.TT3LightDLL.Controls
             this.Controls.Add(this.btnQuit);
             this.Controls.Add(this.btnApply);
             this.Name = "ctlFormController";
-            this.Size = new System.Drawing.Size(324, 33);
+            this.Size = new System.Drawing.Size(324, 34);
             this.LocationChanged += new System.EventHandler(this.ctlFormControler_LocationChanged);
             this.Move += new System.EventHandler(this.ctlFormControler_Move);
             ((System.ComponentModel.ISupportInitialize)(this.imgFormMode)).EndInit();

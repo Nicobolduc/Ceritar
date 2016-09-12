@@ -1,4 +1,4 @@
-﻿namespace Ceritar.Logirack_CVS
+﻿namespace Ceritar.Logirack_CVS.Forms
 {
     partial class frmWorkInProgress
     {
@@ -34,8 +34,8 @@
             // 
             // label1
             // 
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(62, 22);
+            this.label1.Font = new System.Drawing.Font("Arial", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(48, 27);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(183, 23);
             this.label1.TabIndex = 0;

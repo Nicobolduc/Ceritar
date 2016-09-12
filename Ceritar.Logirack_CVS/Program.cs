@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
 namespace Ceritar.Logirack_CVS
 {
     static class Program
@@ -13,7 +14,7 @@ namespace Ceritar.Logirack_CVS
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new mdiGeneral());
+            Application.Run(new Forms.mdiGeneral());
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Ceritar.Logirack_CVS
+﻿namespace Ceritar.Logirack_CVS.Forms
 {
     partial class frmCeritarClient
     {
@@ -42,27 +42,30 @@
             // lblNom
             // 
             this.lblNom.AutoSize = true;
-            this.lblNom.Location = new System.Drawing.Point(4, 11);
+            this.lblNom.Location = new System.Drawing.Point(5, 14);
             this.lblNom.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblNom.Name = "lblNom";
-            this.lblNom.Size = new System.Drawing.Size(35, 13);
+            this.lblNom.Size = new System.Drawing.Size(43, 16);
             this.lblNom.TabIndex = 5;
             this.lblNom.Text = "Nom :";
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(43, 8);
+            this.txtName.Location = new System.Drawing.Point(50, 10);
+            this.txtName.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(258, 20);
+            this.txtName.Size = new System.Drawing.Size(300, 22);
             this.txtName.TabIndex = 6;
             this.txtName.TextChanged += new System.EventHandler(this.txtNom_TextChanged);
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.grdCerApp);
-            this.groupBox1.Location = new System.Drawing.Point(5, 34);
+            this.groupBox1.Location = new System.Drawing.Point(6, 42);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(371, 193);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox1.Size = new System.Drawing.Size(433, 239);
             this.groupBox1.TabIndex = 13;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Liste des applications utilisées";
@@ -76,12 +79,13 @@
             this.grdCerApp.ColumnInfo = resources.GetString("grdCerApp.ColumnInfo");
             this.grdCerApp.ExtendLastCol = true;
             this.grdCerApp.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdCerApp.Location = new System.Drawing.Point(6, 19);
+            this.grdCerApp.Location = new System.Drawing.Point(7, 25);
+            this.grdCerApp.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.grdCerApp.Name = "grdCerApp";
             this.grdCerApp.Rows.Count = 2;
             this.grdCerApp.Rows.DefaultSize = 18;
             this.grdCerApp.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdCerApp.Size = new System.Drawing.Size(359, 168);
+            this.grdCerApp.Size = new System.Drawing.Size(418, 207);
             this.grdCerApp.StyleInfo = resources.GetString("grdCerApp.StyleInfo");
             this.grdCerApp.TabIndex = 2;
             this.grdCerApp.Tag = "21";
@@ -91,10 +95,10 @@
             this.chkActive.AutoSize = true;
             this.chkActive.Checked = true;
             this.chkActive.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkActive.Location = new System.Drawing.Point(322, 10);
+            this.chkActive.Location = new System.Drawing.Point(376, 12);
             this.chkActive.Margin = new System.Windows.Forms.Padding(2);
             this.chkActive.Name = "chkActive";
-            this.chkActive.Size = new System.Drawing.Size(56, 17);
+            this.chkActive.Size = new System.Drawing.Size(62, 20);
             this.chkActive.TabIndex = 14;
             this.chkActive.Text = "Active";
             this.chkActive.UseVisualStyleBackColor = true;
@@ -108,10 +112,11 @@
             this.formController.FormIsLoading = false;
             this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.NO_MODE;
             this.formController.Item_NRI = 0;
-            this.formController.Location = new System.Drawing.Point(-2, 231);
+            this.formController.Location = new System.Drawing.Point(-2, 289);
+            this.formController.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
-            this.formController.Size = new System.Drawing.Size(382, 33);
+            this.formController.Size = new System.Drawing.Size(446, 34);
             this.formController.TabIndex = 15;
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
@@ -119,14 +124,15 @@
             // 
             // frmCeritarClient
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(382, 264);
+            this.ClientSize = new System.Drawing.Size(446, 325);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.formController);
             this.Controls.Add(this.chkActive);
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.lblNom);
+            this.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);

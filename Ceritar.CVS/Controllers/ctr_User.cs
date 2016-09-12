@@ -96,7 +96,17 @@ namespace Ceritar.CVS.Controllers
         {
             string strSQL = string.Empty;
 
-            strSQL = strSQL + " " + Environment.NewLine;
+            strSQL = strSQL + " SELECT TTUser.TTU_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        TTUser.TTU_TS, " + Environment.NewLine;
+            strSQL = strSQL + "        TTUser.TTU_Code, " + Environment.NewLine;
+            strSQL = strSQL + "        TTUser.TTU_FirstName, " + Environment.NewLine;
+            strSQL = strSQL + "        TTUser.TTU_LastName, " + Environment.NewLine;
+            strSQL = strSQL + "        TTUser.TTU_Password, " + Environment.NewLine;
+            strSQL = strSQL + "        TTUser.TTU_Email " + Environment.NewLine;
+
+            strSQL = strSQL + " FROM TTUser " + Environment.NewLine;
+
+            strSQL = strSQL + " WHERE TTUser.TTU_NRI = " + vintTTUser_NRI + Environment.NewLine;
 
             return strSQL;
         }

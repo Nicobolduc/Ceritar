@@ -9,7 +9,7 @@ using C1.Win.C1FlexGrid;
 using System.Windows.Forms;
 using Ceritar.CVS.Controllers.Interfaces;
 
-namespace Ceritar.Logirack_CVS
+namespace Ceritar.Logirack_CVS.Forms
 {
     /// <summary>
     /// Cette classe contient les fonctions et évènements de la vue permettant de définir les gabarits d'une hiérarchie.

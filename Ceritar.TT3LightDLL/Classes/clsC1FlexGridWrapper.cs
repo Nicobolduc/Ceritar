@@ -411,7 +411,7 @@ namespace Ceritar.TT3LightDLL.Classes
             mintNbVisibleColumns = 0;
 
 		    try {
-                strGridCaption = clsApp.GetAppController.str_GetCaption(Convert.ToInt32(mGrdFlex.Tag), clsApp.GetAppController.cUser.GetUserLanguage);
+                strGridCaption = clsApp.GetAppController.str_GetCaption(Convert.ToInt32(mGrdFlex.Tag), clsApp.GetAppController.cUser.UserLanguage);
 
                 lstColumns = Strings.Split(strGridCaption.Insert(0, "|"), "|"); //The first fixed col must not be inclued in the caption!
                 

@@ -135,7 +135,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_User.ErrorCode_TTU.CODE_MANDATORY);
                         }
-                        else if (!string.IsNullOrEmpty(clsSQL.str_ADOSingleLookUp("TTU_NRI", "TTUser", "TTU_Code = " + _strUserCode)))
+                        else if (!string.IsNullOrEmpty(clsSQL.str_ADOSingleLookUp("TTU_NRI", "TTUser", "TTU_Code = " + clsApp.GetAppController.str_FixStringForSQL(_strUserCode))))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.UNIQUE_ATTRIBUTE, ctr_User.ErrorCode_TTU.CODE_UNIQUE);
                         }
@@ -252,19 +252,19 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             {
                 if (!mcSQL.bln_RefreshFields())
                 { }
-                else if (_strUserCode == null || !mcSQL.bln_AddField("TTU_Code", _strUserCode, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (_strUserCode != null && !mcSQL.bln_AddField("TTU_Code", _strUserCode, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (_strFirstname == null || !mcSQL.bln_AddField("TTU_FirstName", _strFirstname, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (_strFirstname != null && !mcSQL.bln_AddField("TTU_FirstName", _strFirstname, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (_strLastname == null || !mcSQL.bln_AddField("TTU_LastName", _strLastname, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (_strLastname != null && !mcSQL.bln_AddField("TTU_LastName", _strLastname, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (_strPassword == null || !mcSQL.bln_AddField("TTU_Password", _strPassword, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (_strPassword != null && !mcSQL.bln_AddField("TTU_Password", _strPassword, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (_strEmail == null || !mcSQL.bln_AddField("TTU_Email", _strEmail, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (_strEmail != null && !mcSQL.bln_AddField("TTU_Email", _strEmail, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (_blnIsActive == null || !mcSQL.bln_AddField("TTU_Active", _blnIsActive, clsSQL.MySQL_FieldTypes.BIT_TYPE))
+                else if (_blnIsActive != null && !mcSQL.bln_AddField("TTU_Active", _blnIsActive, clsSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
-                else if (_intCeritarApp_NRI_Default == null || !mcSQL.bln_AddField("CeA_NRI_Default", _intCeritarApp_NRI_Default, clsSQL.MySQL_FieldTypes.INT_TYPE))
+                else if (_intCeritarApp_NRI_Default != null && !mcSQL.bln_AddField("CeA_NRI_Default", _intCeritarApp_NRI_Default, clsSQL.MySQL_FieldTypes.INT_TYPE))
                 { }
                 else
                 {

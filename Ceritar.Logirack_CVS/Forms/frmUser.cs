@@ -143,7 +143,7 @@ namespace Ceritar.Logirack_CVS.Forms
         {
             bool blnValidReturn = false;
 
-            if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrUser.strGetApplications_SQL(), "CeA_NRI", "CeA_Code", true, ref cboApplications))
+            if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrUser.strGetApplications_SQL(), "CeA_NRI", "CeA_Name", true, ref cboApplications))
             { }
             else if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE)
             {

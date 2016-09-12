@@ -503,7 +503,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 { }
                 else if (!mcSQL.bln_AddField("Rev_DtCreation", _strCreationDate, clsSQL.MySQL_FieldTypes.DATETIME_TYPE)) 
                 { }
-                else if (!mcSQL.bln_AddField("TTU_NRI", clsApp.GetAppController.cUser.GetUser_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("TTU_NRI", clsApp.GetAppController.cUser.User_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("CeC_NRI", _cCeritarClient.CeritarClient_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }

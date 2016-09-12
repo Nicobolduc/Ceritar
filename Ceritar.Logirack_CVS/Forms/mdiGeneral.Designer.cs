@@ -1,4 +1,4 @@
-﻿namespace Ceritar.Logirack_CVS
+﻿namespace Ceritar.Logirack_CVS.Forms
 {
     partial class mdiGeneral
     {
@@ -28,168 +28,184 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mdiGeneral));
             this.mnuMain = new System.Windows.Forms.MenuStrip();
             this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuLogOut = new System.Windows.Forms.ToolStripMenuItem();
-            this.muManagement = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuManagement = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuVersion = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuConfiguration = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuCerApp = new System.Windows.Forms.ToolStripMenuItem();
             this.clientCeritarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuTemplate = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuWindows = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuCloseAllWindows = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusBar = new System.Windows.Forms.StatusStrip();
-            this.lblCurrentUser = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.lblDatabase = new System.Windows.Forms.ToolStripStatusLabel();
-            this.fenêtresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fermerToutesLesFenêtresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.mnuUser = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMain.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.SuspendLayout();
             // 
             // mnuMain
             // 
-            this.mnuMain.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mnuMain.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.mnuMain.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mnuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuFile,
-            this.muManagement,
+            this.mnuManagement,
             this.mnuConfiguration,
-            this.fenêtresToolStripMenuItem});
+            this.mnuWindows,
+            this.helpMenu});
             this.mnuMain.Location = new System.Drawing.Point(0, 0);
+            this.mnuMain.MdiWindowListItem = this.mnuWindows;
             this.mnuMain.Name = "mnuMain";
-            this.mnuMain.Size = new System.Drawing.Size(1314, 29);
-            this.mnuMain.TabIndex = 2;
-            this.mnuMain.Text = "menuStrip2";
+            this.mnuMain.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
+            this.mnuMain.Size = new System.Drawing.Size(922, 24);
+            this.mnuMain.TabIndex = 0;
+            this.mnuMain.Text = "MenuStrip";
             // 
             // mnuFile
             // 
             this.mnuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuLogOut});
+            this.mnuFile.ImageTransparentColor = System.Drawing.SystemColors.ActiveBorder;
             this.mnuFile.Name = "mnuFile";
-            this.mnuFile.Size = new System.Drawing.Size(68, 25);
-            this.mnuFile.Text = "Fichier";
-            this.mnuFile.Click += new System.EventHandler(this.fileToolStripMenuItem_Click);
+            this.mnuFile.Size = new System.Drawing.Size(59, 20);
+            this.mnuFile.Text = "&Fichier";
             // 
             // mnuLogOut
             // 
             this.mnuLogOut.Name = "mnuLogOut";
-            this.mnuLogOut.Size = new System.Drawing.Size(186, 26);
-            this.mnuLogOut.Text = "Se déconnecter";
+            this.mnuLogOut.Size = new System.Drawing.Size(107, 22);
+            this.mnuLogOut.Text = "&Sortir";
             // 
-            // muManagement
+            // mnuManagement
             // 
-            this.muManagement.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuManagement.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuVersion});
-            this.muManagement.Name = "muManagement";
-            this.muManagement.Size = new System.Drawing.Size(75, 25);
-            this.muManagement.Text = "Gestion";
-            this.muManagement.Click += new System.EventHandler(this.installationsActivesToolStripMenuItem_Click);
+            this.mnuManagement.Name = "mnuManagement";
+            this.mnuManagement.Size = new System.Drawing.Size(65, 20);
+            this.mnuManagement.Text = "&Gestion";
             // 
             // mnuVersion
             // 
             this.mnuVersion.Name = "mnuVersion";
-            this.mnuVersion.Size = new System.Drawing.Size(285, 26);
+            this.mnuVersion.Size = new System.Drawing.Size(245, 22);
             this.mnuVersion.Text = "Gestion de version et révision";
-            this.mnuVersion.Click += new System.EventHandler(this.versionToolStripMenuItem_Click);
+            this.mnuVersion.Click += new System.EventHandler(this.mnuVersion_Click);
             // 
             // mnuConfiguration
             // 
             this.mnuConfiguration.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuCerApp,
             this.clientCeritarToolStripMenuItem,
-            this.mnuTemplate});
+            this.mnuTemplate,
+            this.mnuUser});
             this.mnuConfiguration.Name = "mnuConfiguration";
-            this.mnuConfiguration.Size = new System.Drawing.Size(118, 25);
-            this.mnuConfiguration.Text = "Configuration";
+            this.mnuConfiguration.Size = new System.Drawing.Size(95, 20);
+            this.mnuConfiguration.Text = "&Configuration";
             // 
             // mnuCerApp
             // 
             this.mnuCerApp.Name = "mnuCerApp";
-            this.mnuCerApp.Size = new System.Drawing.Size(209, 26);
+            this.mnuCerApp.Size = new System.Drawing.Size(182, 22);
             this.mnuCerApp.Text = "Application Ceritar";
             this.mnuCerApp.Click += new System.EventHandler(this.mnuCerApp_Click);
             // 
             // clientCeritarToolStripMenuItem
             // 
             this.clientCeritarToolStripMenuItem.Name = "clientCeritarToolStripMenuItem";
-            this.clientCeritarToolStripMenuItem.Size = new System.Drawing.Size(209, 26);
+            this.clientCeritarToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.clientCeritarToolStripMenuItem.Text = "Client Ceritar";
-            this.clientCeritarToolStripMenuItem.Click += new System.EventHandler(this.clientCeritarToolStripMenuItem_Click);
+            this.clientCeritarToolStripMenuItem.Click += new System.EventHandler(this.mnuCerClient_Click);
             // 
             // mnuTemplate
             // 
             this.mnuTemplate.Name = "mnuTemplate";
-            this.mnuTemplate.Size = new System.Drawing.Size(209, 26);
+            this.mnuTemplate.Size = new System.Drawing.Size(182, 22);
             this.mnuTemplate.Text = "Gabarit";
-            this.mnuTemplate.Click += new System.EventHandler(this.gabaritToolStripMenuItem_Click);
+            this.mnuTemplate.Click += new System.EventHandler(this.mnuGabarit_Click);
+            // 
+            // mnuWindows
+            // 
+            this.mnuWindows.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuCloseAllWindows});
+            this.mnuWindows.Name = "mnuWindows";
+            this.mnuWindows.Size = new System.Drawing.Size(71, 20);
+            this.mnuWindows.Text = "F&enêtres";
+            // 
+            // mnuCloseAllWindows
+            // 
+            this.mnuCloseAllWindows.Name = "mnuCloseAllWindows";
+            this.mnuCloseAllWindows.Size = new System.Drawing.Size(221, 22);
+            this.mnuCloseAllWindows.Text = "&Fermer toute les fenetres";
+            this.mnuCloseAllWindows.Click += new System.EventHandler(this.mnuCloseAllWindows_Click);
+            // 
+            // helpMenu
+            // 
+            this.helpMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripSeparator8,
+            this.aboutToolStripMenuItem});
+            this.helpMenu.Name = "helpMenu";
+            this.helpMenu.Size = new System.Drawing.Size(46, 20);
+            this.helpMenu.Text = "&Aide";
+            // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(139, 6);
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.aboutToolStripMenuItem.Text = "&About ... ...";
             // 
             // statusBar
             // 
-            this.statusBar.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.statusBar.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.lblCurrentUser,
-            this.toolStripStatusLabel3,
-            this.lblDatabase});
-            this.statusBar.Location = new System.Drawing.Point(0, 745);
+            this.toolStripStatusLabel});
+            this.statusBar.Location = new System.Drawing.Point(0, 608);
             this.statusBar.Name = "statusBar";
-            this.statusBar.Size = new System.Drawing.Size(1314, 25);
-            this.statusBar.TabIndex = 4;
-            this.statusBar.Text = "statusStrip1";
+            this.statusBar.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
+            this.statusBar.Size = new System.Drawing.Size(922, 22);
+            this.statusBar.TabIndex = 2;
+            this.statusBar.Text = "StatusStrip";
             // 
-            // lblCurrentUser
+            // toolStripStatusLabel
             // 
-            this.lblCurrentUser.AutoSize = false;
-            this.lblCurrentUser.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCurrentUser.Name = "lblCurrentUser";
-            this.lblCurrentUser.Size = new System.Drawing.Size(500, 20);
-            this.lblCurrentUser.Text = "lblUser";
-            this.lblCurrentUser.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(46, 17);
+            this.toolStripStatusLabel.Text = "Status";
             // 
-            // toolStripStatusLabel3
+            // mnuUser
             // 
-            this.toolStripStatusLabel3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(64, 20);
-            this.toolStripStatusLabel3.Text = "Database: ";
-            this.toolStripStatusLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDatabase
-            // 
-            this.lblDatabase.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDatabase.Name = "lblDatabase";
-            this.lblDatabase.Size = new System.Drawing.Size(56, 20);
-            this.lblDatabase.Text = "database";
-            // 
-            // fenêtresToolStripMenuItem
-            // 
-            this.fenêtresToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fermerToutesLesFenêtresToolStripMenuItem});
-            this.fenêtresToolStripMenuItem.Name = "fenêtresToolStripMenuItem";
-            this.fenêtresToolStripMenuItem.Size = new System.Drawing.Size(81, 25);
-            this.fenêtresToolStripMenuItem.Text = "Fenêtres";
-            // 
-            // fermerToutesLesFenêtresToolStripMenuItem
-            // 
-            this.fermerToutesLesFenêtresToolStripMenuItem.Name = "fermerToutesLesFenêtresToolStripMenuItem";
-            this.fermerToutesLesFenêtresToolStripMenuItem.Size = new System.Drawing.Size(260, 26);
-            this.fermerToutesLesFenêtresToolStripMenuItem.Text = "Fermer toutes les fenêtres";
-            this.fermerToutesLesFenêtresToolStripMenuItem.Click += new System.EventHandler(this.fermerToutesLesFenêtresToolStripMenuItem_Click);
+            this.mnuUser.Name = "mnuUser";
+            this.mnuUser.Size = new System.Drawing.Size(182, 22);
+            this.mnuUser.Text = "Usager";
+            this.mnuUser.Click += new System.EventHandler(this.mnuUser_Click);
             // 
             // mdiGeneral
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1314, 770);
+            this.ClientSize = new System.Drawing.Size(922, 630);
             this.Controls.Add(this.statusBar);
             this.Controls.Add(this.mnuMain);
+            this.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
+            this.MainMenuStrip = this.mnuMain;
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "mdiGeneral";
             this.Text = "Logirack CVS";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.mdiGeneral_FormClosing);
             this.Load += new System.EventHandler(this.mdiGeneral_Load);
             this.mnuMain.ResumeLayout(false);
             this.mnuMain.PerformLayout();
@@ -199,23 +215,29 @@
             this.PerformLayout();
 
         }
-
         #endregion
 
+
         private System.Windows.Forms.MenuStrip mnuMain;
-        private System.Windows.Forms.ToolStripMenuItem mnuFile;
-        private System.Windows.Forms.ToolStripMenuItem muManagement;
-        private System.Windows.Forms.ToolStripMenuItem mnuConfiguration;
-        private System.Windows.Forms.ToolStripMenuItem mnuVersion;
         private System.Windows.Forms.StatusStrip statusBar;
-        private System.Windows.Forms.ToolStripStatusLabel lblCurrentUser;
-        private System.Windows.Forms.ToolStripStatusLabel lblDatabase;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
-        private System.Windows.Forms.ToolStripMenuItem mnuCerApp;
-        private System.Windows.Forms.ToolStripMenuItem mnuTemplate;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mnuFile;
         private System.Windows.Forms.ToolStripMenuItem mnuLogOut;
+        private System.Windows.Forms.ToolStripMenuItem mnuWindows;
+        private System.Windows.Forms.ToolStripMenuItem mnuCloseAllWindows;
+        private System.Windows.Forms.ToolStripMenuItem helpMenu;
+        private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.ToolStripMenuItem mnuManagement;
+        private System.Windows.Forms.ToolStripMenuItem mnuVersion;
+        private System.Windows.Forms.ToolStripMenuItem mnuConfiguration;
+        private System.Windows.Forms.ToolStripMenuItem mnuCerApp;
         private System.Windows.Forms.ToolStripMenuItem clientCeritarToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem fenêtresToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem fermerToutesLesFenêtresToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mnuTemplate;
+        private System.Windows.Forms.ToolStripMenuItem mnuUser;
     }
 }
+
+
+

@@ -12,7 +12,7 @@ using C1.Win.C1FlexGrid;
 using System.Threading;
 using System.Drawing;
 
-namespace Ceritar.Logirack_CVS
+namespace Ceritar.Logirack_CVS.Forms
 {
     /// <summary>
     /// Cette classe contient les fonctions et évènements de la vue permettant de définir les révisions d'une version.
