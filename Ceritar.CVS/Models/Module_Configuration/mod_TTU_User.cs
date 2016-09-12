@@ -30,6 +30,9 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
         //Working variables
 
+        //Messages
+        private int mintMSG_InvalidEmailFormat = 41;
+
 
 #region "Properties"
 
@@ -146,7 +149,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         }
                         else if (!string.IsNullOrEmpty(_strEmail) && !_strEmail.Contains("@"))
                         {
-                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_User.ErrorCode_TTU.EMAIL_INVALID); //TODO !
+                            mcActionResults.SetInvalid(mintMSG_InvalidEmailFormat, ctr_User.ErrorCode_TTU.EMAIL_INVALID);
                         }
                         else if (!clsSQL.bln_ADOValid_TS("TTUser", "TTU_NRI", _intUser_NRI, "TTU_TS", _intUser_TS))
                         {
