@@ -10,7 +10,6 @@ using Ceritar.TT3LightDLL.Classes;
 using Ceritar.CVS.Controllers.Interfaces;
 using C1.Win.C1FlexGrid;
 using System.Threading;
-using System.Drawing;
 
 namespace Ceritar.Logirack_CVS
 {
@@ -252,10 +251,11 @@ namespace Ceritar.Logirack_CVS
                     if (formController.FormMode != sclsConstants.DML_Mode.INSERT_MODE)
                     {
                         UInt16.TryParse(sqlRecord["Rev_TS"].ToString(), out mintRevision_TS);
-                  
-                        mblnAppExeLocationExistsOnLoad = !string.IsNullOrEmpty(txtReleasePath.Text);
 
                         txtReleasePath.Text = sqlRecord["Rev_Location_Exe"].ToString();
+
+                        mblnAppExeLocationExistsOnLoad = !string.IsNullOrEmpty(txtReleasePath.Text);
+
                         txtScriptsPath.Text = sqlRecord["Rev_Location_Scripts"].ToString();
                         txtCreatedBy.Text = sqlRecord["Rev_CreatedBy"].ToString();
 
@@ -278,36 +278,6 @@ namespace Ceritar.Logirack_CVS
                         else
                         {
                             optExeOnly.Checked = true;
-                        }
-
-                        btnShowScriptsFolder.FlatAppearance.BorderSize = 2;
-
-                        if (Directory.Exists(txtScriptsPath.Text) || File.Exists(txtScriptsPath.Text))
-                        {
-                            btnShowScriptsFolder.FlatAppearance.BorderColor = Color.Lime;            
-                        }
-                        else if (!string.IsNullOrEmpty(txtScriptsPath.Text))
-                        {
-                            btnShowScriptsFolder.FlatAppearance.BorderColor = Color.Red;
-                        }
-                        else
-                        {
-                            btnShowScriptsFolder.FlatAppearance.BorderColor = System.Drawing.SystemColors.Control;
-                        }
-
-                        btnShowExecutableFolder.FlatAppearance.BorderSize = 2;
-
-                        if (Directory.Exists(txtReleasePath.Text) || File.Exists(txtReleasePath.Text))
-                        {
-                            btnShowExecutableFolder.FlatAppearance.BorderColor = Color.Lime;
-                        }
-                        else if (!string.IsNullOrEmpty(txtReleasePath.Text))
-                        {
-                            btnShowExecutableFolder.FlatAppearance.BorderColor = Color.Red;
-                        }
-                        else
-                        {
-                            btnShowExecutableFolder.FlatAppearance.BorderColor = System.Drawing.SystemColors.Control;
                         }
                     }
 
@@ -469,8 +439,6 @@ namespace Ceritar.Logirack_CVS
                 btnLocationSatExe.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
                 btnLocationSatExe.Image = ((System.Drawing.Image)(Properties.Resources.ellipsis));
                 btnLocationSatExe.UseVisualStyleBackColor = true;
-                btnLocationSatExe.FlatStyle = FlatStyle.Flat;
-                btnLocationSatExe.FlatAppearance.BorderSize = 1;
 
                 btnLocationSatExe.Click += btnReplaceSatelliteExe_Click;
             }
@@ -506,17 +474,15 @@ namespace Ceritar.Logirack_CVS
                     if (mcGrdSatellites[grdSatellites.Row, mintGrdSat_CSA_ExeLocation_col] != txtTemp.Text && mcGrdSatellites.bln_CellIsEmpty(grdSatellites.Row, mintGrdSat_SRe_NRI_col))
                     {
                         grdSatellites[grdSatellites.Row, mintGrdSat_Action_col] = sclsConstants.DML_Mode.INSERT_MODE;
-
-                        ((HostedCellControl)mcGrdSatellites.LstHostedCellControls[grdSatellites.Row - 1]).GetCellControl.BackColor = System.Drawing.Color.Yellow;
                     }
                     else if (mcGrdSatellites[grdSatellites.Row, mintGrdSat_CSA_ExeLocation_col] != txtTemp.Text)
                     {
                         grdSatellites[grdSatellites.Row, mintGrdSat_Action_col] = sclsConstants.DML_Mode.UPDATE_MODE;
-
-                        ((HostedCellControl)mcGrdSatellites.LstHostedCellControls[grdSatellites.Row - 1]).GetCellControl.BackColor = System.Drawing.Color.Yellow;
                     }
 
-                    grdSatellites[grdSatellites.Row, mintGrdSat_CSA_ExeLocation_col] = txtTemp.Text;       
+                    grdSatellites[grdSatellites.Row, mintGrdSat_CSA_ExeLocation_col] = txtTemp.Text;
+
+                    ((HostedCellControl)mcGrdSatellites.LstHostedCellControls[grdSatellites.Row - 1]).GetCellControl.BackColor = System.Drawing.Color.Yellow;
                 }
             }
             else
@@ -714,20 +680,7 @@ namespace Ceritar.Logirack_CVS
                     
                     if (!mcGrdSatellites.bln_CellIsEmpty(intRowIndex, mintGrdSat_CSA_ExeLocation_col))
                     {
-                        //mcGrdSatellites.LstHostedCellControls[intRowIndex - 1].GetCellControl.BackColor = System.Drawing.Color.Yellow;
-
-                        if (Directory.Exists(mcGrdSatellites[intRowIndex, mintGrdSat_CSA_ExeLocation_col]) || File.Exists(mcGrdSatellites[intRowIndex, mintGrdSat_CSA_ExeLocation_col]))
-                        {
-                            ((Button)mcGrdSatellites.LstHostedCellControls[intRowIndex - 1].GetCellControl).BackColor = Color.Lime;
-                        }
-                        else if (!string.IsNullOrEmpty(mcGrdSatellites[intRowIndex, mintGrdSat_CSA_ExeLocation_col]))
-                        {
-                            ((Button)mcGrdSatellites.LstHostedCellControls[intRowIndex - 1].GetCellControl).BackColor = Color.Red;
-                        }
-                        else
-                        {
-                            ((Button)mcGrdSatellites.LstHostedCellControls[intRowIndex - 1].GetCellControl).BackColor = System.Drawing.SystemColors.Control;
-                        }
+                        mcGrdSatellites.LstHostedCellControls[intRowIndex - 1].GetCellControl.BackColor = System.Drawing.Color.Yellow;
                     }
                 }
             }

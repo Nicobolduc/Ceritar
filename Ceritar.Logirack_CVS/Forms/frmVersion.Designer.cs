@@ -303,7 +303,7 @@
             this.btnExportInstallationKit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExportInstallationKit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnExportInstallationKit.Image = ((System.Drawing.Image)(resources.GetObject("btnExportInstallationKit.Image")));
-            this.btnExportInstallationKit.Location = new System.Drawing.Point(505, 126);
+            this.btnExportInstallationKit.Location = new System.Drawing.Point(421, 126);
             this.btnExportInstallationKit.Name = "btnExportInstallationKit";
             this.btnExportInstallationKit.Size = new System.Drawing.Size(35, 35);
             this.btnExportInstallationKit.TabIndex = 3;
@@ -566,8 +566,8 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 59.01814F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40.98186F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.groupBox2, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.groupBox4, 1, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -590,7 +590,7 @@
             this.groupBox2.Controls.Add(this.grdClients);
             this.groupBox2.Location = new System.Drawing.Point(3, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(546, 167);
+            this.groupBox2.Size = new System.Drawing.Size(462, 167);
             this.groupBox2.TabIndex = 14;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Clients à qui la version est destinée";
@@ -611,7 +611,7 @@
             this.btnGrdClientsDel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdClientsDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnGrdClientsDel.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdClientsDel.Image")));
-            this.btnGrdClientsDel.Location = new System.Drawing.Point(505, 58);
+            this.btnGrdClientsDel.Location = new System.Drawing.Point(421, 58);
             this.btnGrdClientsDel.Name = "btnGrdClientsDel";
             this.btnGrdClientsDel.Size = new System.Drawing.Size(35, 35);
             this.btnGrdClientsDel.TabIndex = 2;
@@ -623,7 +623,7 @@
             this.btnGrdClientsAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdClientsAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnGrdClientsAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdClientsAdd.Image")));
-            this.btnGrdClientsAdd.Location = new System.Drawing.Point(505, 17);
+            this.btnGrdClientsAdd.Location = new System.Drawing.Point(421, 17);
             this.btnGrdClientsAdd.Name = "btnGrdClientsAdd";
             this.btnGrdClientsAdd.Size = new System.Drawing.Size(35, 35);
             this.btnGrdClientsAdd.TabIndex = 0;
@@ -643,7 +643,7 @@
             this.grdClients.Rows.Count = 1;
             this.grdClients.Rows.DefaultSize = 18;
             this.grdClients.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdClients.Size = new System.Drawing.Size(495, 144);
+            this.grdClients.Size = new System.Drawing.Size(411, 144);
             this.grdClients.StyleInfo = resources.GetString("grdClients.StyleInfo");
             this.grdClients.TabIndex = 1;
             this.grdClients.Tag = "15";
@@ -659,9 +659,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox4.Controls.Add(this.grdSatellite);
-            this.groupBox4.Location = new System.Drawing.Point(555, 3);
+            this.groupBox4.Location = new System.Drawing.Point(471, 3);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(379, 167);
+            this.groupBox4.Size = new System.Drawing.Size(463, 167);
             this.groupBox4.TabIndex = 62;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Applications satellites";
@@ -680,14 +680,14 @@
             this.grdSatellite.Rows.Count = 1;
             this.grdSatellite.Rows.DefaultSize = 18;
             this.grdSatellite.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdSatellite.Size = new System.Drawing.Size(368, 144);
+            this.grdSatellite.Size = new System.Drawing.Size(452, 144);
             this.grdSatellite.StyleInfo = resources.GetString("grdSatellite.StyleInfo");
             this.grdSatellite.TabIndex = 0;
             this.grdSatellite.Tag = "26";
             // 
             // groupBox7
             // 
-            this.groupBox7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox7.Controls.Add(this.btnReplaceExecutable);
             this.groupBox7.Controls.Add(this.btnReplaceTTApp);
