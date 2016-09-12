@@ -164,7 +164,7 @@ namespace Ceritar.CVS.Controllers
 
                         if (blnValidReturn)
                         {
-                            mcModRevision.blnUpdateFilesLocations();
+                            blnValidReturn = mcModRevision.blnUpdateFilesLocations();
                         }
                     }
 
@@ -1083,7 +1083,6 @@ namespace Ceritar.CVS.Controllers
             string strNewZipFileLocation = string.Empty;
             string strReleaseLocation = string.Empty;
             string strLocationSatelliteExe = string.Empty;
-            string strReportLocation = string.Empty;
             string strCurrentScriptFolderLocation = string.Empty;
 
             try
@@ -1103,19 +1102,18 @@ namespace Ceritar.CVS.Controllers
 
                     if (!string.IsNullOrEmpty(strReleaseLocation))
                     {
-                        foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strReleaseLocation, "*.*", SearchOption.AllDirectories))
+                        if ((File.GetAttributes(strReleaseLocation) & FileAttributes.Directory) == FileAttributes.Directory)
                         {
-                            newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
+                            foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strReleaseLocation, "*.*", SearchOption.AllDirectories))
+                            {
+                                newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
+                            }
                         }
-                    }             
-
-                    //Get the report folder location to copy 
-                    if (mcView.GetExeIsExternalReport())
-                    {
-                        strReportLocation = mcView.GetLocation_Release();
-
-                        //Add the external report application to the zip archive
-                        newZipFile.CreateEntryFromFile(strReportLocation, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strReportLocation)));
+                        else if (mcView.GetExeIsExternalReport())
+                        {
+                            //Add the external report application to the zip archive
+                            newZipFile.CreateEntryFromFile(strReleaseLocation, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strReleaseLocation)), CompressionLevel.NoCompression);
+                        }
                     }
                     
                     //Add every satellites applications to the zip archive.
@@ -1142,8 +1140,12 @@ namespace Ceritar.CVS.Controllers
                     }
 
                     //Add all scripts folder to the zip archive.
+                    string strAppRevisionScriptTempLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "00_DB_UpdateRevisionNo.sql");
+
                     strCurrentScriptFolderLocation = mcView.GetLocation_Scripts();
-            
+
+                    File.WriteAllText(strAppRevisionScriptTempLocation, "UPDATE TTParam SET TTP_Value = '" + mcView.GetVersionNo().ToString() + mcView.GetRevisionNo().ToString() + "' WHERE TTP_Name = " + clsApp.GetAppController.str_FixStringForSQL("AppVersion"));
+
                     if (!string.IsNullOrEmpty(strCurrentScriptFolderLocation))
                     {
                         if ((File.GetAttributes(strCurrentScriptFolderLocation) & FileAttributes.Directory) == FileAttributes.Directory)
@@ -1152,12 +1154,20 @@ namespace Ceritar.CVS.Controllers
                             {
                                 newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetScriptsFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
                             }
+
+                            newZipFile.CreateEntryFromFile(strAppRevisionScriptTempLocation, Path.Combine(sclsAppConfigs.GetScriptsFolderName, Path.GetFileName(strAppRevisionScriptTempLocation)));
                         }
                         else
                         {
                             newZipFile.CreateEntryFromFile(strCurrentScriptFolderLocation, Path.Combine(sclsAppConfigs.GetScriptsFolderName, Path.GetFileName(strCurrentScriptFolderLocation)), CompressionLevel.NoCompression);
                         }
-                    }          
+                    }
+                    else
+                    {
+                        newZipFile.CreateEntryFromFile(strAppRevisionScriptTempLocation, Path.Combine(sclsAppConfigs.GetScriptsFolderName, Path.GetFileName(strAppRevisionScriptTempLocation)), CompressionLevel.NoCompression);
+                    }
+
+                    File.Delete(strAppRevisionScriptTempLocation);
                 }
 
                 blnValidReturn = true;

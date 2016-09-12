@@ -313,6 +313,7 @@
             // 
             this.btnShowScriptsFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowScriptsFolder.BackgroundImage")));
             this.btnShowScriptsFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnShowScriptsFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnShowScriptsFolder.Location = new System.Drawing.Point(780, 14);
             this.btnShowScriptsFolder.Name = "btnShowScriptsFolder";
             this.btnShowScriptsFolder.Size = new System.Drawing.Size(40, 40);
@@ -349,6 +350,7 @@
             // 
             this.btnShowExecutableFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowExecutableFolder.BackgroundImage")));
             this.btnShowExecutableFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnShowExecutableFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnShowExecutableFolder.Location = new System.Drawing.Point(780, 16);
             this.btnShowExecutableFolder.Name = "btnShowExecutableFolder";
             this.btnShowExecutableFolder.Size = new System.Drawing.Size(40, 40);
