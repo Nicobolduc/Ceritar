@@ -26,7 +26,7 @@ namespace Ceritar.Logirack_CVS.Forms
         private const short mintGrdApp_CeA_Name_col = 2;
 
         //Classes
-        private clsC1FlexGridWrapper mcGrdApp;
+        private clsTTC1FlexGridWrapper mcGrdApp;
         private Ceritar.CVS.clsActionResults mcActionResults;
 
         //Working variables
@@ -39,9 +39,9 @@ namespace Ceritar.Logirack_CVS.Forms
 
             mcCtrCeritarClient = new ctr_CeritarClient((ICeritarClient) this);
 
-            mcGrdApp = new clsC1FlexGridWrapper();
+            mcGrdApp = new clsTTC1FlexGridWrapper();
             mcGrdApp.HasActionColumn = false;
-            mcGrdApp.SetGridDisplay += new clsC1FlexGridWrapper.SetDisplayEventHandler(mcGrdApp_SetGridDisplay);
+            mcGrdApp.SetGridDisplay += new clsTTC1FlexGridWrapper.SetDisplayEventHandler(mcGrdApp_SetGridDisplay);
         }
 
 
@@ -118,7 +118,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
             try
             {
-                sqlRecord = clsSQL.ADOSelect(mcCtrCeritarClient.strGetDataLoad_SQL(formController.Item_NRI));
+                sqlRecord = clsTTSQL.ADOSelect(mcCtrCeritarClient.strGetDataLoad_SQL(formController.Item_NRI));
 
                 if (sqlRecord.Read())
                 {
@@ -195,7 +195,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
             if (!mcActionResults.IsValid)
             {
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
+                clsTTApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
 
                 switch ((ctr_CeritarClient.ErrorCode_CeC)mcActionResults.GetErrorCode)
                 {
@@ -218,7 +218,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
             if (!mcActionResults.IsValid)
             {
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
+                clsTTApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
             }
 
             if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE) formController.Item_NRI = mcActionResults.GetNewItem_NRI;

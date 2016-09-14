@@ -28,7 +28,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
         //Working variables
         private clsActionResults mcActionResults = new clsActionResults();
         private sclsConstants.DML_Mode mintDML_Action;
-        private clsSQL mcSQL;
+        private clsTTSQL mcSQL;
 
 
 #region "Properties"
@@ -80,7 +80,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
             set { mintDML_Action = value; }
         }
 
-        internal clsSQL SetcSQL
+        internal clsTTSQL SetcSQL
         {
             set { mcSQL = value; }
         }
@@ -129,7 +129,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
 
                     case sclsConstants.DML_Mode.DELETE_MODE:
 
-                        if (!clsSQL.bln_CheckReferenceIntegrity("CerSatApp", "CSA_NRI", _intCeritarSatelliteApp_NRI))
+                        if (!clsTTSQL.bln_CheckReferenceIntegrity("CerSatApp", "CSA_NRI", _intCeritarSatelliteApp_NRI))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_REFERENCE_INTEGRITY, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
                         }
@@ -232,13 +232,13 @@ namespace Ceritar.CVS.Models.Module_Configuration
             {
                 if (!mcSQL.bln_RefreshFields())
                 { }
-                else if (!mcSQL.bln_AddField("CSA_Name", _strName, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (!mcSQL.bln_AddField("CSA_Name", _strName, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("CSA_KitFolderName", _strExportFolderName, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (!mcSQL.bln_AddField("CSA_KitFolderName", _strExportFolderName, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("CeA_NRI", _intCeritarApp_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("CeA_NRI", _intCeritarApp_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("CSA_ExeIsFolder", _blnExeIsFolder, clsSQL.MySQL_FieldTypes.BIT_TYPE))
+                else if (!mcSQL.bln_AddField("CSA_ExeIsFolder", _blnExeIsFolder, clsTTSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
                 else
                 {

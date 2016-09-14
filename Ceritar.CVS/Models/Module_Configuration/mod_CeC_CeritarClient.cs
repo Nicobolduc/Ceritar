@@ -26,7 +26,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
         //mod_IBase
         private clsActionResults mcActionResults = new clsActionResults();
         private sclsConstants.DML_Mode mintDML_Action;
-        private clsSQL mcSQL;
+        private clsTTSQL mcSQL;
 
 
 #region "Properties"
@@ -66,7 +66,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
             set { mintDML_Action = value; }
         }
 
-        internal clsSQL SetcSQL
+        internal clsTTSQL SetcSQL
         {
             set { mcSQL = value; }
         }
@@ -98,7 +98,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
                         {
                             mcActionResults.SetInvalid(mintMSG_InvalidName, ctr_CeritarClient.ErrorCode_CeC.NAME_INVALID);
                         }
-                        else if (!clsSQL.bln_ADOValid_TS("CerClient", "CeC_NRI", _intCeritarClient_NRI, "CeC_TS", _intCeritarClient_TS))
+                        else if (!clsTTSQL.bln_ADOValid_TS("CerClient", "CeC_NRI", _intCeritarClient_NRI, "CeC_TS", _intCeritarClient_TS))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_TIMESTAMP, clsActionResults.BaseErrorCode.INVALID_TIMESTAMP);
                         }
@@ -111,7 +111,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
 
                     case sclsConstants.DML_Mode.DELETE_MODE:
 
-                        if (!clsSQL.bln_CheckReferenceIntegrity("CerClient", "CeC_NRI", _intCeritarClient_NRI))
+                        if (!clsTTSQL.bln_CheckReferenceIntegrity("CerClient", "CeC_NRI", _intCeritarClient_NRI))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_REFERENCE_INTEGRITY, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
                         }
@@ -199,9 +199,9 @@ namespace Ceritar.CVS.Models.Module_Configuration
             {
                 if (!mcSQL.bln_RefreshFields())
                 { }
-                else if (!mcSQL.bln_AddField("CeC_Name", _strCompanyName, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (!mcSQL.bln_AddField("CeC_Name", _strCompanyName, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("CeC_IsActive", _blnIsActive, clsSQL.MySQL_FieldTypes.BIT_TYPE))
+                else if (!mcSQL.bln_AddField("CeC_IsActive", _blnIsActive, clsTTSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
                 else
                 {

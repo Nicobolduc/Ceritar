@@ -21,7 +21,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         //mod_IBase
         private clsActionResults mcActionResults = new clsActionResults();
         private sclsConstants.DML_Mode mintDML_Action;
-        private clsSQL mcSQL;
+        private clsTTSQL mcSQL;
 
 
 #region "Properties"
@@ -56,7 +56,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { mintDML_Action = value; }
         }
 
-        internal clsSQL SetcSQL
+        internal clsTTSQL SetcSQL
         {
             set { mcSQL = value; }
         }
@@ -97,7 +97,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                     case sclsConstants.DML_Mode.DELETE_MODE: //TODO
 
-                        if (!clsSQL.bln_CheckReferenceIntegrity("SRe_NRI", "SRe_NRI", _intSatRevision_NRI))
+                        if (!clsTTSQL.bln_CheckReferenceIntegrity("SRe_NRI", "SRe_NRI", _intSatRevision_NRI))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_REFERENCE_INTEGRITY, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
                         }
@@ -199,11 +199,11 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             {
                 if (!mcSQL.bln_RefreshFields())
                 { }
-                else if (!mcSQL.bln_AddField("Rev_NRI", _cRevision.Revision_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("Rev_NRI", _cRevision.Revision_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("CSA_NRI", _cCeritarSatelliteApp.CeritarSatelliteApp_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("CSA_NRI", _cCeritarSatelliteApp.CeritarSatelliteApp_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("SRe_Exe_Location", _strLocation_Exe, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (!mcSQL.bln_AddField("SRe_Exe_Location", _strLocation_Exe, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
                 else
                 {

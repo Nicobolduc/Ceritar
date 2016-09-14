@@ -36,8 +36,8 @@ namespace Ceritar.Logirack_CVS.Forms
         private const short mintGrdSat_CSA_Exe_IsFolder_col = 6;
 
         //Classes
-        private clsC1FlexGridWrapper mcGrdModules;
-        private clsC1FlexGridWrapper mcGrdSatApp;
+        private clsTTC1FlexGridWrapper mcGrdModules;
+        private clsTTC1FlexGridWrapper mcGrdSatApp;
         private Ceritar.CVS.clsActionResults mcActionResults;
 
         //Working variables
@@ -50,10 +50,10 @@ namespace Ceritar.Logirack_CVS.Forms
             
             mcCtrCeritarApp = new ctr_CeritarApplication((Ceritar.CVS.Controllers.Interfaces.ICeritarApp) this);
 
-            mcGrdModules = new clsC1FlexGridWrapper();
-            mcGrdModules.SetGridDisplay += new clsC1FlexGridWrapper.SetDisplayEventHandler(mcGrdModules_SetDisplay);
+            mcGrdModules = new clsTTC1FlexGridWrapper();
+            mcGrdModules.SetGridDisplay += new clsTTC1FlexGridWrapper.SetDisplayEventHandler(mcGrdModules_SetDisplay);
 
-            mcGrdSatApp = new clsC1FlexGridWrapper();
+            mcGrdSatApp = new clsTTC1FlexGridWrapper();
             mcGrdSatApp.SetGridDisplay += mcGrdAppSat_SetGridDisplay;
         }
 
@@ -120,7 +120,7 @@ namespace Ceritar.Logirack_CVS.Forms
             for (int intRowIdx = 1; intRowIdx <= grdSatApp.Rows.Count - 1; intRowIdx++)
             {
                 structCSA = new structCeritarSatelliteApp();
-                structCSA.Action = clsApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdSatApp[intRowIdx, mintGrdSat_Action_col]);
+                structCSA.Action = clsTTApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdSatApp[intRowIdx, mintGrdSat_Action_col]);
                 structCSA.blnExeIsFolder = Convert.ToBoolean(grdSatApp[intRowIdx, mintGrdSat_CSA_Exe_IsFolder_col]);
                 Int32.TryParse(mcGrdSatApp[intRowIdx, mintGrdSat_CSA_NRI_col], out structCSA.intCeritarSatelliteApp_NRI);
                 Int32.TryParse(mcGrdSatApp[intRowIdx, mintGrdSat_CSA_TS_col], out structCSA.intCeritarSatelliteApp_TS);
@@ -184,7 +184,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
             try
             {
-                sqlRecord = clsSQL.ADOSelect(mcCtrCeritarApp.strGetDataLoad_SQL(formController.Item_NRI));
+                sqlRecord = clsTTSQL.ADOSelect(mcCtrCeritarApp.strGetDataLoad_SQL(formController.Item_NRI));
 
                 if (sqlRecord.Read())
                 {
@@ -277,7 +277,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
             if (!mcActionResults.IsValid)
             {
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
+                clsTTApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
 
                 switch ((ctr_CeritarApplication.ErrorCode_CeA)mcActionResults.GetErrorCode)
                 {
@@ -344,7 +344,7 @@ namespace Ceritar.Logirack_CVS.Forms
             
             if (!mcActionResults.IsValid)
             {
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
+                clsTTApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
             }
 
             if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE) formController.Item_NRI = mcActionResults.GetNewItem_NRI;

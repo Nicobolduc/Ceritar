@@ -15,7 +15,7 @@ namespace Ceritar.CVS.Controllers
         private Interfaces.ICeritarClient mcView;
         private mod_CeC_CeritarClient mcModCerClient;
         private clsActionResults mcActionResult;
-        private clsSQL mcSQL;
+        private clsTTSQL mcSQL;
 
         public enum ErrorCode_CeC
         {
@@ -57,7 +57,7 @@ namespace Ceritar.CVS.Controllers
         {
             try
             {
-                mcSQL = new clsSQL();
+                mcSQL = new clsTTSQL();
 
                 if (mcSQL.bln_BeginTransaction())
                 {

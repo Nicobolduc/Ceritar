@@ -22,7 +22,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         //mod_IBase
         private clsActionResults mcActionResults = new clsActionResults();
         private sclsConstants.DML_Mode mintDML_Action;
-        private clsSQL mcSQL;
+        private clsTTSQL mcSQL;
 
 
 #region "Properties"
@@ -63,7 +63,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { mintDML_Action = value; }
         }
 
-        internal clsSQL SetcSQL
+        internal clsTTSQL SetcSQL
         {
             set { mcSQL = value; }
         }
@@ -172,13 +172,13 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             {
                 if (!mcSQL.bln_RefreshFields())
                 { }
-                else if (!mcSQL.bln_AddField("Ver_NRI", _intVersion_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("Ver_NRI", _intVersion_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("CeC_NRI", _cCeritarClient.CeritarClient_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("CeC_NRI", _cCeritarClient.CeritarClient_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("CSA_NRI", _cCeritarSatelliteApp.CeritarSatelliteApp_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("CSA_NRI", _cCeritarSatelliteApp.CeritarSatelliteApp_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("CSV_Exe_Location", _strLocation_Exe, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (!mcSQL.bln_AddField("CSV_Exe_Location", _strLocation_Exe, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
                 else
                 {

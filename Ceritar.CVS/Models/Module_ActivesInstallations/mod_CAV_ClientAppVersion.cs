@@ -27,7 +27,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         //mod_IBase
         private clsActionResults mcActionResults = new clsActionResults();
         private sclsConstants.DML_Mode mintDML_Action;
-        private clsSQL mcSQL;
+        private clsTTSQL mcSQL;
       
 
 #region "Properties"
@@ -91,7 +91,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { mintDML_Action = value; }
         }
 
-        internal clsSQL SetcSQL
+        internal clsTTSQL SetcSQL
         {
             set { mcSQL = value; }
         }
@@ -127,7 +127,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                     case sclsConstants.DML_Mode.INSERT_MODE:
 
-                        string strExternalReportAppName = clsSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + _intCeritarApplication_NRI);
+                        string strExternalReportAppName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + _intCeritarApplication_NRI);
 
                         if (_cCeritarClient.CeritarClient_NRI <= 0)
                         {
@@ -162,7 +162,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION);
                         }
-                        else if (!clsSQL.bln_ADOValid_TS("ClientAppVersion", "CAV_NRI", _intClientAppVersion_NRI, "CAV_TS", _intClientAppVersion_TS))
+                        else if (!clsTTSQL.bln_ADOValid_TS("ClientAppVersion", "CAV_NRI", _intClientAppVersion_NRI, "CAV_TS", _intClientAppVersion_TS))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_TIMESTAMP, clsActionResults.BaseErrorCode.INVALID_TIMESTAMP);
                         }
@@ -175,7 +175,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                     case sclsConstants.DML_Mode.DELETE_MODE:
 
-                        if (!clsSQL.bln_CheckReferenceIntegrity("ClientAppVersion", "CAV_NRI", _intClientAppVersion_NRI))
+                        if (!clsTTSQL.bln_CheckReferenceIntegrity("ClientAppVersion", "CAV_NRI", _intClientAppVersion_NRI))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_REFERENCE_INTEGRITY, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
                         }
@@ -285,21 +285,21 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             {
                 if (!mcSQL.bln_RefreshFields())
                 { }
-                else if (!mcSQL.bln_AddField("CAV_IsCurrentVersion", _blnIsCurrentVersion, clsSQL.MySQL_FieldTypes.BIT_TYPE))
+                else if (!mcSQL.bln_AddField("CAV_IsCurrentVersion", _blnIsCurrentVersion, clsTTSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("CAV_DtInstalledProd", _strDateInstalled, clsSQL.MySQL_FieldTypes.DATETIME_TYPE))
+                else if (!mcSQL.bln_AddField("CAV_DtInstalledProd", _strDateInstalled, clsTTSQL.MySQL_FieldTypes.DATETIME_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("CeC_NRI", _cCeritarClient.CeritarClient_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("CeC_NRI", _cCeritarClient.CeritarClient_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("CeA_NRI", _intCeritarApplication_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("CeA_NRI", _intCeritarApplication_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("Ver_NRI", _intVersion_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("Ver_NRI", _intVersion_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("CAV_License", _strLicense, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (!mcSQL.bln_AddField("CAV_License", _strLicense, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("CAV_ReportExe_Location", _strLocationReportExe, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (!mcSQL.bln_AddField("CAV_ReportExe_Location", _strLocationReportExe, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("CAV_ScriptsRoot_Location", _strLocationScriptsRoot, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (!mcSQL.bln_AddField("CAV_ScriptsRoot_Location", _strLocationScriptsRoot, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
                 else
                 {
@@ -334,7 +334,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             {
                 if (!mcSQL.bln_RefreshFields())
                 { }
-                else if (!mcSQL.bln_AddField("CAV_ReportExe_Location", _strLocationReportExe, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (!mcSQL.bln_AddField("CAV_ReportExe_Location", _strLocationReportExe, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
                 else if (!mcSQL.bln_ADOUpdate("ClientAppVersion", "ClientAppVersion.CAV_NRI = " + _intClientAppVersion_NRI))
                 { }

@@ -26,7 +26,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         //mod_IBase
         private clsActionResults mcActionResults = new clsActionResults();
         private sclsConstants.DML_Mode mintDML_Action;
-        private clsSQL mcSQL;
+        private clsTTSQL mcSQL;
 
         //Working variables
 
@@ -107,7 +107,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { mintDML_Action = value; }
         }
 
-        internal clsSQL SetcSQL
+        internal clsTTSQL SetcSQL
         {
             set { mcSQL = value; }
         }
@@ -135,7 +135,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_User.ErrorCode_TTU.CODE_MANDATORY);
                         }
-                        else if (!string.IsNullOrEmpty(clsSQL.str_ADOSingleLookUp("TTU_NRI", "TTUser", "TTU_Code = " + clsApp.GetAppController.str_FixStringForSQL(_strUserCode))))
+                        else if (!string.IsNullOrEmpty(clsTTSQL.str_ADOSingleLookUp("TTU_NRI", "TTUser", "TTU_Code = " + clsTTApp.GetAppController.str_FixStringForSQL(_strUserCode) + " AND TTU_NRI <> " + _intUser_NRI)))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.UNIQUE_ATTRIBUTE, ctr_User.ErrorCode_TTU.CODE_UNIQUE);
                         }
@@ -147,11 +147,11 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_User.ErrorCode_TTU.LAST_NAME_MANDATORY);
                         }
-                        else if (!string.IsNullOrEmpty(_strEmail) && !_strEmail.Contains("@"))
+                        else if (string.IsNullOrEmpty(_strEmail) || !_strEmail.Contains("@"))
                         {
                             mcActionResults.SetInvalid(mintMSG_InvalidEmailFormat, ctr_User.ErrorCode_TTU.EMAIL_INVALID);
                         }
-                        else if (!clsSQL.bln_ADOValid_TS("TTUser", "TTU_NRI", _intUser_NRI, "TTU_TS", _intUser_TS))
+                        else if (!clsTTSQL.bln_ADOValid_TS("TTUser", "TTU_NRI", _intUser_NRI, "TTU_TS", _intUser_TS))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_TIMESTAMP, clsActionResults.BaseErrorCode.INVALID_TIMESTAMP);
                         }
@@ -164,7 +164,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                     case sclsConstants.DML_Mode.DELETE_MODE:
 
-                        if (!clsSQL.bln_CheckReferenceIntegrity("TTUser", "TTU_NRI", _intUser_NRI))
+                        if (!clsTTSQL.bln_CheckReferenceIntegrity("TTUser", "TTU_NRI", _intUser_NRI))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_REFERENCE_INTEGRITY, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
                         }
@@ -248,27 +248,29 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
         private bool pfblnTTU_AddFields()
         {
+            bool blnValidReturn = false;
+
             try
             {
                 if (!mcSQL.bln_RefreshFields())
                 { }
-                else if (_strUserCode != null && !mcSQL.bln_AddField("TTU_Code", _strUserCode, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (_strUserCode != null && !mcSQL.bln_AddField("TTU_Code", _strUserCode, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (_strFirstname != null && !mcSQL.bln_AddField("TTU_FirstName", _strFirstname, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (_strFirstname != null && !mcSQL.bln_AddField("TTU_FirstName", _strFirstname, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (_strLastname != null && !mcSQL.bln_AddField("TTU_LastName", _strLastname, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (_strLastname != null && !mcSQL.bln_AddField("TTU_LastName", _strLastname, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (_strPassword != null && !mcSQL.bln_AddField("TTU_Password", _strPassword, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (_strPassword != null && !mcSQL.bln_AddField("TTU_Password", _strPassword, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (_strEmail != null && !mcSQL.bln_AddField("TTU_Email", _strEmail, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (_strEmail != null && !mcSQL.bln_AddField("TTU_Email", _strEmail, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (_blnIsActive != null && !mcSQL.bln_AddField("TTU_Active", _blnIsActive, clsSQL.MySQL_FieldTypes.BIT_TYPE))
+                else if (_blnIsActive != null && !mcSQL.bln_AddField("TTU_Active", _blnIsActive, clsTTSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
-                else if (_intCeritarApp_NRI_Default != null && !mcSQL.bln_AddField("CeA_NRI_Default", _intCeritarApp_NRI_Default, clsSQL.MySQL_FieldTypes.INT_TYPE))
+                else if (_intCeritarApp_NRI_Default != null && !mcSQL.bln_AddField("CeA_NRI_Default", _intCeritarApp_NRI_Default, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else
                 {
-                    mcActionResults.SetValid();
+                    blnValidReturn = true;
                 }
             }
             catch (Exception ex)
@@ -277,7 +279,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
             }
 
-            return mcActionResults.IsValid;
+            return blnValidReturn;
         }
 
     }

@@ -14,27 +14,27 @@ namespace Ceritar.TT3LightDLL.Classes
     /// Cette classe est un genre de controleur des propriétés de l'application. Par exemple, elle gère la connexion au server de base de données et offre des fonctionnalités 
     /// communes et utilisables par tous les écrans de l'application.
     /// </summary>
-    public sealed class clsApp
+    public sealed class clsTTApp
     {
 
         //Private class members
         private SqlConnection mcSQLConnection;
-        private clsUser mctrlUser;
+        private clsTTUser mcTTUser;
         private System.Text.RegularExpressions.Regex mcStringCleaner = new System.Text.RegularExpressions.Regex("'", System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant | System.Text.RegularExpressions.RegexOptions.IgnoreCase);
         private string mstrServerDateFormat = string.Empty;
         private Form mfrmMdi = null;
-        private static clsApp _myUniqueInstance;
+        private static clsTTApp _myUniqueInstance;
         
 
 #region "Constructors"
 
-        private clsApp(Form rfrmMDI)
+        private clsTTApp(Form rfrmMDI)
         {
-            mctrlUser = new clsUser();
+            mcTTUser = new clsTTUser();
 
             mfrmMdi = rfrmMDI;
 
-            clsSQL.OpenSQLServerConnection(ref mcSQLConnection);
+            clsTTSQL.OpenSQLServerConnection(ref mcSQLConnection);
         }
 
 #endregion
@@ -42,7 +42,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
 #region "Properties"
 
-        public static clsApp GetAppController
+        public static clsTTApp GetAppController
         {
             get
             {
@@ -55,9 +55,9 @@ namespace Ceritar.TT3LightDLL.Classes
             get { return mcSQLConnection; }
         }
 
-        public clsUser cUser
+        public clsTTUser cUser
         {
-            get { return this.mctrlUser; }
+            get { return this.mcTTUser; }
         }
 
         public Form GetMDI
@@ -69,7 +69,7 @@ namespace Ceritar.TT3LightDLL.Classes
         {
             get
             {
-                switch (mctrlUser.UserLanguage)
+                switch (mcTTUser.UserLanguage)
                 {
                     case (short)sclsConstants.Language.FRENCH_QC:
                         // Return "dd-MM-yyyy"
@@ -91,7 +91,7 @@ namespace Ceritar.TT3LightDLL.Classes
         {
             get
             {
-                switch (mctrlUser.UserLanguage)
+                switch (mcTTUser.UserLanguage)
                 {
                     case (short)sclsConstants.Language.FRENCH_QC:
                         //Return "dd-MM-yyyy HH:mm:ss"
@@ -121,7 +121,7 @@ namespace Ceritar.TT3LightDLL.Classes
         {
             get 
             {
-                if (mstrServerDateFormat == string.Empty) mstrServerDateFormat = clsSQL.str_ADOSingleLookUp("TTP_Value", "TTParam", "TTP_Name = 'Server date format'");
+                if (mstrServerDateFormat == string.Empty) mstrServerDateFormat = clsTTSQL.str_ADOSingleLookUp("TTP_Value", "TTParam", "TTP_Name = 'Server date format'");
 
                 return mstrServerDateFormat; 
             }
@@ -134,7 +134,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
         public static void Instanciate(Form rfrmMDI)
         {
-            _myUniqueInstance = new clsApp(rfrmMDI);
+            _myUniqueInstance = new clsTTApp(rfrmMDI);
         }
 
         public bool bln_CTLBindCaption(ref Control rControl)
@@ -145,7 +145,7 @@ namespace Ceritar.TT3LightDLL.Classes
             try
             {
 
-                clsSQL.str_ADOSingleLookUp("TTAC_Text", "TTAppCaption", "TTAC_NRI = " + Convert.ToString(rControl.Tag));
+                clsTTSQL.str_ADOSingleLookUp("TTAC_Text", "TTAppCaption", "TTAC_NRI = " + Convert.ToString(rControl.Tag));
 
             }
             catch (Exception ex)
@@ -163,7 +163,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
             try
             {
-                strCaption = clsSQL.str_ADOSingleLookUp("TTAC_Text", "TTAppCaption", "TTAC_No = " + intCaptionID.ToString() + " AND ApL_NRI = " + intLanguage);
+                strCaption = clsTTSQL.str_ADOSingleLookUp("TTAC_Text", "TTAppCaption", "TTAC_No = " + intCaptionID.ToString() + " AND ApL_NRI = " + intLanguage);
 
             }
             catch (Exception ex)
@@ -202,7 +202,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
             try
             {
-                strMessage = _myUniqueInstance.str_GetCaption(vintCaption_NRI, mctrlUser.UserLanguage);
+                strMessage = _myUniqueInstance.str_GetCaption(vintCaption_NRI, mcTTUser.UserLanguage);
 
                 if ((vlstMsgParam != null))
                 {
@@ -234,7 +234,7 @@ namespace Ceritar.TT3LightDLL.Classes
             return msgResult;
         }
 
-        public String ShowInputMessage(int vintCaption_NRI, string vstrTitle = "Attention", string vstrDefaultInput = "", params string[] vlstMsgParam)
+        public String str_ShowInputMessage(int vintCaption_NRI, string vstrTitle = "Attention", string vstrDefaultInput = "", params string[] vlstMsgParam)
         {
             string strMessage = string.Empty;
             int intParamCpt = 1;
@@ -242,7 +242,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
             try
             {
-                strMessage = _myUniqueInstance.str_GetCaption(vintCaption_NRI, mctrlUser.UserLanguage);
+                strMessage = _myUniqueInstance.str_GetCaption(vintCaption_NRI, mcTTUser.UserLanguage);
 
                 if ((vlstMsgParam != null))
                 {

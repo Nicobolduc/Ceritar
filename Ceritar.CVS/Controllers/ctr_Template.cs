@@ -16,7 +16,7 @@ namespace Ceritar.CVS.Controllers
         private Interfaces.ITemplate mcView;
         private mod_Tpl_HierarchyTemplate mcModTemplate;
         private clsActionResults mcActionResult = new clsActionResults();
-        private clsSQL mcSQL;
+        private clsTTSQL mcSQL;
 
         public enum FolderType
         {
@@ -166,7 +166,7 @@ namespace Ceritar.CVS.Controllers
 
             try
             {
-                mcSQL = new clsSQL();
+                mcSQL = new clsTTSQL();
 
                 if (mcSQL.bln_BeginTransaction())
                 {
@@ -219,7 +219,7 @@ namespace Ceritar.CVS.Controllers
 
             try
             {
-                mcSQL = new clsSQL();
+                mcSQL = new clsTTSQL();
 
                 mcModTemplate.SetcSQL = mcSQL;
 

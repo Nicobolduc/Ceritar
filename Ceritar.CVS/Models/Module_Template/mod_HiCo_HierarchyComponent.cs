@@ -22,7 +22,7 @@ namespace Ceritar.CVS.Models.Module_Template
         //mod_IBase
         protected clsActionResults mcActionResults = new clsActionResults();
         protected sclsConstants.DML_Mode mintDML_Action;
-        protected clsSQL mcSQL;
+        protected clsTTSQL mcSQL;
 
         //Working variables
 
@@ -76,7 +76,7 @@ namespace Ceritar.CVS.Models.Module_Template
             set { mintDML_Action = value; }
         }
 
-        internal clsSQL SetcSQL
+        internal clsTTSQL SetcSQL
         {
             set { mcSQL = value; }
         }
@@ -105,7 +105,7 @@ namespace Ceritar.CVS.Models.Module_Template
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Template.ErrorCode_HiCo.NAME_ON_DISK_MANDATORY);
                         }
-                        else if (!clsSQL.bln_ADOValid_TS("HierarchyComp", "HiCo_NRI", _intHierarchyComponent_NRI, "HiCo_TS", _intHierarchyComponent_TS))
+                        else if (!clsTTSQL.bln_ADOValid_TS("HierarchyComp", "HiCo_NRI", _intHierarchyComponent_NRI, "HiCo_TS", _intHierarchyComponent_TS))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_TIMESTAMP, clsActionResults.BaseErrorCode.INVALID_TIMESTAMP);
                         }
@@ -118,7 +118,7 @@ namespace Ceritar.CVS.Models.Module_Template
 
                     case sclsConstants.DML_Mode.DELETE_MODE:
 
-                        if (!clsSQL.bln_CheckReferenceIntegrity("HierarchyComp", "HiCo_NRI", _intTemplate_NRI))
+                        if (!clsTTSQL.bln_CheckReferenceIntegrity("HierarchyComp", "HiCo_NRI", _intTemplate_NRI))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_REFERENCE_INTEGRITY, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
                         }
@@ -214,9 +214,9 @@ namespace Ceritar.CVS.Models.Module_Template
             
             try
             {
-                if (!mcSQL.bln_AddField("HiCo_Name", _strNameOnDisk, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                if (!mcSQL.bln_AddField("HiCo_Name", _strNameOnDisk, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("HiCo_Parent_NRI", _cParentComponent._intHierarchyComponent_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("HiCo_Parent_NRI", _cParentComponent._intHierarchyComponent_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else
                 {

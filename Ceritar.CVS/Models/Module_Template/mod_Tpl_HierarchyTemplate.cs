@@ -37,7 +37,7 @@ namespace Ceritar.CVS.Models.Module_Template
         //mod_IBase
         private clsActionResults mcActionResults = new clsActionResults();
         private sclsConstants.DML_Mode mintDML_Action;
-        private clsSQL mcSQL;
+        private clsTTSQL mcSQL;
 
         //Working variables
         private int mintReleaseFolderCount = 0;
@@ -105,7 +105,7 @@ namespace Ceritar.CVS.Models.Module_Template
             set { mintDML_Action = value; }
         }
 
-        internal clsSQL SetcSQL
+        internal clsTTSQL SetcSQL
         {
             set { mcSQL = value; }
         }
@@ -136,7 +136,7 @@ namespace Ceritar.CVS.Models.Module_Template
                     case sclsConstants.DML_Mode.UPDATE_MODE:
 
                         //On verifie si l'application des rapports est obligatoire
-                        string strExternalReportAppName = clsSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + _intCeritarApplication_NRI);
+                        string strExternalReportAppName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + _intCeritarApplication_NRI);
 
                         mintMinMaxFolderType -= (int)(string.IsNullOrEmpty(strExternalReportAppName) ? 1 : 0);
 
@@ -144,7 +144,7 @@ namespace Ceritar.CVS.Models.Module_Template
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Template.ErrorCode_Tpl.NAME_MANDATORY);
                         }
-                        else if (!string.IsNullOrEmpty(clsSQL.str_ADOSingleLookUp("Tpl_NRI", "Template", "Tpl_NRI <> " + _intTemplate_NRI + " AND Tpl_Name = " + clsApp.GetAppController.str_FixStringForSQL(_strTemplateName) + " AND CeA_NRI = " + _intCeritarApplication_NRI + " AND Template.TeT_NRI = " + (int)_templateType)))
+                        else if (!string.IsNullOrEmpty(clsTTSQL.str_ADOSingleLookUp("Tpl_NRI", "Template", "Tpl_NRI <> " + _intTemplate_NRI + " AND Tpl_Name = " + clsTTApp.GetAppController.str_FixStringForSQL(_strTemplateName) + " AND CeA_NRI = " + _intCeritarApplication_NRI + " AND Template.TeT_NRI = " + (int)_templateType)))
                         {
                             mcActionResults.SetInvalid(mintMSG_UniqueTemplateNameForApp, ctr_Template.ErrorCode_Tpl.TEMPLATE_NAME_UNIQUE);
                         }
@@ -160,7 +160,7 @@ namespace Ceritar.CVS.Models.Module_Template
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Template.ErrorCode_Tpl.HIERARCHY_MANDATORY);
                         }
-                        else if (!clsSQL.bln_ADOValid_TS("Template", "Tpl_NRI", _intTemplate_NRI, "Tpl_TS", _intTemplate_TS))
+                        else if (!clsTTSQL.bln_ADOValid_TS("Template", "Tpl_NRI", _intTemplate_NRI, "Tpl_TS", _intTemplate_TS))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_TIMESTAMP, clsActionResults.BaseErrorCode.INVALID_TIMESTAMP);
                         }
@@ -188,7 +188,7 @@ namespace Ceritar.CVS.Models.Module_Template
                             }
                             else if (_blnByDefault)
                             {      
-                                string strExistingDefaultTemplateName = clsSQL.str_ADOSingleLookUp("Tpl_Name", "Template", "Tpl_NRI <> " + _intTemplate_NRI + " AND Tpl_ByDefault = 1 AND CeA_NRI = " + _intCeritarApplication_NRI + " AND Template.TeT_NRI = " + (int)_templateType);
+                                string strExistingDefaultTemplateName = clsTTSQL.str_ADOSingleLookUp("Tpl_Name", "Template", "Tpl_NRI <> " + _intTemplate_NRI + " AND Tpl_ByDefault = 1 AND CeA_NRI = " + _intCeritarApplication_NRI + " AND Template.TeT_NRI = " + (int)_templateType);
 
                                 if (!string.IsNullOrEmpty(strExistingDefaultTemplateName))
                                 {
@@ -209,7 +209,7 @@ namespace Ceritar.CVS.Models.Module_Template
 
                     case sclsConstants.DML_Mode.DELETE_MODE:
 
-                        if (!clsSQL.bln_CheckReferenceIntegrity("Template", "Tpl_NRI", _intTemplate_NRI))
+                        if (!clsTTSQL.bln_CheckReferenceIntegrity("Template", "Tpl_NRI", _intTemplate_NRI))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_REFERENCE_INTEGRITY, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
                         }
@@ -410,13 +410,13 @@ namespace Ceritar.CVS.Models.Module_Template
             {
                 if (!mcSQL.bln_RefreshFields())
                 { }
-                else if (!mcSQL.bln_AddField("Tpl_Name", _strTemplateName, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (!mcSQL.bln_AddField("Tpl_Name", _strTemplateName, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("Tpl_ByDefault", _blnByDefault, clsSQL.MySQL_FieldTypes.BIT_TYPE))
+                else if (!mcSQL.bln_AddField("Tpl_ByDefault", _blnByDefault, clsTTSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("TeT_NRI", (int)_templateType, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("TeT_NRI", (int)_templateType, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("CeA_NRI", _intCeritarApplication_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("CeA_NRI", _intCeritarApplication_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else
                 {

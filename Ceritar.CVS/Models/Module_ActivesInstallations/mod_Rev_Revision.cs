@@ -35,7 +35,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         //mod_IBase
         private clsActionResults mcActionResults = new clsActionResults();
         private sclsConstants.DML_Mode mintDML_Action;
-        private clsSQL mcSQL;
+        private clsTTSQL mcSQL;
 
         //Messages
         private const int mintMSG_CantDeleteRevisionIfNotLast = 30;
@@ -142,7 +142,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { mintDML_Action = value; }
         }
 
-        internal clsSQL SetcSQL
+        internal clsTTSQL SetcSQL
         {
             set { mcSQL = value; }
         }
@@ -210,7 +210,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.CREATED_BY_MANDATORY);
                         }
-                        else if (!clsSQL.bln_ADOValid_TS("Revision", "Rev_NRI", _intRevision_NRI, "Rev_TS", _intRevision_TS))
+                        else if (!clsTTSQL.bln_ADOValid_TS("Revision", "Rev_NRI", _intRevision_NRI, "Rev_TS", _intRevision_TS))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_TIMESTAMP, clsActionResults.BaseErrorCode.INVALID_TIMESTAMP);
                         }
@@ -239,7 +239,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.REPORT_EXE_MANDATORY);
                         }
-                        else if (!clsSQL.bln_ADOValid_TS("Revision", "Rev_NRI", _intRevision_NRI, "Rev_TS", _intRevision_TS))
+                        else if (!clsTTSQL.bln_ADOValid_TS("Revision", "Rev_NRI", _intRevision_NRI, "Rev_TS", _intRevision_TS))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_TIMESTAMP, clsActionResults.BaseErrorCode.INVALID_TIMESTAMP);
                         }
@@ -252,11 +252,11 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                     case sclsConstants.DML_Mode.DELETE_MODE:
 
-                        if (!clsSQL.bln_CheckReferenceIntegrity("Revision", "Rev_NRI", _intRevision_NRI))
+                        if (!clsTTSQL.bln_CheckReferenceIntegrity("Revision", "Rev_NRI", _intRevision_NRI))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_REFERENCE_INTEGRITY, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
                         }
-                        else if (!string.IsNullOrEmpty(clsSQL.str_ADOSingleLookUp("Rev_NRI", "Revision", "Rev_No > " + _intRevision_Number + " AND Revision.Ver_NRI = " + _cVersion.Version_NRI)))
+                        else if (!string.IsNullOrEmpty(clsTTSQL.str_ADOSingleLookUp("Rev_NRI", "Revision", "Rev_No > " + _intRevision_Number + " AND Revision.Ver_NRI = " + _cVersion.Version_NRI)))
                         {
                             mcActionResults.SetInvalid(mintMSG_CantDeleteRevisionIfNotLast, ctr_Revision.ErrorCode_Rev.CANT_DELETE_NOT_LAST_REVISION);
                         }
@@ -407,9 +407,9 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                     if (!mcSQL.bln_RefreshFields())
                     { }
-                    else if (!mcSQL.bln_AddField("RevM_ChangeDesc", _lstModifications[intIndex], clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                    else if (!mcSQL.bln_AddField("RevM_ChangeDesc", _lstModifications[intIndex], clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                     { }
-                    else if (!mcSQL.bln_AddField("Rev_NRI", _intRevision_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                    else if (!mcSQL.bln_AddField("Rev_NRI", _intRevision_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                     { }
                     else if (!mcSQL.bln_ADOInsert("RevModifs", out intDML_OutParam))
                     { }
@@ -497,27 +497,27 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             {
                 if (!mcSQL.bln_RefreshFields())
                 { }
-                else if (!mcSQL.bln_AddField("Rev_No", _intRevision_Number, clsSQL.MySQL_FieldTypes.INT_TYPE))
+                else if (!mcSQL.bln_AddField("Rev_No", _intRevision_Number, clsTTSQL.MySQL_FieldTypes.INT_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("Ver_NRI", _cVersion.Version_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("Ver_NRI", _cVersion.Version_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("Rev_DtCreation", _strCreationDate, clsSQL.MySQL_FieldTypes.DATETIME_TYPE)) 
+                else if (!mcSQL.bln_AddField("Rev_DtCreation", _strCreationDate, clsTTSQL.MySQL_FieldTypes.DATETIME_TYPE)) 
                 { }
-                else if (!mcSQL.bln_AddField("TTU_NRI", clsApp.GetAppController.cUser.User_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("TTU_NRI", clsTTApp.GetAppController.cUser.User_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("CeC_NRI", _cCeritarClient.CeritarClient_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("CeC_NRI", _cCeritarClient.CeritarClient_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("Tpl_NRI", _cTemplateSource.Template_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("Tpl_NRI", _cTemplateSource.Template_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("Rev_Location_Exe", _strLocation_Release, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (!mcSQL.bln_AddField("Rev_Location_Exe", _strLocation_Release, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("Rev_Location_Scripts", _strLocation_Scripts, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (!mcSQL.bln_AddField("Rev_Location_Scripts", _strLocation_Scripts, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("Rev_CreatedBy", _strCreatedBy, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (!mcSQL.bln_AddField("Rev_CreatedBy", _strCreatedBy, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("Rev_ExeIsReport", _blnExeIsExternalReport, clsSQL.MySQL_FieldTypes.BIT_TYPE))
+                else if (!mcSQL.bln_AddField("Rev_ExeIsReport", _blnExeIsExternalReport, clsTTSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("Rev_ExeWithReport", _blnExeWithExternalReport, clsSQL.MySQL_FieldTypes.BIT_TYPE))
+                else if (!mcSQL.bln_AddField("Rev_ExeWithReport", _blnExeWithExternalReport, clsTTSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
                 else
                 {
@@ -552,9 +552,9 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             {
                 if (!mcSQL.bln_RefreshFields())
                 { }
-                else if (!mcSQL.bln_AddField("Rev_Location_Exe", _strLocation_Release, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (!mcSQL.bln_AddField("Rev_Location_Exe", _strLocation_Release, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("Rev_Location_Scripts", _strLocation_Scripts, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (!mcSQL.bln_AddField("Rev_Location_Scripts", _strLocation_Scripts, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
                 else if (!mcSQL.bln_ADOUpdate("Revision", "Revision.Rev_NRI = " + _intRevision_NRI))
                 { }

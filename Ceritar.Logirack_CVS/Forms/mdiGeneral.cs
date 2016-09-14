@@ -20,9 +20,10 @@ namespace Ceritar.Logirack_CVS.Forms
     {
         //Messages
         private const int mintMSG_AdminRightWarning = 40;
+        private const int mintMSG_NewUser = 43;
 
         //Working variables
-        private int childFormNumber = 0;
+        
 
         public mdiGeneral()
         {
@@ -31,16 +32,22 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void main()
         {
-            clsApp.Instanciate(this);
+            bool blnLoadSuccess = false;
+
+            clsTTApp.Instanciate(this);
+
+            lblStatus_BD.Text += clsTTApp.GetAppController.SQLConnection.Database;
 
             Application.ApplicationExit += new EventHandler(ApplicationExit);
-
+            
             if (!IsUserAdministrator())
             {
-                clsApp.GetAppController.ShowMessage(mintMSG_AdminRightWarning);
+                clsTTApp.GetAppController.ShowMessage(mintMSG_AdminRightWarning);
             }
 
-            pfblnAutoLogInUser();
+            blnLoadSuccess = pfblnAutoLogInUser();
+
+            if (!blnLoadSuccess) Application.Exit();
 
             sclsGenList.ShowGenList(sclsGenList.GeneralLists_ID.VERSION_REVISION_LIST_NRI);
         }
@@ -48,30 +55,55 @@ namespace Ceritar.Logirack_CVS.Forms
         private bool pfblnAutoLogInUser()
         {
             bool blnValidReturn;
-            string strUser_Code;
+            string strUser_Code = string.Empty;
+            DialogResult resultAnswer;
             int intUser_NRI = 0;
 
             try
             {
-                strUser_Code = clsSQL.str_ADOSingleLookUp("TTInI_Value", "TTInI", "TTInI_Config = 'User_Code' AND TTInI_ComputerID = " + clsApp.GetAppController.str_FixStringForSQL(clsApp.GetAppController.cUser.str_GetUserComputerID()));
+                blnValidReturn = true;
+
+                strUser_Code = clsTTSQL.str_ADOSingleLookUp("TTInI_Value", "TTInI", "TTInI_Config = 'User_Code' AND TTInI_ComputerID = " + clsTTApp.GetAppController.str_FixStringForSQL(clsTTApp.GetAppController.cUser.GetUserComputerID));
 
                 if (!string.IsNullOrEmpty(strUser_Code))
                 {
-                    Int32.TryParse(clsSQL.str_ADOSingleLookUp("TTU_NRI", "TTUser", "TTU_Code = " + clsApp.GetAppController.str_FixStringForSQL(strUser_Code)), out intUser_NRI);
+                    Int32.TryParse(clsTTSQL.str_ADOSingleLookUp("TTU_NRI", "TTUser", "TTU_Active = 1 AND TTU_Code = " + clsTTApp.GetAppController.str_FixStringForSQL(strUser_Code)), out intUser_NRI);
 
-                    clsApp.GetAppController.cUser.User_NRI = intUser_NRI;
+                    clsTTApp.GetAppController.cUser.User_NRI = intUser_NRI;
+                    clsTTApp.GetAppController.cUser.User_Code = strUser_Code;
+
+                    if (string.IsNullOrEmpty(clsTTApp.GetAppController.cUser.User_Code) || clsTTApp.GetAppController.cUser.User_NRI <= 0)
+                    {
+                        blnValidReturn = Static_Classes.sclsMain.fbln_CreateNewUser(strUser_Code);
+                    }
                 }
-
-                if (string.IsNullOrEmpty(strUser_Code) || intUser_NRI <= 0)
+                else
                 {
-                    frmUser frmUser = new frmUser();
+                    resultAnswer = clsTTApp.GetAppController.ShowMessage(mintMSG_NewUser, MessageBoxButtons.YesNo);
 
-                    frmUser.MdiParent = this;
+                    if (resultAnswer == System.Windows.Forms.DialogResult.No)
+                    {
+                        frmTTLogin frmTTLogin = new frmTTLogin();
 
-                    ((TT3LightDLL.Controls.IFormController)frmUser).GetFormController().ShowForm(this, sclsConstants.DML_Mode.INSERT_MODE, ref intUser_NRI, true, true);
+                        frmTTLogin.ShowDialog(this);
+
+                        //Si l'application n'est pas fermée apres ce Call, c'est que le user est authentifié
+                        blnValidReturn = clsTTApp.GetAppController.cUser.bln_SaveIniConfiguration("APP", "User_Code", clsTTApp.GetAppController.cUser.User_Code);
+                    }
+                    else
+                    {
+                        blnValidReturn = Static_Classes.sclsMain.fbln_CreateNewUser(); 
+                    }
                 }
 
-                blnValidReturn = true;
+                if (string.IsNullOrEmpty(clsTTApp.GetAppController.cUser.User_Code) || clsTTApp.GetAppController.cUser.User_NRI <= 0)
+                {
+                    Application.Exit();
+                }
+                else
+                {
+                    lblStatus_User.Text += clsTTApp.GetAppController.cUser.User_Code;
+                }       
             }
             catch (Exception ex)
             {
@@ -107,7 +139,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void ApplicationExit(object sender, EventArgs e)
         {
-            if (clsApp.GetAppController.SQLConnection != null) clsApp.GetAppController.SQLConnection.Close();
+            if (clsTTApp.GetAppController.SQLConnection != null) clsTTApp.GetAppController.SQLConnection.Close();
         }
 
         private void mnuVersion_Click(object sender, EventArgs e)
@@ -155,7 +187,7 @@ namespace Ceritar.Logirack_CVS.Forms
         private void mnuUser_Click(object sender, EventArgs e)
         {
             frmUser frmUser = new frmUser();
-            int intItem_NRI = clsApp.GetAppController.cUser.User_NRI;
+            int intItem_NRI = clsTTApp.GetAppController.cUser.User_NRI;
 
             frmUser.MdiParent = this;
 

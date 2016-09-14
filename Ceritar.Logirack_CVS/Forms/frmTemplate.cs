@@ -30,7 +30,7 @@ namespace Ceritar.Logirack_CVS.Forms
         private const short mintGrdTpl_HiCo_FolderType_col = 8;
 
         //Classes
-        private clsC1FlexGridWrapper mcGrdTemplate;
+        private clsTTC1FlexGridWrapper mcGrdTemplate;
         private Ceritar.CVS.clsActionResults mcActionResults;
         private CellStyle csSystemItem;
 
@@ -44,7 +44,7 @@ namespace Ceritar.Logirack_CVS.Forms
             
             mcCtrTemplate = new ctr_Template((Ceritar.CVS.Controllers.Interfaces.ITemplate) this);
                    
-            mcGrdTemplate = new clsC1FlexGridWrapper();
+            mcGrdTemplate = new clsTTC1FlexGridWrapper();
             mcGrdTemplate.SetGridDisplay += mcGrdTemplate_SetGridDisplay;
 
             csSystemItem = grdTemplate.Styles.Add("SystemItem");
@@ -162,7 +162,7 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 mcGrdTemplate.GridIsLoading = true;
 
-                cDataReader = clsSQL.ADOSelect(mcCtrTemplate.strGetListe_HierarchyComponents_SQL(formController.Item_NRI, ((int)cboTypes.SelectedValue == (int)ctr_Template.TemplateType.REVISION ? true : false)));
+                cDataReader = clsTTSQL.ADOSelect(mcCtrTemplate.strGetListe_HierarchyComponents_SQL(formController.Item_NRI, ((int)cboTypes.SelectedValue == (int)ctr_Template.TemplateType.REVISION ? true : false)));
 
                 if (cDataReader.HasRows)
                 {
@@ -254,7 +254,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
             try
             {
-                sqlRecord = clsSQL.ADOSelect(mcCtrTemplate.strGetDataLoad_SQL(formController.Item_NRI));
+                sqlRecord = clsTTSQL.ADOSelect(mcCtrTemplate.strGetDataLoad_SQL(formController.Item_NRI));
 
                 if (sqlRecord.Read())
                 {
@@ -685,7 +685,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
             if (!mcActionResults.IsValid)
             {
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
+                clsTTApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
             }
 
             if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE) formController.Item_NRI = mcActionResults.GetNewItem_NRI;
@@ -699,7 +699,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
             if (!mcActionResults.IsValid)
             {
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
+                clsTTApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
 
                 switch ((ctr_Template.ErrorCode_Tpl)mcActionResults.GetErrorCode)
                 {

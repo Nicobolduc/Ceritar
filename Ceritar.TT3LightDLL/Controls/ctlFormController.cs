@@ -335,7 +335,7 @@ namespace Ceritar.TT3LightDLL.Controls
             foreach (System.Reflection.MemberInfo property in fields)
 
             {
-                if (fields.GetType() == typeof(Ceritar.TT3LightDLL.Classes.clsC1FlexGridWrapper))
+                if (fields.GetType() == typeof(Ceritar.TT3LightDLL.Classes.clsTTC1FlexGridWrapper))
                 {
                     MessageBox.Show("Name: " + property.Name); 
                 }
@@ -376,7 +376,8 @@ namespace Ceritar.TT3LightDLL.Controls
                 if (FormMode == sclsConstants.DML_Mode.INSERT_MODE && mintItem_ID != 0)
                     beNotifyEventArgs.NewItemInserted = true;
 
-                ((IFormController)mfrmCallingForm).GetFormController().CallBeNotify(beNotifyEventArgs);
+                if (mfrmCallingForm is IFormController)
+                    ((IFormController)mfrmCallingForm).GetFormController().CallBeNotify(beNotifyEventArgs);
             }
         }
 

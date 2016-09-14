@@ -37,8 +37,8 @@ namespace Ceritar.Logirack_CVS.Forms
         private const short mintGrdSat_CSA_ExportFolderName_col = 7;
 
         //Classes
-        private clsC1FlexGridWrapper mcGrdRevModifs;
-        private clsC1FlexGridWrapper mcGrdSatellites;
+        private clsTTC1FlexGridWrapper mcGrdRevModifs;
+        private clsTTC1FlexGridWrapper mcGrdSatellites;
         private Ceritar.CVS.clsActionResults mcActionResults;
 
         //Public working variables
@@ -60,9 +60,9 @@ namespace Ceritar.Logirack_CVS.Forms
 
             mcCtrRevision = new ctr_Revision(this);
 
-            mcGrdRevModifs = new clsC1FlexGridWrapper();
+            mcGrdRevModifs = new clsTTC1FlexGridWrapper();
 
-            mcGrdSatellites = new clsC1FlexGridWrapper();
+            mcGrdSatellites = new clsTTC1FlexGridWrapper();
             mcGrdSatellites.SetGridDisplay += mcGrdSatellites_SetGridDisplay;
 
             dtpCreation.Value = DateTime.Now;
@@ -78,7 +78,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
         string IRevision.GetCreationDate()
         {
-            return dtpCreation.Value.ToString(clsApp.GetAppController.str_GetServerDateTimeFormat);
+            return dtpCreation.Value.ToString(clsTTApp.GetAppController.str_GetServerDateTimeFormat);
         }
 
         sclsConstants.DML_Mode IRevision.GetDML_Action()
@@ -177,7 +177,7 @@ namespace Ceritar.Logirack_CVS.Forms
                 {
                     structSRe = new structSatRevision();
 
-                    structSRe.Action = clsApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdSatellites[intRowIndex, mintGrdSat_Action_col]);
+                    structSRe.Action = clsTTApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdSatellites[intRowIndex, mintGrdSat_Action_col]);
                     structSRe.intCeritarSatelliteApp_NRI = Int32.Parse(mcGrdSatellites[intRowIndex, mintGrdSat_CSA_NRI_col]);
                     Int32.TryParse(mcGrdSatellites[intRowIndex, mintGrdSat_SRe_NRI_col], out structSRe.intSatRevision_NRI);
                     structSRe.strLocationSatelliteExe = mcGrdSatellites[intRowIndex, mintGrdSat_CSA_ExeLocation_col];
@@ -239,7 +239,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
             try
             {
-                sqlRecord = clsSQL.ADOSelect(mcCtrRevision.strGetDataLoad_SQL(mintVersion_NRI, formController.Item_NRI));
+                sqlRecord = clsTTSQL.ADOSelect(mcCtrRevision.strGetDataLoad_SQL(mintVersion_NRI, formController.Item_NRI));
 
                 if (sqlRecord.Read())
                 {
@@ -317,7 +317,7 @@ namespace Ceritar.Logirack_CVS.Forms
                     blnValidReturn = true;
                 }
 
-                dtpCreation.CustomFormat = clsApp.GetAppController.str_GetServerDateTimeFormat;
+                dtpCreation.CustomFormat = clsTTApp.GetAppController.str_GetServerDateTimeFormat;
 
                 return blnValidReturn;
             }
@@ -604,7 +604,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
             if (!mcActionResults.IsValid)
             {
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
+                clsTTApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
 
                 switch ((ctr_Revision.ErrorCode_Rev)mcActionResults.GetErrorCode)
                 {
@@ -669,11 +669,11 @@ namespace Ceritar.Logirack_CVS.Forms
 
                 if (!mcActionResults.IsValid)
                 {
-                    clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
+                    clsTTApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
                 }
                 else if (formController.FormMode != sclsConstants.DML_Mode.INSERT_MODE)
                 {
-                    if (mcActionResults.SuccessMessage_NRI > 0) clsApp.GetAppController.ShowMessage(mcActionResults.SuccessMessage_NRI);
+                    if (mcActionResults.SuccessMessage_NRI > 0) clsTTApp.GetAppController.ShowMessage(mcActionResults.SuccessMessage_NRI);
                 }         
             }
             finally

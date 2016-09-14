@@ -18,7 +18,7 @@ namespace Ceritar.CVS.Controllers
         private Interfaces.ICeritarApp mcView;
         private mod_CeA_CeritarApplication mcModCerApp;
         private clsActionResults mcActionResult;
-        private clsSQL mcSQL;
+        private clsTTSQL mcSQL;
 
         public enum ErrorCode_CeA
         {
@@ -95,7 +95,7 @@ namespace Ceritar.CVS.Controllers
 
             try
             {
-                mcSQL = new clsSQL();
+                mcSQL = new clsTTSQL();
                 
                 if (mcSQL.bln_BeginTransaction())
                 {

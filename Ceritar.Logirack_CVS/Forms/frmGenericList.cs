@@ -25,7 +25,7 @@ namespace Ceritar.Logirack_CVS.Forms
         private sclsGenList.GeneralLists_ID mListToOpen;
 
         //Private class members
-        private clsC1FlexGridWrapper mcGrdList;
+        private clsTTC1FlexGridWrapper mcGrdList;
 
 
 #region "Constructor"
@@ -36,7 +36,7 @@ namespace Ceritar.Logirack_CVS.Forms
             
 	        mListToOpen = vstrGenList_ID;
 
-            mcGrdList = new clsC1FlexGridWrapper();
+            mcGrdList = new clsTTC1FlexGridWrapper();
             mcGrdList.SetGridDisplay += mcGrdList_SetGridDisplay;
 
             btnRefresh.Click += btnRefresh_Click;

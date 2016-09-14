@@ -24,6 +24,9 @@ namespace Ceritar.Logirack_CVS.Forms
         //Working variables
         private ushort mintUser_TS;
 
+        //Public variables
+        public string mstrUser_Code = string.Empty;
+
 
         public frmUser()
         {
@@ -102,7 +105,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
             try
             {
-                sqlRecord = clsSQL.ADOSelect(mcCtrUser.strGetDataLoad_SQL(formController.Item_NRI));
+                sqlRecord = clsTTSQL.ADOSelect(mcCtrUser.strGetDataLoad_SQL(formController.Item_NRI));
 
                 if (sqlRecord.Read())
                 {
@@ -114,13 +117,14 @@ namespace Ceritar.Logirack_CVS.Forms
                     txtPassword.Text = sqlRecord["TTU_Password"].ToString();
                     txtEmail.Text = sqlRecord["TTU_Email"].ToString();
 
-                    chkActive.Checked = Convert.ToBoolean(sqlRecord["TTU_IsActive"].ToString());
+                    chkActive.Checked = Convert.ToBoolean(sqlRecord["TTU_Active"].ToString());
 
-                    cboApplications.SelectedValue = Int32.Parse(sqlRecord["CeA_NRI_Default"].ToString());
+                    if (sqlRecord["CeA_NRI_Default"] != System.DBNull.Value)
+                        cboApplications.SelectedValue = Int32.Parse(sqlRecord["CeA_NRI_Default"].ToString());
 
                     blnValidReturn = true;
                 }
-
+                
                 return blnValidReturn;
             }
             catch (Exception ex)
@@ -147,6 +151,10 @@ namespace Ceritar.Logirack_CVS.Forms
             { }
             else if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE)
             {
+                txtCode.Text = mstrUser_Code;
+
+                if (mstrUser_Code != string.Empty) txtPassword.Focus();
+
                 blnValidReturn = true;
             }
             else if (!pfblnData_Load())
@@ -213,7 +221,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
             if (!mcActionResults.IsValid)
             {
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
+                clsTTApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
 
                 switch ((ctr_User.ErrorCode_TTU)mcActionResults.GetErrorCode)
                 {
@@ -257,10 +265,16 @@ namespace Ceritar.Logirack_CVS.Forms
 
             if (!mcActionResults.IsValid)
             {
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
+                clsTTApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
             }
 
             if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE) formController.Item_NRI = mcActionResults.GetNewItem_NRI;
+
+            if (mcActionResults.IsValid)
+            {
+                clsTTApp.GetAppController.cUser.User_NRI = formController.Item_NRI;
+                clsTTApp.GetAppController.cUser.User_Code = txtCode.Text;
+            }
 
             eventArgs.SaveSuccessful = mcActionResults.IsValid;
         }
@@ -270,6 +284,18 @@ namespace Ceritar.Logirack_CVS.Forms
             if (!formController.FormIsLoading)
             {
                 formController.ChangeMade = true;
+            }
+        }
+
+        private void formController_SetReadRights()
+        {
+            switch (formController.FormMode)
+            {
+                case sclsConstants.DML_Mode.UPDATE_MODE:
+
+                    txtPassword.PasswordChar = '*';
+
+                    break;
             }
         }
 

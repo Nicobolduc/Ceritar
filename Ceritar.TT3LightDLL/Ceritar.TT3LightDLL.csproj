@@ -48,10 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\clsApp.cs" />
-    <Compile Include="Classes\clsC1FlexGridWrapper.cs" />
-    <Compile Include="Classes\clsSQL.cs" />
-    <Compile Include="Classes\clsUser.cs" />
+    <Compile Include="Classes\clsTTApp.cs" />
+    <Compile Include="Classes\clsTTC1FlexGridWrapper.cs" />
+    <Compile Include="Classes\clsTTSQL.cs" />
+    <Compile Include="Classes\clsTTUser.cs" />
     <Compile Include="Controls\ctlFormController.cs">
       <SubType>UserControl</SubType>
     </Compile>

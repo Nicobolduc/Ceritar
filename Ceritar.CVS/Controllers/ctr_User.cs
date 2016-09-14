@@ -15,7 +15,7 @@ namespace Ceritar.CVS.Controllers
         private Interfaces.IUser mcView;
         private mod_TTU_User mcModUser = null;
         private clsActionResults mcActionResult;
-        private clsSQL mcSQL;
+        private clsTTSQL mcSQL;
         
         public enum ErrorCode_TTU
         {
@@ -48,6 +48,8 @@ namespace Ceritar.CVS.Controllers
                 mcModUser.User_NRI = mcView.GetUser_NRI();
                 mcModUser.User_TS = mcView.GetUser_TS();
                 mcModUser.UserCode = mcView.GetCode();
+                mcModUser.IsActive = mcView.IsActive();
+                mcModUser.CeritarApp_NRI_Default = mcView.GetCeritarApp_NRI_Default();
 
                 mcActionResult = mcModUser.Validate();
             }
@@ -64,7 +66,7 @@ namespace Ceritar.CVS.Controllers
         {
             try
             {
-                mcSQL = new clsSQL();
+                mcSQL = new clsTTSQL();
 
                 if (mcSQL.bln_BeginTransaction())
                 {
@@ -73,6 +75,11 @@ namespace Ceritar.CVS.Controllers
                     mcModUser.blnSave();
 
                     mcActionResult = mcModUser.ActionResults;
+
+                    if (mcActionResult.IsValid)
+                    {
+                        mcActionResult.IsValid = clsTTApp.GetAppController.cUser.bln_SaveIniConfiguration("APP","User_Code", mcModUser.UserCode);
+                    }
                 }
             }
             catch (Exception ex)
@@ -102,7 +109,9 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        TTUser.TTU_FirstName, " + Environment.NewLine;
             strSQL = strSQL + "        TTUser.TTU_LastName, " + Environment.NewLine;
             strSQL = strSQL + "        TTUser.TTU_Password, " + Environment.NewLine;
-            strSQL = strSQL + "        TTUser.TTU_Email " + Environment.NewLine;
+            strSQL = strSQL + "        TTUser.TTU_Email, " + Environment.NewLine;
+            strSQL = strSQL + "        TTUser.TTU_Active, " + Environment.NewLine;
+            strSQL = strSQL + "        TTUser.CeA_NRI_Default " + Environment.NewLine;
 
             strSQL = strSQL + " FROM TTUser " + Environment.NewLine;
 

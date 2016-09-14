@@ -17,7 +17,7 @@ namespace Ceritar.TT3LightDLL.Classes
     /// Cette classe est un wrapper sur le contrôle de grille "C1FlexGrid". Elle permet d'offrir des fonctionnalités génériques simplifiant l'utilisation de ce contrôle.
     /// Elle ajoute également des événements sur la grille qui sont utiles pour les forms.
     /// </summary>
-    public class clsC1FlexGridWrapper
+    public class clsTTC1FlexGridWrapper
     {
         //Documentation available here: //http://helpcentral.componentone.com/nethelp/c1flexgrid/topic132.html
         //Row 0 is the Header and col 0 is the first small fixed col
@@ -57,7 +57,7 @@ namespace Ceritar.TT3LightDLL.Classes
         private int mintNbVisibleColumns = 0;
 
 
-        public clsC1FlexGridWrapper()
+        public clsTTC1FlexGridWrapper()
         {
             mlstHostedCellControls = new List<HostedCellControl>();
 
@@ -283,7 +283,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
                 mGrdFlex.BeginUpdate();
 
-                sqlCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.SQLConnection);
+                sqlCmd = new SqlCommand(vstrSQL, clsTTApp.GetAppController.SQLConnection);
 
 			    mySQLReader = sqlCmd.ExecuteReader();
 
@@ -411,7 +411,7 @@ namespace Ceritar.TT3LightDLL.Classes
             mintNbVisibleColumns = 0;
 
 		    try {
-                strGridCaption = clsApp.GetAppController.str_GetCaption(Convert.ToInt32(mGrdFlex.Tag), clsApp.GetAppController.cUser.UserLanguage);
+                strGridCaption = clsTTApp.GetAppController.str_GetCaption(Convert.ToInt32(mGrdFlex.Tag), clsTTApp.GetAppController.cUser.UserLanguage);
 
                 lstColumns = Strings.Split(strGridCaption.Insert(0, "|"), "|"); //The first fixed col must not be inclued in the caption!
                 
@@ -523,7 +523,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
 		    try 
             {
-			    mySQLCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.SQLConnection);
+			    mySQLCmd = new SqlCommand(vstrSQL, clsTTApp.GetAppController.SQLConnection);
 
 			    mySQLReader = mySQLCmd.ExecuteReader();
 
@@ -555,7 +555,7 @@ namespace Ceritar.TT3LightDLL.Classes
                 CellStyle individualColStyle = mGrdFlex.Styles.Add("DateTime" + vintColumnIndex);
 
                 individualColStyle.DataType = typeof(DateTime);
-                individualColStyle.Format = clsApp.GetAppController.str_GetServerDateFormat;
+                individualColStyle.Format = clsTTApp.GetAppController.str_GetServerDateFormat;
 
                 mGrdFlex.Cols[vintColumnIndex].Style = individualColStyle;
 

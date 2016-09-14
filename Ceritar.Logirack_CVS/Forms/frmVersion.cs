@@ -63,9 +63,9 @@ namespace Ceritar.Logirack_CVS.Forms
         private const short mintTab_Revision = 1;
 
         //Classes
-        public clsC1FlexGridWrapper mcGrdClients;
-        public clsC1FlexGridWrapper mcGrdSatelliteApps;
-        public clsC1FlexGridWrapper mcGrdRevisions;
+        public clsTTC1FlexGridWrapper mcGrdClients;
+        public clsTTC1FlexGridWrapper mcGrdSatelliteApps;
+        public clsTTC1FlexGridWrapper mcGrdRevisions;
         private Ceritar.CVS.clsActionResults mcActionResults;
 
         //Messages
@@ -88,15 +88,15 @@ namespace Ceritar.Logirack_CVS.Forms
 
             mcCtrVersion = new ctr_Version((IVersion)this);
 
-            mcGrdClients = new clsC1FlexGridWrapper();
+            mcGrdClients = new clsTTC1FlexGridWrapper();
             mcGrdClients.SetGridDisplay += mcGrdClients_SetGridDisplay;
             mcGrdClients.AfterClickAdd += mcGrdClients_AfterClickAdd;
             mcGrdClients.BeforeClickAdd += mcGrdClients_BeforeClickAdd;
 
-            mcGrdSatelliteApps = new clsC1FlexGridWrapper();
+            mcGrdSatelliteApps = new clsTTC1FlexGridWrapper();
             mcGrdSatelliteApps.SetGridDisplay += mcGrdSatelliteApps_SetGridDisplay;
 
-            mcGrdRevisions = new clsC1FlexGridWrapper();
+            mcGrdRevisions = new clsTTC1FlexGridWrapper();
             mcGrdRevisions.SetGridDisplay +=mcGrdRevisions_SetGridDisplay;
 
             dtpCreation.Value = DateTime.Now;
@@ -171,7 +171,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
         string IVersion.GetCreationDate()
         {
-            return dtpCreation.Value.ToString(clsApp.GetAppController.str_GetServerDateTimeFormat);
+            return dtpCreation.Value.ToString(clsTTApp.GetAppController.str_GetServerDateTimeFormat);
         }
 
         List<structClientAppVersion> IVersion.GetClientsList()
@@ -183,7 +183,7 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 structCAV = new structClientAppVersion();
 
-                structCAV.Action = clsApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdClients[intRowIndex, mintGrdClients_Action_col]);
+                structCAV.Action = clsTTApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdClients[intRowIndex, mintGrdClients_Action_col]);
                 structCAV.strDateInstalled = (Convert.ToBoolean(grdClients[intRowIndex, mintGrdClients_Installed_col]) ? DateTime.Now.ToString() : string.Empty);
                 structCAV.blnIsCurrentVersion = Convert.ToBoolean(grdClients[intRowIndex, mintGrdClients_IsCurrentVersion_col]);
                 structCAV.strCeritarClient_Name = mcGrdClients[intRowIndex, mintGrdClients_CeC_Name_col];
@@ -209,7 +209,7 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 structCSV = new structClientSatVersion();
 
-                structCSV.Action = clsApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdSatellite[intRowIndex, mintGrdSat_Action_col]);
+                structCSV.Action = clsTTApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdSatellite[intRowIndex, mintGrdSat_Action_col]);
                 structCSV.intCeritarSatelliteApp_NRI = Int32.Parse(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_NRI_col]);
                 structCSV.intCeritarClient_NRI = Int32.Parse(mcGrdClients[grdClients.Row, mintGrdClients_CeC_NRI_col]);
                 Int32.TryParse(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSV_NRI_col], out structCSV.intClientSatVersion_NRI);
@@ -239,7 +239,7 @@ namespace Ceritar.Logirack_CVS.Forms
         {
             structClientAppVersion structCAV = new structClientAppVersion();
 
-            structCAV.Action = clsApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdClients[grdClients.Row, mintGrdClients_Action_col]);
+            structCAV.Action = clsTTApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdClients[grdClients.Row, mintGrdClients_Action_col]);
             structCAV.strDateInstalled = (Convert.ToBoolean(grdClients[grdClients.Row, mintGrdClients_Installed_col]) ? DateTime.Now.ToString() : string.Empty);
             structCAV.blnIsCurrentVersion = Convert.ToBoolean(grdClients[grdClients.Row, mintGrdClients_IsCurrentVersion_col]);
             structCAV.strCeritarClient_Name = mcGrdClients[grdClients.Row, mintGrdClients_CeC_Name_col];
@@ -265,12 +265,12 @@ namespace Ceritar.Logirack_CVS.Forms
 
         string IVersion.GetLatestVersionNo()
         {
-            return clsApp.GetAppController.ShowInputMessage(mintMSG_ApplicationNotExistsInSystem);
+            return clsTTApp.GetAppController.str_ShowInputMessage(mintMSG_ApplicationNotExistsInSystem);
         }
 
         int IVersion.GetCreatedByUser_NRI()
         {
-            return (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE? clsApp.GetAppController.cUser.User_NRI : mintCreatedByUser_NRI);
+            return (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE? clsTTApp.GetAppController.cUser.User_NRI : mintCreatedByUser_NRI);
         }
 
 #endregion
@@ -391,14 +391,14 @@ namespace Ceritar.Logirack_CVS.Forms
                 
             try
             {
-                sqlRecord = clsSQL.ADOSelect(mcCtrVersion.strGetDataLoad_SQL(formController.Item_NRI));
+                sqlRecord = clsTTSQL.ADOSelect(mcCtrVersion.strGetDataLoad_SQL(formController.Item_NRI));
 
                 if (sqlRecord.Read())
                 {
                     UInt16.TryParse(sqlRecord["Ver_TS"].ToString(), out mintVersion_TS);
                     Int32.TryParse(sqlRecord["TTU_NRI"].ToString(), out mintCreatedByUser_NRI);
 
-                    txtCreatedBy.Text = sqlRecord["TTU_Code"].ToString();
+                    txtCreatedBy.Text = sqlRecord["CreatedByNom"].ToString();
                     txtCompiledBy.Text = sqlRecord["Ver_CompiledBy"].ToString();
                     txtVersionNo.Text = sqlRecord["Ver_No"].ToString();
 
@@ -819,7 +819,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
             if (!mcActionResults.IsValid)
             {
-                clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI, MessageBoxButtons.OK, mcActionResults.GetLstParams);
+                clsTTApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI, MessageBoxButtons.OK, mcActionResults.GetLstParams);
 
                 switch ((ctr_Version.ErrorCode_Ver)mcActionResults.GetErrorCode)
                 {
@@ -926,7 +926,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
                 if (!mcActionResults.IsValid)
                 {
-                    clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI, MessageBoxButtons.OK, mcActionResults.GetLstParams);
+                    clsTTApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI, MessageBoxButtons.OK, mcActionResults.GetLstParams);
 
                     switch ((ctr_Version.ErrorCode_Ver)mcActionResults.GetErrorCode)
                     {
@@ -951,7 +951,7 @@ namespace Ceritar.Logirack_CVS.Forms
                 }
                 else if (mcActionResults.GetErrorMessage_NRI > 0)
                 {
-                    clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI, MessageBoxButtons.OK);
+                    clsTTApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI, MessageBoxButtons.OK);
                 }
 
                 if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE) formController.Item_NRI = mcActionResults.GetNewItem_NRI;
@@ -1095,7 +1095,7 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetTemplates_SQL(Int32.Parse(cboApplications.SelectedValue.ToString())), "Tpl_NRI", "Tpl_Name", false, ref cboTemplates);
 
-                mstrExternalApplicationName = clsSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + cboApplications.SelectedValue.ToString());
+                mstrExternalApplicationName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + cboApplications.SelectedValue.ToString());
 
                 grdClients.Cols[mintGrdClients_LocationReportExe_col].Visible = !string.IsNullOrEmpty(mstrExternalApplicationName);
             }
@@ -1155,7 +1155,7 @@ namespace Ceritar.Logirack_CVS.Forms
         {
             if (mblnGrdSatellitesChangeMade)
             {
-                DialogResult msgResult = clsApp.GetAppController.ShowMessage(mintMSG_ChangesWillBeLostOnRowChange, MessageBoxButtons.YesNo);
+                DialogResult msgResult = clsTTApp.GetAppController.ShowMessage(mintMSG_ChangesWillBeLostOnRowChange, MessageBoxButtons.YesNo);
 
                 mblnGrdSatellitesChangeMade = msgResult == DialogResult.No;
             }
@@ -1244,7 +1244,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
                 if (!mcActionResults.IsValid)
                 {
-                    clsApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI, MessageBoxButtons.OK, mcActionResults.GetLstParams);
+                    clsTTApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI, MessageBoxButtons.OK, mcActionResults.GetLstParams);
 
                     switch ((ctr_Version.ErrorCode_Ver)mcActionResults.GetErrorCode)
                     {
@@ -1280,7 +1280,7 @@ namespace Ceritar.Logirack_CVS.Forms
                     formController_LoadData(new LoadDataEventArgs(formController.Item_NRI));
                     formController.FormIsLoading = false; //TODO METHOD 
 
-                    if (mcActionResults.SuccessMessage_NRI > 0) clsApp.GetAppController.ShowMessage(mcActionResults.SuccessMessage_NRI);
+                    if (mcActionResults.SuccessMessage_NRI > 0) clsTTApp.GetAppController.ShowMessage(mcActionResults.SuccessMessage_NRI);
                 }
                 grdClients.Row = mintGrdClient_SelectedRow;
 
@@ -1288,7 +1288,7 @@ namespace Ceritar.Logirack_CVS.Forms
             }
             else
             {
-                clsApp.GetAppController.ShowMessage((int)sclsConstants.Validation_Message.INVALID_ACTION_IF_CHANGE_MADE);
+                clsTTApp.GetAppController.ShowMessage((int)sclsConstants.Validation_Message.INVALID_ACTION_IF_CHANGE_MADE);
             }
         }
 
@@ -1333,7 +1333,7 @@ namespace Ceritar.Logirack_CVS.Forms
         {
             if (txtVersionNo.Text != string.Empty && !Microsoft.VisualBasic.Information.IsNumeric(txtVersionNo.Text))
             {
-                clsApp.GetAppController.ShowMessage((int)sclsConstants.Validation_Message.NUMERIC_VALUE);
+                clsTTApp.GetAppController.ShowMessage((int)sclsConstants.Validation_Message.NUMERIC_VALUE);
                 e.Cancel = true;
                 txtVersionNo.SelectAll();
             }
@@ -1355,7 +1355,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
                     if (mblnGrdSatellitesChangeMade & grdClients.Row != intClickedRow)
                     {
-                        msgResult = clsApp.GetAppController.ShowMessage(mintMSG_ChangesWillBeLostOnRowChange, MessageBoxButtons.YesNo);
+                        msgResult = clsTTApp.GetAppController.ShowMessage(mintMSG_ChangesWillBeLostOnRowChange, MessageBoxButtons.YesNo);
                     }
 
                     break;
@@ -1525,7 +1525,7 @@ namespace Ceritar.Logirack_CVS.Forms
         {
             if (!formController.FormIsLoading && mblnGrdSatellitesChangeMade & e.NewRange.r1 != e.OldRange.r1)
             {
-                DialogResult msgResult = clsApp.GetAppController.ShowMessage(mintMSG_ChangesWillBeLostOnRowChange, MessageBoxButtons.YesNo);
+                DialogResult msgResult = clsTTApp.GetAppController.ShowMessage(mintMSG_ChangesWillBeLostOnRowChange, MessageBoxButtons.YesNo);
 
                 if (msgResult == DialogResult.No) e.Cancel = true;
             }
@@ -1602,7 +1602,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
                         if (!string.IsNullOrEmpty(mcGrdClients[grdClients.MouseRow, mintGrdClients_DateInstalled_col]))
                         {
-                            toolTip.Show(clsApp.GetAppController.str_GetServerFormatedDate(mcGrdClients[grdClients.MouseRow, mintGrdClients_DateInstalled_col]), grdClients, e.Location.X + 5, e.Location.Y - 10, 1000);
+                            toolTip.Show(clsTTApp.GetAppController.str_GetServerFormatedDate(mcGrdClients[grdClients.MouseRow, mintGrdClients_DateInstalled_col]), grdClients, e.Location.X + 5, e.Location.Y - 10, 1000);
                         }
                            
                         break;
@@ -1646,7 +1646,7 @@ namespace Ceritar.Logirack_CVS.Forms
             }
             catch (Exception)
             {
-                clsApp.GetAppController.ShowMessage((int)sclsConstants.Validation_Message.INVALID_PATH, MessageBoxButtons.OK, strRootFolder);
+                clsTTApp.GetAppController.ShowMessage((int)sclsConstants.Validation_Message.INVALID_PATH, MessageBoxButtons.OK, strRootFolder);
             }
         }
 

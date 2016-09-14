@@ -84,7 +84,7 @@ namespace Ceritar.CVS.Models.Module_Template
                             {
                                 mcActionResults.SetInvalid(mintMSG_InvalidName, ctr_Template.ErrorCode_HiCo.NAME_ON_DISK_INVALID);
                             }
-                            else if (!clsSQL.bln_ADOValid_TS("HierarchyComp", "HiCo_NRI", _intHierarchyComponent_NRI, "HiCo_TS", _intHierarchyComponent_TS))
+                            else if (!clsTTSQL.bln_ADOValid_TS("HierarchyComp", "HiCo_NRI", _intHierarchyComponent_NRI, "HiCo_TS", _intHierarchyComponent_TS))
                             {
                                 mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_TIMESTAMP, clsActionResults.BaseErrorCode.INVALID_TIMESTAMP);
                             }
@@ -101,7 +101,7 @@ namespace Ceritar.CVS.Models.Module_Template
 
                         case sclsConstants.DML_Mode.DELETE_MODE:
 
-                            if (!clsSQL.bln_CheckReferenceIntegrity("Template", "Tpl_NRI", _intTemplate_NRI))
+                            if (!clsTTSQL.bln_CheckReferenceIntegrity("Template", "Tpl_NRI", _intTemplate_NRI))
                             {
                                 mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_REFERENCE_INTEGRITY, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
                             }
@@ -268,15 +268,15 @@ namespace Ceritar.CVS.Models.Module_Template
             {
                 if (!mcSQL.bln_RefreshFields())
                 { }
-                else if (!mcSQL.bln_AddField("FoT_NRI", (int)_folderType, clsSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                else if (!mcSQL.bln_AddField("FoT_NRI", (int)_folderType, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("HiCo_IsFolder", 1, clsSQL.MySQL_FieldTypes.BIT_TYPE))
+                else if (!mcSQL.bln_AddField("HiCo_IsFolder", 1, clsTTSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("HiCo_NodeLevel", _intNodeLevel, clsSQL.MySQL_FieldTypes.INT_TYPE))
+                else if (!mcSQL.bln_AddField("HiCo_NodeLevel", _intNodeLevel, clsTTSQL.MySQL_FieldTypes.INT_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("Tpl_NRI", _intTemplate_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("Tpl_NRI", _intTemplate_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("TTP_NRI", _intAppConfig_NRI, clsSQL.MySQL_FieldTypes.NRI_TYPE))
+                else if (!mcSQL.bln_AddField("TTP_NRI", _intAppConfig_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else
                 {

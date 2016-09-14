@@ -10,7 +10,7 @@ namespace Ceritar.TT3LightDLL.Classes
     /// Cette classe offre toutes les fonctionnalités nécessaires pour interagir avec la base de données. 
     /// Notamment la gestion des transactions et des opérations de select, insert, update et delete.
     /// </summary>
-    public sealed class clsSQL
+    public sealed class clsTTSQL
     {
 
         //Private members
@@ -51,7 +51,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
 #region "Constructor"
 
-        public clsSQL()
+        public clsTTSQL()
         {
             mColFields = new System.Collections.Specialized.StringDictionary();
 
@@ -74,7 +74,7 @@ namespace Ceritar.TT3LightDLL.Classes
         
             try 
             {
-                cSQLCmd = new SqlCommand(vstrSQL, clsApp.GetAppController.SQLConnection);
+                cSQLCmd = new SqlCommand(vstrSQL, clsTTApp.GetAppController.SQLConnection);
 
                 cSQLReader = cSQLCmd.ExecuteReader();
             }
@@ -95,9 +95,9 @@ namespace Ceritar.TT3LightDLL.Classes
 
             try
             {
-                strSQL = "SELECT " + vstrField + " AS " + clsApp.GetAppController.str_FixStringForSQL(vstrField) + " FROM " + vstrTable + " WHERE " + vstrWhere;
+                strSQL = "SELECT " + vstrField + " AS " + clsTTApp.GetAppController.str_FixStringForSQL(vstrField) + " FROM " + vstrTable + " WHERE " + vstrWhere;
 
-                cSQLCmd = new SqlCommand(strSQL, clsApp.GetAppController.SQLConnection);
+                cSQLCmd = new SqlCommand(strSQL, clsTTApp.GetAppController.SQLConnection);
 
                 cSQLReader = cSQLCmd.ExecuteReader();
 
@@ -236,24 +236,24 @@ namespace Ceritar.TT3LightDLL.Classes
                 {
                     switch (vintDBType)
                     {
-                        case clsSQL.MySQL_FieldTypes.VARCHAR_TYPE:
-                            vstrValue = clsApp.GetAppController.str_FixStringForSQL(vstrValue);
+                        case clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE:
+                            vstrValue = clsTTApp.GetAppController.str_FixStringForSQL(vstrValue);
 
                             break;
 
-                        case clsSQL.MySQL_FieldTypes.DATETIME_TYPE:
+                        case clsTTSQL.MySQL_FieldTypes.DATETIME_TYPE:
                             //vstrValue = Convert.ToDateTime(vstrValue).ToString(clsApp.GetAppController.str_GetServerDateTimeFormat);
-                            vstrValue = clsApp.GetAppController.str_FixStringForSQL(vstrValue);
+                            vstrValue = clsTTApp.GetAppController.str_FixStringForSQL(vstrValue);
 
                             break;
 
-                        case clsSQL.MySQL_FieldTypes.DECIMAL_TYPE:
-                        case clsSQL.MySQL_FieldTypes.INT_TYPE:
+                        case clsTTSQL.MySQL_FieldTypes.DECIMAL_TYPE:
+                        case clsTTSQL.MySQL_FieldTypes.INT_TYPE:
                             vstrValue = vstrValue.ToString();
 
                             break;
 
-                        case clsSQL.MySQL_FieldTypes.NRI_TYPE:
+                        case clsTTSQL.MySQL_FieldTypes.NRI_TYPE:
                             if (vstrValue == "0")
                             {
                                 vstrValue = "NULL";
@@ -265,7 +265,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
                             break;
 
-                        case clsSQL.MySQL_FieldTypes.BIT_TYPE:
+                        case clsTTSQL.MySQL_FieldTypes.BIT_TYPE:
                             if (vstrValue == true.ToString() || vstrValue == "1")
                             {
                                 vstrValue = "1";
@@ -457,7 +457,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
             try
             {
-                strSQL = "SELECT " + vstrField + " AS " + clsApp.GetAppController.str_FixStringForSQL(vstrField) + " FROM " + vstrTable + " WHERE " + vstrWhere;
+                strSQL = "SELECT " + vstrField + " AS " + clsTTApp.GetAppController.str_FixStringForSQL(vstrField) + " FROM " + vstrTable + " WHERE " + vstrWhere;
 
                 mcSQLCmd.CommandText = strSQL;
 
@@ -509,7 +509,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
             if (!blnValidReturn)
             {
-                clsApp.GetAppController.ShowMessage((int) sclsConstants.Validation_Message.INVALID_REFERENCE_INTEGRITY);
+                clsTTApp.GetAppController.ShowMessage((int) sclsConstants.Validation_Message.INVALID_REFERENCE_INTEGRITY);
             }
 
             return blnValidReturn;

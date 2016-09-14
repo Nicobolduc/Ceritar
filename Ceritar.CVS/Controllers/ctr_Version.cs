@@ -21,7 +21,7 @@ namespace Ceritar.CVS.Controllers
         private Interfaces.IVersion mcView;
         private mod_Ver_Version mcModVersion;
         private clsActionResults mcActionResult;
-        private clsSQL mcSQL;
+        private clsTTSQL mcSQL;
 
         //Messages
         private const int mintMSG_BuildSuccess = 37;
@@ -92,7 +92,7 @@ namespace Ceritar.CVS.Controllers
 
             try
             {
-                mcSQL = new clsSQL();
+                mcSQL = new clsTTSQL();
 
                 if (mcSQL.bln_BeginTransaction())
                 {
@@ -138,7 +138,7 @@ namespace Ceritar.CVS.Controllers
 
             try
             {
-                mcSQL = new clsSQL();
+                mcSQL = new clsTTSQL();
 
                 mcModVersion = new mod_Ver_Version();
 
@@ -214,7 +214,7 @@ namespace Ceritar.CVS.Controllers
             {
                 currentFolderInfos = new DirectoryInfo(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES);
 
-                cSQLReader = clsSQL.ADOSelect(strSQL);
+                cSQLReader = clsTTSQL.ADOSelect(strSQL);
 
                 while (cSQLReader.Read())
                 {
@@ -272,7 +272,7 @@ namespace Ceritar.CVS.Controllers
 
                             if (!string.IsNullOrEmpty(mcView.GetLocation_Release()) && mcView.GetLocation_Release() != currentFolderInfos.FullName)
                             {
-                                blnValidReturn = clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseValidExtensions);
+                                blnValidReturn = clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseValidExtensions);
 
                                 //TODO: Apply the other solution for this
                                 string[] reportExe = Directory.GetFiles(currentFolderInfos.FullName, "*RPT.exe", SearchOption.TopDirectoryOnly);
@@ -329,7 +329,7 @@ namespace Ceritar.CVS.Controllers
 
                             if (!string.IsNullOrEmpty(mcView.GetLocation_VariousFolder()))
                             {
-                                clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_VariousFolder(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_VariousFolder())), true, true);
+                                clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_VariousFolder(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_VariousFolder())), true, true);
                             }
 
                             blnValidReturn = true;
@@ -415,7 +415,7 @@ namespace Ceritar.CVS.Controllers
                     {
                         if (mcSQL == null)
                         {
-                            intPreviousActiveVersionInProd = UInt16.Parse(clsSQL.str_ADOSingleLookUp("ISNULL(MAX(Version.Ver_No), 0)", "ClientAppVersion INNER JOIN Version ON Version.Ver_NRI = ClientAppVersion.Ver_NRI", "ClientAppVersion.CAV_DtInstalledProd IS NOT NULL AND Version.Ver_No <" + mcView.GetVersionNo() + " AND Version.CeA_NRI = " + mcView.GetCeritarApplication_NRI() + " AND ClientAppVersion.CeC_NRI = " + cCAV.CeritarClient.CeritarClient_NRI));
+                            intPreviousActiveVersionInProd = UInt16.Parse(clsTTSQL.str_ADOSingleLookUp("ISNULL(MAX(Version.Ver_No), 0)", "ClientAppVersion INNER JOIN Version ON Version.Ver_NRI = ClientAppVersion.Ver_NRI", "ClientAppVersion.CAV_DtInstalledProd IS NOT NULL AND Version.Ver_No <" + mcView.GetVersionNo() + " AND Version.CeA_NRI = " + mcView.GetCeritarApplication_NRI() + " AND ClientAppVersion.CeC_NRI = " + cCAV.CeritarClient.CeritarClient_NRI));
                         }
                         else
                         {
@@ -450,7 +450,7 @@ namespace Ceritar.CVS.Controllers
                                                                                    cCAV.CeritarClient.CompanyName, 
                                                                                    sclsAppConfigs.GetVersionNumberPrefix + intCurrentFolder_VersionNo.ToString());
 
-                                clsApp.GetAppController.blnCopyFolderContent(strCurrentVersionFolderToCopy_Path,
+                                clsTTApp.GetAppController.blnCopyFolderContent(strCurrentVersionFolderToCopy_Path,
                                                                              strActiveInstallation_Revision_Path,
                                                                              true,
                                                                              true);
@@ -730,7 +730,7 @@ namespace Ceritar.CVS.Controllers
 
                 mcModVersion.CerApplication = new Ceritar.CVS.Models.Module_Configuration.mod_CeA_CeritarApplication();
                 mcModVersion.CerApplication.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
-                mcModVersion.CerApplication.ExternalReportAppName = clsSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + mcModVersion.CerApplication.CeritarApplication_NRI);
+                mcModVersion.CerApplication.ExternalReportAppName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + mcModVersion.CerApplication.CeritarApplication_NRI);
 
                 mcModVersion.TemplateSource = new Models.Module_Template.mod_Tpl_HierarchyTemplate();
                 mcModVersion.TemplateSource.Template_NRI = mcView.GetTemplateSource_NRI();
@@ -819,12 +819,12 @@ namespace Ceritar.CVS.Controllers
 
             try
             {
-                strCeritarClientName = clsSQL.str_ADOSingleLookUp("CeC_Name", "CerClient", "CeC_NRI = " + vintCeritarClient_NRI);
+                strCeritarClientName = clsTTSQL.str_ADOSingleLookUp("CeC_Name", "CerClient", "CeC_NRI = " + vintCeritarClient_NRI);
 
                 strNewZipFileLocation = vstrExportFolderLocation + @"\Installation Kit " + mcView.GetVersionNo().ToString() + " - " + strCeritarClientName + @".zip";
 
                 //Get the release folder location to copy (from the version kit or from the latest revision)
-                strReleaseLocation = clsSQL.str_ADOSingleLookUp("TOP 1 Rev_Location_Exe", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Rev_Location_Exe IS NOT NULL AND Revision.Rev_ExeIsReport = 0 ORDER BY Revision.Rev_No DESC");
+                strReleaseLocation = clsTTSQL.str_ADOSingleLookUp("TOP 1 Rev_Location_Exe", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Rev_Location_Exe IS NOT NULL AND Revision.Rev_ExeIsReport = 0 ORDER BY Revision.Rev_No DESC");
 
                 strReleaseLocation = strReleaseLocation == string.Empty ? mcView.GetLocation_Release() : strReleaseLocation;
 
@@ -840,7 +840,7 @@ namespace Ceritar.CVS.Controllers
                     }
 
                     //Get the report folder location to copy (from the version kit or from the latest revision)
-                    strReportLocation = clsSQL.str_ADOSingleLookUp("TOP 1 Rev_Location_Exe", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Rev_Location_Exe IS NOT NULL AND Revision.Rev_ExeIsReport = 1 ORDER BY Revision.Rev_No DESC");
+                    strReportLocation = clsTTSQL.str_ADOSingleLookUp("TOP 1 Rev_Location_Exe", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Rev_Location_Exe IS NOT NULL AND Revision.Rev_ExeIsReport = 1 ORDER BY Revision.Rev_No DESC");
 
                     strReportLocation = strReportLocation == string.Empty ? mcView.GetSelectedClient().strLocationReportExe : strReportLocation;
 
@@ -856,7 +856,7 @@ namespace Ceritar.CVS.Controllers
                     foreach (structClientSatVersion structSat in lstSatellites)
                     {
                         //Get the executable folder location to copy (from the version kit or from the latest revision)
-                        strLocationSatelliteExe = clsSQL.str_ADOSingleLookUp("TOP 1 SatRevision.SRe_Exe_Location", "Revision INNER JOIN SatRevision ON SatRevision.Rev_NRI = Revision.Rev_NRI", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND SatRevision.SRe_Exe_Location IS NOT NULL AND SatRevision.CSA_NRI = " + structSat.intCeritarSatelliteApp_NRI + " ORDER BY Revision.Rev_No DESC");
+                        strLocationSatelliteExe = clsTTSQL.str_ADOSingleLookUp("TOP 1 SatRevision.SRe_Exe_Location", "Revision INNER JOIN SatRevision ON SatRevision.Rev_NRI = Revision.Rev_NRI", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND SatRevision.SRe_Exe_Location IS NOT NULL AND SatRevision.CSA_NRI = " + structSat.intCeritarSatelliteApp_NRI + " ORDER BY Revision.Rev_No DESC");
 
                         strLocationSatelliteExe = strLocationSatelliteExe == string.Empty ? structSat.strLocationSatelliteExe : strLocationSatelliteExe;
 
@@ -948,7 +948,7 @@ namespace Ceritar.CVS.Controllers
                         {
                             if (cCSV.Location_Exe != currentFolderInfos.FullName)
                             {
-                                clsApp.GetAppController.blnCopyFolderContent(cCSV.Location_Exe, currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseValidExtensions);
+                                clsTTApp.GetAppController.blnCopyFolderContent(cCSV.Location_Exe, currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseValidExtensions);
 
                                 cCSV.Location_Exe = currentFolderInfos.FullName;
                             }
@@ -1028,7 +1028,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " ) " + Environment.NewLine;
 
             strSQL = strSQL + " SELECT Path = TTParam.TTP_Value + " + Environment.NewLine;
-            strSQL = strSQL + "               (SELECT '/' + CONVERT(VARCHAR(300), REPLACE(LstHierarchyComp.HiCo_Name, '_XXX', " + clsApp.GetAppController.str_FixStringForSQL("_" + vstrVersion_No) + ")) " + Environment.NewLine;
+            strSQL = strSQL + "               (SELECT '/' + CONVERT(VARCHAR(300), REPLACE(LstHierarchyComp.HiCo_Name, '_XXX', " + clsTTApp.GetAppController.str_FixStringForSQL("_" + vstrVersion_No) + ")) " + Environment.NewLine;
             strSQL = strSQL + "                FROM LstHierarchyComp " + Environment.NewLine;
             strSQL = strSQL + "                    INNER JOIN FolderType ON FolderType.FoT_NRI = LstHierarchyComp.FoT_NRI " + Environment.NewLine;
 
@@ -1041,7 +1041,7 @@ namespace Ceritar.CVS.Controllers
 
             strSQL = strSQL + " WHERE TTParam.TTP_Name = 'InstallationsActives' " + Environment.NewLine;
 
-            sqlRecord = clsSQL.ADOSelect(strSQL);
+            sqlRecord = clsTTSQL.ADOSelect(strSQL);
 
             if (sqlRecord.Read())
             {
@@ -1104,7 +1104,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        Version.Ver_IsDemo, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_ExternalRPTAppName, " + Environment.NewLine;
             strSQL = strSQL + "        Version.TTU_NRI, " + Environment.NewLine;
-            strSQL = strSQL + "        TTUser.TTU_Code " + Environment.NewLine;
+            strSQL = strSQL + "        CreatedByNom = TTUser.TTU_FirstName + ' ' + TTUser.TTU_LastName " + Environment.NewLine;
 
             strSQL = strSQL + " FROM Version " + Environment.NewLine;
 
