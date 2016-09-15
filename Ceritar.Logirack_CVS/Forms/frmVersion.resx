@@ -152,43 +152,39 @@
         rCFl6vnNSYnf0MejU7rCwPUUniXQT1JCgZ8SFSEAIv6PIPwN4yKgFxaRKb8AAAAASUVORK5CYII=
 </value>
   </data>
-  <data name="btnGrdRevAdd.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="btnGrdRevAdd.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        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
-        SUVORK5CYII=
+        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
 </value>
   </data>
   <data name="btnGenerate.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -1185,6 +1181,12 @@
   <data name="grdRevisions.StyleInfo" xml:space="preserve">
     <value>Normal{Font:Arial, 9pt;}	Alternate{}	Fixed{BackColor:Control;ForeColor:ControlText;Border:Flat,1,ControlDark,Both;BackgroundImageLayout:Hide;}	Highlight{BackColor:Highlight;ForeColor:HighlightText;}	Focus{}	Editor{}	Search{BackColor:Highlight;ForeColor:HighlightText;}	Frozen{BackColor:Beige;}	NewRow{ForeColor:GrayText;}	EmptyArea{BackColor:AppWorkspace;Border:Flat,1,ControlDarkDark,Both;}	SelectedColumnHeader{}	SelectedRowHeader{}	GrandTotal{BackColor:Black;ForeColor:White;}	Subtotal0{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal1{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal2{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal3{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal4{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal5{BackColor:ControlDarkDark;ForeColor:White;}	FilterEditor{}	FirstCustomStyle{}	</value>
   </data>
+  <metadata name="mnuClientSatVersion.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>549, 17</value>
+  </metadata>
+  <data name="grdSatellite.StyleInfo" xml:space="preserve">
+    <value>Normal{Font:Arial, 9pt;}	Alternate{}	Fixed{BackColor:Control;ForeColor:ControlText;Border:Flat,1,ControlDark,Both;BackgroundImageLayout:Hide;}	Highlight{BackColor:Highlight;ForeColor:HighlightText;}	Focus{}	Editor{}	Search{BackColor:Highlight;ForeColor:HighlightText;}	Frozen{BackColor:Beige;}	NewRow{ForeColor:GrayText;}	EmptyArea{BackColor:AppWorkspace;Border:Flat,1,ControlDarkDark,Both;}	SelectedColumnHeader{}	SelectedRowHeader{}	GrandTotal{BackColor:Black;ForeColor:White;}	Subtotal0{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal1{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal2{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal3{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal4{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal5{BackColor:ControlDarkDark;ForeColor:White;}	FilterEditor{}	FirstCustomStyle{}	</value>
+  </data>
   <data name="btnGrdClientsDel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
@@ -1204,9 +1206,6 @@
 </value>
   </data>
   <data name="grdClients.StyleInfo" xml:space="preserve">
-    <value>Normal{Font:Arial, 9pt;}	Alternate{}	Fixed{BackColor:Control;ForeColor:ControlText;Border:Flat,1,ControlDark,Both;BackgroundImageLayout:Hide;}	Highlight{BackColor:Highlight;ForeColor:HighlightText;}	Focus{}	Editor{}	Search{BackColor:Highlight;ForeColor:HighlightText;}	Frozen{BackColor:Beige;}	NewRow{ForeColor:GrayText;}	EmptyArea{BackColor:AppWorkspace;Border:Flat,1,ControlDarkDark,Both;}	SelectedColumnHeader{}	SelectedRowHeader{}	GrandTotal{BackColor:Black;ForeColor:White;}	Subtotal0{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal1{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal2{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal3{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal4{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal5{BackColor:ControlDarkDark;ForeColor:White;}	FilterEditor{}	FirstCustomStyle{}	</value>
-  </data>
-  <data name="grdSatellite.StyleInfo" xml:space="preserve">
     <value>Normal{Font:Arial, 9pt;}	Alternate{}	Fixed{BackColor:Control;ForeColor:ControlText;Border:Flat,1,ControlDark,Both;BackgroundImageLayout:Hide;}	Highlight{BackColor:Highlight;ForeColor:HighlightText;}	Focus{}	Editor{}	Search{BackColor:Highlight;ForeColor:HighlightText;}	Frozen{BackColor:Beige;}	NewRow{ForeColor:GrayText;}	EmptyArea{BackColor:AppWorkspace;Border:Flat,1,ControlDarkDark,Both;}	SelectedColumnHeader{}	SelectedRowHeader{}	GrandTotal{BackColor:Black;ForeColor:White;}	Subtotal0{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal1{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal2{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal3{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal4{BackColor:ControlDarkDark;ForeColor:White;}	Subtotal5{BackColor:ControlDarkDark;ForeColor:White;}	FilterEditor{}	FirstCustomStyle{}	</value>
   </data>
   <metadata name="openFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">

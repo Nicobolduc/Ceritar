@@ -434,11 +434,13 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        FolderType.FoT_Code " + Environment.NewLine;
 
             strSQL = strSQL + " FROM FolderType " + Environment.NewLine;
+            strSQL = strSQL + "     INNER JOIN CerApp ON CerApp.CeA_NRI = " + mcView.GetCeritarApplication_NRI() + Environment.NewLine;
 
             strSQL = strSQL + " WHERE FolderType.FoT_NRI NOT IN (" + (int)ctr_Template.FolderType.Ceritar_Application + "," + Environment.NewLine
                                                                    + (int)ctr_Template.FolderType.Version_Number + "," + Environment.NewLine
                                                                    + (int)ctr_Template.FolderType.Revision_Number + ")" + Environment.NewLine;
-
+            strSQL = strSQL + "   AND FolderType.FoT_NRI NOT IN (CASE WHEN CerApp.CeA_ExternalRPTAppName IS NOT NULL THEN 0 ELSE " + (int)ctr_Template.FolderType.External_Report + " END)" + Environment.NewLine;
+            
             strSQL = strSQL + " ORDER BY FolderType.FoT_NRI " + Environment.NewLine;
 
             return strSQL;

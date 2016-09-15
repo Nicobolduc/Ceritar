@@ -649,6 +649,7 @@ namespace Ceritar.TT3LightDLL.Classes
                     mGrdFlex.AfterRowColChange -= mGrdFlex_AfterRowColChange;
                     mGrdFlex.Paint -= mGrdFlex_Paint;
                     mGrdFlex.DoubleClick -= mGrdFlex_DoubleClick;
+                    mGrdFlex.MouseDown -= mGrdFlex_MouseDown;
                 }
 
                 if (mGrdFlex != null)
@@ -658,7 +659,16 @@ namespace Ceritar.TT3LightDLL.Classes
                     mGrdFlex.AfterRowColChange += mGrdFlex_AfterRowColChange;
                     mGrdFlex.Paint += mGrdFlex_Paint;
                     mGrdFlex.DoubleClick += mGrdFlex_DoubleClick;
+                    mGrdFlex.MouseDown += mGrdFlex_MouseDown;
                 }
+            }
+        }
+
+        void mGrdFlex_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (mGrdFlex.Rows.Count > 1 && mGrdFlex.ContextMenuStrip != null)
+            {
+                mGrdFlex.Select(mGrdFlex.GetCellRange(mGrdFlex.MouseRow, 1, mGrdFlex.MouseRow, mGrdFlex.Cols.Count - 1), true);
             }
         }
 

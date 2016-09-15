@@ -75,6 +75,8 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
+            this.mnuSatRevision = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuiDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -83,6 +85,7 @@
             this.groupBox2.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox6.SuspendLayout();
+            this.mnuSatRevision.SuspendLayout();
             this.SuspendLayout();
             // 
             // dtpCreation
@@ -472,6 +475,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grdSatellites.AutoSearch = C1.Win.C1FlexGrid.AutoSearchEnum.FromTop;
             this.grdSatellites.ColumnInfo = "2,1,0,0,0,90,Columns:0{Width:5;}\t";
+            this.grdSatellites.ContextMenuStrip = this.mnuSatRevision;
             this.grdSatellites.ExtendLastCol = true;
             this.grdSatellites.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grdSatellites.Location = new System.Drawing.Point(5, 21);
@@ -631,6 +635,20 @@
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
             // 
+            // mnuSatRevision
+            // 
+            this.mnuSatRevision.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuiDelete});
+            this.mnuSatRevision.Name = "mnuSatRevision";
+            this.mnuSatRevision.Size = new System.Drawing.Size(130, 26);
+            // 
+            // mnuiDelete
+            // 
+            this.mnuiDelete.Name = "mnuiDelete";
+            this.mnuiDelete.Size = new System.Drawing.Size(152, 22);
+            this.mnuiDelete.Text = "Supprimer";
+            this.mnuiDelete.Click += new System.EventHandler(this.mnuiDelete_Click);
+            // 
             // frmRevision
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -665,6 +683,7 @@
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox6.ResumeLayout(false);
+            this.mnuSatRevision.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -716,6 +735,8 @@
         private System.Windows.Forms.RadioButton optRptOnly;
         private System.Windows.Forms.Button btnShowRootFolder;
         private System.Windows.Forms.CheckBox chkAddScripts;
+        private System.Windows.Forms.ContextMenuStrip mnuSatRevision;
+        private System.Windows.Forms.ToolStripMenuItem mnuiDelete;
 
     }
 }

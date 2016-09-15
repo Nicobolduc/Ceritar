@@ -449,6 +449,21 @@ namespace Ceritar.TT3LightDLL.Controls
             this.Cursor = Cursors.Default;
         }
 
+        public void ReloadForm(sclsConstants.DML_Mode vintFormMode = TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.NO_MODE)
+        {
+            this.Cursor = Cursors.WaitCursor;
+
+            ChangeMade = false;
+
+            mintFormMode = (vintFormMode == sclsConstants.DML_Mode.NO_MODE ? mintFormMode : vintFormMode);
+
+            SetControlDisplay();
+
+            LoadLinkedFormData();
+
+            this.Cursor = Cursors.Default;
+        }
+
         private void btnCancel_Click(object sender, System.EventArgs e)
         {
             sclsWinControls_Utilities.EmptyAllFormControls(mfrmParent);

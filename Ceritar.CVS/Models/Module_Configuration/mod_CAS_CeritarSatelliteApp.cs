@@ -168,7 +168,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
                         { }
                         else
                         {
-                            mcActionResults.SetNewItem_NRI = _intCeritarSatelliteApp_NRI; //TODO chagner ca
+                            mcActionResults.SetNewItem_NRI = _intCeritarSatelliteApp_NRI;
                             blnValidReturn = true;
                         }
 

@@ -44,6 +44,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
             this.cboApplications = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -181,6 +182,7 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.cboApplications);
             this.groupBox1.Location = new System.Drawing.Point(8, 170);
@@ -210,6 +212,14 @@
             this.cboApplications.Size = new System.Drawing.Size(240, 24);
             this.cboApplications.TabIndex = 0;
             this.cboApplications.SelectedIndexChanged += new System.EventHandler(this.cboApplications_SelectedIndexChanged);
+            // 
+            // label6
+            // 
+            this.label6.Location = new System.Drawing.Point(5, 61);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(142, 21);
+            this.label6.TabIndex = 43;
+            this.label6.Text = "Répertoire par défaut :";
             // 
             // frmUser
             // 
@@ -260,5 +270,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox cboApplications;
+        private System.Windows.Forms.Label label6;
     }
 }

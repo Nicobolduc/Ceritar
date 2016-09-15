@@ -674,12 +674,12 @@ namespace Ceritar.Logirack_CVS.Forms
 
         void mcGrdClients_SetGridDisplay()
         {
-            grdClients.Cols[mintGrdClients_CeC_Name_col].Width = 160;
+            grdClients.Cols[mintGrdClients_CeC_Name_col].Width = 220;
             grdClients.Cols[mintGrdClients_Installed_col].Width = 49;
             grdClients.Cols[mintGrdClients_IsCurrentVersion_col].Width = 51;
             grdClients.Cols[mintGrdClients_LocationReportExe_col].Width = 45;
             grdClients.Cols[mintGrdClients_Selection_col].Width = 20;
-            grdClients.Cols[mintGrdClients_LatestRPTExe_col].Width = 90;
+            grdClients.Cols[mintGrdClients_LatestRPTExe_col].Width = 120;
 
             grdClients.Cols[mintGrdClients_IsCurrentVersion_col].DataType = typeof(bool);
             grdClients.Cols[mintGrdClients_Installed_col].DataType = typeof(bool);
@@ -721,8 +721,8 @@ namespace Ceritar.Logirack_CVS.Forms
 
         void mcGrdSatelliteApps_SetGridDisplay()
         {
-            grdSatellite.Cols[mintGrdSat_CSA_Name_col].Width = 210;
-            grdSatellite.Cols[mintGrdSat_CSA_LatestExe_col].Width = 75;
+            grdSatellite.Cols[mintGrdSat_CSA_Name_col].Width = 220;
+            grdSatellite.Cols[mintGrdSat_CSA_LatestExe_col].Width = 120;
             grdSatellite.Cols[mintGrdSat_CSV_LocationExe_col].Width = 17;
 
             if (grdSatellite.Rows.Count > 1)
@@ -754,9 +754,9 @@ namespace Ceritar.Logirack_CVS.Forms
 
         void mcGrdRevisions_SetGridDisplay()
         {
-            grdRevisions.Cols[mintGrdRev_Number_col].Width = 60;
-            grdRevisions.Cols[mintGrdRev_Rev_IsValid_col].Width = 35;
-            grdRevisions.Cols[mintGrdRev_CeritarClientName_col].Width = 150;
+            grdRevisions.Cols[mintGrdRev_Number_col].Width = 65;
+            grdRevisions.Cols[mintGrdRev_Rev_IsValid_col].Width = 45;
+            grdRevisions.Cols[mintGrdRev_CeritarClientName_col].Width = 175;
             grdRevisions.Cols[mintGrdRev_Description_col].Width = 500;
         }
 
@@ -781,12 +781,14 @@ namespace Ceritar.Logirack_CVS.Forms
             { }
             else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetApplications_SQL(), "CeA_NRI", "CeA_Name", false, ref cboApplications))
             { }
-            else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetTemplates_SQL(), "Tpl_NRI", "Tpl_Name", false, ref cboTemplates))
+            else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetTemplates_SQL((int)cboApplications.SelectedValue), "Tpl_NRI", "Tpl_Name", false, ref cboTemplates))
             { }
             else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetClients_SQL(), "CeC_NRI", "Cec_Name", false, ref cboClients))
             { }
             else if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE)
             {
+                txtCreatedBy.Text = clsTTApp.GetAppController.cUser.User_Code;
+
                 cboTemplates.SelectedIndex = (cboTemplates.Items.Count > 0 ? 0 : -1);
 
                 blnValidReturn = true;
@@ -1276,9 +1278,10 @@ namespace Ceritar.Logirack_CVS.Forms
                 else
                 {
                     btnGenerate_Blink(false);
+
                     formController.FormIsLoading = true;
-                    formController_LoadData(new LoadDataEventArgs(formController.Item_NRI));
-                    formController.FormIsLoading = false; //TODO METHOD 
+                    formController.ReloadForm();
+                    formController.FormIsLoading = false;
 
                     if (mcActionResults.SuccessMessage_NRI > 0) clsTTApp.GetAppController.ShowMessage(mcActionResults.SuccessMessage_NRI);
                 }
@@ -1664,7 +1667,20 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 case "frmRevision":
                     pfblnGrdRevisions_Load();
+
                     break;
+            }
+        }
+
+        private void mnuClientSatVersion_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            bool blnValidReturn = false;
+
+            if (mcGrdSatelliteApps.bln_RowEditIsValid() && e.ClickedItem.Name.Equals(mnuiDelete.Name) && !mcGrdSatelliteApps.bln_CellIsEmpty(grdSatellite.Row, mintGrdSat_CSV_NRI_col))
+            {
+                blnValidReturn = mcCtrVersion.blnDeleteClientSatelliteVersion(Int32.Parse(mcGrdSatelliteApps[grdSatellite.Row, mintGrdSat_CSV_NRI_col]));
+
+                if (blnValidReturn) formController.ReloadForm();
             }
         }
 

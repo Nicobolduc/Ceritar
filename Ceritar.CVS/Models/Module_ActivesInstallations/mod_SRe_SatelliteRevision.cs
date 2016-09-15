@@ -95,7 +95,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                         break;
 
-                    case sclsConstants.DML_Mode.DELETE_MODE: //TODO
+                    case sclsConstants.DML_Mode.DELETE_MODE: //Not used. Go to blnDeleteSatRevision
 
                         if (!clsTTSQL.bln_CheckReferenceIntegrity("SRe_NRI", "SRe_NRI", _intSatRevision_NRI))
                         {
@@ -230,5 +230,26 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             return blnValidReturn;
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+
+            mod_SRe_SatelliteRevision objAsPart = obj as mod_SRe_SatelliteRevision;
+
+            if (objAsPart == null)
+            {
+                return false;
+            }
+            else
+            {
+                return Equals(objAsPart);
+            }
+        }
+
+        public bool Equals(mod_SRe_SatelliteRevision other)
+        {
+            if (other == null) return false;
+            return (this._intSatRevision_NRI.Equals(other._intSatRevision_NRI));
+        }
     }
 }

@@ -522,7 +522,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 { }
                 else if (!mcSQL.bln_AddField("Ver_No", _intVersionNo, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("Ver_DtCreation", _strCreationDate, clsTTSQL.MySQL_FieldTypes.DATETIME_TYPE)) //TODO
+                else if (!mcSQL.bln_AddField("Ver_DtCreation", _strCreationDate, clsTTSQL.MySQL_FieldTypes.DATETIME_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("TTU_NRI", _cCreatedByUser.User_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }

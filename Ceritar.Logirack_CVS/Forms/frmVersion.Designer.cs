@@ -91,6 +91,8 @@
             this.label7 = new System.Windows.Forms.Label();
             this.tmrGenerateBlink = new System.Windows.Forms.Timer(this.components);
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
+            this.mnuClientSatVersion = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuiDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.tabRevision.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -105,6 +107,7 @@
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.tab.SuspendLayout();
+            this.mnuClientSatVersion.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -285,8 +288,8 @@
             // btnGrdRevAdd
             // 
             this.btnGrdRevAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGrdRevAdd.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGrdRevAdd.BackgroundImage")));
             this.btnGrdRevAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnGrdRevAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevAdd.Image")));
             this.btnGrdRevAdd.Location = new System.Drawing.Point(1030, 26);
             this.btnGrdRevAdd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGrdRevAdd.Name = "btnGrdRevAdd";
@@ -519,7 +522,7 @@
             this.tabRevision.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabRevision.Name = "tabRevision";
             this.tabRevision.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabRevision.Size = new System.Drawing.Size(1094, 572);
+            this.tabRevision.Size = new System.Drawing.Size(1094, 581);
             this.tabRevision.TabIndex = 1;
             this.tabRevision.Text = "Révisions";
             this.tabRevision.UseVisualStyleBackColor = true;
@@ -715,6 +718,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grdSatellite.AutoSearch = C1.Win.C1FlexGrid.AutoSearchEnum.FromTop;
             this.grdSatellite.ColumnInfo = "1,1,0,0,0,90,Columns:0{Width:5;}\t";
+            this.grdSatellite.ContextMenuStrip = this.mnuClientSatVersion;
             this.grdSatellite.ExtendLastCol = true;
             this.grdSatellite.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grdSatellite.Location = new System.Drawing.Point(7, 21);
@@ -903,6 +907,20 @@
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
             // 
+            // mnuClientSatVersion
+            // 
+            this.mnuClientSatVersion.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuiDelete});
+            this.mnuClientSatVersion.Name = "mnuClientSatVersion";
+            this.mnuClientSatVersion.Size = new System.Drawing.Size(153, 48);
+            this.mnuClientSatVersion.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.mnuClientSatVersion_ItemClicked);
+            // 
+            // mnuiDelete
+            // 
+            this.mnuiDelete.Name = "mnuiDelete";
+            this.mnuiDelete.Size = new System.Drawing.Size(152, 22);
+            this.mnuiDelete.Text = "Supprimer";
+            // 
             // frmVersion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -937,6 +955,7 @@
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.tab.ResumeLayout(false);
+            this.mnuClientSatVersion.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1005,5 +1024,7 @@
         private System.Windows.Forms.Button btnShowDB_UpgradeScripts;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         public TT3LightDLL.Controls.ctlFormController formController;
+        private System.Windows.Forms.ContextMenuStrip mnuClientSatVersion;
+        private System.Windows.Forms.ToolStripMenuItem mnuiDelete;
     }
 }

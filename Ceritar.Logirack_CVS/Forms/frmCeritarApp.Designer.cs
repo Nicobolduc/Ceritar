@@ -239,7 +239,7 @@
             // 
             // chkReportAppExternal
             // 
-            this.chkReportAppExternal.Location = new System.Drawing.Point(198, 209);
+            this.chkReportAppExternal.Location = new System.Drawing.Point(206, 208);
             this.chkReportAppExternal.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.chkReportAppExternal.Name = "chkReportAppExternal";
             this.chkReportAppExternal.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -251,12 +251,12 @@
             // 
             // txtReportAppExternal
             // 
-            this.txtReportAppExternal.Location = new System.Drawing.Point(220, 206);
+            this.txtReportAppExternal.Location = new System.Drawing.Point(232, 206);
             this.txtReportAppExternal.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtReportAppExternal.MaxLength = 75;
             this.txtReportAppExternal.Name = "txtReportAppExternal";
             this.txtReportAppExternal.ReadOnly = true;
-            this.txtReportAppExternal.Size = new System.Drawing.Size(202, 22);
+            this.txtReportAppExternal.Size = new System.Drawing.Size(190, 22);
             this.txtReportAppExternal.TabIndex = 4;
             this.txtReportAppExternal.TextChanged += new System.EventHandler(this.txtReportAppExternal_TextChanged);
             // 
@@ -264,7 +264,7 @@
             // 
             this.label3.Location = new System.Drawing.Point(3, 209);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(196, 21);
+            this.label3.Size = new System.Drawing.Size(214, 21);
             this.label3.TabIndex = 4;
             this.label3.Text = "Nom du Exe externe des rapports:";
             // 

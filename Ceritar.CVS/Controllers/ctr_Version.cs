@@ -4,6 +4,7 @@ using System.Linq;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using Microsoft.VisualBasic;
 using Ceritar.CVS.Models.Module_ActivesInstallations;
 using Ceritar.CVS.Controllers.Interfaces;
 using Ceritar.TT3LightDLL.Static_Classes;
@@ -192,6 +193,54 @@ namespace Ceritar.CVS.Controllers
             return blnValidReturn;
         }
 
+        public bool blnDeleteClientSatelliteVersion(int vintCSV_NRI)
+        {
+            bool blnValidReturn = false;
+            string strFolderPath = string.Empty;
+
+            try
+            {
+                mcSQL = new clsTTSQL();
+
+                strFolderPath = mcSQL.str_ADOSingleLookUp_Trans("CSV_Exe_Location", "ClientSatVersion", "CSV_NRI = " + vintCSV_NRI);
+
+                if (!mcSQL.bln_BeginTransaction())
+                { }
+                else if (!mcSQL.bln_ADODelete("ClientSatVersion", "CSV_NRI = " + vintCSV_NRI))
+                { }
+                else
+                {
+                    if ((File.GetAttributes(strFolderPath) & FileAttributes.Directory) == FileAttributes.Directory)
+                    {
+                        strFolderPath = new DirectoryInfo(strFolderPath).Parent.FullName;
+                    }
+                    else
+                    {
+                        strFolderPath = new FileInfo(strFolderPath).Directory.Parent.FullName;
+                    }
+
+                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(strFolderPath, Microsoft.VisualBasic.FileIO.UIOption.AllDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
+
+                    blnValidReturn = true;
+                }
+            }
+            catch (System.OperationCanceledException)
+            {
+                blnValidReturn = false;
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                mcSQL.bln_EndTransaction(blnValidReturn);
+            }
+
+            return blnValidReturn;
+        }
+
         /// <summary>
         /// Construit la hiérarchie reçu en paramètre à partir de ce qui est dans la base de données.
         /// Boucle sur chaque niveau de la hiérarchie et en fonction du type de dossier, effectue divers traitements.
@@ -274,7 +323,7 @@ namespace Ceritar.CVS.Controllers
                             {
                                 blnValidReturn = clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseValidExtensions);
 
-                                //TODO: Apply the other solution for this
+                                //TODO: Apply the other solution for this mcModVersion.CerApplication.ExternalReportAppName
                                 string[] reportExe = Directory.GetFiles(currentFolderInfos.FullName, "*RPT.exe", SearchOption.TopDirectoryOnly);
 
                                 if (reportExe.Length > 0) File.Delete(reportExe[0]);
@@ -1236,8 +1285,9 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        CerApp.CeA_Name " + Environment.NewLine;
 
             strSQL = strSQL + " FROM CerApp " + Environment.NewLine;
+            strSQL = strSQL + "     LEFT JOIN TTUser ON TTUser.TTU_NRI = " + clsTTApp.GetAppController.cUser.User_NRI + Environment.NewLine;
 
-            strSQL = strSQL + " ORDER BY CerApp.CeA_Name " + Environment.NewLine;
+            strSQL = strSQL + " ORDER BY CASE WHEN TTUser.CeA_NRI_Default = CerApp.CeA_NRI THEN 0 ELSE 1 END ASC, CerApp.CeA_Name " + Environment.NewLine;
 
             return strSQL;
         }

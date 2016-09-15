@@ -37,7 +37,7 @@ namespace Ceritar.Logirack_CVS.Forms
         //Working variables
         private ushort mintTpl_TS;
 
-        //TODO: Si on ajoute une ligne et qu'elle ne suit pas immediatement la precedent, ca fonctionne pas bien !! ********************************************
+        
         public frmTemplate()
         {
             InitializeComponent();
@@ -495,13 +495,13 @@ namespace Ceritar.Logirack_CVS.Forms
             { }
             else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrTemplate.strGetTemplateTypes_SQL(), "TeT_NRI", "TeT_Code", false, ref cboTypes))
             { }
-            else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrTemplate.strGetFolderTypes_SQL(), "FoT_NRI", "FoT_Code", false, ref cboFolderType))
-            { }
             else if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE)
             {
                 blnValidReturn = true;
             }
             else if (!pfblnData_Load()) 
+            { }
+            else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrTemplate.strGetFolderTypes_SQL(), "FoT_NRI", "FoT_Code", false, ref cboFolderType))
             { }
             else if (!pfblnGrdTemplate_Load())
             { }
@@ -664,6 +664,10 @@ namespace Ceritar.Logirack_CVS.Forms
 
                             break;
                     }
+
+                    formController.FormIsLoading = true;
+                    sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrTemplate.strGetFolderTypes_SQL(), "FoT_NRI", "FoT_Code", false, ref cboFolderType);
+                    formController.FormIsLoading = false;
                 }
                 else
                 {

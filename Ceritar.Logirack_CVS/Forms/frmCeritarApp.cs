@@ -237,7 +237,7 @@ namespace Ceritar.Logirack_CVS.Forms
             { }
             if (!mcGrdSatApp.bln_Init(ref grdSatApp, ref btnGrdSatAdd, ref btnGrdSatDel))
             { }
-            else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrCeritarApp.strGetListe_Domains_SQL(), "ApD_NRI", "ApD_Code", false, ref cboDomain))
+            else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrCeritarApp.strGetListe_Domains_SQL(), "ApD_NRI", "ApD_Code", true, ref cboDomain))
             { }
             else if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE)
             { 

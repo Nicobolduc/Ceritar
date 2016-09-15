@@ -947,5 +947,17 @@ namespace Ceritar.Logirack_CVS.Forms
             pfblnExportRevisionKit();
         }
 
+        private void mnuiDelete_Click(object sender, EventArgs e)
+        {
+            bool blnValidReturn = false;
+
+            if (mcGrdSatellites.bln_RowEditIsValid() && !mcGrdSatellites.bln_CellIsEmpty(grdSatellites.Row, mintGrdSat_SRe_NRI_col)) //&& e.ClickedItem.Name.Equals(mnuiDelete.Name))
+            {
+                blnValidReturn = mcCtrRevision.blnDeleteSatelliteRevision(Int32.Parse(mcGrdSatellites[grdSatellites.Row, mintGrdSat_SRe_NRI_col]));
+
+                if (blnValidReturn) formController.ReloadForm();
+            }
+        }
+
     }
 }

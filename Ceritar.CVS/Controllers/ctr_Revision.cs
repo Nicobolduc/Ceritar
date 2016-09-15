@@ -198,6 +198,76 @@ namespace Ceritar.CVS.Controllers
             return mcActionResult;
         }
 
+        public bool blnDeleteSatelliteRevision(int vintSRe_NRI)
+        {
+            bool blnValidReturn = false;
+            string strFolderPath = string.Empty;
+            string strRevisionFolderPath = string.Empty;
+            string strNewRevisionFolderName = string.Empty;
+
+            try
+            {
+                mcSQL = new clsTTSQL();
+                mcModRevision = new mod_Rev_Revision();
+
+                strFolderPath = mcSQL.str_ADOSingleLookUp_Trans("SRe_Exe_Location", "SatRevision", "SRe_NRI = " + vintSRe_NRI);
+
+                if (!mcSQL.bln_BeginTransaction())
+                { }
+                else if (!mcSQL.bln_ADODelete("SatRevision", "SRe_NRI = " + vintSRe_NRI))
+                { }
+                else
+                {
+                    if ((File.GetAttributes(strFolderPath) & FileAttributes.Directory) == FileAttributes.Directory)
+                    {
+                        strFolderPath = new DirectoryInfo(strFolderPath).FullName;
+                        strRevisionFolderPath = new DirectoryInfo(strFolderPath).Parent.FullName;
+                    }
+                    else
+                    {
+                        strFolderPath = new FileInfo(strFolderPath).Directory.FullName;
+                        strRevisionFolderPath = new FileInfo(strFolderPath).Directory.FullName;
+                    }
+                    
+                    pfblnFeedModelWithView();
+
+                    foreach (mod_SRe_SatelliteRevision cSRe in mcModRevision.LstSatelliteRevisions)
+                    {
+                        if (cSRe.SatRevision_NRI == vintSRe_NRI)
+                        {
+                            mcModRevision.LstSatelliteRevisions.Remove(cSRe);
+
+                            break;
+                        }
+                    }
+
+                    strNewRevisionFolderName = pfstrGetRevisionFolderName();
+
+                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(strFolderPath, Microsoft.VisualBasic.FileIO.UIOption.AllDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
+
+                    Directory.Move(strRevisionFolderPath, Path.Combine(new DirectoryInfo(strRevisionFolderPath).Parent.FullName, strNewRevisionFolderName));
+
+                    blnValidReturn = mcSQL.bln_ADOExecute("UPDATE Revision SET Rev_Location_Exe = REPLACE(Rev_Location_Exe, " + clsTTApp.GetAppController.str_FixStringForSQL(new DirectoryInfo(strFolderPath).Parent.Name) + ", " + clsTTApp.GetAppController.str_FixStringForSQL(strNewRevisionFolderName) + ") WHERE Revision.Rev_NRI = " + mcView.GetRevision_NRI());
+                    blnValidReturn = mcSQL.bln_ADOExecute("UPDATE Revision SET Rev_Location_Scripts = REPLACE(Rev_Location_Scripts, " + clsTTApp.GetAppController.str_FixStringForSQL(new DirectoryInfo(strFolderPath).Parent.Name) + ", " + clsTTApp.GetAppController.str_FixStringForSQL(strNewRevisionFolderName) + ") WHERE Revision.Rev_NRI = " + mcView.GetRevision_NRI());
+                }
+            }
+            catch (System.OperationCanceledException)
+            {
+                blnValidReturn = false;
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                mcSQL.bln_EndTransaction(blnValidReturn);
+            }
+
+            return blnValidReturn;
+        }
+
         public bool blnBuildRevisionHierarchy(int vintTemplate_NRI)
         {
             bool blnValidReturn = false;
