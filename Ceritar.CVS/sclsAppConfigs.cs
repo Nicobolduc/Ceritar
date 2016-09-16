@@ -14,7 +14,7 @@ namespace Ceritar.CVS
         private static string _strReleaseFolderName = "Release";
         private static string _strRevisionAllScriptFolderName = "Rev_AllScripts";
         private static string _strCaptionsAndMenusFileName;
-        private static string[] _strReleaseValidExtensions = { ".dll", ".config", ".exe" };
+        private static string[] _strReleaseInvalidExtensions = { ".xml", ".pdb", ".ini", ".log", ".txt" };
         private const string _strVersionNumberPrefix = "V_";
         private const string _strRevisionNumberPrefix = "R_";
 
@@ -92,9 +92,9 @@ namespace Ceritar.CVS
             get { return _strRevisionNumberPrefix; }
         }
 
-        public static string[] GetReleaseValidExtensions
+        public static string[] GetReleaseInvalidExtensions
         {
-            get { return sclsAppConfigs._strReleaseValidExtensions; }
+            get { return sclsAppConfigs._strReleaseInvalidExtensions; }
         }
 
 #endregion

@@ -277,7 +277,9 @@ namespace Ceritar.CVS.Controllers
 
                             if (mcView.GetDML_Action() == sclsConstants.DML_Mode.DELETE_MODE) //On supprime toute la hierarchie existante et on sort
                             {
-                                blnValidReturn = pfblnDeleteVersionHierarchy(strVersionFolderRoot);
+                                blnValidReturn = true;
+
+                                pfblnDeleteVersionHierarchy(strVersionFolderRoot);
 
                                 return blnValidReturn;
                             }
@@ -321,10 +323,11 @@ namespace Ceritar.CVS.Controllers
 
                             if (!string.IsNullOrEmpty(mcView.GetLocation_Release()) && mcView.GetLocation_Release() != currentFolderInfos.FullName)
                             {
-                                blnValidReturn = clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseValidExtensions);
+                                if (Directory.Exists(currentFolderInfos.FullName)) Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(currentFolderInfos.FullName, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.DoNothing);
 
-                                //TODO: Apply the other solution for this mcModVersion.CerApplication.ExternalReportAppName
-                                string[] reportExe = Directory.GetFiles(currentFolderInfos.FullName, "*RPT.exe", SearchOption.TopDirectoryOnly);
+                                blnValidReturn = clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseInvalidExtensions);
+
+                                string[] reportExe = Directory.GetFiles(currentFolderInfos.FullName, mcModVersion.CerApplication.ExternalReportAppName, SearchOption.TopDirectoryOnly);
 
                                 if (reportExe.Length > 0) File.Delete(reportExe[0]);
                             }
@@ -432,7 +435,7 @@ namespace Ceritar.CVS.Controllers
 
                 if (!blnValidReturn && mcModVersion.DML_Action == sclsConstants.DML_Mode.INSERT_MODE)
                 {
-                    //pfblnDeleteVersionHierarchy(strVersionFolderRoot);
+                    pfblnDeleteVersionHierarchy(strVersionFolderRoot, false);
                 }
             }
 
@@ -486,7 +489,7 @@ namespace Ceritar.CVS.Controllers
 
                         strActiveInstallation_Revision_Path = Path.Combine(vstrDestinationFolderPath, cCAV.CeritarClient.CompanyName);
 
-                        if (Directory.Exists(strActiveInstallation_Revision_Path)) { Directory.Delete(strActiveInstallation_Revision_Path, true); }
+                        if (Directory.Exists(strActiveInstallation_Revision_Path)) { Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(strActiveInstallation_Revision_Path,  Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.DoNothing); }
 
 
                         foreach (string strCurrentVersionFolderToCopy_Path in lstVersionsFolders)
@@ -641,28 +644,32 @@ namespace Ceritar.CVS.Controllers
         /// </summary>
         /// <param name="vstrVersionFolderRoot">Le chemin du répertoire à supprimer</param>
         /// <returns></returns>
-        private bool pfblnDeleteVersionHierarchy(string vstrVersionFolderRoot)
+        private bool pfblnDeleteVersionHierarchy(string vstrVersionFolderRoot, bool vblnAskIfSureToDelete = true)
         {
             bool blnValidReturn = false;
             List<mod_CSV_ClientSatVersion> lstSatellites;
             System.Windows.Forms.DialogResult answer;
+            Microsoft.VisualBasic.FileIO.UIOption intUIOption;
 
             try
             {
-                answer = System.Windows.Forms.MessageBox.Show("Voulez-vous supprimer le répertoire à l'emplacement suivant : " + vstrVersionFolderRoot, "Attention", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                //answer = System.Windows.Forms.MessageBox.Show("Voulez-vous supprimer le répertoire à l'emplacement suivant : " + vstrVersionFolderRoot, "Attention", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2);
 
-                if (answer == System.Windows.Forms.DialogResult.Yes)
-                {
-                    System.Diagnostics.Process process = new System.Diagnostics.Process();
-                    System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                //if (answer == System.Windows.Forms.DialogResult.Yes)
+                //{
+                intUIOption = (vblnAskIfSureToDelete ? Microsoft.VisualBasic.FileIO.UIOption.AllDialogs : Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs);
 
-                    startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                    startInfo.FileName = "cmd.exe";
-                    startInfo.Arguments = @"/C RMDIR """ + vstrVersionFolderRoot + @""" /S /Q";
+                Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(vstrVersionFolderRoot, intUIOption, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
+                    //System.Diagnostics.Process process = new System.Diagnostics.Process();
+                    //System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
 
-                    process.StartInfo = startInfo;
-                    process.Start();
-                    process.WaitForExit();
+                    //startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                    //startInfo.FileName = "cmd.exe";
+                    //startInfo.Arguments = @"/C RMDIR """ + vstrVersionFolderRoot + @""" /S /Q";
+
+                    //process.StartInfo = startInfo;
+                    //process.Start();
+                    //process.WaitForExit();
 
                     lstSatellites = mcModVersion.LstClientSatelliteApps;
 
@@ -673,26 +680,27 @@ namespace Ceritar.CVS.Controllers
                                                              cCSV.CeritarClient.CompanyName,
                                                              sclsAppConfigs.GetVersionNumberPrefix + mcModVersion.VersionNo.ToString()
                                                            );
-
+                     
                         answer = System.Windows.Forms.MessageBox.Show("Voulez-vous supprimer le répertoire à l'emplacement suivant : " + vstrVersionFolderRoot, "Attention", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning ,System.Windows.Forms.MessageBoxDefaultButton.Button2);
 
                         if (answer == System.Windows.Forms.DialogResult.Yes)
                         {
-                            process = new System.Diagnostics.Process();
-                            startInfo = new System.Diagnostics.ProcessStartInfo();
+                            Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(vstrVersionFolderRoot, Microsoft.VisualBasic.FileIO.UIOption.AllDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.DoNothing);
+                            //process = new System.Diagnostics.Process();
+                            //startInfo = new System.Diagnostics.ProcessStartInfo();
 
-                            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                            startInfo.FileName = "cmd.exe";
-                            startInfo.Arguments = @"/C RMDIR """ + vstrVersionFolderRoot + @""" /S /Q";
+                            //startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                            //startInfo.FileName = "cmd.exe";
+                            //startInfo.Arguments = @"/C RMDIR """ + vstrVersionFolderRoot + @""" /S /Q";
 
-                            process.StartInfo = startInfo;
-                            process.Start();
-                            process.WaitForExit();
+                            //process.StartInfo = startInfo;
+                            //process.Start();
+                            //process.WaitForExit();
                         }
                     }
-                }        
 
-                blnValidReturn = true;
+                    blnValidReturn = true;
+                //}        
             }
             catch (Exception ex)
             {
@@ -972,7 +980,7 @@ namespace Ceritar.CVS.Controllers
         /// <returns>Vrai si tout s'est bien passé.</returns>
         private bool pfblnCopyAllSatellitesAndUpdateLocations()
         {
-            bool blnValidReturn = false;
+            bool blnValidReturn = true;
             DirectoryInfo currentFolderInfos = null;
 
             try
@@ -997,7 +1005,7 @@ namespace Ceritar.CVS.Controllers
                         {
                             if (cCSV.Location_Exe != currentFolderInfos.FullName)
                             {
-                                clsTTApp.GetAppController.blnCopyFolderContent(cCSV.Location_Exe, currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseValidExtensions);
+                                clsTTApp.GetAppController.blnCopyFolderContent(cCSV.Location_Exe, currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseInvalidExtensions);
 
                                 cCSV.Location_Exe = currentFolderInfos.FullName;
                             }

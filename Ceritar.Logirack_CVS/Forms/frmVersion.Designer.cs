@@ -76,6 +76,8 @@
             this.grdClients = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.grdSatellite = new C1.Win.C1FlexGrid.C1FlexGrid();
+            this.mnuClientSatVersion = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuiDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.txtReleasePath = new System.Windows.Forms.TextBox();
             this.txtTTAppPath = new System.Windows.Forms.TextBox();
@@ -91,8 +93,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.tmrGenerateBlink = new System.Windows.Forms.Timer(this.components);
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
-            this.mnuClientSatVersion = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.mnuiDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.tabRevision.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -103,11 +103,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.grdClients)).BeginInit();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdSatellite)).BeginInit();
+            this.mnuClientSatVersion.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.tab.SuspendLayout();
-            this.mnuClientSatVersion.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -732,6 +732,20 @@
             this.grdSatellite.TabIndex = 0;
             this.grdSatellite.Tag = "26";
             // 
+            // mnuClientSatVersion
+            // 
+            this.mnuClientSatVersion.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuiDelete});
+            this.mnuClientSatVersion.Name = "mnuClientSatVersion";
+            this.mnuClientSatVersion.Size = new System.Drawing.Size(130, 26);
+            this.mnuClientSatVersion.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.mnuClientSatVersion_ItemClicked);
+            // 
+            // mnuiDelete
+            // 
+            this.mnuiDelete.Name = "mnuiDelete";
+            this.mnuiDelete.Size = new System.Drawing.Size(129, 22);
+            this.mnuiDelete.Text = "Supprimer";
+            // 
             // groupBox7
             // 
             this.groupBox7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -766,7 +780,7 @@
             this.txtReleasePath.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtReleasePath.Name = "txtReleasePath";
             this.txtReleasePath.ReadOnly = true;
-            this.txtReleasePath.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.txtReleasePath.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtReleasePath.Size = new System.Drawing.Size(968, 22);
             this.txtReleasePath.TabIndex = 72;
             // 
@@ -779,7 +793,7 @@
             this.txtTTAppPath.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtTTAppPath.Name = "txtTTAppPath";
             this.txtTTAppPath.ReadOnly = true;
-            this.txtTTAppPath.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.txtTTAppPath.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtTTAppPath.Size = new System.Drawing.Size(968, 22);
             this.txtTTAppPath.TabIndex = 71;
             // 
@@ -792,7 +806,7 @@
             this.txtWordAppChangePath.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtWordAppChangePath.Name = "txtWordAppChangePath";
             this.txtWordAppChangePath.ReadOnly = true;
-            this.txtWordAppChangePath.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.txtWordAppChangePath.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtWordAppChangePath.Size = new System.Drawing.Size(968, 22);
             this.txtWordAppChangePath.TabIndex = 70;
             // 
@@ -805,7 +819,7 @@
             this.txtExcelAppChangePath.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtExcelAppChangePath.Name = "txtExcelAppChangePath";
             this.txtExcelAppChangePath.ReadOnly = true;
-            this.txtExcelAppChangePath.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.txtExcelAppChangePath.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtExcelAppChangePath.Size = new System.Drawing.Size(968, 22);
             this.txtExcelAppChangePath.TabIndex = 69;
             // 
@@ -907,20 +921,6 @@
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
             // 
-            // mnuClientSatVersion
-            // 
-            this.mnuClientSatVersion.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuiDelete});
-            this.mnuClientSatVersion.Name = "mnuClientSatVersion";
-            this.mnuClientSatVersion.Size = new System.Drawing.Size(153, 48);
-            this.mnuClientSatVersion.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.mnuClientSatVersion_ItemClicked);
-            // 
-            // mnuiDelete
-            // 
-            this.mnuiDelete.Name = "mnuiDelete";
-            this.mnuiDelete.Size = new System.Drawing.Size(152, 22);
-            this.mnuiDelete.Text = "Supprimer";
-            // 
             // frmVersion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -949,13 +949,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.grdClients)).EndInit();
             this.groupBox4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdSatellite)).EndInit();
+            this.mnuClientSatVersion.ResumeLayout(false);
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
             this.groupBox6.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.tab.ResumeLayout(false);
-            this.mnuClientSatVersion.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

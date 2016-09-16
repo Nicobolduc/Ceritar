@@ -288,14 +288,14 @@ namespace Ceritar.TT3LightDLL.Classes
         /// <param name="vstrDestinationFolderPath">Le chemin sur le disque vers le dossier où les fichiers doivent être copiés.</param>
         /// <param name="vblnOverwrite">Si true, les fichiers existant déjà seront remplacés.</param>
         /// <param name="vblnCreateFolderIfNotExist">Si le dossier de destination spécifié n'existe pas, il sera créé.</param>
-        /// <param name="vlstExtensionsToCopy">La liste des extensions de fichier qui seront copiés. Si vide, tout est copié.</param>
+        /// <param name="vlstExtensionsToAvoid">La liste des extensions de fichier qui seront copiés. Si vide, tout est copié.</param>
         /// <returns></returns>
         public bool blnCopyFolderContent(string vstrSourceFolderPath, 
                                          string vstrDestinationFolderPath, 
                                          bool vblnOverwrite = true, 
                                          bool vblnCreateFolderIfNotExist = false,
                                          SearchOption vSearchOption = SearchOption.TopDirectoryOnly,
-                                         params string[] vlstExtensionsToCopy)
+                                         params string[] vlstExtensionsToAvoid)
         {
             bool blnValidReturn = true;
             string strFileDestinationPath = string.Empty;
@@ -303,9 +303,9 @@ namespace Ceritar.TT3LightDLL.Classes
 
             try
             {
-                if (vlstExtensionsToCopy != null && vlstExtensionsToCopy.Length > 0)
+                if (vlstExtensionsToAvoid != null && vlstExtensionsToAvoid.Length > 0)
                 {
-                    var lstReleaseFilesWithFilters = Directory.GetFiles(vstrSourceFolderPath, "*.*", vSearchOption).Where(f => vlstExtensionsToCopy.Contains(System.IO.Path.GetExtension(f).ToLower())).ToArray();
+                    var lstReleaseFilesWithFilters = Directory.GetFiles(vstrSourceFolderPath, "*.*", vSearchOption).Where(f => !vlstExtensionsToAvoid.Contains(System.IO.Path.GetExtension(f).ToLower())).ToArray();
 
                     lstReleaseFilesToCopy = lstReleaseFilesWithFilters;
                 }

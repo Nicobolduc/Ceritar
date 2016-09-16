@@ -207,19 +207,22 @@ namespace Ceritar.Logirack_CVS.Forms
 
             for (int intRowIndex = 1; intRowIndex < grdSatellite.Rows.Count; intRowIndex++)
             {
-                structCSV = new structClientSatVersion();
+                if (!mcGrdSatelliteApps.bln_CellIsEmpty(intRowIndex, mintGrdSat_CSV_LocationExe_col))
+                {
+                    structCSV = new structClientSatVersion();
 
-                structCSV.Action = clsTTApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdSatellite[intRowIndex, mintGrdSat_Action_col]);
-                structCSV.intCeritarSatelliteApp_NRI = Int32.Parse(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_NRI_col]);
-                structCSV.intCeritarClient_NRI = Int32.Parse(mcGrdClients[grdClients.Row, mintGrdClients_CeC_NRI_col]);
-                Int32.TryParse(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSV_NRI_col], out structCSV.intClientSatVersion_NRI);
-                structCSV.strCeritarClient_Name = mcGrdClients[grdClients.Row, mintGrdClients_CeC_Name_col];
-                structCSV.strLocationSatelliteExe = mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSV_LocationExe_col];
-                structCSV.strCeritarSatelliteApp_Name = mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_Name_col];
-                structCSV.strKitFolderName = mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_KitFolderName_col];
-                structCSV.blnExeIsFolder = Convert.ToBoolean(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_ExeIsFolder_col]);
+                    structCSV.Action = clsTTApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdSatellite[intRowIndex, mintGrdSat_Action_col]);
+                    structCSV.intCeritarSatelliteApp_NRI = Int32.Parse(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_NRI_col]);
+                    structCSV.intCeritarClient_NRI = Int32.Parse(mcGrdClients[grdClients.Row, mintGrdClients_CeC_NRI_col]);
+                    Int32.TryParse(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSV_NRI_col], out structCSV.intClientSatVersion_NRI);
+                    structCSV.strCeritarClient_Name = mcGrdClients[grdClients.Row, mintGrdClients_CeC_Name_col];
+                    structCSV.strLocationSatelliteExe = mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSV_LocationExe_col];
+                    structCSV.strCeritarSatelliteApp_Name = mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_Name_col];
+                    structCSV.strKitFolderName = mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_KitFolderName_col];
+                    structCSV.blnExeIsFolder = Convert.ToBoolean(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_ExeIsFolder_col]);
 
-                lstSatelliteApps.Add(structCSV);
+                    lstSatelliteApps.Add(structCSV);
+                }
             }
 
             return lstSatelliteApps;
@@ -789,6 +792,10 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 txtCreatedBy.Text = clsTTApp.GetAppController.cUser.User_Code;
 
+                mstrExternalApplicationName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + Int32.Parse(cboApplications.SelectedValue.ToString()).ToString());
+
+                grdClients.Cols[mintGrdClients_LocationReportExe_col].Visible = !string.IsNullOrEmpty(mstrExternalApplicationName);
+
                 cboTemplates.SelectedIndex = (cboTemplates.Items.Count > 0 ? 0 : -1);
 
                 blnValidReturn = true;
@@ -1093,11 +1100,11 @@ namespace Ceritar.Logirack_CVS.Forms
                 grdClients[grdClients.Row, mintGrdClients_CeC_Name_col] = null; 
             }
 
-            if (cboApplications.SelectedIndex >= 0 & !formController.FormIsLoading)
+            if (cboApplications.SelectedIndex >= 0 && !formController.FormIsLoading)
             {
                 sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetTemplates_SQL(Int32.Parse(cboApplications.SelectedValue.ToString())), "Tpl_NRI", "Tpl_Name", false, ref cboTemplates);
 
-                mstrExternalApplicationName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + cboApplications.SelectedValue.ToString());
+                mstrExternalApplicationName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + Int32.Parse(cboApplications.SelectedValue.ToString()).ToString());
 
                 grdClients.Cols[mintGrdClients_LocationReportExe_col].Visible = !string.IsNullOrEmpty(mstrExternalApplicationName);
             }

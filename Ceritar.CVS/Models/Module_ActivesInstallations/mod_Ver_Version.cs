@@ -665,7 +665,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             {
                 if (mintDML_Action != sclsConstants.DML_Mode.DELETE_MODE)
                 {
-                    for (int intIndex = 0; intIndex < _lstClientSatelliteApps.Count; intIndex++)
+                    for (int intIndex = 0; intIndex < LstClientSatelliteApps.Count; intIndex++)
                     {
                         blnValidReturn = false;
 

@@ -57,6 +57,8 @@ namespace Ceritar.CVS.Controllers
 
             try
             {
+                mcModRevision = new mod_Rev_Revision();
+
                 mcModRevision.DML_Action = mcView.GetDML_Action();
                 mcModRevision.Revision_Number = mcView.GetRevisionNo();
                 mcModRevision.CreationDate = mcView.GetCreationDate();
@@ -243,12 +245,22 @@ namespace Ceritar.CVS.Controllers
 
                     strNewRevisionFolderName = pfstrGetRevisionFolderName();
 
+                    blnValidReturn = false;
+
+                    if (!mcSQL.bln_ADOExecute("UPDATE Revision SET Rev_Location_Exe = REPLACE(Rev_Location_Exe, " + clsTTApp.GetAppController.str_FixStringForSQL(new DirectoryInfo(strFolderPath).Parent.Name) + ", " + clsTTApp.GetAppController.str_FixStringForSQL(strNewRevisionFolderName) + ") WHERE Revision.Rev_NRI = " + mcView.GetRevision_NRI()))
+                    { }
+                    else if (!mcSQL.bln_ADOExecute("UPDATE Revision SET Rev_Location_Scripts = REPLACE(Rev_Location_Scripts, " + clsTTApp.GetAppController.str_FixStringForSQL(new DirectoryInfo(strFolderPath).Parent.Name) + ", " + clsTTApp.GetAppController.str_FixStringForSQL(strNewRevisionFolderName) + ") WHERE Revision.Rev_NRI = " + mcView.GetRevision_NRI()))
+                    { }
+                    else if (!mcSQL.bln_ADOExecute("UPDATE SatRevision SET SRe_Exe_Location = REPLACE(SRe_Exe_Location, " + clsTTApp.GetAppController.str_FixStringForSQL(new DirectoryInfo(strFolderPath).Parent.Name) + ", " + clsTTApp.GetAppController.str_FixStringForSQL(strNewRevisionFolderName) + ") WHERE SatRevision.Rev_NRI = " + mcView.GetRevision_NRI()))
+                    { }
+                    else
+                    {
+                        blnValidReturn = true;
+                    }
+
                     Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(strFolderPath, Microsoft.VisualBasic.FileIO.UIOption.AllDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
 
                     Directory.Move(strRevisionFolderPath, Path.Combine(new DirectoryInfo(strRevisionFolderPath).Parent.FullName, strNewRevisionFolderName));
-
-                    blnValidReturn = mcSQL.bln_ADOExecute("UPDATE Revision SET Rev_Location_Exe = REPLACE(Rev_Location_Exe, " + clsTTApp.GetAppController.str_FixStringForSQL(new DirectoryInfo(strFolderPath).Parent.Name) + ", " + clsTTApp.GetAppController.str_FixStringForSQL(strNewRevisionFolderName) + ") WHERE Revision.Rev_NRI = " + mcView.GetRevision_NRI());
-                    blnValidReturn = mcSQL.bln_ADOExecute("UPDATE Revision SET Rev_Location_Scripts = REPLACE(Rev_Location_Scripts, " + clsTTApp.GetAppController.str_FixStringForSQL(new DirectoryInfo(strFolderPath).Parent.Name) + ", " + clsTTApp.GetAppController.str_FixStringForSQL(strNewRevisionFolderName) + ") WHERE Revision.Rev_NRI = " + mcView.GetRevision_NRI());
                 }
             }
             catch (System.OperationCanceledException)
@@ -417,7 +429,7 @@ namespace Ceritar.CVS.Controllers
 
                                             currentFolderInfos.Create();
 
-                                            blnValidReturn = clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseValidExtensions);
+                                            blnValidReturn = clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseInvalidExtensions);
 
                                             //Supprime l'application des rapports externe au besoin
                                             if (!mcView.GetExeWithExternalReport())
@@ -511,7 +523,6 @@ namespace Ceritar.CVS.Controllers
 
                                         currentFolderInfos.Create();
 
-                                        //clsApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Scripts(), currentFolderInfos.FullName, true, true);
                                         lstScripts = Directory.GetFiles(mcView.GetLocation_Scripts()).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
                                         
                                         for (int intIndex = 0; intIndex < lstScripts.Count; intIndex++)
@@ -619,7 +630,7 @@ namespace Ceritar.CVS.Controllers
 
                                             currentFolderInfos.Create();
 
-                                            blnValidReturn = clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseValidExtensions);
+                                            blnValidReturn = clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseInvalidExtensions);
 
                                             mcModRevision.Path_Release = currentFolderInfos.FullName;
                                         }
@@ -930,7 +941,7 @@ namespace Ceritar.CVS.Controllers
                     {
                         if (rcSatRevision.Location_Exe != currentFolderInfos.FullName)
                         {
-                            clsTTApp.GetAppController.blnCopyFolderContent(rcSatRevision.Location_Exe, currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseValidExtensions);
+                            clsTTApp.GetAppController.blnCopyFolderContent(rcSatRevision.Location_Exe, currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseInvalidExtensions);
 
                             rcSatRevision.Location_Exe = currentFolderInfos.FullName;
                         }
@@ -1001,16 +1012,17 @@ namespace Ceritar.CVS.Controllers
 
                     if (blnValidReturn)
                     {
-                        System.Diagnostics.Process process = new System.Diagnostics.Process();
-                        System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                        Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(vstrRevisionFolderRoot, Microsoft.VisualBasic.FileIO.UIOption.AllDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
+                        //System.Diagnostics.Process process = new System.Diagnostics.Process();
+                        //System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
 
-                        startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                        startInfo.FileName = "cmd.exe";
-                        startInfo.Arguments = @"/C RMDIR """ + vstrRevisionFolderRoot + @""" /S /Q";
+                        //startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                        //startInfo.FileName = "cmd.exe";
+                        //startInfo.Arguments = @"/C RMDIR """ + vstrRevisionFolderRoot + @""" /S /Q";
 
-                        process.StartInfo = startInfo;
-                        process.Start();
-                        process.WaitForExit();
+                        //process.StartInfo = startInfo;
+                        //process.Start();
+                        //process.WaitForExit();
                     }
                 }
                 else
@@ -1050,16 +1062,17 @@ namespace Ceritar.CVS.Controllers
 
                 if (answer == System.Windows.Forms.DialogResult.Yes)
                 {
-                    System.Diagnostics.Process process = new System.Diagnostics.Process();
-                    System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(vstrRevisionFolderPath, Microsoft.VisualBasic.FileIO.UIOption.AllDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
+                    //System.Diagnostics.Process process = new System.Diagnostics.Process();
+                    //System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
 
-                    startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                    startInfo.FileName = "cmd.exe";
-                    startInfo.Arguments = @"/C RMDIR """ + vstrRevisionFolderPath + @""" /S /Q";
+                    //startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                    //startInfo.FileName = "cmd.exe";
+                    //startInfo.Arguments = @"/C RMDIR """ + vstrRevisionFolderPath + @""" /S /Q";
 
-                    process.StartInfo = startInfo;
-                    process.Start();
-                    process.WaitForExit();
+                    //process.StartInfo = startInfo;
+                    //process.Start();
+                    //process.WaitForExit();
                 }
                 else
                 {
@@ -1123,7 +1136,8 @@ namespace Ceritar.CVS.Controllers
 
                         if (lstCorrespondingScriptsFounds.Count > 0)
                         {
-                            File.Delete(lstCorrespondingScriptsFounds[lstCorrespondingScriptsFounds.Count - 1]); //On supprime toujours la dernière version?
+                            File.Delete(lstCorrespondingScriptsFounds[lstCorrespondingScriptsFounds.Count - 1]);
+                            //Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(lstCorrespondingScriptsFounds[lstCorrespondingScriptsFounds.Count - 1], Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.DoNothing);
                         }
                     }
                 }
