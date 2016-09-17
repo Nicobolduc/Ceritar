@@ -737,7 +737,7 @@ namespace Ceritar.Logirack_CVS.Forms
                         {
                             case ctr_Template.ErrorCode_HiCo.NAME_ON_DISK_MANDATORY:
 
-                                grdTemplate.Row = grdTemplate.FindRow(string.Empty, 1, mintGrdTpl_HiCo_Name_col, false, true, false);
+                                grdTemplate.Select(grdTemplate.FindRow(string.Empty, 1, mintGrdTpl_HiCo_Name_col, false, true, false), mintGrdTpl_HiCo_Name_col, true);
                                 break;
 
                             case ctr_Template.ErrorCode_HiCo.NAME_ON_DISK_INVALID:
@@ -861,6 +861,24 @@ namespace Ceritar.Logirack_CVS.Forms
         private void cmdAddSibbling_Click(object sender, EventArgs e)
         {
             pfblnAddNodeRow(NodeTypeEnum.FirstChild);
+        }
+
+        private void btnDeleteRow_Click(object sender, EventArgs e)
+        {
+            int intRowIndex = grdTemplate.Row + 1;
+
+            while (true)
+            {
+                if (intRowIndex < grdTemplate.Rows.Count && grdTemplate.Rows[grdTemplate.Row].Node.Level < grdTemplate.Rows[intRowIndex].Node.Level)
+                {
+                    mcGrdTemplate.bln_SetRowActionToDelete(intRowIndex);
+                }
+                else
+                {
+                    break;
+                }
+                intRowIndex++;
+            }
         }
 
     }

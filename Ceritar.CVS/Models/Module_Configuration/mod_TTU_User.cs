@@ -21,7 +21,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private string _strFirstname = null;
         private string _strLastname = null;
         private string _strEmail = null;
-        private mod_TTG_UerGroup _cUserGroup = null; //TODO Unused
+        private mod_TTG_UerGroup _cUserGroup = null; //TODO
 
         //mod_IBase
         private clsActionResults mcActionResults = new clsActionResults();

@@ -514,39 +514,19 @@ namespace Ceritar.TT3LightDLL.Classes
             mGrdFlex.Cols[vintColumnIndex].Style.TextAlign = TextAlignEnum.CenterCenter;
 	    }
 
-	    public void SetColType_ComboBox(string vstrSQL, int vintColumnIndex, string vstrValueMember, string vstrDisplayMember, bool vblnAllowEmpty)
+	    public void SetColType_ComboBox(ref ComboBox rcboLinked ,string vstrSQL, int vintColumnIndex, string vstrValueMember, string vstrDisplayMember, bool vblnAllowEmpty)
 	    {
-		    SqlCommand mySQLCmd = default(SqlCommand);
-		    SqlDataReader mySQLReader = null;
-		    ListDictionary  myBindingList = new ListDictionary();
-            CellStyle individualColStyle = mGrdFlex.Styles.Add("ComboBox" + vintColumnIndex);
-
-		    try 
+            try
             {
-			    mySQLCmd = new SqlCommand(vstrSQL, clsTTApp.GetAppController.SQLConnection);
+                sclsWinControls_Utilities.blnComboBox_LoadFromSQL(vstrSQL, vstrValueMember, vstrDisplayMember, vblnAllowEmpty, ref rcboLinked);
 
-			    mySQLReader = mySQLCmd.ExecuteReader();
-
-			    if (vblnAllowEmpty) {
-                    myBindingList.Add("", "");
-			    }
-
-			    while (mySQLReader.Read()) {
-
-				    if (!Information.IsDBNull(mySQLReader[vstrValueMember])) {
-					    myBindingList.Add(Convert.ToInt32(mySQLReader[vstrValueMember]), Convert.ToString(mySQLReader[vstrDisplayMember]));
-				    }
-			    }
-
-			    mGrdFlex.Cols[vintColumnIndex].DataMap = myBindingList;
-
-		    } catch (Exception ex) {
-			    sclsErrorsLog.WriteToErrorLog(ex, ex.Source + " - " + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);
-		    } finally {
-			    if ((mySQLReader != null)) {
-				    mySQLReader.Dispose();
-			    }
-		    }
+                mGrdFlex.Cols[vintColumnIndex].Style = mGrdFlex.Styles.Normal;
+                mGrdFlex.Cols[vintColumnIndex].Style.Editor = rcboLinked;
+            }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source + " - " + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);
+            }
 	    }
 
 	    public void SetColType_DateTimePicker(int vintColumnIndex, bool vblnNullable)

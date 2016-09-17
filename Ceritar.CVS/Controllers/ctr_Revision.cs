@@ -351,11 +351,10 @@ namespace Ceritar.CVS.Controllers
                             if (strLstCurrentDirectory.Length == 1 && !strLstCurrentDirectory[0].ToString().Equals(strRevisionFolderRoot))
                             {
                                 Directory.Move(strLstCurrentDirectory[0].ToString(), strRevisionFolderRoot);
-
-                                pfblnDeleteDirectory(strLstCurrentDirectory[0].ToString());
                             }
                             else if (strLstCurrentDirectory.Length > 1)
                             {
+                                //On cherche un autre répertoire avec ce numéro de révision. S'il existe, on copy son contenu dans le nouveau.
                                 for (int intIndex = 0; intIndex < strLstCurrentDirectory.Length; intIndex++)
                                 {
                                     string strDirectoryName = new FileInfo(strLstCurrentDirectory[intIndex].ToString()).Name;
@@ -366,8 +365,6 @@ namespace Ceritar.CVS.Controllers
                                     if (intVersion == mcView.GetRevisionNo() && !strLstCurrentDirectory[intIndex].ToString().Equals(strRevisionFolderRoot))
                                     {
                                         Directory.Move(strLstCurrentDirectory[intIndex].ToString(), strRevisionFolderRoot);
-
-                                        pfblnDeleteDirectory(strLstCurrentDirectory[intIndex].ToString());
 
                                         break;
                                     }
@@ -1004,7 +1001,7 @@ namespace Ceritar.CVS.Controllers
 
             try
             {
-                answer = System.Windows.Forms.MessageBox.Show("Voulez-vous supprimer le répertoire à l'emplacement suivant : " + vstrRevisionFolderRoot, "Attention", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                answer = System.Windows.Forms.MessageBox.Show("Voulez-vous envoyer à la corbeille le répertoire suivant: " + vstrRevisionFolderRoot, "Attention", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2);
                 
                 if (answer == System.Windows.Forms.DialogResult.Yes)
                 {
@@ -1012,7 +1009,7 @@ namespace Ceritar.CVS.Controllers
 
                     if (blnValidReturn)
                     {
-                        Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(vstrRevisionFolderRoot, Microsoft.VisualBasic.FileIO.UIOption.AllDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
+                        Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(vstrRevisionFolderRoot, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
                         //System.Diagnostics.Process process = new System.Diagnostics.Process();
                         //System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
 
@@ -1040,7 +1037,7 @@ namespace Ceritar.CVS.Controllers
         }
 
         /// <summary>
-        /// Envoie le répertoire à l'emplacement spécifié si désiré dans la corbeille.
+        /// Envoie le répertoire à l'emplacement spécifié, si désiré, dans la corbeille.
         /// </summary>
         /// <param name="vstrRevisionFolderPath">Le chemin du répertoire à supprimer</param>
         /// <returns></returns>
@@ -1053,7 +1050,7 @@ namespace Ceritar.CVS.Controllers
             {
                 if (vblnAskBefore)
                 {
-                    answer = System.Windows.Forms.MessageBox.Show("Voulez-vous supprimer le répertoire à l'emplacement suivant : " + vstrRevisionFolderPath, "Attention", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                    answer = System.Windows.Forms.MessageBox.Show("Voulez-vous envoyer à la corbeille le répertoire suivant: " + vstrRevisionFolderPath, "Attention", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2);
                 }
                 else
                 {
@@ -1062,7 +1059,7 @@ namespace Ceritar.CVS.Controllers
 
                 if (answer == System.Windows.Forms.DialogResult.Yes)
                 {
-                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(vstrRevisionFolderPath, Microsoft.VisualBasic.FileIO.UIOption.AllDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
+                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(vstrRevisionFolderPath, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
                     //System.Diagnostics.Process process = new System.Diagnostics.Process();
                     //System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
 
@@ -1073,6 +1070,8 @@ namespace Ceritar.CVS.Controllers
                     //process.StartInfo = startInfo;
                     //process.Start();
                     //process.WaitForExit();
+
+                    blnValidReturn = true;
                 }
                 else
                 {

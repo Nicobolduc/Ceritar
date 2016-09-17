@@ -192,6 +192,7 @@
             this.btnDeleteRow.TabIndex = 32;
             this.toolTip.SetToolTip(this.btnDeleteRow, "Supprimer la ligne");
             this.btnDeleteRow.UseVisualStyleBackColor = true;
+            this.btnDeleteRow.Click += new System.EventHandler(this.btnDeleteRow_Click);
             // 
             // btnAddChild
             // 

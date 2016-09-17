@@ -649,17 +649,21 @@ namespace Ceritar.CVS.Controllers
             bool blnValidReturn = false;
             List<mod_CSV_ClientSatVersion> lstSatellites;
             System.Windows.Forms.DialogResult answer;
-            Microsoft.VisualBasic.FileIO.UIOption intUIOption;
 
             try
             {
-                //answer = System.Windows.Forms.MessageBox.Show("Voulez-vous supprimer le répertoire à l'emplacement suivant : " + vstrVersionFolderRoot, "Attention", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                if (vblnAskIfSureToDelete)
+                {
+                    answer = System.Windows.Forms.MessageBox.Show("Voulez-vous envoyer à la corbeille le répertoire suivant: " + vstrVersionFolderRoot, "Attention", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                }
+                else
+                {
+                    answer = System.Windows.Forms.DialogResult.Yes;
+                }
 
-                //if (answer == System.Windows.Forms.DialogResult.Yes)
-                //{
-                intUIOption = (vblnAskIfSureToDelete ? Microsoft.VisualBasic.FileIO.UIOption.AllDialogs : Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs);
-
-                Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(vstrVersionFolderRoot, intUIOption, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
+                if (answer == System.Windows.Forms.DialogResult.Yes)
+                {
+                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(vstrVersionFolderRoot, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
                     //System.Diagnostics.Process process = new System.Diagnostics.Process();
                     //System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
 
@@ -680,12 +684,20 @@ namespace Ceritar.CVS.Controllers
                                                              cCSV.CeritarClient.CompanyName,
                                                              sclsAppConfigs.GetVersionNumberPrefix + mcModVersion.VersionNo.ToString()
                                                            );
-                     
-                        answer = System.Windows.Forms.MessageBox.Show("Voulez-vous supprimer le répertoire à l'emplacement suivant : " + vstrVersionFolderRoot, "Attention", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning ,System.Windows.Forms.MessageBoxDefaultButton.Button2);
+
+                        if (vblnAskIfSureToDelete)
+                        {
+                            answer = System.Windows.Forms.MessageBox.Show("Voulez-vous envoyer à la corbeille le répertoire suivant: " + vstrVersionFolderRoot, "Attention", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                        }
+                        else
+                        {
+                            answer = System.Windows.Forms.DialogResult.Yes;
+                        }
+                        
 
                         if (answer == System.Windows.Forms.DialogResult.Yes)
                         {
-                            Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(vstrVersionFolderRoot, Microsoft.VisualBasic.FileIO.UIOption.AllDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.DoNothing);
+                            Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(vstrVersionFolderRoot, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
                             //process = new System.Diagnostics.Process();
                             //startInfo = new System.Diagnostics.ProcessStartInfo();
 
@@ -700,7 +712,7 @@ namespace Ceritar.CVS.Controllers
                     }
 
                     blnValidReturn = true;
-                //}        
+                }      
             }
             catch (Exception ex)
             {

@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Classes\clsTTApp.cs" />
     <Compile Include="Classes\clsTTC1FlexGridWrapper.cs" />
+    <Compile Include="Classes\clsTTForms.cs" />
     <Compile Include="Classes\clsTTSQL.cs" />
     <Compile Include="Classes\clsTTUser.cs" />
     <Compile Include="Controls\ctlFormController.cs">

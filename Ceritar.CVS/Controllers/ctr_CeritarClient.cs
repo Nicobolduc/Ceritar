@@ -102,16 +102,64 @@ namespace Ceritar.CVS.Controllers
         {
             string strSQL = string.Empty;
 
-            strSQL = strSQL + " SELECT CerApp.CeA_NRI, " + Environment.NewLine;
-            strSQL = strSQL + "        CerApp.CeA_Name " + Environment.NewLine;
+            strSQL = strSQL + " DECLARE @CerClient_NRI INT = " + vintCeC_NRI + Environment.NewLine;
 
-            strSQL = strSQL + " FROM ClientAppVersion " + Environment.NewLine;
-            strSQL = strSQL + "     INNER JOIN CerApp ON CerApp.CeA_NRI = ClientAppVersion.CeA_NRI " + Environment.NewLine;
-
-            strSQL = strSQL + " WHERE ClientAppVersion.CeC_NRI = " + vintCeC_NRI + Environment.NewLine;
-            strSQL = strSQL + "   AND ClientAppVersion.CAV_DtInstalledProd IS NOT NULL " + Environment.NewLine;
-
+            strSQL = strSQL + " SELECT CerApp.CeA_Name, " + Environment.NewLine;
+            strSQL = strSQL + " 	   MAX(TVer.Ver_No) AS Ver_No, " + Environment.NewLine;
+            strSQL = strSQL + " 	   MAX(TVer.Rev_No) AS Rev_No " + Environment.NewLine;
+	   
+            strSQL = strSQL + " FROM CerApp " + Environment.NewLine;
+            strSQL = strSQL + " 	CROSS APPLY (SELECT TOP 1 Version.Ver_No, " + Environment.NewLine;
+            strSQL = strSQL + " 							  TRef.Rev_No " + Environment.NewLine;
+            strSQL = strSQL + " 				 FROM ClientAppVersion " + Environment.NewLine;
+            strSQL = strSQL + " 					INNER JOIN Version ON Version.Ver_NRI = ClientAppVersion.Ver_NRI " + Environment.NewLine;
+					
+            strSQL = strSQL + " 					OUTER APPLY (SELECT TOP 1 Revision.Rev_No " + Environment.NewLine;
+            strSQL = strSQL + " 								 FROM Revision " + Environment.NewLine;
+            strSQL = strSQL + " 								 WHERE Revision.Ver_NRI = ClientAppVersion.Ver_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 								   AND Revision.CeC_NRI = ClientAppVersion.CeC_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 								   AND Revision.Rev_Location_Exe IS NOT NULL " + Environment.NewLine;
+            strSQL = strSQL + " 								   AND Revision.Rev_ExeIsReport = 0 " + Environment.NewLine;
+            strSQL = strSQL + " 								 ORDER BY Revision.Rev_No DESC " + Environment.NewLine;
+            strSQL = strSQL + " 								) AS TRef " + Environment.NewLine;
+								
+            strSQL = strSQL + " 				 WHERE ClientAppVersion.CeA_NRI = CerApp.CeA_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 				   AND ClientAppVersion.CeC_NRI = @CerClient_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 				   AND ClientAppVersion.CAV_DtInstalledProd IS NOT NULL " + Environment.NewLine;
+            strSQL = strSQL + " 				 ORDER BY Version.Ver_No DESC " + Environment.NewLine;
+            strSQL = strSQL + " 				) AS TVer " + Environment.NewLine;
+				
             strSQL = strSQL + " GROUP BY CerApp.CeA_NRI, CerApp.CeA_Name " + Environment.NewLine;
+
+
+            strSQL = strSQL + " UNION ALL " + Environment.NewLine;
+
+
+            strSQL = strSQL + " SELECT CerSatApp.CSA_Name, " + Environment.NewLine;
+            strSQL = strSQL + " 	   MAX(TVer.Ver_No) AS Ver_No, " + Environment.NewLine;
+            strSQL = strSQL + " 	   MAX(TVer.Rev_No) AS Rev_No " + Environment.NewLine;
+	   
+            strSQL = strSQL + " FROM CerSatApp " + Environment.NewLine;
+            strSQL = strSQL + " 	CROSS APPLY (SELECT TOP 1 Version.Ver_No, " + Environment.NewLine;
+            strSQL = strSQL + " 							  TRef.Rev_No " + Environment.NewLine;
+            strSQL = strSQL + " 				 FROM ClientSatVersion " + Environment.NewLine;
+            strSQL = strSQL + " 					INNER JOIN Version ON Version.Ver_NRI = ClientSatVersion.Ver_NRI " + Environment.NewLine;
+					
+            strSQL = strSQL + " 					OUTER APPLY (SELECT TOP 1 Revision.Rev_No " + Environment.NewLine;
+            strSQL = strSQL + " 								 FROM Revision " + Environment.NewLine;
+            strSQL = strSQL + " 									INNER JOIN SatRevision ON SatRevision.Rev_NRI = Revision.Rev_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 								 WHERE SatRevision.CSA_NRI = ClientSatVersion.CSA_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 								   AND Revision.Ver_NRI = Version.Ver_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 								 ORDER BY Revision.Rev_No DESC " + Environment.NewLine;
+            strSQL = strSQL + " 								) AS TRef " + Environment.NewLine;
+								
+            strSQL = strSQL + " 				 WHERE ClientSatVersion.CSA_NRI = CerSatApp.CSA_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 				   AND ClientSatVersion.CeC_NRI = @CerClient_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 				 ORDER BY Version.Ver_No DESC " + Environment.NewLine;
+            strSQL = strSQL + " 				) AS TVer " + Environment.NewLine;
+				
+            strSQL = strSQL + " GROUP BY CerSatApp.CSA_NRI, CerSatApp.CSA_Name " + Environment.NewLine;
+
             
             return strSQL;
         }

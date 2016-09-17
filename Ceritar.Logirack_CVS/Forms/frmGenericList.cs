@@ -98,7 +98,6 @@ namespace Ceritar.Logirack_CVS.Forms
 
                     case sclsConstants.DML_Mode.CONSULT_MODE:
                     case sclsConstants.DML_Mode.DELETE_MODE:
-                        //sclsWinControls_Utilities.DisableAllFormControls((Form)frmToOpen, null, null);
 
                         frmToOpen.GetFormController().ShowForm(this, vFormMode, ref intItem_NRI, mblnChildFormIsModal);
 
@@ -278,7 +277,17 @@ namespace Ceritar.Logirack_CVS.Forms
         {
             foreach (C1.Win.C1FlexGrid.Column cCol in grdList.Cols)
             {
-                if (cCol.IsVisible && cCol.Index > 1) cCol.Width = grdList.Width / mcGrdList.GetNbVisibleColumns - 10;
+                if (cCol.IsVisible && cCol.Index > 1)
+                {
+                    if (grdList.Cols.Count > 4)
+                    {
+                        if (cCol.IsVisible && cCol.Index > 1) cCol.Width = TextRenderer.MeasureText(cCol.Caption, grdList.Font).Width;
+                    }
+                    else
+                    {
+                        if (cCol.IsVisible && cCol.Index > 1) cCol.Width = grdList.Width / mcGrdList.GetNbVisibleColumns - 10;
+                    }
+                }
             }
 
             switch (mListToOpen)
@@ -287,16 +296,15 @@ namespace Ceritar.Logirack_CVS.Forms
 
                     grdList.AllowMerging = C1.Win.C1FlexGrid.AllowMergingEnum.Free;
                     C1.Win.C1FlexGrid.CellRange crMerged = grdList.GetCellRange(1, 2, grdList.Rows.Count - 1, 2);
-                    //grdList.Cols[0].AllowMerging = true;
-                    //grdList.Cols[1].AllowMerging = true;
-                    grdList.Cols[2].AllowMerging = true;
 
+                    grdList.Cols[2].AllowMerging = true;
+                    
                     break;
 
                 case sclsGenList.GeneralLists_ID.CERITAR_CLIENT_LIST_NRI:
 
-                    grdList.Cols[3].DataType = typeof(Boolean); //TODO gestion colonnes
-
+                    grdList.Cols[3].DataType = typeof(Boolean);
+                    
                     break;
             }
         }

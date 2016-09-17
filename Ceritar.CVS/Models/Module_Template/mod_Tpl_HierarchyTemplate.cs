@@ -248,7 +248,7 @@ namespace Ceritar.CVS.Models.Module_Template
                     if (!blnValidReturn) break;
                 }
 
-                if (blnValidReturn)
+                if (blnValidReturn && vcRootFolderToSearchFrom.DML_Action != sclsConstants.DML_Mode.DELETE_MODE)
                 {
                     switch (_templateType)
                     {

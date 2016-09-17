@@ -22,8 +22,9 @@ namespace Ceritar.Logirack_CVS.Forms
         private ctr_CeritarClient mcCtrCeritarClient;
 
         //Columns grdApp
-        private const short mintGrdApp_CeA_NRI= 1;
-        private const short mintGrdApp_CeA_Name_col = 2;
+        private const short mintGrdApp_CeA_Name_col = 1;
+        private const short mintGrdApp_CurrentVersion_col = 2;
+        private const short mintGrdApp_CurrentRevision_col = 3;
 
         //Classes
         private clsTTC1FlexGridWrapper mcGrdApp;
@@ -173,7 +174,9 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void mcGrdApp_SetGridDisplay()
         {
-            grdCerApp.Cols[mintGrdApp_CeA_Name_col].Width = 30;
+            grdCerApp.Cols[mintGrdApp_CeA_Name_col].Width = 200;
+            grdCerApp.Cols[mintGrdApp_CurrentVersion_col].Width = 100;
+            grdCerApp.Cols[mintGrdApp_CurrentRevision_col].Width = 100;
         }
 
         private void txtNom_TextChanged(object sender, EventArgs e)

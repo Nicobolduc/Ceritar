@@ -18,7 +18,7 @@ namespace Ceritar.TT3LightDLL.Classes
         private SqlCommand mcSQLCmd;
         private SqlTransaction mcSQLTransaction;
         private sclsConstants.DML_Mode _intDMLCommand;
-        private bool mblnTransactionStarted;
+        private bool mblnSilentMessage;
         private System.Collections.Specialized.StringDictionary mColFields;
 
 
@@ -37,13 +37,19 @@ namespace Ceritar.TT3LightDLL.Classes
 
         public bool TransactionStarted
         {
-            get { return mblnTransactionStarted; }
+            get { return mcSQLTransaction == null; }
         }
 
         public sclsConstants.DML_Mode DLMCommand
         {
             get { return _intDMLCommand; }
             set { _intDMLCommand = value; }
+        }
+
+        public bool SilentMessage
+        {
+            get { return mblnSilentMessage; }
+            set { mblnSilentMessage = value; }
         }
 
 #endregion
@@ -165,7 +171,7 @@ namespace Ceritar.TT3LightDLL.Classes
             try
             {
                 mcSQLTransaction = mcSQLConnection.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
-                mblnTransactionStarted = true;
+
                 mcSQLCmd.Transaction = mcSQLTransaction;
 
                 blnValidReturn = true;
@@ -204,9 +210,10 @@ namespace Ceritar.TT3LightDLL.Classes
             }
             finally
             {
-                mblnTransactionStarted = false;
                 if (mcSQLTransaction != null) mcSQLTransaction.Dispose();
                 if (mcSQLCmd != null) mcSQLCmd.Dispose();
+
+                mcSQLTransaction = null;
             }
 
             return blnValidReturn;
@@ -242,7 +249,6 @@ namespace Ceritar.TT3LightDLL.Classes
                             break;
 
                         case clsTTSQL.MySQL_FieldTypes.DATETIME_TYPE:
-                            //vstrValue = Convert.ToDateTime(vstrValue).ToString(clsApp.GetAppController.str_GetServerDateTimeFormat);
                             vstrValue = clsTTApp.GetAppController.str_FixStringForSQL(vstrValue);
 
                             break;

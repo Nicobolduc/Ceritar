@@ -150,9 +150,6 @@ namespace Ceritar.Logirack_CVS.Forms
         private void mdiGeneral_Load(object sender, EventArgs e)
         {
             main();
-
-            //lblDatabase.Text = clsApp.GetAppController.SQLConnection.Database;
-            //lblCurrentUser.Text = "Utilisateur: Nicolas";
         }
 
         private void mnuCerApp_Click(object sender, EventArgs e)
@@ -182,6 +179,8 @@ namespace Ceritar.Logirack_CVS.Forms
             }
 
             this.ResumeLayout();
+
+            clsTTForms.GetTTForms.GenericList_Count = 0;
         }
 
         private void mnuUser_Click(object sender, EventArgs e)

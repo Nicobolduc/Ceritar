@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCeritarClient));
             this.lblNom = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
@@ -35,6 +36,7 @@
             this.grdCerApp = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.chkActive = new System.Windows.Forms.CheckBox();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
+            this.toolTips = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdCerApp)).BeginInit();
             this.SuspendLayout();
@@ -56,6 +58,7 @@
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(300, 22);
             this.txtName.TabIndex = 6;
+            this.toolTips.SetToolTip(this.txtName, "!! Doit correspondre aux noms des dossiers dans SVR-CERITAR-01");
             this.txtName.TextChanged += new System.EventHandler(this.txtNom_TextChanged);
             // 
             // groupBox1
@@ -122,6 +125,13 @@
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
             // 
+            // toolTips
+            // 
+            this.toolTips.AutomaticDelay = 250;
+            this.toolTips.AutoPopDelay = 10000;
+            this.toolTips.InitialDelay = 250;
+            this.toolTips.ReshowDelay = 50;
+            // 
             // frmCeritarClient
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -154,5 +164,6 @@
         public C1.Win.C1FlexGrid.C1FlexGrid grdCerApp;
         private System.Windows.Forms.CheckBox chkActive;
         public TT3LightDLL.Controls.ctlFormController formController;
+        private System.Windows.Forms.ToolTip toolTips;
     }
 }

@@ -158,6 +158,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.Name = "frmGenericList";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Liste générique";
             ((System.ComponentModel.ISupportInitialize)(this.grdList)).EndInit();
             this.ResumeLayout(false);

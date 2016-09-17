@@ -42,9 +42,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.cboApplications = new System.Windows.Forms.ComboBox();
-            this.label6 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -194,6 +194,14 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Configurations par défaut";
             // 
+            // label6
+            // 
+            this.label6.Location = new System.Drawing.Point(5, 61);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(142, 21);
+            this.label6.TabIndex = 43;
+            this.label6.Text = "Répertoire par défaut :";
+            // 
             // label5
             // 
             this.label5.Location = new System.Drawing.Point(5, 27);
@@ -212,14 +220,6 @@
             this.cboApplications.Size = new System.Drawing.Size(240, 24);
             this.cboApplications.TabIndex = 0;
             this.cboApplications.SelectedIndexChanged += new System.EventHandler(this.cboApplications_SelectedIndexChanged);
-            // 
-            // label6
-            // 
-            this.label6.Location = new System.Drawing.Point(5, 61);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(142, 21);
-            this.label6.TabIndex = 43;
-            this.label6.Text = "Répertoire par défaut :";
             // 
             // frmUser
             // 
@@ -240,10 +240,12 @@
             this.Controls.Add(this.txtCode);
             this.Controls.Add(this.lblNom);
             this.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(487, 444);
             this.Name = "frmUser";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Informations et configurations de l\'usager courant.";

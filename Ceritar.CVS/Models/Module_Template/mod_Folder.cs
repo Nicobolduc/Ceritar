@@ -148,7 +148,6 @@ namespace Ceritar.CVS.Models.Module_Template
 
                     if (!blnValidReturn || !mcActionResults.IsValid)
                     {
-                        //TODO: not working
                         mcActionResults.RowInError = mcActionResults.RowInError <= intRowIndex ? intRowIndex : mcActionResults.RowInError;
                         break;
                     }

@@ -130,7 +130,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="sclsGenList.cs" />
+    <Compile Include="Static_Classes\sclsGenList.cs" />
     <EmbeddedResource Include="Forms\frmCeritarApp.resx">
       <DependentUpon>frmCeritarApp.cs</DependentUpon>
     </EmbeddedResource>

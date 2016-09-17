@@ -192,7 +192,7 @@ namespace Ceritar.Logirack_CVS.Forms
                 structCAV.intClientAppVersion_TS = Int32.Parse(mcGrdClients[intRowIndex, mintGrdClients_CAV_TS_col]);
                 structCAV.strLicense = grdClients[intRowIndex, mintGrdClients_License_col].ToString();
                 structCAV.strLocationReportExe = mcGrdClients[intRowIndex, mintGrdClients_LocationReportExe_col];
-                structCAV.strLocationScriptsRoot = mcGrdClients[intRowIndex, mintGrdClients_LocationScriptsRoot_col] == "" ? System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop) : mcGrdClients[intRowIndex, mintGrdClients_LocationScriptsRoot_col];
+                structCAV.strLocationScriptsRoot = mcGrdClients[intRowIndex, mintGrdClients_LocationScriptsRoot_col] == "" ? ""/*System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop)*/ : mcGrdClients[intRowIndex, mintGrdClients_LocationScriptsRoot_col];
 
                 lstClient.Add(structCAV);
             }
@@ -718,8 +718,7 @@ namespace Ceritar.Logirack_CVS.Forms
                 }   
             }
 
-            grdClients.Cols[mintGrdClients_CeC_Name_col].Style = grdClients.Styles.Normal;
-            grdClients.Cols[mintGrdClients_CeC_Name_col].Style.Editor = cboClients;
+            mcGrdClients.SetColType_ComboBox(ref cboClients, mcCtrVersion.strGetClients_SQL(), mintGrdClients_CeC_Name_col, "CeC_NRI", "CeC_Name", false);
         }
 
         void mcGrdSatelliteApps_SetGridDisplay()
@@ -785,8 +784,6 @@ namespace Ceritar.Logirack_CVS.Forms
             else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetApplications_SQL(), "CeA_NRI", "CeA_Name", false, ref cboApplications))
             { }
             else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetTemplates_SQL((int)cboApplications.SelectedValue), "Tpl_NRI", "Tpl_Name", false, ref cboTemplates))
-            { }
-            else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetClients_SQL(), "CeC_NRI", "Cec_Name", false, ref cboClients))
             { }
             else if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE)
             {

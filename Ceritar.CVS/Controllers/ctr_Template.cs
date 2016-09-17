@@ -114,7 +114,7 @@ namespace Ceritar.CVS.Controllers
                     cCurrentFolder.NodeLevel = lstHiCo[intIdx].intNodeLevel;
                     cCurrentFolder.Type = (FolderType)lstHiCo[intIdx].FolderType;
                     cCurrentFolder.Template_NRI = mcModTemplate.Template_NRI;
-
+                   
                     if (intIdx == 0)
                     {
                         cParentFolder = ((mod_Folder)mcModTemplate.RacineSystem);

@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using Ceritar.Logirack_CVS.Forms;
 using Ceritar.Logirack_CVS;
 using Ceritar.TT3LightDLL.Static_Classes;
+using Ceritar.TT3LightDLL.Classes;
 
 namespace Ceritar.Logirack_CVS
 {
@@ -41,13 +42,18 @@ namespace Ceritar.Logirack_CVS
             try
             {
                 frmGenericList frmGenList = new frmGenericList(vList_ID);
-               
+
+                strListGenTitle = " - ";
+
                 switch (vList_ID)
                 {
                     case GeneralLists_ID.CERITAR_APPLICATION_LIST_NRI:
                         strSQL = strGetList_CeritarApplications_SQL();
-                        strListGenTitle = " - Fiche d'une application de Ceritar";
-                        //TODO caption pour ca
+
+                        frmGenList.Tag = 44;
+
+                        strListGenTitle += clsTTApp.GetAppController.str_GetCaption((int)frmGenList.Tag, clsTTApp.GetAppController.cUser.UserLanguage);
+                        
                         frmGenList.mintGridTag = ((int) GeneralList_GridCapID.CERITAR_APPLICATION_GRID_CAP_NRI).ToString();
                         frmGenList.SetFormToOpenName = typeof(frmCeritarApp).Name;
 
@@ -55,7 +61,11 @@ namespace Ceritar.Logirack_CVS
 
                     case GeneralLists_ID.CERITAR_CLIENT_LIST_NRI:
                         strSQL = strGetList_CeritarClient_SQL();
-                        strListGenTitle = " - Fiche d'un client de Ceritar";
+                        
+                        frmGenList.Tag = 45;
+
+                        strListGenTitle += clsTTApp.GetAppController.str_GetCaption((int)frmGenList.Tag, clsTTApp.GetAppController.cUser.UserLanguage);
+
                         frmGenList.mintGridTag = ((int)GeneralList_GridCapID.CERITAR_CLIENT_GRID_CAP_NRI).ToString();
                         frmGenList.SetFormToOpenName = typeof(frmCeritarClient).Name;
 
@@ -63,8 +73,11 @@ namespace Ceritar.Logirack_CVS
 
                     case GeneralLists_ID.TEMPLATE_LIST_NRI:
                         strSQL = strGetList_Templates_SQL();
-                        strListGenTitle = " - Gabarits des installations actives";
-                        //TODO caption pour ca
+                        
+                        frmGenList.Tag = 46;
+
+                        strListGenTitle += clsTTApp.GetAppController.str_GetCaption((int)frmGenList.Tag, clsTTApp.GetAppController.cUser.UserLanguage);
+
                         frmGenList.mintGridTag = ((int) GeneralList_GridCapID.TEMPLATE_GRID_CAP_NRI).ToString();
                         frmGenList.SetFormToOpenName = typeof(frmTemplate).Name;
 
@@ -72,7 +85,11 @@ namespace Ceritar.Logirack_CVS
 
                     case GeneralLists_ID.VERSION_REVISION_LIST_NRI:
                         strSQL = strGetList_Versions_SQL();
-                        strListGenTitle = " - Versions et révisions";
+                        
+                        frmGenList.Tag = 47;
+
+                        strListGenTitle += clsTTApp.GetAppController.str_GetCaption((int)frmGenList.Tag, clsTTApp.GetAppController.cUser.UserLanguage);
+
                         frmGenList.mintGridTag = ((int) GeneralList_GridCapID.VERSION_REVISION_GRID_CAP_NRI).ToString();
                         frmGenList.SetFormToOpenName = typeof(frmVersion).Name;
 
@@ -89,19 +106,9 @@ namespace Ceritar.Logirack_CVS
                     frmGenList.mstrGridSQL = strSQL;
                     frmGenList.Text = frmGenList.Text + strListGenTitle;
                     frmGenList.MdiParent = TT3LightDLL.Classes.clsTTApp.GetAppController.GetMDI;
+                    frmGenList.Location = clsTTForms.GetTTForms.GetGenericListLocation();
 
                     frmGenList.formController.ShowForm(frmGenList, sclsConstants.DML_Mode.CONSULT_MODE, ref intItem_NRI);
-                   
-                    //if (mdiGeneral.GetGenListChildCount == 0)
-                    //{
-                        frmGenList.Location = new System.Drawing.Point(0, 0);
-                    //}
-                    //else
-                    //{
-                    //    frmGenList.Location = new Point(My.Forms.mdiGeneral.GetGenListChildCount * 25, My.Forms.mdiGeneral.GetGenListChildCount * 25);
-                    //}
-
-                    //mdiGeneral.AddGenListHandle((object)frmGenList, frmGenList.Handle.ToInt32);
                 }
 
             }

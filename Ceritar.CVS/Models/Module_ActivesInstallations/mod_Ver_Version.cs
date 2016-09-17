@@ -26,7 +26,6 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private string _strLocation_CaptionsAndMenus;
         private bool _blnIsDemo;
         private mod_TTU_User _cCreatedByUser;
-        private List<mod_Rev_Revision> _lstRevisions; //TODO unused
         private mod_CeA_CeritarApplication _cCerApplication;
         private mod_Tpl_HierarchyTemplate _cTemplateSource;
         private List<mod_CAV_ClientAppVersion> _lstClientsUsing;
@@ -38,7 +37,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private clsTTSQL mcSQL;
 
         //Messages
-        private const int mintMSG_VersionNo_UniqueAndBiggerPrevious = 18;
+        private const int mintMSG_VersionNo_Unique = 18;
         private const int mintMSG_CantDeleteVersionIfUsed = 22;
         private const int mintMSG_CantInstallDemoInProd = 24;
         private const int mintMSG_SCRIPS_NOT_FOUND = 29;
@@ -100,12 +99,6 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         internal mod_TTU_User GetCreatedByUser
         {
             get { return _cCreatedByUser; }
-        }
-
-        internal List<mod_Rev_Revision> LstRevisions
-        {
-            get { return _lstRevisions; }
-            set { _lstRevisions = value; }
         }
 
         internal mod_CeA_CeritarApplication CerApplication
@@ -226,11 +219,10 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_TIMESTAMP, clsActionResults.BaseErrorCode.INVALID_TIMESTAMP);
                         }
-                            //TODO: Il faut valider que le numero n'est pas plus petit pour un client donné ou les clients inclus
-                        //else if (!string.IsNullOrEmpty(clsSQL.str_ADOSingleLookUp("Ver_NRI", "Version", "CeA_NRI = " + _cCerApplication.CeritarApplication_NRI +  " AND Ver_No >= " + clsApp.GetAppController.str_FixStringForSQL(_intVersionNo.ToString()))))
-                        //{
-                        //    mcActionResults.SetInvalid(mintMSG_VersionNo_UniqueAndBiggerPrevious, ctr_Version.ErrorCode_Ver.VERSION_NO_UNIQUE_AND_BIGGER_PREVIOUS);
-                        //}
+                        else if (!string.IsNullOrEmpty(clsTTSQL.str_ADOSingleLookUp("Ver_NRI", "Version", "CeA_NRI = " + _cCerApplication.CeritarApplication_NRI + " AND Ver_No = " + clsTTApp.GetAppController.str_FixStringForSQL(_intVersionNo.ToString()))))
+                        {
+                            mcActionResults.SetInvalid(mintMSG_VersionNo_Unique, ctr_Version.ErrorCode_Ver.VERSION_NO_UNIQUE_AND_BIGGER_PREVIOUS);
+                        }
                         else
                         {
                             mcActionResults.SetValid();
@@ -332,11 +324,11 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                                         blnValidReturn = false;
                                     }
 
-                                    if (string.IsNullOrEmpty(client.LocationScriptsRoot) || !Directory.Exists(client.LocationScriptsRoot))
-                                    {
-                                        mcActionResults.SetInvalid(mintMSG_SCRIPS_NOT_FOUND, ctr_Version.ErrorCode_Ver.SCRIPTS_MANDATORY, client.CeritarClient.CompanyName);
-                                        blnValidReturn = false;
-                                    }
+                                    //if (string.IsNullOrEmpty(client.LocationScriptsRoot) || !Directory.Exists(client.LocationScriptsRoot))
+                                    //{
+                                    //    mcActionResults.SetInvalid(mintMSG_SCRIPS_NOT_FOUND, ctr_Version.ErrorCode_Ver.SCRIPTS_MANDATORY, client.CeritarClient.CompanyName);
+                                    //    blnValidReturn = false;
+                                    //}
 
                                     if (!blnValidReturn) break;
                                 }
@@ -380,9 +372,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                                     if (blnValidReturn && (string.IsNullOrEmpty(LstClientsUsing[intIndex].LocationScriptsRoot) || !Directory.Exists(LstClientsUsing[intIndex].LocationScriptsRoot)))
                                     {
-                                        //mcActionResults.SetInvalid(mintMSG_SCRIPS_NOT_FOUND, ctr_Version.ErrorCode_Ver.SCRIPTS_MANDATORY, LstClientsUsing[intIndex].CeritarClient.CompanyName);
-                                        //blnValidReturn = false;
-                                        //TODO: A revoir
+                                        mcActionResults.SetInvalid(mintMSG_SCRIPS_NOT_FOUND, ctr_Version.ErrorCode_Ver.SCRIPTS_MANDATORY, LstClientsUsing[intIndex].CeritarClient.CompanyName, ".../" + sclsAppConfigs.GetScriptsFolderName + '/' + LstClientsUsing[intIndex].CeritarClient.CompanyName);
                                     }
 
                                     if (!blnValidReturn) break;

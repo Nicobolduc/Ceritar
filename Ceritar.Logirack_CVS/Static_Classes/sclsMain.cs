@@ -9,6 +9,9 @@ namespace Ceritar.Logirack_CVS.Static_Classes
 {
     internal class sclsMain
     {
+        //Variables global de raccourci vers les singletons
+        public static clsTTApp gcTTApp = clsTTApp.GetAppController;
+
         //Messages
         private const int mintMSG_MustBeIdentified = 42;
 
@@ -23,7 +26,7 @@ namespace Ceritar.Logirack_CVS.Static_Classes
                 frmUser.mstrUser_Code = vstrUser_Code;
 
                 ((TT3LightDLL.Controls.IFormController)frmUser).GetFormController().ShowForm(clsTTApp.GetAppController.GetMDI, sclsConstants.DML_Mode.INSERT_MODE, ref intUser_NRI, true, true);
-
+                
                 if (intUser_NRI <= 0)
                 {
                     clsTTApp.GetAppController.ShowMessage(mintMSG_MustBeIdentified);
@@ -44,4 +47,12 @@ namespace Ceritar.Logirack_CVS.Static_Classes
             return blnValidReturn;
         }
     }
+
+    /*
+     select * from TTAppCaption order by TTAC_NRI desc
+
+    insert into TTAppCaption values(44, '', 1)
+    insert into TTAppCaption values(44, '', 2)
+
+     * */
 }
