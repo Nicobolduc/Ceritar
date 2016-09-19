@@ -2,10 +2,11 @@
 using System.Windows.Forms;
 using Ceritar.Logirack_CVS.Forms;
 using Ceritar.Logirack_CVS;
+using Ceritar.Logirack_CVS.Static_Classes;
 using Ceritar.TT3LightDLL.Static_Classes;
 using Ceritar.TT3LightDLL.Classes;
 
-namespace Ceritar.Logirack_CVS
+namespace Ceritar.Logirack_CVS.Static_Classes
 {
     /// <summary>
     /// Cette classe statique contients les informations relatives aux listes génériques affichées par l'écran "frmGenericList".
@@ -26,7 +27,7 @@ namespace Ceritar.Logirack_CVS
         {
             CERITAR_APPLICATION_GRID_CAP_NRI = 2,
             CERITAR_CLIENT_GRID_CAP_NRI = 8,
-            TEMPLATE_GRID_CAP_NRI = 21,
+            TEMPLATE_GRID_CAP_NRI = 48,
             VERSION_REVISION_GRID_CAP_NRI = 14
         }
 
@@ -186,11 +187,13 @@ namespace Ceritar.Logirack_CVS
         private static string strGetList_Versions_SQL(string vstrWhere = null)
         {
             string strSQL = string.Empty;
+            string strDefaultApplication = string.Empty;
+
+            strDefaultApplication = clsTTSQL.str_ADOSingleLookUp("CeA_NRI_Default", "TTUser", "TTU_NRI = " + clsTTApp.GetAppController.cUser.User_NRI);
 
             strSQL = strSQL + " SELECT Version.Ver_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_Name, " + Environment.NewLine;
             strSQL = strSQL + "        Version.Ver_No " + Environment.NewLine;
-            //strSQL = strSQL + "        CurrentlyInProd =  " + Environment.NewLine;
 
             strSQL = strSQL + " FROM Version " + Environment.NewLine;
             strSQL = strSQL + "     INNER JOIN CerApp ON CerApp.CeA_NRI = Version.CeA_NRI " + Environment.NewLine;
@@ -201,8 +204,15 @@ namespace Ceritar.Logirack_CVS
                 strSQL = strSQL + vstrWhere + Environment.NewLine;
             }
 
-            strSQL = strSQL + "  ORDER BY CerApp.CeA_Name, Version.Ver_No DESC " + Environment.NewLine;
-
+            if (!string.IsNullOrEmpty(strDefaultApplication))
+            {
+                strSQL = strSQL + " ORDER BY CASE WHEN CerApp.CeA_NRI = " + strDefaultApplication + " THEN 0 ELSE 1 END, CerApp.CeA_Name, Version.Ver_No DESC " + Environment.NewLine;
+            }
+            else
+            {
+                strSQL = strSQL + " ORDER BY CerApp.CeA_Name, Version.Ver_No DESC " + Environment.NewLine;
+            }
+            
             return strSQL;
         }
 

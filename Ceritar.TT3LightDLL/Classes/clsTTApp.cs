@@ -223,7 +223,7 @@ namespace Ceritar.TT3LightDLL.Classes
                     }
                 }
 
-                msgResult = MessageBox.Show(strMessage, "Message", vmsgType);
+                msgResult = MessageBox.Show(strMessage, "Message", vmsgType, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2, MessageBoxOptions.DefaultDesktopOnly);
 
             }
             catch (Exception ex)

@@ -69,8 +69,9 @@ namespace Ceritar.Logirack_CVS.Forms
         private Ceritar.CVS.clsActionResults mcActionResults;
 
         //Messages
-        private int mintMSG_ChangesWillBeLostOnRowChange = 27;
-        private int mintMSG_ApplicationNotExistsInSystem = 38;
+        private const int mintMSG_ChangesWillBeLostOnRowChange = 27;
+        private const int mintMSG_ApplicationNotExistsInSystem = 38;
+        private const int mintMSG_AreYouSure = 49;
 
         //Working variables
         private ushort mintVersion_TS;
@@ -424,6 +425,9 @@ namespace Ceritar.Logirack_CVS.Forms
                     dtpCreation.Value = DateTime.Parse(sqlRecord["Ver_DtCreation"].ToString());
 
                     cboApplications.SelectedValue = Int32.Parse(sqlRecord["CeA_NRI"].ToString());
+
+                    sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetTemplates_SQL((int)cboApplications.SelectedValue), "Tpl_NRI", "Tpl_Name", false, ref cboTemplates);
+
                     cboTemplates.SelectedValue = Int32.Parse(sqlRecord["Tpl_NRI"].ToString());
 
                     chkDemoVersion.Checked = Convert.ToBoolean(sqlRecord["Ver_IsDemo"]);
@@ -783,10 +787,10 @@ namespace Ceritar.Logirack_CVS.Forms
             { }
             else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetApplications_SQL(), "CeA_NRI", "CeA_Name", false, ref cboApplications))
             { }
-            else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetTemplates_SQL((int)cboApplications.SelectedValue), "Tpl_NRI", "Tpl_Name", false, ref cboTemplates))
-            { }
             else if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE)
             {
+                blnValidReturn = sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetTemplates_SQL((int)cboApplications.SelectedValue), "Tpl_NRI", "Tpl_Name", false, ref cboTemplates);
+
                 txtCreatedBy.Text = clsTTApp.GetAppController.cUser.User_Code;
 
                 mstrExternalApplicationName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + Int32.Parse(cboApplications.SelectedValue.ToString()).ToString());

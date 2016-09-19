@@ -646,7 +646,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
         void mGrdFlex_MouseDown(object sender, MouseEventArgs e)
         {
-            if (mGrdFlex.Rows.Count > 1 && mGrdFlex.ContextMenuStrip != null)
+            if (mGrdFlex.Rows.Count > 1 && mGrdFlex.ContextMenuStrip != null && e.Button == MouseButtons.Right)
             {
                 mGrdFlex.Select(mGrdFlex.GetCellRange(mGrdFlex.MouseRow, 1, mGrdFlex.MouseRow, mGrdFlex.Cols.Count - 1), true);
             }

@@ -26,6 +26,7 @@ namespace Ceritar.CVS.Controllers
 
         //Messages
         private const int mintMSG_BuildSuccess = 37;
+        private const int mintMSG_AreYouSureToSendToThrash = 49;
 
         public enum ErrorCode_Rev
         {
@@ -454,7 +455,9 @@ namespace Ceritar.CVS.Controllers
                                         mcModRevision.Path_Release = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Release()));
                                     }
                                 }
-                                else if ((File.Exists(currentFolderInfos.FullName) || Directory.Exists(currentFolderInfos.FullName)) && mcView.GetLocation_Release() != currentFolderInfos.FullName)
+                                else if ((File.Exists(currentFolderInfos.FullName) || Directory.Exists(currentFolderInfos.FullName)) && 
+                                          mcView.GetLocation_Release() != currentFolderInfos.FullName &&
+                                          !string.IsNullOrEmpty(mcView.GetLocation_Release()))
                                 {
                                     //Met a jour le path si le contenu de la revision change, mais pas le release
                                     mcModRevision.Path_Release = currentFolderInfos.FullName;
@@ -567,7 +570,9 @@ namespace Ceritar.CVS.Controllers
                                     blnScriptsChanged = true;
                                 }
                             } 
-                            else if ((File.Exists(currentFolderInfos.FullName) || Directory.Exists(currentFolderInfos.FullName)) && mcView.GetLocation_Scripts() != currentFolderInfos.FullName)
+                            else if ((File.Exists(currentFolderInfos.FullName) || Directory.Exists(currentFolderInfos.FullName)) && 
+                                      mcView.GetLocation_Scripts() != currentFolderInfos.FullName && 
+                                      !string.IsNullOrEmpty(mcView.GetLocation_Scripts()))
                             {
                                 //Met a jour le path si le contenu de la revision change, mais pas les scripts
                                 mcModRevision.Path_Scripts = currentFolderInfos.FullName;
@@ -643,7 +648,9 @@ namespace Ceritar.CVS.Controllers
                                         mcModRevision.Path_Release = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Release()));
                                     }
                                 }
-                                else if ((File.Exists(currentFolderInfos.FullName) || Directory.Exists(currentFolderInfos.FullName)) && mcView.GetLocation_Release() != currentFolderInfos.FullName)
+                                else if ((File.Exists(currentFolderInfos.FullName) || Directory.Exists(currentFolderInfos.FullName)) && 
+                                          mcView.GetLocation_Release() != currentFolderInfos.FullName &&
+                                          !string.IsNullOrEmpty(mcView.GetLocation_Release()))
                                 {
                                     //Met a jour le path si le contenu de la revision change, mais pas le release
                                     mcModRevision.Path_Release = currentFolderInfos.FullName;
@@ -1001,7 +1008,7 @@ namespace Ceritar.CVS.Controllers
 
             try
             {
-                answer = System.Windows.Forms.MessageBox.Show("Voulez-vous envoyer à la corbeille le répertoire suivant: " + vstrRevisionFolderRoot, "Attention", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                answer = clsTTApp.GetAppController.ShowMessage(mintMSG_AreYouSureToSendToThrash, System.Windows.Forms.MessageBoxButtons.YesNo, vstrRevisionFolderRoot);
                 
                 if (answer == System.Windows.Forms.DialogResult.Yes)
                 {
@@ -1050,7 +1057,7 @@ namespace Ceritar.CVS.Controllers
             {
                 if (vblnAskBefore)
                 {
-                    answer = System.Windows.Forms.MessageBox.Show("Voulez-vous envoyer à la corbeille le répertoire suivant: " + vstrRevisionFolderPath, "Attention", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                    answer = clsTTApp.GetAppController.ShowMessage(mintMSG_AreYouSureToSendToThrash, System.Windows.Forms.MessageBoxButtons.YesNo, vstrRevisionFolderPath);
                 }
                 else
                 {

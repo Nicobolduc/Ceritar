@@ -27,6 +27,8 @@ namespace Ceritar.CVS.Controllers
         //Messages
         private const int mintMSG_BuildSuccess = 37;
         private const int mintMSG_GenerationCanceled = 39;
+        private const int mintMSG_AreYouSureToSendToThrash = 49;
+        private const int mintMSG_CannotDeleteCSV = 50;
 
         //Working variables
         private bool mblnUpdateSelectedClientOnly = false;
@@ -46,7 +48,8 @@ namespace Ceritar.CVS.Controllers
             REPORT_MANDATORY = 11,
             CANT_DELETE_USED_VERSION = 12,
             DEMO_CANT_BE_INSTALLED = 13,
-            SCRIPTS_MANDATORY = 14
+            SCRIPTS_MANDATORY = 14,
+            CANT_DELETE_VERSION_WITH_REVISION = 15
         }
 
         public clsActionResults GetActionResult
@@ -197,31 +200,41 @@ namespace Ceritar.CVS.Controllers
         {
             bool blnValidReturn = false;
             string strFolderPath = string.Empty;
+            string strRevision_CSA = string.Empty;
 
             try
             {
-                mcSQL = new clsTTSQL();
+                strRevision_CSA = clsTTSQL.str_ADOSingleLookUp("SRe_NRI", "ClientSatVersion INNER JOIN SatRevision ON SatRevision.CSA_NRI = ClientSatVersion.CSA_NRI INNER JOIN Revision ON Revision.Rev_NRI = SatRevision.Rev_NRI AND Revision.CeC_NRI = ClientSatVersion.CeC_NRI", "ClientSatVersion.CSV_NRI = " + vintCSV_NRI + " AND Revision.Ver_NRI = " + mcView.GetVersion_NRI());
 
-                strFolderPath = mcSQL.str_ADOSingleLookUp_Trans("CSV_Exe_Location", "ClientSatVersion", "CSV_NRI = " + vintCSV_NRI);
-
-                if (!mcSQL.bln_BeginTransaction())
-                { }
-                else if (!mcSQL.bln_ADODelete("ClientSatVersion", "CSV_NRI = " + vintCSV_NRI))
-                { }
-                else
+                if (string.IsNullOrEmpty(strRevision_CSA))
                 {
-                    if ((File.GetAttributes(strFolderPath) & FileAttributes.Directory) == FileAttributes.Directory)
-                    {
-                        strFolderPath = new DirectoryInfo(strFolderPath).Parent.FullName;
-                    }
+                    mcSQL = new clsTTSQL();
+
+                    strFolderPath = mcSQL.str_ADOSingleLookUp_Trans("CSV_Exe_Location", "ClientSatVersion", "CSV_NRI = " + vintCSV_NRI);
+
+                    if (!mcSQL.bln_BeginTransaction())
+                    { }
+                    else if (!mcSQL.bln_ADODelete("ClientSatVersion", "CSV_NRI = " + vintCSV_NRI))
+                    { }
                     else
                     {
-                        strFolderPath = new FileInfo(strFolderPath).Directory.Parent.FullName;
+                        if ((File.GetAttributes(strFolderPath) & FileAttributes.Directory) == FileAttributes.Directory)
+                        {
+                            strFolderPath = new DirectoryInfo(strFolderPath).Parent.FullName;
+                        }
+                        else
+                        {
+                            strFolderPath = new FileInfo(strFolderPath).Directory.Parent.FullName;
+                        }
+
+                        Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(strFolderPath, Microsoft.VisualBasic.FileIO.UIOption.AllDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
+
+                        blnValidReturn = true;
                     }
-
-                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(strFolderPath, Microsoft.VisualBasic.FileIO.UIOption.AllDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
-
-                    blnValidReturn = true;
+                }
+                else
+                {
+                    clsTTApp.GetAppController.ShowMessage(mintMSG_CannotDeleteCSV);
                 }
             }
             catch (System.OperationCanceledException)
@@ -235,7 +248,7 @@ namespace Ceritar.CVS.Controllers
             }
             finally
             {
-                mcSQL.bln_EndTransaction(blnValidReturn);
+                if (mcSQL != null) mcSQL.bln_EndTransaction(blnValidReturn);
             }
 
             return blnValidReturn;
@@ -654,7 +667,7 @@ namespace Ceritar.CVS.Controllers
             {
                 if (vblnAskIfSureToDelete)
                 {
-                    answer = System.Windows.Forms.MessageBox.Show("Voulez-vous envoyer à la corbeille le répertoire suivant: " + vstrVersionFolderRoot, "Attention", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                    answer = clsTTApp.GetAppController.ShowMessage(mintMSG_AreYouSureToSendToThrash, System.Windows.Forms.MessageBoxButtons.YesNo, vstrVersionFolderRoot);
                 }
                 else
                 {
@@ -687,7 +700,7 @@ namespace Ceritar.CVS.Controllers
 
                         if (vblnAskIfSureToDelete)
                         {
-                            answer = System.Windows.Forms.MessageBox.Show("Voulez-vous envoyer à la corbeille le répertoire suivant: " + vstrVersionFolderRoot, "Attention", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning, System.Windows.Forms.MessageBoxDefaultButton.Button2);
+                            answer = clsTTApp.GetAppController.ShowMessage(mintMSG_AreYouSureToSendToThrash, System.Windows.Forms.MessageBoxButtons.YesNo, vstrVersionFolderRoot);
                         }
                         else
                         {

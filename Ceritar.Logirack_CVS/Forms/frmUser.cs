@@ -149,6 +149,8 @@ namespace Ceritar.Logirack_CVS.Forms
 
             if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrUser.strGetApplications_SQL(), "CeA_NRI", "CeA_Name", true, ref cboApplications))
             { }
+            else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrUser.strGetAppLanguages_SQL(), "ApL_NRI", "ApL_Code", false, ref cboLanguages))
+            { }
             else if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE)
             {
                 txtCode.Text = mstrUser_Code;
@@ -162,6 +164,11 @@ namespace Ceritar.Logirack_CVS.Forms
             else
             {
                 blnValidReturn = true;
+            }
+
+            if (blnValidReturn)
+            {
+                cboLanguages.SelectedValue = Int32.Parse(clsTTApp.GetAppController.cUser.UserLanguage.ToString());
             }
 
             if (!blnValidReturn) this.Close();

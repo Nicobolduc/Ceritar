@@ -1,8 +1,9 @@
 ﻿using System;
-using Ceritar.TT3LightDLL.Static_Classes;
-using Ceritar.TT3LightDLL.Classes;
 using System.Windows.Forms;
 using System.Reflection;
+using Ceritar.TT3LightDLL.Static_Classes;
+using Ceritar.TT3LightDLL.Classes;
+using Ceritar.Logirack_CVS.Static_Classes;
 using Ceritar.TT3LightDLL.Controls;
 
 namespace Ceritar.Logirack_CVS.Forms

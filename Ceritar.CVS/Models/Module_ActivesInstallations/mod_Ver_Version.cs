@@ -41,6 +41,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private const int mintMSG_CantDeleteVersionIfUsed = 22;
         private const int mintMSG_CantInstallDemoInProd = 24;
         private const int mintMSG_SCRIPS_NOT_FOUND = 29;
+        private const int mintMSG_CannotDeleteThisVersion = 51;
 
         //Working variables
         private bool mblnIncludeScriptsOnRefresh = false;
@@ -260,6 +261,10 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         if (!string.IsNullOrEmpty(clsTTSQL.str_ADOSingleLookUp("CAV_NRI", "ClientAppVersion", "(CAV_DtInstalledProd IS NOT NULL OR CAV_IsCurrentVersion = 1) AND CeA_NRI = " + _cCerApplication.CeritarApplication_NRI + " AND Ver_NRI = " + _intVersion_NRI)))
                         {
                             mcActionResults.SetInvalid(mintMSG_CantDeleteVersionIfUsed, ctr_Version.ErrorCode_Ver.CANT_DELETE_USED_VERSION);
+                        }
+                        else if (!string.IsNullOrEmpty(clsTTSQL.str_ADOSingleLookUp("TOP 1 Rev_NRI", "Revision", "Ver_NRI = " + _intVersion_NRI)))
+                        {
+                            mcActionResults.SetInvalid(mintMSG_CannotDeleteThisVersion, ctr_Version.ErrorCode_Ver.CANT_DELETE_VERSION_WITH_REVISION);
                         }
                         else if (!clsTTSQL.bln_CheckReferenceIntegrity("Ver_NRI", "Ver_NRI", _intVersion_NRI))
                         {

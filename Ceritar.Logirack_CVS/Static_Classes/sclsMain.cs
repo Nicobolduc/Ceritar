@@ -49,10 +49,10 @@ namespace Ceritar.Logirack_CVS.Static_Classes
     }
 
     /*
-     select * from TTAppCaption order by TTAC_NRI desc
-
-    insert into TTAppCaption values(44, '', 1)
-    insert into TTAppCaption values(44, '', 2)
+    insert into TTAppCaption values(49, 'Voulez-vous envoyer à la corbeille le répertoire suivant: @1', 1)
+    insert into TTAppCaption values(49, 'Voulez-vous envoyer à la corbeille le répertoire suivant: @1', 2)
+    
+    select * from TTAppCaption order by TTAC_NRI desc
 
      * */
 }

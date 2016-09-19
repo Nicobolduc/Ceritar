@@ -134,6 +134,20 @@ namespace Ceritar.CVS.Controllers
             return strSQL;
         }
 
+        public string strGetAppLanguages_SQL()
+        {
+            string strSQL = string.Empty;
+
+            strSQL = strSQL + " SELECT AppLanguage.ApL_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        AppLanguage.ApL_Code " + Environment.NewLine;
+
+            strSQL = strSQL + " FROM AppLanguage " + Environment.NewLine;
+
+            strSQL = strSQL + " ORDER BY AppLanguage.ApL_NRI ASC " + Environment.NewLine;
+
+            return strSQL;
+        }
+
 #endregion
 
 

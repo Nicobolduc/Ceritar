@@ -42,9 +42,11 @@
             this.label4 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cboLanguages = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.cboApplications = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -182,9 +184,11 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.cboLanguages);
+            this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.cboApplications);
+            this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Location = new System.Drawing.Point(8, 170);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Name = "groupBox1";
@@ -192,34 +196,53 @@
             this.groupBox1.Size = new System.Drawing.Size(458, 191);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Configurations par défaut";
+            this.groupBox1.Text = "Préférences";
+            // 
+            // cboLanguages
+            // 
+            this.cboLanguages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboLanguages.FormattingEnabled = true;
+            this.cboLanguages.Location = new System.Drawing.Point(144, 55);
+            this.cboLanguages.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cboLanguages.Name = "cboLanguages";
+            this.cboLanguages.Size = new System.Drawing.Size(240, 24);
+            this.cboLanguages.TabIndex = 44;
+            // 
+            // label7
+            // 
+            this.label7.Location = new System.Drawing.Point(6, 58);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(140, 21);
+            this.label7.TabIndex = 45;
+            this.label7.Text = "Langue: ";
             // 
             // label6
             // 
-            this.label6.Location = new System.Drawing.Point(5, 61);
+            this.label6.Location = new System.Drawing.Point(6, 91);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(142, 21);
             this.label6.TabIndex = 43;
             this.label6.Text = "Répertoire par défaut :";
-            // 
-            // label5
-            // 
-            this.label5.Location = new System.Drawing.Point(5, 27);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(133, 21);
-            this.label5.TabIndex = 42;
-            this.label5.Text = "Application principale :";
+            this.label6.Visible = false;
             // 
             // cboApplications
             // 
             this.cboApplications.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboApplications.FormattingEnabled = true;
-            this.cboApplications.Location = new System.Drawing.Point(145, 22);
+            this.cboApplications.Location = new System.Drawing.Point(144, 23);
             this.cboApplications.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.cboApplications.Name = "cboApplications";
             this.cboApplications.Size = new System.Drawing.Size(240, 24);
             this.cboApplications.TabIndex = 0;
             this.cboApplications.SelectedIndexChanged += new System.EventHandler(this.cboApplications_SelectedIndexChanged);
+            // 
+            // label5
+            // 
+            this.label5.Location = new System.Drawing.Point(6, 26);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(232, 21);
+            this.label5.TabIndex = 42;
+            this.label5.Text = "Application par défaut:";
             // 
             // frmUser
             // 
@@ -273,5 +296,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox cboApplications;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox cboLanguages;
+        private System.Windows.Forms.Label label7;
     }
 }
