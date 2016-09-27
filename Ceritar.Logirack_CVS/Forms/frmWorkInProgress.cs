@@ -20,6 +20,8 @@ namespace Ceritar.Logirack_CVS.Forms
         private void frmWorkInProgress_Load(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
+
+            this.Location = new Point(Screen.PrimaryScreen.Bounds.Width / 2 - 200, 200);
         }
 
         private void frmWorkInProgress_FormClosed(object sender, FormClosedEventArgs e)

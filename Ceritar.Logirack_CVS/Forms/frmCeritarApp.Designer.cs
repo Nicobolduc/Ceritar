@@ -102,7 +102,7 @@
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Size = new System.Drawing.Size(468, 206);
-            this.groupBox1.TabIndex = 12;
+            this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Liste des modules";
             // 
@@ -213,7 +213,7 @@
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
             this.formController.Size = new System.Drawing.Size(482, 34);
-            this.formController.TabIndex = 3;
+            this.formController.TabIndex = 5;
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
@@ -233,7 +233,7 @@
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox2.Size = new System.Drawing.Size(468, 238);
-            this.groupBox2.TabIndex = 16;
+            this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Liste des applications satellites";
             // 

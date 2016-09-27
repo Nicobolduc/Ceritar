@@ -193,6 +193,8 @@ namespace Ceritar.CVS.Controllers
 
             strSQL = strSQL + " FROM AppDomain " + Environment.NewLine;
 
+            strSQL = strSQL + " ORDER BY AppDomain.ApD_Code " + Environment.NewLine;
+
             return strSQL;
         }
 

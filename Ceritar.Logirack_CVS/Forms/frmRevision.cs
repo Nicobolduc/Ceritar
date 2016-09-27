@@ -931,7 +931,7 @@ namespace Ceritar.Logirack_CVS.Forms
         private void btnShowRootFolder_Click(object sender, EventArgs e)
         {
             string strRootFolder = mcCtrRevision.str_GetRevisionFolderPath((int)cboTemplates.SelectedValue, txtVersionNo.Text);
-
+          
             try
             {
                 System.Diagnostics.Process.Start(@strRootFolder);

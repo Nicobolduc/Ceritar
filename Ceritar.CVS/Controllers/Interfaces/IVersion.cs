@@ -26,6 +26,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         string GetLocation_VariousFile();
         string GetLocation_VariousFolder();
         string GetLatestVersionNo();
+        string GetDescription();
         bool GetIsDemo();
         bool GetIncludeScriptsOnRefresh();
         

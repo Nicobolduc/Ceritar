@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mdiGeneral));
             this.mnuMain = new System.Windows.Forms.MenuStrip();
             this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuLogIn = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuLogOut = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuManagement = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuVersion = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,6 +47,7 @@
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusBar = new System.Windows.Forms.StatusStrip();
+            this.lblUser = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus_User = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus_Space = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus_BD = new System.Windows.Forms.ToolStripStatusLabel();
@@ -74,17 +76,27 @@
             // mnuFile
             // 
             this.mnuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuLogIn,
             this.mnuLogOut});
             this.mnuFile.ImageTransparentColor = System.Drawing.SystemColors.ActiveBorder;
             this.mnuFile.Name = "mnuFile";
             this.mnuFile.Size = new System.Drawing.Size(59, 20);
             this.mnuFile.Text = "&Fichier";
             // 
+            // mnuLogIn
+            // 
+            this.mnuLogIn.Name = "mnuLogIn";
+            this.mnuLogIn.Size = new System.Drawing.Size(111, 22);
+            this.mnuLogIn.Text = "Entrer";
+            this.mnuLogIn.Visible = false;
+            this.mnuLogIn.Click += new System.EventHandler(this.mnuLogIn_Click);
+            // 
             // mnuLogOut
             // 
             this.mnuLogOut.Name = "mnuLogOut";
-            this.mnuLogOut.Size = new System.Drawing.Size(152, 22);
+            this.mnuLogOut.Size = new System.Drawing.Size(111, 22);
             this.mnuLogOut.Text = "&Sortir";
+            this.mnuLogOut.Click += new System.EventHandler(this.mnuLogOut_Click);
             // 
             // mnuManagement
             // 
@@ -179,6 +191,7 @@
             // 
             this.statusBar.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lblUser,
             this.lblStatus_User,
             this.lblStatus_Space,
             this.lblStatus_BD});
@@ -189,12 +202,18 @@
             this.statusBar.TabIndex = 2;
             this.statusBar.Text = "StatusStrip";
             // 
+            // lblUser
+            // 
+            this.lblUser.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblUser.Name = "lblUser";
+            this.lblUser.Size = new System.Drawing.Size(60, 17);
+            this.lblUser.Text = "Usager: ";
+            // 
             // lblStatus_User
             // 
             this.lblStatus_User.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblStatus_User.Name = "lblStatus_User";
-            this.lblStatus_User.Size = new System.Drawing.Size(60, 17);
-            this.lblStatus_User.Text = "Usager: ";
+            this.lblStatus_User.Size = new System.Drawing.Size(0, 17);
             // 
             // lblStatus_Space
             // 
@@ -206,7 +225,7 @@
             // 
             this.lblStatus_BD.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblStatus_BD.Name = "lblStatus_BD";
-            this.lblStatus_BD.Size = new System.Drawing.Size(1090, 17);
+            this.lblStatus_BD.Size = new System.Drawing.Size(1059, 17);
             this.lblStatus_BD.Spring = true;
             this.lblStatus_BD.Text = "Base de données: ";
             // 
@@ -240,7 +259,7 @@
         private System.Windows.Forms.MenuStrip mnuMain;
         private System.Windows.Forms.StatusStrip statusBar;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
-        private System.Windows.Forms.ToolStripStatusLabel lblStatus_User;
+        private System.Windows.Forms.ToolStripStatusLabel lblUser;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mnuFile;
         private System.Windows.Forms.ToolStripMenuItem mnuLogOut;
@@ -255,8 +274,10 @@
         private System.Windows.Forms.ToolStripMenuItem clientCeritarToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mnuTemplate;
         private System.Windows.Forms.ToolStripMenuItem mnuUser;
-        private System.Windows.Forms.ToolStripStatusLabel lblStatus_Space;
         private System.Windows.Forms.ToolStripStatusLabel lblStatus_BD;
+        private System.Windows.Forms.ToolStripMenuItem mnuLogIn;
+        private System.Windows.Forms.ToolStripStatusLabel lblStatus_Space;
+        public System.Windows.Forms.ToolStripStatusLabel lblStatus_User;
     }
 }
 

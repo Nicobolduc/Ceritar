@@ -298,7 +298,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " AS " + Environment.NewLine;
             strSQL = strSQL + " ( " + Environment.NewLine;
             strSQL = strSQL + "     SELECT *, " + Environment.NewLine;
-            strSQL = strSQL + " 		   CAST(0 AS varbinary(max)) AS Level " + Environment.NewLine;
+            strSQL = strSQL + " 		   CASE WHEN FoT_NRI = " + (int)ctr_Template.FolderType.System + " THEN CAST(0 AS varbinary(max)) ELSE CAST(HierarchyComp.HiCo_NRI AS varbinary(max)) END AS Level " + Environment.NewLine;
             strSQL = strSQL + " 	FROM HierarchyComp  " + Environment.NewLine;
             strSQL = strSQL + " 	WHERE 1 = 1 " + Environment.NewLine;
             strSQL = strSQL + "       AND HiCo_Parent_NRI IS NULL " + Environment.NewLine;
@@ -872,11 +872,43 @@ namespace Ceritar.CVS.Controllers
 
             try
             {
+                //strSQL = strSQL + " WITH LstHierarchyComp " + Environment.NewLine;
+                //strSQL = strSQL + " AS " + Environment.NewLine;
+                //strSQL = strSQL + " ( " + Environment.NewLine;
+                //strSQL = strSQL + "     SELECT *, " + Environment.NewLine;
+                //strSQL = strSQL + " 		   CAST(0 AS varbinary(max)) AS Level " + Environment.NewLine;
+                //strSQL = strSQL + " 	FROM HierarchyComp  " + Environment.NewLine;
+                //strSQL = strSQL + " 	WHERE HiCo_Parent_NRI IS NULL " + Environment.NewLine;
+
+                //strSQL = strSQL + "     UNION ALL " + Environment.NewLine;
+
+                //strSQL = strSQL + "     SELECT HiCo_Childrens.*, " + Environment.NewLine;
+                //strSQL = strSQL + " 		   Level + CAST(HiCo_Childrens.HiCo_NRI AS varbinary(max)) AS Level " + Environment.NewLine;
+                //strSQL = strSQL + " 	FROM HierarchyComp HiCo_Childrens  " + Environment.NewLine;
+                //strSQL = strSQL + " 		INNER JOIN LstHierarchyComp on HiCo_Childrens.HiCo_Parent_NRI = LstHierarchyComp.HiCo_NRI " + Environment.NewLine;
+                //strSQL = strSQL + " 	WHERE HiCo_Childrens.HiCo_Parent_NRI IS NOT NULL " + Environment.NewLine;
+                //strSQL = strSQL + " ) " + Environment.NewLine;
+
+                //strSQL = strSQL + " SELECT Path = TTParam.TTP_Value + " + Environment.NewLine;
+                //strSQL = strSQL + "               (SELECT '/' + CONVERT(VARCHAR(300), REPLACE(LstHierarchyComp.HiCo_Name, '_XXX', " + clsTTApp.GetAppController.str_FixStringForSQL("_" + vstrVersion_No) + ")), " + Environment.NewLine;
+                //strSQL = strSQL + "                       LstHierarchyComp.FoT_NRI " + Environment.NewLine;
+                //strSQL = strSQL + "                FROM LstHierarchyComp " + Environment.NewLine;
+                //strSQL = strSQL + "                    INNER JOIN FolderType ON FolderType.FoT_NRI = LstHierarchyComp.FoT_NRI " + Environment.NewLine;
+
+                //strSQL = strSQL + "                WHERE LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
+                //strSQL = strSQL + "                  AND FolderType.FoT_Modifiable = 0 " + Environment.NewLine;
+
+                //strSQL = strSQL + "                ORDER BY Level FOR XML PATH('') ) " + Environment.NewLine;
+
+                //strSQL = strSQL + " FROM TTParam " + Environment.NewLine;
+
+                //strSQL = strSQL + " WHERE TTParam.TTP_Name = 'InstallationsActives' " + Environment.NewLine;
+
                 strSQL = strSQL + " WITH LstHierarchyComp " + Environment.NewLine;
                 strSQL = strSQL + " AS " + Environment.NewLine;
                 strSQL = strSQL + " ( " + Environment.NewLine;
                 strSQL = strSQL + "     SELECT *, " + Environment.NewLine;
-                strSQL = strSQL + " 		   CAST(0 AS varbinary(max)) AS Level " + Environment.NewLine;
+                strSQL = strSQL + " 		   CASE WHEN FoT_NRI = " + (int)ctr_Template.FolderType.System + " THEN CAST(0 AS varbinary(max)) ELSE CAST(HierarchyComp.HiCo_NRI AS varbinary(max)) END AS Level " + Environment.NewLine;
                 strSQL = strSQL + " 	FROM HierarchyComp  " + Environment.NewLine;
                 strSQL = strSQL + " 	WHERE HiCo_Parent_NRI IS NULL " + Environment.NewLine;
 
@@ -889,25 +921,23 @@ namespace Ceritar.CVS.Controllers
                 strSQL = strSQL + " 	WHERE HiCo_Childrens.HiCo_Parent_NRI IS NOT NULL " + Environment.NewLine;
                 strSQL = strSQL + " ) " + Environment.NewLine;
 
-                strSQL = strSQL + " SELECT Path = TTParam.TTP_Value + " + Environment.NewLine;
-                strSQL = strSQL + "               (SELECT '/' + CONVERT(VARCHAR(300), REPLACE(LstHierarchyComp.HiCo_Name, '_XXX', " + clsTTApp.GetAppController.str_FixStringForSQL("_" + vstrVersion_No) + ")) " + Environment.NewLine;
-                strSQL = strSQL + "                FROM LstHierarchyComp " + Environment.NewLine;
-                strSQL = strSQL + "                    INNER JOIN FolderType ON FolderType.FoT_NRI = LstHierarchyComp.FoT_NRI " + Environment.NewLine;
+                strSQL = strSQL + " SELECT FolderName = CASE WHEN LstHierarchyComp.FoT_NRI = " + (int)ctr_Template.FolderType.Version_Number + " THEN CONVERT(VARCHAR(300), REPLACE(LstHierarchyComp.HiCo_Name, '_XXX', " + clsTTApp.GetAppController.str_FixStringForSQL("_" + vstrVersion_No) + ")) ELSE LstHierarchyComp.HiCo_Name END, " + Environment.NewLine;
+                strSQL = strSQL + "        LstHierarchyComp.FoT_NRI " + Environment.NewLine;
 
-                strSQL = strSQL + "                WHERE LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
-                strSQL = strSQL + "                  AND FolderType.FoT_Modifiable = 0 " + Environment.NewLine;
+                strSQL = strSQL + " FROM LstHierarchyComp " + Environment.NewLine;
 
-                strSQL = strSQL + "                ORDER BY Level FOR XML PATH('') ) " + Environment.NewLine;
+                strSQL = strSQL + " WHERE LstHierarchyComp.FoT_NRI = " + (int)ctr_Template.FolderType.System + Environment.NewLine;
+                strSQL = strSQL + "    OR LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
 
-                strSQL = strSQL + " FROM TTParam " + Environment.NewLine;
-
-                strSQL = strSQL + " WHERE TTParam.TTP_Name = 'InstallationsActives' " + Environment.NewLine;
+                strSQL = strSQL + " ORDER BY Level " + Environment.NewLine;
 
                 sqlRecord = clsTTSQL.ADOSelect(strSQL);
 
-                if (sqlRecord.Read())
+                while (sqlRecord.Read())
                 {
-                    strPath = sqlRecord["Path"].ToString();
+                    strPath = Path.Combine(strPath, sqlRecord["FolderName"].ToString());
+
+                    if (sqlRecord["FoT_NRI"].ToString() == ((int)ctr_Template.FolderType.Revision_Number).ToString()) break;
                 }
             } catch (Exception ex)
             {
@@ -1356,6 +1386,54 @@ namespace Ceritar.CVS.Controllers
             return blnIsValid;
         }
 
+        //public string str_GetRevisionnFolderPath(int vintTemplate_NRI, string vstrVersion_No)
+        //{
+        //    string strSQL = string.Empty;
+        //    string strPath = string.Empty;
+        //    SqlDataReader sqlRecord = null;
+
+        //    strSQL = strSQL + " WITH LstHierarchyComp " + Environment.NewLine;
+        //    strSQL = strSQL + " AS " + Environment.NewLine;
+        //    strSQL = strSQL + " ( " + Environment.NewLine;
+        //    strSQL = strSQL + "     SELECT *, " + Environment.NewLine;
+        //    strSQL = strSQL + " 		   CAST(0 AS varbinary(max)) AS Level " + Environment.NewLine;
+        //    strSQL = strSQL + " 	FROM HierarchyComp  " + Environment.NewLine;
+        //    strSQL = strSQL + " 	WHERE HiCo_Parent_NRI IS NULL " + Environment.NewLine;
+
+        //    strSQL = strSQL + "     UNION ALL " + Environment.NewLine;
+
+        //    strSQL = strSQL + "     SELECT HiCo_Childrens.*, " + Environment.NewLine;
+        //    strSQL = strSQL + " 		   Level + CAST(HiCo_Childrens.HiCo_NRI AS varbinary(max)) AS Level " + Environment.NewLine;
+        //    strSQL = strSQL + " 	FROM HierarchyComp HiCo_Childrens  " + Environment.NewLine;
+        //    strSQL = strSQL + " 		INNER JOIN LstHierarchyComp on HiCo_Childrens.HiCo_Parent_NRI = LstHierarchyComp.HiCo_NRI " + Environment.NewLine;
+        //    strSQL = strSQL + " 	WHERE HiCo_Childrens.HiCo_Parent_NRI IS NOT NULL " + Environment.NewLine;
+        //    strSQL = strSQL + " ) " + Environment.NewLine;
+
+        //    strSQL = strSQL + " SELECT FolderName = CASE WHEN LstHierarchyComp.FoT_NRI = " + (int)ctr_Template.FolderType.Revision_Number + " THEN CONVERT(VARCHAR(300), REPLACE(LstHierarchyComp.HiCo_Name, '_XXX', " + clsTTApp.GetAppController.str_FixStringForSQL("_" + vstrVersion_No) + ")) ELSE LstHierarchyComp.HiCo_Name END, " + Environment.NewLine;
+        //    strSQL = strSQL + "        LstHierarchyComp.FoT_NRI " + Environment.NewLine;
+
+        //    strSQL = strSQL + " FROM LstHierarchyComp " + Environment.NewLine;
+
+        //    strSQL = strSQL + " WHERE LstHierarchyComp.TTP_NRI = " + (int)sclsAppConfigs.CONFIG_TYPE_NRI.PATH_INSTALLATIONS_ACTIVES + Environment.NewLine;
+        //    strSQL = strSQL + "    OR LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
+
+        //    strSQL = strSQL + " ORDER BY Level " + Environment.NewLine;
+
+        //    sqlRecord = clsTTSQL.ADOSelect(strSQL);
+
+        //    while (sqlRecord.Read())
+        //    {
+        //        strPath = Path.Combine(strPath, sqlRecord["FolderName"].ToString());
+
+        //        if (sqlRecord["FoT_NRI"].ToString() == ((int)ctr_Template.FolderType.Revision_Number).ToString()) break;
+        //    }
+
+        //    if (sqlRecord != null) sqlRecord.Dispose();
+
+        //    return strPath;
+        //}
+
+
 #region "SQL Queries"
 
         public string strGetDataLoad_SQL(int vintVersion_NRI, int vintRevision_NRI)
@@ -1423,7 +1501,7 @@ namespace Ceritar.CVS.Controllers
 
             strSQL = strSQL + " FROM Template " + Environment.NewLine;
 
-            strSQL = strSQL + "     INNER JOIN Version ON Version.Ver_NRI = " + mcView.GetVersion_NRI() + Environment.NewLine;
+            strSQL = strSQL + "     INNER JOIN Version ON Version.Tpl_NRI = Template.Tpl_NRI_Ref AND Version.Ver_NRI = " + mcView.GetVersion_NRI() + Environment.NewLine;
 
             strSQL = strSQL + " WHERE Template.TeT_NRI = " + (int)ctr_Template.TemplateType.REVISION + Environment.NewLine;
             strSQL = strSQL + "   AND Template.CeA_NRI = Version.CeA_NRI " + Environment.NewLine;

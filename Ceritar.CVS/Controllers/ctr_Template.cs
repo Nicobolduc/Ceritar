@@ -27,7 +27,8 @@ namespace Ceritar.CVS.Controllers
             Scripts = 5,
             External_Report = 6,
             Version_Number = 7,
-            Revision_Number = 8
+            Revision_Number = 8,
+            System = 9
         }
 
         public enum TemplateType
@@ -56,7 +57,8 @@ namespace Ceritar.CVS.Controllers
             NAME_ON_DISK_MANDATORY = 10,
             FOLDER_TYPE_MANDATORY = 11,
             NAME_ON_DISK_INVALID = 12,
-            INVALID_NODE_LEVEL = 13
+            INVALID_NODE_LEVEL = 13,
+            NAME_ON_DISK_UNIQUE = 14
         }
 
 #endregion
@@ -85,6 +87,7 @@ namespace Ceritar.CVS.Controllers
                 mcModTemplate.Template_TS = mcView.GetTemplate_TS();
                 mcModTemplate.IsByDefault = mcView.GetByDefaultValue();
                 mcModTemplate.TemplatType = (mod_Tpl_HierarchyTemplate.TemplateType)mcView.GetTemplateType_NRI();
+                mcModTemplate.Template_NRI_Ref = mcView.GetTemplate_NRI_Ref();
                 mcModTemplate.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
 
 
@@ -271,9 +274,10 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " SELECT Template.Tpl_TS, " + Environment.NewLine;
             strSQL = strSQL + "        Template.Tpl_Name, " + Environment.NewLine;
             strSQL = strSQL + "        Template.Tpl_ByDefault, " + Environment.NewLine;
+            strSQL = strSQL + "        Template.Tpl_NRI_Ref, " + Environment.NewLine;
             strSQL = strSQL + "        Template.TeT_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        Template.CeA_NRI " + Environment.NewLine;
-
+            
             strSQL = strSQL + " FROM Template " + Environment.NewLine;
 
             strSQL = strSQL + " WHERE Template.Tpl_NRI = " + vintTpl_NRI + Environment.NewLine;
@@ -341,18 +345,10 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " AS " + Environment.NewLine;
             strSQL = strSQL + " ( " + Environment.NewLine;
             strSQL = strSQL + "     SELECT *, " + Environment.NewLine;
-            strSQL = strSQL + " 		   CAST(0 AS varbinary(max)) AS Level " + Environment.NewLine;
+            strSQL = strSQL + " 		   CASE WHEN FoT_NRI = " + (int)ctr_Template.FolderType.System + " THEN CAST(0 AS varbinary(max)) ELSE CAST(HierarchyComp.HiCo_NRI AS varbinary(max)) END AS Level " + Environment.NewLine;
             strSQL = strSQL + " 	FROM HierarchyComp  " + Environment.NewLine;
             strSQL = strSQL + " 	WHERE 1 = 1 " + Environment.NewLine;
-
-            //if (vblnLoadRevision)
-            //{
-            //    strSQL = strSQL + "   AND HierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
-            //}
-            //else
-            //{
-                strSQL = strSQL + "   AND HiCo_Parent_NRI IS NULL " + Environment.NewLine;
-            //}
+            strSQL = strSQL + "       AND HiCo_Parent_NRI IS NULL " + Environment.NewLine;
 
             strSQL = strSQL + "     UNION ALL " + Environment.NewLine;
 
@@ -365,12 +361,12 @@ namespace Ceritar.CVS.Controllers
 
             strSQL = strSQL + " SELECT  ActionCol = 0, " + Environment.NewLine;
             strSQL = strSQL + "    		LstHierarchyComp.HiCo_NRI,   " + Environment.NewLine;
-            strSQL = strSQL + "    		IsSystem = CASE WHEN LstHierarchyComp.TTP_NRI IS NULL THEN 0 ELSE 1 END,   " + Environment.NewLine;
+            strSQL = strSQL + "    		IsSystem = CASE WHEN LstHierarchyComp.FoT_NRI = " + (int)ctr_Template.FolderType.System + " THEN 1 ELSE 0 END,   " + Environment.NewLine;
             strSQL = strSQL + "    		LstHierarchyComp.HiCo_NodeLevel,   " + Environment.NewLine;
             strSQL = strSQL + "    		IsNode = 0, --CASE WHEN LstHierarchyComp.HiCo_Parent_NRI = TNode.Parent OR LstHierarchyComp.HiCo_Parent_NRI IS NULL THEN 1 ELSE 0 END,  " + Environment.NewLine; //Not used anymore
             strSQL = strSQL + "    		LstHierarchyComp.HiCo_Name,   " + Environment.NewLine;
-            strSQL = strSQL + "    		FoT_NRI = CASE WHEN LstHierarchyComp.TTP_NRI IS NULL THEN LstHierarchyComp.FoT_NRI ELSE 0 END,  " + Environment.NewLine;
-            strSQL = strSQL + "    		FoT_Code = CASE WHEN LstHierarchyComp.TTP_NRI IS NULL THEN FolderType.FoT_Code ELSE NULL END  " + Environment.NewLine;
+            strSQL = strSQL + "    	    LstHierarchyComp.FoT_NRI,  " + Environment.NewLine;
+            strSQL = strSQL + "    		FolderType.FoT_Code  " + Environment.NewLine;
 
             strSQL = strSQL + " FROM LstHierarchyComp " + Environment.NewLine;
             strSQL = strSQL + " 	INNER JOIN FolderType ON FolderType.FoT_NRI = LstHierarchyComp.FoT_NRI  " + Environment.NewLine;
@@ -390,8 +386,42 @@ namespace Ceritar.CVS.Controllers
             }
             else
             {
-                strSQL = strSQL + "   AND LstHierarchyComp.TTP_NRI = " + (int)sclsAppConfigs.CONFIG_TYPE.PATH_INSTALLATIONS_ACTIVES + " OR LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
+                strSQL = strSQL + "   AND LstHierarchyComp.FoT_NRI = " + (int)ctr_Template.FolderType.System + " OR LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
             }
+
+            strSQL = strSQL + " ORDER BY Level " + Environment.NewLine;
+
+            return strSQL;
+        }
+
+        public string strGetTemplateReference_Hierarchy(int vintTemplate_NRI)
+        {
+            string strSQL = string.Empty;
+
+            strSQL = strSQL + " WITH LstHierarchyComp " + Environment.NewLine;
+            strSQL = strSQL + " AS " + Environment.NewLine;
+            strSQL = strSQL + " ( " + Environment.NewLine;
+            strSQL = strSQL + "     SELECT *, " + Environment.NewLine;
+            strSQL = strSQL + " 		   CASE WHEN FoT_NRI = " + (int)ctr_Template.FolderType.System + " THEN CAST(0 AS varbinary(max)) ELSE CAST(HierarchyComp.HiCo_NRI AS varbinary(max)) END AS Level " + Environment.NewLine;
+            strSQL = strSQL + " 	FROM HierarchyComp  " + Environment.NewLine;
+            strSQL = strSQL + " 	WHERE HiCo_Parent_NRI IS NULL " + Environment.NewLine;
+
+            strSQL = strSQL + "     UNION ALL " + Environment.NewLine;
+
+            strSQL = strSQL + "     SELECT HiCo_Childrens.*, " + Environment.NewLine;
+            strSQL = strSQL + " 		   Level + CAST(HiCo_Childrens.HiCo_NRI AS varbinary(max)) AS Level " + Environment.NewLine;
+            strSQL = strSQL + " 	FROM HierarchyComp HiCo_Childrens  " + Environment.NewLine;
+            strSQL = strSQL + " 		INNER JOIN LstHierarchyComp on HiCo_Childrens.HiCo_Parent_NRI = LstHierarchyComp.HiCo_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 	WHERE HiCo_Childrens.HiCo_Parent_NRI IS NOT NULL " + Environment.NewLine;
+            strSQL = strSQL + " ) " + Environment.NewLine;
+
+            strSQL = strSQL + " SELECT LstHierarchyComp.HiCo_Name, " + Environment.NewLine;
+            strSQL = strSQL + "        LstHierarchyComp.FoT_NRI " + Environment.NewLine;
+
+            strSQL = strSQL + " FROM LstHierarchyComp " + Environment.NewLine;
+
+            strSQL = strSQL + " WHERE LstHierarchyComp.FoT_NRI != " + (int)ctr_Template.FolderType.System + Environment.NewLine;
+            strSQL = strSQL + "   AND LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
 
             strSQL = strSQL + " ORDER BY Level " + Environment.NewLine;
 
@@ -422,6 +452,23 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " FROM TemplateType " + Environment.NewLine;
 
             strSQL = strSQL + " ORDER BY TemplateType.TeT_NRI " + Environment.NewLine;
+
+            return strSQL;
+        }
+
+        public string strGetTemplateRef_SQL(int vintCeA_NRI)
+        {
+            string strSQL = string.Empty;
+
+            strSQL = strSQL + " SELECT Template.Tpl_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        Template.Tpl_Name " + Environment.NewLine;
+
+            strSQL = strSQL + " FROM Template " + Environment.NewLine;
+
+            strSQL = strSQL + " WHERE Template.TeT_NRI = " + (int)ctr_Template.TemplateType.VERSION + Environment.NewLine;
+            strSQL = strSQL + "   AND Template.CeA_NRI = " + vintCeA_NRI + Environment.NewLine;
+
+            strSQL = strSQL + " ORDER BY Template.Tpl_Name " + Environment.NewLine;
 
             return strSQL;
         }

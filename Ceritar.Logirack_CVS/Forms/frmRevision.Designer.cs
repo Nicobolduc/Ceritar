@@ -64,6 +64,8 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.grdSatellites = new C1.Win.C1FlexGrid.C1FlexGrid();
+            this.mnuSatRevision = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuiDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtScriptsPath = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
@@ -75,17 +77,15 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
-            this.mnuSatRevision = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.mnuiDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdSatellites)).BeginInit();
+            this.mnuSatRevision.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox6.SuspendLayout();
-            this.mnuSatRevision.SuspendLayout();
             this.SuspendLayout();
             // 
             // dtpCreation
@@ -94,10 +94,10 @@
             this.dtpCreation.CustomFormat = "MM-dd-yyyy hh:mm";
             this.dtpCreation.Enabled = false;
             this.dtpCreation.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpCreation.Location = new System.Drawing.Point(460, 23);
+            this.dtpCreation.Location = new System.Drawing.Point(480, 23);
             this.dtpCreation.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dtpCreation.Name = "dtpCreation";
-            this.dtpCreation.Size = new System.Drawing.Size(153, 22);
+            this.dtpCreation.Size = new System.Drawing.Size(135, 22);
             this.dtpCreation.TabIndex = 4;
             // 
             // cboClients
@@ -107,7 +107,7 @@
             this.cboClients.Location = new System.Drawing.Point(79, 57);
             this.cboClients.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.cboClients.Name = "cboClients";
-            this.cboClients.Size = new System.Drawing.Size(262, 24);
+            this.cboClients.Size = new System.Drawing.Size(284, 24);
             this.cboClients.TabIndex = 2;
             this.cboClients.SelectedIndexChanged += new System.EventHandler(this.cboClients_SelectedIndexChanged);
             // 
@@ -204,10 +204,10 @@
             // 
             // txtCreatedBy
             // 
-            this.txtCreatedBy.Location = new System.Drawing.Point(414, 57);
+            this.txtCreatedBy.Location = new System.Drawing.Point(456, 57);
             this.txtCreatedBy.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtCreatedBy.Name = "txtCreatedBy";
-            this.txtCreatedBy.Size = new System.Drawing.Size(199, 22);
+            this.txtCreatedBy.Size = new System.Drawing.Size(166, 22);
             this.txtCreatedBy.TabIndex = 5;
             this.txtCreatedBy.TextChanged += new System.EventHandler(this.txtCreatedBy_TextChanged);
             // 
@@ -232,7 +232,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(349, 27);
+            this.label1.Location = new System.Drawing.Point(369, 27);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(107, 16);
             this.label1.TabIndex = 68;
@@ -263,7 +263,7 @@
             this.cboTemplates.Location = new System.Drawing.Point(79, 92);
             this.cboTemplates.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.cboTemplates.Name = "cboTemplates";
-            this.cboTemplates.Size = new System.Drawing.Size(262, 24);
+            this.cboTemplates.Size = new System.Drawing.Size(360, 24);
             this.cboTemplates.TabIndex = 3;
             // 
             // label6
@@ -276,7 +276,7 @@
             // 
             // label7
             // 
-            this.label7.Location = new System.Drawing.Point(349, 60);
+            this.label7.Location = new System.Drawing.Point(369, 60);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(70, 21);
             this.label7.TabIndex = 74;
@@ -489,6 +489,20 @@
             this.grdSatellites.TabIndex = 0;
             this.grdSatellites.Tag = "35";
             // 
+            // mnuSatRevision
+            // 
+            this.mnuSatRevision.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuiDelete});
+            this.mnuSatRevision.Name = "mnuSatRevision";
+            this.mnuSatRevision.Size = new System.Drawing.Size(130, 26);
+            // 
+            // mnuiDelete
+            // 
+            this.mnuiDelete.Name = "mnuiDelete";
+            this.mnuiDelete.Size = new System.Drawing.Size(129, 22);
+            this.mnuiDelete.Text = "Supprimer";
+            this.mnuiDelete.Click += new System.EventHandler(this.mnuiDelete_Click);
+            // 
             // groupBox2
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -635,20 +649,6 @@
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
             // 
-            // mnuSatRevision
-            // 
-            this.mnuSatRevision.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuiDelete});
-            this.mnuSatRevision.Name = "mnuSatRevision";
-            this.mnuSatRevision.Size = new System.Drawing.Size(130, 26);
-            // 
-            // mnuiDelete
-            // 
-            this.mnuiDelete.Name = "mnuiDelete";
-            this.mnuiDelete.Size = new System.Drawing.Size(152, 22);
-            this.mnuiDelete.Text = "Supprimer";
-            this.mnuiDelete.Click += new System.EventHandler(this.mnuiDelete_Click);
-            // 
             // frmRevision
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -678,12 +678,12 @@
             this.groupBox1.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdSatellites)).EndInit();
+            this.mnuSatRevision.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox6.ResumeLayout(false);
-            this.mnuSatRevision.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

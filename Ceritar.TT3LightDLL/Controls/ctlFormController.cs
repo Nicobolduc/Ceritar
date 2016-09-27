@@ -465,6 +465,7 @@ namespace Ceritar.TT3LightDLL.Controls
 
         private void btnCancel_Click(object sender, System.EventArgs e)
         {
+            this.FormIsLoading = true;
             sclsWinControls_Utilities.EmptyAllFormControls(mfrmParent);
             LoadLinkedFormData();
         }

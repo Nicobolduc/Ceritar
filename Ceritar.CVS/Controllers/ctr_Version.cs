@@ -806,6 +806,7 @@ namespace Ceritar.CVS.Controllers
                 mcModVersion.Location_APP_CHANGEMENT = mcView.GetLocation_APP_CHANGEMENT();
                 mcModVersion.Location_Release = mcView.GetLocation_Release();
                 mcModVersion.Location_CaptionsAndMenus = mcView.GetLocation_TTApp();
+                mcModVersion.Description = mcView.GetDescription();
                 mcModVersion.CreationDate = mcView.GetCreationDate();
                 mcModVersion.IsDemo = mcView.GetIsDemo();
                 mcModVersion.IncludeScriptsOnRefresh = mcView.GetIncludeScriptsOnRefresh();
@@ -967,7 +968,7 @@ namespace Ceritar.CVS.Controllers
                     }
 
                     //Add the Rev_AllScripts folder if it exists
-                    strRevAllScripts_Location = Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES, mcView.GetCeritarApplication_Name(), sclsAppConfigs.GetVersionNumberPrefix + mcView.GetVersionNo().ToString(), sclsAppConfigs.GetRevisionAllScriptFolderName);
+                    strRevAllScripts_Location = Path.Combine(str_GetVersionFolderPath(mcModVersion.TemplateSource.Template_NRI, mcModVersion.VersionNo.ToString()), sclsAppConfigs.GetRevisionAllScriptFolderName);
 
                     if (Directory.Exists(strRevAllScripts_Location))
                     {
@@ -1086,7 +1087,7 @@ namespace Ceritar.CVS.Controllers
             return blnValidReturn;
         }
 
-        public string str_GetVersionFolderPath(int vintTemplate_NRI, string vstrVersion_No)
+        /*public string str_GetVersionFolderPath(int vintTemplate_NRI, string vstrVersion_No)
         {
             string strSQL = string.Empty;
             string strPath = string.Empty;
@@ -1131,9 +1132,56 @@ namespace Ceritar.CVS.Controllers
             }
 
             return strPath;
+        }*/
+
+        public string str_GetVersionFolderPath(int vintTemplate_NRI, string vstrVersion_No)
+        {
+            string strSQL = string.Empty;
+            string strPath = string.Empty;
+            SqlDataReader sqlRecord = null;
+
+            strSQL = strSQL + " WITH LstHierarchyComp " + Environment.NewLine;
+            strSQL = strSQL + " AS " + Environment.NewLine;
+            strSQL = strSQL + " ( " + Environment.NewLine;
+            strSQL = strSQL + "     SELECT *, " + Environment.NewLine;
+            strSQL = strSQL + " 		   CASE WHEN FoT_NRI = " + (int)ctr_Template.FolderType.System + " THEN CAST(0 AS varbinary(max)) ELSE CAST(HierarchyComp.HiCo_NRI AS varbinary(max)) END AS Level " + Environment.NewLine;
+            strSQL = strSQL + " 	FROM HierarchyComp  " + Environment.NewLine;
+            strSQL = strSQL + " 	WHERE HiCo_Parent_NRI IS NULL " + Environment.NewLine;
+
+            strSQL = strSQL + "     UNION ALL " + Environment.NewLine;
+
+            strSQL = strSQL + "     SELECT HiCo_Childrens.*, " + Environment.NewLine;
+            strSQL = strSQL + " 		   Level + CAST(HiCo_Childrens.HiCo_NRI AS varbinary(max)) AS Level " + Environment.NewLine;
+            strSQL = strSQL + " 	FROM HierarchyComp HiCo_Childrens  " + Environment.NewLine;
+            strSQL = strSQL + " 		INNER JOIN LstHierarchyComp on HiCo_Childrens.HiCo_Parent_NRI = LstHierarchyComp.HiCo_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 	WHERE HiCo_Childrens.HiCo_Parent_NRI IS NOT NULL " + Environment.NewLine;
+            strSQL = strSQL + " ) " + Environment.NewLine;
+
+            strSQL = strSQL + " SELECT FolderName = CASE WHEN LstHierarchyComp.FoT_NRI = " + (int)ctr_Template.FolderType.Version_Number + " THEN CONVERT(VARCHAR(300), REPLACE(LstHierarchyComp.HiCo_Name, '_XXX', " + clsTTApp.GetAppController.str_FixStringForSQL("_" + vstrVersion_No) + ")) ELSE LstHierarchyComp.HiCo_Name END, " + Environment.NewLine;
+            strSQL = strSQL + "        LstHierarchyComp.FoT_NRI " + Environment.NewLine;
+
+            strSQL = strSQL + " FROM LstHierarchyComp " + Environment.NewLine;
+
+            strSQL = strSQL + " WHERE LstHierarchyComp.FoT_NRI = " + (int)ctr_Template.FolderType.System + Environment.NewLine;
+            strSQL = strSQL + "    OR LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
+
+            strSQL = strSQL + " ORDER BY Level " + Environment.NewLine;
+
+            sqlRecord = clsTTSQL.ADOSelect(strSQL);
+
+            while (sqlRecord.Read())
+            {
+                strPath = Path.Combine(strPath, sqlRecord["FolderName"].ToString());
+
+                if (sqlRecord["FoT_NRI"].ToString() == ((int)ctr_Template.FolderType.Version_Number).ToString()) break;
+            }
+
+            if (sqlRecord != null) sqlRecord.Dispose();
+
+            return strPath;
         }
 
-
+        
 #region "SQL Queries"
 
         private string pfstrGetTemplateHierarchy_SQL(int vintTemplate_NRI)
@@ -1144,7 +1192,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " AS " + Environment.NewLine;
             strSQL = strSQL + " ( " + Environment.NewLine;
             strSQL = strSQL + "     SELECT *, " + Environment.NewLine;
-            strSQL = strSQL + " 		   CAST(0 AS varbinary(max)) AS Level " + Environment.NewLine;
+            strSQL = strSQL + " 		   CASE WHEN FoT_NRI = " + (int)ctr_Template.FolderType.System + " THEN CAST(0 AS varbinary(max)) ELSE CAST(HierarchyComp.HiCo_NRI AS varbinary(max)) END AS Level " + Environment.NewLine;
             strSQL = strSQL + " 	FROM HierarchyComp  " + Environment.NewLine;
             strSQL = strSQL + " 	WHERE HiCo_Parent_NRI IS NULL " + Environment.NewLine;
 
@@ -1184,6 +1232,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        Version.Ver_Release_Location, " + Environment.NewLine;
             strSQL = strSQL + "        Version.Ver_CaptionsAndMenus_Location, " + Environment.NewLine;
             strSQL = strSQL + "        Version.Ver_IsDemo, " + Environment.NewLine;
+            strSQL = strSQL + "        Version.Ver_Description, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_ExternalRPTAppName, " + Environment.NewLine;
             strSQL = strSQL + "        Version.TTU_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        CreatedByNom = TTUser.TTU_FirstName + ' ' + TTUser.TTU_LastName " + Environment.NewLine;

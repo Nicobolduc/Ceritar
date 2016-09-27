@@ -18,9 +18,8 @@ namespace Ceritar.CVS
         private const string _strVersionNumberPrefix = "V_";
         private const string _strRevisionNumberPrefix = "R_";
 
-        internal enum CONFIG_TYPE
+        internal enum CONFIG_TYPE_NRI
         {
-            PATH_INSTALLATIONS_ACTIVES = 100,
             PATH_DB_UPGRADE_SCRIPTS = 102,
             FILENAME_CAPTIONS_AND_MENUS = 103
         }
@@ -34,7 +33,7 @@ namespace Ceritar.CVS
             {
                 if (string.IsNullOrEmpty(_strRoot_DB_UPGRADE_SCRIPTS_Dir) || !System.IO.Directory.Exists(_strRoot_DB_UPGRADE_SCRIPTS_Dir))
                 {
-                    _strRoot_DB_UPGRADE_SCRIPTS_Dir = clsTTSQL.str_ADOSingleLookUp("TTP_Value", "TTParam", "TTP_NRI = " + (int)CONFIG_TYPE.PATH_DB_UPGRADE_SCRIPTS);
+                    _strRoot_DB_UPGRADE_SCRIPTS_Dir = clsTTSQL.str_ADOSingleLookUp("TTP_Value", "TTParam", "TTP_NRI = " + (int)CONFIG_TYPE_NRI.PATH_DB_UPGRADE_SCRIPTS);
                 }
 
                 return _strRoot_DB_UPGRADE_SCRIPTS_Dir;
@@ -45,9 +44,47 @@ namespace Ceritar.CVS
         {
             get
             {
+                string strSQL = string.Empty;
+                System.Data.SqlClient.SqlDataReader sqlRecord = null;
+
                 if (string.IsNullOrEmpty(_strRoot_INSTALLATIONS_ACTIVES_Dir) || !System.IO.Directory.Exists(_strRoot_INSTALLATIONS_ACTIVES_Dir))
                 {
-                    _strRoot_INSTALLATIONS_ACTIVES_Dir = clsTTSQL.str_ADOSingleLookUp("TTP_Value", "TTParam", "TTP_NRI = " + (int)CONFIG_TYPE.PATH_INSTALLATIONS_ACTIVES);
+                    _strRoot_INSTALLATIONS_ACTIVES_Dir = string.Empty;
+                    //_strRoot_INSTALLATIONS_ACTIVES_Dir = clsTTSQL.str_ADOSingleLookUp("TTP_Value", "TTParam", "TTP_NRI = " + (int)CONFIG_TYPE_NRI.PATH_INSTALLATIONS_ACTIVES);
+
+                    strSQL = strSQL + " WITH LstHierarchyComp " + Environment.NewLine;
+                    strSQL = strSQL + " AS " + Environment.NewLine;
+                    strSQL = strSQL + " ( " + Environment.NewLine;
+                    strSQL = strSQL + "     SELECT *, " + Environment.NewLine;
+                    strSQL = strSQL + " 		   CASE WHEN FoT_NRI = " + (int)Controllers.ctr_Template.FolderType.System + " THEN CAST(0 AS varbinary(max)) ELSE CAST(HierarchyComp.HiCo_NRI AS varbinary(max)) END AS Level " + Environment.NewLine;
+                    strSQL = strSQL + " 	FROM HierarchyComp  " + Environment.NewLine;
+                    strSQL = strSQL + " 	WHERE HiCo_Parent_NRI IS NULL " + Environment.NewLine;
+
+                    strSQL = strSQL + "     UNION ALL " + Environment.NewLine;
+
+                    strSQL = strSQL + "     SELECT HiCo_Childrens.*, " + Environment.NewLine;
+                    strSQL = strSQL + " 		   Level + CAST(HiCo_Childrens.HiCo_NRI AS varbinary(max)) AS Level " + Environment.NewLine;
+                    strSQL = strSQL + " 	FROM HierarchyComp HiCo_Childrens  " + Environment.NewLine;
+                    strSQL = strSQL + " 		INNER JOIN LstHierarchyComp on HiCo_Childrens.HiCo_Parent_NRI = LstHierarchyComp.HiCo_NRI " + Environment.NewLine;
+                    strSQL = strSQL + " 	WHERE HiCo_Childrens.HiCo_Parent_NRI IS NOT NULL " + Environment.NewLine;
+                    strSQL = strSQL + " ) " + Environment.NewLine;
+
+                    strSQL = strSQL + " SELECT LstHierarchyComp.HiCo_Name " + Environment.NewLine;
+
+                    strSQL = strSQL + " FROM LstHierarchyComp " + Environment.NewLine;
+
+                    strSQL = strSQL + " WHERE LstHierarchyComp.FoT_NRI = " + (int)Controllers.ctr_Template.FolderType.System + Environment.NewLine;
+
+                    strSQL = strSQL + " ORDER BY Level " + Environment.NewLine;
+
+                    sqlRecord = clsTTSQL.ADOSelect(strSQL);
+
+                    while (sqlRecord.Read())
+                    {
+                        _strRoot_INSTALLATIONS_ACTIVES_Dir = System.IO.Path.Combine(_strRoot_INSTALLATIONS_ACTIVES_Dir, sqlRecord["HiCo_Name"].ToString());
+                    }
+
+                    if (sqlRecord != null) sqlRecord.Dispose();
                 }
 
                 return System.IO.Path.Combine(_strRoot_INSTALLATIONS_ACTIVES_Dir + (_strRoot_INSTALLATIONS_ACTIVES_Dir.Substring(_strRoot_INSTALLATIONS_ACTIVES_Dir.Length - 1, 1) == "\\" ? "" : "\\"));
@@ -60,7 +97,7 @@ namespace Ceritar.CVS
             {
                 if (string.IsNullOrEmpty(_strCaptionsAndMenusFileName))
                 {
-                    _strCaptionsAndMenusFileName = clsTTSQL.str_ADOSingleLookUp("TTP_Value", "TTParam", "TTP_NRI = " + (int)CONFIG_TYPE.FILENAME_CAPTIONS_AND_MENUS);
+                    _strCaptionsAndMenusFileName = clsTTSQL.str_ADOSingleLookUp("TTP_Value", "TTParam", "TTP_NRI = " + (int)CONFIG_TYPE_NRI.FILENAME_CAPTIONS_AND_MENUS);
                 }
 
                 return _strCaptionsAndMenusFileName;

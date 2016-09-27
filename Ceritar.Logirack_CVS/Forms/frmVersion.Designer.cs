@@ -31,6 +31,8 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmVersion));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtDescription = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.txtCreatedBy = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.chkDemoVersion = new System.Windows.Forms.CheckBox();
@@ -114,6 +116,8 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.txtDescription);
+            this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.txtCreatedBy);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.chkDemoVersion);
@@ -127,30 +131,49 @@
             this.groupBox1.Controls.Add(this.txtCompiledBy);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.cboApplications);
-            this.groupBox1.Location = new System.Drawing.Point(6, 7);
+            this.groupBox1.Location = new System.Drawing.Point(6, 6);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox1.Size = new System.Drawing.Size(1091, 90);
-            this.groupBox1.TabIndex = 37;
+            this.groupBox1.Size = new System.Drawing.Size(1102, 91);
+            this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Informations";
+            // 
+            // txtDescription
+            // 
+            this.txtDescription.Location = new System.Drawing.Point(680, 24);
+            this.txtDescription.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtDescription.MaxLength = 10;
+            this.txtDescription.Multiline = true;
+            this.txtDescription.Name = "txtDescription";
+            this.txtDescription.Size = new System.Drawing.Size(162, 55);
+            this.txtDescription.TabIndex = 5;
+            this.txtDescription.TextChanged += new System.EventHandler(this.txtDescription_TextChanged);
+            // 
+            // label10
+            // 
+            this.label10.Location = new System.Drawing.Point(600, 27);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(85, 21);
+            this.label10.TabIndex = 52;
+            this.label10.Text = "Description: ";
             // 
             // txtCreatedBy
             // 
             this.txtCreatedBy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCreatedBy.Location = new System.Drawing.Point(881, 55);
+            this.txtCreatedBy.Location = new System.Drawing.Point(907, 57);
             this.txtCreatedBy.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtCreatedBy.Name = "txtCreatedBy";
             this.txtCreatedBy.ReadOnly = true;
-            this.txtCreatedBy.Size = new System.Drawing.Size(202, 22);
-            this.txtCreatedBy.TabIndex = 74;
+            this.txtCreatedBy.Size = new System.Drawing.Size(186, 22);
+            this.txtCreatedBy.TabIndex = 7;
             // 
             // label6
             // 
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(822, 59);
+            this.label6.Location = new System.Drawing.Point(848, 60);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(53, 16);
             this.label6.TabIndex = 73;
@@ -159,11 +182,11 @@
             // chkDemoVersion
             // 
             this.chkDemoVersion.AutoSize = true;
-            this.chkDemoVersion.Location = new System.Drawing.Point(520, 59);
+            this.chkDemoVersion.Location = new System.Drawing.Point(523, 25);
             this.chkDemoVersion.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.chkDemoVersion.Name = "chkDemoVersion";
             this.chkDemoVersion.Size = new System.Drawing.Size(61, 20);
-            this.chkDemoVersion.TabIndex = 4;
+            this.chkDemoVersion.TabIndex = 3;
             this.chkDemoVersion.Text = "Démo";
             this.chkDemoVersion.UseVisualStyleBackColor = true;
             this.chkDemoVersion.CheckedChanged += new System.EventHandler(this.chkDemoVersion_CheckedChanged);
@@ -172,7 +195,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(822, 27);
+            this.label2.Location = new System.Drawing.Point(848, 27);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(107, 16);
             this.label2.TabIndex = 69;
@@ -184,11 +207,11 @@
             this.dtpCreation.CustomFormat = "MM-dd-yyyy hh:mm";
             this.dtpCreation.Enabled = false;
             this.dtpCreation.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpCreation.Location = new System.Drawing.Point(930, 23);
+            this.dtpCreation.Location = new System.Drawing.Point(956, 24);
             this.dtpCreation.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dtpCreation.Name = "dtpCreation";
-            this.dtpCreation.Size = new System.Drawing.Size(153, 22);
-            this.dtpCreation.TabIndex = 53;
+            this.dtpCreation.Size = new System.Drawing.Size(137, 22);
+            this.dtpCreation.TabIndex = 6;
             // 
             // label5
             // 
@@ -211,7 +234,7 @@
             // 
             // label4
             // 
-            this.label4.Location = new System.Drawing.Point(343, 60);
+            this.label4.Location = new System.Drawing.Point(346, 27);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(93, 21);
             this.label4.TabIndex = 44;
@@ -219,19 +242,19 @@
             // 
             // txtVersionNo
             // 
-            this.txtVersionNo.Location = new System.Drawing.Point(436, 57);
+            this.txtVersionNo.Location = new System.Drawing.Point(439, 24);
             this.txtVersionNo.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtVersionNo.MaxLength = 10;
             this.txtVersionNo.Name = "txtVersionNo";
             this.txtVersionNo.Size = new System.Drawing.Size(76, 22);
-            this.txtVersionNo.TabIndex = 3;
+            this.txtVersionNo.TabIndex = 2;
             this.txtVersionNo.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.txtVersionNo.TextChanged += new System.EventHandler(this.txtVersionNo_TextChanged);
             this.txtVersionNo.Validating += new System.ComponentModel.CancelEventHandler(this.txtVersionNo_Validating);
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(343, 27);
+            this.label1.Location = new System.Drawing.Point(346, 60);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(93, 21);
             this.label1.TabIndex = 42;
@@ -239,11 +262,11 @@
             // 
             // txtCompiledBy
             // 
-            this.txtCompiledBy.Location = new System.Drawing.Point(436, 23);
+            this.txtCompiledBy.Location = new System.Drawing.Point(439, 57);
             this.txtCompiledBy.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtCompiledBy.Name = "txtCompiledBy";
-            this.txtCompiledBy.Size = new System.Drawing.Size(230, 22);
-            this.txtCompiledBy.TabIndex = 2;
+            this.txtCompiledBy.Size = new System.Drawing.Size(225, 22);
+            this.txtCompiledBy.TabIndex = 4;
             this.txtCompiledBy.TextChanged += new System.EventHandler(this.txtCompiledBy_TextChanged);
             // 
             // label3
@@ -361,7 +384,7 @@
             this.btnReplaceExecutable.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnReplaceExecutable.Name = "btnReplaceExecutable";
             this.btnReplaceExecutable.Size = new System.Drawing.Size(35, 37);
-            this.btnReplaceExecutable.TabIndex = 64;
+            this.btnReplaceExecutable.TabIndex = 3;
             this.toolTip.SetToolTip(this.btnReplaceExecutable, "Sélectionner l\'exécutable");
             this.btnReplaceExecutable.UseVisualStyleBackColor = true;
             this.btnReplaceExecutable.Click += new System.EventHandler(this.btnReplaceExecutable_Click);
@@ -374,7 +397,7 @@
             this.btnReplaceTTApp.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnReplaceTTApp.Name = "btnReplaceTTApp";
             this.btnReplaceTTApp.Size = new System.Drawing.Size(35, 37);
-            this.btnReplaceTTApp.TabIndex = 63;
+            this.btnReplaceTTApp.TabIndex = 2;
             this.toolTip.SetToolTip(this.btnReplaceTTApp, "Sélectionner le TTApp");
             this.btnReplaceTTApp.UseVisualStyleBackColor = true;
             this.btnReplaceTTApp.Click += new System.EventHandler(this.btnReplaceTTApp_Click);
@@ -387,7 +410,7 @@
             this.btnReplaceAppChangeDOC.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnReplaceAppChangeDOC.Name = "btnReplaceAppChangeDOC";
             this.btnReplaceAppChangeDOC.Size = new System.Drawing.Size(35, 37);
-            this.btnReplaceAppChangeDOC.TabIndex = 62;
+            this.btnReplaceAppChangeDOC.TabIndex = 1;
             this.toolTip.SetToolTip(this.btnReplaceAppChangeDOC, "Sélectionner le App_Changements");
             this.btnReplaceAppChangeDOC.UseVisualStyleBackColor = true;
             this.btnReplaceAppChangeDOC.Click += new System.EventHandler(this.btnReplaceAppChangeDOC_Click);
@@ -400,7 +423,7 @@
             this.btnReplaceAppChangeXLS.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnReplaceAppChangeXLS.Name = "btnReplaceAppChangeXLS";
             this.btnReplaceAppChangeXLS.Size = new System.Drawing.Size(35, 37);
-            this.btnReplaceAppChangeXLS.TabIndex = 61;
+            this.btnReplaceAppChangeXLS.TabIndex = 0;
             this.toolTip.SetToolTip(this.btnReplaceAppChangeXLS, "Sélectionner le App_Changements");
             this.btnReplaceAppChangeXLS.UseVisualStyleBackColor = true;
             this.btnReplaceAppChangeXLS.Click += new System.EventHandler(this.btnReplaceAppChangeXLS_Click);
@@ -414,7 +437,7 @@
             this.btnShowExecutable.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowExecutable.Name = "btnShowExecutable";
             this.btnShowExecutable.Size = new System.Drawing.Size(47, 49);
-            this.btnShowExecutable.TabIndex = 68;
+            this.btnShowExecutable.TabIndex = 11;
             this.toolTip.SetToolTip(this.btnShowExecutable, "Consulter l\'exécutable");
             this.btnShowExecutable.UseVisualStyleBackColor = true;
             this.btnShowExecutable.Click += new System.EventHandler(this.btnShowExecutable_Click);
@@ -428,7 +451,7 @@
             this.btnShowAccess.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowAccess.Name = "btnShowAccess";
             this.btnShowAccess.Size = new System.Drawing.Size(47, 49);
-            this.btnShowAccess.TabIndex = 67;
+            this.btnShowAccess.TabIndex = 10;
             this.toolTip.SetToolTip(this.btnShowAccess, "Consulter TTApp");
             this.btnShowAccess.UseVisualStyleBackColor = true;
             this.btnShowAccess.Click += new System.EventHandler(this.btnShowAccess_Click);
@@ -442,7 +465,7 @@
             this.btnShowWord.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowWord.Name = "btnShowWord";
             this.btnShowWord.Size = new System.Drawing.Size(47, 49);
-            this.btnShowWord.TabIndex = 66;
+            this.btnShowWord.TabIndex = 9;
             this.toolTip.SetToolTip(this.btnShowWord, "Consulter App_Changements.docx");
             this.btnShowWord.UseVisualStyleBackColor = true;
             this.btnShowWord.Click += new System.EventHandler(this.btnShowWord_Click);
@@ -456,7 +479,7 @@
             this.btnShowExcel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowExcel.Name = "btnShowExcel";
             this.btnShowExcel.Size = new System.Drawing.Size(47, 49);
-            this.btnShowExcel.TabIndex = 65;
+            this.btnShowExcel.TabIndex = 8;
             this.toolTip.SetToolTip(this.btnShowExcel, "Consulter App_Changements.xls");
             this.btnShowExcel.UseVisualStyleBackColor = true;
             this.btnShowExcel.Click += new System.EventHandler(this.btnShowExcel_Click);
@@ -469,7 +492,7 @@
             this.btnSelectVariousFilePath.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnSelectVariousFilePath.Name = "btnSelectVariousFilePath";
             this.btnSelectVariousFilePath.Size = new System.Drawing.Size(35, 37);
-            this.btnSelectVariousFilePath.TabIndex = 75;
+            this.btnSelectVariousFilePath.TabIndex = 1;
             this.toolTip.SetToolTip(this.btnSelectVariousFilePath, "Permet de copier un fichier quelconque dans le dossier racine de la version");
             this.btnSelectVariousFilePath.UseVisualStyleBackColor = true;
             this.btnSelectVariousFilePath.Click += new System.EventHandler(this.btnSelectVariousFilePath_Click);
@@ -482,7 +505,7 @@
             this.btnSelectVariousFolderPath.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnSelectVariousFolderPath.Name = "btnSelectVariousFolderPath";
             this.btnSelectVariousFolderPath.Size = new System.Drawing.Size(35, 37);
-            this.btnSelectVariousFolderPath.TabIndex = 76;
+            this.btnSelectVariousFolderPath.TabIndex = 2;
             this.toolTip.SetToolTip(this.btnSelectVariousFolderPath, "Permet de copier un dossier quelconque dans le dossier racine de la version");
             this.btnSelectVariousFolderPath.UseVisualStyleBackColor = true;
             this.btnSelectVariousFolderPath.Click += new System.EventHandler(this.btnSelectVariousFolderPath_Click);
@@ -496,7 +519,7 @@
             this.btnShowRootFolder.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowRootFolder.Name = "btnShowRootFolder";
             this.btnShowRootFolder.Size = new System.Drawing.Size(47, 49);
-            this.btnShowRootFolder.TabIndex = 83;
+            this.btnShowRootFolder.TabIndex = 3;
             this.toolTip.SetToolTip(this.btnShowRootFolder, "Accéder à la racine de la version");
             this.btnShowRootFolder.UseVisualStyleBackColor = true;
             this.btnShowRootFolder.Click += new System.EventHandler(this.btnShowRootFolder_Click);
@@ -510,7 +533,7 @@
             this.btnShowDB_UpgradeScripts.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowDB_UpgradeScripts.Name = "btnShowDB_UpgradeScripts";
             this.btnShowDB_UpgradeScripts.Size = new System.Drawing.Size(47, 49);
-            this.btnShowDB_UpgradeScripts.TabIndex = 84;
+            this.btnShowDB_UpgradeScripts.TabIndex = 2;
             this.toolTip.SetToolTip(this.btnShowDB_UpgradeScripts, "Accéder à DB_UpgradeScripts");
             this.btnShowDB_UpgradeScripts.UseVisualStyleBackColor = true;
             this.btnShowDB_UpgradeScripts.Click += new System.EventHandler(this.btnShowDB_UpgradeScripts_Click);
@@ -782,7 +805,7 @@
             this.txtReleasePath.ReadOnly = true;
             this.txtReleasePath.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtReleasePath.Size = new System.Drawing.Size(968, 22);
-            this.txtReleasePath.TabIndex = 72;
+            this.txtReleasePath.TabIndex = 7;
             // 
             // txtTTAppPath
             // 
@@ -795,7 +818,7 @@
             this.txtTTAppPath.ReadOnly = true;
             this.txtTTAppPath.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtTTAppPath.Size = new System.Drawing.Size(968, 22);
-            this.txtTTAppPath.TabIndex = 71;
+            this.txtTTAppPath.TabIndex = 6;
             // 
             // txtWordAppChangePath
             // 
@@ -808,7 +831,7 @@
             this.txtWordAppChangePath.ReadOnly = true;
             this.txtWordAppChangePath.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtWordAppChangePath.Size = new System.Drawing.Size(968, 22);
-            this.txtWordAppChangePath.TabIndex = 70;
+            this.txtWordAppChangePath.TabIndex = 5;
             // 
             // txtExcelAppChangePath
             // 
@@ -821,7 +844,7 @@
             this.txtExcelAppChangePath.ReadOnly = true;
             this.txtExcelAppChangePath.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtExcelAppChangePath.Size = new System.Drawing.Size(968, 22);
-            this.txtExcelAppChangePath.TabIndex = 69;
+            this.txtExcelAppChangePath.TabIndex = 4;
             // 
             // groupBox6
             // 
@@ -835,7 +858,7 @@
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox6.Size = new System.Drawing.Size(353, 68);
-            this.groupBox6.TabIndex = 81;
+            this.groupBox6.TabIndex = 1;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Documents divers";
             // 
@@ -865,7 +888,7 @@
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox5.Size = new System.Drawing.Size(113, 97);
-            this.groupBox5.TabIndex = 63;
+            this.groupBox5.TabIndex = 4;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Actions";
             // 
@@ -881,7 +904,7 @@
             this.tab.Name = "tab";
             this.tab.SelectedIndex = 0;
             this.tab.Size = new System.Drawing.Size(1102, 610);
-            this.tab.TabIndex = 0;
+            this.tab.TabIndex = 1;
             // 
             // label7
             // 
@@ -895,6 +918,7 @@
             this.label7.Size = new System.Drawing.Size(537, 20);
             this.label7.TabIndex = 51;
             this.label7.Text = "DB_UpgradeScripts et Installations_Actives sont synchronisés";
+            this.label7.Visible = false;
             // 
             // tmrGenerateBlink
             // 
@@ -914,7 +938,7 @@
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
             this.formController.Size = new System.Drawing.Size(1112, 34);
-            this.formController.TabIndex = 1;
+            this.formController.TabIndex = 2;
             this.formController.BeNotify += new Ceritar.TT3LightDLL.Controls.ctlFormController.BeNotifyEventHandler(this.formController_BeNotify);
             this.formController.SetReadRights += new Ceritar.TT3LightDLL.Controls.ctlFormController.SetReadRightsEventHandler(this.formController_SetReadRights);
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
@@ -1026,5 +1050,7 @@
         public TT3LightDLL.Controls.ctlFormController formController;
         private System.Windows.Forms.ContextMenuStrip mnuClientSatVersion;
         private System.Windows.Forms.ToolStripMenuItem mnuiDelete;
+        private System.Windows.Forms.TextBox txtDescription;
+        private System.Windows.Forms.Label label10;
     }
 }

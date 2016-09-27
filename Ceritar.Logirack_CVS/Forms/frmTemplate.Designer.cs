@@ -47,6 +47,8 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cboFolderType = new System.Windows.Forms.ComboBox();
             this.grdTemplate = new C1.Win.C1FlexGrid.C1FlexGrid();
+            this.lblTemplate = new System.Windows.Forms.Label();
+            this.cboTemplate = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdTemplate)).BeginInit();
             this.SuspendLayout();
@@ -56,8 +58,8 @@
             this.txtName.Location = new System.Drawing.Point(83, 15);
             this.txtName.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(356, 22);
-            this.txtName.TabIndex = 3;
+            this.txtName.Size = new System.Drawing.Size(359, 22);
+            this.txtName.TabIndex = 0;
             this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
             // 
             // lblNom
@@ -84,7 +86,7 @@
             this.cboTypes.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.cboTypes.Name = "cboTypes";
             this.cboTypes.Size = new System.Drawing.Size(236, 24);
-            this.cboTypes.TabIndex = 16;
+            this.cboTypes.TabIndex = 1;
             this.cboTypes.SelectedIndexChanged += new System.EventHandler(this.cboTypes_SelectedIndexChanged);
             // 
             // chkByDefault
@@ -95,7 +97,7 @@
             this.chkByDefault.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.chkByDefault.Name = "chkByDefault";
             this.chkByDefault.Size = new System.Drawing.Size(86, 20);
-            this.chkByDefault.TabIndex = 18;
+            this.chkByDefault.TabIndex = 4;
             this.chkByDefault.Text = "Par défaut";
             this.chkByDefault.UseVisualStyleBackColor = true;
             this.chkByDefault.CheckedChanged += new System.EventHandler(this.chkByDefault_CheckedChanged);
@@ -116,7 +118,7 @@
             this.cboApplications.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.cboApplications.Name = "cboApplications";
             this.cboApplications.Size = new System.Drawing.Size(236, 24);
-            this.cboApplications.TabIndex = 21;
+            this.cboApplications.TabIndex = 3;
             this.cboApplications.SelectedIndexChanged += new System.EventHandler(this.cboApplications_SelectedIndexChanged);
             // 
             // formController
@@ -132,7 +134,7 @@
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
             this.formController.Size = new System.Drawing.Size(783, 34);
-            this.formController.TabIndex = 24;
+            this.formController.TabIndex = 5;
             this.formController.SetReadRights += new Ceritar.TT3LightDLL.Controls.ctlFormController.SetReadRightsEventHandler(this.formController_SetReadRights);
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
@@ -147,7 +149,7 @@
             this.btnMoveRight.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnMoveRight.Name = "btnMoveRight";
             this.btnMoveRight.Size = new System.Drawing.Size(29, 31);
-            this.btnMoveRight.TabIndex = 30;
+            this.btnMoveRight.TabIndex = 3;
             this.toolTip.SetToolTip(this.btnMoveRight, "Augmenter d\'un niveau");
             this.btnMoveRight.UseVisualStyleBackColor = true;
             this.btnMoveRight.Click += new System.EventHandler(this.btnMoveRight_Click);
@@ -161,7 +163,7 @@
             this.btnMoveLeft.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnMoveLeft.Name = "btnMoveLeft";
             this.btnMoveLeft.Size = new System.Drawing.Size(29, 31);
-            this.btnMoveLeft.TabIndex = 29;
+            this.btnMoveLeft.TabIndex = 2;
             this.toolTip.SetToolTip(this.btnMoveLeft, "Reculer d\'un niveau");
             this.btnMoveLeft.UseVisualStyleBackColor = true;
             this.btnMoveLeft.Click += new System.EventHandler(this.btnMoveLeft_Click);
@@ -175,7 +177,7 @@
             this.AddSibbling.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.AddSibbling.Name = "AddSibbling";
             this.AddSibbling.Size = new System.Drawing.Size(29, 31);
-            this.AddSibbling.TabIndex = 28;
+            this.AddSibbling.TabIndex = 1;
             this.toolTip.SetToolTip(this.AddSibbling, "Ajouter un noeud");
             this.AddSibbling.UseVisualStyleBackColor = true;
             this.AddSibbling.Click += new System.EventHandler(this.btnAddChild_Click);
@@ -189,7 +191,7 @@
             this.btnDeleteRow.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnDeleteRow.Name = "btnDeleteRow";
             this.btnDeleteRow.Size = new System.Drawing.Size(29, 31);
-            this.btnDeleteRow.TabIndex = 32;
+            this.btnDeleteRow.TabIndex = 4;
             this.toolTip.SetToolTip(this.btnDeleteRow, "Supprimer la ligne");
             this.btnDeleteRow.UseVisualStyleBackColor = true;
             this.btnDeleteRow.Click += new System.EventHandler(this.btnDeleteRow_Click);
@@ -203,7 +205,7 @@
             this.btnAddChild.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnAddChild.Name = "btnAddChild";
             this.btnAddChild.Size = new System.Drawing.Size(29, 31);
-            this.btnAddChild.TabIndex = 33;
+            this.btnAddChild.TabIndex = 0;
             this.toolTip.SetToolTip(this.btnAddChild, "Ajouter un enfant");
             this.btnAddChild.UseVisualStyleBackColor = true;
             this.btnAddChild.Click += new System.EventHandler(this.cmdAddSibbling_Click);
@@ -240,6 +242,7 @@
             // grdTemplate
             // 
             this.grdTemplate.AllowEditing = false;
+            this.grdTemplate.AllowSorting = C1.Win.C1FlexGrid.AllowSortingEnum.None;
             this.grdTemplate.AutoSearch = C1.Win.C1FlexGrid.AutoSearchEnum.FromTop;
             this.grdTemplate.ColumnInfo = "1,1,0,0,0,90,Columns:0{Width:5;}\t";
             this.grdTemplate.ExtendLastCol = true;
@@ -252,16 +255,36 @@
             this.grdTemplate.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
             this.grdTemplate.Size = new System.Drawing.Size(724, 569);
             this.grdTemplate.StyleInfo = resources.GetString("grdTemplate.StyleInfo");
-            this.grdTemplate.TabIndex = 24;
+            this.grdTemplate.TabIndex = 5;
             this.grdTemplate.Tag = "9";
             this.grdTemplate.AfterRowColChange += new C1.Win.C1FlexGrid.RangeEventHandler(this.grdTemplate_AfterRowColChange);
             this.grdTemplate.DoubleClick += new System.EventHandler(this.grdTemplate_DoubleClick);
+            // 
+            // lblTemplate
+            // 
+            this.lblTemplate.Location = new System.Drawing.Point(325, 50);
+            this.lblTemplate.Name = "lblTemplate";
+            this.lblTemplate.Size = new System.Drawing.Size(136, 21);
+            this.lblTemplate.TabIndex = 30;
+            this.lblTemplate.Text = "Gabarit de version:";
+            // 
+            // cboTemplate
+            // 
+            this.cboTemplate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboTemplate.FormattingEnabled = true;
+            this.cboTemplate.Location = new System.Drawing.Point(439, 47);
+            this.cboTemplate.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cboTemplate.Name = "cboTemplate";
+            this.cboTemplate.Size = new System.Drawing.Size(299, 24);
+            this.cboTemplate.TabIndex = 2;
+            this.cboTemplate.SelectedIndexChanged += new System.EventHandler(this.cboTemplate_SelectedIndexChanged);
             // 
             // frmTemplate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(786, 754);
+            this.Controls.Add(this.cboTemplate);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.formController);
             this.Controls.Add(this.label3);
@@ -271,6 +294,7 @@
             this.Controls.Add(this.cboTypes);
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.lblNom);
+            this.Controls.Add(this.lblTemplate);
             this.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -305,5 +329,7 @@
         private System.Windows.Forms.ComboBox cboFolderType;
         private System.Windows.Forms.Button btnDeleteRow;
         private System.Windows.Forms.Button btnAddChild;
+        private System.Windows.Forms.Label lblTemplate;
+        private System.Windows.Forms.ComboBox cboTemplate;
     }
 }

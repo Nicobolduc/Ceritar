@@ -57,7 +57,7 @@
             this.txtName.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(300, 22);
-            this.txtName.TabIndex = 6;
+            this.txtName.TabIndex = 0;
             this.toolTips.SetToolTip(this.txtName, "!! Doit correspondre aux noms des dossiers dans SVR-CERITAR-01");
             this.txtName.TextChanged += new System.EventHandler(this.txtNom_TextChanged);
             // 
@@ -69,7 +69,7 @@
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Size = new System.Drawing.Size(433, 239);
-            this.groupBox1.TabIndex = 13;
+            this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Liste des applications utilisées";
             // 
@@ -90,7 +90,7 @@
             this.grdCerApp.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
             this.grdCerApp.Size = new System.Drawing.Size(418, 207);
             this.grdCerApp.StyleInfo = resources.GetString("grdCerApp.StyleInfo");
-            this.grdCerApp.TabIndex = 2;
+            this.grdCerApp.TabIndex = 0;
             this.grdCerApp.Tag = "21";
             // 
             // chkActive
@@ -102,7 +102,7 @@
             this.chkActive.Margin = new System.Windows.Forms.Padding(2);
             this.chkActive.Name = "chkActive";
             this.chkActive.Size = new System.Drawing.Size(62, 20);
-            this.chkActive.TabIndex = 14;
+            this.chkActive.TabIndex = 1;
             this.chkActive.Text = "Active";
             this.chkActive.UseVisualStyleBackColor = true;
             this.chkActive.CheckedChanged += new System.EventHandler(this.chkActive_CheckedChanged);
@@ -120,7 +120,7 @@
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
             this.formController.Size = new System.Drawing.Size(446, 34);
-            this.formController.TabIndex = 15;
+            this.formController.TabIndex = 3;
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);

@@ -24,6 +24,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private string _strLocation_APP_CHANGEMENT;
         private string _strLocation_Release;
         private string _strLocation_CaptionsAndMenus;
+        private string _strDescription;
         private bool _blnIsDemo;
         private mod_TTU_User _cCreatedByUser;
         private mod_CeA_CeritarApplication _cCerApplication;
@@ -83,6 +84,12 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         {
             get { return _strLocation_CaptionsAndMenus; }
             set { _strLocation_CaptionsAndMenus = value; }
+        }
+
+        internal string Description
+        {
+            get { return _strDescription; }
+            set { _strDescription = value; }
         }
 
         internal ushort VersionNo
@@ -528,6 +535,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 else if (!mcSQL.bln_AddField("Ver_CaptionsAndMenus_Location", _strLocation_CaptionsAndMenus, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("Ver_IsDemo", _blnIsDemo, clsTTSQL.MySQL_FieldTypes.BIT_TYPE))
+                { }
+                else if (!mcSQL.bln_AddField("Ver_Description", _strDescription, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
                 else
                 {

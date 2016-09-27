@@ -17,6 +17,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         int GetCeritarApplication_NRI();
         int GetTemplateType_NRI();
         int GetTemplate_NRI();
+        int GetTemplate_NRI_Ref();
         ushort GetTemplate_TS();
         bool GetByDefaultValue();
         structHierarchyComponent GetRacineSystem();

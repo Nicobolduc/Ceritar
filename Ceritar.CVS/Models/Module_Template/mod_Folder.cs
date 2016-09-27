@@ -21,6 +21,7 @@ namespace Ceritar.CVS.Models.Module_Template
         //Messages
         private const int mintMSG_InvalidName = 32;
         private const int mintMSG_InvalidNodeLevel = 33;
+        private const int mintMSG_UniqueFolderName = 53;
 
         //Working variables
 
@@ -72,7 +73,7 @@ namespace Ceritar.CVS.Models.Module_Template
                             mcActionResults.SetValid();
 
                             break;
-
+                            
                         case sclsConstants.DML_Mode.INSERT_MODE:
                         case sclsConstants.DML_Mode.UPDATE_MODE:
 
@@ -83,6 +84,10 @@ namespace Ceritar.CVS.Models.Module_Template
                             else if (Path.GetInvalidFileNameChars().Where(x => this._strNameOnDisk.Contains(x)).Count() > 0 || this._strNameOnDisk == "con")
                             {
                                 mcActionResults.SetInvalid(mintMSG_InvalidName, ctr_Template.ErrorCode_HiCo.NAME_ON_DISK_INVALID);
+                            }
+                            else if (!string.IsNullOrEmpty(clsTTSQL.str_ADOSingleLookUp("HiCo_NRI", "HierarchyComp", " HierarchyComp.Tpl_NRI = " + _intTemplate_NRI + " AND HierarchyComp.HiCo_Name = " + clsTTApp.GetAppController.str_FixStringForSQL(_strNameOnDisk))))
+                            {
+                                mcActionResults.SetInvalid(mintMSG_UniqueFolderName, ctr_Template.ErrorCode_HiCo.NAME_ON_DISK_UNIQUE);
                             }
                             else if (!clsTTSQL.bln_ADOValid_TS("HierarchyComp", "HiCo_NRI", _intHierarchyComponent_NRI, "HiCo_TS", _intHierarchyComponent_TS))
                             {
@@ -131,7 +136,7 @@ namespace Ceritar.CVS.Models.Module_Template
         private bool pfblnChildrens_Validate()
         {
             bool blnValidReturn = true;
-            int intRowIndex = 6;
+            int intRowIndex = 3;
 
             try
             {
@@ -149,6 +154,7 @@ namespace Ceritar.CVS.Models.Module_Template
                     if (!blnValidReturn || !mcActionResults.IsValid)
                     {
                         mcActionResults.RowInError = mcActionResults.RowInError <= intRowIndex ? intRowIndex : mcActionResults.RowInError;
+
                         break;
                     }
 
@@ -274,8 +280,6 @@ namespace Ceritar.CVS.Models.Module_Template
                 else if (!mcSQL.bln_AddField("HiCo_NodeLevel", _intNodeLevel, clsTTSQL.MySQL_FieldTypes.INT_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("Tpl_NRI", _intTemplate_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
-                { }
-                else if (!mcSQL.bln_AddField("TTP_NRI", _intAppConfig_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else
                 {

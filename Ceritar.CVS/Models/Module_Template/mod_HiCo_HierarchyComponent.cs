@@ -16,7 +16,6 @@ namespace Ceritar.CVS.Models.Module_Template
         protected int _intHierarchyComponent_TS;
         protected string _strNameOnDisk;
         protected int _intTemplate_NRI;
-        protected int _intAppConfig_NRI;
         protected mod_HiCo_HierarchyComponent _cParentComponent;
 
         //mod_IBase
@@ -51,12 +50,6 @@ namespace Ceritar.CVS.Models.Module_Template
         {
             get { return _intTemplate_NRI; }
             set { _intTemplate_NRI = value; }
-        }
-
-        internal int AppConfig_NRI
-        {
-            get { return _intAppConfig_NRI; }
-            set { _intAppConfig_NRI = value; }
         }
 
         internal mod_HiCo_HierarchyComponent ParentComponent

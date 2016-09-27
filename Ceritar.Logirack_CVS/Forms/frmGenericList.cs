@@ -276,11 +276,13 @@ namespace Ceritar.Logirack_CVS.Forms
 
         void mcGrdList_SetGridDisplay()
         {
+            C1.Win.C1FlexGrid.CellRange crMerged;
+
             foreach (C1.Win.C1FlexGrid.Column cCol in grdList.Cols)
             {
                 if (cCol.IsVisible && cCol.Index > 1)
                 {
-                    if (grdList.Cols.Count > 4)
+                    if (grdList.Cols.Count > 5)
                     {
                         if (cCol.IsVisible && cCol.Index > 1) cCol.Width = TextRenderer.MeasureText(cCol.Caption, grdList.Font).Width;
                     }
@@ -296,10 +298,20 @@ namespace Ceritar.Logirack_CVS.Forms
                 case sclsGenList.GeneralLists_ID.VERSION_REVISION_LIST_NRI:
 
                     grdList.AllowMerging = C1.Win.C1FlexGrid.AllowMergingEnum.Free;
-                    C1.Win.C1FlexGrid.CellRange crMerged = grdList.GetCellRange(1, 2, grdList.Rows.Count - 1, 2);
+                    crMerged = grdList.GetCellRange(1, 2, grdList.Rows.Count - 1, 2);
 
                     grdList.Cols[2].AllowMerging = true;
                     
+                    break;
+
+                case sclsGenList.GeneralLists_ID.TEMPLATE_LIST_NRI:
+
+                    grdList.AllowMerging = C1.Win.C1FlexGrid.AllowMergingEnum.Free;
+                    crMerged = grdList.GetCellRange(1, 2, grdList.Rows.Count - 1, 3);
+
+                    grdList.Cols[2].AllowMerging = true;
+                    grdList.Cols[3].AllowMerging = true;
+
                     break;
 
                 case sclsGenList.GeneralLists_ID.CERITAR_CLIENT_LIST_NRI:

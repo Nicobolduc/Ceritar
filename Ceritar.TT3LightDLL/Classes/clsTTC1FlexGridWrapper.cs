@@ -483,9 +483,27 @@ namespace Ceritar.TT3LightDLL.Classes
             return blnValidReturn;
         }
 
-        public bool bln_RowEditIsValid()
+        public bool bln_SetRowActionToUpdate(int vintRowIndex)
         {
-            return mGrdFlex.Rows.Count > 1 && mGrdFlex.Row > 0 && mfrmParent.GetFormController().FormMode != sclsConstants.DML_Mode.CONSULT_MODE && mfrmParent.GetFormController().FormMode != sclsConstants.DML_Mode.DELETE_MODE;
+            bool blnValidReturn = false;
+
+            if (mGrdFlex.Rows.Count > 1 && 
+                mGrdFlex.Row > 0 && 
+                mfrmParent.GetFormController().FormMode != sclsConstants.DML_Mode.DELETE_MODE && 
+                mfrmParent.GetFormController().FormMode != sclsConstants.DML_Mode.CONSULT_MODE &&
+                mGrdFlex[vintRowIndex, mintDefaultActionCol].ToString() != sclsConstants.DML_Mode.INSERT_MODE.ToString())
+            {
+                CellRange crCell = mGrdFlex.GetCellRange(vintRowIndex, 0);
+                crCell.Style = csUpdateRow;
+
+                mGrdFlex[vintRowIndex, mintDefaultActionCol] = sclsConstants.DML_Mode.UPDATE_MODE;
+
+                mfrmParent.GetFormController().ChangeMade = true;
+
+                blnValidReturn = true;
+            }
+
+            return blnValidReturn;
         }
 
         public bool bln_SetRowActionToDelete(int vintRowIndex)
@@ -505,6 +523,11 @@ namespace Ceritar.TT3LightDLL.Classes
             }
             
             return blnValidReturn;
+        }
+
+        public bool bln_RowEditIsValid()
+        {
+            return mGrdFlex.Rows.Count > 1 && mGrdFlex.Row > 0 && mfrmParent.GetFormController().FormMode != sclsConstants.DML_Mode.CONSULT_MODE && mfrmParent.GetFormController().FormMode != sclsConstants.DML_Mode.DELETE_MODE;
         }
 
 	    public void SetColType_CheckBox(int vintColumnIndex)

@@ -445,7 +445,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
 
             try
             {
-                for (int intIndex = 0; intIndex < _lstSatelliteApps.Count; intIndex++)
+                for (int intIndex = 0; intIndex < LstCeritarSatelliteApps.Count; intIndex++)
                 {
                     mcActionResults = _lstSatelliteApps[intIndex].Validate();
 

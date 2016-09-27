@@ -306,5 +306,29 @@ namespace Ceritar.Logirack_CVS.Forms
             }
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Visible = false;
+            this.Close();
+           
+            frmTTLogin frmTTLogin = new frmTTLogin();
+
+            frmTTLogin.ShowDialog(this);
+
+            //Si l'application n'est pas fermée apres ce Call, c'est que le user est authentifié
+            clsTTApp.GetAppController.cUser.bln_SaveIniConfiguration("APP", "User_Code", clsTTApp.GetAppController.cUser.User_Code);
+
+            if (string.IsNullOrEmpty(clsTTApp.GetAppController.cUser.User_Code) || clsTTApp.GetAppController.cUser.User_NRI <= 0)
+            {
+                Application.Exit();
+            }
+            else
+            {
+                ((mdiGeneral)clsTTApp.GetAppController.GetMDI).lblStatus_User.Text = clsTTApp.GetAppController.cUser.User_Code;
+
+                formController.Item_NRI = clsTTApp.GetAppController.cUser.User_NRI;
+            }
+        }
+
     }
 }

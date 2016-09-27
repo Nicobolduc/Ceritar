@@ -103,8 +103,8 @@ namespace Ceritar.Logirack_CVS.Forms
                 }
                 else
                 {
-                    lblStatus_User.Text += clsTTApp.GetAppController.cUser.User_Code;
-                }       
+                    lblStatus_User.Text = clsTTApp.GetAppController.cUser.User_Code;
+                }
             }
             catch (Exception ex)
             {
@@ -192,6 +192,52 @@ namespace Ceritar.Logirack_CVS.Forms
             frmUser.MdiParent = this;
 
             ((TT3LightDLL.Controls.IFormController)frmUser).GetFormController().ShowForm(this, sclsConstants.DML_Mode.UPDATE_MODE, ref intItem_NRI);
+        }
+
+        private void mnuLogOut_Click(object sender, EventArgs e)
+        {
+            mnuCloseAllWindows_Click(this, new EventArgs());
+            
+            foreach (ToolStripMenuItem mnuItem in mnuMain.Items)
+            {
+                if (mnuItem.Name != mnuFile.Name)
+                {
+                    mnuItem.Enabled = false;
+                }
+                else
+                {
+                    mnuLogIn.Visible = true;
+                    mnuLogOut.Visible = false;
+                }
+            }
+        }
+
+        private void mnuLogIn_Click(object sender, EventArgs e)
+        {
+            frmTTLogin frmTTLogin = new frmTTLogin();
+
+            frmTTLogin.ShowDialog(this);
+
+            //Si l'application n'est pas fermée apres ce Call, c'est que le user est authentifié
+            clsTTApp.GetAppController.cUser.bln_SaveIniConfiguration("APP", "User_Code", clsTTApp.GetAppController.cUser.User_Code);
+
+            if (string.IsNullOrEmpty(clsTTApp.GetAppController.cUser.User_Code) || clsTTApp.GetAppController.cUser.User_NRI <= 0)
+            {
+                Application.Exit();
+            }
+            else
+            {
+                lblStatus_User.Text = clsTTApp.GetAppController.cUser.User_Code;
+            }
+
+            foreach (ToolStripMenuItem mnuItem in mnuMain.Items)
+            {
+                mnuItem.Enabled = true;
+
+            }
+
+            mnuLogIn.Visible = false;
+            mnuLogOut.Visible = true;
         }
     }
 }

@@ -264,7 +264,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void mcGrdAppSat_SetGridDisplay()
         {
-            grdSatApp.Cols[mintGrdSat_CSA_Name_col].Width = 160;
+            grdSatApp.Cols[mintGrdSat_CSA_Name_col].Width = 210;
             grdSatApp.Cols[mintGrdSat_CSA_KitFolderName_col].Width = 125;
             grdSatApp.Cols[mintGrdSat_CSA_Exe_IsFolder_col].Width = 62;
 

@@ -267,6 +267,11 @@ namespace Ceritar.Logirack_CVS.Forms
             return mstrVariousFolderLocation;
         }
 
+        string IVersion.GetDescription()
+        {
+            return txtDescription.Text;
+        }
+
         string IVersion.GetLatestVersionNo()
         {
             return clsTTApp.GetAppController.str_ShowInputMessage(mintMSG_ApplicationNotExistsInSystem);
@@ -392,7 +397,7 @@ namespace Ceritar.Logirack_CVS.Forms
             string strAppChangeLocation = string.Empty;
 
             mblnGrdSatellitesChangeMade = false;
-                
+            
             try
             {
                 sqlRecord = clsTTSQL.ADOSelect(mcCtrVersion.strGetDataLoad_SQL(formController.Item_NRI));
@@ -405,6 +410,9 @@ namespace Ceritar.Logirack_CVS.Forms
                     txtCreatedBy.Text = sqlRecord["CreatedByNom"].ToString();
                     txtCompiledBy.Text = sqlRecord["Ver_CompiledBy"].ToString();
                     txtVersionNo.Text = sqlRecord["Ver_No"].ToString();
+
+                    if (sqlRecord["Ver_Description"] != DBNull.Value)
+                        txtDescription.Text = sqlRecord["Ver_Description"].ToString();
 
                     strAppChangeLocation = sqlRecord["Ver_AppChange_Location"].ToString();
 
@@ -1175,7 +1183,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void btnGenerate_Blink(bool vblnDoBlinking)
         {
-            if (vblnDoBlinking && formController.FormMode != sclsConstants.DML_Mode.INSERT_MODE)
+            if (vblnDoBlinking && formController.FormMode != sclsConstants.DML_Mode.INSERT_MODE && (grdClients.Rows.Count > 1 || mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.INSERT_MODE.ToString()))
             {
                 tmrGenerateBlink.Start();
                 
@@ -1235,6 +1243,7 @@ namespace Ceritar.Logirack_CVS.Forms
                     btnGrdRevDel.Enabled = true;
                     btnShowRootFolder.Enabled = true;
                     btnShowDB_UpgradeScripts.Enabled = true;
+                    txtDescription.Enabled = false;
 
                     break;
             }
@@ -1689,6 +1698,14 @@ namespace Ceritar.Logirack_CVS.Forms
                 blnValidReturn = mcCtrVersion.blnDeleteClientSatelliteVersion(Int32.Parse(mcGrdSatelliteApps[grdSatellite.Row, mintGrdSat_CSV_NRI_col]));
 
                 if (blnValidReturn) formController.ReloadForm();
+            }
+        }
+
+        private void txtDescription_TextChanged(object sender, EventArgs e)
+        {
+            if (!formController.FormIsLoading)
+            {
+                formController.ChangeMade = true;
             }
         }
 

@@ -15,6 +15,7 @@ namespace Ceritar.CVS.Models.Module_Template
         //Model attributes
         private int _intTemplate_NRI;
         private ushort _intTemplate_TS;
+        private int _intTemplate_NRI_Ref;
         private string _strTemplateName;
         private TemplateType _templateType;
         private bool _blnByDefault;
@@ -60,6 +61,12 @@ namespace Ceritar.CVS.Models.Module_Template
         {
             get { return _intTemplate_TS; }
             set { _intTemplate_TS = value; }
+        }
+
+        internal int Template_NRI_Ref
+        {
+            get { return _intTemplate_NRI_Ref; }
+            set { _intTemplate_NRI_Ref = value; }
         }
 
         internal string TemplateName
@@ -415,6 +422,8 @@ namespace Ceritar.CVS.Models.Module_Template
                 else if (!mcSQL.bln_AddField("Tpl_ByDefault", _blnByDefault, clsTTSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("TeT_NRI", (int)_templateType, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
+                { }
+                else if (!mcSQL.bln_AddField("Tpl_NRI_Ref", _intTemplate_NRI_Ref, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("CeA_NRI", _intCeritarApplication_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }

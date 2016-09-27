@@ -27,7 +27,7 @@ namespace Ceritar.Logirack_CVS.Static_Classes
         {
             CERITAR_APPLICATION_GRID_CAP_NRI = 2,
             CERITAR_CLIENT_GRID_CAP_NRI = 8,
-            TEMPLATE_GRID_CAP_NRI = 48,
+            TEMPLATE_GRID_CAP_NRI = 52,
             VERSION_REVISION_GRID_CAP_NRI = 14
         }
 
@@ -170,16 +170,20 @@ namespace Ceritar.Logirack_CVS.Static_Classes
             string strSQL = string.Empty;
 
             strSQL = strSQL + " SELECT Template.Tpl_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.CeA_Name, " + Environment.NewLine;
+            strSQL = strSQL + "        TemplateType.TeT_Code, " + Environment.NewLine;
             strSQL = strSQL + "        Template.Tpl_Name " + Environment.NewLine;
 
             strSQL = strSQL + " FROM Template " + Environment.NewLine;
+            strSQL = strSQL + "     INNER JOIN CerApp ON CerApp.CeA_NRI = Template.CeA_NRI " + Environment.NewLine;
+            strSQL = strSQL + "     INNER JOIN TemplateType ON TemplateType.TeT_NRI = Template.TeT_NRI " + Environment.NewLine;
 
             if (vstrWhere != string.Empty)
             {
                 strSQL = strSQL + vstrWhere + Environment.NewLine;
             }
 
-            strSQL = strSQL + "  ORDER BY Template.Tpl_Name " + Environment.NewLine;
+            strSQL = strSQL + "  ORDER BY CerApp.CeA_Name, TemplateType.TeT_Code, Template.Tpl_Name " + Environment.NewLine;
 
             return strSQL;
         }
