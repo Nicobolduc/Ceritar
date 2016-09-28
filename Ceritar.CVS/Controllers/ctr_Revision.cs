@@ -465,6 +465,7 @@ namespace Ceritar.CVS.Controllers
                             }
                             else
                             {
+                                if (Directory.Exists(currentFolderInfos.FullName)) Directory.Delete(currentFolderInfos.FullName, true);
                                 //Do nothing, pas de Release de l'application
                             }
                             
@@ -585,8 +586,8 @@ namespace Ceritar.CVS.Controllers
 
                             if (!string.IsNullOrEmpty(mcView.GetLocation_Scripts()) & blnScriptsChanged)
                             {
-                                strRevAllScripts_Location = Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES, mcView.GetCeritarApplication_Name(), sclsAppConfigs.GetVersionNumberPrefix +  mcModRevision.Version.VersionNo.ToString(), sclsAppConfigs.GetRevisionAllScriptFolderName);
-
+                                strRevAllScripts_Location = str_GetRevisionRootFolderPath(mcModRevision.TemplateSource.Template_NRI, mcModRevision.Version.VersionNo.ToString()).Replace(sclsAppConfigs.GetRevisionNumberPrefix + "XX", sclsAppConfigs.GetRevisionAllScriptFolderName);
+                                    
                                 if (!Directory.Exists(strRevAllScripts_Location))
                                 {
                                     Directory.CreateDirectory(strRevAllScripts_Location);
@@ -656,6 +657,10 @@ namespace Ceritar.CVS.Controllers
                                     mcModRevision.Path_Release = currentFolderInfos.FullName;
                                 }
                             } 
+                            else
+                            {
+                                if (Directory.Exists(currentFolderInfos.FullName)) Directory.Delete(currentFolderInfos.FullName, true);
+                            }
 
                             break;
 
@@ -1130,7 +1135,7 @@ namespace Ceritar.CVS.Controllers
             int intFirstUnderscoreIndex = 0;
             int intLastDigitCharIndex = 0;
             string strScriptToFindName = string.Empty;
-            string strRevAllScripts_Location = Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES, mcView.GetCeritarApplication_Name(), sclsAppConfigs.GetVersionNumberPrefix +  mcModRevision.Version.VersionNo.ToString(), sclsAppConfigs.GetRevisionAllScriptFolderName);
+            string strRevAllScripts_Location = str_GetRevisionRootFolderPath(mcModRevision.TemplateSource.Template_NRI, mcModRevision.Version.VersionNo.ToString()).Replace(sclsAppConfigs.GetRevisionNumberPrefix + "XX", sclsAppConfigs.GetRevisionAllScriptFolderName);
             List<string> lstScripts;
             List<string> lstCorrespondingScriptsFounds;
 
@@ -1314,6 +1319,7 @@ namespace Ceritar.CVS.Controllers
         public bool blnRevisionPathIsValid(int vintRev_NRI)
         {
             bool blnIsValid = false;
+            int intRecordCount = -1;
             string strSQL = string.Empty;
             string strRevisionFolderPath = string.Empty;
             SqlDataReader sqlRecord = null;
@@ -1342,31 +1348,37 @@ namespace Ceritar.CVS.Controllers
                 strSQL = strSQL + " --ORDER BY Ver_NRI, Rev_No ASC " + Environment.NewLine;
 
                 sqlRecord = clsTTSQL.ADOSelect(strSQL);
-
-                if (sqlRecord.Read())
+              
+                while (sqlRecord.Read())
                 {
-                    cRevision.Version = new mod_Ver_Version();
-                    cRevision.Version.VersionNo = UInt16.Parse(sqlRecord["Ver_No"].ToString());
+                    if (intRecordCount == -1)
+                    {
+                        cRevision.Version = new mod_Ver_Version();
+                        cRevision.Version.VersionNo = UInt16.Parse(sqlRecord["Ver_No"].ToString());
+                        cRevision.Revision_Number = Byte.Parse(sqlRecord["Rev_No"].ToString());
+                        cRevision.Path_Release = sqlRecord["Rev_Location_Exe"].ToString();
+                        cRevision.ExeIsExternalReport = Convert.ToBoolean(sqlRecord["Rev_ExeIsReport"].ToString());
+                        cRevision.ExeWithExternalReport = Convert.ToBoolean(sqlRecord["Rev_ExeWithReport"].ToString());
+                        cRevision.Path_Scripts = sqlRecord["Rev_Location_Scripts"].ToString();
 
-                    cRevision.Revision_Number = Byte.Parse(sqlRecord["Rev_No"].ToString());
-                    cRevision.Path_Release = sqlRecord["Rev_Location_Exe"].ToString();
-                    cRevision.ExeIsExternalReport = Convert.ToBoolean(sqlRecord["Rev_ExeIsReport"].ToString());
-                    cRevision.ExeWithExternalReport = Convert.ToBoolean(sqlRecord["Rev_ExeWithReport"].ToString());
-                    cRevision.Path_Scripts = sqlRecord["Rev_Location_Scripts"].ToString();
+                        cRevision.TemplateSource = new Models.Module_Template.mod_Tpl_HierarchyTemplate();
+                        cRevision.TemplateSource.Template_NRI = Int32.Parse(sqlRecord["Tpl_NRI"].ToString());
 
+                        intRecordCount = 0;
+                    }
+                    
                     cRevision.LstSatelliteRevisions.Add(new mod_SRe_SatelliteRevision());
-                    cRevision.LstSatelliteRevisions[0].Location_Exe = sqlRecord["SRe_Exe_Location"].ToString();
+                    cRevision.LstSatelliteRevisions[intRecordCount].Location_Exe = sqlRecord["SRe_Exe_Location"].ToString();
 
-                    cRevision.LstSatelliteRevisions[0].CeritarSatelliteApp = new mod_CSA_CeritarSatelliteApp();
-                    cRevision.LstSatelliteRevisions[0].CeritarSatelliteApp.ExportFolderName = sqlRecord["CSA_KitFolderName"].ToString();
+                    cRevision.LstSatelliteRevisions[intRecordCount].CeritarSatelliteApp = new mod_CSA_CeritarSatelliteApp();
+                    cRevision.LstSatelliteRevisions[intRecordCount].CeritarSatelliteApp.ExportFolderName = sqlRecord["CSA_KitFolderName"].ToString();
 
-                    cRevision.TemplateSource = new Models.Module_Template.mod_Tpl_HierarchyTemplate();
-                    cRevision.TemplateSource.Template_NRI = Int32.Parse(sqlRecord["Tpl_NRI"].ToString());
-
-                    strRevisionFolderPath = str_GetRevisionFolderPath(cRevision);
-
-                    blnIsValid = Directory.Exists(strRevisionFolderPath);
+                    intRecordCount++;
                 }
+
+                strRevisionFolderPath = str_GetRevisionFolderPath(cRevision);
+
+                blnIsValid = Directory.Exists(strRevisionFolderPath);
             }
             catch (FileNotFoundException exPath)
             {

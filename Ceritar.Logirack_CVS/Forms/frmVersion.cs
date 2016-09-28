@@ -274,7 +274,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
         string IVersion.GetLatestVersionNo()
         {
-            return clsTTApp.GetAppController.str_ShowInputMessage(mintMSG_ApplicationNotExistsInSystem);
+            return clsTTApp.GetAppController.str_ShowInputMessage(mintMSG_ApplicationNotExistsInSystem, "Attention", "", mcGrdClients[grdClients.Row, mintGrdClients_CeC_Name_col]);
         }
 
         int IVersion.GetCreatedByUser_NRI()
@@ -309,19 +309,29 @@ namespace Ceritar.Logirack_CVS.Forms
             return blnValidReturn;
         }
 
-        private bool pfblnGrdSatelliteApps_Load()
+        private bool pfblnGrdSatelliteApps_Load(int vintGrdClient_RowToLoad = 0)
         {
             bool blnValidReturn = false;
+            int intRowToLoad = 0;
 
             try
             {
-                if (grdClients.Rows.Count > 1 && !mcGrdClients.bln_CellIsEmpty(grdClients.Row, mintGrdClients_CeC_NRI_col))
+                if (vintGrdClient_RowToLoad > 0)
+                {
+                    intRowToLoad = vintGrdClient_RowToLoad;
+                }
+                else if (grdClients.Rows.Count > 1)
+                {
+                    intRowToLoad = grdClients.Row;
+                }
+
+                if (intRowToLoad >= 1 && !mcGrdClients.bln_CellIsEmpty(intRowToLoad, mintGrdClients_CeC_NRI_col))
                 {
                     Cursor.Current = Cursors.WaitCursor;
 
                     mcGrdSatelliteApps.LstHostedCellControls = new List<HostedCellControl>();
 
-                    blnValidReturn = mcGrdSatelliteApps.bln_FillData(mcCtrVersion.strGetListe_SatelliteApps_SQL(formController.Item_NRI, Int32.Parse(mcGrdClients[grdClients.Row, mintGrdClients_CeC_NRI_col])));
+                    blnValidReturn = mcGrdSatelliteApps.bln_FillData(mcCtrVersion.strGetListe_SatelliteApps_SQL(formController.Item_NRI, Int32.Parse(mcGrdClients[intRowToLoad, mintGrdClients_CeC_NRI_col])));
 
                     mblnGrdSatellitesChangeMade = false;
 
@@ -355,7 +365,7 @@ namespace Ceritar.Logirack_CVS.Forms
                 if (grdRevisions.Rows.Count > 1)
                 {
                     btnGrdRevDel.Enabled = true;
-                    btnGrdRevUpdate.Enabled = true;
+                    btnGrdRevUpdate.Enabled = mcGrdClients.bln_RowEditIsValid();
 
                     grdRevisions.Row = grdRevisions.Rows.Count - 1;
    
@@ -771,7 +781,7 @@ namespace Ceritar.Logirack_CVS.Forms
             grdRevisions.Cols[mintGrdRev_Number_col].Width = 65;
             grdRevisions.Cols[mintGrdRev_Rev_IsValid_col].Width = 45;
             grdRevisions.Cols[mintGrdRev_CeritarClientName_col].Width = 175;
-            grdRevisions.Cols[mintGrdRev_Description_col].Width = 500;
+            grdRevisions.Cols[mintGrdRev_Description_col].Width = 600;
         }
 
         private void formController_LoadData(LoadDataEventArgs eventArgs)
@@ -1171,11 +1181,21 @@ namespace Ceritar.Logirack_CVS.Forms
 
         void mcGrdClients_BeforeClickAdd(ref bool vblnCancel)
         {
-            if (mblnGrdSatellitesChangeMade)
+            if (mblnGrdSatellitesChangeMade || mcGrdClients[grdClients.Row, mintGrdClients_Action_col] == sclsConstants.DML_Mode.INSERT_MODE.ToString())
             {
                 DialogResult msgResult = clsTTApp.GetAppController.ShowMessage(mintMSG_ChangesWillBeLostOnRowChange, MessageBoxButtons.YesNo);
 
                 mblnGrdSatellitesChangeMade = msgResult == DialogResult.No;
+
+                if (msgResult == System.Windows.Forms.DialogResult.Yes)
+                {
+                    formController.FormIsLoading = true;
+                    pfblnGrdClients_Load();
+                    pfblnGrdSatelliteApps_Load();
+                    formController.FormIsLoading = false;
+
+                    btnGenerate_Blink(false);
+                }
             }
             
             vblnCancel = mblnGrdSatellitesChangeMade;
@@ -1183,7 +1203,11 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void btnGenerate_Blink(bool vblnDoBlinking)
         {
-            if (vblnDoBlinking && formController.FormMode != sclsConstants.DML_Mode.INSERT_MODE && (grdClients.Rows.Count > 1 || mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.INSERT_MODE.ToString()))
+            if (vblnDoBlinking && 
+                formController.FormMode != sclsConstants.DML_Mode.INSERT_MODE && 
+                grdClients.Rows.Count > 1 &&
+                mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.INSERT_MODE.ToString()
+               )
             {
                 tmrGenerateBlink.Start();
                 
@@ -1241,9 +1265,16 @@ namespace Ceritar.Logirack_CVS.Forms
                 case sclsConstants.DML_Mode.DELETE_MODE: case sclsConstants.DML_Mode.CONSULT_MODE:
 
                     btnGrdRevDel.Enabled = true;
+                    btnGrdRevUpdate.Enabled = false;
                     btnShowRootFolder.Enabled = true;
                     btnShowDB_UpgradeScripts.Enabled = true;
                     txtDescription.Enabled = false;
+                    btnGrdClientsAdd.Enabled = false;
+                    btnGrdClientsDel.Enabled = false;
+                    btnShowAccess.Enabled = true;
+                    btnShowExcel.Enabled = true;
+                    btnShowExecutable.Enabled = true;
+                    btnShowWord.Enabled = true;
 
                     break;
             }
@@ -1385,12 +1416,16 @@ namespace Ceritar.Logirack_CVS.Forms
             if (msgResult == DialogResult.Yes)
             {
                 grdClients.Row = intClickedRow;
-                mblnGrdSatellitesChangeMade = false;
+                
                 strPreviousLocation = mcGrdClients[grdClients.Row, mintGrdClients_LocationReportExe_col];
 
                 ShowOpenFileDialog("LogirackTransport RPT (*.exe)|*.exe", grdClients, mcGrdClients[grdClients.Row, mintGrdClients_LocationReportExe_col], true);
 
-                if (!strPreviousLocation.Equals(mcGrdClients[grdClients.Row, mintGrdClients_LocationReportExe_col])) btnGenerate_Blink(true);
+                if (!strPreviousLocation.Equals(mcGrdClients[grdClients.Row, mintGrdClients_LocationReportExe_col]))
+                {
+                    btnGenerate_Blink(true);
+                    mblnGrdSatellitesChangeMade = true;
+                }     
             }
 
             mcGrdClients.GridIsLoading = false;
@@ -1465,11 +1500,11 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void grdClients_AfterRowColChange(object sender, RangeEventArgs e)
         {
-            if (!formController.FormIsLoading && mcGrdClients.bln_RowEditIsValid() & e.OldRange.r1 != e.NewRange.r2 & grdClients.Rows.Count > 1)
+            if (!formController.FormIsLoading && grdClients.Rows.Count > 1 && grdClients.Row > 0 && e.OldRange.r1 != e.NewRange.r2)
             {
                 pfblnGrdSatelliteApps_Load();
 
-                btnGenerate.Enabled = mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.INSERT_MODE.ToString();
+                btnGenerate.Enabled = mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.INSERT_MODE.ToString() && mcGrdClients.bln_RowEditIsValid() && formController.FormMode != sclsConstants.DML_Mode.INSERT_MODE;
             }
             else
             {
@@ -1543,9 +1578,19 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void grdClients_BeforeRowColChange(object sender, RangeEventArgs e)
         {
-            if (!formController.FormIsLoading && mblnGrdSatellitesChangeMade & e.NewRange.r1 != e.OldRange.r1)
+            if (!formController.FormIsLoading && (mblnGrdSatellitesChangeMade || mcGrdClients[e.OldRange.r1, mintGrdClients_Action_col] == sclsConstants.DML_Mode.INSERT_MODE.ToString()) & e.NewRange.r1 != e.OldRange.r1)
             {
                 DialogResult msgResult = clsTTApp.GetAppController.ShowMessage(mintMSG_ChangesWillBeLostOnRowChange, MessageBoxButtons.YesNo);
+
+                if (msgResult == System.Windows.Forms.DialogResult.Yes)
+                {
+                    formController.FormIsLoading = true;
+                    pfblnGrdClients_Load();
+                    pfblnGrdSatelliteApps_Load(e.NewRange.r1);
+                    formController.FormIsLoading = false;
+
+                    btnGenerate_Blink(false);
+                }
 
                 if (msgResult == DialogResult.No) e.Cancel = true;
             }

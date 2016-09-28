@@ -251,13 +251,13 @@ namespace Ceritar.Logirack_CVS.Forms
 
                     if (formController.FormMode != sclsConstants.DML_Mode.INSERT_MODE)
                     {
-                        UInt16.TryParse(sqlRecord["Rev_TS"].ToString(), out mintRevision_TS);
-                  
-                        mblnAppExeLocationExistsOnLoad = !string.IsNullOrEmpty(txtReleasePath.Text);
+                        UInt16.TryParse(sqlRecord["Rev_TS"].ToString(), out mintRevision_TS);                 
 
                         txtReleasePath.Text = sqlRecord["Rev_Location_Exe"].ToString();
                         txtScriptsPath.Text = sqlRecord["Rev_Location_Scripts"].ToString();
                         txtCreatedBy.Text = sqlRecord["Rev_CreatedBy"].ToString();
+
+                        mblnAppExeLocationExistsOnLoad = !string.IsNullOrEmpty(txtReleasePath.Text);
 
                         cboClients.SelectedValue = Int32.Parse(sqlRecord["CeC_NRI"].ToString());
                         cboTemplates.SelectedValue = Int32.Parse(sqlRecord["Tpl_NRI"].ToString());
@@ -818,6 +818,7 @@ namespace Ceritar.Logirack_CVS.Forms
                 case (int)sclsConstants.DML_Mode.UPDATE_MODE:
 
                     cboTemplates.Enabled = false;
+                    cboClients.Enabled = false;
                     txtCreatedBy.Enabled = false;
                     btnSelectVariousFilePath.Enabled = true;
                     btnSelectVariousFolderPath.Enabled = true;
@@ -868,6 +869,7 @@ namespace Ceritar.Logirack_CVS.Forms
                 {
                     txtReleasePath.Text = string.Empty;
                     mblnAppExeLocationExistsOnLoad = false;
+                    btnShowRootFolder.Enabled = false;
                 }
             }
         }
@@ -891,6 +893,7 @@ namespace Ceritar.Logirack_CVS.Forms
                 {
                     txtReleasePath.Text = string.Empty;
                     mblnAppExeLocationExistsOnLoad = false;
+                    btnShowRootFolder.Enabled = false;
                 }
             }
         }
@@ -901,6 +904,7 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 txtReleasePath.Text = string.Empty;
                 mblnAppExeLocationExistsOnLoad = false;
+                btnShowRootFolder.Enabled = false;
             }
         }
 

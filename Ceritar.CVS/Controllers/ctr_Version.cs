@@ -201,6 +201,7 @@ namespace Ceritar.CVS.Controllers
             bool blnValidReturn = false;
             string strFolderPath = string.Empty;
             string strRevision_CSA = string.Empty;
+            System.Windows.Forms.DialogResult answer;
 
             try
             {
@@ -227,7 +228,13 @@ namespace Ceritar.CVS.Controllers
                             strFolderPath = new FileInfo(strFolderPath).Directory.Parent.FullName;
                         }
 
-                        Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(strFolderPath, Microsoft.VisualBasic.FileIO.UIOption.AllDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
+                        answer = clsTTApp.GetAppController.ShowMessage(mintMSG_AreYouSureToSendToThrash, System.Windows.Forms.MessageBoxButtons.YesNo, strFolderPath);
+
+                        if (answer == System.Windows.Forms.DialogResult.Yes)
+                        {
+                            Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(strFolderPath, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
+                        }
+                       
 
                         blnValidReturn = true;
                     }
@@ -498,68 +505,73 @@ namespace Ceritar.CVS.Controllers
                             blnValidReturn = false;
                         }
 
-                        lstVersionsFolders = Directory.GetDirectories(Path.Combine(sclsAppConfigs.GetRoot_DB_UPGRADE_SCRIPTS, mcView.GetCeritarApplication_Name()));
-
-                        strActiveInstallation_Revision_Path = Path.Combine(vstrDestinationFolderPath, cCAV.CeritarClient.CompanyName);
-
-                        if (Directory.Exists(strActiveInstallation_Revision_Path)) { Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(strActiveInstallation_Revision_Path,  Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.DoNothing); }
-
-
-                        foreach (string strCurrentVersionFolderToCopy_Path in lstVersionsFolders)
+                        if (blnValidReturn)
                         {
-                            UInt16.TryParse(Regex.Replace(new DirectoryInfo(strCurrentVersionFolderToCopy_Path).Name, @"[^0-9]+", ""), out intCurrentFolder_VersionNo);
+                            lstVersionsFolders = Directory.GetDirectories(Path.Combine(sclsAppConfigs.GetRoot_DB_UPGRADE_SCRIPTS, mcView.GetCeritarApplication_Name()));
 
-                            if (blnValidReturn && intCurrentFolder_VersionNo > intPreviousActiveVersionInProd && intCurrentFolder_VersionNo <= mcView.GetVersionNo())
+                            strActiveInstallation_Revision_Path = Path.Combine(vstrDestinationFolderPath, cCAV.CeritarClient.CompanyName);
+
+                            if (Directory.Exists(strActiveInstallation_Revision_Path)) { Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(strActiveInstallation_Revision_Path, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.DoNothing); }
+
+
+                            foreach (string strCurrentVersionFolderToCopy_Path in lstVersionsFolders)
                             {
-                                strActiveInstallation_Revision_Path = Path.Combine(vstrDestinationFolderPath, 
-                                                                                   cCAV.CeritarClient.CompanyName, 
-                                                                                   sclsAppConfigs.GetVersionNumberPrefix + intCurrentFolder_VersionNo.ToString());
+                                UInt16.TryParse(Regex.Replace(new DirectoryInfo(strCurrentVersionFolderToCopy_Path).Name, @"[^0-9]+", ""), out intCurrentFolder_VersionNo);
 
-                                clsTTApp.GetAppController.blnCopyFolderContent(strCurrentVersionFolderToCopy_Path,
-                                                                             strActiveInstallation_Revision_Path,
-                                                                             true,
-                                                                             true);
-
-                                cCAV.DML_Action = sclsConstants.DML_Mode.UPDATE_MODE;
-                                cCAV.LocationScriptsRoot = Path.Combine(vstrDestinationFolderPath, cCAV.CeritarClient.CompanyName);
-                                
-                                //Copy all client's specific scripts at the end of the current folder
-                                if (Directory.GetDirectories(strCurrentVersionFolderToCopy_Path, cCAV.CeritarClient.CompanyName + "*", SearchOption.TopDirectoryOnly).Length > 0)
+                                if (blnValidReturn && intCurrentFolder_VersionNo > intPreviousActiveVersionInProd && intCurrentFolder_VersionNo <= mcView.GetVersionNo())
                                 {
-                                    string[] lstSpecificScripts = Directory.GetFiles(Directory.GetDirectories(strCurrentVersionFolderToCopy_Path, cCAV.CeritarClient.CompanyName + "*", SearchOption.TopDirectoryOnly)[0]);
-                                    string strNewScriptName = string.Empty;
-                                    int intNewScriptNumber = 0;
-                                    List<string> lstScripts = Directory.GetFiles(strCurrentVersionFolderToCopy_Path).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();//.OrderBy(f => f).ToList<string>();
+                                    strActiveInstallation_Revision_Path = Path.Combine(vstrDestinationFolderPath,
+                                                                                       cCAV.CeritarClient.CompanyName,
+                                                                                       sclsAppConfigs.GetVersionNumberPrefix + intCurrentFolder_VersionNo.ToString());
 
-                                    for (int intIndex = 0; intIndex < lstSpecificScripts.Length; intIndex++)
+                                    clsTTApp.GetAppController.blnCopyFolderContent(strCurrentVersionFolderToCopy_Path,
+                                                                                 strActiveInstallation_Revision_Path,
+                                                                                 true,
+                                                                                 true,
+                                                                                 SearchOption.TopDirectoryOnly,
+                                                                                 new string[] {".doc", ".docx"});
+
+                                    cCAV.DML_Action = sclsConstants.DML_Mode.UPDATE_MODE;
+                                    cCAV.LocationScriptsRoot = Path.Combine(vstrDestinationFolderPath, cCAV.CeritarClient.CompanyName);
+
+                                    //Copy all client's specific scripts at the end of the current folder
+                                    if (Directory.GetDirectories(strCurrentVersionFolderToCopy_Path, cCAV.CeritarClient.CompanyName + "*", SearchOption.TopDirectoryOnly).Length > 0)
                                     {
-                                        strNewScriptName = Path.GetFileName(lstSpecificScripts[intIndex]);
-                                        strNewScriptName = strNewScriptName.Substring(strNewScriptName.IndexOf("_") + 1);
+                                        string[] lstSpecificScripts = Directory.GetFiles(Directory.GetDirectories(strCurrentVersionFolderToCopy_Path, cCAV.CeritarClient.CompanyName + "*", SearchOption.TopDirectoryOnly)[0]);
+                                        string strNewScriptName = string.Empty;
+                                        int intNewScriptNumber = 0;
+                                        List<string> lstScripts = Directory.GetFiles(strCurrentVersionFolderToCopy_Path).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();//.OrderBy(f => f).ToList<string>();
 
-                                        //Int32.Parse(new String(Path.GetFileName(lstScripts[lstScripts.Count - 1]).TakeWhile(Char.IsDigit).ToArray()))
-                                        intNewScriptNumber = (intNewScriptNumber == 0 ? lstScripts.Count : intNewScriptNumber) + 1;
-                                        
-                                        strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
+                                        for (int intIndex = 0; intIndex < lstSpecificScripts.Length; intIndex++)
+                                        {
+                                            strNewScriptName = Path.GetFileName(lstSpecificScripts[intIndex]);
+                                            strNewScriptName = strNewScriptName.Substring(strNewScriptName.IndexOf("_") + 1);
 
-                                        File.Copy(lstSpecificScripts[intIndex], Path.Combine(vstrDestinationFolderPath,
-                                                                                             cCAV.CeritarClient.CompanyName,
-                                                                                             sclsAppConfigs.GetVersionNumberPrefix + intCurrentFolder_VersionNo.ToString(),
-                                                                                             strNewScriptName), true
-                                                 );
+                                            //Int32.Parse(new String(Path.GetFileName(lstScripts[lstScripts.Count - 1]).TakeWhile(Char.IsDigit).ToArray()))
+                                            intNewScriptNumber = (intNewScriptNumber == 0 ? lstScripts.Count : intNewScriptNumber) + 1;
+
+                                            strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
+
+                                            File.Copy(lstSpecificScripts[intIndex], Path.Combine(vstrDestinationFolderPath,
+                                                                                                 cCAV.CeritarClient.CompanyName,
+                                                                                                 sclsAppConfigs.GetVersionNumberPrefix + intCurrentFolder_VersionNo.ToString(),
+                                                                                                 strNewScriptName), true
+                                                     );
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //Do nothing
                                     }
                                 }
-                                else 
+                                else
                                 {
                                     //Do nothing
                                 }
-                            }
-                            else
-                            {
-                                //Do nothing
-                            }
 
-                            if (!blnValidReturn) break;
-                        }
+                                if (!blnValidReturn) break;
+                            }
+                        }               
 
                         //Ce segment de code sert à sauvegarder le nouveau path du dossier racine des scripts
                         if (blnValidReturn & cCAV.DML_Action == sclsConstants.DML_Mode.UPDATE_MODE)

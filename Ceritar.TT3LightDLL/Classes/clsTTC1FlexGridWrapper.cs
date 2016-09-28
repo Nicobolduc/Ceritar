@@ -723,7 +723,7 @@ namespace Ceritar.TT3LightDLL.Classes
                 AddRow();
 	    }
 
-	    private void btnDeleteRow_Click(object sender, EventArgs e)
+	    public void btnDeleteRow_Click(object sender, EventArgs e)
 	    {
             CellRange crRow;
 		    int intSelectedRow = mGrdFlex.Row;

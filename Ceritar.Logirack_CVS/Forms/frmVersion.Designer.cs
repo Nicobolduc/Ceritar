@@ -799,12 +799,13 @@
             this.txtReleasePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtReleasePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtReleasePath.Location = new System.Drawing.Point(49, 196);
+            this.txtReleasePath.Location = new System.Drawing.Point(49, 188);
             this.txtReleasePath.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtReleasePath.Multiline = true;
             this.txtReleasePath.Name = "txtReleasePath";
             this.txtReleasePath.ReadOnly = true;
             this.txtReleasePath.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.txtReleasePath.Size = new System.Drawing.Size(968, 22);
+            this.txtReleasePath.Size = new System.Drawing.Size(968, 44);
             this.txtReleasePath.TabIndex = 7;
             // 
             // txtTTAppPath
@@ -812,12 +813,13 @@
             this.txtTTAppPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTTAppPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtTTAppPath.Location = new System.Drawing.Point(49, 140);
+            this.txtTTAppPath.Location = new System.Drawing.Point(49, 132);
             this.txtTTAppPath.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtTTAppPath.Multiline = true;
             this.txtTTAppPath.Name = "txtTTAppPath";
             this.txtTTAppPath.ReadOnly = true;
             this.txtTTAppPath.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.txtTTAppPath.Size = new System.Drawing.Size(968, 22);
+            this.txtTTAppPath.Size = new System.Drawing.Size(968, 44);
             this.txtTTAppPath.TabIndex = 6;
             // 
             // txtWordAppChangePath
@@ -825,12 +827,13 @@
             this.txtWordAppChangePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtWordAppChangePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtWordAppChangePath.Location = new System.Drawing.Point(49, 84);
+            this.txtWordAppChangePath.Location = new System.Drawing.Point(49, 76);
             this.txtWordAppChangePath.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtWordAppChangePath.Multiline = true;
             this.txtWordAppChangePath.Name = "txtWordAppChangePath";
             this.txtWordAppChangePath.ReadOnly = true;
             this.txtWordAppChangePath.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.txtWordAppChangePath.Size = new System.Drawing.Size(968, 22);
+            this.txtWordAppChangePath.Size = new System.Drawing.Size(968, 44);
             this.txtWordAppChangePath.TabIndex = 5;
             // 
             // txtExcelAppChangePath
@@ -838,12 +841,13 @@
             this.txtExcelAppChangePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtExcelAppChangePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtExcelAppChangePath.Location = new System.Drawing.Point(49, 27);
+            this.txtExcelAppChangePath.Location = new System.Drawing.Point(49, 19);
             this.txtExcelAppChangePath.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtExcelAppChangePath.Multiline = true;
             this.txtExcelAppChangePath.Name = "txtExcelAppChangePath";
             this.txtExcelAppChangePath.ReadOnly = true;
             this.txtExcelAppChangePath.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.txtExcelAppChangePath.Size = new System.Drawing.Size(968, 22);
+            this.txtExcelAppChangePath.Size = new System.Drawing.Size(968, 44);
             this.txtExcelAppChangePath.TabIndex = 4;
             // 
             // groupBox6
