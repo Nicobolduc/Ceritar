@@ -738,7 +738,7 @@ namespace Ceritar.CVS.Controllers
         /// <param name="rintNextScriptNumber">Le prochain numéro de script à utiliser.</param>
         /// <returns>Le nom du nouveau fichier avec son numéro.</returns>
         /// <remarks>La fonction considère que les scripts traités ont été triés par nom au préalable.</remarks>
-        private string pfstrGetNewFileNameWithNumber(string vstrDestinationFolderPath,string vstrSourceScriptPath, ref int rintNextScriptNumber)
+        private string pfstrGetNewFileNameWithNumber(string vstrDestinationFolderPath, string vstrSourceScriptPath, ref int rintNextScriptNumber)
         {
             string strNewScriptName = string.Empty;
             int intFirstUnderscoreIndex = 0;

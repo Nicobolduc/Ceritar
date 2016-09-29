@@ -239,5 +239,19 @@ namespace Ceritar.Logirack_CVS.Forms
             mnuLogIn.Visible = false;
             mnuLogOut.Visible = true;
         }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmAbout frmAbout = new frmAbout();
+
+            frmAbout.Show();
+        }
+
+        private void mnuConfigurations_Click(object sender, EventArgs e)
+        {
+            frmConfigurations frmConfig = new frmConfigurations();
+
+            frmConfig.Show();
+        }
     }
 }

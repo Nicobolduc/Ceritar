@@ -473,6 +473,8 @@ namespace Ceritar.CVS.Controllers
             bool blnValidReturn = false;
             ushort intPreviousActiveVersionInProd;
             ushort intCurrentFolder_VersionNo;
+            ushort intPreviousFolder_VersionNo = 0;
+            int intTotalScriptsCount = 1;
             string strActiveInstallation_Revision_Path = string.Empty;
             string[] lstVersionsFolders;
             List<mod_CAV_ClientAppVersion> lstCAV = mcModVersion.LstClientsUsing;
@@ -524,12 +526,38 @@ namespace Ceritar.CVS.Controllers
                                                                                        cCAV.CeritarClient.CompanyName,
                                                                                        sclsAppConfigs.GetVersionNumberPrefix + intCurrentFolder_VersionNo.ToString());
 
-                                    clsTTApp.GetAppController.blnCopyFolderContent(strCurrentVersionFolderToCopy_Path,
-                                                                                 strActiveInstallation_Revision_Path,
-                                                                                 true,
-                                                                                 true,
-                                                                                 SearchOption.TopDirectoryOnly,
-                                                                                 new string[] {".doc", ".docx"});
+                                    if (intPreviousFolder_VersionNo != intCurrentFolder_VersionNo)
+                                    {
+                                        intTotalScriptsCount = 1;
+
+                                        clsTTApp.GetAppController.blnCopyFolderContent(strCurrentVersionFolderToCopy_Path,
+                                                                                   strActiveInstallation_Revision_Path,
+                                                                                   true,
+                                                                                   true,
+                                                                                   SearchOption.TopDirectoryOnly,
+                                                                                   new string[] {".doc", ".docx"});
+                                    }
+                                    else //On a 2 dossiers (ou plus) pour la meme version. On les ajoutes dans le dossier courant.
+                                    {
+                                        List<string> lstScriptsToCopy;
+                                        string strNewScriptName = string.Empty;
+                                        int intNewScriptNumber = 0;
+
+                                        intNewScriptNumber = ++intTotalScriptsCount;
+
+                                        clsTTApp.GetAppController.setAttributesToNormal(new DirectoryInfo(strCurrentVersionFolderToCopy_Path));
+
+                                        lstScriptsToCopy = Directory.GetFiles(strCurrentVersionFolderToCopy_Path, "*.*", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
+
+                                        for (int intIndex = 0; intIndex < lstScriptsToCopy.Count; intIndex ++)
+                                        {
+                                            strNewScriptName = pfstrGetNewFileNameWithNumber(strActiveInstallation_Revision_Path, lstScriptsToCopy[intIndex], ref intNewScriptNumber);
+
+                                            File.Copy(lstScriptsToCopy[intIndex], Path.Combine(strActiveInstallation_Revision_Path, strNewScriptName), true);
+                                        }
+                                    }
+
+                                    intTotalScriptsCount += Directory.GetFiles(strCurrentVersionFolderToCopy_Path, "*.*", SearchOption.TopDirectoryOnly).ToArray().Count();
 
                                     cCAV.DML_Action = sclsConstants.DML_Mode.UPDATE_MODE;
                                     cCAV.LocationScriptsRoot = Path.Combine(vstrDestinationFolderPath, cCAV.CeritarClient.CompanyName);
@@ -540,7 +568,6 @@ namespace Ceritar.CVS.Controllers
                                         string[] lstSpecificScripts = Directory.GetFiles(Directory.GetDirectories(strCurrentVersionFolderToCopy_Path, cCAV.CeritarClient.CompanyName + "*", SearchOption.TopDirectoryOnly)[0]);
                                         string strNewScriptName = string.Empty;
                                         int intNewScriptNumber = 0;
-                                        List<string> lstScripts = Directory.GetFiles(strCurrentVersionFolderToCopy_Path).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();//.OrderBy(f => f).ToList<string>();
 
                                         for (int intIndex = 0; intIndex < lstSpecificScripts.Length; intIndex++)
                                         {
@@ -548,7 +575,7 @@ namespace Ceritar.CVS.Controllers
                                             strNewScriptName = strNewScriptName.Substring(strNewScriptName.IndexOf("_") + 1);
 
                                             //Int32.Parse(new String(Path.GetFileName(lstScripts[lstScripts.Count - 1]).TakeWhile(Char.IsDigit).ToArray()))
-                                            intNewScriptNumber = (intNewScriptNumber == 0 ? lstScripts.Count : intNewScriptNumber) + 1;
+                                            intNewScriptNumber = (intNewScriptNumber == 0 ? intTotalScriptsCount : intNewScriptNumber);
 
                                             strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
 
@@ -557,12 +584,18 @@ namespace Ceritar.CVS.Controllers
                                                                                                  sclsAppConfigs.GetVersionNumberPrefix + intCurrentFolder_VersionNo.ToString(),
                                                                                                  strNewScriptName), true
                                                      );
+
+                                            intNewScriptNumber++;
                                         }
+
+                                        intTotalScriptsCount += lstSpecificScripts.Count();
                                     }
                                     else
                                     {
                                         //Do nothing
                                     }
+
+                                    intPreviousFolder_VersionNo = intCurrentFolder_VersionNo;
                                 }
                                 else
                                 {
@@ -602,6 +635,72 @@ namespace Ceritar.CVS.Controllers
             }
 
             return blnValidReturn;
+        }
+
+        /// <summary>
+        /// Retourne le nom du fichier avec son numéro préfixé. Ex.: DB_Exemple devient 01_DB_Exemple.
+        /// </summary>
+        /// <param name="vstrSourceScriptPath">Le chemin vers le script à analyser.</param>
+        /// <param name="rintNextScriptNumber">Le prochain numéro de script à utiliser.</param>
+        /// <returns>Le nom du nouveau fichier avec son numéro.</returns>
+        /// <remarks>La fonction considère que les scripts traités ont été triés par nom au préalable.</remarks>
+        private string pfstrGetNewFileNameWithNumber(string vstrDestinationFolderPath, string vstrSourceScriptPath, ref int rintNextScriptNumber)
+        {
+            string strNewScriptName = string.Empty;
+            int intFirstUnderscoreIndex = 0;
+            int intLastDigitCharIndex = 0;
+            int intIntendedScriptNumber = 0;
+            List<string> lstExistingScripts;
+
+            try
+            {
+                if (rintNextScriptNumber <= 0)
+                {
+                    //On regarde le prochain numéro à utiliser dans le dossier de destination
+                    lstExistingScripts = Directory.GetFiles(vstrDestinationFolderPath).ToList();//.OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
+
+                    if (lstExistingScripts.Count > 0)
+                    {
+                        //Int32.TryParse(new String(Path.GetFileName(lstExistingScripts[lstExistingScripts.Count - 1]).TakeWhile(Char.IsDigit).ToArray()), out intNewScriptNumber);
+                        rintNextScriptNumber = lstExistingScripts.Count;
+                    }
+
+                    rintNextScriptNumber++;
+                }
+
+                strNewScriptName = Path.GetFileName(vstrSourceScriptPath);
+
+                intFirstUnderscoreIndex = strNewScriptName.IndexOf("_");
+                intLastDigitCharIndex = new String(strNewScriptName.TakeWhile(Char.IsDigit).ToArray()).Length;
+
+                if (intFirstUnderscoreIndex < 4 && intFirstUnderscoreIndex > -1) //On ne peut jamais avoir un script # en haut de 999
+                {
+                    Int32.TryParse(strNewScriptName.Substring(0, intFirstUnderscoreIndex), out intIntendedScriptNumber);
+                    strNewScriptName = strNewScriptName.Substring(intFirstUnderscoreIndex + 1);
+                }
+                else if (intLastDigitCharIndex < 4) //Les premiers caractères pourraient être le numéro de script avec oubli d'ajouter un _
+                {
+                    Int32.TryParse(strNewScriptName.Substring(0, intLastDigitCharIndex), out intIntendedScriptNumber);
+                    strNewScriptName = strNewScriptName.Substring(intLastDigitCharIndex);
+                }
+                else
+                {
+                    //Do nothing, le script ne contient pas de numéro au début
+                }
+
+                strNewScriptName = rintNextScriptNumber.ToString("00") + "_" + strNewScriptName;
+            }
+            catch (Exception ex)
+            {
+                mcActionResult.SetInvalid(sclsConstants.Error_Message.ERROR_UNHANDLED, clsActionResults.BaseErrorCode.UNHANDLED_ERROR);
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                rintNextScriptNumber++;
+            }
+
+            return strNewScriptName;
         }
 
         /// <summary>

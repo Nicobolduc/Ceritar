@@ -62,6 +62,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\frmAbout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmAbout.Designer.cs">
+      <DependentUpon>frmAbout.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmCeritarApp.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -73,6 +79,12 @@
     </Compile>
     <Compile Include="Forms\frmCeritarClient.Designer.cs">
       <DependentUpon>frmCeritarClient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmConfigurations.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmConfigurations.Designer.cs">
+      <DependentUpon>frmConfigurations.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmGenericList.cs">
       <SubType>Form</SubType>
@@ -131,11 +143,17 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Static_Classes\sclsGenList.cs" />
+    <EmbeddedResource Include="Forms\frmAbout.resx">
+      <DependentUpon>frmAbout.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmCeritarApp.resx">
       <DependentUpon>frmCeritarApp.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmCeritarClient.resx">
       <DependentUpon>frmCeritarClient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmConfigurations.resx">
+      <DependentUpon>frmConfigurations.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmGenericList.resx">
       <DependentUpon>frmGenericList.cs</DependentUpon>
