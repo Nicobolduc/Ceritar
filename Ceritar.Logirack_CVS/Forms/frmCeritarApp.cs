@@ -399,11 +399,11 @@ namespace Ceritar.Logirack_CVS.Forms
                 {
                     case mintGrdSat_CSA_Name_col:
 
-                        if (mcGrdSatApp[grdSatApp.Row, mintGrdSat_Action_col] == sclsConstants.DML_Mode.INSERT_MODE.ToString())
-                        {
+                        //if (mcGrdSatApp[grdSatApp.Row, mintGrdSat_Action_col] == sclsConstants.DML_Mode.INSERT_MODE.ToString())
+                        //{
                             grdSatApp.StartEditing();
                             formController.ChangeMade = true;
-                        }
+                        //}
 
                         break;
 

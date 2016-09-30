@@ -148,7 +148,7 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "frmCeritarClient";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Définition d\'un client de Ceritar";
+            this.Text = "Client de Ceritar";
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdCerApp)).EndInit();
             this.ResumeLayout(false);

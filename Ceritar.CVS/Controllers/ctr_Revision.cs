@@ -27,6 +27,7 @@ namespace Ceritar.CVS.Controllers
         //Messages
         private const int mintMSG_BuildSuccess = 37;
         private const int mintMSG_AreYouSureToSendToThrash = 49;
+        private const int mintMSG_ManyDirectoryFound = 54;
 
         public enum ErrorCode_Rev
         {
@@ -365,8 +366,15 @@ namespace Ceritar.CVS.Controllers
 
                                     if (intVersion == mcView.GetRevisionNo() && !strLstCurrentDirectory[intIndex].ToString().Equals(strRevisionFolderRoot))
                                     {
-                                        Directory.Move(strLstCurrentDirectory[intIndex].ToString(), strRevisionFolderRoot);
-
+                                        try
+                                        {
+                                            Directory.Move(strLstCurrentDirectory[intIndex].ToString(), strRevisionFolderRoot);
+                                        }
+                                        catch (System.IO.IOException)
+                                        {
+                                            clsTTApp.GetAppController.ShowMessage(mintMSG_ManyDirectoryFound, System.Windows.Forms.MessageBoxButtons.OK, mcModRevision.Revision_Number.ToString());
+                                        }
+                                        
                                         break;
                                     }
                                 }

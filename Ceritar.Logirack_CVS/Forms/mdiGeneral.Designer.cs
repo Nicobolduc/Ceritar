@@ -44,6 +44,7 @@
             this.mnuWindows = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuCloseAllWindows = new System.Windows.Forms.ToolStripMenuItem();
             this.helpMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuConfigurations = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusBar = new System.Windows.Forms.StatusStrip();
@@ -52,7 +53,7 @@
             this.lblStatus_Space = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus_BD = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.mnuConfigurations = new System.Windows.Forms.ToolStripMenuItem();
+            this.gestionDeDBUpgradeScriptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMain.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.SuspendLayout();
@@ -87,7 +88,7 @@
             // mnuLogIn
             // 
             this.mnuLogIn.Name = "mnuLogIn";
-            this.mnuLogIn.Size = new System.Drawing.Size(152, 22);
+            this.mnuLogIn.Size = new System.Drawing.Size(111, 22);
             this.mnuLogIn.Text = "&Entrer";
             this.mnuLogIn.Visible = false;
             this.mnuLogIn.Click += new System.EventHandler(this.mnuLogIn_Click);
@@ -95,14 +96,15 @@
             // mnuLogOut
             // 
             this.mnuLogOut.Name = "mnuLogOut";
-            this.mnuLogOut.Size = new System.Drawing.Size(152, 22);
+            this.mnuLogOut.Size = new System.Drawing.Size(111, 22);
             this.mnuLogOut.Text = "&Sortir";
             this.mnuLogOut.Click += new System.EventHandler(this.mnuLogOut_Click);
             // 
             // mnuManagement
             // 
             this.mnuManagement.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuVersion});
+            this.mnuVersion,
+            this.gestionDeDBUpgradeScriptsToolStripMenuItem});
             this.mnuManagement.Name = "mnuManagement";
             this.mnuManagement.Size = new System.Drawing.Size(65, 20);
             this.mnuManagement.Text = "&Gestion";
@@ -110,7 +112,7 @@
             // mnuVersion
             // 
             this.mnuVersion.Name = "mnuVersion";
-            this.mnuVersion.Size = new System.Drawing.Size(245, 22);
+            this.mnuVersion.Size = new System.Drawing.Size(307, 22);
             this.mnuVersion.Text = "&Gestion de version et révision";
             this.mnuVersion.Click += new System.EventHandler(this.mnuVersion_Click);
             // 
@@ -178,6 +180,13 @@
             this.helpMenu.Size = new System.Drawing.Size(46, 20);
             this.helpMenu.Text = "&Aide";
             // 
+            // mnuConfigurations
+            // 
+            this.mnuConfigurations.Name = "mnuConfigurations";
+            this.mnuConfigurations.Size = new System.Drawing.Size(194, 22);
+            this.mnuConfigurations.Text = "Configurations";
+            this.mnuConfigurations.Click += new System.EventHandler(this.mnuConfigurations_Click);
+            // 
             // toolStripSeparator8
             // 
             this.toolStripSeparator8.Name = "toolStripSeparator8";
@@ -232,12 +241,11 @@
             this.lblStatus_BD.Spring = true;
             this.lblStatus_BD.Text = "Base de données: ";
             // 
-            // mnuConfigurations
+            // gestionDeDBUpgradeScriptsToolStripMenuItem
             // 
-            this.mnuConfigurations.Name = "mnuConfigurations";
-            this.mnuConfigurations.Size = new System.Drawing.Size(194, 22);
-            this.mnuConfigurations.Text = "Configurations";
-            this.mnuConfigurations.Click += new System.EventHandler(this.mnuConfigurations_Click);
+            this.gestionDeDBUpgradeScriptsToolStripMenuItem.Name = "gestionDeDBUpgradeScriptsToolStripMenuItem";
+            this.gestionDeDBUpgradeScriptsToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
+            this.gestionDeDBUpgradeScriptsToolStripMenuItem.Text = "A venir - Gestion de DB_UpgradeScripts";
             // 
             // mdiGeneral
             // 
@@ -289,6 +297,7 @@
         private System.Windows.Forms.ToolStripStatusLabel lblStatus_Space;
         public System.Windows.Forms.ToolStripStatusLabel lblStatus_User;
         private System.Windows.Forms.ToolStripMenuItem mnuConfigurations;
+        private System.Windows.Forms.ToolStripMenuItem gestionDeDBUpgradeScriptsToolStripMenuItem;
     }
 }
 

@@ -128,6 +128,7 @@
     a) S'assurer que les noms des dossiers représentant une application portent le même nom que ceux donnés dans l'applciation.
     b) S'assurer que les noms des dossiers représentant un client (Client_Only) contiennent le nom exact du client dans l'application.
     c) Pour TOUS les dossiers dans DB_UpgradeScript qui ont des # dans leur nom, ce # doit faire partie du numéro de version.
+         Donc, pas de "V300_PART1", car devient 3001..
 Note: Les versions multi-dossiers sont supportées!
 
 4.) Dans l'application:
@@ -186,7 +187,7 @@ Note: Les versions multi-dossiers sont supportées!
         XTesb3QPLh88M+QwdP6m681Lt7xuXbu94vbgcOjwnZHokdE77DtTd1PuvriXeW/h/sYH6AdFD6UeVjxS
         fNTws+7PbaOWo6fHXMf6Hwc/vj/OGn/2S8Yv7ycKnpCfVEyqTDZPmU2dmnafvvF05dOJZ+nPFmYKf5X+
         tfa5zvMffnP8rX82YnbiBf/Fp99LXsq/PPRq2aueuYC5R69TXy/MF72Rf3P4LeNt37vwd5MLWe+x7ys/
-        6H7o/ujz8cGn1E+f/gUDmPP8usTo0wAAAAlwSFlzAAALDgAACw4BQL7hQQAACTxJREFUWEfFl3dUVFce
+        6H7o/ujz8cGn1E+f/gUDmPP8usTo0wAAAAlwSFlzAAALDQAACw0B7QfALAAACTxJREFUWEfFl3dUVFce
         x9/QO4JGUVE4IIKyigpSBpBEpEWiseCeE3NOsu5ujtvMJu7GgiXZ2CMoxQIaIyBlaMMMDDBA6CJKV0BQ
         rMBQpaiDlfnu7z0QGMI5+Wf35J3z4fLu/d3v7/tueW8uA+A3hfujzjCMuwrD2FAZZzOL4TGMsR7DmOoy
         zFwWnSnQnqLuXf1UkLTOP1R4XC7S5FAy4EoGLBjG8aLZtPSmjat7WrauHWra4iNvDvCRN232ljdu8pI3
@@ -232,7 +233,7 @@ Note: Les versions multi-dossiers sont supportées!
   <data name="pictureBox1.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsEAAA7BAbiRa+0AAEvSSURBVHhe7X0HWFTX9v17L0WjMmhM10Rj7wUbVuy990Ls
+        YQUAAAAJcEhZcwAADsAAAA7AAWrWiQkAAEvSSURBVHhe7X0HWFTX9v17L0WjMmhM10Rj7wUbVuy990Ls
         oGIBFRWxoxSpIiig2AtW7L0LoogCIoIFEHvv8SV5L8n673Vm7nglaMx7/yTm9zjft7+BmTsz95y99tpr
         n3Punb/ltJyW03JaTstpOS2n5bScltNyWk7LaTktp+W0nJbTctr/jZacnNzyUtqlo/J4NDnlhaWkpCjT
         P8djzl88f/TsubNLDx069K7pI3LaX7lduHAh5M6dO8i8kokrV6+Y7erVq8r0z/EYPifv+dfFixeLmz4i

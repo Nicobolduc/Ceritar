@@ -475,6 +475,7 @@ namespace Ceritar.CVS.Controllers
             ushort intCurrentFolder_VersionNo;
             ushort intPreviousFolder_VersionNo = 0;
             int intTotalScriptsCount = 1;
+            int intNewScriptNumber = 0;
             string strActiveInstallation_Revision_Path = string.Empty;
             string[] lstVersionsFolders;
             List<mod_CAV_ClientAppVersion> lstCAV = mcModVersion.LstClientsUsing;
@@ -541,9 +542,9 @@ namespace Ceritar.CVS.Controllers
                                     {
                                         List<string> lstScriptsToCopy;
                                         string strNewScriptName = string.Empty;
-                                        int intNewScriptNumber = 0;
+                                        intNewScriptNumber = 0;
 
-                                        intNewScriptNumber = ++intTotalScriptsCount;
+                                        intNewScriptNumber = intTotalScriptsCount;
 
                                         clsTTApp.GetAppController.setAttributesToNormal(new DirectoryInfo(strCurrentVersionFolderToCopy_Path));
 
@@ -557,7 +558,19 @@ namespace Ceritar.CVS.Controllers
                                         }
                                     }
 
-                                    intTotalScriptsCount += Directory.GetFiles(strCurrentVersionFolderToCopy_Path, "*.*", SearchOption.TopDirectoryOnly).ToArray().Count();
+                                    intNewScriptNumber = 0;
+                                    List<string> lstTempScripts = Directory.GetFiles(strCurrentVersionFolderToCopy_Path, "*.*", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
+
+                                    Int32.TryParse(new string(Path.GetFileName(lstTempScripts[lstTempScripts.Count() - 1]).TakeWhile(Char.IsDigit).ToArray()), out intNewScriptNumber);
+
+                                    if (intNewScriptNumber == 0) //Au cas ou le dernier script n'aurait pas des chiffres comme premiers caracteres
+                                    {
+                                        intTotalScriptsCount += lstTempScripts.Count();
+                                    }
+                                    else
+                                    {
+                                        intTotalScriptsCount = intNewScriptNumber + 1;
+                                    }
 
                                     cCAV.DML_Action = sclsConstants.DML_Mode.UPDATE_MODE;
                                     cCAV.LocationScriptsRoot = Path.Combine(vstrDestinationFolderPath, cCAV.CeritarClient.CompanyName);
@@ -567,14 +580,16 @@ namespace Ceritar.CVS.Controllers
                                     {
                                         string[] lstSpecificScripts = Directory.GetFiles(Directory.GetDirectories(strCurrentVersionFolderToCopy_Path, cCAV.CeritarClient.CompanyName + "*", SearchOption.TopDirectoryOnly)[0]);
                                         string strNewScriptName = string.Empty;
-                                        int intNewScriptNumber = 0;
+                                        int intIndex = 0;
 
-                                        for (int intIndex = 0; intIndex < lstSpecificScripts.Length; intIndex++)
+                                        intNewScriptNumber = 0;
+                                        //intTotalScriptsCount++;
+
+                                        for (intIndex = 0; intIndex < lstSpecificScripts.Length; intIndex++)
                                         {
                                             strNewScriptName = Path.GetFileName(lstSpecificScripts[intIndex]);
                                             strNewScriptName = strNewScriptName.Substring(strNewScriptName.IndexOf("_") + 1);
 
-                                            //Int32.Parse(new String(Path.GetFileName(lstScripts[lstScripts.Count - 1]).TakeWhile(Char.IsDigit).ToArray()))
                                             intNewScriptNumber = (intNewScriptNumber == 0 ? intTotalScriptsCount : intNewScriptNumber);
 
                                             strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;

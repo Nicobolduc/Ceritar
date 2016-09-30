@@ -1229,13 +1229,14 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 case sclsConstants.DML_Mode.INSERT_MODE:
 
+                    chkIncludeScripts.Enabled = false;
+                    chkIncludeScripts.Checked = true;
+
                     btnGenerate.Enabled = false;
                     btnExportInstallationKit.Enabled = false;
                     btnSelectVariousFilePath.Enabled = false;
                     btnSelectVariousFolderPath.Enabled = false;
                     btnShowRootFolder.Enabled = false;
-
-                    chkIncludeScripts.Enabled = false;
 
                     tab.TabPages[mintTab_Revision].Enabled = false;
 
@@ -1244,6 +1245,9 @@ namespace Ceritar.Logirack_CVS.Forms
                 case sclsConstants.DML_Mode.UPDATE_MODE:
 
                     tab.TabPages[mintTab_Revision].Enabled = true;
+
+                    chkIncludeScripts.Enabled = true;
+                    chkIncludeScripts.Checked = false;
 
                     btnGenerate.Enabled = true;
                     btnExportInstallationKit.Enabled = false;
@@ -1256,9 +1260,7 @@ namespace Ceritar.Logirack_CVS.Forms
                     cboTemplates.Enabled = false;
 
                     txtCompiledBy.ReadOnly = true;
-                    txtVersionNo.ReadOnly = true;
-
-                    chkIncludeScripts.Enabled = true;
+                    txtVersionNo.ReadOnly = true;                 
 
                     break;
 
@@ -1505,6 +1507,8 @@ namespace Ceritar.Logirack_CVS.Forms
                 pfblnGrdSatelliteApps_Load();
 
                 btnGenerate.Enabled = mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.INSERT_MODE.ToString() && mcGrdClients.bln_RowEditIsValid() && formController.FormMode != sclsConstants.DML_Mode.INSERT_MODE;
+                chkIncludeScripts.Enabled = btnGenerate.Enabled;
+                chkIncludeScripts.Checked = !chkIncludeScripts.Enabled;
             }
             else
             {
@@ -1588,6 +1592,10 @@ namespace Ceritar.Logirack_CVS.Forms
                     pfblnGrdClients_Load();
                     pfblnGrdSatelliteApps_Load(e.NewRange.r1);
                     formController.FormIsLoading = false;
+
+                    btnGenerate.Enabled = true;
+                    chkIncludeScripts.Enabled = true;
+                    chkIncludeScripts.Checked = false;
 
                     btnGenerate_Blink(false);
                 }
