@@ -81,6 +81,8 @@ namespace Ceritar.Logirack_CVS.Forms
         private string mstrVariousFolderLocation;
         private int mintGrdClient_SelectedRow = 1;
         private int mintCreatedByUser_NRI;
+        private string mstrLatestFilePathUsed = string.Empty;
+        private string mstrLatestFolderPathUsed = string.Empty;
         
 
         public frmVersion()
@@ -426,17 +428,20 @@ namespace Ceritar.Logirack_CVS.Forms
 
                     strAppChangeLocation = sqlRecord["Ver_AppChange_Location"].ToString();
 
-                    if (strAppChangeLocation.Substring(strAppChangeLocation.Length - 4, 4) == "xlsx" || strAppChangeLocation.Substring(strAppChangeLocation.Length - 3, 3) == "xls")
+                    if (!string.IsNullOrEmpty(strAppChangeLocation))
                     {
-                        txtExcelAppChangePath.Text = sqlRecord["Ver_AppChange_Location"].ToString();
-                        txtWordAppChangePath.Text = string.Empty;
+                        if (strAppChangeLocation.Substring(strAppChangeLocation.Length - 4, 4) == "xlsx" || strAppChangeLocation.Substring(strAppChangeLocation.Length - 3, 3) == "xls")
+                        {
+                            txtExcelAppChangePath.Text = sqlRecord["Ver_AppChange_Location"].ToString();
+                            txtWordAppChangePath.Text = string.Empty;
+                        }
+                        else if (strAppChangeLocation.Substring(strAppChangeLocation.Length - 4, 4) == "docx" || strAppChangeLocation.Substring(strAppChangeLocation.Length - 3, 3) == "doc")
+                        {
+                            txtWordAppChangePath.Text = sqlRecord["Ver_AppChange_Location"].ToString();
+                            txtExcelAppChangePath.Text = string.Empty;
+                        }
                     }
-                    else if (strAppChangeLocation.Substring(strAppChangeLocation.Length - 4, 4) == "docx" || strAppChangeLocation.Substring(strAppChangeLocation.Length - 3, 3) == "doc")
-                    {
-                        txtWordAppChangePath.Text = sqlRecord["Ver_AppChange_Location"].ToString();
-                        txtExcelAppChangePath.Text = string.Empty;
-                    }
-
+                    
                     txtReleasePath.Text = sqlRecord["Ver_Release_Location"].ToString();
                     txtTTAppPath.Text = sqlRecord["Ver_CaptionsAndMenus_Location"].ToString();
 
@@ -530,7 +535,7 @@ namespace Ceritar.Logirack_CVS.Forms
                     {
                         openFileDialog.FileName = string.Empty;
 
-                        vstrInitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                        vstrInitialDirectory = mstrLatestFilePathUsed == string.Empty ? System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop) : mstrLatestFilePathUsed;
                     }
 
                     openFileDialog.InitialDirectory = vstrInitialDirectory;
@@ -579,6 +584,8 @@ namespace Ceritar.Logirack_CVS.Forms
                                 ((C1FlexGrid)rControl)[grdSatellite.Row, mintGrdSat_CSV_LocationExe_col] = openFileDialog.FileName;
                             }
                         }
+
+                        mstrLatestFilePathUsed = openFileDialog.FileName;
                     }
                 }
             }
@@ -605,8 +612,15 @@ namespace Ceritar.Logirack_CVS.Forms
                     }
                     else
                     {
-                        folderBrowserDialog.RootFolder = Environment.SpecialFolder.Desktop;
-                        folderBrowserDialog.SelectedPath = string.Empty;
+                        if (mstrLatestFolderPathUsed == string.Empty)
+                        {
+                            folderBrowserDialog.RootFolder = Environment.SpecialFolder.Desktop;
+                            folderBrowserDialog.SelectedPath = string.Empty;
+                        }
+                        else
+                        {
+                            folderBrowserDialog.SelectedPath = mstrLatestFolderPathUsed;
+                        }
                     }
                     
                     dialogResult = folderBrowserDialog.ShowDialog();
@@ -614,6 +628,8 @@ namespace Ceritar.Logirack_CVS.Forms
                     if (dialogResult == System.Windows.Forms.DialogResult.OK)
                     {
                         rtxtAffected.Text = folderBrowserDialog.SelectedPath;
+
+                        mstrLatestFolderPathUsed = folderBrowserDialog.SelectedPath;
                     }
                 }
             }
@@ -835,6 +851,9 @@ namespace Ceritar.Logirack_CVS.Forms
 
                 blnValidReturn = true;
             }
+
+            this.ActiveControl = txtVersionNo;
+            txtVersionNo.Focus();
       
             if (!blnValidReturn) this.Close();
         }
@@ -1008,7 +1027,7 @@ namespace Ceritar.Logirack_CVS.Forms
         {
             string strPreviousLocation = txtExcelAppChangePath.Text;
 
-            ShowOpenFileDialog("Excel|*.xls|Excel 2010|*.xlsx", txtExcelAppChangePath, txtExcelAppChangePath.Text, true);
+            ShowOpenFileDialog("Excel|*.xls;*.xlsx", txtExcelAppChangePath, txtExcelAppChangePath.Text, true);
 
             if (!string.IsNullOrEmpty(txtExcelAppChangePath.Text)) txtWordAppChangePath.Text = string.Empty;
 
@@ -1223,7 +1242,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void formController_SetReadRights()
         {
-            tmrGenerateBlink.Stop();
+            btnGenerate_Blink(false);
 
             switch (formController.FormMode)
             {
@@ -1480,7 +1499,7 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 strPreviousLocation = mcGrdSatelliteApps[grdSatellite.Row, mintGrdSat_CSV_LocationExe_col];
 
-                ShowOpenFileDialog("Executables (*.exe)|*.exe", grdSatellite, mcGrdSatelliteApps[grdSatellite.Row, mintGrdSat_CSV_LocationExe_col], true);
+                ShowOpenFileDialog("Executables (exe, apk)|*.exe;*.apk", grdSatellite, mcGrdSatelliteApps[grdSatellite.Row, mintGrdSat_CSV_LocationExe_col], true);
             }
 
             if (!strPreviousLocation.Equals(mcGrdSatelliteApps[grdSatellite.Row, mintGrdSat_CSV_LocationExe_col])) btnGenerate_Blink(true);
@@ -1748,9 +1767,18 @@ namespace Ceritar.Logirack_CVS.Forms
 
             if (mcGrdSatelliteApps.bln_RowEditIsValid() && e.ClickedItem.Name.Equals(mnuiDelete.Name) && !mcGrdSatelliteApps.bln_CellIsEmpty(grdSatellite.Row, mintGrdSat_CSV_NRI_col))
             {
+                Cursor.Current = Cursors.WaitCursor;
+
                 blnValidReturn = mcCtrVersion.blnDeleteClientSatelliteVersion(Int32.Parse(mcGrdSatelliteApps[grdSatellite.Row, mintGrdSat_CSV_NRI_col]));
 
                 if (blnValidReturn) formController.ReloadForm();
+
+                Cursor.Current = Cursors.Default;
+            }
+            else if (grdSatellite.Rows.Count > 1 && grdSatellite.Row > 0 && !mcGrdSatelliteApps.bln_CellIsEmpty(grdSatellite.Row, mintGrdSat_CSV_LocationExe_col))
+            {
+                mcGrdSatelliteApps[grdSatellite.Row, mintGrdSat_CSV_LocationExe_col] = string.Empty;
+                ((HostedCellControl)mcGrdSatelliteApps.LstHostedCellControls[grdSatellite.Row - 1]).GetCellControl.BackColor = System.Drawing.SystemColors.Control;
             }
         }
 

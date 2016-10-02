@@ -239,6 +239,7 @@
             // 
             // chkReportAppExternal
             // 
+            this.chkReportAppExternal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkReportAppExternal.Location = new System.Drawing.Point(206, 208);
             this.chkReportAppExternal.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.chkReportAppExternal.Name = "chkReportAppExternal";
@@ -251,6 +252,7 @@
             // 
             // txtReportAppExternal
             // 
+            this.txtReportAppExternal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.txtReportAppExternal.Location = new System.Drawing.Point(232, 206);
             this.txtReportAppExternal.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtReportAppExternal.MaxLength = 75;
@@ -262,6 +264,7 @@
             // 
             // label3
             // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.Location = new System.Drawing.Point(3, 209);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(214, 21);
@@ -311,7 +314,7 @@
             this.MaximizeBox = false;
             this.Name = "frmCeritarApp";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Définition d\'une application Ceritar";
+            this.Text = "Solution logiciel de Ceritar";
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdModules)).EndInit();
             this.groupBox2.ResumeLayout(false);

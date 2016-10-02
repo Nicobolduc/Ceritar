@@ -306,11 +306,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 {
                     case sclsConstants.DML_Mode.INSERT_MODE:
 
-                        if (_blnIsDemo)
-                        {
-                            blnValidReturn = true;
-                        }
-                        else if (string.IsNullOrEmpty(_strLocation_APP_CHANGEMENT) || !File.Exists(_strLocation_APP_CHANGEMENT))
+                        if (!_blnIsDemo && (string.IsNullOrEmpty(_strLocation_APP_CHANGEMENT) || !File.Exists(_strLocation_APP_CHANGEMENT)))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY);
                         }
@@ -330,17 +326,11 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                                 foreach (mod_CAV_ClientAppVersion client in LstClientsUsing)
                                 {
-                                    if (!string.IsNullOrEmpty(_cCerApplication.ExternalReportAppName) && (string.IsNullOrEmpty(client.LocationReportExe) || !File.Exists(client.LocationReportExe)))
+                                    if (!_blnIsDemo && !string.IsNullOrEmpty(_cCerApplication.ExternalReportAppName) && (string.IsNullOrEmpty(client.LocationReportExe) || !File.Exists(client.LocationReportExe)))
                                     {
                                         mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.REPORT_MANDATORY);
                                         blnValidReturn = false;
                                     }
-
-                                    //if (string.IsNullOrEmpty(client.LocationScriptsRoot) || !Directory.Exists(client.LocationScriptsRoot))
-                                    //{
-                                    //    mcActionResults.SetInvalid(mintMSG_SCRIPS_NOT_FOUND, ctr_Version.ErrorCode_Ver.SCRIPTS_MANDATORY, client.CeritarClient.CompanyName);
-                                    //    blnValidReturn = false;
-                                    //}
 
                                     if (!blnValidReturn) break;
                                 }
@@ -355,18 +345,18 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                     case sclsConstants.DML_Mode.UPDATE_MODE:
 
-                        if (!string.IsNullOrEmpty(_strLocation_APP_CHANGEMENT) && !File.Exists(_strLocation_APP_CHANGEMENT))
+                        if (!_blnIsDemo && (string.IsNullOrEmpty(_strLocation_APP_CHANGEMENT) || !File.Exists(_strLocation_APP_CHANGEMENT)))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY);
                         }
-                        else if (!string.IsNullOrEmpty(_strLocation_CaptionsAndMenus) && !File.Exists(_strLocation_CaptionsAndMenus))
+                        else if (string.IsNullOrEmpty(_strLocation_CaptionsAndMenus) || !File.Exists(_strLocation_CaptionsAndMenus))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY);
                         }
-                        else if (!string.IsNullOrEmpty(_strLocation_Release) && !Directory.Exists(_strLocation_Release))
+                        else if (string.IsNullOrEmpty(_strLocation_Release) || !Directory.Exists(_strLocation_Release))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.RELEASE_MANDATORY);
-                        } 
+                        }
                         else
                         {
                             if (LstClientsUsing != null)
@@ -534,17 +524,21 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 { }
                 else if (!mcSQL.bln_AddField("Ver_CaptionsAndMenus_Location", _strLocation_CaptionsAndMenus, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
+                else if (!mcSQL.bln_AddField("Ver_Release_Location", _strLocation_Release, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                { }
+                else if (!mcSQL.bln_AddField("Ver_AppChange_Location", _strLocation_APP_CHANGEMENT, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                { }
                 else if (!mcSQL.bln_AddField("Ver_IsDemo", _blnIsDemo, clsTTSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("Ver_Description", _strDescription, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
                 else
                 {
-                    if (DML_Action == sclsConstants.DML_Mode.INSERT_MODE)
-                    {
-                        mcSQL.bln_AddField("Ver_Release_Location", _strLocation_Release, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE);
-                        mcSQL.bln_AddField("Ver_AppChange_Location", _strLocation_APP_CHANGEMENT, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE);
-                    }
+                    //if (DML_Action == sclsConstants.DML_Mode.INSERT_MODE)
+                    //{
+                    //    mcSQL.bln_AddField("Ver_Release_Location", _strLocation_Release, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE);
+                    //    mcSQL.bln_AddField("Ver_AppChange_Location", _strLocation_APP_CHANGEMENT, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE);
+                    //}
 
                     blnValidReturn = true;
                 }
@@ -579,6 +573,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 {
                     for (int intIndex = 0; intIndex < LstClientsUsing.Count; intIndex++)
                     {
+                        LstClientsUsing[intIndex].VersionParent = this;
+
                         mcActionResults = LstClientsUsing[intIndex].Validate();
 
                         if (!mcActionResults.IsValid)

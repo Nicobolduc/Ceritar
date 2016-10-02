@@ -470,6 +470,7 @@
             // 
             // grdSatellites
             // 
+            this.grdSatellites.AllowSorting = C1.Win.C1FlexGrid.AllowSortingEnum.None;
             this.grdSatellites.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));

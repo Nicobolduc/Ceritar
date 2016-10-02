@@ -109,7 +109,8 @@ namespace Ceritar.CVS.Controllers
                         blnValidReturn = blnBuildVersionHierarchy(mcModVersion.TemplateSource.Template_NRI);
                     }
 
-                    mcActionResult = mcModVersion.ActionResults;
+                    if (mcActionResult.IsValid)
+                        mcActionResult = mcModVersion.ActionResults;
                 }
             }
             catch (Exception ex)
@@ -119,7 +120,7 @@ namespace Ceritar.CVS.Controllers
             }
             finally
             {
-                if (!blnValidReturn & mcActionResult.IsValid)
+                if (!blnValidReturn & mcActionResult.IsValid & mcActionResult.GetErrorMessage_NRI <= 0)
                 {
                     mcActionResult.SetInvalid(sclsConstants.Error_Message.ERROR_SAVE_MSG, clsActionResults.BaseErrorCode.ERROR_SAVE);
                 }
@@ -345,7 +346,7 @@ namespace Ceritar.CVS.Controllers
                             {
                                 if (Directory.Exists(currentFolderInfos.FullName)) Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(currentFolderInfos.FullName, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.DoNothing);
 
-                                blnValidReturn = clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseInvalidExtensions);
+                                blnValidReturn = clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, false, sclsAppConfigs.GetReleaseInvalidExtensions);
 
                                 string[] reportExe = Directory.GetFiles(currentFolderInfos.FullName, mcModVersion.CerApplication.ExternalReportAppName, SearchOption.TopDirectoryOnly);
 
@@ -384,12 +385,15 @@ namespace Ceritar.CVS.Controllers
 
                         case (int)ctr_Template.FolderType.Version_Number:
 
-                            mcModVersion.Location_APP_CHANGEMENT = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_APP_CHANGEMENT()));
-
-                            if (!string.IsNullOrEmpty(mcView.GetLocation_APP_CHANGEMENT()) && mcModVersion.Location_APP_CHANGEMENT != mcView.GetLocation_APP_CHANGEMENT())
+                            if (!string.IsNullOrEmpty(mcView.GetLocation_APP_CHANGEMENT()))
                             {
-                                File.Copy(mcView.GetLocation_APP_CHANGEMENT(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_APP_CHANGEMENT())), true);
-                            }
+                                mcModVersion.Location_APP_CHANGEMENT = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_APP_CHANGEMENT()));
+
+                                if (mcModVersion.Location_APP_CHANGEMENT != mcView.GetLocation_APP_CHANGEMENT())
+                                {
+                                    File.Copy(mcView.GetLocation_APP_CHANGEMENT(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_APP_CHANGEMENT())), true);
+                                }
+                            }           
 
                             //Ajout des documents divers
                             if ((!string.IsNullOrEmpty(mcView.GetLocation_VariousFile()) || !string.IsNullOrEmpty(mcView.GetLocation_VariousFolder())) && !Directory.Exists(currentFolderInfos.FullName)) currentFolderInfos.Create();
@@ -401,7 +405,7 @@ namespace Ceritar.CVS.Controllers
 
                             if (!string.IsNullOrEmpty(mcView.GetLocation_VariousFolder()))
                             {
-                                clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_VariousFolder(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_VariousFolder())), true, true);
+                                clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_VariousFolder(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_VariousFolder())), true, true, SearchOption.TopDirectoryOnly, true);
                             }
 
                             blnValidReturn = true;
@@ -536,6 +540,7 @@ namespace Ceritar.CVS.Controllers
                                                                                    true,
                                                                                    true,
                                                                                    SearchOption.TopDirectoryOnly,
+                                                                                   false,
                                                                                    new string[] {".doc", ".docx"});
                                     }
                                     else //On a 2 dossiers (ou plus) pour la meme version. On les ajoutes dans le dossier courant.
@@ -802,7 +807,8 @@ namespace Ceritar.CVS.Controllers
 
                 if (answer == System.Windows.Forms.DialogResult.Yes)
                 {
-                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(vstrVersionFolderRoot, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
+                    if (Directory.Exists(vstrVersionFolderRoot))
+                        Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(vstrVersionFolderRoot, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
                     //System.Diagnostics.Process process = new System.Diagnostics.Process();
                     //System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
 
@@ -836,7 +842,8 @@ namespace Ceritar.CVS.Controllers
 
                         if (answer == System.Windows.Forms.DialogResult.Yes)
                         {
-                            Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(vstrVersionFolderRoot, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
+                            if (Directory.Exists(vstrVersionFolderRoot))
+                                Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(vstrVersionFolderRoot, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
                             //process = new System.Diagnostics.Process();
                             //startInfo = new System.Diagnostics.ProcessStartInfo();
 
@@ -850,7 +857,7 @@ namespace Ceritar.CVS.Controllers
                         }
                     }
 
-                    blnValidReturn = true;
+                    blnValidReturn = mcActionResult.IsValid;
                 }      
             }
             catch (Exception ex)
@@ -1151,13 +1158,17 @@ namespace Ceritar.CVS.Controllers
                                                                            )
                                                              );
 
-                        if (!Directory.Exists(currentFolderInfos.FullName)) currentFolderInfos.Create();
+                        if (!Directory.Exists(currentFolderInfos.FullName))
+                        {
+                            //currentFolderInfos.Delete(true);
+                            currentFolderInfos.Create();
+                        }
 
                         if ((File.GetAttributes(cCSV.Location_Exe) & FileAttributes.Directory) == FileAttributes.Directory) //Executable is a folder
                         {
                             if (cCSV.Location_Exe != currentFolderInfos.FullName)
                             {
-                                clsTTApp.GetAppController.blnCopyFolderContent(cCSV.Location_Exe, currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseInvalidExtensions);
+                                clsTTApp.GetAppController.blnCopyFolderContent(cCSV.Location_Exe, currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, true, sclsAppConfigs.GetReleaseInvalidExtensions);
 
                                 cCSV.Location_Exe = currentFolderInfos.FullName;
                             }

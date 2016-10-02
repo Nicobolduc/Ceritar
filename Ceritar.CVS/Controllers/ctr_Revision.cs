@@ -435,7 +435,7 @@ namespace Ceritar.CVS.Controllers
 
                                             currentFolderInfos.Create();
 
-                                            blnValidReturn = clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseInvalidExtensions);
+                                            blnValidReturn = clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, false, sclsAppConfigs.GetReleaseInvalidExtensions);
 
                                             //Supprime l'application des rapports externe au besoin
                                             if (!mcView.GetExeWithExternalReport())
@@ -641,7 +641,7 @@ namespace Ceritar.CVS.Controllers
 
                                             currentFolderInfos.Create();
 
-                                            blnValidReturn = clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseInvalidExtensions);
+                                            blnValidReturn = clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, false, sclsAppConfigs.GetReleaseInvalidExtensions);
 
                                             mcModRevision.Path_Release = currentFolderInfos.FullName;
                                         }
@@ -684,7 +684,7 @@ namespace Ceritar.CVS.Controllers
 
                             if (!string.IsNullOrEmpty(mcView.GetLocation_VariousFolder()))
                             {
-                                clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_VariousFolder(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_VariousFolder())), true, true);
+                                clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_VariousFolder(), Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_VariousFolder())), true, true, SearchOption.TopDirectoryOnly, true);
                             }
 
                             break;
@@ -988,7 +988,7 @@ namespace Ceritar.CVS.Controllers
                     {
                         if (rcSatRevision.Location_Exe != currentFolderInfos.FullName)
                         {
-                            clsTTApp.GetAppController.blnCopyFolderContent(rcSatRevision.Location_Exe, currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, sclsAppConfigs.GetReleaseInvalidExtensions);
+                            clsTTApp.GetAppController.blnCopyFolderContent(rcSatRevision.Location_Exe, currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, true, sclsAppConfigs.GetReleaseInvalidExtensions);
 
                             rcSatRevision.Location_Exe = currentFolderInfos.FullName;
                         }

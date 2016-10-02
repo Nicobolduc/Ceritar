@@ -144,7 +144,7 @@
             // 
             this.txtDescription.Location = new System.Drawing.Point(680, 24);
             this.txtDescription.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.txtDescription.MaxLength = 10;
+            this.txtDescription.MaxLength = 65;
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.Size = new System.Drawing.Size(162, 55);
@@ -696,6 +696,7 @@
             // 
             // grdClients
             // 
+            this.grdClients.AllowSorting = C1.Win.C1FlexGrid.AllowSortingEnum.None;
             this.grdClients.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -736,6 +737,7 @@
             // 
             // grdSatellite
             // 
+            this.grdSatellite.AllowSorting = C1.Win.C1FlexGrid.AllowSortingEnum.None;
             this.grdSatellite.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));

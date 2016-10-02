@@ -24,6 +24,9 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private int _intCeritarApplication_NRI;
         private int _intVersion_NRI;
 
+        //Others
+        private mod_Ver_Version _cVersionParent = null;
+
         //mod_IBase
         private clsActionResults mcActionResults = new clsActionResults();
         private sclsConstants.DML_Mode mintDML_Action;
@@ -108,6 +111,12 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { _strLocationScriptsRoot = value; }
         }
 
+        internal mod_Ver_Version VersionParent
+        {
+            get { return _cVersionParent; }
+            set { _cVersionParent = value; }
+        }
+
 #endregion
 
 
@@ -115,6 +124,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         {
             try
             {
+                string strExternalReportAppName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + _intCeritarApplication_NRI);
+
                 mcActionResults.SetDefault();
 
                 switch (mintDML_Action)
@@ -127,7 +138,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                     case sclsConstants.DML_Mode.INSERT_MODE:
 
-                        string strExternalReportAppName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + _intCeritarApplication_NRI);
+                        
 
                         if (_cCeritarClient.CeritarClient_NRI <= 0)
                         {
@@ -137,7 +148,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION);
                         }
-                        else if (string.IsNullOrEmpty(_strLocationReportExe) & !string.IsNullOrEmpty(strExternalReportAppName))
+                        else if (string.IsNullOrEmpty(_strLocationReportExe) & !string.IsNullOrEmpty(strExternalReportAppName) & !_cVersionParent.IsDemo)
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, Ceritar.CVS.Controllers.ctr_Version.ErrorCode_Ver.REPORT_MANDATORY);
                         }
@@ -165,6 +176,10 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         else if (!clsTTSQL.bln_ADOValid_TS("ClientAppVersion", "CAV_NRI", _intClientAppVersion_NRI, "CAV_TS", _intClientAppVersion_TS))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_TIMESTAMP, clsActionResults.BaseErrorCode.INVALID_TIMESTAMP);
+                        }
+                        else if (string.IsNullOrEmpty(_strLocationReportExe) & !string.IsNullOrEmpty(strExternalReportAppName) & !_cVersionParent.IsDemo)
+                        {
+                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, Ceritar.CVS.Controllers.ctr_Version.ErrorCode_Ver.REPORT_MANDATORY);
                         }
                         else
                         {

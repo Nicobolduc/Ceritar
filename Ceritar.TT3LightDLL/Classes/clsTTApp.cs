@@ -223,7 +223,9 @@ namespace Ceritar.TT3LightDLL.Classes
                     }
                 }
 
-                msgResult = MessageBox.Show(strMessage, "Message", vmsgType, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2, MessageBoxOptions.DefaultDesktopOnly);
+
+                msgResult = MessageBox.Show(clsTTApp.GetAppController.GetMDI, strMessage, "Message", vmsgType, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                //msgResult = MessageBox.Show(strMessage, "Message", vmsgType, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2, MessageBoxOptions.DefaultDesktopOnly, );
 
             }
             catch (Exception ex)
@@ -295,34 +297,48 @@ namespace Ceritar.TT3LightDLL.Classes
                                          bool vblnOverwrite = true, 
                                          bool vblnCreateFolderIfNotExist = false,
                                          SearchOption vSearchOption = SearchOption.TopDirectoryOnly,
+                                         bool vblnIncludeSubFolders = false,
                                          params string[] vlstExtensionsToAvoid)
         {
             bool blnValidReturn = true;
             string strFileDestinationPath = string.Empty;
-            string[] lstReleaseFilesToCopy;
+            string[] lstFilesToCopy;
+            string[] lstFoldersToCopy;
 
             try
             {
+                //Copie des fichiers
                 if (vlstExtensionsToAvoid != null && vlstExtensionsToAvoid.Length > 0)
                 {
-                    var lstReleaseFilesWithFilters = Directory.GetFiles(vstrSourceFolderPath, "*.*", vSearchOption).Where(f => !vlstExtensionsToAvoid.Contains(System.IO.Path.GetExtension(f).ToLower())).ToArray();
+                    var lstFilesWithFilters = Directory.GetFiles(vstrSourceFolderPath, "*.*", vSearchOption).Where(f => !vlstExtensionsToAvoid.Contains(System.IO.Path.GetExtension(f).ToLower())).ToArray();
 
-                    lstReleaseFilesToCopy = lstReleaseFilesWithFilters;
+                    lstFilesToCopy = lstFilesWithFilters;
                 }
                 else
                 {
-                    string[] lstReleaseFilesNoFilter = Directory.GetFiles(vstrSourceFolderPath, "*.*", vSearchOption);
+                    string[] lstFilesNoFilter = Directory.GetFiles(vstrSourceFolderPath, "*.*", vSearchOption);
 
-                    lstReleaseFilesToCopy = lstReleaseFilesNoFilter;
+                    lstFilesToCopy = lstFilesNoFilter;
                 }
 
-                foreach (string strCurrentFile in lstReleaseFilesToCopy)
+                foreach (string strCurrentFile in lstFilesToCopy)
                 {
                     if (vblnCreateFolderIfNotExist && !Directory.Exists(vstrDestinationFolderPath)) Directory.CreateDirectory(vstrDestinationFolderPath);
 
                     strFileDestinationPath = Path.Combine(vstrDestinationFolderPath, Path.GetFileName(strCurrentFile));
 
                     File.Copy(strCurrentFile, strFileDestinationPath, vblnOverwrite);
+                }
+
+                //Copie des sous-dossiers, recursivement
+                if (vblnIncludeSubFolders && vSearchOption != SearchOption.AllDirectories)
+                {
+                    lstFoldersToCopy = Directory.GetDirectories(vstrSourceFolderPath);
+
+                    foreach (string strFolder in lstFoldersToCopy)
+                    {
+                        blnValidReturn = blnCopyFolderContent(strFolder, Path.Combine(vstrDestinationFolderPath, new DirectoryInfo(strFolder).Name), vblnOverwrite, vblnCreateFolderIfNotExist, vSearchOption, true, vlstExtensionsToAvoid);
+                    }
                 }
             }
             catch (Exception ex)
