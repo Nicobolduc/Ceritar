@@ -27,6 +27,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         string GetLocation_VariousFolder();
         string GetLatestVersionNo();
         string GetDescription();
+        string GetExternalRPTAppName();
         bool GetIsDemo();
         bool GetIncludeScriptsOnRefresh();
         

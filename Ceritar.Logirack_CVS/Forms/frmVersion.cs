@@ -76,7 +76,7 @@ namespace Ceritar.Logirack_CVS.Forms
         //Working variables
         private ushort mintVersion_TS;
         private bool mblnGrdSatellitesChangeMade;
-        private string mstrExternalApplicationName;
+        private string mstrExternalReportAppName;
         private string mstrVariousFileLocation;
         private string mstrVariousFolderLocation;
         private int mintGrdClient_SelectedRow = 1;
@@ -279,6 +279,11 @@ namespace Ceritar.Logirack_CVS.Forms
             return clsTTApp.GetAppController.str_ShowInputMessage(mintMSG_ApplicationNotExistsInSystem, "Attention", "", mcGrdClients[grdClients.Row, mintGrdClients_CeC_Name_col]);
         }
 
+        string IVersion.GetExternalRPTAppName()
+        {
+            return mstrExternalReportAppName;
+        }
+
         int IVersion.GetCreatedByUser_NRI()
         {
             return (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE? clsTTApp.GetAppController.cUser.User_NRI : mintCreatedByUser_NRI);
@@ -455,7 +460,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
                     chkDemoVersion.Checked = Convert.ToBoolean(sqlRecord["Ver_IsDemo"]);
 
-                    mstrExternalApplicationName = sqlRecord["CeA_ExternalRPTAppName"].ToString();
+                    mstrExternalReportAppName = sqlRecord["CeA_ExternalRPTAppName"].ToString();
 
                     blnValidReturn = true;
                 }
@@ -726,7 +731,7 @@ namespace Ceritar.Logirack_CVS.Forms
             grdClients.Cols[mintGrdClients_Installed_col].DataType = typeof(bool);
             grdClients.Cols[mintGrdClients_Selection_col].DataType = typeof(bool);
 
-            grdClients.Cols[mintGrdClients_LocationReportExe_col].Visible = !string.IsNullOrEmpty(mstrExternalApplicationName);
+            grdClients.Cols[mintGrdClients_LocationReportExe_col].Visible = !string.IsNullOrEmpty(mstrExternalReportAppName);
 
             if (grdClients.Rows.Count > 1)
             {
@@ -827,9 +832,9 @@ namespace Ceritar.Logirack_CVS.Forms
 
                 txtCreatedBy.Text = clsTTApp.GetAppController.cUser.User_Code;
 
-                mstrExternalApplicationName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + Int32.Parse(cboApplications.SelectedValue.ToString()).ToString());
+                mstrExternalReportAppName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + Int32.Parse(cboApplications.SelectedValue.ToString()).ToString());
 
-                grdClients.Cols[mintGrdClients_LocationReportExe_col].Visible = !string.IsNullOrEmpty(mstrExternalApplicationName);
+                grdClients.Cols[mintGrdClients_LocationReportExe_col].Visible = !string.IsNullOrEmpty(mstrExternalReportAppName);
 
                 cboTemplates.SelectedIndex = (cboTemplates.Items.Count > 0 ? 0 : -1);
 
@@ -1142,9 +1147,9 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetTemplates_SQL(Int32.Parse(cboApplications.SelectedValue.ToString())), "Tpl_NRI", "Tpl_Name", false, ref cboTemplates);
 
-                mstrExternalApplicationName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + Int32.Parse(cboApplications.SelectedValue.ToString()).ToString());
+                mstrExternalReportAppName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + Int32.Parse(cboApplications.SelectedValue.ToString()).ToString());
 
-                grdClients.Cols[mintGrdClients_LocationReportExe_col].Visible = !string.IsNullOrEmpty(mstrExternalApplicationName);
+                grdClients.Cols[mintGrdClients_LocationReportExe_col].Visible = !string.IsNullOrEmpty(mstrExternalReportAppName);
             }
         }
 

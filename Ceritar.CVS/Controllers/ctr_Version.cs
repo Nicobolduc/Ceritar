@@ -1056,9 +1056,14 @@ namespace Ceritar.CVS.Controllers
                     }
 
                     //Get the report folder location to copy (from the version kit or from the latest revision)
-                    strReportLocation = clsTTSQL.str_ADOSingleLookUp("TOP 1 Rev_Location_Exe", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Rev_Location_Exe IS NOT NULL AND Revision.Rev_ExeIsReport = 1 ORDER BY Revision.Rev_No DESC");
+                    strReportLocation = clsTTSQL.str_ADOSingleLookUp("TOP 1 Rev_Location_Exe", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Rev_Location_Exe IS NOT NULL AND Revision.Rev_ExeIsReport = 1 AND Revision.CeC_NRI =" + mcView.GetSelectedClient().intCeritarClient_NRI.ToString() + " ORDER BY Revision.Rev_No DESC");
 
                     strReportLocation = strReportLocation == string.Empty ? mcView.GetSelectedClient().strLocationReportExe : strReportLocation;
+
+                    if ((File.GetAttributes(strReportLocation) & FileAttributes.Directory) == FileAttributes.Directory)
+                    {
+                        strReportLocation = Path.Combine(strReportLocation, mcView.GetExternalRPTAppName());
+                    }
 
                     //Add the external report application to the zip archive
                     newZipFile.CreateEntryFromFile(strReportLocation, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strReportLocation)));
@@ -1099,9 +1104,9 @@ namespace Ceritar.CVS.Controllers
                             newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetScriptsFolderName, new DirectoryInfo(strCurrentScriptsFolder).Name, Path.GetFileName(strCurrentFileToCopyPath)));
                         }
                     }
-
+                    
                     //Add the Rev_AllScripts folder if it exists
-                    strRevAllScripts_Location = Path.Combine(str_GetVersionFolderPath(mcModVersion.TemplateSource.Template_NRI, mcModVersion.VersionNo.ToString()), sclsAppConfigs.GetRevisionAllScriptFolderName);
+                    strRevAllScripts_Location = Path.Combine(str_GetVersionFolderPath(mcView.GetTemplateSource_NRI(), mcView.GetVersionNo().ToString()), sclsAppConfigs.GetRevisionAllScriptFolderName);
 
                     if (Directory.Exists(strRevAllScripts_Location))
                     {
