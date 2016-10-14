@@ -118,7 +118,7 @@
             this.groupBox3.Controls.Add(this.btnGrdRevDel);
             this.groupBox3.Controls.Add(this.btnGrdRevAdd);
             this.groupBox3.Controls.Add(this.grdRevModifs);
-            this.groupBox3.Location = new System.Drawing.Point(6, 170);
+            this.groupBox3.Location = new System.Drawing.Point(6, 177);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -197,7 +197,7 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox1.Size = new System.Drawing.Size(622, 156);
+            this.groupBox1.Size = new System.Drawing.Size(622, 165);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Informations";
@@ -293,7 +293,7 @@
             this.btnExportRevision.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExportRevision.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnExportRevision.Image = ((System.Drawing.Image)(resources.GetObject("btnExportRevision.Image")));
-            this.btnExportRevision.Location = new System.Drawing.Point(922, 666);
+            this.btnExportRevision.Location = new System.Drawing.Point(922, 673);
             this.btnExportRevision.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnExportRevision.Name = "btnExportRevision";
             this.btnExportRevision.Size = new System.Drawing.Size(47, 49);
@@ -413,7 +413,7 @@
             this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGenerate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGenerate.BackgroundImage")));
             this.btnGenerate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnGenerate.Location = new System.Drawing.Point(864, 666);
+            this.btnGenerate.Location = new System.Drawing.Point(864, 673);
             this.btnGenerate.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(47, 49);
@@ -428,7 +428,7 @@
             this.btnShowRootFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowRootFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnShowRootFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnShowRootFolder.Image")));
-            this.btnShowRootFolder.Location = new System.Drawing.Point(808, 666);
+            this.btnShowRootFolder.Location = new System.Drawing.Point(808, 673);
             this.btnShowRootFolder.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowRootFolder.Name = "btnShowRootFolder";
             this.btnShowRootFolder.Size = new System.Drawing.Size(47, 49);
@@ -463,7 +463,7 @@
             this.groupBox4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox4.Size = new System.Drawing.Size(337, 156);
+            this.groupBox4.Size = new System.Drawing.Size(337, 165);
             this.groupBox4.TabIndex = 1;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "La révision est pour l\'application sattellite suivante:";
@@ -479,13 +479,13 @@
             this.grdSatellites.ContextMenuStrip = this.mnuSatRevision;
             this.grdSatellites.ExtendLastCol = true;
             this.grdSatellites.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grdSatellites.Location = new System.Drawing.Point(5, 21);
+            this.grdSatellites.Location = new System.Drawing.Point(4, 18);
             this.grdSatellites.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.grdSatellites.Name = "grdSatellites";
             this.grdSatellites.Rows.Count = 1;
             this.grdSatellites.Rows.DefaultSize = 18;
             this.grdSatellites.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdSatellites.Size = new System.Drawing.Size(328, 131);
+            this.grdSatellites.Size = new System.Drawing.Size(330, 144);
             this.grdSatellites.StyleInfo = resources.GetString("grdSatellites.StyleInfo");
             this.grdSatellites.TabIndex = 0;
             this.grdSatellites.Tag = "35";
@@ -513,7 +513,7 @@
             this.groupBox2.Controls.Add(this.btnSelectScriptsFolderPath);
             this.groupBox2.Controls.Add(this.txtScriptsPath);
             this.groupBox2.Controls.Add(this.btnShowScriptsFolder);
-            this.groupBox2.Location = new System.Drawing.Point(6, 433);
+            this.groupBox2.Location = new System.Drawing.Point(6, 440);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -544,14 +544,14 @@
             this.groupBox5.Controls.Add(this.txtReleasePath);
             this.groupBox5.Controls.Add(this.btnShowExecutableFolder);
             this.groupBox5.Controls.Add(this.optRptOnly);
-            this.groupBox5.Location = new System.Drawing.Point(6, 543);
+            this.groupBox5.Location = new System.Drawing.Point(6, 550);
             this.groupBox5.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox5.Size = new System.Drawing.Size(966, 105);
             this.groupBox5.TabIndex = 4;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Exécutable(s) de l\'application principale";
+            this.groupBox5.Text = "Exécutable";
             // 
             // optExeOnly
             // 
@@ -606,7 +606,7 @@
             this.groupBox6.Controls.Add(this.label8);
             this.groupBox6.Controls.Add(this.label4);
             this.groupBox6.Controls.Add(this.btnSelectVariousFolderPath);
-            this.groupBox6.Location = new System.Drawing.Point(6, 655);
+            this.groupBox6.Location = new System.Drawing.Point(6, 662);
             this.groupBox6.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);

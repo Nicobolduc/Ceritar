@@ -695,7 +695,15 @@ namespace Ceritar.Logirack_CVS.Forms
                         grdClients.Row = intSelectedRow;
                         grdClients.Refresh();
 
+                        frmWorkInProgress frmWorking = new frmWorkInProgress();
+                        Thread newThread = new Thread(() => frmWorking.ShowDialog());
+
+                        newThread.Start();
+
                         blnValidReturn = mcCtrVersion.blnExportVersionInstallationKit((int)cboTemplates.SelectedValue, intCeritarClient_NRI, txtTemp.Text);
+
+                        if (newThread != null)
+                            newThread.Abort();
 
                         if (blnValidReturn)
                         {
@@ -966,7 +974,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
             try
             {
-                if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE)
+                if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE || mcGrdClients[grdClients.Row, mintGrdClients_Action_col] == TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.INSERT_MODE.ToString())
                 {
                     newThread = new Thread(() => frmWorking.ShowDialog());
                     newThread.Start();
@@ -1314,7 +1322,16 @@ namespace Ceritar.Logirack_CVS.Forms
 
                 mintGrdClient_SelectedRow = grdClients.Row;
 
+                frmWorkInProgress frmWorking = new frmWorkInProgress();
+                Thread newThread = new Thread(() => frmWorking.ShowDialog());
+
+                if (chkIncludeScripts.Checked)
+                    newThread.Start();
+
                 mcCtrVersion.blnUpdateVersionHierarchy();
+
+                if (newThread != null && newThread.ThreadState == ThreadState.Running)
+                    newThread.Abort();
 
                 mcActionResults = mcCtrVersion.GetActionResult;
 
@@ -1757,10 +1774,16 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void formController_BeNotify(BeNotifyEventArgs eventArgs)
         {
+            int intGrdRev_RowSelected = 1;
+
             switch (eventArgs.LstReceivedValues[0].ToString())
             {
                 case "frmRevision":
+                    intGrdRev_RowSelected = grdRevisions.Row;
+
                     pfblnGrdRevisions_Load();
+
+                    grdRevisions.Row = intGrdRev_RowSelected;
 
                     break;
             }

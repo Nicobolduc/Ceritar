@@ -934,10 +934,10 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void btnShowRootFolder_Click(object sender, EventArgs e)
         {
-            string strRootFolder = mcCtrRevision.str_GetRevisionFolderPath((int)cboTemplates.SelectedValue, txtVersionNo.Text);
-          
             try
             {
+                string strRootFolder = mcCtrRevision.str_GetRevisionFolderPath((int)cboTemplates.SelectedValue, txtVersionNo.Text);
+
                 System.Diagnostics.Process.Start(@strRootFolder);
             }
             catch (Exception ex)

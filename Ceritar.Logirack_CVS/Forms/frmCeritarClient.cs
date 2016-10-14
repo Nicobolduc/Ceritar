@@ -223,6 +223,10 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 clsTTApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
             }
+            else if (mcActionResults.SuccessMessage_NRI > 0)
+            {
+                clsTTApp.GetAppController.ShowMessage(mcActionResults.SuccessMessage_NRI);
+            }
 
             if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE) formController.Item_NRI = mcActionResults.GetNewItem_NRI;
 

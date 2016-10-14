@@ -20,6 +20,9 @@ namespace Ceritar.CVS.Controllers
         private clsActionResults mcActionResult;
         private clsTTSQL mcSQL;
 
+        //Messages
+        
+
         public enum ErrorCode_CeA
         {
             NAME_MANDATORY = 1,

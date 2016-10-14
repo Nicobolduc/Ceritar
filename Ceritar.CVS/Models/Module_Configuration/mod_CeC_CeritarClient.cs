@@ -22,11 +22,15 @@ namespace Ceritar.CVS.Models.Module_Configuration
 
         //Messages
         private const int mintMSG_InvalidName = 34;
+        private const int mintMSG_WarningOnNameChange = 56;
 
         //mod_IBase
         private clsActionResults mcActionResults = new clsActionResults();
         private sclsConstants.DML_Mode mintDML_Action;
         private clsTTSQL mcSQL;
+
+        //Working variables
+        private bool mblnNameChanged = false;
 
 
 #region "Properties"
@@ -46,7 +50,15 @@ namespace Ceritar.CVS.Models.Module_Configuration
         internal string CompanyName
         {
             get { return _strCompanyName; }
-            set { _strCompanyName = value; }
+            set 
+            {
+                if (_strCompanyName != value || (string.IsNullOrEmpty(_strCompanyName) && DML_Action != sclsConstants.DML_Mode.NO_MODE && DML_Action != sclsConstants.DML_Mode.CONSULT_MODE))
+                {
+                    mblnNameChanged = true; 
+                }
+
+                _strCompanyName = value; 
+            }
         }
 
         internal bool IsActive
@@ -188,6 +200,11 @@ namespace Ceritar.CVS.Models.Module_Configuration
             {
                 mcActionResults.SetInvalid(sclsConstants.Error_Message.ERROR_SAVE_MSG, clsActionResults.BaseErrorCode.ERROR_SAVE);
                 sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            if (mcActionResults.IsValid && mblnNameChanged)
+            {
+                mcActionResults.SuccessMessage_NRI = mintMSG_WarningOnNameChange;
             }
 
             return mcActionResults.IsValid;

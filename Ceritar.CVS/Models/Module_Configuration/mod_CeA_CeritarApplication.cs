@@ -26,6 +26,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
 
         //Messages
         private const int mintMSG_InvalidName = 32;
+        private const int mintMSG_WarningOnNameChange = 55;
 
         public enum AppDomain
         {
@@ -380,7 +381,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
                 for (int intIndex = 0; intIndex < _lstSatelliteApps.Count; intIndex++)
                 {
                     _lstSatelliteApps[intIndex].SetcSQL = mcSQL;
-                    _lstSatelliteApps[intIndex].CeritarApp_NRI = _intCeritarApplication_NRI;
+                    _lstSatelliteApps[intIndex].CeritarApp_NRI = _intCeritarApplication_NRI;        
 
                     blnValidReturn = _lstSatelliteApps[intIndex].blnSave();
 
@@ -389,6 +390,10 @@ namespace Ceritar.CVS.Models.Module_Configuration
                         mcActionResults = _lstSatelliteApps[intIndex].ActionResults;
 
                         break;
+                    }
+                    else if (_lstSatelliteApps[intIndex].DML_Action != sclsConstants.DML_Mode.CONSULT_MODE && _lstSatelliteApps[intIndex].DML_Action != sclsConstants.DML_Mode.NO_MODE)
+                    {
+                        mcActionResults.SuccessMessage_NRI = mintMSG_WarningOnNameChange;
                     }
                 }
             }

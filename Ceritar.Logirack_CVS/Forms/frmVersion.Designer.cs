@@ -142,22 +142,22 @@
             // 
             // txtDescription
             // 
-            this.txtDescription.Location = new System.Drawing.Point(680, 24);
+            this.txtDescription.Location = new System.Drawing.Point(673, 24);
             this.txtDescription.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtDescription.MaxLength = 65;
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(162, 55);
+            this.txtDescription.Size = new System.Drawing.Size(169, 55);
             this.txtDescription.TabIndex = 5;
             this.txtDescription.TextChanged += new System.EventHandler(this.txtDescription_TextChanged);
             // 
             // label10
             // 
-            this.label10.Location = new System.Drawing.Point(600, 27);
+            this.label10.Location = new System.Drawing.Point(633, 27);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(85, 21);
+            this.label10.Size = new System.Drawing.Size(39, 21);
             this.label10.TabIndex = 52;
-            this.label10.Text = "Description: ";
+            this.label10.Text = "Note: ";
             // 
             // txtCreatedBy
             // 
@@ -265,7 +265,7 @@
             this.txtCompiledBy.Location = new System.Drawing.Point(439, 57);
             this.txtCompiledBy.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtCompiledBy.Name = "txtCompiledBy";
-            this.txtCompiledBy.Size = new System.Drawing.Size(225, 22);
+            this.txtCompiledBy.Size = new System.Drawing.Size(228, 22);
             this.txtCompiledBy.TabIndex = 4;
             this.txtCompiledBy.TextChanged += new System.EventHandler(this.txtCompiledBy_TextChanged);
             // 
@@ -341,7 +341,7 @@
             this.btnExportInstallationKit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExportInstallationKit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnExportInstallationKit.Image = ((System.Drawing.Image)(resources.GetObject("btnExportInstallationKit.Image")));
-            this.btnExportInstallationKit.Location = new System.Drawing.Point(591, 155);
+            this.btnExportInstallationKit.Location = new System.Drawing.Point(591, 162);
             this.btnExportInstallationKit.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnExportInstallationKit.Name = "btnExportInstallationKit";
             this.btnExportInstallationKit.Size = new System.Drawing.Size(41, 43);
@@ -710,7 +710,7 @@
             this.grdClients.Rows.Count = 1;
             this.grdClients.Rows.DefaultSize = 18;
             this.grdClients.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdClients.Size = new System.Drawing.Size(579, 181);
+            this.grdClients.Size = new System.Drawing.Size(579, 184);
             this.grdClients.StyleInfo = resources.GetString("grdClients.StyleInfo");
             this.grdClients.TabIndex = 1;
             this.grdClients.Tag = "15";
@@ -752,7 +752,7 @@
             this.grdSatellite.Rows.Count = 1;
             this.grdSatellite.Rows.DefaultSize = 18;
             this.grdSatellite.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdSatellite.Size = new System.Drawing.Size(429, 181);
+            this.grdSatellite.Size = new System.Drawing.Size(429, 184);
             this.grdSatellite.StyleInfo = resources.GetString("grdSatellite.StyleInfo");
             this.grdSatellite.TabIndex = 0;
             this.grdSatellite.Tag = "26";
