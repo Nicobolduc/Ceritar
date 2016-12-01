@@ -77,6 +77,8 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
+            this.txtNote = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -94,7 +96,7 @@
             this.dtpCreation.CustomFormat = "MM-dd-yyyy hh:mm";
             this.dtpCreation.Enabled = false;
             this.dtpCreation.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpCreation.Location = new System.Drawing.Point(480, 23);
+            this.dtpCreation.Location = new System.Drawing.Point(481, 23);
             this.dtpCreation.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dtpCreation.Name = "dtpCreation";
             this.dtpCreation.Size = new System.Drawing.Size(135, 22);
@@ -104,7 +106,7 @@
             // 
             this.cboClients.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboClients.FormattingEnabled = true;
-            this.cboClients.Location = new System.Drawing.Point(79, 57);
+            this.cboClients.Location = new System.Drawing.Point(79, 53);
             this.cboClients.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.cboClients.Name = "cboClients";
             this.cboClients.Size = new System.Drawing.Size(284, 24);
@@ -173,7 +175,7 @@
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(3, 60);
+            this.label2.Location = new System.Drawing.Point(3, 56);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(72, 21);
             this.label2.TabIndex = 60;
@@ -181,6 +183,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.txtNote);
             this.groupBox1.Controls.Add(this.txtCreatedBy);
             this.groupBox1.Controls.Add(this.txtRevisionNo);
             this.groupBox1.Controls.Add(this.label3);
@@ -193,6 +196,7 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.cboClients);
             this.groupBox1.Controls.Add(this.label7);
+            this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Location = new System.Drawing.Point(6, 6);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Name = "groupBox1";
@@ -204,10 +208,10 @@
             // 
             // txtCreatedBy
             // 
-            this.txtCreatedBy.Location = new System.Drawing.Point(456, 57);
+            this.txtCreatedBy.Location = new System.Drawing.Point(447, 53);
             this.txtCreatedBy.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtCreatedBy.Name = "txtCreatedBy";
-            this.txtCreatedBy.Size = new System.Drawing.Size(166, 22);
+            this.txtCreatedBy.Size = new System.Drawing.Size(169, 22);
             this.txtCreatedBy.TabIndex = 4;
             this.txtCreatedBy.TextChanged += new System.EventHandler(this.txtCreatedBy_TextChanged);
             // 
@@ -240,7 +244,7 @@
             // 
             // label5
             // 
-            this.label5.Location = new System.Drawing.Point(3, 98);
+            this.label5.Location = new System.Drawing.Point(3, 92);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(72, 21);
             this.label5.TabIndex = 51;
@@ -260,7 +264,7 @@
             // 
             this.cboTemplates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboTemplates.FormattingEnabled = true;
-            this.cboTemplates.Location = new System.Drawing.Point(79, 92);
+            this.cboTemplates.Location = new System.Drawing.Point(79, 86);
             this.cboTemplates.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.cboTemplates.Name = "cboTemplates";
             this.cboTemplates.Size = new System.Drawing.Size(360, 24);
@@ -276,7 +280,7 @@
             // 
             // label7
             // 
-            this.label7.Location = new System.Drawing.Point(369, 60);
+            this.label7.Location = new System.Drawing.Point(369, 56);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(70, 21);
             this.label7.TabIndex = 74;
@@ -650,6 +654,25 @@
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
             // 
+            // txtNote
+            // 
+            this.txtNote.Location = new System.Drawing.Point(79, 121);
+            this.txtNote.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtNote.MaxLength = 65;
+            this.txtNote.Multiline = true;
+            this.txtNote.Name = "txtNote";
+            this.txtNote.Size = new System.Drawing.Size(537, 38);
+            this.txtNote.TabIndex = 75;
+            this.txtNote.TextChanged += new System.EventHandler(this.txtNote_TextChanged);
+            // 
+            // label9
+            // 
+            this.label9.Location = new System.Drawing.Point(3, 124);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(83, 21);
+            this.label9.TabIndex = 76;
+            this.label9.Text = "Note:";
+            // 
             // frmRevision
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -738,6 +761,8 @@
         private System.Windows.Forms.CheckBox chkAddScripts;
         private System.Windows.Forms.ContextMenuStrip mnuSatRevision;
         private System.Windows.Forms.ToolStripMenuItem mnuiDelete;
+        private System.Windows.Forms.TextBox txtNote;
+        private System.Windows.Forms.Label label9;
 
     }
 }

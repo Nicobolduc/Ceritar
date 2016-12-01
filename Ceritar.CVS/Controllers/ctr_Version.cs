@@ -514,6 +514,8 @@ namespace Ceritar.CVS.Controllers
 
                         if (blnValidReturn)
                         {
+                            intPreviousFolder_VersionNo = 0;
+
                             lstVersionsFolders = Directory.GetDirectories(Path.Combine(sclsAppConfigs.GetRoot_DB_UPGRADE_SCRIPTS, mcView.GetCeritarApplication_Name()));
 
                             strActiveInstallation_Revision_Path = Path.Combine(vstrDestinationFolderPath, cCAV.CeritarClient.CompanyName);

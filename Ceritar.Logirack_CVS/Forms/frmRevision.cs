@@ -96,6 +96,11 @@ namespace Ceritar.Logirack_CVS.Forms
             return txtScriptsPath.Text;
         }
 
+        string IRevision.GetNote()
+        {
+            return txtNote.Text;
+        }
+
         byte IRevision.GetRevisionNo()
         {
             return byte.Parse(txtRevisionNo.Text);
@@ -256,6 +261,9 @@ namespace Ceritar.Logirack_CVS.Forms
                         txtReleasePath.Text = sqlRecord["Rev_Location_Exe"].ToString();
                         txtScriptsPath.Text = sqlRecord["Rev_Location_Scripts"].ToString();
                         txtCreatedBy.Text = sqlRecord["Rev_CreatedBy"].ToString();
+
+                        if (sqlRecord["Rev_Note"] != DBNull.Value)
+                            txtNote.Text = sqlRecord["Rev_Note"].ToString();
 
                         mblnAppExeLocationExistsOnLoad = !string.IsNullOrEmpty(txtReleasePath.Text);
 
@@ -960,6 +968,14 @@ namespace Ceritar.Logirack_CVS.Forms
                 blnValidReturn = mcCtrRevision.blnDeleteSatelliteRevision(Int32.Parse(mcGrdSatellites[grdSatellites.Row, mintGrdSat_SRe_NRI_col]));
 
                 if (blnValidReturn) formController.ReloadForm();
+            }
+        }
+
+        private void txtNote_TextChanged(object sender, EventArgs e)
+        {
+            if (!formController.FormIsLoading)
+            {
+                formController.ChangeMade = true;
             }
         }
 

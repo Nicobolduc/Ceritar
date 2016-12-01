@@ -408,43 +408,52 @@ namespace Ceritar.TT3LightDLL.Controls
 
             this.Cursor = Cursors.WaitCursor;
 
-            if (ValidateForm != null)
-                ValidateForm(validationEvent);
-
-            if (validationEvent.IsValid)
+            try
             {
-                if (SaveData != null)
-                    SaveData(saveEvent);
+                if (ValidateForm != null)
+                    ValidateForm(validationEvent);
 
-                if (saveEvent.SaveSuccessful)
+                if (validationEvent.IsValid)
                 {
-                    ChangeMade = false;
+                    btnApply.Enabled = false;
 
-                    switch (mintFormMode)
+                    if (SaveData != null)
+                        SaveData(saveEvent);
+
+                    if (saveEvent.SaveSuccessful)
                     {
-                        case sclsConstants.DML_Mode.INSERT_MODE:
-                            FormMode = sclsConstants.DML_Mode.UPDATE_MODE;
-                            LoadLinkedFormData();
+                        ChangeMade = false;
 
-                            break;
+                        switch (mintFormMode)
+                        {
+                            case sclsConstants.DML_Mode.INSERT_MODE:
+                                FormMode = sclsConstants.DML_Mode.UPDATE_MODE;
+                                LoadLinkedFormData();
 
-                        case sclsConstants.DML_Mode.UPDATE_MODE:
-                            LoadLinkedFormData();
+                                break;
 
-                            break;
+                            case sclsConstants.DML_Mode.UPDATE_MODE:
+                                LoadLinkedFormData();
 
-                        case sclsConstants.DML_Mode.DELETE_MODE:
-                            mfrmParent.Close();
+                                break;
 
-                            break;
+                            case sclsConstants.DML_Mode.DELETE_MODE:
+                                mfrmParent.Close();
+
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        //Do nothing
                     }
                 }
-                else
-                {
-                  //Do nothing
-                }
             }
-
+            finally
+            {
+                if (!saveEvent.SaveSuccessful) btnApply.Enabled = true;
+            }
+            
             this.Cursor = Cursors.Default;
         }
 

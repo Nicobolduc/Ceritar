@@ -29,6 +29,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private string _strLocation_Scripts;
         private string _strCreationDate;
         private string _strCreatedBy;
+        private string _strNote;
         private bool _blnExeIsExternalReport;
         private bool _blnExeWithExternalReport;
         
@@ -84,6 +85,12 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         {
             get { return _strCreatedBy; }
             set { _strCreatedBy = value; }
+        }
+
+        internal string Note
+        {
+            get { return _strNote; }
+            set { _strNote = value; }
         }
 
         internal mod_CeC_CeritarClient CeritarClient
@@ -518,6 +525,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 else if (!mcSQL.bln_AddField("Rev_ExeIsReport", _blnExeIsExternalReport, clsTTSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("Rev_ExeWithReport", _blnExeWithExternalReport, clsTTSQL.MySQL_FieldTypes.BIT_TYPE))
+                { }
+                else if (!mcSQL.bln_AddField("Rev_Note", _strNote, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
                 else
                 {

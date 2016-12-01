@@ -72,6 +72,7 @@ namespace Ceritar.CVS.Controllers
                 mcModRevision.Revision_TS = mcView.GetRevision_TS();
                 mcModRevision.ExeIsExternalReport = mcView.GetExeIsExternalReport();
                 mcModRevision.ExeWithExternalReport = mcView.GetExeWithExternalReport();
+                mcModRevision.Note = mcView.GetNote();
 
                 mcModRevision.CeritarClient = new Models.Module_Configuration.mod_CeC_CeritarClient();
                 mcModRevision.CeritarClient.CeritarClient_NRI = mcView.GetCeritarClient_NRI();
@@ -1277,7 +1278,7 @@ namespace Ceritar.CVS.Controllers
 
                     strCurrentScriptFolderLocation = mcView.GetLocation_Scripts();
 
-                    File.WriteAllText(strAppRevisionScriptTempLocation, "UPDATE TTParam SET TTP_Value = '" + mcView.GetVersionNo().ToString() + mcView.GetRevisionNo().ToString() + "' WHERE TTP_Name = " + clsTTApp.GetAppController.str_FixStringForSQL("AppVersion"));
+                    File.WriteAllText(strAppRevisionScriptTempLocation, "UPDATE TTParam SET TTP_Value = '" + mcView.GetRevisionNo().ToString() + "' WHERE TTP_Name = " + clsTTApp.GetAppController.str_FixStringForSQL("AppRevision"));
 
                     if (!string.IsNullOrEmpty(strCurrentScriptFolderLocation))
                     {
@@ -1475,6 +1476,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        Revision.Rev_ExeIsReport, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_ExeWithReport, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_CreatedBy, " + Environment.NewLine;
+            strSQL = strSQL + "        Revision.Rev_Note, " + Environment.NewLine;
             strSQL = strSQL + "        RevisionNo = CASE WHEN Revision.Rev_NRI IS NULL THEN " + clsTTApp.GetAppController.str_FixStringForSQL(strNewRevisionNo) + " ELSE Revision.Rev_No END, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_Name, " + Environment.NewLine;

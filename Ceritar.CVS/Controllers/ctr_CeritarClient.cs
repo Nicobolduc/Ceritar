@@ -178,7 +178,8 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " 							  TRef.Rev_No " + Environment.NewLine;
             strSQL = strSQL + " 				 FROM ClientSatVersion " + Environment.NewLine;
             strSQL = strSQL + " 					INNER JOIN Version ON Version.Ver_NRI = ClientSatVersion.Ver_NRI " + Environment.NewLine;
-					
+            strSQL = strSQL + " 					INNER JOIN (SELECT MAX(ClientAppVersion.CAV_DtInstalledProd) As DtInstalled, ClientAppVersion.Ver_NRI, ClientAppVersion.CeC_NRI FROM ClientAppVersion GROUP BY ClientAppVersion.Ver_NRI, ClientAppVersion.CeC_NRI) AS TCAV ON TCAV.Ver_NRI = Version.Ver_NRI AND TCAV.CeC_NRI = ClientSatVersion.CeC_NRI " + Environment.NewLine;
+
             strSQL = strSQL + " 					OUTER APPLY (SELECT TOP 1 Revision.Rev_No " + Environment.NewLine;
             strSQL = strSQL + " 								 FROM Revision " + Environment.NewLine;
             strSQL = strSQL + " 									INNER JOIN SatRevision ON SatRevision.Rev_NRI = Revision.Rev_NRI " + Environment.NewLine;
@@ -189,6 +190,7 @@ namespace Ceritar.CVS.Controllers
 								
             strSQL = strSQL + " 				 WHERE ClientSatVersion.CSA_NRI = CerSatApp.CSA_NRI " + Environment.NewLine;
             strSQL = strSQL + " 				   AND ClientSatVersion.CeC_NRI = @CerClient_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 				   AND TCAV.DtInstalled IS NOT NULL " + Environment.NewLine;
 
             strSQL = strSQL + " 				 ORDER BY Version.Ver_No DESC " + Environment.NewLine;
             strSQL = strSQL + " 				) AS TVer " + Environment.NewLine;
