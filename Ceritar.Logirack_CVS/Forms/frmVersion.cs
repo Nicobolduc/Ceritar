@@ -1791,9 +1791,42 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void mnuClientSatVersion_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
+            
+        }
+
+        private void txtDescription_TextChanged(object sender, EventArgs e)
+        {
+            if (!formController.FormIsLoading)
+            {
+                formController.ChangeMade = true;
+            }
+        }
+
+        private void mnuiShowInExplorer_Click(object sender, EventArgs e)
+        {
+            string strLocation = mcGrdSatelliteApps[grdSatellite.Row, mintGrdSat_CSV_LocationExe_col];
+
+            if (mcGrdSatelliteApps.bln_RowEditIsValid() && !string.IsNullOrEmpty(strLocation))
+            {
+                if (File.Exists(strLocation) || Directory.Exists(strLocation))
+                {
+                    if ((File.GetAttributes(strLocation) & FileAttributes.Directory) == FileAttributes.Directory)
+                    {
+                        System.Diagnostics.Process.Start(strLocation);
+                    }
+                    else
+                    {
+                        System.Diagnostics.Process.Start("explorer.exe", "/select, " + strLocation);
+                    }
+                }
+            }
+        }
+
+        private void mnuiDelete_Click(object sender, EventArgs e)
+        {
             bool blnValidReturn = false;
 
-            if (mcGrdSatelliteApps.bln_RowEditIsValid() && e.ClickedItem.Name.Equals(mnuiDelete.Name) && !mcGrdSatelliteApps.bln_CellIsEmpty(grdSatellite.Row, mintGrdSat_CSV_NRI_col))
+            if (mcGrdSatelliteApps.bln_RowEditIsValid() && !mcGrdSatelliteApps.bln_CellIsEmpty(grdSatellite.Row, mintGrdSat_CSV_NRI_col))
             {
                 Cursor.Current = Cursors.WaitCursor;
 
@@ -1807,14 +1840,6 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 mcGrdSatelliteApps[grdSatellite.Row, mintGrdSat_CSV_LocationExe_col] = string.Empty;
                 ((HostedCellControl)mcGrdSatelliteApps.LstHostedCellControls[grdSatellite.Row - 1]).GetCellControl.BackColor = System.Drawing.SystemColors.Control;
-            }
-        }
-
-        private void txtDescription_TextChanged(object sender, EventArgs e)
-        {
-            if (!formController.FormIsLoading)
-            {
-                formController.ChangeMade = true;
             }
         }
 

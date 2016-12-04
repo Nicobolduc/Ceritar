@@ -79,6 +79,7 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.grdSatellite = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.mnuClientSatVersion = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuiShowInExplorer = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuiDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.txtReleasePath = new System.Windows.Forms.TextBox();
@@ -760,16 +761,24 @@
             // mnuClientSatVersion
             // 
             this.mnuClientSatVersion.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuiShowInExplorer,
             this.mnuiDelete});
             this.mnuClientSatVersion.Name = "mnuClientSatVersion";
-            this.mnuClientSatVersion.Size = new System.Drawing.Size(130, 26);
-            this.mnuClientSatVersion.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.mnuClientSatVersion_ItemClicked);
+            this.mnuClientSatVersion.Size = new System.Drawing.Size(213, 70);
+            // 
+            // mnuiShowInExplorer
+            // 
+            this.mnuiShowInExplorer.Name = "mnuiShowInExplorer";
+            this.mnuiShowInExplorer.Size = new System.Drawing.Size(212, 22);
+            this.mnuiShowInExplorer.Text = "Afficher dans l\'explorateur";
+            this.mnuiShowInExplorer.Click += new System.EventHandler(this.mnuiShowInExplorer_Click);
             // 
             // mnuiDelete
             // 
             this.mnuiDelete.Name = "mnuiDelete";
-            this.mnuiDelete.Size = new System.Drawing.Size(129, 22);
+            this.mnuiDelete.Size = new System.Drawing.Size(212, 22);
             this.mnuiDelete.Text = "Supprimer";
+            this.mnuiDelete.Click += new System.EventHandler(this.mnuiDelete_Click);
             // 
             // groupBox7
             // 
@@ -1058,5 +1067,6 @@
         private System.Windows.Forms.ToolStripMenuItem mnuiDelete;
         private System.Windows.Forms.TextBox txtDescription;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.ToolStripMenuItem mnuiShowInExplorer;
     }
 }
