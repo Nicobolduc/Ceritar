@@ -38,6 +38,7 @@
             this.grdRevModifs = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtNote = new System.Windows.Forms.TextBox();
             this.txtCreatedBy = new System.Windows.Forms.TextBox();
             this.txtRevisionNo = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -47,6 +48,7 @@
             this.cboTemplates = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.toolTips = new System.Windows.Forms.ToolTip(this.components);
             this.btnExportRevision = new System.Windows.Forms.Button();
             this.btnSelectScriptsFilePath = new System.Windows.Forms.Button();
@@ -77,8 +79,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
-            this.txtNote = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
+            this.mnuiShowInExplorer = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -206,6 +207,17 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Informations";
             // 
+            // txtNote
+            // 
+            this.txtNote.Location = new System.Drawing.Point(79, 121);
+            this.txtNote.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtNote.MaxLength = 65;
+            this.txtNote.Multiline = true;
+            this.txtNote.Name = "txtNote";
+            this.txtNote.Size = new System.Drawing.Size(537, 38);
+            this.txtNote.TabIndex = 75;
+            this.txtNote.TextChanged += new System.EventHandler(this.txtNote_TextChanged);
+            // 
             // txtCreatedBy
             // 
             this.txtCreatedBy.Location = new System.Drawing.Point(447, 53);
@@ -285,6 +297,14 @@
             this.label7.Size = new System.Drawing.Size(70, 21);
             this.label7.TabIndex = 74;
             this.label7.Text = "Créée par:";
+            // 
+            // label9
+            // 
+            this.label9.Location = new System.Drawing.Point(3, 124);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(83, 21);
+            this.label9.TabIndex = 76;
+            this.label9.Text = "Note:";
             // 
             // toolTips
             // 
@@ -497,14 +517,15 @@
             // mnuSatRevision
             // 
             this.mnuSatRevision.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuiShowInExplorer,
             this.mnuiDelete});
             this.mnuSatRevision.Name = "mnuSatRevision";
-            this.mnuSatRevision.Size = new System.Drawing.Size(130, 26);
+            this.mnuSatRevision.Size = new System.Drawing.Size(213, 70);
             // 
             // mnuiDelete
             // 
             this.mnuiDelete.Name = "mnuiDelete";
-            this.mnuiDelete.Size = new System.Drawing.Size(129, 22);
+            this.mnuiDelete.Size = new System.Drawing.Size(212, 22);
             this.mnuiDelete.Text = "Supprimer";
             this.mnuiDelete.Click += new System.EventHandler(this.mnuiDelete_Click);
             // 
@@ -654,24 +675,12 @@
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
             // 
-            // txtNote
+            // mnuiShowInExplorer
             // 
-            this.txtNote.Location = new System.Drawing.Point(79, 121);
-            this.txtNote.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.txtNote.MaxLength = 65;
-            this.txtNote.Multiline = true;
-            this.txtNote.Name = "txtNote";
-            this.txtNote.Size = new System.Drawing.Size(537, 38);
-            this.txtNote.TabIndex = 75;
-            this.txtNote.TextChanged += new System.EventHandler(this.txtNote_TextChanged);
-            // 
-            // label9
-            // 
-            this.label9.Location = new System.Drawing.Point(3, 124);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(83, 21);
-            this.label9.TabIndex = 76;
-            this.label9.Text = "Note:";
+            this.mnuiShowInExplorer.Name = "mnuiShowInExplorer";
+            this.mnuiShowInExplorer.Size = new System.Drawing.Size(212, 22);
+            this.mnuiShowInExplorer.Text = "Afficher dans l\'explorateur";
+            this.mnuiShowInExplorer.Click += new System.EventHandler(this.mnuiShowInExplorer_Click);
             // 
             // frmRevision
             // 
@@ -763,6 +772,7 @@
         private System.Windows.Forms.ToolStripMenuItem mnuiDelete;
         private System.Windows.Forms.TextBox txtNote;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.ToolStripMenuItem mnuiShowInExplorer;
 
     }
 }

@@ -298,7 +298,8 @@ namespace Ceritar.TT3LightDLL.Classes
                                          bool vblnCreateFolderIfNotExist = false,
                                          SearchOption vSearchOption = SearchOption.TopDirectoryOnly,
                                          bool vblnIncludeSubFolders = false,
-                                         params string[] vlstExtensionsToAvoid)
+                                         string[] vlstExtensionsToAvoid = null,
+                                         string[] vlstFoldersToAvoid = null)
         {
             bool blnValidReturn = true;
             string strFileDestinationPath = string.Empty;
@@ -337,7 +338,8 @@ namespace Ceritar.TT3LightDLL.Classes
 
                     foreach (string strFolder in lstFoldersToCopy)
                     {
-                        blnValidReturn = blnCopyFolderContent(strFolder, Path.Combine(vstrDestinationFolderPath, new DirectoryInfo(strFolder).Name), vblnOverwrite, vblnCreateFolderIfNotExist, vSearchOption, true, vlstExtensionsToAvoid);
+                        if (vlstFoldersToAvoid == null || !vlstFoldersToAvoid.Contains(new DirectoryInfo(strFolder).Name))
+                            blnValidReturn = blnCopyFolderContent(strFolder, Path.Combine(vstrDestinationFolderPath, new DirectoryInfo(strFolder).Name), vblnOverwrite, vblnCreateFolderIfNotExist, vSearchOption, true, vlstExtensionsToAvoid);
                     }
                 }
             }

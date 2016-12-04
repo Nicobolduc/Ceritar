@@ -67,7 +67,7 @@ namespace Ceritar.CVS.Controllers
                 mcModRevision.CreatedBy = mcView.GetCreatedBy();
                 mcModRevision.LstModifications = mcView.GetModificationsList();
                 mcModRevision.Path_Release = mcView.GetLocation_Release();
-                mcModRevision.Path_Scripts = mcView.GetLocation_Scripts();
+                mcModRevision.Path_Scripts = (string.IsNullOrEmpty(mcView.GetLocation_Scripts()) & mcModRevision.DML_Action == sclsConstants.DML_Mode.INSERT_MODE ? "placeHolder" : mcView.GetLocation_Scripts());
                 mcModRevision.Revision_NRI = mcView.GetRevision_NRI();
                 mcModRevision.Revision_TS = mcView.GetRevision_TS();
                 mcModRevision.ExeIsExternalReport = mcView.GetExeIsExternalReport();
@@ -588,12 +588,28 @@ namespace Ceritar.CVS.Controllers
                                 mcModRevision.Path_Scripts = currentFolderInfos.FullName;
                             }
 
+
+                            //Ajout du script de mise à jour du numéro de révision
+                            if (string.IsNullOrEmpty(mcView.GetLocation_Scripts()) & mcModRevision.DML_Action == sclsConstants.DML_Mode.INSERT_MODE)
+                            {
+                                Directory.CreateDirectory(currentFolderInfos.FullName);
+
+                                mcModRevision.Path_Scripts = currentFolderInfos.FullName;
+
+                                blnScriptsChanged = true;
+                            }
+                            string strAppRevisionScriptLocation = Path.Combine(mcModRevision.Path_Scripts, sclsAppConfigs.GetAppRevisionFileName(mcModRevision.Revision_Number.ToString()));
+
+                            if (!string.IsNullOrEmpty(mcModRevision.Path_Scripts) && !File.Exists(strAppRevisionScriptLocation))
+                                File.WriteAllText(strAppRevisionScriptLocation, "UPDATE TTParam SET TTP_Value = '" + mcView.GetRevisionNo().ToString() + "' WHERE TTP_Name = " + clsTTApp.GetAppController.str_FixStringForSQL("AppRevision"));
+
+
                             //Ajout dans Rev_AllScripts
                             List<string> lstScriptsToCopy;
                             string strNewScriptName = string.Empty;
                             int intNewScriptNumber = 0;
 
-                            if (!string.IsNullOrEmpty(mcView.GetLocation_Scripts()) & blnScriptsChanged)
+                            if (!string.IsNullOrEmpty(mcModRevision.Path_Scripts) & blnScriptsChanged)
                             {
                                 strRevAllScripts_Location = str_GetRevisionRootFolderPath(mcModRevision.TemplateSource.Template_NRI, mcModRevision.Version.VersionNo.ToString()).Replace(sclsAppConfigs.GetRevisionNumberPrefix + "XX", sclsAppConfigs.GetRevisionAllScriptFolderName);
                                     
@@ -623,6 +639,7 @@ namespace Ceritar.CVS.Controllers
                                 }
                             }
 
+                            
                             break;
 
                         case (int)ctr_Template.FolderType.External_Report:
@@ -989,7 +1006,7 @@ namespace Ceritar.CVS.Controllers
                     {
                         if (rcSatRevision.Location_Exe != currentFolderInfos.FullName)
                         {
-                            clsTTApp.GetAppController.blnCopyFolderContent(rcSatRevision.Location_Exe, currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, true, sclsAppConfigs.GetReleaseInvalidExtensions);
+                            clsTTApp.GetAppController.blnCopyFolderContent(rcSatRevision.Location_Exe, currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, true, sclsAppConfigs.GetReleaseInvalidExtensions, sclsAppConfigs.GetReleaseInvalidFolders);
 
                             rcSatRevision.Location_Exe = currentFolderInfos.FullName;
                         }
@@ -1274,11 +1291,11 @@ namespace Ceritar.CVS.Controllers
                     }
 
                     //Add all scripts folder to the zip archive.
-                    string strAppRevisionScriptTempLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "00_DB_UpdateRevisionNo.sql");
+                    //string strAppRevisionScriptTempLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), sclsAppConfigs.GetAppRevisionFileName(mcView.GetRevisionNo().ToString()));
 
                     strCurrentScriptFolderLocation = mcView.GetLocation_Scripts();
 
-                    File.WriteAllText(strAppRevisionScriptTempLocation, "UPDATE TTParam SET TTP_Value = '" + mcView.GetRevisionNo().ToString() + "' WHERE TTP_Name = " + clsTTApp.GetAppController.str_FixStringForSQL("AppRevision"));
+                    //File.WriteAllText(strAppRevisionScriptTempLocation, "UPDATE TTParam SET TTP_Value = '" + mcView.GetRevisionNo().ToString() + "' WHERE TTP_Name = " + clsTTApp.GetAppController.str_FixStringForSQL("AppRevision"));
 
                     if (!string.IsNullOrEmpty(strCurrentScriptFolderLocation))
                     {
@@ -1289,19 +1306,19 @@ namespace Ceritar.CVS.Controllers
                                 newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetScriptsFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
                             }
 
-                            newZipFile.CreateEntryFromFile(strAppRevisionScriptTempLocation, Path.Combine(sclsAppConfigs.GetScriptsFolderName, Path.GetFileName(strAppRevisionScriptTempLocation)));
+                            //newZipFile.CreateEntryFromFile(strAppRevisionScriptTempLocation, Path.Combine(sclsAppConfigs.GetScriptsFolderName, Path.GetFileName(strAppRevisionScriptTempLocation)));
                         }
                         else
                         {
                             newZipFile.CreateEntryFromFile(strCurrentScriptFolderLocation, Path.Combine(sclsAppConfigs.GetScriptsFolderName, Path.GetFileName(strCurrentScriptFolderLocation)), CompressionLevel.NoCompression);
                         }
                     }
-                    else
-                    {
-                        newZipFile.CreateEntryFromFile(strAppRevisionScriptTempLocation, Path.Combine(sclsAppConfigs.GetScriptsFolderName, Path.GetFileName(strAppRevisionScriptTempLocation)), CompressionLevel.NoCompression);
-                    }
+                    //else
+                    //{
+                    //    newZipFile.CreateEntryFromFile(strAppRevisionScriptTempLocation, Path.Combine(sclsAppConfigs.GetScriptsFolderName, Path.GetFileName(strAppRevisionScriptTempLocation)), CompressionLevel.NoCompression);
+                    //}
 
-                    File.Delete(strAppRevisionScriptTempLocation);
+                    //File.Delete(strAppRevisionScriptTempLocation);
                 }
 
                 blnValidReturn = true;

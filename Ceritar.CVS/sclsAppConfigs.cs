@@ -10,11 +10,13 @@ namespace Ceritar.CVS
     {
         private static string _strRoot_DB_UPGRADE_SCRIPTS_Dir;
         private static string _strRoot_INSTALLATIONS_ACTIVES_Dir;
+        private static string _strAppRevisionFileName = "00_DB_UpdateRevisionNo";
         private static string _strScriptsFolderName = "Scripts";
         private static string _strReleaseFolderName = "Release";
         private static string _strRevisionAllScriptFolderName = "Rev_AllScripts";
         private static string _strCaptionsAndMenusFileName;
         private static string[] _strReleaseInvalidExtensions = { ".xml", ".pdb", ".ini", ".log", ".txt", ".sample" };
+        private static string[] _strReleaseInvalidFolders = { "zh-CN" };
         private const string _strVersionNumberPrefix = "V_";
         private const string _strRevisionNumberPrefix = "R_";
 
@@ -134,8 +136,17 @@ namespace Ceritar.CVS
             get { return sclsAppConfigs._strReleaseInvalidExtensions; }
         }
 
+        public static string[] GetReleaseInvalidFolders
+        {
+            get { return sclsAppConfigs._strReleaseInvalidFolders; }
+        }
+
 #endregion
 
-        
+
+        public static string GetAppRevisionFileName(string vstrRevisionNo)
+        {
+            return sclsAppConfigs._strAppRevisionFileName + vstrRevisionNo + ".sql";
+        }
     }
 }

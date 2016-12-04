@@ -665,11 +665,11 @@ namespace Ceritar.Logirack_CVS.Forms
 
             try
             {
-                if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE)
-                {
+                //if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE)
+                //{
                     newThread = new Thread(() => frmWorking.ShowDialog());
                     newThread.Start();
-                }
+                //}
 
                 mcActionResults = mcCtrRevision.Save();
 
@@ -976,6 +976,26 @@ namespace Ceritar.Logirack_CVS.Forms
             if (!formController.FormIsLoading)
             {
                 formController.ChangeMade = true;
+            }
+        }
+
+        private void mnuiShowInExplorer_Click(object sender, EventArgs e)
+        {
+            string strLocation = mcGrdSatellites[grdSatellites.Row, mintGrdSat_CSA_ExeLocation_col];
+
+            if (mcGrdSatellites.bln_RowEditIsValid() && !string.IsNullOrEmpty(strLocation))
+            {
+                if (File.Exists(strLocation) || Directory.Exists(strLocation))
+                {
+                    if ((File.GetAttributes(strLocation) & FileAttributes.Directory) == FileAttributes.Directory)
+                    {
+                        System.Diagnostics.Process.Start(strLocation);
+                    }
+                    else
+                    {
+                        System.Diagnostics.Process.Start("explorer.exe", "/select, " + strLocation);
+                    }
+                }
             }
         }
 
