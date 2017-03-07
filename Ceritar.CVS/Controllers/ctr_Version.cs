@@ -506,7 +506,7 @@ namespace Ceritar.CVS.Controllers
                             UInt16.TryParse(mcView.GetLatestVersionNo(), out intPreviousActiveVersionInProd);
                         }
 
-                        if (intPreviousActiveVersionInProd <= 0)
+                        if (intPreviousActiveVersionInProd < 0)
                         {
                             mcActionResult.SetInvalid(mintMSG_GenerationCanceled, clsActionResults.BaseErrorCode.ERROR_SAVE);
                             blnValidReturn = false;
