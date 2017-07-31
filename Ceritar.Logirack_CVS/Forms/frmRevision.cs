@@ -999,5 +999,15 @@ namespace Ceritar.Logirack_CVS.Forms
             }
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            frmCrystalReportViewer frmReportViewer = new frmCrystalReportViewer();
+
+            Crystal_Reports.rptSignature rpt = new Crystal_Reports.rptSignature();
+
+            frmReportViewer.crystalReportViewer1.ReportSource = rpt;
+            frmReportViewer.crystalReportViewer1.Refresh();
+        }
+
     }
 }

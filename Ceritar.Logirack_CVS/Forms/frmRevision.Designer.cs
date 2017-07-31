@@ -67,6 +67,7 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.grdSatellites = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.mnuSatRevision = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuiShowInExplorer = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuiDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtScriptsPath = new System.Windows.Forms.TextBox();
@@ -79,7 +80,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
-            this.mnuiShowInExplorer = new System.Windows.Forms.ToolStripMenuItem();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -520,7 +521,14 @@
             this.mnuiShowInExplorer,
             this.mnuiDelete});
             this.mnuSatRevision.Name = "mnuSatRevision";
-            this.mnuSatRevision.Size = new System.Drawing.Size(213, 70);
+            this.mnuSatRevision.Size = new System.Drawing.Size(213, 48);
+            // 
+            // mnuiShowInExplorer
+            // 
+            this.mnuiShowInExplorer.Name = "mnuiShowInExplorer";
+            this.mnuiShowInExplorer.Size = new System.Drawing.Size(212, 22);
+            this.mnuiShowInExplorer.Text = "Afficher dans l\'explorateur";
+            this.mnuiShowInExplorer.Click += new System.EventHandler(this.mnuiShowInExplorer_Click);
             // 
             // mnuiDelete
             // 
@@ -675,18 +683,22 @@
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
             // 
-            // mnuiShowInExplorer
+            // button1
             // 
-            this.mnuiShowInExplorer.Name = "mnuiShowInExplorer";
-            this.mnuiShowInExplorer.Size = new System.Drawing.Size(212, 22);
-            this.mnuiShowInExplorer.Text = "Afficher dans l\'explorateur";
-            this.mnuiShowInExplorer.Click += new System.EventHandler(this.mnuiShowInExplorer_Click);
+            this.button1.Location = new System.Drawing.Point(536, 673);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 10;
+            this.button1.Text = "print";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // frmRevision
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(976, 770);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.btnShowRootFolder);
             this.Controls.Add(this.btnGenerate);
             this.Controls.Add(this.groupBox5);
@@ -773,6 +785,7 @@
         private System.Windows.Forms.TextBox txtNote;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ToolStripMenuItem mnuiShowInExplorer;
+        private System.Windows.Forms.Button button1;
 
     }
 }
