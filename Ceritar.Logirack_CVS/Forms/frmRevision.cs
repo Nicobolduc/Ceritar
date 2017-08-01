@@ -11,6 +11,7 @@ using Ceritar.CVS.Controllers.Interfaces;
 using C1.Win.C1FlexGrid;
 using System.Threading;
 using System.Drawing;
+using CrystalDecisions.CrystalReports.Engine;
 
 namespace Ceritar.Logirack_CVS.Forms
 {
@@ -1001,12 +1002,15 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
+            ReportDocument rptDoc = new ReportDocument();
             frmCrystalReportViewer frmReportViewer = new frmCrystalReportViewer();
 
-            Crystal_Reports.rptSignature rpt = new Crystal_Reports.rptSignature();
+            rptDoc.Load(Application.StartupPath + @"\Crystal Reports\" + typeof(Crystal_Reports.rptSignature).Name);
 
-            frmReportViewer.crystalReportViewer1.ReportSource = rpt;
+            frmReportViewer.crystalReportViewer1.ReportSource = rptDoc;
             frmReportViewer.crystalReportViewer1.Refresh();
+
+            frmReportViewer.Show();
         }
 
     }
