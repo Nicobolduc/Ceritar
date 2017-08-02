@@ -50,7 +50,7 @@ namespace Ceritar.Logirack_CVS.Crystal_Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section Section1 {
+        public CrystalDecisions.CrystalReports.Engine.Section Report_Header {
             get {
                 return this.ReportDefinition.Sections[0];
             }
