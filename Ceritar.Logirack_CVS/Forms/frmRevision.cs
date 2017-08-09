@@ -712,8 +712,8 @@ namespace Ceritar.Logirack_CVS.Forms
 
         void mcGrdSatellites_SetGridDisplay()
         {
-            grdSatellites.Cols[mintGrdSat_CSA_Name_col].Width = 200;
-            grdSatellites.Cols[mintGrdSat_CSA_ExeLocation_col].Width = 42;
+            grdSatellites.Cols[mintGrdSat_CSA_Name_col].Width = 250;
+            grdSatellites.Cols[mintGrdSat_CSA_ExeLocation_col].Width = 30;
 
             if (grdSatellites.Rows.Count > 1)
             {
@@ -1003,9 +1003,12 @@ namespace Ceritar.Logirack_CVS.Forms
         private void button1_Click(object sender, EventArgs e)
         {
             ReportDocument rptDoc = new ReportDocument();
-            frmCrystalReportViewer frmReportViewer = new frmCrystalReportViewer();
+            frmCrystalReportViewer frmReportViewer = new frmCrystalReportViewer();                      
 
-            rptDoc.Load(Application.StartupPath + @"\Crystal Reports\" + typeof(Crystal_Reports.rptSignature).Name);
+            rptDoc.Load(Application.StartupPath + @"\Crystal Reports\" + typeof(Crystal_Reports.rptSignature).Name + @".rpt");
+
+            rptDoc.SetParameterValue("@Rev_NRI", formController.Item_NRI);
+            rptDoc.SetDatabaseLogon("sa", "*8059%Ce");
 
             frmReportViewer.crystalReportViewer1.ReportSource = rptDoc;
             frmReportViewer.crystalReportViewer1.Refresh();

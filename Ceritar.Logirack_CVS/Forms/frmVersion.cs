@@ -203,7 +203,7 @@ namespace Ceritar.Logirack_CVS.Forms
             return lstClient;
         }
 
-        List<structClientSatVersion> IVersion.GetClientSatellitesList()
+        List<structClientSatVersion> IVersion.GetClientSatellitesList(int vintCeritarClient_NRI)
         {
             List<structClientSatVersion> lstSatelliteApps = new List<structClientSatVersion>();
             structClientSatVersion structCSV;
@@ -212,19 +212,22 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 if (!mcGrdSatelliteApps.bln_CellIsEmpty(intRowIndex, mintGrdSat_CSV_LocationExe_col))
                 {
-                    structCSV = new structClientSatVersion();
+                    if (mcGrdClients[intRowIndex, mintGrdClients_CeC_NRI_col].ToString() == vintCeritarClient_NRI.ToString() || vintCeritarClient_NRI == 0)
+                    {
+                        structCSV = new structClientSatVersion();
 
-                    structCSV.Action = clsTTApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdSatellite[intRowIndex, mintGrdSat_Action_col]);
-                    structCSV.intCeritarSatelliteApp_NRI = Int32.Parse(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_NRI_col]);
-                    structCSV.intCeritarClient_NRI = Int32.Parse(mcGrdClients[grdClients.Row, mintGrdClients_CeC_NRI_col]);
-                    Int32.TryParse(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSV_NRI_col], out structCSV.intClientSatVersion_NRI);
-                    structCSV.strCeritarClient_Name = mcGrdClients[grdClients.Row, mintGrdClients_CeC_Name_col];
-                    structCSV.strLocationSatelliteExe = mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSV_LocationExe_col];
-                    structCSV.strCeritarSatelliteApp_Name = mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_Name_col];
-                    structCSV.strKitFolderName = mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_KitFolderName_col];
-                    structCSV.blnExeIsFolder = Convert.ToBoolean(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_ExeIsFolder_col]);
+                        structCSV.Action = clsTTApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdSatellite[intRowIndex, mintGrdSat_Action_col]);
+                        structCSV.intCeritarSatelliteApp_NRI = Int32.Parse(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_NRI_col]);
+                        structCSV.intCeritarClient_NRI = Int32.Parse(mcGrdClients[grdClients.Row, mintGrdClients_CeC_NRI_col]);
+                        Int32.TryParse(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSV_NRI_col], out structCSV.intClientSatVersion_NRI);
+                        structCSV.strCeritarClient_Name = mcGrdClients[grdClients.Row, mintGrdClients_CeC_Name_col];
+                        structCSV.strLocationSatelliteExe = mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSV_LocationExe_col];
+                        structCSV.strCeritarSatelliteApp_Name = mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_Name_col];
+                        structCSV.strKitFolderName = mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_KitFolderName_col];
+                        structCSV.blnExeIsFolder = Convert.ToBoolean(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_ExeIsFolder_col]);
 
-                    lstSatelliteApps.Add(structCSV);
+                        lstSatelliteApps.Add(structCSV);
+                    }                    
                 }
             }
 

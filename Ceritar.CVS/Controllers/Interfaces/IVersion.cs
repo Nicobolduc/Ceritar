@@ -33,7 +33,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         
         structClientAppVersion GetSelectedClient();
         List<structClientAppVersion> GetClientsList();
-        List<structClientSatVersion> GetClientSatellitesList();
+        List<structClientSatVersion> GetClientSatellitesList(int vintCeritarClient_NRI);
     }
 
     /// <summary>

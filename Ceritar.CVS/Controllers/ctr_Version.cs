@@ -66,6 +66,8 @@ namespace Ceritar.CVS.Controllers
 
         public clsActionResults Validate()
         {
+            if (mcModVersion.DML_Action != sclsConstants.DML_Mode.DELETE_MODE) mblnUpdateSelectedClientOnly = true;
+
             try
             {
                 mcModVersion = new mod_Ver_Version();
@@ -112,6 +114,8 @@ namespace Ceritar.CVS.Controllers
                     if (mcActionResult.IsValid)
                         mcActionResult = mcModVersion.ActionResults;
                 }
+
+                mblnUpdateSelectedClientOnly = false;
             }
             catch (Exception ex)
             {
@@ -141,6 +145,8 @@ namespace Ceritar.CVS.Controllers
         {
             bool blnValidReturn = false;
 
+            mblnUpdateSelectedClientOnly = true;
+
             try
             {
                 mcSQL = new clsTTSQL();
@@ -153,28 +159,28 @@ namespace Ceritar.CVS.Controllers
 
                 if (blnValidReturn)
                 {
-                    mcModVersion.LstClientsUsing.Clear();
+                    //mcModVersion.LstClientsUsing.Clear();
 
-                    mblnUpdateSelectedClientOnly = true;
+                    //mblnUpdateSelectedClientOnly = true;
 
-                    structClientAppVersion structCAV = mcView.GetSelectedClient();
-                    mod_CAV_ClientAppVersion cCAV = new mod_CAV_ClientAppVersion();
-                    cCAV.DML_Action = structCAV.Action;
-                    cCAV.ClientAppVersion_NRI = structCAV.intClientAppVersion_NRI;
-                    cCAV.ClientAppVersion_TS = structCAV.intClientAppVersion_TS;
-                    cCAV.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
-                    cCAV.DateInstalled = structCAV.strDateInstalled;
-                    cCAV.IsCurrentVersion = structCAV.blnIsCurrentVersion;
-                    cCAV.License = structCAV.strLicense;
-                    cCAV.Version_NRI = mcView.GetVersion_NRI();
-                    cCAV.LocationReportExe = structCAV.strLocationReportExe;
-                    cCAV.LocationScriptsRoot = structCAV.strLocationScriptsRoot;
+                    //structClientAppVersion structCAV = mcView.GetSelectedClient();
+                    //mod_CAV_ClientAppVersion cCAV = new mod_CAV_ClientAppVersion();
+                    //cCAV.DML_Action = structCAV.Action;
+                    //cCAV.ClientAppVersion_NRI = structCAV.intClientAppVersion_NRI;
+                    //cCAV.ClientAppVersion_TS = structCAV.intClientAppVersion_TS;
+                    //cCAV.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
+                    //cCAV.DateInstalled = structCAV.strDateInstalled;
+                    //cCAV.IsCurrentVersion = structCAV.blnIsCurrentVersion;
+                    //cCAV.License = structCAV.strLicense;
+                    //cCAV.Version_NRI = mcView.GetVersion_NRI();
+                    //cCAV.LocationReportExe = structCAV.strLocationReportExe;
+                    //cCAV.LocationScriptsRoot = structCAV.strLocationScriptsRoot;
 
-                    cCAV.CeritarClient = new Models.Module_Configuration.mod_CeC_CeritarClient();
-                    cCAV.CeritarClient.CeritarClient_NRI = structCAV.intCeritarClient_NRI;
-                    cCAV.CeritarClient.CompanyName = structCAV.strCeritarClient_Name;
+                    //cCAV.CeritarClient = new Models.Module_Configuration.mod_CeC_CeritarClient();
+                    //cCAV.CeritarClient.CeritarClient_NRI = structCAV.intCeritarClient_NRI;
+                    //cCAV.CeritarClient.CompanyName = structCAV.strCeritarClient_Name;
 
-                    mcModVersion.LstClientsUsing.Add(cCAV);
+                    //mcModVersion.LstClientsUsing.Add(cCAV);
 
                     blnValidReturn = mcModVersion.blnValidateHierarchyBuildFiles();
 
@@ -192,6 +198,10 @@ namespace Ceritar.CVS.Controllers
             {
                 blnValidReturn = false;
                 sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                mblnUpdateSelectedClientOnly = false;
             }
 
             return blnValidReturn;
@@ -956,7 +966,16 @@ namespace Ceritar.CVS.Controllers
                 mcModVersion.CreatedByUser = new mod_TTU_User();
                 mcModVersion.CreatedByUser.User_NRI = mcView.GetCreatedByUser_NRI();
                 
-                lstStructCAV = mcView.GetClientsList();
+                if (mblnUpdateSelectedClientOnly)
+                {
+                    lstStructCAV = new List<structClientAppVersion>();
+                    lstStructCAV.Add(mcView.GetSelectedClient());
+                }
+                else
+                {
+                    lstStructCAV = mcView.GetClientsList();
+                }
+                
 
                 foreach (structClientAppVersion structCAV in lstStructCAV)
                 {
@@ -979,8 +998,15 @@ namespace Ceritar.CVS.Controllers
                     mcModVersion.LstClientsUsing.Add(cCAV);
                 }
 
-                lstStructCSV = mcView.GetClientSatellitesList();
-
+                if (mblnUpdateSelectedClientOnly)
+                {
+                    lstStructCSV = mcView.GetClientSatellitesList(lstStructCAV[0].intCeritarClient_NRI);
+                }
+                else
+                {
+                    lstStructCSV = mcView.GetClientSatellitesList(0);
+                }
+                
                 foreach (structClientSatVersion structCSV in lstStructCSV)
                 {
                     cCSV = new mod_CSV_ClientSatVersion();
@@ -1049,13 +1075,18 @@ namespace Ceritar.CVS.Controllers
                 //Create the new archive file and add all the folders to it.
                 if (File.Exists(strNewZipFileLocation)) File.Delete(strNewZipFileLocation);
 
-                using (ZipArchive newZipFile = ZipFile.Open(strNewZipFileLocation, ZipArchiveMode.Create))
+                //Add the release folder with the report application to the zip archive.
+                clsTTApp.GetAppController.blnDeleteFilesFromFolder(strReleaseLocation, sclsAppConfigs.GetReleaseInvalidExtensions);
+
+                ZipFile.CreateFromDirectory(strReleaseLocation, strNewZipFileLocation, CompressionLevel.Optimal, true);
+
+                using (ZipArchive newZipFile = ZipFile.Open(strNewZipFileLocation, ZipArchiveMode.Update))
                 {
                     //Add the release folder with the report application to the zip archive.
-                    foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strReleaseLocation, "*.*", SearchOption.AllDirectories))
-                    {
-                        newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
-                    }
+                    //foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strReleaseLocation, "*.*", SearchOption.AllDirectories))
+                    //{
+                    //    newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
+                    //}s
 
                     //Get the report folder location to copy (from the version kit or from the latest revision)
                     strReportLocation = clsTTSQL.str_ADOSingleLookUp("TOP 1 Rev_Location_Exe", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Rev_Location_Exe IS NOT NULL AND Revision.Rev_ExeIsReport = 1 AND Revision.CeC_NRI =" + mcView.GetSelectedClient().intCeritarClient_NRI.ToString() + " ORDER BY Revision.Rev_No DESC");
@@ -1074,7 +1105,7 @@ namespace Ceritar.CVS.Controllers
                     newZipFile.CreateEntryFromFile(strCaptionsAndMenusLocation, Path.Combine(new DirectoryInfo(strCaptionsAndMenusLocation).Parent.Name, Path.GetFileName(strCaptionsAndMenusLocation)));
                 
                     //Add every satellites applications to the zip archive.
-                    List<structClientSatVersion> lstSatellites = mcView.GetClientSatellitesList();
+                    List<structClientSatVersion> lstSatellites = mcView.GetClientSatellitesList(0);
 
                     foreach (structClientSatVersion structSat in lstSatellites)
                     {

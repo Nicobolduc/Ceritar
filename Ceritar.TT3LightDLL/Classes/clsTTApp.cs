@@ -157,6 +157,42 @@ namespace Ceritar.TT3LightDLL.Classes
             return blnValidReturn;
         }
 
+        public bool blnDeleteFilesFromFolder(string vstrFolderPath, string[] vlstExtensionsToDelete = null)
+        {
+            bool blnValidReturn = false;
+            
+            try
+            {
+                if (Directory.Exists(vstrFolderPath))
+                {
+                    blnValidReturn = true;
+
+                    foreach (string strFile in Directory.GetFiles(vstrFolderPath, "*.*", SearchOption.AllDirectories).Where(f => vlstExtensionsToDelete.Contains(System.IO.Path.GetExtension(f).ToLower())))
+                    {
+                        File.Delete(strFile);
+                    }
+                    foreach (string strFolder in Directory.GetDirectories(vstrFolderPath))
+                    {
+                        blnValidReturn = blnDeleteFilesFromFolder(strFolder, vlstExtensionsToDelete);
+
+                        if (!blnValidReturn) break;
+                    }
+                }
+                else
+                {
+                    blnValidReturn = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnValidReturn;
+        }
+            
+
         public string str_GetCaption(int intCaptionID, short intLanguage)
         {
             string strCaption = string.Empty;

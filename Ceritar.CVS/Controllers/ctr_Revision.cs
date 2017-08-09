@@ -487,7 +487,7 @@ namespace Ceritar.CVS.Controllers
                                 {
                                     strDestinationFolder = currentFolderInfos.Parent.FullName;
 
-                                    strDestinationFolder = Path.Combine(strDestinationFolder, mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExportFolderName);
+                                    strDestinationFolder = Path.Combine(strDestinationFolder, mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExportFolderName + @" [" + mcModRevision.CeritarClient.CompanyName + @"]");
 
                                     blnValidReturn = pfblnCopyAndSaveSatelliteLocation(mcModRevision.LstSatelliteRevisions[intIndex], strDestinationFolder, true);
 
