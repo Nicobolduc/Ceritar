@@ -233,10 +233,15 @@ namespace Ceritar.Logirack_CVS.Forms
             return chkAddScripts.Checked;
         }
 
-#endregion
+        bool IRevision.IsPreparationMode()
+        {
+            return chkPreparation.Checked;
+        }
+
+        #endregion
 
 
-#region "Functions"
+        #region "Functions"
 
         private bool pfblnData_Load()
         {
@@ -275,6 +280,9 @@ namespace Ceritar.Logirack_CVS.Forms
 
                         optRptOnly.Checked = Convert.ToBoolean(sqlRecord["Rev_ExeIsReport"].ToString());
                         optExeAndRpt.Checked = Convert.ToBoolean(sqlRecord["Rev_ExeWithReport"].ToString());
+
+                        chkPreparation.Checked = Convert.ToBoolean(sqlRecord["Rev_PreparationMode"].ToString());
+                        chkPreparation.Enabled = chkPreparation.Checked;
 
                         if (optRptOnly.Checked)
                         {
@@ -318,6 +326,10 @@ namespace Ceritar.Logirack_CVS.Forms
                         {
                             btnShowExecutableFolder.FlatAppearance.BorderColor = System.Drawing.SystemColors.Control;
                         }
+                    }
+                    else
+                    {
+                        chkPreparation.Enabled = true;
                     }
 
                     optExeAndRpt.Visible = !string.IsNullOrEmpty(mstrCeritarApplication_RPT_Name);
@@ -820,7 +832,7 @@ namespace Ceritar.Logirack_CVS.Forms
                     btnSelectVariousFilePath.Enabled = false;
                     btnSelectVariousFolderPath.Enabled = false;
                     btnShowRootFolder.Enabled = false;
-                    btnExportRevision.Enabled = false;
+                    btnExportRevision.Enabled = false;                                      
 
                     break;
 
@@ -1016,5 +1028,31 @@ namespace Ceritar.Logirack_CVS.Forms
             frmReportViewer.Show();
         }
 
+        private void chkPreparation_CheckStateChanged(object sender, EventArgs e)
+        {
+            if (chkPreparation.Checked)
+            {
+                gbExe.Enabled = false;
+                gbSatellites.Enabled = false;
+                gbScripts.Enabled = false;
+
+                btnShowRootFolder.Enabled = false;
+                btnPrintPairValidation.Enabled = false;
+                btnExportRevision.Enabled = false;
+            }
+            else
+            {
+                gbExe.Enabled = true;
+                gbSatellites.Enabled = true;
+                gbScripts.Enabled = true;
+
+                btnShowRootFolder.Enabled = true;
+                btnPrintPairValidation.Enabled = true;
+                btnExportRevision.Enabled = true;
+            }
+
+            formController.ChangeMade = true;
+        }
+                
     }
 }

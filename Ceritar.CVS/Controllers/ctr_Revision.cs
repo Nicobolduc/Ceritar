@@ -72,6 +72,7 @@ namespace Ceritar.CVS.Controllers
                 mcModRevision.Revision_TS = mcView.GetRevision_TS();
                 mcModRevision.ExeIsExternalReport = mcView.GetExeIsExternalReport();
                 mcModRevision.ExeWithExternalReport = mcView.GetExeWithExternalReport();
+                mcModRevision.PreparationMode = mcView.IsPreparationMode();
                 mcModRevision.Note = mcView.GetNote();
 
                 mcModRevision.CeritarClient = new Models.Module_Configuration.mod_CeC_CeritarClient();
@@ -163,7 +164,7 @@ namespace Ceritar.CVS.Controllers
 
                     blnValidReturn = mcModRevision.blnSave();
 
-                    if (blnValidReturn & mcModRevision.ActionResults.IsValid)
+                    if (blnValidReturn & mcModRevision.ActionResults.IsValid & !mcView.IsPreparationMode())
                     {
                         blnValidReturn = blnBuildRevisionHierarchy(mcModRevision.TemplateSource.Template_NRI);
 
@@ -1494,6 +1495,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        Revision.Rev_ExeWithReport, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_CreatedBy, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_Note, " + Environment.NewLine;
+            strSQL = strSQL + "        Revision.Rev_PreparationMode, " + Environment.NewLine;
             strSQL = strSQL + "        RevisionNo = CASE WHEN Revision.Rev_NRI IS NULL THEN " + clsTTApp.GetAppController.str_FixStringForSQL(strNewRevisionNo) + " ELSE Revision.Rev_No END, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_Name, " + Environment.NewLine;

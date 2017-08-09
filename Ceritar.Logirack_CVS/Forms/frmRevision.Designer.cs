@@ -38,6 +38,7 @@
             this.grdRevModifs = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkPreparation = new System.Windows.Forms.CheckBox();
             this.txtNote = new System.Windows.Forms.TextBox();
             this.txtCreatedBy = new System.Windows.Forms.TextBox();
             this.txtRevisionNo = new System.Windows.Forms.TextBox();
@@ -62,16 +63,17 @@
             this.btnGenerate = new System.Windows.Forms.Button();
             this.btnShowRootFolder = new System.Windows.Forms.Button();
             this.chkAddScripts = new System.Windows.Forms.CheckBox();
+            this.btnPrintPairValidation = new System.Windows.Forms.Button();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.gbSatellites = new System.Windows.Forms.GroupBox();
             this.grdSatellites = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.mnuSatRevision = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnuiShowInExplorer = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuiDelete = new System.Windows.Forms.ToolStripMenuItem();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.gbScripts = new System.Windows.Forms.GroupBox();
             this.txtScriptsPath = new System.Windows.Forms.TextBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.gbExe = new System.Windows.Forms.GroupBox();
             this.optExeOnly = new System.Windows.Forms.RadioButton();
             this.optExeAndRpt = new System.Windows.Forms.RadioButton();
             this.txtReleasePath = new System.Windows.Forms.TextBox();
@@ -80,15 +82,14 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
-            this.button1 = new System.Windows.Forms.Button();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.groupBox1.SuspendLayout();
-            this.groupBox4.SuspendLayout();
+            this.gbSatellites.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdSatellites)).BeginInit();
             this.mnuSatRevision.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox5.SuspendLayout();
+            this.gbScripts.SuspendLayout();
+            this.gbExe.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -185,6 +186,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.chkPreparation);
             this.groupBox1.Controls.Add(this.txtNote);
             this.groupBox1.Controls.Add(this.txtCreatedBy);
             this.groupBox1.Controls.Add(this.txtRevisionNo);
@@ -207,6 +209,17 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Informations";
+            // 
+            // chkPreparation
+            // 
+            this.chkPreparation.Location = new System.Drawing.Point(447, 88);
+            this.chkPreparation.Name = "chkPreparation";
+            this.chkPreparation.Size = new System.Drawing.Size(169, 21);
+            this.chkPreparation.TabIndex = 77;
+            this.chkPreparation.Text = "Mode préparation";
+            this.toolTips.SetToolTip(this.chkPreparation, "Permet de préparer la révision sans la générée dans les installations actives");
+            this.chkPreparation.UseVisualStyleBackColor = true;
+            this.chkPreparation.CheckStateChanged += new System.EventHandler(this.chkPreparation_CheckStateChanged);
             // 
             // txtNote
             // 
@@ -475,23 +488,35 @@
         "existant. Sinon ceux existant sont supprimés.");
             this.chkAddScripts.UseVisualStyleBackColor = true;
             // 
+            // btnPrintPairValidation
+            // 
+            this.btnPrintPairValidation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPrintPairValidation.Image = ((System.Drawing.Image)(resources.GetObject("btnPrintPairValidation.Image")));
+            this.btnPrintPairValidation.Location = new System.Drawing.Point(728, 673);
+            this.btnPrintPairValidation.Name = "btnPrintPairValidation";
+            this.btnPrintPairValidation.Size = new System.Drawing.Size(47, 49);
+            this.btnPrintPairValidation.TabIndex = 5;
+            this.toolTips.SetToolTip(this.btnPrintPairValidation, "Imprimer pour signature");
+            this.btnPrintPairValidation.UseVisualStyleBackColor = true;
+            this.btnPrintPairValidation.Click += new System.EventHandler(this.button1_Click);
+            // 
             // openFileDialog
             // 
             this.openFileDialog.FileName = "openFileDialog1";
             // 
-            // groupBox4
+            // gbSatellites
             // 
-            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.gbSatellites.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox4.Controls.Add(this.grdSatellites);
-            this.groupBox4.Location = new System.Drawing.Point(635, 6);
-            this.groupBox4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox4.Size = new System.Drawing.Size(337, 165);
-            this.groupBox4.TabIndex = 1;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "La révision est pour l\'application sattellite suivante:";
+            this.gbSatellites.Controls.Add(this.grdSatellites);
+            this.gbSatellites.Location = new System.Drawing.Point(635, 6);
+            this.gbSatellites.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.gbSatellites.Name = "gbSatellites";
+            this.gbSatellites.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.gbSatellites.Size = new System.Drawing.Size(337, 165);
+            this.gbSatellites.TabIndex = 1;
+            this.gbSatellites.TabStop = false;
+            this.gbSatellites.Text = "La révision est pour l\'application sattellite suivante:";
             // 
             // grdSatellites
             // 
@@ -537,23 +562,23 @@
             this.mnuiDelete.Text = "Supprimer";
             this.mnuiDelete.Click += new System.EventHandler(this.mnuiDelete_Click);
             // 
-            // groupBox2
+            // gbScripts
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.gbScripts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.chkAddScripts);
-            this.groupBox2.Controls.Add(this.btnSelectScriptsFilePath);
-            this.groupBox2.Controls.Add(this.btnSelectScriptsFolderPath);
-            this.groupBox2.Controls.Add(this.txtScriptsPath);
-            this.groupBox2.Controls.Add(this.btnShowScriptsFolder);
-            this.groupBox2.Location = new System.Drawing.Point(6, 440);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox2.Size = new System.Drawing.Size(966, 102);
-            this.groupBox2.TabIndex = 3;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Scripts";
+            this.gbScripts.Controls.Add(this.chkAddScripts);
+            this.gbScripts.Controls.Add(this.btnSelectScriptsFilePath);
+            this.gbScripts.Controls.Add(this.btnSelectScriptsFolderPath);
+            this.gbScripts.Controls.Add(this.txtScriptsPath);
+            this.gbScripts.Controls.Add(this.btnShowScriptsFolder);
+            this.gbScripts.Location = new System.Drawing.Point(6, 440);
+            this.gbScripts.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.gbScripts.Name = "gbScripts";
+            this.gbScripts.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.gbScripts.Size = new System.Drawing.Size(966, 102);
+            this.gbScripts.TabIndex = 3;
+            this.gbScripts.TabStop = false;
+            this.gbScripts.Text = "Scripts";
             // 
             // txtScriptsPath
             // 
@@ -566,25 +591,25 @@
             this.txtScriptsPath.Size = new System.Drawing.Size(809, 40);
             this.txtScriptsPath.TabIndex = 2;
             // 
-            // groupBox5
+            // gbExe
             // 
-            this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.gbExe.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox5.Controls.Add(this.optExeOnly);
-            this.groupBox5.Controls.Add(this.optExeAndRpt);
-            this.groupBox5.Controls.Add(this.btnSelectExecutableFilePath);
-            this.groupBox5.Controls.Add(this.btnSelectExecutableFolderPath);
-            this.groupBox5.Controls.Add(this.txtReleasePath);
-            this.groupBox5.Controls.Add(this.btnShowExecutableFolder);
-            this.groupBox5.Controls.Add(this.optRptOnly);
-            this.groupBox5.Location = new System.Drawing.Point(6, 550);
-            this.groupBox5.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox5.Size = new System.Drawing.Size(966, 105);
-            this.groupBox5.TabIndex = 4;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Exécutable";
+            this.gbExe.Controls.Add(this.optExeOnly);
+            this.gbExe.Controls.Add(this.optExeAndRpt);
+            this.gbExe.Controls.Add(this.btnSelectExecutableFilePath);
+            this.gbExe.Controls.Add(this.btnSelectExecutableFolderPath);
+            this.gbExe.Controls.Add(this.txtReleasePath);
+            this.gbExe.Controls.Add(this.btnShowExecutableFolder);
+            this.gbExe.Controls.Add(this.optRptOnly);
+            this.gbExe.Location = new System.Drawing.Point(6, 550);
+            this.gbExe.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.gbExe.Name = "gbExe";
+            this.gbExe.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.gbExe.Size = new System.Drawing.Size(966, 105);
+            this.gbExe.TabIndex = 4;
+            this.gbExe.TabStop = false;
+            this.gbExe.Text = "Exécutable";
             // 
             // optExeOnly
             // 
@@ -683,31 +708,19 @@
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
             // 
-            // button1
-            // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
-            this.button1.Location = new System.Drawing.Point(728, 673);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(47, 49);
-            this.button1.TabIndex = 5;
-            this.toolTips.SetToolTip(this.button1, "Imprimer pour signature");
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // frmRevision
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(976, 770);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnPrintPairValidation);
             this.Controls.Add(this.btnShowRootFolder);
             this.Controls.Add(this.btnGenerate);
-            this.Controls.Add(this.groupBox5);
+            this.Controls.Add(this.gbExe);
             this.Controls.Add(this.groupBox6);
-            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.gbScripts);
             this.Controls.Add(this.btnExportRevision);
-            this.Controls.Add(this.groupBox4);
+            this.Controls.Add(this.gbSatellites);
             this.Controls.Add(this.formController);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox3);
@@ -723,13 +736,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
+            this.gbSatellites.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdSatellites)).EndInit();
             this.mnuSatRevision.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
+            this.gbScripts.ResumeLayout(false);
+            this.gbScripts.PerformLayout();
+            this.gbExe.ResumeLayout(false);
+            this.gbExe.PerformLayout();
             this.groupBox6.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -756,17 +769,17 @@
         private System.Windows.Forms.ToolTip toolTips;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
-        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox gbSatellites;
         public C1.Win.C1FlexGrid.C1FlexGrid grdSatellites;
         private System.Windows.Forms.Button btnExportRevision;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox txtCreatedBy;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox gbScripts;
         private System.Windows.Forms.Button btnSelectScriptsFilePath;
         private System.Windows.Forms.Button btnSelectScriptsFolderPath;
         private System.Windows.Forms.TextBox txtScriptsPath;
         private System.Windows.Forms.Button btnShowScriptsFolder;
-        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.GroupBox gbExe;
         private System.Windows.Forms.Button btnSelectExecutableFilePath;
         private System.Windows.Forms.Button btnSelectExecutableFolderPath;
         private System.Windows.Forms.TextBox txtReleasePath;
@@ -787,7 +800,7 @@
         private System.Windows.Forms.TextBox txtNote;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ToolStripMenuItem mnuiShowInExplorer;
-        private System.Windows.Forms.Button button1;
-
+        private System.Windows.Forms.Button btnPrintPairValidation;
+        private System.Windows.Forms.CheckBox chkPreparation;
     }
 }

@@ -32,7 +32,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private string _strNote;
         private bool _blnExeIsExternalReport;
         private bool _blnExeWithExternalReport;
-        
+        private bool _blnPreparationMode;
+
         //mod_IBase
         private clsActionResults mcActionResults = new clsActionResults();
         private sclsConstants.DML_Mode mintDML_Action;
@@ -166,7 +167,13 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { _blnExeWithExternalReport = value; }
         }
 
-#endregion
+        internal bool PreparationMode
+        {
+            get { return _blnPreparationMode; }
+            set { _blnPreparationMode = value; }
+        }
+
+        #endregion
 
 
         internal clsActionResults Validate()
@@ -525,6 +532,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 else if (!mcSQL.bln_AddField("Rev_ExeIsReport", _blnExeIsExternalReport, clsTTSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("Rev_ExeWithReport", _blnExeWithExternalReport, clsTTSQL.MySQL_FieldTypes.BIT_TYPE))
+                { }
+                else if (!mcSQL.bln_AddField("Rev_PreparationMode", _blnPreparationMode, clsTTSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("Rev_Note", _strNote, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
