@@ -85,13 +85,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Crystal Reports\rptSignature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>rptSignature.rpt</DependentUpon>
-      <SubType>Component</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
     <Compile Include="Forms\frmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -164,12 +157,6 @@
     <Compile Include="Forms\mdiGeneral.Designer.cs">
       <DependentUpon>mdiGeneral.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frmCrystalReportViewer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\frmCrystalReportViewer.Designer.cs">
-      <DependentUpon>frmCrystalReportViewer.cs</DependentUpon>
-    </Compile>
     <Compile Include="Static_Classes\sclsMain.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -179,11 +166,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Static_Classes\sclsGenList.cs" />
-    <EmbeddedResource Include="Crystal Reports\rptSignature.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptSignature.cs</LastGenOutput>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmAbout.resx">
       <DependentUpon>frmAbout.cs</DependentUpon>
     </EmbeddedResource>
@@ -220,9 +202,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\mdiGeneral.resx">
       <DependentUpon>mdiGeneral.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frmCrystalReportViewer.resx">
-      <DependentUpon>frmCrystalReportViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -272,6 +251,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Crystal Reports\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -11,7 +11,7 @@ using Ceritar.CVS.Controllers.Interfaces;
 using C1.Win.C1FlexGrid;
 using System.Threading;
 using System.Drawing;
-using CrystalDecisions.CrystalReports.Engine;
+//using CrystalDecisions.CrystalReports.Engine;
 
 namespace Ceritar.Logirack_CVS.Forms
 {
@@ -329,7 +329,7 @@ namespace Ceritar.Logirack_CVS.Forms
                     }
                     else
                     {
-                        chkPreparation.Enabled = true;
+                        chkPreparation.Enabled = true;                     
                     }
 
                     optExeAndRpt.Visible = !string.IsNullOrEmpty(mstrCeritarApplication_RPT_Name);
@@ -415,6 +415,10 @@ namespace Ceritar.Logirack_CVS.Forms
                     txtAffected.Text = folderBrowserDialog.SelectedPath;
 
                     formController.ChangeMade = vblnChangeMade;
+
+                    if (txtAffected.Name == txtScriptsPath.Name) btnShowScriptsFolder.FlatAppearance.BorderColor = Color.Yellow;
+
+                    if (txtAffected.Name == txtReleasePath.Name) btnShowExecutableFolder.FlatAppearance.BorderColor = Color.Yellow;
                 }
             }
         }
@@ -451,6 +455,10 @@ namespace Ceritar.Logirack_CVS.Forms
                         if (rControl.GetType() == typeof(TextBox))
                         {
                             ((TextBox)rControl).Text = openFileDialog.FileName;
+
+                            if (((TextBox)rControl).Name == txtScriptsPath.Name) btnShowScriptsFolder.FlatAppearance.BorderColor = Color.Yellow;
+
+                            if (((TextBox)rControl).Name == txtReleasePath.Name) btnShowExecutableFolder.FlatAppearance.BorderColor = Color.Yellow;
                         }
 
                         if (rControl.GetType() == typeof(C1FlexGrid))
@@ -840,7 +848,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
                     cboTemplates.Enabled = false;
                     cboClients.Enabled = false;
-                    txtCreatedBy.Enabled = false;
+                    txtCreatedBy.ReadOnly = true;
                     btnSelectVariousFilePath.Enabled = true;
                     btnSelectVariousFolderPath.Enabled = true;
                     btnShowRootFolder.Enabled = true;
@@ -848,6 +856,8 @@ namespace Ceritar.Logirack_CVS.Forms
 
                     break;
             }
+
+            ChkPreparationControlsActivation();
         }
 
         //private void grdSatellites_DoubleClick(object sender, EventArgs e)
@@ -1014,21 +1024,28 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ReportDocument rptDoc = new ReportDocument();
-            frmCrystalReportViewer frmReportViewer = new frmCrystalReportViewer();                      
+            //ReportDocument rptDoc = new ReportDocument();
+            //frmCrystalReportViewer frmReportViewer = new frmCrystalReportViewer();                      
 
-            rptDoc.Load(Application.StartupPath + @"\Crystal Reports\" + typeof(Crystal_Reports.rptSignature).Name + @".rpt");
+            //rptDoc.Load(Application.StartupPath + @"\Crystal Reports\" + typeof(Crystal_Reports.rptSignature).Name + @".rpt");
 
-            rptDoc.SetParameterValue("@Rev_NRI", formController.Item_NRI);
-            rptDoc.SetDatabaseLogon("sa", "*8059%Ce");
+            //rptDoc.SetParameterValue("@Rev_NRI", formController.Item_NRI);
+            //rptDoc.SetDatabaseLogon("sa", "*8059%Ce");
 
-            frmReportViewer.crystalReportViewer1.ReportSource = rptDoc;
-            frmReportViewer.crystalReportViewer1.Refresh();
+            //frmReportViewer.crystalReportViewer1.ReportSource = rptDoc;
+            //frmReportViewer.crystalReportViewer1.Refresh();
 
-            frmReportViewer.Show();
+            //frmReportViewer.Show();
         }
 
         private void chkPreparation_CheckStateChanged(object sender, EventArgs e)
+        {
+            ChkPreparationControlsActivation();
+
+            formController.ChangeMade = true;
+        }
+                
+        private void ChkPreparationControlsActivation()
         {
             if (chkPreparation.Checked)
             {
@@ -1050,9 +1067,6 @@ namespace Ceritar.Logirack_CVS.Forms
                 btnPrintPairValidation.Enabled = true;
                 btnExportRevision.Enabled = true;
             }
-
-            formController.ChangeMade = true;
         }
-                
     }
 }

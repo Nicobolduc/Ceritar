@@ -67,7 +67,10 @@ namespace Ceritar.CVS.Controllers
                 mcModRevision.CreatedBy = mcView.GetCreatedBy();
                 mcModRevision.LstModifications = mcView.GetModificationsList();
                 mcModRevision.Path_Release = mcView.GetLocation_Release();
-                mcModRevision.Path_Scripts = (string.IsNullOrEmpty(mcView.GetLocation_Scripts()) & mcModRevision.DML_Action == sclsConstants.DML_Mode.INSERT_MODE ? "placeHolder" : mcView.GetLocation_Scripts());
+
+                if (!mcView.IsPreparationMode())
+                    mcModRevision.Path_Scripts = (string.IsNullOrEmpty(mcView.GetLocation_Scripts()) & mcModRevision.DML_Action == sclsConstants.DML_Mode.INSERT_MODE ? "placeHolder" : mcView.GetLocation_Scripts());
+
                 mcModRevision.Revision_NRI = mcView.GetRevision_NRI();
                 mcModRevision.Revision_TS = mcView.GetRevision_TS();
                 mcModRevision.ExeIsExternalReport = mcView.GetExeIsExternalReport();
@@ -1236,6 +1239,7 @@ namespace Ceritar.CVS.Controllers
             string strReleaseLocation = string.Empty;
             string strLocationSatelliteExe = string.Empty;
             string strCurrentScriptFolderLocation = string.Empty;
+            ZipArchiveMode archiveMode = ZipArchiveMode.Create;
 
             try
             {
@@ -1243,23 +1247,39 @@ namespace Ceritar.CVS.Controllers
 
                 strNewZipFileLocation = Path.Combine(vstrExportFolderLocation, mcView.GetCeritarApplication_Name() + @" Revision " + mcView.GetRevisionNo().ToString() + " - " + strCeritarClientName + @".zip");
 
+                strReleaseLocation = mcView.GetLocation_Release();
+
                 //Create the new archive file and add all the folders to it.
                 if (File.Exists(strNewZipFileLocation)) File.Delete(strNewZipFileLocation);
 
-                using (ZipArchive newZipFile = ZipFile.Open(strNewZipFileLocation, ZipArchiveMode.Create))
+                //Add the release folder with the report application to the zip archive.
+                if (!string.IsNullOrEmpty(strReleaseLocation))
+                {
+                    clsTTApp.GetAppController.blnDeleteFilesFromFolder(strReleaseLocation, sclsAppConfigs.GetReleaseInvalidExtensions);
+
+                    if ((File.GetAttributes(strReleaseLocation) & FileAttributes.Directory) == FileAttributes.Directory)
+                    {
+                        ZipFile.CreateFromDirectory(strReleaseLocation, strNewZipFileLocation, CompressionLevel.Optimal, true);
+
+                        archiveMode = ZipArchiveMode.Update;
+                    }
+                }
+                                               
+
+                using (ZipArchive newZipFile = ZipFile.Open(strNewZipFileLocation, archiveMode))
                 {
                     //Add the release folder with the report application to the zip archive.
                     //Get the release folder location to copy
-                    strReleaseLocation = mcView.GetLocation_Release();
+                    
 
                     if (!string.IsNullOrEmpty(strReleaseLocation))
                     {
                         if ((File.GetAttributes(strReleaseLocation) & FileAttributes.Directory) == FileAttributes.Directory)
                         {
-                            foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strReleaseLocation, "*.*", SearchOption.AllDirectories))
-                            {
-                                newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
-                            }
+                            //foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strReleaseLocation, "*.*", SearchOption.AllDirectories))
+                            //{
+                            //    newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
+                            //}
                         }
                         else if (mcView.GetExeIsExternalReport())
                         {
