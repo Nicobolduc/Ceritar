@@ -66,11 +66,11 @@ namespace Ceritar.CVS.Controllers
 
         public clsActionResults Validate()
         {
-            if (mcModVersion.DML_Action != sclsConstants.DML_Mode.DELETE_MODE) mblnUpdateSelectedClientOnly = true;
-
             try
             {
                 mcModVersion = new mod_Ver_Version();
+
+                if (mcModVersion.DML_Action != sclsConstants.DML_Mode.DELETE_MODE) mblnUpdateSelectedClientOnly = true;
 
                 pfblnFeedModelWithView();
 
