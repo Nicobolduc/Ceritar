@@ -11,7 +11,7 @@ using Ceritar.CVS.Controllers.Interfaces;
 using C1.Win.C1FlexGrid;
 using System.Threading;
 using System.Drawing;
-//using CrystalDecisions.CrystalReports.Engine;
+using CrystalDecisions.CrystalReports.Engine;
 
 namespace Ceritar.Logirack_CVS.Forms
 {
@@ -1024,18 +1024,18 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //ReportDocument rptDoc = new ReportDocument();
-            //frmCrystalReportViewer frmReportViewer = new frmCrystalReportViewer();                      
+            ReportDocument rptDoc = new ReportDocument();
+            frmCrystalReportViewer frmReportViewer = new frmCrystalReportViewer();
 
-            //rptDoc.Load(Application.StartupPath + @"\Crystal Reports\" + typeof(Crystal_Reports.rptSignature).Name + @".rpt");
+            rptDoc.Load(Application.StartupPath + @"\Crystal Reports\" + typeof(Crystal_Reports.rptSignature).Name + @".rpt");
 
-            //rptDoc.SetParameterValue("@Rev_NRI", formController.Item_NRI);
-            //rptDoc.SetDatabaseLogon("sa", "*8059%Ce");
+            rptDoc.SetParameterValue("@Rev_NRI", formController.Item_NRI);
+            rptDoc.SetDatabaseLogon("sa", "*8059%Ce");
 
-            //frmReportViewer.crystalReportViewer1.ReportSource = rptDoc;
-            //frmReportViewer.crystalReportViewer1.Refresh();
+            frmReportViewer.crystalReportViewer1.ReportSource = rptDoc;
+            frmReportViewer.crystalReportViewer1.Refresh();
 
-            //frmReportViewer.Show();
+            frmReportViewer.Show();
         }
 
         private void chkPreparation_CheckStateChanged(object sender, EventArgs e)

@@ -532,7 +532,7 @@ namespace Ceritar.TT3LightDLL.Classes
                                                       User ID=ltuser;
                                                       Password=ltuser;
                                                       Initial Catalog=Logirack_CVS;
-                                                      Data Source=SVR-SQL14;
+                                                      Data Source=BOLDUC-PC\SVR_SQL16;
                                                       MultipleActiveResultSets=True");
 
 //                rcSQLConnection = new SqlConnection(@"Persist Security Info=False;
