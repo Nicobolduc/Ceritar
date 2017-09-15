@@ -1030,6 +1030,9 @@ namespace Ceritar.Logirack_CVS.Forms
             rptDoc.Load(Application.StartupPath + @"\Crystal Reports\" + typeof(Crystal_Reports.rptSignature).Name + @".rpt");
 
             rptDoc.SetParameterValue("@Rev_NRI", formController.Item_NRI);
+            rptDoc.SetParameterValue("@Rev_NRI", formController.Item_NRI, rptDoc.Subreports["rptSub_Signature_Objectif"].Name.ToString());
+            rptDoc.SetParameterValue("@Rev_NRI", formController.Item_NRI, rptDoc.Subreports["rptSub_Signature_Contenu_App"].Name.ToString());
+
             rptDoc.SetDatabaseLogon("sa", "*8059%Ce");
 
             frmReportViewer.crystalReportViewer1.ReportSource = rptDoc;

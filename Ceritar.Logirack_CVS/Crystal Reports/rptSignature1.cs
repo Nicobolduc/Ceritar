@@ -82,7 +82,7 @@ namespace Ceritar.Logirack_CVS.Crystal_Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section Contenu_APPS {
+        public CrystalDecisions.CrystalReports.Engine.Section Contenu_App {
             get {
                 return this.ReportDefinition.Sections[4];
             }
@@ -90,7 +90,7 @@ namespace Ceritar.Logirack_CVS.Crystal_Reports {
         
         [Browsable(false)]
         [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public CrystalDecisions.CrystalReports.Engine.Section Contenu_SCRIPTS {
+        public CrystalDecisions.CrystalReports.Engine.Section Contenu_Scripts {
             get {
                 return this.ReportDefinition.Sections[5];
             }
@@ -117,6 +117,22 @@ namespace Ceritar.Logirack_CVS.Crystal_Reports {
         public CrystalDecisions.Shared.IParameterField Parameter_Rev_NRI {
             get {
                 return this.DataDefinition.ParameterFields[0];
+            }
+        }
+        
+        [Browsable(false)]
+        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public CrystalDecisions.Shared.IParameterField Parameter_rptSub_Signature_Contenu_App_Rev_NRI {
+            get {
+                return this.DataDefinition.ParameterFields[1];
+            }
+        }
+        
+        [Browsable(false)]
+        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public CrystalDecisions.Shared.IParameterField Parameter_rptSub_Signature_Objectif_Rev_NRI {
+            get {
+                return this.DataDefinition.ParameterFields[2];
             }
         }
     }
