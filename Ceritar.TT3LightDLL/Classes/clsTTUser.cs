@@ -13,6 +13,9 @@ namespace Ceritar.TT3LightDLL.Classes
         private short _intLanguage = 1;
         private int _intUser_NRI = 101;
         private string _strUser_Code = string.Empty;
+        private string _strUser_Firstname = string.Empty;
+        private string _strUser_Lastname = string.Empty;
+        private string _strUser_Email = string.Empty;
         private string _strUserComputerID = string.Empty;
 
 
@@ -27,13 +30,55 @@ namespace Ceritar.TT3LightDLL.Classes
         public int User_NRI
         {
             get { return _intUser_NRI; }
-            set { _intUser_NRI = value; }
+            set
+            {
+                _intUser_NRI = value;
+
+                if (_intUser_NRI > 0)
+                {
+                    string strSQL = string.Empty;
+                    System.Data.SqlClient.SqlDataReader sqlRecord = null;
+
+                    strSQL += " SELECT TTU_FirstName, " + Environment.NewLine;
+                    strSQL += "        TTU_LastName, " + Environment.NewLine;
+                    strSQL += "        TTU_Email " + Environment.NewLine;
+                    strSQL += " FROM TTUser " + Environment.NewLine;
+                    strSQL += " WHERE TTUser.TTU_NRI = " + _intUser_NRI.ToString() + Environment.NewLine;
+
+                    sqlRecord = clsTTSQL.ADOSelect(strSQL);
+
+                    if (sqlRecord.Read())
+                    {
+                        _strUser_Firstname = sqlRecord["TTU_FirstName"].ToString();
+                        _strUser_Lastname = sqlRecord["TTU_LastName"].ToString();
+                        _strUser_Email = sqlRecord["TTU_Email"].ToString();
+                    }
+                }
+            }
         }
 
         public string User_Code
         {
             get { return _strUser_Code; }
             set { _strUser_Code = value; }
+        }
+
+        public string User_FirsName
+        {
+            get { return _strUser_Firstname; }
+            set { _strUser_Firstname = value; }
+        }
+
+        public string User_LastName
+        {
+            get { return _strUser_Lastname; }
+            set { _strUser_Lastname = value; }
+        }
+
+        public string User_Email
+        {
+            get { return _strUser_Email; }
+            set { _strUser_Email = value; }
         }
 
         public string GetUserComputerID

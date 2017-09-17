@@ -1363,6 +1363,45 @@ namespace Ceritar.CVS.Controllers
             return blnValidReturn;
         }
 
+        public string strGetRevisionScriptsList(int vintRev_NRI)
+        {
+            System.Text.StringBuilder scriptsList = new System.Text.StringBuilder();
+            string strCurrentScriptFolderLocation = string.Empty;
+
+            try
+            {
+                strCurrentScriptFolderLocation = mcView.GetLocation_Scripts();
+
+                if (!string.IsNullOrEmpty(strCurrentScriptFolderLocation))
+                {
+                    if ((File.GetAttributes(strCurrentScriptFolderLocation) & FileAttributes.Directory) == FileAttributes.Directory)
+                    {
+                        foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strCurrentScriptFolderLocation, "*.*", SearchOption.TopDirectoryOnly))
+                        {
+                            scriptsList.Append(Path.GetFileName(strCurrentFileToCopyPath));
+                            scriptsList.AppendLine();
+                        }
+                    }
+                    else
+                    {
+                        scriptsList.Append(Path.GetFileName(strCurrentScriptFolderLocation));
+                        scriptsList.AppendLine();
+                    }
+                }
+                else
+                {
+                    scriptsList.AppendFormat("* Aucun scripts présent *", Environment.NewLine);
+                }                
+            }
+            catch (Exception ex)
+            {
+                scriptsList.AppendFormat("Error appending other scripts", Environment.NewLine); ;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return scriptsList.ToString();
+        }
+
         public bool blnRevisionPathIsValid(int vintRev_NRI)
         {
             bool blnIsValid = false;

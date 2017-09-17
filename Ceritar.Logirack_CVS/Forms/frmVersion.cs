@@ -212,7 +212,7 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 if (!mcGrdSatelliteApps.bln_CellIsEmpty(intRowIndex, mintGrdSat_CSV_LocationExe_col))
                 {
-                    if (mcGrdClients[intRowIndex, mintGrdClients_CeC_NRI_col].ToString() == vintCeritarClient_NRI.ToString() || vintCeritarClient_NRI == 0)
+                    if (mcGrdClients[grdClients.Row, mintGrdClients_CeC_NRI_col].ToString() == vintCeritarClient_NRI.ToString() || vintCeritarClient_NRI == 0)
                     {
                         structCSV = new structClientSatVersion();
 
