@@ -1022,12 +1022,30 @@ namespace Ceritar.Logirack_CVS.Forms
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnPrintPairValidation_Click(object sender, EventArgs e)
         {
             ReportDocument rptDoc = new ReportDocument();
             frmCrystalReportViewer frmReportViewer = new frmCrystalReportViewer();
 
+            CrystalDecisions.Shared.TableLogOnInfo tableLogoninfo = new CrystalDecisions.Shared.TableLogOnInfo();
+            CrystalDecisions.Shared.ConnectionInfo crConnectionInfo = new CrystalDecisions.Shared.ConnectionInfo();
+            SqlConnectionStringBuilder appConnection = new SqlConnectionStringBuilder(clsTTApp.GetAppController.SQLConnection.ConnectionString);
+
             rptDoc.Load(Application.StartupPath + @"\Crystal Reports\" + typeof(Crystal_Reports.rptSignature).Name + @".rpt");
+
+            crConnectionInfo.ServerName = clsTTApp.GetAppController.SQLConnection.DataSource;
+            crConnectionInfo.DatabaseName = clsTTApp.GetAppController.SQLConnection.Database;
+            crConnectionInfo.UserID = appConnection.UserID;
+            crConnectionInfo.Password = appConnection.Password;
+
+            rptDoc.SetDatabaseLogon(appConnection.UserID, appConnection.Password, clsTTApp.GetAppController.SQLConnection.DataSource, clsTTApp.GetAppController.SQLConnection.Database, true);
+
+            foreach (Table table in rptDoc.Database.Tables)
+            {
+                tableLogoninfo = table.LogOnInfo;
+                tableLogoninfo.ConnectionInfo = crConnectionInfo;
+                table.ApplyLogOnInfo(tableLogoninfo);
+            }            
 
             rptDoc.SetParameterValue("@Rev_NRI", formController.Item_NRI);
             rptDoc.SetParameterValue("CurrentUserName", clsTTApp.GetAppController.cUser.User_FirsName + " " + clsTTApp.GetAppController.cUser.User_LastName);
@@ -1036,9 +1054,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
             rptDoc.SetParameterValue("@Rev_NRI", formController.Item_NRI, rptDoc.Subreports["rptSub_Signature_Contenu_App"].Name.ToString());
 
-            rptDoc.SetParameterValue("ScriptsList", mcCtrRevision.strGetRevisionScriptsList(formController.Item_NRI), rptDoc.Subreports["rptSub_Signature_Contenu_Script"].Name.ToString());
-
-            rptDoc.SetDatabaseLogon("sa", "*8059%Ce");
+            rptDoc.SetParameterValue("ScriptsList", mcCtrRevision.strGetRevisionScriptsList(formController.Item_NRI), rptDoc.Subreports["rptSub_Signature_Contenu_Script"].Name.ToString());          
 
             frmReportViewer.crystalReportViewer1.ReportSource = rptDoc;
             frmReportViewer.crystalReportViewer1.Refresh();

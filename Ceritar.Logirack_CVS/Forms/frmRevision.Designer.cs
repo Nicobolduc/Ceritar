@@ -498,7 +498,7 @@
             this.btnPrintPairValidation.TabIndex = 5;
             this.toolTips.SetToolTip(this.btnPrintPairValidation, "Imprimer pour signature");
             this.btnPrintPairValidation.UseVisualStyleBackColor = true;
-            this.btnPrintPairValidation.Click += new System.EventHandler(this.button1_Click);
+            this.btnPrintPairValidation.Click += new System.EventHandler(this.btnPrintPairValidation_Click);
             // 
             // openFileDialog
             // 

@@ -52,6 +52,11 @@ namespace Ceritar.TT3LightDLL.Classes
             set { mblnSilentMessage = value; }
         }
 
+        public SqlConnection GetSQLConnection
+        {
+            get { return mcSQLConnection; }
+        }
+
 #endregion
 
 
@@ -528,11 +533,11 @@ namespace Ceritar.TT3LightDLL.Classes
             {
                 //OSQL -S BOLDUC-PC\SVR_SQL -E 
                 //sp_password NULL, '1234', 'sa' GO
-                rcSQLConnection = new SqlConnection(@"Persist Security Info=False;
+                rcSQLConnection = new SqlConnection(@"Persist Security Info=true;
                                                       User ID=ltuser;
                                                       Password=ltuser;
                                                       Initial Catalog=Logirack_CVS;
-                                                      Data Source=BOLDUC-PC\SVR_SQL16;
+                                                      Data Source=SVR-SQL14;
                                                       MultipleActiveResultSets=True");
 
 //                rcSQLConnection = new SqlConnection(@"Persist Security Info=False;
