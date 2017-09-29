@@ -11,6 +11,8 @@ using Ceritar.Logirack_CVS.Static_Classes;
 using Ceritar.TT3LightDLL.Static_Classes;
 using Ceritar.TT3LightDLL.Classes;
 using System.Security.Principal;
+using System.Runtime.InteropServices;
+using Microsoft.VisualBasic;
 
 namespace Ceritar.Logirack_CVS.Forms
 {
@@ -19,6 +21,9 @@ namespace Ceritar.Logirack_CVS.Forms
     /// </summary>
     public partial class mdiGeneral : Form
     {
+        [DllImport("Advapi32.dll", EntryPoint = "GetUserName", ExactSpelling = false, SetLastError = true)]
+        static extern bool GetUserName([MarshalAs(UnmanagedType.LPArray)] byte[] lpBuffer, [MarshalAs(UnmanagedType.LPArray)] Int32[] nSize);
+
         //Messages
         private const int mintMSG_AdminRightWarning = 40;
         private const int mintMSG_NewUser = 43;
@@ -34,23 +39,86 @@ namespace Ceritar.Logirack_CVS.Forms
         private void main()
         {
             bool blnLoadSuccess = false;
+            bool blnCeritUpLaunched = false;
+            int intAppChecked = 0;
+            string strCommand = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).ToArray());
 
-            clsTTApp.Instanciate(this);
-
-            lblStatus_BD.Text += clsTTApp.GetAppController.SQLConnection.Database;
-
-            Application.ApplicationExit += new EventHandler(ApplicationExit);
-            
-            if (!IsUserAdministrator())
+            if (strCommand != string.Empty)
             {
-                clsTTApp.GetAppController.ShowMessage(mintMSG_AdminRightWarning);
+                intAppChecked = Strings.InStr(1, strCommand, "AppChecked");
+            }
+            else
+            {
+                //Do nothing, c'est le CeritUp qui a relancé l'application
             }
 
-            blnLoadSuccess = pfblnAutoLogInUser();
+            if (intAppChecked == 0) pfblnCeritUp_CheckForUpdate(ref blnCeritUpLaunched);
 
-            if (!blnLoadSuccess) Application.Exit();
+            if (!blnCeritUpLaunched)
+            {
+                clsTTApp.Instanciate(this);
+
+                lblStatus_BD.Text += clsTTApp.GetAppController.SQLConnection.Database;
+
+                Application.ApplicationExit += new EventHandler(ApplicationExit);
+
+                if (!IsUserAdministrator())
+                {
+                    clsTTApp.GetAppController.ShowMessage(mintMSG_AdminRightWarning);
+                }
+
+                blnLoadSuccess = pfblnAutoLogInUser();
+            }       
+            else
+            {
+                //Do nothing, close application
+            }            
+
+            if (!blnLoadSuccess || blnCeritUpLaunched) Application.Exit();
 
             sclsGenList.ShowGenList(sclsGenList.GeneralLists_ID.VERSION_REVISION_LIST_NRI);
+        }
+
+        private bool pfblnCeritUp_CheckForUpdate(ref bool rblnCeritUpLaunched)
+        {
+            bool blnValidReturn = true;
+            byte[] str = new byte[256];
+            Int32[] len = new Int32[1];
+            len[0] = 256;
+            System.Diagnostics.Process[] lstCVSProcessRunning;
+            string strUserName = string.Empty;
+
+            System.IO.FileInfo strCurrentExeName = new System.IO.FileInfo(System.Windows.Forms.Application.ExecutablePath);
+
+            rblnCeritUpLaunched = false;
+
+            //Regarde si on a CeritUP dans le repertoire
+            if (Microsoft.VisualBasic.FileSystem.Dir(System.IO.Path.Combine(System.IO.Directory.GetParent(Application.ExecutablePath).FullName, "CeritUP.exe")) != string.Empty)
+            {
+                //On va chercher le username et on enlève les espaces superflus          
+                GetUserName(str, len);
+                strUserName = System.Text.Encoding.ASCII.GetString(str).TrimEnd('\0');
+
+                //Regarde le nombre de process d'ouvert de Logirack. Si on en a plus d'un on cancelle la maj
+                var vCVSProcessRunning = System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(strCurrentExeName.Name)).Where(p => p.StartInfo.UserName == strUserName).ToArray();
+                lstCVSProcessRunning = vCVSProcessRunning;
+
+                if (lstCVSProcessRunning.Length <= 1)
+                {
+                    rblnCeritUpLaunched = true;
+                    Microsoft.VisualBasic.Interaction.Shell(System.IO.Path.Combine(strCurrentExeName.DirectoryName, "CeritUP.exe ") +  System.IO.Path.GetFileNameWithoutExtension(strCurrentExeName.Name), Microsoft.VisualBasic.AppWinStyle.NormalFocus);
+                }
+                else
+                {
+                    //do nothing
+                }
+            }
+            else
+            {
+                //do nothing: pas de ceritup, pas besoin de passer ici
+            }
+
+            return blnValidReturn;
         }
 
         private bool pfblnAutoLogInUser()

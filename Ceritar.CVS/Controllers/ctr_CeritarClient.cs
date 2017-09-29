@@ -128,7 +128,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " 				   AND ClientAppVersion.CeC_NRI = @CerClient_NRI " + Environment.NewLine;
             strSQL = strSQL + " 				   AND ClientAppVersion.CAV_DtInstalledProd IS NOT NULL " + Environment.NewLine;
 
-            strSQL = strSQL + " 				 ORDER BY Version.Ver_No DESC " + Environment.NewLine;
+            strSQL = strSQL + " 				 ORDER BY ClientAppVersion.CeA_NRI DESC, Version.Ver_No DESC " + Environment.NewLine;
             strSQL = strSQL + " 				) AS TVer " + Environment.NewLine;
 				
             strSQL = strSQL + " GROUP BY CerApp.CeA_NRI, CerApp.CeA_Name " + Environment.NewLine;
@@ -160,7 +160,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "  				   AND ClientAppVersion.CAV_DtInstalledProd IS NOT NULL " + Environment.NewLine;
             strSQL = strSQL + "  				   AND ClientAppVersion.CAV_ReportExe_Location IS NOT NULL " + Environment.NewLine;
 
-            strSQL = strSQL + "  				 ORDER BY Version.Ver_No DESC " + Environment.NewLine;
+            strSQL = strSQL + "  				 ORDER BY ClientAppVersion.CeA_NRI DESC, Version.Ver_No DESC " + Environment.NewLine;
             strSQL = strSQL + "  				) AS TVer " + Environment.NewLine;
 
             strSQL = strSQL + "  GROUP BY CerApp.CeA_NRI, CerApp.CeA_ExternalRPTAppName " + Environment.NewLine;
@@ -192,7 +192,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " 				   AND ClientSatVersion.CeC_NRI = @CerClient_NRI " + Environment.NewLine;
             strSQL = strSQL + " 				   AND TCAV.DtInstalled IS NOT NULL " + Environment.NewLine;
 
-            strSQL = strSQL + " 				 ORDER BY Version.Ver_No DESC " + Environment.NewLine;
+            strSQL = strSQL + " 				 ORDER BY ClientSatVersion.CSA_NRI DESC, Version.Ver_No DESC " + Environment.NewLine;
             strSQL = strSQL + " 				) AS TVer " + Environment.NewLine;
 				
             strSQL = strSQL + " GROUP BY CerSatApp.CSA_NRI, CerSatApp.CSA_Name " + Environment.NewLine;
