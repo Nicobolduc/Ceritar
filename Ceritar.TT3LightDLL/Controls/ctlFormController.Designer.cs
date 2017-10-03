@@ -46,7 +46,7 @@ namespace Ceritar.TT3LightDLL.Controls
             this.btnQuit.Name = "btnQuit";
             this.btnQuit.Size = new System.Drawing.Size(75, 25);
             this.btnQuit.TabIndex = 22;
-            this.btnQuit.Text = "Fermer";
+            this.btnQuit.Text = "&Quitter";
             this.btnQuit.UseVisualStyleBackColor = true;
             this.btnQuit.Click += new System.EventHandler(this.btnQuit_Click);
             // 
@@ -59,7 +59,7 @@ namespace Ceritar.TT3LightDLL.Controls
             this.btnApply.Name = "btnApply";
             this.btnApply.Size = new System.Drawing.Size(82, 25);
             this.btnApply.TabIndex = 21;
-            this.btnApply.Text = "Enregistrer";
+            this.btnApply.Text = "&Appliquer";
             this.btnApply.UseVisualStyleBackColor = true;
             this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
             // 
@@ -89,10 +89,10 @@ namespace Ceritar.TT3LightDLL.Controls
             // 
             // ctlFormController
             // 
+            this.Controls.Add(this.btnApply);
             this.Controls.Add(this.imgFormMode);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnQuit);
-            this.Controls.Add(this.btnApply);
             this.Name = "ctlFormController";
             this.Size = new System.Drawing.Size(324, 34);
             this.LocationChanged += new System.EventHandler(this.ctlFormControler_LocationChanged);

@@ -19,7 +19,7 @@ namespace Ceritar.Logirack_CVS.Forms
         public string mstrGridSQL = string.Empty;
 
         //Private members
-        private const int mintItem_ID_col = 1;
+        private int mintItem_ID_col = 1;
         private int mintSelectedRow = 1;
         private string mstrFormToOpenName = string.Empty;
         private bool mblnChildFormIsModal = false;
@@ -59,10 +59,16 @@ namespace Ceritar.Logirack_CVS.Forms
             set { mblnChildFormIsModal = value; }
         }
 
-#endregion
+        public int Item_ID_col
+        {
+            get => mintItem_ID_col;
+            set => mintItem_ID_col = value;
+        }
+
+        #endregion
 
 
-#region "Functions / Subs"
+        #region "Functions / Subs"
 
         private bool blnOpenForm(sclsConstants.DML_Mode vFormMode)
         {
@@ -284,7 +290,7 @@ namespace Ceritar.Logirack_CVS.Forms
                 {
                     if (grdList.Cols.Count > 5)
                     {
-                        if (cCol.IsVisible && cCol.Index > 1) cCol.Width = TextRenderer.MeasureText(cCol.Caption, grdList.Font).Width;
+                        if (cCol.IsVisible && cCol.Index > 1) cCol.Width = TextRenderer.MeasureText(cCol.Caption, grdList.Font).Width * 2;
                     }
                     else
                     {
@@ -306,11 +312,14 @@ namespace Ceritar.Logirack_CVS.Forms
 
                 case sclsGenList.GeneralLists_ID.TEMPLATE_LIST_NRI:
 
-                    grdList.AllowMerging = C1.Win.C1FlexGrid.AllowMergingEnum.Free;
+                    grdList.Cols[2].Width = 200;
+
+                    grdList.AllowMerging = C1.Win.C1FlexGrid.AllowMergingEnum.RestrictAll;
                     crMerged = grdList.GetCellRange(1, 2, grdList.Rows.Count - 1, 3);
 
+                    grdList.Cols[1].AllowMerging = true;
                     grdList.Cols[2].AllowMerging = true;
-                    grdList.Cols[3].AllowMerging = true;
+                    //grdList.Cols[3].AllowMerging = true;
 
                     break;
 

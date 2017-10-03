@@ -76,6 +76,7 @@ namespace Ceritar.Logirack_CVS.Static_Classes
                         strSQL = strGetList_Templates_SQL();
                         
                         frmGenList.Tag = 46;
+                        frmGenList.Item_ID_col = 4;
 
                         strListGenTitle += clsTTApp.GetAppController.str_GetCaption((int)frmGenList.Tag, clsTTApp.GetAppController.cUser.UserLanguage);
 
@@ -169,10 +170,11 @@ namespace Ceritar.Logirack_CVS.Static_Classes
         {
             string strSQL = string.Empty;
 
-            strSQL = strSQL + " SELECT Template.Tpl_NRI, " + Environment.NewLine;
+            strSQL = strSQL + " SELECT 0 AS PlaceHolder, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_Name, " + Environment.NewLine;
             strSQL = strSQL + "        TemplateType.TeT_Code, " + Environment.NewLine;
-            strSQL = strSQL + "        Template.Tpl_Name " + Environment.NewLine;
+            strSQL = strSQL + "        Template.Tpl_Name, " + Environment.NewLine;
+            strSQL = strSQL + "        Template.Tpl_NRI " + Environment.NewLine;
 
             strSQL = strSQL + " FROM Template " + Environment.NewLine;
             strSQL = strSQL + "     INNER JOIN CerApp ON CerApp.CeA_NRI = Template.CeA_NRI " + Environment.NewLine;

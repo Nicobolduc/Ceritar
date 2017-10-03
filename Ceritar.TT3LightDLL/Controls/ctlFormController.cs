@@ -237,13 +237,13 @@ namespace Ceritar.TT3LightDLL.Controls
             switch (mintFormMode)
             {
                 case sclsConstants.DML_Mode.INSERT_MODE:
-                    btnApply.Text = "Enregistrer";
+                    btnApply.Text = "&Enregistrer";
                     imgFormMode.Image = Ceritar.TT3LightDLL.Properties.Resources.AddItem;
 
                     break;
 
                 case sclsConstants.DML_Mode.UPDATE_MODE:
-                    btnApply.Text = "Appliquer";
+                    btnApply.Text = "&Appliquer";
                     imgFormMode.Image = Ceritar.TT3LightDLL.Properties.Resources.ModifyItem;
 
                     break;
@@ -253,7 +253,7 @@ namespace Ceritar.TT3LightDLL.Controls
                     btnCancel.Enabled = false;
                     btnQuit.Enabled = true;
 
-                    btnApply.Text = "Appliquer";
+                    btnApply.Text = "&Appliquer";
                     imgFormMode.Image = Ceritar.TT3LightDLL.Properties.Resources.ConsultItem;
 
                     break;
@@ -263,7 +263,7 @@ namespace Ceritar.TT3LightDLL.Controls
                     btnCancel.Enabled = false;
                     btnQuit.Enabled = true;
 
-                    btnApply.Text = "Supprimer";
+                    btnApply.Text = "&Supprimer";
                     imgFormMode.Image = Ceritar.TT3LightDLL.Properties.Resources.DeleteItem;
                     
                     break;

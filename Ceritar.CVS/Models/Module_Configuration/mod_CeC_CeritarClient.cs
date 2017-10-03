@@ -148,7 +148,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
         {
             try
             {
-                mcActionResults.SetDefault();
+                mcActionResults.SetValid();
 
                 switch (mintDML_Action)
                 {

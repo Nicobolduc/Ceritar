@@ -63,12 +63,15 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.grdCerApp);
             this.groupBox1.Location = new System.Drawing.Point(6, 42);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox1.Size = new System.Drawing.Size(433, 239);
+            this.groupBox1.Size = new System.Drawing.Size(471, 449);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Liste des applications utilisées";
@@ -88,17 +91,18 @@
             this.grdCerApp.Rows.Count = 2;
             this.grdCerApp.Rows.DefaultSize = 18;
             this.grdCerApp.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdCerApp.Size = new System.Drawing.Size(418, 207);
+            this.grdCerApp.Size = new System.Drawing.Size(456, 417);
             this.grdCerApp.StyleInfo = resources.GetString("grdCerApp.StyleInfo");
             this.grdCerApp.TabIndex = 0;
             this.grdCerApp.Tag = "21";
             // 
             // chkActive
             // 
+            this.chkActive.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkActive.AutoSize = true;
             this.chkActive.Checked = true;
             this.chkActive.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkActive.Location = new System.Drawing.Point(376, 12);
+            this.chkActive.Location = new System.Drawing.Point(414, 12);
             this.chkActive.Margin = new System.Windows.Forms.Padding(2);
             this.chkActive.Name = "chkActive";
             this.chkActive.Size = new System.Drawing.Size(62, 20);
@@ -115,11 +119,11 @@
             this.formController.FormIsLoading = false;
             this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.NO_MODE;
             this.formController.Item_NRI = 0;
-            this.formController.Location = new System.Drawing.Point(-2, 289);
+            this.formController.Location = new System.Drawing.Point(-2, 499);
             this.formController.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
-            this.formController.Size = new System.Drawing.Size(446, 34);
+            this.formController.Size = new System.Drawing.Size(484, 34);
             this.formController.TabIndex = 3;
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
@@ -136,7 +140,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(446, 325);
+            this.ClientSize = new System.Drawing.Size(484, 535);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.formController);
             this.Controls.Add(this.chkActive);

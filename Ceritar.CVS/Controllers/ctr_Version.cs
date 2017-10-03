@@ -565,7 +565,7 @@ namespace Ceritar.CVS.Controllers
 
                                         clsTTApp.GetAppController.setAttributesToNormal(new DirectoryInfo(strCurrentVersionFolderToCopy_Path));
 
-                                        lstScriptsToCopy = Directory.GetFiles(strCurrentVersionFolderToCopy_Path, "*.*", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
+                                        lstScriptsToCopy = Directory.GetFiles(strCurrentVersionFolderToCopy_Path, "*.sql", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
 
                                         for (int intIndex = 0; intIndex < lstScriptsToCopy.Count; intIndex ++)
                                         {
@@ -576,7 +576,7 @@ namespace Ceritar.CVS.Controllers
                                     }
 
                                     intNewScriptNumber = 0;
-                                    List<string> lstTempScripts = Directory.GetFiles(strCurrentVersionFolderToCopy_Path, "*.*", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
+                                    List<string> lstTempScripts = Directory.GetFiles(strCurrentVersionFolderToCopy_Path, "*.sql", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
 
                                     Int32.TryParse(new string(Path.GetFileName(lstTempScripts[lstTempScripts.Count() - 1]).TakeWhile(Char.IsDigit).ToArray()), out intNewScriptNumber);
 

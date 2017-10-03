@@ -13,7 +13,7 @@ namespace Ceritar.CVS
     public class clsActionResults
     {
         private bool mblnValid;
-        private int mintSuccessMessage_NRI;
+        private List<int> mlstSuccessMessage_NRI;
         private int mintErrorMessage_NRI;
         private int mintNewItem_NRI;
         private object mErrorCode;
@@ -36,10 +36,11 @@ namespace Ceritar.CVS
 
         public clsActionResults()
         {
-            mblnValid = false;
+            mblnValid = false;  
             mErrorCode = BaseErrorCode.NO_ERROR;
             mintErrorMessage_NRI = mintMSG_NotUsedError;
             mintRowInError = 0;
+            mlstSuccessMessage_NRI = new List<int>();
         }
 
 
@@ -58,8 +59,8 @@ namespace Ceritar.CVS
 
         public int SuccessMessage_NRI
         {
-            get { return mintSuccessMessage_NRI; }
-            set { mintSuccessMessage_NRI = value;  }
+            get { return (mlstSuccessMessage_NRI.Count == 0 ? 0 : mlstSuccessMessage_NRI[0]); }
+            set { if(!mlstSuccessMessage_NRI.Contains(value)) mlstSuccessMessage_NRI.Add(value);  }
         }
 
         public object GetErrorCode
@@ -95,7 +96,7 @@ namespace Ceritar.CVS
             mblnValid = false;
             mErrorCode = BaseErrorCode.UNHANDLED_ERROR;
             mintErrorMessage_NRI = -1;
-            mintSuccessMessage_NRI = 0;
+            mlstSuccessMessage_NRI = new List<int>();
             mintRowInError = 0;
             lstParams = null;
         }
@@ -105,7 +106,6 @@ namespace Ceritar.CVS
             mblnValid = true;
             mErrorCode = BaseErrorCode.NO_ERROR;
             mintErrorMessage_NRI = 0;
-            mintSuccessMessage_NRI = vintSuccessMessage_NRI;
             mintRowInError = 0;
             lstParams = null;
         }
@@ -115,7 +115,7 @@ namespace Ceritar.CVS
             mblnValid = false;
             mErrorCode = vintErrorCode;
             mintErrorMessage_NRI = (int)vintMessage_NRI;
-            mintSuccessMessage_NRI = 0;
+            mlstSuccessMessage_NRI.Clear();
             lstParams = vstrParams;
         }
 
@@ -125,7 +125,7 @@ namespace Ceritar.CVS
             mErrorCode = BaseErrorCode.NO_ERROR;
             mintErrorMessage_NRI = mintMSG_NotUsedError;
             mintRowInError = 0;
-            mintSuccessMessage_NRI = 0;
+            mlstSuccessMessage_NRI = new List<int>();
             lstParams = null;
         }
     }

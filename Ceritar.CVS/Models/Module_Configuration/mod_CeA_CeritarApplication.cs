@@ -219,6 +219,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
                         else 
                         {
                             mcActionResults.SetNewItem_NRI = _intCeritarApplication_NRI;
+                            mcActionResults.SuccessMessage_NRI = mintMSG_WarningOnNameChange;
 
                             blnValidReturn = true;
                         }
@@ -237,6 +238,8 @@ namespace Ceritar.CVS.Models.Module_Configuration
                         { } 
                         else
                         {
+                            mcActionResults.SuccessMessage_NRI = mintMSG_WarningOnNameChange;
+
                             blnValidReturn = true;
                         }
 

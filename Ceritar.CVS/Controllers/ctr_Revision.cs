@@ -537,7 +537,7 @@ namespace Ceritar.CVS.Controllers
 
                                         currentFolderInfos.Create();
 
-                                        lstScripts = Directory.GetFiles(mcView.GetLocation_Scripts()).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
+                                        lstScripts = Directory.GetFiles(mcView.GetLocation_Scripts(), "*.sql").OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
                                         
                                         for (int intIndex = 0; intIndex < lstScripts.Count; intIndex++)
                                         {
@@ -626,11 +626,11 @@ namespace Ceritar.CVS.Controllers
                                 {
                                     clsTTApp.GetAppController.setAttributesToNormal(new DirectoryInfo(mcModRevision.Path_Scripts));
 
-                                    lstScriptsToCopy = Directory.GetFiles(mcModRevision.Path_Scripts, "*.*", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList(); // OrderBy(f => f).ToList<string>();
+                                    lstScriptsToCopy = Directory.GetFiles(mcModRevision.Path_Scripts, "*.sql", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList(); // OrderBy(f => f).ToList<string>();
                                 }
                                 else
                                 {
-                                    lstScriptsToCopy = Directory.GetFiles(new FileInfo(mcModRevision.Path_Scripts).Directory.FullName, "*.*", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
+                                    lstScriptsToCopy = Directory.GetFiles(new FileInfo(mcModRevision.Path_Scripts).Directory.FullName, "*.sql", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
                                 }
 
                                 clsTTApp.GetAppController.setAttributesToNormal(new DirectoryInfo(strRevAllScripts_Location));

@@ -104,14 +104,22 @@ namespace Ceritar.CVS.Controllers
 
             strSQL = strSQL + " DECLARE @CerClient_NRI INT = " + vintCeC_NRI + Environment.NewLine;
 
+            strSQL = strSQL + " SELECT T1.AppName, " + Environment.NewLine;
+            strSQL = strSQL + "        T1.Ver_No, " + Environment.NewLine;
+            strSQL = strSQL + "        T1.Rev_No " + Environment.NewLine;
+            strSQL = strSQL + " FROM ( " + Environment.NewLine;
+
             strSQL = strSQL + " --Application principal " + Environment.NewLine;
-            strSQL = strSQL + " SELECT CerApp.CeA_Name, " + Environment.NewLine;
+            strSQL = strSQL + " SELECT AppName = CerApp.CeA_Name, " + Environment.NewLine;
+            strSQL = strSQL + "        MIN(TVer.CeA_NRI) AS CeA_NRI, " + Environment.NewLine;
             strSQL = strSQL + " 	   MAX(TVer.Ver_No) AS Ver_No, " + Environment.NewLine;
-            strSQL = strSQL + " 	   MAX(TVer.Rev_No) AS Rev_No " + Environment.NewLine;
-	   
+            strSQL = strSQL + " 	   MAX(TVer.Rev_No) AS Rev_No, " + Environment.NewLine;
+            strSQL = strSQL + " 	   SEQ = 1 " + Environment.NewLine;
+
             strSQL = strSQL + " FROM CerApp " + Environment.NewLine;
             strSQL = strSQL + " 	CROSS APPLY (SELECT TOP 1 Version.Ver_No, " + Environment.NewLine;
-            strSQL = strSQL + " 							  TRef.Rev_No " + Environment.NewLine;
+            strSQL = strSQL + " 							  TRef.Rev_No, " + Environment.NewLine;
+            strSQL = strSQL + "  							  ClientAppVersion.CeA_NRI " + Environment.NewLine;
             strSQL = strSQL + " 				 FROM ClientAppVersion " + Environment.NewLine;
             strSQL = strSQL + " 					INNER JOIN Version ON Version.Ver_NRI = ClientAppVersion.Ver_NRI " + Environment.NewLine;
 					
@@ -128,7 +136,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " 				   AND ClientAppVersion.CeC_NRI = @CerClient_NRI " + Environment.NewLine;
             strSQL = strSQL + " 				   AND ClientAppVersion.CAV_DtInstalledProd IS NOT NULL " + Environment.NewLine;
 
-            strSQL = strSQL + " 				 ORDER BY ClientAppVersion.CeA_NRI DESC, Version.Ver_No DESC " + Environment.NewLine;
+            //strSQL = strSQL + " 				 ORDER BY ClientAppVersion.CeA_NRI DESC, Version.Ver_No DESC " + Environment.NewLine;
             strSQL = strSQL + " 				) AS TVer " + Environment.NewLine;
 				
             strSQL = strSQL + " GROUP BY CerApp.CeA_NRI, CerApp.CeA_Name " + Environment.NewLine;
@@ -137,13 +145,16 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " UNION ALL " + Environment.NewLine;
 
             strSQL = strSQL + " --Rapports externes de l'application principal " + Environment.NewLine;
-            strSQL = strSQL + " SELECT REPLACE(CerApp.CeA_ExternalRPTAppName, '.exe', '' ), " + Environment.NewLine;
+            strSQL = strSQL + " SELECT AppName = REPLACE(CerApp.CeA_ExternalRPTAppName, '.exe', '' ), " + Environment.NewLine;
+            strSQL = strSQL + "        MIN(TVer.CeA_NRI) AS CeA_NRI, " + Environment.NewLine;
             strSQL = strSQL + "  	   MAX(TVer.Ver_No) AS Ver_No, " + Environment.NewLine;
-            strSQL = strSQL + "  	   MAX(TVer.Rev_No) AS Rev_No " + Environment.NewLine;
+            strSQL = strSQL + "  	   MAX(TVer.Rev_No) AS Rev_No, " + Environment.NewLine;
+            strSQL = strSQL + " 	   SEQ = 2 " + Environment.NewLine;
 
             strSQL = strSQL + "  FROM CerApp " + Environment.NewLine;
             strSQL = strSQL + "  	CROSS APPLY (SELECT TOP 1 Version.Ver_No, " + Environment.NewLine;
-            strSQL = strSQL + "  							  TRef.Rev_No " + Environment.NewLine;
+            strSQL = strSQL + "  							  TRef.Rev_No, " + Environment.NewLine;
+            strSQL = strSQL + "  							  ClientAppVersion.CeA_NRI " + Environment.NewLine;
             strSQL = strSQL + "  				 FROM ClientAppVersion " + Environment.NewLine;
 
             strSQL = strSQL + "  					INNER JOIN Version ON Version.Ver_NRI = ClientAppVersion.Ver_NRI " + Environment.NewLine;
@@ -160,7 +171,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "  				   AND ClientAppVersion.CAV_DtInstalledProd IS NOT NULL " + Environment.NewLine;
             strSQL = strSQL + "  				   AND ClientAppVersion.CAV_ReportExe_Location IS NOT NULL " + Environment.NewLine;
 
-            strSQL = strSQL + "  				 ORDER BY ClientAppVersion.CeA_NRI DESC, Version.Ver_No DESC " + Environment.NewLine;
+            //strSQL = strSQL + "  				 ORDER BY ClientAppVersion.CeA_NRI DESC, Version.Ver_No DESC " + Environment.NewLine;
             strSQL = strSQL + "  				) AS TVer " + Environment.NewLine;
 
             strSQL = strSQL + "  GROUP BY CerApp.CeA_NRI, CerApp.CeA_ExternalRPTAppName " + Environment.NewLine;
@@ -169,10 +180,12 @@ namespace Ceritar.CVS.Controllers
 
 
             strSQL = strSQL + " --Applications satellites " + Environment.NewLine;
-            strSQL = strSQL + " SELECT CerSatApp.CSA_Name, " + Environment.NewLine;
+            strSQL = strSQL + " SELECT AppName = CerSatApp.CSA_Name, " + Environment.NewLine;
+            strSQL = strSQL + "        MIN(CerSatApp.CeA_NRI) AS CeA_NRI, " + Environment.NewLine;
             strSQL = strSQL + " 	   MAX(TVer.Ver_No) AS Ver_No, " + Environment.NewLine;
-            strSQL = strSQL + " 	   MAX(TVer.Rev_No) AS Rev_No " + Environment.NewLine;
-	   
+            strSQL = strSQL + " 	   MAX(TVer.Rev_No) AS Rev_No, " + Environment.NewLine;
+            strSQL = strSQL + " 	   SEQ = 3 " + Environment.NewLine;
+
             strSQL = strSQL + " FROM CerSatApp " + Environment.NewLine;
             strSQL = strSQL + " 	CROSS APPLY (SELECT TOP 1 Version.Ver_No, " + Environment.NewLine;
             strSQL = strSQL + " 							  TRef.Rev_No " + Environment.NewLine;
@@ -192,12 +205,14 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " 				   AND ClientSatVersion.CeC_NRI = @CerClient_NRI " + Environment.NewLine;
             strSQL = strSQL + " 				   AND TCAV.DtInstalled IS NOT NULL " + Environment.NewLine;
 
-            strSQL = strSQL + " 				 ORDER BY ClientSatVersion.CSA_NRI DESC, Version.Ver_No DESC " + Environment.NewLine;
+            //strSQL = strSQL + " 				 ORDER BY ClientSatVersion.CSA_NRI DESC, Version.Ver_No DESC " + Environment.NewLine;
             strSQL = strSQL + " 				) AS TVer " + Environment.NewLine;
 				
             strSQL = strSQL + " GROUP BY CerSatApp.CSA_NRI, CerSatApp.CSA_Name " + Environment.NewLine;
 
-            
+            strSQL = strSQL + "    ) AS T1 " + Environment.NewLine;
+            strSQL = strSQL + " ORDER BY T1.CeA_NRI DESC, T1.SEQ, T1.Ver_No DESC " + Environment.NewLine;
+
             return strSQL;
         }
 
