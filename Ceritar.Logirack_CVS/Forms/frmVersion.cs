@@ -1138,6 +1138,8 @@ namespace Ceritar.Logirack_CVS.Forms
                             mcGrdClients[grdClients.Row, mintGrdClients_Selection_col] = (mcGrdClients[grdClients.Row, mintGrdClients_Selection_col] == "0" ? "1" : "0");
 
                             btnExportInstallationKit.Enabled = mcGrdClients[grdClients.Row, mintGrdClients_Selection_col] == "1";
+                            chkBaseKit.Enabled = btnExportInstallationKit.Enabled;
+                            lblBaseKit.Enabled = btnExportInstallationKit.Enabled;
 
                             mcGrdClients.GridIsLoading = false;
                         }
@@ -1276,6 +1278,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
                     btnGenerate.Enabled = false;
                     btnExportInstallationKit.Enabled = false;
+                    lblBaseKit.Enabled = false;
                     btnSelectVariousFilePath.Enabled = false;
                     btnSelectVariousFolderPath.Enabled = false;
                     btnShowRootFolder.Enabled = false;
@@ -1290,10 +1293,11 @@ namespace Ceritar.Logirack_CVS.Forms
 
                     chkIncludeScripts.Enabled = true;
                     chkIncludeScripts.Checked = false;
-                    chkBaseKit.Enabled = true;
+                    chkBaseKit.Enabled = false;
 
                     btnGenerate.Enabled = true;
                     btnExportInstallationKit.Enabled = false;
+                    lblBaseKit.Enabled = false;
                     btnGrdRevAdd.Enabled = true;
                     btnSelectVariousFilePath.Enabled = true;
                     btnSelectVariousFolderPath.Enabled = true;
