@@ -28,5 +28,15 @@ namespace Ceritar.Logirack_CVS.Forms
         {
             Cursor.Current = Cursors.Default;
         }
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                var cp = base.CreateParams;
+                cp.ExStyle |= 8;  // Turn on WS_EX_TOPMOST
+                return cp;
+            }
+        }
     }
 }
