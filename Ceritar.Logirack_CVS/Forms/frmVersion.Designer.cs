@@ -72,10 +72,12 @@
             this.tabVersion = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.chkBaseKit = new System.Windows.Forms.CheckBox();
             this.cboClients = new System.Windows.Forms.ComboBox();
             this.btnGrdClientsDel = new System.Windows.Forms.Button();
             this.btnGrdClientsAdd = new System.Windows.Forms.Button();
             this.grdClients = new C1.Win.C1FlexGrid.C1FlexGrid();
+            this.label11 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.grdSatellite = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.mnuClientSatVersion = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -649,6 +651,8 @@
             this.groupBox2.Controls.Add(this.btnGrdClientsDel);
             this.groupBox2.Controls.Add(this.btnGrdClientsAdd);
             this.groupBox2.Controls.Add(this.grdClients);
+            this.groupBox2.Controls.Add(this.chkBaseKit);
+            this.groupBox2.Controls.Add(this.label11);
             this.groupBox2.Location = new System.Drawing.Point(3, 4);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox2.Name = "groupBox2";
@@ -657,6 +661,15 @@
             this.groupBox2.TabIndex = 14;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Clients à qui la version est destinée";
+            // 
+            // chkBaseKit
+            // 
+            this.chkBaseKit.Location = new System.Drawing.Point(591, 145);
+            this.chkBaseKit.Name = "chkBaseKit";
+            this.chkBaseKit.Size = new System.Drawing.Size(15, 15);
+            this.chkBaseKit.TabIndex = 16;
+            this.toolTip.SetToolTip(this.chkBaseKit, "Exporte un kit contenant seulement :\r\n-Release\r\n-TTApp\r\n-Scripts");
+            this.chkBaseKit.UseVisualStyleBackColor = true;
             // 
             // cboClients
             // 
@@ -721,6 +734,15 @@
             this.grdClients.DoubleClick += new System.EventHandler(this.grdClients_DoubleClick);
             this.grdClients.MouseMove += new System.Windows.Forms.MouseEventHandler(this.grdClients_MouseMove);
             // 
+            // label11
+            // 
+            this.label11.Location = new System.Drawing.Point(603, 144);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(38, 15);
+            this.label11.TabIndex = 17;
+            this.label11.Text = "Base";
+            this.toolTip.SetToolTip(this.label11, "Exporte un kit contenant seulement :\r\n-Release\r\n-TTApp\r\n-Scripts");
+            // 
             // groupBox4
             // 
             this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -734,7 +756,7 @@
             this.groupBox4.Size = new System.Drawing.Size(442, 211);
             this.groupBox4.TabIndex = 62;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Applications satellites";
+            this.groupBox4.Text = "Applications satellites pour le client";
             // 
             // grdSatellite
             // 
@@ -764,7 +786,7 @@
             this.mnuiShowInExplorer,
             this.mnuiDelete});
             this.mnuClientSatVersion.Name = "mnuClientSatVersion";
-            this.mnuClientSatVersion.Size = new System.Drawing.Size(213, 70);
+            this.mnuClientSatVersion.Size = new System.Drawing.Size(213, 48);
             // 
             // mnuiShowInExplorer
             // 
@@ -1068,5 +1090,7 @@
         private System.Windows.Forms.TextBox txtDescription;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.ToolStripMenuItem mnuiShowInExplorer;
+        private System.Windows.Forms.CheckBox chkBaseKit;
+        private System.Windows.Forms.Label label11;
     }
 }

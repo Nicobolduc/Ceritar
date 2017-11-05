@@ -29,6 +29,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         string GetDescription();
         string GetExternalRPTAppName();
         bool GetIsDemo();
+        bool GetIsBaseKit();
         bool GetIncludeScriptsOnRefresh();
         
         structClientAppVersion GetSelectedClient();

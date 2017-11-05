@@ -292,10 +292,15 @@ namespace Ceritar.Logirack_CVS.Forms
             return (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE? clsTTApp.GetAppController.cUser.User_NRI : mintCreatedByUser_NRI);
         }
 
-#endregion
-        
-        
-#region "Functions"
+        bool IVersion.GetIsBaseKit()
+        {
+            return chkBaseKit.Checked;
+        }
+
+        #endregion
+
+
+        #region "Functions"
 
         private bool pfblnGrdClients_Load()
         {
@@ -1266,6 +1271,8 @@ namespace Ceritar.Logirack_CVS.Forms
 
                     chkIncludeScripts.Enabled = false;
                     chkIncludeScripts.Checked = true;
+                    chkBaseKit.Checked = false;
+                    chkBaseKit.Enabled = false;
 
                     btnGenerate.Enabled = false;
                     btnExportInstallationKit.Enabled = false;
@@ -1283,6 +1290,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
                     chkIncludeScripts.Enabled = true;
                     chkIncludeScripts.Checked = false;
+                    chkBaseKit.Enabled = true;
 
                     btnGenerate.Enabled = true;
                     btnExportInstallationKit.Enabled = false;
@@ -1301,6 +1309,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
                 case sclsConstants.DML_Mode.DELETE_MODE: case sclsConstants.DML_Mode.CONSULT_MODE:
 
+                    chkBaseKit.Enabled = true;
                     btnGrdRevDel.Enabled = true;
                     btnGrdRevUpdate.Enabled = false;
                     btnShowRootFolder.Enabled = true;
@@ -1845,6 +1854,6 @@ namespace Ceritar.Logirack_CVS.Forms
                 ((HostedCellControl)mcGrdSatelliteApps.LstHostedCellControls[grdSatellite.Row - 1]).GetCellControl.BackColor = System.Drawing.SystemColors.Control;
             }
         }
-
+        
     }
 }
