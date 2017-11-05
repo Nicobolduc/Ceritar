@@ -1055,7 +1055,7 @@ namespace Ceritar.CVS.Controllers
             string strCeritarClientName = string.Empty;
             string strNewZipFileLocation = string.Empty;
             string strReleaseLocation = string.Empty;
-            string strLocationSatelliteExe = string.Empty;
+            string strSatelliteExeLocation = string.Empty;
             string strReportLocation = string.Empty;
             string strCaptionsAndMenusLocation = mcView.GetLocation_TTApp();
             string strCurrentScriptFolderLocation = mcView.GetSelectedClient().strLocationScriptsRoot;
@@ -1110,20 +1110,27 @@ namespace Ceritar.CVS.Controllers
                     foreach (structClientSatVersion structSat in lstSatellites)
                     {
                         //Get the executable folder location to copy (from the version kit or from the latest revision)
-                        strLocationSatelliteExe = clsTTSQL.str_ADOSingleLookUp("TOP 1 SatRevision.SRe_Exe_Location", "Revision INNER JOIN SatRevision ON SatRevision.Rev_NRI = Revision.Rev_NRI", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND SatRevision.SRe_Exe_Location IS NOT NULL AND SatRevision.CSA_NRI = " + structSat.intCeritarSatelliteApp_NRI + " ORDER BY Revision.Rev_No DESC");
+                        strSatelliteExeLocation = clsTTSQL.str_ADOSingleLookUp("TOP 1 SatRevision.SRe_Exe_Location", "Revision INNER JOIN SatRevision ON SatRevision.Rev_NRI = Revision.Rev_NRI", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND SatRevision.SRe_Exe_Location IS NOT NULL AND SatRevision.CSA_NRI = " + structSat.intCeritarSatelliteApp_NRI + " ORDER BY Revision.Rev_No DESC");
 
-                        strLocationSatelliteExe = strLocationSatelliteExe == string.Empty ? structSat.strLocationSatelliteExe : strLocationSatelliteExe;
+                        strSatelliteExeLocation = strSatelliteExeLocation == string.Empty ? structSat.strLocationSatelliteExe : strSatelliteExeLocation;
 
-                        if (structSat.blnExeIsFolder && Directory.Exists(strLocationSatelliteExe))
+                        if (structSat.blnExeIsFolder && Directory.Exists(strSatelliteExeLocation))
                         {
-                            foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strLocationSatelliteExe, "*.*", SearchOption.AllDirectories))
+                            //Ajoute les fichiers seuls
+                            foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strSatelliteExeLocation, "*.*", SearchOption.TopDirectoryOnly))
                             {
                                 newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(structSat.strKitFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
                             }
+
+                            //Réplique les structures de répertoire
+                            foreach (string strCurrentFileToCopyPath in Directory.GetDirectories(strSatelliteExeLocation, "*.*", SearchOption.TopDirectoryOnly))
+                            {
+                                blnValidReturn = clsTTApp.GetAppController.blnAddDirectoryStructureToZipFile(newZipFile, strCurrentFileToCopyPath, structSat.strKitFolderName);
+                            }
                         }
-                        else if (File.Exists(strLocationSatelliteExe))
+                        else if (File.Exists(strSatelliteExeLocation))
                         {
-                            newZipFile.CreateEntryFromFile(strLocationSatelliteExe, Path.Combine(structSat.strKitFolderName, Path.GetFileName(strLocationSatelliteExe)));
+                            newZipFile.CreateEntryFromFile(strSatelliteExeLocation, Path.Combine(structSat.strKitFolderName, Path.GetFileName(strSatelliteExeLocation)));
                         }
                     }
 

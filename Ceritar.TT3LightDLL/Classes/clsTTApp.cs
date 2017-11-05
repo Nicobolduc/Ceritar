@@ -7,6 +7,8 @@ using System.Data.SqlClient;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.IO.Compression;
+using System.Runtime.InteropServices;
 
 namespace Ceritar.TT3LightDLL.Classes
 {
@@ -16,6 +18,8 @@ namespace Ceritar.TT3LightDLL.Classes
     /// </summary>
     public sealed class clsTTApp
     {
+        [DllImport("shlwapi.dll", EntryPoint = "PathRelativePathTo")]
+        static extern bool PathRelativePathTo(System.Text.StringBuilder lpszDst, string from, UInt32 attrFrom, string to, UInt32 attrTo);
 
         //Private class members
         private SqlConnection mcSQLConnection;
@@ -401,7 +405,68 @@ namespace Ceritar.TT3LightDLL.Classes
             }
         }
 
-#endregion
+        public bool blnAddDirectoryStructureToZipFile(System.IO.Compression.ZipArchive rZipArchive, string vstrSourceFolderPath, string vstrRootFolderName)
+        {
+            bool blnValidReturn = true;
+            string[] lstDirectories;
+
+            try
+            {
+                if (File.GetAttributes(vstrSourceFolderPath) == FileAttributes.Directory)
+                {
+                    lstDirectories = Directory.GetDirectories(vstrSourceFolderPath); //Va chercher les répertoires
+
+                    if (lstDirectories.Length == 0)
+                    {
+                        foreach (string strCurrentFileToCopyPath in Directory.GetFiles(vstrSourceFolderPath, "*.*", SearchOption.TopDirectoryOnly))
+                        {
+                            DirectoryInfo cEndDirectoryInfo = new DirectoryInfo(str_GetPathRelativePathTo(strCurrentFileToCopyPath, vstrSourceFolderPath));
+
+                            ZipFileExtensions.CreateEntryFromFile(rZipArchive, strCurrentFileToCopyPath, Path.Combine(vstrRootFolderName, cEndDirectoryInfo.Name, Path.GetFileName(strCurrentFileToCopyPath)));
+                        }
+
+                        blnValidReturn = true;
+                    }
+                    else
+                    {
+                        for (int intIndex = 0; intIndex < lstDirectories.Length; intIndex++)
+                        {
+                            DirectoryInfo cEndDirectoryInfo = new DirectoryInfo(lstDirectories[intIndex]);
+                            
+                            blnValidReturn = blnAddDirectoryStructureToZipFile(rZipArchive, lstDirectories[intIndex], Path.Combine(vstrRootFolderName, cEndDirectoryInfo.Parent.Name));
+                        }
+
+                        blnValidReturn = true;
+                    }
+                }
+                else
+                {
+                    blnValidReturn = true;
+                }                       
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnValidReturn;
+        }
+
+        /// <summary>
+        /// Retourne la portion de path qui diffère entre le Path1 et le Path2.
+        /// </summary>
+        /// <param name="vstrPath1">Le path sur lequel le Path2 sera comparé.</param>
+        /// <param name="vstrPath2">Le path pour lequel on veut la différence.</param>
+        /// <returns>Un path qui représente la différence entre les 2 paths.</returns>
+        public static string str_GetPathRelativePathTo(string vstrPath1, string vstrPath2)
+        {
+            System.Text.StringBuilder builder = new System.Text.StringBuilder(1024);
+            bool result = PathRelativePathTo(builder, vstrPath1, 0, vstrPath2, 0);
+            return builder.ToString();
+        }
+
+        #endregion
 
     }
 
