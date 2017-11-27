@@ -329,6 +329,8 @@ namespace Ceritar.Logirack_CVS.Forms
                     
                     break;
             }
+
+            grdList.ScrollBars = ScrollBars.Both;
         }
 
         ctlFormController IFormController.GetFormController()

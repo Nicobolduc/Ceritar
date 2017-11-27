@@ -16,6 +16,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         string GetName();
         string GetDescription();
         string GetExternalReportAppName();
+        bool IsGeneratingRevisionNoScript();
         List<string> GetLstModules();
         List<structCeritarSatelliteApp> GetLstAppSatellites();
         Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode GetDML_Mode();

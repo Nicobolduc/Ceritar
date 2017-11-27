@@ -49,6 +49,7 @@
             this.txtReportAppExternal = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.grdSatApp = new C1.Win.C1FlexGrid.C1FlexGrid();
+            this.chkGenRevNoScript = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdModules)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -57,7 +58,7 @@
             // 
             // lblNom
             // 
-            this.lblNom.Location = new System.Drawing.Point(2, 18);
+            this.lblNom.Location = new System.Drawing.Point(2, 8);
             this.lblNom.Name = "lblNom";
             this.lblNom.Size = new System.Drawing.Size(59, 21);
             this.lblNom.TabIndex = 0;
@@ -65,16 +66,16 @@
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(82, 15);
+            this.txtName.Location = new System.Drawing.Point(82, 5);
             this.txtName.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(347, 22);
+            this.txtName.Size = new System.Drawing.Size(392, 22);
             this.txtName.TabIndex = 0;
             this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(2, 50);
+            this.label1.Location = new System.Drawing.Point(2, 32);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(83, 21);
             this.label1.TabIndex = 2;
@@ -82,11 +83,11 @@
             // 
             // txtDescription
             // 
-            this.txtDescription.Location = new System.Drawing.Point(82, 47);
+            this.txtDescription.Location = new System.Drawing.Point(82, 29);
             this.txtDescription.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(347, 48);
+            this.txtDescription.Size = new System.Drawing.Size(392, 48);
             this.txtDescription.TabIndex = 1;
             this.txtDescription.TextChanged += new System.EventHandler(this.txtDescription_TextChanged);
             // 
@@ -97,7 +98,7 @@
             this.groupBox1.Controls.Add(this.btnGrdModDel);
             this.groupBox1.Controls.Add(this.btnGrdModAdd);
             this.groupBox1.Controls.Add(this.grdModules);
-            this.groupBox1.Location = new System.Drawing.Point(6, 381);
+            this.groupBox1.Location = new System.Drawing.Point(6, 390);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -185,7 +186,7 @@
             // 
             this.cboDomain.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboDomain.FormattingEnabled = true;
-            this.cboDomain.Location = new System.Drawing.Point(82, 105);
+            this.cboDomain.Location = new System.Drawing.Point(82, 80);
             this.cboDomain.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.cboDomain.Name = "cboDomain";
             this.cboDomain.Size = new System.Drawing.Size(215, 24);
@@ -194,9 +195,9 @@
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(2, 108);
+            this.label2.Location = new System.Drawing.Point(2, 83);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(72, 21);
+            this.label2.Size = new System.Drawing.Size(100, 21);
             this.label2.TabIndex = 15;
             this.label2.Text = "Domaine:";
             // 
@@ -208,7 +209,7 @@
             this.formController.FormIsLoading = false;
             this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.CONSULT_MODE;
             this.formController.Item_NRI = 0;
-            this.formController.Location = new System.Drawing.Point(-6, 596);
+            this.formController.Location = new System.Drawing.Point(-6, 605);
             this.formController.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
@@ -228,12 +229,12 @@
             this.groupBox2.Controls.Add(this.btnGrdSatDel);
             this.groupBox2.Controls.Add(this.btnGrdSatAdd);
             this.groupBox2.Controls.Add(this.grdSatApp);
-            this.groupBox2.Location = new System.Drawing.Point(6, 136);
+            this.groupBox2.Location = new System.Drawing.Point(6, 145);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox2.Size = new System.Drawing.Size(468, 238);
-            this.groupBox2.TabIndex = 3;
+            this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Liste des applications satellites";
             // 
@@ -293,13 +294,23 @@
             this.grdSatApp.DoubleClick += new System.EventHandler(this.grdAppSat_DoubleClick);
             this.grdSatApp.Validated += new System.EventHandler(this.grdAppSat_Validated);
             // 
+            // chkGenRevNoScript
+            // 
+            this.chkGenRevNoScript.Location = new System.Drawing.Point(82, 111);
+            this.chkGenRevNoScript.Name = "chkGenRevNoScript";
+            this.chkGenRevNoScript.Size = new System.Drawing.Size(388, 20);
+            this.chkGenRevNoScript.TabIndex = 3;
+            this.chkGenRevNoScript.Text = "Auto. générer le script de changement de numéro de révision";
+            this.chkGenRevNoScript.UseVisualStyleBackColor = true;
+            this.chkGenRevNoScript.Click += new System.EventHandler(this.chkGenRevNoScript_Click);
+            // 
             // frmCeritarApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(478, 632);
+            this.ClientSize = new System.Drawing.Size(478, 641);
+            this.Controls.Add(this.chkGenRevNoScript);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.cboDomain);
             this.Controls.Add(this.formController);
             this.Controls.Add(this.groupBox1);
@@ -307,6 +318,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.lblNom);
+            this.Controls.Add(this.label2);
             this.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -346,5 +358,6 @@
         private System.Windows.Forms.TextBox txtReportAppExternal;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox chkReportAppExternal;
+        private System.Windows.Forms.CheckBox chkGenRevNoScript;
     }
 }

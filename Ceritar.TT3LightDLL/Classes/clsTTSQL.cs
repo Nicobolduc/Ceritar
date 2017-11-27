@@ -533,26 +533,26 @@ namespace Ceritar.TT3LightDLL.Classes
             {
                 //OSQL -S BOLDUC-PC\SVR_SQL -E 
                 //sp_password NULL, '1234', 'sa' GO
+                //rcSQLConnection = new SqlConnection(@"Persist Security Info=true;
+                //                                      User ID=ltuser;
+                //                                      Password=ltuser;
+                //                                      Initial Catalog=Logirack_CVS;
+                //                                      Data Source=SVR-SQL14;
+                //                                      MultipleActiveResultSets=True");
+
                 rcSQLConnection = new SqlConnection(@"Persist Security Info=true;
-                                                      User ID=ltuser;
-                                                      Password=ltuser;
+                                                      User ID=sa;
+                                                      Password=*8059%Ce;
                                                       Initial Catalog=Logirack_CVS;
-                                                      Data Source=SVR-SQL14;
+                                                      Data Source=localhost\SVR_SQL16;
                                                       MultipleActiveResultSets=True");
 
-//                rcSQLConnection = new SqlConnection(@"Persist Security Info=False;
-//                                                      User ID=sa;
-//                                                      Password=1234;
-//                                                      Initial Catalog=Logirack_CVS_Dev;
-//                                                      Data Source=localhost\SVR_SQL;
-//                                                      MultipleActiveResultSets=True");
-
-//                rcSQLConnection = new SqlConnection(@"Persist Security Info=False;
-//                                                                        User ID=sa;
-//                                                                        Password=1234;
-//                                                                        Initial Catalog=Logirack_CVS_Dev;
-//                                                                        Data Source=24.200.162.199\SVR_SQL;
-//                                                                        MultipleActiveResultSets=True");
+                //                rcSQLConnection = new SqlConnection(@"Persist Security Info=False;
+                //                                                                        User ID=sa;
+                //                                                                        Password=1234;
+                //                                                                        Initial Catalog=Logirack_CVS_Dev;
+                //                                                                        Data Source=24.200.162.199\SVR_SQL;
+                //                                                                        MultipleActiveResultSets=True");
 
                 rcSQLConnection.Open();
             }

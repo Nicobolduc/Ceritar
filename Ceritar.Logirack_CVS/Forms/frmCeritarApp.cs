@@ -138,10 +138,15 @@ namespace Ceritar.Logirack_CVS.Forms
             return chkReportAppExternal.Checked ? txtReportAppExternal.Text : string.Empty;
         }
 
-#endregion
+        bool ICeritarApp.IsGeneratingRevisionNoScript()
+        {
+            return chkGenRevNoScript.Checked;
+        }
+
+        #endregion
 
 
-#region "Functions"
+        #region "Functions"
 
         private bool pfblnGrdModules_Load()
         {
@@ -192,7 +197,10 @@ namespace Ceritar.Logirack_CVS.Forms
                     txtName.Text = sqlRecord["CeA_Name"].ToString();
                     txtDescription.Text = sqlRecord["CeA_Desc"].ToString();
                     txtReportAppExternal.Text = sqlRecord["CeA_ExternalRPTAppName"].ToString();
+
                     cboDomain.SelectedValue = Int32.Parse(sqlRecord["ApD_NRI"].ToString());
+
+                    chkGenRevNoScript.Checked = bool.Parse(sqlRecord["CeA_AutoGenRevisionNoScript"].ToString());
 
                     if (!string.IsNullOrEmpty(txtReportAppExternal.Text))
                     {
@@ -452,6 +460,14 @@ namespace Ceritar.Logirack_CVS.Forms
         }
 
         private void txtReportAppExternal_TextChanged(object sender, EventArgs e)
+        {
+            if (!formController.FormIsLoading)
+            {
+                formController.ChangeMade = true;
+            }
+        }
+
+        private void chkGenRevNoScript_Click(object sender, EventArgs e)
         {
             if (!formController.FormIsLoading)
             {

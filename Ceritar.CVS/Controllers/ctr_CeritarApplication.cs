@@ -61,6 +61,7 @@ namespace Ceritar.CVS.Controllers
                 mcModCerApp.LstModules = mcView.GetLstModules();
                 mcModCerApp.DML_Action = mcView.GetDML_Mode();
                 mcModCerApp.Domaine_NRI = (mod_CeA_CeritarApplication.AppDomain)mcView.GetDomain_NRI();
+                mcModCerApp.AutoGenRevisionNoScript = mcView.IsGeneratingRevisionNoScript();
 
                 lstSatelliteApps = mcView.GetLstAppSatellites();
 
@@ -139,11 +140,12 @@ namespace Ceritar.CVS.Controllers
         public string strGetDataLoad_SQL(int vintCeA_NRI)
         {
             string strSQL = string.Empty;
-
+            
             strSQL = strSQL + " SELECT CerApp.CeA_TS, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_Name, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_Desc, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.ApD_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.CeA_AutoGenRevisionNoScript, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_ExternalRPTAppName " + Environment.NewLine;
 
             strSQL = strSQL + " FROM CerApp " + Environment.NewLine;

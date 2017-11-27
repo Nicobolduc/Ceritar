@@ -68,8 +68,15 @@ namespace Ceritar.CVS.Controllers
                 mcModRevision.LstModifications = mcView.GetModificationsList();
                 mcModRevision.Path_Release = mcView.GetLocation_Release();
 
+                mcModRevision.Version = new mod_Ver_Version();
+                mcModRevision.Version.CerApplication = new mod_CeA_CeritarApplication();
+                mcModRevision.Version.CerApplication.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
+                mcModRevision.Version.CerApplication.Name = mcView.GetCeritarApplication_Name();
+                mcModRevision.Version.CerApplication.ExternalReportAppName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + mcModRevision.Version.CerApplication.CeritarApplication_NRI);
+                mcModRevision.Version.CerApplication.AutoGenRevisionNoScript = bool.Parse(clsTTSQL.str_ADOSingleLookUp("CeA_AutoGenRevisionNoScript", "CerApp", "CeA_NRI = " + mcModRevision.Version.CerApplication.CeritarApplication_NRI));
+
                 if (!mcView.IsPreparationMode())
-                    mcModRevision.Path_Scripts = (string.IsNullOrEmpty(mcView.GetLocation_Scripts()) & mcModRevision.DML_Action == sclsConstants.DML_Mode.INSERT_MODE ? "placeHolder" : mcView.GetLocation_Scripts());
+                    mcModRevision.Path_Scripts = (string.IsNullOrEmpty(mcView.GetLocation_Scripts()) & mcModRevision.Version.CerApplication.AutoGenRevisionNoScript ? "placeHolder" : mcView.GetLocation_Scripts());
 
                 mcModRevision.Revision_NRI = mcView.GetRevision_NRI();
                 mcModRevision.Revision_TS = mcView.GetRevision_TS();
@@ -87,8 +94,7 @@ namespace Ceritar.CVS.Controllers
 
                 mcModRevision.TemplateSource = new Models.Module_Template.mod_Tpl_HierarchyTemplate();
                 mcModRevision.TemplateSource.Template_NRI = mcView.GetTemplateSource_NRI();
-
-                mcModRevision.Version = new mod_Ver_Version();
+            
                 mcModRevision.Version.Version_NRI = mcView.GetVersion_NRI();
                 mcModRevision.Version.VersionNo = mcView.GetVersionNo();
 
@@ -112,11 +118,6 @@ namespace Ceritar.CVS.Controllers
 
                     mcModRevision.LstSatelliteRevisions.Add(cSRe);
                 }
-
-                mcModRevision.Version.CerApplication = new mod_CeA_CeritarApplication();
-                mcModRevision.Version.CerApplication.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
-                mcModRevision.Version.CerApplication.Name = mcView.GetCeritarApplication_Name();
-                mcModRevision.Version.CerApplication.ExternalReportAppName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + mcModRevision.Version.CerApplication.CeritarApplication_NRI);
 
                 blnValidReturn = true;
             }
@@ -541,7 +542,7 @@ namespace Ceritar.CVS.Controllers
                                         
                                         for (int intIndex = 0; intIndex < lstScripts.Count; intIndex++)
                                         {
-                                            strNewDestinationFileName = pfstrGetNewFileNameWithNumber(currentFolderInfos.FullName, lstScripts[intIndex], ref intNextScriptNo);
+                                            strNewDestinationFileName = pfstrGetNewFileNameWithNumber(currentFolderInfos.FullName, lstScripts[intIndex], ref intNextScriptNo, mcModRevision.Version.CerApplication.AutoGenRevisionNoScript);
 
                                             strNewDestinationFileName = Path.Combine(currentFolderInfos.FullName, strNewDestinationFileName);
 
@@ -573,7 +574,7 @@ namespace Ceritar.CVS.Controllers
 
                                     currentFolderInfos.Create();
 
-                                    strNewDestinationFileName = pfstrGetNewFileNameWithNumber(currentFolderInfos.FullName, mcView.GetLocation_Scripts(), ref intNextScriptNo);
+                                    strNewDestinationFileName = pfstrGetNewFileNameWithNumber(currentFolderInfos.FullName, mcView.GetLocation_Scripts(), ref intNextScriptNo, mcModRevision.Version.CerApplication.AutoGenRevisionNoScript);
 
                                     strNewDestinationFileName = Path.Combine(currentFolderInfos.FullName, strNewDestinationFileName);
 
@@ -594,19 +595,25 @@ namespace Ceritar.CVS.Controllers
 
 
                             //Ajout du script de mise à jour du numéro de révision
-                            if (string.IsNullOrEmpty(mcView.GetLocation_Scripts()) & mcModRevision.DML_Action == sclsConstants.DML_Mode.INSERT_MODE)
+                            if (mcModRevision.Version.CerApplication.AutoGenRevisionNoScript)
                             {
-                                Directory.CreateDirectory(currentFolderInfos.FullName);
+                                if (string.IsNullOrEmpty(mcView.GetLocation_Scripts()))
+                                {
+                                    if (!Directory.Exists(currentFolderInfos.FullName)) Directory.CreateDirectory(currentFolderInfos.FullName);
 
-                                mcModRevision.Path_Scripts = currentFolderInfos.FullName;
+                                    mcModRevision.Path_Scripts = currentFolderInfos.FullName;
+                                }
 
-                                blnScriptsChanged = true;
+                                string strAppRevisionScriptLocation = Path.Combine(mcModRevision.Path_Scripts, sclsAppConfigs.GetAppRevisionFileName(mcModRevision.Revision_Number.ToString()));
+
+                                if (!string.IsNullOrEmpty(mcModRevision.Path_Scripts) && !File.Exists(strAppRevisionScriptLocation))
+                                {
+                                    File.WriteAllText(strAppRevisionScriptLocation, "UPDATE TTParam SET TTP_Value = '" + mcView.GetRevisionNo().ToString() + "' WHERE TTP_Name = " + clsTTApp.GetAppController.str_FixStringForSQL("AppRevision"));
+
+                                    blnScriptsChanged = true;
+                                }
                             }
-                            string strAppRevisionScriptLocation = Path.Combine(mcModRevision.Path_Scripts, sclsAppConfigs.GetAppRevisionFileName(mcModRevision.Revision_Number.ToString()));
-
-                            if (!string.IsNullOrEmpty(mcModRevision.Path_Scripts) && !File.Exists(strAppRevisionScriptLocation))
-                                File.WriteAllText(strAppRevisionScriptLocation, "UPDATE TTParam SET TTP_Value = '" + mcView.GetRevisionNo().ToString() + "' WHERE TTP_Name = " + clsTTApp.GetAppController.str_FixStringForSQL("AppRevision"));
-
+                            
 
                             //Ajout dans Rev_AllScripts
                             List<string> lstScriptsToCopy;
@@ -637,7 +644,7 @@ namespace Ceritar.CVS.Controllers
 
                                 for (int intIndex = intNbScriptsAlreadyPresent; intIndex < lstScriptsToCopy.Count; intIndex ++)
                                 {
-                                    strNewScriptName = pfstrGetNewFileNameWithNumber(strRevAllScripts_Location, lstScriptsToCopy[intIndex], ref intNewScriptNumber);
+                                    strNewScriptName = pfstrGetNewFileNameWithNumber(strRevAllScripts_Location, lstScriptsToCopy[intIndex], ref intNewScriptNumber, false);
 
                                     File.Copy(lstScriptsToCopy[intIndex], Path.Combine(strRevAllScripts_Location, strNewScriptName), true);
                                 }
@@ -768,7 +775,7 @@ namespace Ceritar.CVS.Controllers
         /// <param name="rintNextScriptNumber">Le prochain numéro de script à utiliser.</param>
         /// <returns>Le nom du nouveau fichier avec son numéro.</returns>
         /// <remarks>La fonction considère que les scripts traités ont été triés par nom au préalable.</remarks>
-        private string pfstrGetNewFileNameWithNumber(string vstrDestinationFolderPath, string vstrSourceScriptPath, ref int rintNextScriptNumber)
+        private string pfstrGetNewFileNameWithNumber(string vstrDestinationFolderPath, string vstrSourceScriptPath, ref int rintNextScriptNumber, bool vblnZeroBased)
         {
             string strNewScriptName = string.Empty;
             int intFirstUnderscoreIndex = 0;
@@ -786,7 +793,15 @@ namespace Ceritar.CVS.Controllers
                     if (lstExistingScripts.Count > 0)
                     {
                         //Int32.TryParse(new String(Path.GetFileName(lstExistingScripts[lstExistingScripts.Count - 1]).TakeWhile(Char.IsDigit).ToArray()), out intNewScriptNumber);
-                        rintNextScriptNumber = lstExistingScripts.Count;
+
+                        if (vblnZeroBased) //Il va y avoir un script # 00
+                        {
+                            rintNextScriptNumber = lstExistingScripts.Count - 1;
+                        }
+                        else
+                        {
+                            rintNextScriptNumber = lstExistingScripts.Count;
+                        }
                     }
 
                     rintNextScriptNumber++;

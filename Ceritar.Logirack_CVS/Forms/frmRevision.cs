@@ -705,10 +705,18 @@ namespace Ceritar.Logirack_CVS.Forms
                     if (mcActionResults.SuccessMessage_NRI > 0) clsTTApp.GetAppController.ShowMessage(mcActionResults.SuccessMessage_NRI);
                 }         
             }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
             finally
             {
-                if (newThread != null)
-                    newThread.Abort();
+                //if (newThread != null)
+                    this.Invoke(new MethodInvoker(delegate ()
+                    {
+                        frmWorking.Close();//Access your controls
+                    }));
+                
 
                 eventArgs.SaveSuccessful = mcActionResults.IsValid;
             }          
