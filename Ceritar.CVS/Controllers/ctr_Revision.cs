@@ -441,7 +441,7 @@ namespace Ceritar.CVS.Controllers
 
                                             currentFolderInfos.Create();
 
-                                            blnValidReturn = clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, false, sclsAppConfigs.GetReleaseInvalidExtensions);
+                                            blnValidReturn = clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, false, SearchOption.TopDirectoryOnly, true, sclsAppConfigs.GetReleaseInvalidExtensions, sclsAppConfigs.GetReleaseInvalidFolders);
 
                                             //Supprime l'application des rapports externe au besoin
                                             if (!mcView.GetExeWithExternalReport())
@@ -552,6 +552,25 @@ namespace Ceritar.CVS.Controllers
                                         mcModRevision.Path_Scripts = currentFolderInfos.FullName;
 
                                         blnScriptsChanged = true;
+
+                                        //Copy all client's specific scripts in the scripts folder
+                                        if (Directory.GetDirectories(mcView.GetLocation_Scripts(), mcModRevision.CeritarClient.CompanyName + "*", SearchOption.TopDirectoryOnly).Length > 0)
+                                        {
+                                            string[] lstSpecificScripts = Directory.GetFiles(Directory.GetDirectories(mcView.GetLocation_Scripts(), mcModRevision.CeritarClient.CompanyName + "*", SearchOption.TopDirectoryOnly)[0]);
+                                            string strClientSpecificScriptsDestinationPath = System.IO.Path.Combine(currentFolderInfos.FullName, mcModRevision.CeritarClient.CompanyName + @" Only");
+                                            int intSpecificNextScriptNo = 0;
+
+                                            if (!Directory.Exists(strClientSpecificScriptsDestinationPath)) Directory.CreateDirectory(strClientSpecificScriptsDestinationPath);
+
+                                            for (int intIndex = 0; intIndex < lstSpecificScripts.Length; intIndex++)
+                                            {
+                                                strNewDestinationFileName = pfstrGetNewFileNameWithNumber(strClientSpecificScriptsDestinationPath, lstSpecificScripts[intIndex], ref intSpecificNextScriptNo, false);
+
+                                                strNewDestinationFileName = Path.Combine(strClientSpecificScriptsDestinationPath, strNewDestinationFileName);
+
+                                                File.Copy(lstSpecificScripts[intIndex], strNewDestinationFileName, true);
+                                            }
+                                        }
                                     }
                                 }
                                 else if (mcView.GetLocation_Scripts() != Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Scripts())))
@@ -613,7 +632,7 @@ namespace Ceritar.CVS.Controllers
                                     blnScriptsChanged = true;
                                 }
                             }
-                            
+
 
                             //Ajout dans Rev_AllScripts
                             List<string> lstScriptsToCopy;

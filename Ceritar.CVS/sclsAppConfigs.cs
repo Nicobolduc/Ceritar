@@ -15,7 +15,7 @@ namespace Ceritar.CVS
         private static string _strReleaseFolderName = "Release";
         private static string _strRevisionAllScriptFolderName = "Rev_AllScripts";
         private static string _strCaptionsAndMenusFileName;
-        private static string[] _strReleaseInvalidExtensions = { ".xml", ".pdb", ".ini", ".log", ".txt", ".sample" };
+        private static string[] _strReleaseInvalidExtensions = { ".xml", ".pdb", ".ini", ".log", ".txt", ".sample", ".scc" };
         private static string[] _strReleaseInvalidFolders = { "zh-CN" };
         private const string _strVersionNumberPrefix = "V_";
         private const string _strRevisionNumberPrefix = "R_";

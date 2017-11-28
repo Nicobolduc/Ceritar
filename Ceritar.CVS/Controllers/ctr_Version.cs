@@ -356,7 +356,7 @@ namespace Ceritar.CVS.Controllers
                             {
                                 if (Directory.Exists(currentFolderInfos.FullName)) Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(currentFolderInfos.FullName, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.DoNothing);
 
-                                blnValidReturn = clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, false, sclsAppConfigs.GetReleaseInvalidExtensions);
+                                blnValidReturn = clsTTApp.GetAppController.blnCopyFolderContent(mcView.GetLocation_Release(), currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, true, sclsAppConfigs.GetReleaseInvalidExtensions);
 
                                 string[] reportExe = Directory.GetFiles(currentFolderInfos.FullName, mcModVersion.CerApplication.ExternalReportAppName, SearchOption.TopDirectoryOnly);
 

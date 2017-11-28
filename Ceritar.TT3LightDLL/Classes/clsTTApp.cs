@@ -348,6 +348,8 @@ namespace Ceritar.TT3LightDLL.Classes
 
             try
             {
+                if (!Directory.Exists(vstrDestinationFolderPath)) Directory.CreateDirectory(vstrDestinationFolderPath);
+
                 //Copie des fichiers
                 if (vlstExtensionsToAvoid != null && vlstExtensionsToAvoid.Length > 0)
                 {
@@ -379,7 +381,11 @@ namespace Ceritar.TT3LightDLL.Classes
                     foreach (string strFolder in lstFoldersToCopy)
                     {
                         if (vlstFoldersToAvoid == null || !vlstFoldersToAvoid.Contains(new DirectoryInfo(strFolder).Name))
+                        {
+                            if (!Directory.Exists(Path.Combine(vstrDestinationFolderPath, new DirectoryInfo(strFolder).Name))) Directory.CreateDirectory(Path.Combine(vstrDestinationFolderPath, new DirectoryInfo(strFolder).Name));
+
                             blnValidReturn = blnCopyFolderContent(strFolder, Path.Combine(vstrDestinationFolderPath, new DirectoryInfo(strFolder).Name), vblnOverwrite, vblnCreateFolderIfNotExist, vSearchOption, true, vlstExtensionsToAvoid);
+                        }
                     }
                 }
             }
