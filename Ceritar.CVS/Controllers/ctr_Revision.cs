@@ -1303,9 +1303,6 @@ namespace Ceritar.CVS.Controllers
                 using (ZipArchive newZipFile = ZipFile.Open(strNewZipFileLocation, archiveMode))
                 {
                     //Add the release folder with the report application to the zip archive.
-                    //Get the release folder location to copy
-                    
-
                     if (!string.IsNullOrEmpty(strReleaseLocation))
                     {
                         if ((File.GetAttributes(strReleaseLocation) & FileAttributes.Directory) == FileAttributes.Directory)
@@ -1346,11 +1343,7 @@ namespace Ceritar.CVS.Controllers
                     }
 
                     //Add all scripts folder to the zip archive.
-                    //string strAppRevisionScriptTempLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), sclsAppConfigs.GetAppRevisionFileName(mcView.GetRevisionNo().ToString()));
-
                     strCurrentScriptFolderLocation = mcView.GetLocation_Scripts();
-
-                    //File.WriteAllText(strAppRevisionScriptTempLocation, "UPDATE TTParam SET TTP_Value = '" + mcView.GetRevisionNo().ToString() + "' WHERE TTP_Name = " + clsTTApp.GetAppController.str_FixStringForSQL("AppRevision"));
 
                     if (!string.IsNullOrEmpty(strCurrentScriptFolderLocation))
                     {
@@ -1360,20 +1353,34 @@ namespace Ceritar.CVS.Controllers
                             {
                                 newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetScriptsFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
                             }
-
-                            //newZipFile.CreateEntryFromFile(strAppRevisionScriptTempLocation, Path.Combine(sclsAppConfigs.GetScriptsFolderName, Path.GetFileName(strAppRevisionScriptTempLocation)));
                         }
                         else
                         {
                             newZipFile.CreateEntryFromFile(strCurrentScriptFolderLocation, Path.Combine(sclsAppConfigs.GetScriptsFolderName, Path.GetFileName(strCurrentScriptFolderLocation)), CompressionLevel.NoCompression);
                         }
-                    }
-                    //else
-                    //{
-                    //    newZipFile.CreateEntryFromFile(strAppRevisionScriptTempLocation, Path.Combine(sclsAppConfigs.GetScriptsFolderName, Path.GetFileName(strAppRevisionScriptTempLocation)), CompressionLevel.NoCompression);
-                    //}
 
-                    //File.Delete(strAppRevisionScriptTempLocation);
+                        //Copy all client's specific scripts at the end of the scripts folder
+                        if (Directory.GetDirectories(strCurrentScriptFolderLocation, strCeritarClientName + "*", SearchOption.TopDirectoryOnly).Length > 0)
+                        {
+                            string[] lstSpecificScripts = Directory.GetFiles(Directory.GetDirectories(strCurrentScriptFolderLocation, strCeritarClientName + "*", SearchOption.TopDirectoryOnly)[0]);
+                            string strNewScriptName = string.Empty;
+                            int intNewScriptNumber = 0;
+
+                            for (int intIndex = 0; intIndex < lstSpecificScripts.Length; intIndex++)
+                            {
+                                strNewScriptName = Path.GetFileName(lstSpecificScripts[intIndex]);
+                                strNewScriptName = strNewScriptName.Substring(strNewScriptName.IndexOf("_") + 1);
+
+                                intNewScriptNumber = (intNewScriptNumber == 0 ? Directory.GetFiles(strCurrentScriptFolderLocation).Length : intNewScriptNumber);
+
+                                strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
+
+                                newZipFile.CreateEntryFromFile(lstSpecificScripts[intIndex], Path.Combine(sclsAppConfigs.GetScriptsFolderName, strNewScriptName));
+
+                                intNewScriptNumber++;
+                            }
+                        }
+                    }
                 }
 
                 blnValidReturn = true;
