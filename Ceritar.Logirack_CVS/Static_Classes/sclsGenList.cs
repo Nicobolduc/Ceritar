@@ -76,7 +76,7 @@ namespace Ceritar.Logirack_CVS.Static_Classes
                         strSQL = strGetList_Templates_SQL();
                         
                         frmGenList.Tag = 46;
-                        frmGenList.Item_ID_col = 4;
+                        frmGenList.Item_ID_col = 5;
 
                         strListGenTitle += clsTTApp.GetAppController.str_GetCaption((int)frmGenList.Tag, clsTTApp.GetAppController.cUser.UserLanguage);
 
