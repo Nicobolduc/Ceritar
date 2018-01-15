@@ -21,6 +21,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
         private string _strDescription;
         private string _strExternalReportAppName;
         private bool _blnAutoGenRevisionNoScript;
+        private bool _blnManageTTApp;
         private AppDomain _domain_NRI;
         private List<string> _lstModules;
         private List<mod_CSA_CeritarSatelliteApp> _lstSatelliteApps;
@@ -120,6 +121,12 @@ namespace Ceritar.CVS.Models.Module_Configuration
         {
             get => _blnAutoGenRevisionNoScript;
             set => _blnAutoGenRevisionNoScript = value;
+        }
+
+        internal bool ManageTTApp
+        {
+            get => _blnManageTTApp;
+            set => _blnManageTTApp = value;
         }
 
         #endregion
@@ -306,6 +313,8 @@ namespace Ceritar.CVS.Models.Module_Configuration
                 else if (!mcSQL.bln_AddField("CeA_Desc", _strDescription, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("CeA_AutoGenRevisionNoScript", _blnAutoGenRevisionNoScript, clsTTSQL.MySQL_FieldTypes.BIT_TYPE))
+                { }
+                else if (!mcSQL.bln_AddField("CeA_ManageTTApp", _blnManageTTApp, clsTTSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("ApD_NRI", (int)_domain_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }

@@ -62,6 +62,7 @@ namespace Ceritar.CVS.Controllers
                 mcModCerApp.DML_Action = mcView.GetDML_Mode();
                 mcModCerApp.Domaine_NRI = (mod_CeA_CeritarApplication.AppDomain)mcView.GetDomain_NRI();
                 mcModCerApp.AutoGenRevisionNoScript = mcView.IsGeneratingRevisionNoScript();
+                mcModCerApp.ManageTTApp = mcView.IsManagingTTApp();
 
                 lstSatelliteApps = mcView.GetLstAppSatellites();
 
@@ -146,7 +147,8 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        CerApp.CeA_Desc, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.ApD_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_AutoGenRevisionNoScript, " + Environment.NewLine;
-            strSQL = strSQL + "        CerApp.CeA_ExternalRPTAppName " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.CeA_ExternalRPTAppName, " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.CeA_ManageTTApp " + Environment.NewLine;
 
             strSQL = strSQL + " FROM CerApp " + Environment.NewLine;
 

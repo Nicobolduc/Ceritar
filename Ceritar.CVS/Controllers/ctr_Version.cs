@@ -70,9 +70,9 @@ namespace Ceritar.CVS.Controllers
             {
                 mcModVersion = new mod_Ver_Version();
 
-                if (mcModVersion.DML_Action != sclsConstants.DML_Mode.DELETE_MODE) mblnUpdateSelectedClientOnly = true;
+                if (mcView.GetDML_Action() != sclsConstants.DML_Mode.DELETE_MODE) mblnUpdateSelectedClientOnly = true;
 
-                pfblnFeedModelWithView();
+                pfblnFeedModelWithView();                               
 
                 mcActionResult = mcModVersion.Validate();
 
@@ -376,11 +376,14 @@ namespace Ceritar.CVS.Controllers
 
                         case (int)ctr_Template.FolderType.CaptionsAndMenus:
 
-                            mcModVersion.Location_CaptionsAndMenus = Path.Combine(currentFolderInfos.FullName, sclsAppConfigs.GetCaptionsAndMenusFileName);
-
-                            if (!string.IsNullOrEmpty(mcView.GetLocation_TTApp()) && mcModVersion.Location_CaptionsAndMenus != mcView.GetLocation_TTApp())
+                            if (!string.IsNullOrEmpty(mcView.GetLocation_TTApp()))
                             {
-                                File.Copy(mcView.GetLocation_TTApp(), Path.Combine(currentFolderInfos.FullName, sclsAppConfigs.GetCaptionsAndMenusFileName), true);
+                                mcModVersion.Location_CaptionsAndMenus = Path.Combine(currentFolderInfos.FullName, sclsAppConfigs.GetCaptionsAndMenusFileName);
+
+                                if (mcModVersion.Location_CaptionsAndMenus != mcView.GetLocation_TTApp())
+                                {
+                                    File.Copy(mcView.GetLocation_TTApp(), Path.Combine(currentFolderInfos.FullName, sclsAppConfigs.GetCaptionsAndMenusFileName), true);
+                                }
                             }
 
                             blnValidReturn = true;
@@ -553,7 +556,9 @@ namespace Ceritar.CVS.Controllers
                                                                                    true,
                                                                                    SearchOption.TopDirectoryOnly,
                                                                                    false,
-                                                                                   new string[] {".doc", ".docx"});
+                                                                                   new string[] {".doc", ".docx"},
+                                                                                   null,
+                                                                                   "*.sql");
                                     }
                                     else //On a 2 dossiers (ou plus) pour la meme version. On les ajoutes dans le dossier courant.
                                     {
@@ -578,7 +583,7 @@ namespace Ceritar.CVS.Controllers
                                     intNewScriptNumber = 0;
                                     List<string> lstTempScripts = Directory.GetFiles(strCurrentVersionFolderToCopy_Path, "*.sql", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
 
-                                    Int32.TryParse(new string(Path.GetFileName(lstTempScripts[lstTempScripts.Count() - 1]).TakeWhile(Char.IsDigit).ToArray()), out intNewScriptNumber);
+                                    if (lstTempScripts.Count >0) Int32.TryParse(new string(Path.GetFileName(lstTempScripts[lstTempScripts.Count() - 1]).TakeWhile(Char.IsDigit).ToArray()), out intNewScriptNumber);
 
                                     if (intNewScriptNumber == 0) //Au cas ou le dernier script n'aurait pas des chiffres comme premiers caracteres
                                     {
@@ -959,6 +964,7 @@ namespace Ceritar.CVS.Controllers
                 mcModVersion.CerApplication = new Ceritar.CVS.Models.Module_Configuration.mod_CeA_CeritarApplication();
                 mcModVersion.CerApplication.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
                 mcModVersion.CerApplication.ExternalReportAppName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + mcModVersion.CerApplication.CeritarApplication_NRI);
+                mcModVersion.CerApplication.ManageTTApp = bool.Parse(clsTTSQL.str_ADOSingleLookUp("CeA_ManageTTApp", "CerApp", "CeA_NRI = " + mcModVersion.CerApplication.CeritarApplication_NRI));
 
                 mcModVersion.TemplateSource = new Models.Module_Template.mod_Tpl_HierarchyTemplate();
                 mcModVersion.TemplateSource.Template_NRI = mcView.GetTemplateSource_NRI();
@@ -1095,17 +1101,20 @@ namespace Ceritar.CVS.Controllers
 
                         strReportLocation = strReportLocation == string.Empty ? mcView.GetSelectedClient().strLocationReportExe : strReportLocation;
 
-                        if ((File.GetAttributes(strReportLocation) & FileAttributes.Directory) == FileAttributes.Directory)
+                        if (!string.IsNullOrEmpty(strReportLocation))
                         {
-                            strReportLocation = Path.Combine(strReportLocation, mcView.GetExternalRPTAppName());
-                        }
+                            if ((File.GetAttributes(strReportLocation) & FileAttributes.Directory) == FileAttributes.Directory)
+                            {
+                                strReportLocation = Path.Combine(strReportLocation, mcView.GetExternalRPTAppName());
+                            }
 
-                        //Add the external report application to the zip archive
-                        newZipFile.CreateEntryFromFile(strReportLocation, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strReportLocation)));
+                            //Add the external report application to the zip archive
+                            newZipFile.CreateEntryFromFile(strReportLocation, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strReportLocation)));
+                        }
                     }
 
                     //Add the TTApp to the zip archive.
-                    newZipFile.CreateEntryFromFile(strCaptionsAndMenusLocation, Path.Combine(new DirectoryInfo(strCaptionsAndMenusLocation).Parent.Name, Path.GetFileName(strCaptionsAndMenusLocation)));
+                    if (!string.IsNullOrEmpty(strCaptionsAndMenusLocation)) newZipFile.CreateEntryFromFile(strCaptionsAndMenusLocation, Path.Combine(new DirectoryInfo(strCaptionsAndMenusLocation).Parent.Name, Path.GetFileName(strCaptionsAndMenusLocation)));
                     
                     if (!mcView.GetIsBaseKit())
                     {

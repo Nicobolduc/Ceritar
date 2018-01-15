@@ -212,11 +212,11 @@ namespace Ceritar.Logirack_CVS.Static_Classes
 
             if (!string.IsNullOrEmpty(strDefaultApplication))
             {
-                strSQL = strSQL + " ORDER BY CASE WHEN CerApp.CeA_NRI = " + strDefaultApplication + " THEN 0 ELSE 1 END, CerApp.CeA_Name, Version.Ver_No DESC " + Environment.NewLine;
+                strSQL = strSQL + " ORDER BY CASE WHEN CerApp.CeA_NRI = " + strDefaultApplication + " THEN 0 ELSE 1 END, CerApp.ApD_NRI, CerApp.CeA_Name, Version.Ver_No DESC " + Environment.NewLine;
             }
             else
             {
-                strSQL = strSQL + " ORDER BY CerApp.CeA_Name, Version.Ver_No DESC " + Environment.NewLine;
+                strSQL = strSQL + " ORDER BY CerApp.ApD_NRI, CerApp.CeA_Name, Version.Ver_No DESC " + Environment.NewLine;
             }
             
             return strSQL;

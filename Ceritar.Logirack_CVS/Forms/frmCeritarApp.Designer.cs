@@ -50,6 +50,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.grdSatApp = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.chkGenRevNoScript = new System.Windows.Forms.CheckBox();
+            this.chkManageTTApp = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdModules)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -102,12 +103,12 @@
             this.groupBox1.Controls.Add(this.btnGrdModDel);
             this.groupBox1.Controls.Add(this.btnGrdModAdd);
             this.groupBox1.Controls.Add(this.grdModules);
-            this.groupBox1.Location = new System.Drawing.Point(6, 478);
+            this.groupBox1.Location = new System.Drawing.Point(6, 505);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox1.Size = new System.Drawing.Size(530, 206);
-            this.groupBox1.TabIndex = 4;
+            this.groupBox1.Size = new System.Drawing.Size(530, 179);
+            this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Liste des modules";
             // 
@@ -150,10 +151,10 @@
             this.grdModules.Location = new System.Drawing.Point(7, 23);
             this.grdModules.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.grdModules.Name = "grdModules";
-            this.grdModules.Rows.Count = 2;
+            this.grdModules.Rows.Count = 8;
             this.grdModules.Rows.DefaultSize = 18;
             this.grdModules.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdModules.Size = new System.Drawing.Size(478, 176);
+            this.grdModules.Size = new System.Drawing.Size(478, 149);
             this.grdModules.StyleInfo = resources.GetString("grdModules.StyleInfo");
             this.grdModules.TabIndex = 2;
             this.grdModules.Tag = "1";
@@ -218,7 +219,7 @@
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
             this.formController.Size = new System.Drawing.Size(544, 34);
-            this.formController.TabIndex = 5;
+            this.formController.TabIndex = 7;
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
@@ -233,12 +234,12 @@
             this.groupBox2.Controls.Add(this.btnGrdSatDel);
             this.groupBox2.Controls.Add(this.btnGrdSatAdd);
             this.groupBox2.Controls.Add(this.grdSatApp);
-            this.groupBox2.Location = new System.Drawing.Point(6, 138);
+            this.groupBox2.Location = new System.Drawing.Point(6, 168);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox2.Size = new System.Drawing.Size(530, 333);
-            this.groupBox2.TabIndex = 4;
+            this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Liste des applications satellites";
             // 
@@ -308,11 +309,24 @@
             this.chkGenRevNoScript.UseVisualStyleBackColor = true;
             this.chkGenRevNoScript.Click += new System.EventHandler(this.chkGenRevNoScript_Click);
             // 
+            // chkManageTTApp
+            // 
+            this.chkManageTTApp.Checked = true;
+            this.chkManageTTApp.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkManageTTApp.Location = new System.Drawing.Point(82, 137);
+            this.chkManageTTApp.Name = "chkManageTTApp";
+            this.chkManageTTApp.Size = new System.Drawing.Size(388, 20);
+            this.chkManageTTApp.TabIndex = 4;
+            this.chkManageTTApp.Text = "Les versions nécessitent un TTApp.mdb";
+            this.chkManageTTApp.UseVisualStyleBackColor = true;
+            this.chkManageTTApp.CheckedChanged += new System.EventHandler(this.chkTTAppNeeded_CheckedChanged);
+            // 
             // frmCeritarApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(540, 729);
+            this.Controls.Add(this.chkManageTTApp);
             this.Controls.Add(this.chkGenRevNoScript);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.cboDomain);
@@ -363,5 +377,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox chkReportAppExternal;
         private System.Windows.Forms.CheckBox chkGenRevNoScript;
+        private System.Windows.Forms.CheckBox chkManageTTApp;
     }
 }

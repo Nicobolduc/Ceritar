@@ -310,7 +310,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY);
                         }
-                        else if (string.IsNullOrEmpty(_strLocation_CaptionsAndMenus) || !File.Exists(_strLocation_CaptionsAndMenus))
+                        else if (_cCerApplication.ManageTTApp && (string.IsNullOrEmpty(_strLocation_CaptionsAndMenus) || !File.Exists(_strLocation_CaptionsAndMenus)))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY);
                         }
@@ -349,7 +349,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY);
                         }
-                        else if (string.IsNullOrEmpty(_strLocation_CaptionsAndMenus) || !File.Exists(_strLocation_CaptionsAndMenus))
+                        else if (_cCerApplication.ManageTTApp && (string.IsNullOrEmpty(_strLocation_CaptionsAndMenus) || !File.Exists(_strLocation_CaptionsAndMenus)))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.TTAPP_MANDATORY);
                         }

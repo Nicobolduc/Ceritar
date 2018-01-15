@@ -650,6 +650,7 @@ namespace Ceritar.TT3LightDLL.Classes
                     mGrdFlex.CellChanged -= mGrdFlex_CellsChanged;
                     mGrdFlex.CellChecked -= mGrdFlex_CheckBoxClick;
                     mGrdFlex.AfterRowColChange -= mGrdFlex_AfterRowColChange;
+                    mGrdFlex.BeforeRowColChange -= mGrdFlex_BeforeRowColChange;
                     mGrdFlex.Paint -= mGrdFlex_Paint;
                     mGrdFlex.DoubleClick -= mGrdFlex_DoubleClick;
                     mGrdFlex.MouseDown -= mGrdFlex_MouseDown;
@@ -660,6 +661,7 @@ namespace Ceritar.TT3LightDLL.Classes
                     mGrdFlex.CellChanged += mGrdFlex_CellsChanged;
                     mGrdFlex.CellChecked += mGrdFlex_CheckBoxClick;
                     mGrdFlex.AfterRowColChange += mGrdFlex_AfterRowColChange;
+                    mGrdFlex.BeforeRowColChange += mGrdFlex_BeforeRowColChange;
                     mGrdFlex.Paint += mGrdFlex_Paint;
                     mGrdFlex.DoubleClick += mGrdFlex_DoubleClick;
                     mGrdFlex.MouseDown += mGrdFlex_MouseDown;
@@ -804,6 +806,14 @@ namespace Ceritar.TT3LightDLL.Classes
                 crUpdate.Style = csUpdateRow;
 
                 mfrmParent.GetFormController().ChangeMade = true;
+            }
+        }
+
+        private void mGrdFlex_BeforeRowColChange(object sender, RangeEventArgs e)
+        {
+            if (!mblnHasNoActionColumn && mblnFromButtonAddClick)
+            {
+                mGrdFlex[mGrdFlex.Rows.Count - 1, mintDefaultActionCol] = sclsConstants.DML_Mode.INSERT_MODE;
             }
         }
 

@@ -55,10 +55,11 @@ namespace Ceritar.Logirack_CVS.Forms
 
             mcGrdSatApp = new clsTTC1FlexGridWrapper();
             mcGrdSatApp.SetGridDisplay += mcGrdAppSat_SetGridDisplay;
+            mcGrdSatApp.AfterClickAdd += mcGrdSatApp_AfterClickAdd;
         }
 
 
-#region "Interfaces functions"
+        #region "Interfaces functions"
 
         List<string> CVS.Controllers.Interfaces.ICeritarApp.GetLstModules()
         {
@@ -143,6 +144,11 @@ namespace Ceritar.Logirack_CVS.Forms
             return chkGenRevNoScript.Checked;
         }
 
+        bool ICeritarApp.IsManagingTTApp()
+        {
+            return chkManageTTApp.Checked;
+        }
+
         #endregion
 
 
@@ -201,6 +207,7 @@ namespace Ceritar.Logirack_CVS.Forms
                     cboDomain.SelectedValue = Int32.Parse(sqlRecord["ApD_NRI"].ToString());
 
                     chkGenRevNoScript.Checked = bool.Parse(sqlRecord["CeA_AutoGenRevisionNoScript"].ToString());
+                    chkManageTTApp.Checked = bool.Parse(sqlRecord["CeA_ManageTTApp"].ToString());
 
                     if (!string.IsNullOrEmpty(txtReportAppExternal.Text))
                     {
@@ -473,6 +480,19 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 formController.ChangeMade = true;
             }
+        }
+
+        private void chkTTAppNeeded_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!formController.FormIsLoading)
+            {
+                formController.ChangeMade = true;
+            }
+        }
+
+        private void mcGrdSatApp_AfterClickAdd()
+        {
+            mcGrdSatApp[grdSatApp.Row, mintGrdSat_CSA_Exe_IsFolder_col] = "1";
         }
     }
 }

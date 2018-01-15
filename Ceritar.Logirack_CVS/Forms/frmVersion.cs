@@ -104,9 +104,8 @@ namespace Ceritar.Logirack_CVS.Forms
 
             dtpCreation.Value = DateTime.Now;
         }
-       
 
-#region "Interfaces functions"
+        #region "Interfaces functions"
 
         ctlFormController IFormController.GetFormController()
         {
@@ -690,7 +689,7 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 ShowFolderBrowserDialog(ref txtTemp, "Sélectionnez l'emplacement où sauvegarder l'archive.");
 
-                intSelectedRow = grdClients.FindRow(true, 1, mintGrdClients_Selection_col, false);
+                intSelectedRow = grdClients.Row; //FindRow(true, 1, mintGrdClients_Selection_col, false);
 
                 if (!string.IsNullOrEmpty(txtTemp.Text) & intSelectedRow > 0)
                 {
@@ -740,7 +739,7 @@ namespace Ceritar.Logirack_CVS.Forms
             grdClients.Cols[mintGrdClients_Installed_col].Width = 49;
             grdClients.Cols[mintGrdClients_IsCurrentVersion_col].Width = 51;
             grdClients.Cols[mintGrdClients_LocationReportExe_col].Width = 45;
-            grdClients.Cols[mintGrdClients_Selection_col].Width = 20;
+            //grdClients.Cols[mintGrdClients_Selection_col].Width = 20;
             grdClients.Cols[mintGrdClients_LatestRPTExe_col].Width = 120;
 
             grdClients.Cols[mintGrdClients_IsCurrentVersion_col].DataType = typeof(bool);
@@ -1127,22 +1126,23 @@ namespace Ceritar.Logirack_CVS.Forms
 
                     case mintGrdClients_Selection_col:
 
-                        if (mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.INSERT_MODE.ToString())
-                        {
-                            mcGrdClients.GridIsLoading = true;
+                        //Deplacer dans le rowColChanged
+                        //if (mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.INSERT_MODE.ToString())
+                        //{
+                        //    mcGrdClients.GridIsLoading = true;
 
-                            int intSelectedRow = grdClients.FindRow("true", 1, mintGrdClients_Selection_col, false, true, false);
+                        //    int intSelectedRow = grdClients.FindRow("true", 1, mintGrdClients_Selection_col, false, true, false);
 
-                            if (intSelectedRow >= 1 & intSelectedRow != grdClients.Row) mcGrdClients[intSelectedRow, mintGrdClients_Selection_col] = "0";
+                        //    if (intSelectedRow >= 1 & intSelectedRow != grdClients.Row) mcGrdClients[intSelectedRow, mintGrdClients_Selection_col] = "0";
 
-                            mcGrdClients[grdClients.Row, mintGrdClients_Selection_col] = (mcGrdClients[grdClients.Row, mintGrdClients_Selection_col] == "0" ? "1" : "0");
+                        //    mcGrdClients[grdClients.Row, mintGrdClients_Selection_col] = (mcGrdClients[grdClients.Row, mintGrdClients_Selection_col] == "0" ? "1" : "0");
 
-                            btnExportInstallationKit.Enabled = mcGrdClients[grdClients.Row, mintGrdClients_Selection_col] == "1";
-                            chkBaseKit.Enabled = btnExportInstallationKit.Enabled;
-                            lblBaseKit.Enabled = btnExportInstallationKit.Enabled;
+                        //    btnExportInstallationKit.Enabled = mcGrdClients[grdClients.Row, mintGrdClients_Selection_col] == "1";
+                        //    chkBaseKit.Enabled = btnExportInstallationKit.Enabled;
+                        //    lblBaseKit.Enabled = btnExportInstallationKit.Enabled;
 
-                            mcGrdClients.GridIsLoading = false;
-                        }
+                        //    mcGrdClients.GridIsLoading = false;
+                        //}
 
                         break;
                 }
@@ -1293,11 +1293,11 @@ namespace Ceritar.Logirack_CVS.Forms
 
                     chkIncludeScripts.Enabled = true;
                     chkIncludeScripts.Checked = false;
-                    chkBaseKit.Enabled = false;
+                    //chkBaseKit.Enabled = false;
 
                     btnGenerate.Enabled = true;
-                    btnExportInstallationKit.Enabled = false;
-                    lblBaseKit.Enabled = false;
+                    //btnExportInstallationKit.Enabled = false;
+                    //lblBaseKit.Enabled = false;
                     btnGrdRevAdd.Enabled = true;
                     btnSelectVariousFilePath.Enabled = true;
                     btnSelectVariousFolderPath.Enabled = true;
@@ -1559,13 +1559,9 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void grdClients_AfterRowColChange(object sender, RangeEventArgs e)
         {
-            if (!formController.FormIsLoading && grdClients.Rows.Count > 1 && grdClients.Row > 0 && e.OldRange.r1 != e.NewRange.r2)
+            if (grdClients.Rows.Count > 1 && grdClients.Row > 0 && e.OldRange.r1 != e.NewRange.r2)
             {
-                pfblnGrdSatelliteApps_Load();
-
-                btnGenerate.Enabled = mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.INSERT_MODE.ToString() && mcGrdClients.bln_RowEditIsValid() && formController.FormMode != sclsConstants.DML_Mode.INSERT_MODE;
-                chkIncludeScripts.Enabled = btnGenerate.Enabled;
-                chkIncludeScripts.Checked = !chkIncludeScripts.Enabled;
+                GrdClientRowColChangeActions();
             }
             else
             {
@@ -1574,6 +1570,34 @@ namespace Ceritar.Logirack_CVS.Forms
 
             pfblnEnableDisable_btnGrdClientsDelete(e.NewRange.r1);
         }
+
+        private void GrdClientRowColChangeActions()
+        {
+            bool blnEnableControls = false;
+
+            if (!formController.FormIsLoading)
+            {
+                pfblnGrdSatelliteApps_Load();
+
+                btnGenerate.Enabled = mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.INSERT_MODE.ToString() && mcGrdClients.bln_RowEditIsValid() && formController.FormMode != sclsConstants.DML_Mode.INSERT_MODE;
+                chkIncludeScripts.Enabled = btnGenerate.Enabled;
+                chkIncludeScripts.Checked = !chkIncludeScripts.Enabled;
+            }
+
+            if (mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.INSERT_MODE.ToString())
+            {
+                blnEnableControls = true;
+            }
+            else
+            {
+                blnEnableControls = false;
+            }
+
+            btnExportInstallationKit.Enabled = blnEnableControls;
+            chkBaseKit.Enabled = blnEnableControls;
+            lblBaseKit.Enabled = blnEnableControls;
+        }
+        
 
         private void btnShowExecutable_Click(object sender, EventArgs e)
         {
@@ -1858,6 +1882,5 @@ namespace Ceritar.Logirack_CVS.Forms
                 ((HostedCellControl)mcGrdSatelliteApps.LstHostedCellControls[grdSatellite.Row - 1]).GetCellControl.BackColor = System.Drawing.SystemColors.Control;
             }
         }
-        
     }
 }

@@ -339,7 +339,8 @@ namespace Ceritar.TT3LightDLL.Classes
                                          SearchOption vSearchOption = SearchOption.TopDirectoryOnly,
                                          bool vblnIncludeSubFolders = false,
                                          string[] vlstExtensionsToAvoid = null,
-                                         string[] vlstFoldersToAvoid = null)
+                                         string[] vlstFoldersToAvoid = null,
+                                         string vstrSearchPattern = "*.*")
         {
             bool blnValidReturn = true;
             string strFileDestinationPath = string.Empty;
@@ -353,13 +354,13 @@ namespace Ceritar.TT3LightDLL.Classes
                 //Copie des fichiers
                 if (vlstExtensionsToAvoid != null && vlstExtensionsToAvoid.Length > 0)
                 {
-                    var lstFilesWithFilters = Directory.GetFiles(vstrSourceFolderPath, "*.*", vSearchOption).Where(f => !vlstExtensionsToAvoid.Contains(System.IO.Path.GetExtension(f).ToLower())).ToArray();
+                    var lstFilesWithFilters = Directory.GetFiles(vstrSourceFolderPath, vstrSearchPattern, vSearchOption).Where(f => !vlstExtensionsToAvoid.Contains(System.IO.Path.GetExtension(f).ToLower())).ToArray();
 
                     lstFilesToCopy = lstFilesWithFilters;
                 }
                 else
                 {
-                    string[] lstFilesNoFilter = Directory.GetFiles(vstrSourceFolderPath, "*.*", vSearchOption);
+                    string[] lstFilesNoFilter = Directory.GetFiles(vstrSourceFolderPath, vstrSearchPattern, vSearchOption);
 
                     lstFilesToCopy = lstFilesNoFilter;
                 }
