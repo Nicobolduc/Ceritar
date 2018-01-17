@@ -800,6 +800,7 @@ namespace Ceritar.TT3LightDLL.Classes
                 //CellRange crUpdate = mGrdFlex.GetCellRange(mGrdFlex.Row, 0, mGrdFlex.Row, mGrdFlex.Cols.Count - 1);
                 //crUpdate.Style = mGrdFlex.Styles.Add(null);
                 //crUpdate.Style = csUpdateRow;
+
                 mGrdFlex[mGrdFlex.Row, mintDefaultActionCol] = sclsConstants.DML_Mode.UPDATE_MODE;
               
                 CellRange crUpdate = mGrdFlex.GetCellRange(mGrdFlex.Row, 0);

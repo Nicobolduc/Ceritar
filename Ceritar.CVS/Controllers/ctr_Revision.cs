@@ -106,6 +106,7 @@ namespace Ceritar.CVS.Controllers
                     cSRe.DML_Action = structSRe.Action;
                     cSRe.SatRevision_NRI = structSRe.intSatRevision_NRI;
                     cSRe.Location_Exe = structSRe.strLocationSatelliteExe;
+                    cSRe.ClientSatVersion_NRI = structSRe.intClientSatVersion_NRI;
 
                     cSRe.Revision = new mod_Rev_Revision();
                     cSRe.Revision.Revision_NRI = mcView.GetRevision_NRI();
@@ -115,6 +116,7 @@ namespace Ceritar.CVS.Controllers
                     cSRe.CeritarSatelliteApp.CeritarSatelliteApp_NRI = structSRe.intCeritarSatelliteApp_NRI;
                     cSRe.CeritarSatelliteApp.ExeIsFolder = structSRe.blnExeIsFolder;
                     cSRe.CeritarSatelliteApp.ExportFolderName = structSRe.strExportFolderName;
+                    cSRe.CeritarSatelliteApp.ExePerCustomer = structSRe.blnExePerCustomer;
 
                     mcModRevision.LstSatelliteRevisions.Add(cSRe);
                 }
@@ -1315,7 +1317,7 @@ namespace Ceritar.CVS.Controllers
                         else if (mcView.GetExeIsExternalReport())
                         {
                             //Add the external report application to the zip archive
-                            newZipFile.CreateEntryFromFile(strReleaseLocation, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strReleaseLocation)), CompressionLevel.NoCompression);
+                            newZipFile.CreateEntryFromFile(strReleaseLocation, Path.Combine(new DirectoryInfo(strReleaseLocation).Parent.Name, Path.GetFileName(strReleaseLocation)), CompressionLevel.NoCompression);
                         }
                     }
                     
@@ -1682,7 +1684,9 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        SatRevision.SRe_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        SatRevision.SRe_Exe_Location, " + Environment.NewLine;
             strSQL = strSQL + "        CerSatApp.CSA_ExeIsFolder, " + Environment.NewLine;
-            strSQL = strSQL + "        CerSatApp.CSA_KitFolderName " + Environment.NewLine;
+            strSQL = strSQL + "        CerSatApp.CSA_KitFolderName, " + Environment.NewLine;
+            strSQL = strSQL + "        ClientSatVersion.CSV_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        ClientSatVersion.CSV_ExePerCustomer " + Environment.NewLine;
 
             strSQL = strSQL + " FROM Version " + Environment.NewLine;
           

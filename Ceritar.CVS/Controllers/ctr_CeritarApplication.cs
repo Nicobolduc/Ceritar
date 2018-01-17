@@ -74,6 +74,7 @@ namespace Ceritar.CVS.Controllers
                     cCSA.CeritarSatelliteApp_TS = structCSA.intCeritarSatelliteApp_TS;
                     cCSA.DML_Action = structCSA.Action;
                     cCSA.ExeIsFolder = structCSA.blnExeIsFolder;
+                    cCSA.ExePerCustomer = structCSA.blnExePerCustomer;
                     cCSA.Name = structCSA.strSatelliteApp_Name;
                     cCSA.ExportFolderName = structCSA.strKitExport_FolderName;
 
@@ -182,7 +183,8 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        CerSatApp.CSA_TS, " + Environment.NewLine;
             strSQL = strSQL + "        CerSatApp.CSA_Name, " + Environment.NewLine;
             strSQL = strSQL + "        CerSatApp.CSA_KitFolderName, " + Environment.NewLine;
-            strSQL = strSQL + "        CerSatApp.CSA_ExeIsFolder " + Environment.NewLine;
+            strSQL = strSQL + "        CerSatApp.CSA_ExeIsFolder, " + Environment.NewLine;
+            strSQL = strSQL + "        CerSatApp.CSA_ExePerCustomer " + Environment.NewLine;
 
             strSQL = strSQL + " FROM CerSatApp " + Environment.NewLine;
 

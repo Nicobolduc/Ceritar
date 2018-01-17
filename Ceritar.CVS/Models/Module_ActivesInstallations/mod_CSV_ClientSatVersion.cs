@@ -18,6 +18,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private mod_CSA_CeritarSatelliteApp _cCeritarSatelliteApp;
         private mod_CeC_CeritarClient _cCeritarClient;
         private string _strLocation_Exe;
+        private bool _blnExePerCustomer;
 
         //mod_IBase
         private clsActionResults mcActionResults = new clsActionResults();
@@ -73,7 +74,16 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             get { return mcActionResults; }
         }
 
-#endregion
+        /// <summary>
+        /// Indique que chaque client possède un Release spécifique pour cette version
+        /// </summary>
+        internal bool ExePerCustomer
+        {
+            get { return _blnExePerCustomer; }
+            set { _blnExePerCustomer = value; }
+        }
+
+        #endregion
 
 
         internal clsActionResults Validate()
@@ -179,6 +189,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 else if (!mcSQL.bln_AddField("CSA_NRI", _cCeritarSatelliteApp.CeritarSatelliteApp_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("CSV_Exe_Location", _strLocation_Exe, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                { }
+                else if (!mcSQL.bln_AddField("CSV_ExePerCustomer", _blnExePerCustomer, clsTTSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
                 else
                 {

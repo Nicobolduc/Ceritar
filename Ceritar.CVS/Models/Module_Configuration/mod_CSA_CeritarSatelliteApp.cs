@@ -21,6 +21,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
         private string _strExportFolderName;
         private int _intCeritarApp_NRI;
         private bool _blnExeIsFolder;
+        private bool _blnExePerCustomer;
 
         //Messages
         private const int mintMSG_InvalidName = 32;
@@ -67,6 +68,15 @@ namespace Ceritar.CVS.Models.Module_Configuration
         {
             get { return _blnExeIsFolder; }
             set { _blnExeIsFolder = value; }
+        }
+
+        /// <summary>
+        /// Indique que chaque client possède un Release spécifique
+        /// </summary>
+        internal bool ExePerCustomer
+        {
+            get { return _blnExePerCustomer; }
+            set { _blnExePerCustomer = value; }
         }
 
         internal clsActionResults ActionResults
@@ -239,6 +249,8 @@ namespace Ceritar.CVS.Models.Module_Configuration
                 else if (!mcSQL.bln_AddField("CeA_NRI", _intCeritarApp_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("CSA_ExeIsFolder", _blnExeIsFolder, clsTTSQL.MySQL_FieldTypes.BIT_TYPE))
+                { }
+                else if (!mcSQL.bln_AddField("CSA_ExePerCustomer", _blnExePerCustomer, clsTTSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
                 else
                 {

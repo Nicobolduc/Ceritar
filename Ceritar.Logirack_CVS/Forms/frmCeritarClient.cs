@@ -174,8 +174,8 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void mcGrdApp_SetGridDisplay()
         {
-            grdCerApp.Cols[mintGrdApp_CeA_Name_col].Width = 240;
-            grdCerApp.Cols[mintGrdApp_CurrentVersion_col].Width = 100;
+            grdCerApp.Cols[mintGrdApp_CeA_Name_col].Width = 255;
+            grdCerApp.Cols[mintGrdApp_CurrentVersion_col].Width = 105;
             grdCerApp.Cols[mintGrdApp_CurrentRevision_col].Width = 100;
         }
 

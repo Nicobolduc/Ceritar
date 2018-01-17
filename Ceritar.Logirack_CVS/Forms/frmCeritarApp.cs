@@ -34,6 +34,7 @@ namespace Ceritar.Logirack_CVS.Forms
         private const short mintGrdSat_CSA_Name_col = 4;
         private const short mintGrdSat_CSA_KitFolderName_col = 5;
         private const short mintGrdSat_CSA_Exe_IsFolder_col = 6;
+        private const short mintGrdSat_CSA_Exe_PerCustomer_col = 7;
 
         //Classes
         private clsTTC1FlexGridWrapper mcGrdModules;
@@ -122,7 +123,8 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 structCSA = new structCeritarSatelliteApp();
                 structCSA.Action = clsTTApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdSatApp[intRowIdx, mintGrdSat_Action_col]);
-                structCSA.blnExeIsFolder = Convert.ToBoolean(grdSatApp[intRowIdx, mintGrdSat_CSA_Exe_IsFolder_col]);
+                structCSA.blnExeIsFolder = Convert.ToBoolean(grdSatApp[intRowIdx, mintGrdSat_CSA_Exe_IsFolder_col]); 
+                structCSA.blnExePerCustomer = Convert.ToBoolean(grdSatApp[intRowIdx, mintGrdSat_CSA_Exe_PerCustomer_col]);
                 Int32.TryParse(mcGrdSatApp[intRowIdx, mintGrdSat_CSA_NRI_col], out structCSA.intCeritarSatelliteApp_NRI);
                 Int32.TryParse(mcGrdSatApp[intRowIdx, mintGrdSat_CSA_TS_col], out structCSA.intCeritarSatelliteApp_TS);
                 structCSA.strSatelliteApp_Name = mcGrdSatApp[intRowIdx, mintGrdSat_CSA_Name_col];
@@ -281,9 +283,11 @@ namespace Ceritar.Logirack_CVS.Forms
         {
             grdSatApp.Cols[mintGrdSat_CSA_Name_col].Width = 210;
             grdSatApp.Cols[mintGrdSat_CSA_KitFolderName_col].Width = 125;
-            grdSatApp.Cols[mintGrdSat_CSA_Exe_IsFolder_col].Width = 62;
+            grdSatApp.Cols[mintGrdSat_CSA_Exe_IsFolder_col].Width = 120;
+            grdSatApp.Cols[mintGrdSat_CSA_Exe_PerCustomer_col].Width = 1;
 
             mcGrdSatApp.SetColType_CheckBox(mintGrdSat_CSA_Exe_IsFolder_col);
+            mcGrdSatApp.SetColType_CheckBox(mintGrdSat_CSA_Exe_PerCustomer_col);
         }
 
         private void formController_ValidateForm(TT3LightDLL.Controls.ValidateFormEventArgs eventArgs)
@@ -437,6 +441,12 @@ namespace Ceritar.Logirack_CVS.Forms
                     case mintGrdSat_CSA_Exe_IsFolder_col:
 
                         mcGrdSatApp[grdSatApp.Row, mintGrdSat_CSA_Exe_IsFolder_col] = (mcGrdSatApp[grdSatApp.Row, mintGrdSat_CSA_Exe_IsFolder_col] == "0" ? "1" : "0");
+
+                        break;
+
+                    case mintGrdSat_CSA_Exe_PerCustomer_col:
+
+                        mcGrdSatApp[grdSatApp.Row, mintGrdSat_CSA_Exe_PerCustomer_col] = (mcGrdSatApp[grdSatApp.Row, mintGrdSat_CSA_Exe_PerCustomer_col] == "0" ? "1" : "0");
 
                         break;
                 }

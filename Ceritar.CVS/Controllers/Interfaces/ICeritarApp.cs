@@ -32,6 +32,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         public int intCeritarSatelliteApp_NRI;
         public int intCeritarSatelliteApp_TS;
         public bool blnExeIsFolder;
+        public bool blnExePerCustomer;
         public string strSatelliteApp_Name;
         public string strKitExport_FolderName;
     }

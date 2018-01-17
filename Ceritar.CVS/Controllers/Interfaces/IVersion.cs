@@ -67,6 +67,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         public string strCeritarSatelliteApp_Name;
         public string strLocationSatelliteExe;
         public bool blnExeIsFolder;
+        public bool blnExePerCustomer;
         public string strKitFolderName;
     }
 }

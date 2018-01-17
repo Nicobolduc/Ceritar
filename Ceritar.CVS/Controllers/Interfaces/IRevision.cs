@@ -44,10 +44,12 @@ namespace Ceritar.CVS.Controllers.Interfaces
     {
         public sclsConstants.DML_Mode Action;
         public int intSatRevision_NRI;
+        public int intClientSatVersion_NRI;
         public int intCeritarSatelliteApp_NRI;
         public string strCeritarSatelliteApp_Name;
         public string strLocationSatelliteExe;
         public string strExportFolderName;
         public bool blnExeIsFolder;
+        public bool blnExePerCustomer;
     }
 }

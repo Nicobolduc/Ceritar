@@ -224,30 +224,29 @@ namespace Ceritar.CVS.Controllers
 
                     strFolderPath = mcSQL.str_ADOSingleLookUp_Trans("CSV_Exe_Location", "ClientSatVersion", "CSV_NRI = " + vintCSV_NRI);
 
-                    if (!mcSQL.bln_BeginTransaction())
-                    { }
-                    else if (!mcSQL.bln_ADODelete("ClientSatVersion", "CSV_NRI = " + vintCSV_NRI))
-                    { }
+                    if ((File.GetAttributes(strFolderPath) & FileAttributes.Directory) == FileAttributes.Directory)
+                    {
+                        strFolderPath = new DirectoryInfo(strFolderPath).Parent.FullName;
+                    }
                     else
                     {
-                        if ((File.GetAttributes(strFolderPath) & FileAttributes.Directory) == FileAttributes.Directory)
-                        {
-                            strFolderPath = new DirectoryInfo(strFolderPath).Parent.FullName;
-                        }
+                        strFolderPath = new FileInfo(strFolderPath).Directory.Parent.FullName;
+                    }
+
+                    answer = clsTTApp.GetAppController.ShowMessage(mintMSG_AreYouSureToSendToThrash, System.Windows.Forms.MessageBoxButtons.YesNo, strFolderPath);
+
+                    if (answer == System.Windows.Forms.DialogResult.Yes)
+                    {
+                        if (!mcSQL.bln_BeginTransaction())
+                        { }
+                        else if (!mcSQL.bln_ADODelete("ClientSatVersion", "CSV_NRI = " + vintCSV_NRI))
+                        { }
                         else
                         {
-                            strFolderPath = new FileInfo(strFolderPath).Directory.Parent.FullName;
-                        }
-
-                        answer = clsTTApp.GetAppController.ShowMessage(mintMSG_AreYouSureToSendToThrash, System.Windows.Forms.MessageBoxButtons.YesNo, strFolderPath);
-
-                        if (answer == System.Windows.Forms.DialogResult.Yes)
-                        {
                             Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(strFolderPath, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
-                        }
-                       
 
-                        blnValidReturn = true;
+                            blnValidReturn = true;
+                        }
                     }
                 }
                 else
@@ -384,6 +383,10 @@ namespace Ceritar.CVS.Controllers
                                 {
                                     File.Copy(mcView.GetLocation_TTApp(), Path.Combine(currentFolderInfos.FullName, sclsAppConfigs.GetCaptionsAndMenusFileName), true);
                                 }
+                            }
+                            else if (mcModVersion.DML_Action == sclsConstants.DML_Mode.INSERT_MODE)
+                            {
+                                currentFolderInfos.Delete();
                             }
 
                             blnValidReturn = true;
@@ -1020,6 +1023,7 @@ namespace Ceritar.CVS.Controllers
                     cCSV.ClientSatVersion_NRI = structCSV.intClientSatVersion_NRI;
                     cCSV.Location_Exe = structCSV.strLocationSatelliteExe;
                     cCSV.Version_NRI = mcView.GetVersion_NRI();
+                    cCSV.ExePerCustomer = structCSV.blnExePerCustomer;
 
                     cCSV.CeritarClient = new Models.Module_Configuration.mod_CeC_CeritarClient();
                     cCSV.CeritarClient.CeritarClient_NRI = structCSV.intCeritarClient_NRI;
@@ -1107,9 +1111,9 @@ namespace Ceritar.CVS.Controllers
                             {
                                 strReportLocation = Path.Combine(strReportLocation, mcView.GetExternalRPTAppName());
                             }
-
+                            
                             //Add the external report application to the zip archive
-                            newZipFile.CreateEntryFromFile(strReportLocation, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strReportLocation)));
+                            newZipFile.CreateEntryFromFile(strReportLocation, Path.Combine(new DirectoryInfo(strReleaseLocation).Name, Path.GetFileName(strReportLocation)));
                         }
                     }
 
@@ -1212,7 +1216,7 @@ namespace Ceritar.CVS.Controllers
                     {
                         currentFolderInfos = new DirectoryInfo(Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES,
                                                                             cCSV.CeritarSatelliteApp.Name,
-                                                                            cCSV.CeritarClient.CompanyName,
+                                                                            (cCSV.ExePerCustomer ? cCSV.CeritarClient.CompanyName : ""),
                                                                             sclsAppConfigs.GetVersionNumberPrefix + mcModVersion.VersionNo.ToString(),
                                                                             "Kit"
                                                                            )
@@ -1220,7 +1224,6 @@ namespace Ceritar.CVS.Controllers
 
                         if (!Directory.Exists(currentFolderInfos.FullName))
                         {
-                            //currentFolderInfos.Delete(true);
                             currentFolderInfos.Create();
                         }
 
@@ -1489,7 +1492,8 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        CerSatApp.CSA_KitFolderName, " + Environment.NewLine;
             strSQL = strSQL + "        CerSatApp.CSA_ExeIsFolder, " + Environment.NewLine;
             strSQL = strSQL + "        ClientSatVersion.CSV_NRI, " + Environment.NewLine;
-            strSQL = strSQL + "        ClientSatVersion.CSV_Exe_Location " + Environment.NewLine;        
+            strSQL = strSQL + "        ClientSatVersion.CSV_Exe_Location, " + Environment.NewLine;
+            strSQL = strSQL + "        ExePerCustomer = ISNULL(ClientSatVersion.CSV_ExePerCustomer, CerSatApp.CSA_ExePerCustomer) " + Environment.NewLine;
 
             strSQL = strSQL + " FROM CerSatApp " + Environment.NewLine;
 

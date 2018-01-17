@@ -14,6 +14,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
     {
         //Model attributes
         private int _intSatRevision_NRI;
+        private int _intClientSatVersion_NRI;
         private mod_Rev_Revision _cRevision;
         private mod_CSA_CeritarSatelliteApp _cCeritarSatelliteApp;
         private string _strLocation_Exe;
@@ -30,6 +31,12 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         {
             get { return _intSatRevision_NRI; }
             set { _intSatRevision_NRI = value; }
+        }
+
+        internal int ClientSatVersion_NRI
+        {
+            get { return _intClientSatVersion_NRI; }
+            set { _intClientSatVersion_NRI = value; }
         }
 
         internal mod_Rev_Revision Revision
@@ -202,6 +209,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 else if (!mcSQL.bln_AddField("Rev_NRI", _cRevision.Revision_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("CSA_NRI", _cCeritarSatelliteApp.CeritarSatelliteApp_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
+                { }
+                else if (!mcSQL.bln_AddField("CSV_NRI", _intClientSatVersion_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("SRe_Exe_Location", _strLocation_Exe, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }

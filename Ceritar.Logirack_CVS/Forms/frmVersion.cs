@@ -48,6 +48,7 @@ namespace Ceritar.Logirack_CVS.Forms
         private const short mintGrdSat_CSA_ExeIsFolder_col = 7;
         private const short mintGrdSat_CSV_NRI_col = 8;
         private const short mintGrdSat_CSV_LocationExe_col = 9;
+        private const short mintGrdSat_CSV_ExePerCustomer_col = 10;
 
         //Columns grdRev
         private const short mintGrdRev_Rev_NRI_col = 1;
@@ -224,6 +225,7 @@ namespace Ceritar.Logirack_CVS.Forms
                         structCSV.strCeritarSatelliteApp_Name = mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_Name_col];
                         structCSV.strKitFolderName = mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_KitFolderName_col];
                         structCSV.blnExeIsFolder = Convert.ToBoolean(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSA_ExeIsFolder_col]);
+                        structCSV.blnExePerCustomer = Convert.ToBoolean(mcGrdSatelliteApps[intRowIndex, mintGrdSat_CSV_ExePerCustomer_col]);
 
                         lstSatelliteApps.Add(structCSV);
                     }                    

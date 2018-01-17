@@ -36,6 +36,8 @@ namespace Ceritar.Logirack_CVS.Forms
         private const short mintGrdSat_CSA_ExeLocation_col = 5;
         private const short mintGrdSat_CSA_ExeIsFolder_col = 6;
         private const short mintGrdSat_CSA_ExportFolderName_col = 7;
+        private const short mintGrdSat_CSV_NRI_col = 8;
+        private const short mintGrdSat_CSV_ExePerCustomer_col = 9;
 
         //Classes
         private clsTTC1FlexGridWrapper mcGrdRevModifs;
@@ -189,7 +191,9 @@ namespace Ceritar.Logirack_CVS.Forms
                     structSRe.strLocationSatelliteExe = mcGrdSatellites[intRowIndex, mintGrdSat_CSA_ExeLocation_col];
                     structSRe.strCeritarSatelliteApp_Name = mcGrdSatellites[intRowIndex, mintGrdSat_CSA_Name_col];
                     structSRe.blnExeIsFolder = Convert.ToBoolean(mcGrdSatellites[intRowIndex, mintGrdSat_CSA_ExeIsFolder_col]);
+                    structSRe.blnExePerCustomer = Convert.ToBoolean(mcGrdSatellites[intRowIndex, mintGrdSat_CSV_ExePerCustomer_col]);
                     structSRe.strExportFolderName = mcGrdSatellites[intRowIndex, mintGrdSat_CSA_ExportFolderName_col];
+                    Int32.TryParse(mcGrdSatellites[intRowIndex, mintGrdSat_CSV_NRI_col], out structSRe.intClientSatVersion_NRI);
 
                     if (!mcGrdSatellites.bln_CellIsEmpty(intRowIndex, mintGrdSat_SRe_NRI_col))
                     {

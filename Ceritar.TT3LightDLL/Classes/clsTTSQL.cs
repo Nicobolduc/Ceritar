@@ -196,13 +196,16 @@ namespace Ceritar.TT3LightDLL.Classes
 
             try
             {
-                if (vblnCommitChanges)
+                if (mcSQLTransaction != null)
                 {
-                    mcSQLTransaction.Commit();
-                }
-                else
-                {
-                    mcSQLTransaction.Rollback();
+                    if (vblnCommitChanges)
+                    {
+                        mcSQLTransaction.Commit();
+                    }
+                    else
+                    {
+                        mcSQLTransaction.Rollback();
+                    }
                 }
 
                 blnValidReturn = true;
