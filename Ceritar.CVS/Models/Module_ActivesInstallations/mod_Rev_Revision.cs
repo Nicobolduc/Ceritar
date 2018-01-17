@@ -18,7 +18,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         //Model attributes
         private int _intRevision_NRI;
         private int _intRevision_TS;
-        private byte _intRevision_Number;
+        private sbyte _intRevision_Number;
         private mod_Tpl_HierarchyTemplate _cTemplateSource;
         private mod_Ver_Version _cVersion;
         private mod_TTU_User _cCreatedByUser;
@@ -58,7 +58,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { _intRevision_TS = value; }
         }
 
-        internal byte Revision_Number
+        internal sbyte Revision_Number
         {
             get { return _intRevision_Number; }
             set { _intRevision_Number = value; }
@@ -196,7 +196,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.MODIFICATION_LIST_MANDATORY);
                         }
-                        else if (_intRevision_Number <= 0)
+                        else if (_intRevision_Number == 0)
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.REVISION_NUMBER_MANDATORY);
                         }
@@ -270,7 +270,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.INVALID_REFERENCE_INTEGRITY, clsActionResults.BaseErrorCode.UNHANDLED_EXCEPTION);
                         }
-                        else if (!string.IsNullOrEmpty(clsTTSQL.str_ADOSingleLookUp("Rev_NRI", "Revision", "Rev_No > " + _intRevision_Number + " AND Revision.Ver_NRI = " + _cVersion.Version_NRI)))
+                        else if (!_blnPreparationMode && !string.IsNullOrEmpty(clsTTSQL.str_ADOSingleLookUp("Rev_NRI", "Revision", "Rev_No > " + _intRevision_Number + " AND Revision.Ver_NRI = " + _cVersion.Version_NRI)))
                         {
                             mcActionResults.SetInvalid(mintMSG_CantDeleteRevisionIfNotLast, ctr_Revision.ErrorCode_Rev.CANT_DELETE_NOT_LAST_REVISION);
                         }
@@ -511,7 +511,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             {
                 if (!mcSQL.bln_RefreshFields())
                 { }
-                else if (!mcSQL.bln_AddField("Rev_No", _intRevision_Number, clsTTSQL.MySQL_FieldTypes.INT_TYPE))
+                else if (!mcSQL.bln_AddField("Rev_No", (_intRevision_Number <= 0 ? null : _intRevision_Number.ToString()), clsTTSQL.MySQL_FieldTypes.INT_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("Ver_NRI", _cVersion.Version_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }

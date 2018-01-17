@@ -1327,7 +1327,7 @@ namespace Ceritar.CVS.Controllers
                     foreach (Interfaces.structSatRevision structSat in lstSatellites)
                     {
                         //Get the executable folder location to copy (from the version kit or from the latest revision)
-                        strLocationSatelliteExe = clsTTSQL.str_ADOSingleLookUp("TOP 1 SatRevision.SRe_Exe_Location", "Revision INNER JOIN SatRevision ON SatRevision.Rev_NRI = Revision.Rev_NRI", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND SatRevision.SRe_Exe_Location IS NOT NULL AND SatRevision.CSA_NRI = " + structSat.intCeritarSatelliteApp_NRI + " ORDER BY Revision.Rev_No DESC");
+                        strLocationSatelliteExe = clsTTSQL.str_ADOSingleLookUp("TOP 1 SatRevision.SRe_Exe_Location", "Revision INNER JOIN SatRevision ON SatRevision.Rev_NRI = Revision.Rev_NRI", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Revision.Rev_PreparationMode = 0 AND SatRevision.SRe_Exe_Location IS NOT NULL AND SatRevision.CSA_NRI = " + structSat.intCeritarSatelliteApp_NRI + " ORDER BY Revision.Rev_No DESC");
 
                         strLocationSatelliteExe = strLocationSatelliteExe == string.Empty ? structSat.strLocationSatelliteExe : strLocationSatelliteExe;
 
@@ -1473,6 +1473,7 @@ namespace Ceritar.CVS.Controllers
                 strSQL = strSQL + "     ON SatRevision.Rev_NRI = Revision.Rev_NRI " + Environment.NewLine;
 
                 strSQL = strSQL + " WHERE Revision.Rev_NRI = " + vintRev_NRI + Environment.NewLine;
+                strSQL = strSQL + "   AND Revision.Rev_PreparationMode = 0 " + Environment.NewLine;
 
                 strSQL = strSQL + " --ORDER BY Ver_NRI, Rev_No ASC " + Environment.NewLine;
 
@@ -1484,7 +1485,7 @@ namespace Ceritar.CVS.Controllers
                     {
                         cRevision.Version = new mod_Ver_Version();
                         cRevision.Version.VersionNo = UInt16.Parse(sqlRecord["Ver_No"].ToString());
-                        cRevision.Revision_Number = Byte.Parse(sqlRecord["Rev_No"].ToString());
+                        cRevision.Revision_Number = SByte.Parse(sqlRecord["Rev_No"].ToString());
                         cRevision.Path_Release = sqlRecord["Rev_Location_Exe"].ToString();
                         cRevision.ExeIsExternalReport = Convert.ToBoolean(sqlRecord["Rev_ExeIsReport"].ToString());
                         cRevision.ExeWithExternalReport = Convert.ToBoolean(sqlRecord["Rev_ExeWithReport"].ToString());
@@ -1505,7 +1506,7 @@ namespace Ceritar.CVS.Controllers
                     intRecordCount++;
                 }
 
-                strRevisionFolderPath = str_GetRevisionFolderPath(cRevision);
+                if (sqlRecord.HasRows) strRevisionFolderPath = str_GetRevisionFolderPath(cRevision);
 
                 blnIsValid = Directory.Exists(strRevisionFolderPath);
             }
@@ -1582,11 +1583,8 @@ namespace Ceritar.CVS.Controllers
             string strSQL = string.Empty;
             string strNewRevisionNo = string.Empty;
 
-            if (mcView.GetDML_Action() == sclsConstants.DML_Mode.INSERT_MODE)
-            {
-                strNewRevisionNo = clsTTSQL.str_ADOSingleLookUp("MAX(ISNULL(Revision.Rev_No, 0)) + 1", "Version LEFT JOIN Revision ON Revision.Ver_NRI = Version.Ver_NRI", "Version.Ver_NRI = " + vintVersion_NRI);
-            }
-
+            strNewRevisionNo = clsTTSQL.str_ADOSingleLookUp("MAX(ISNULL(Revision.Rev_No, 0)) + 1", "Version LEFT JOIN Revision ON Revision.Ver_NRI = Version.Ver_NRI", "Revision.Rev_PreparationMode = 0 AND Version.Ver_NRI = " + vintVersion_NRI);
+            
             strSQL = strSQL + " SELECT Version.Ver_No, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_TS, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_DtCreation, " + Environment.NewLine;
@@ -1598,7 +1596,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        Revision.Rev_CreatedBy, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_Note, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_PreparationMode, " + Environment.NewLine;
-            strSQL = strSQL + "        RevisionNo = CASE WHEN Revision.Rev_NRI IS NULL THEN " + clsTTApp.GetAppController.str_FixStringForSQL(strNewRevisionNo) + " ELSE Revision.Rev_No END, " + Environment.NewLine;
+            strSQL = strSQL + "        RevisionNo = CASE WHEN Revision.Rev_NRI IS NULL OR Revision.Rev_No IS NULL THEN " + clsTTApp.GetAppController.str_FixStringForSQL(strNewRevisionNo) + " ELSE Revision.Rev_No END, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_Name, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_ExternalRPTAppName, " + Environment.NewLine;
@@ -1654,7 +1652,7 @@ namespace Ceritar.CVS.Controllers
             return strSQL;
         }
 
-        public string strGetClients_SQL()
+        public string strGetClients_SQL(int vintRevision_NRI)
         {
             string strSQL = string.Empty;
 
@@ -1668,7 +1666,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "     ON ClientAppVersion.Ver_NRI = Version.Ver_NRI " + Environment.NewLine;
 
             strSQL = strSQL + " WHERE Version.Ver_NRI = " + mcView.GetVersion_NRI() + Environment.NewLine;
-
+            strSQL = strSQL + "   AND NOT EXISTS (SELECT 1 FROM Revision WHERE Revision.Ver_NRI = Version.Ver_NRI AND Revision.Rev_PreparationMode = 1 AND Revision.CeC_NRI = ClientAppVersion.CeC_NRI AND Revision.Rev_NRI <> " + vintRevision_NRI.ToString() + ") " + Environment.NewLine;
             strSQL = strSQL + " ORDER BY CerClient.CeC_Name " + Environment.NewLine;
 
             return strSQL;

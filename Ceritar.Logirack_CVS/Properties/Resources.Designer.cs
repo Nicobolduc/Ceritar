@@ -83,6 +83,16 @@ namespace Ceritar.Logirack_CVS.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Under_construction {
+            get {
+                object obj = ResourceManager.GetObject("Under_construction", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap valid {
             get {
                 object obj = ResourceManager.GetObject("valid", resourceCulture);

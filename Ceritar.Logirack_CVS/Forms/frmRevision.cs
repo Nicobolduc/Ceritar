@@ -55,7 +55,7 @@ namespace Ceritar.Logirack_CVS.Forms
         private string mstrVariousFolderLocation;
         private ushort mintRevision_TS;
         private bool mblnAppExeLocationExistsOnLoad;
-
+        private sbyte mintAttributedRevisionNo;
 
         public frmRevision()
         {
@@ -104,9 +104,9 @@ namespace Ceritar.Logirack_CVS.Forms
             return txtNote.Text;
         }
 
-        byte IRevision.GetRevisionNo()
+        sbyte IRevision.GetRevisionNo()
         {
-            return byte.Parse(txtRevisionNo.Text);
+            return sbyte.Parse((txtRevisionNo.Text == string.Empty ? "-1" : txtRevisionNo.Text));
         }
 
         int IRevision.GetRevision_NRI()
@@ -259,6 +259,8 @@ namespace Ceritar.Logirack_CVS.Forms
                 if (sqlRecord.Read())
                 {
                     txtRevisionNo.Text = sqlRecord["RevisionNo"].ToString();
+                    mintAttributedRevisionNo = SByte.Parse(txtRevisionNo.Text);
+
                     txtVersionNo.Text = sqlRecord["Ver_No"].ToString();
                     mstrCeritarApplication_NRI = Int32.Parse(sqlRecord["CeA_NRI"].ToString());
                     mstrCeritarApplication_Name = sqlRecord["CeA_Name"].ToString();
@@ -615,7 +617,7 @@ namespace Ceritar.Logirack_CVS.Forms
             { }
             else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrRevision.strGetTemplates_SQL(), "Tpl_NRI", "Tpl_Name", false, ref cboTemplates))
             { }
-            else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrRevision.strGetClients_SQL(), "CeC_NRI", "CeC_Name", true, ref cboClients))
+            else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrRevision.strGetClients_SQL(formController.Item_NRI), "CeC_NRI", "CeC_Name", true, ref cboClients))
             { }
             else if (!pfblnData_Load())
             { }
@@ -1092,6 +1094,8 @@ namespace Ceritar.Logirack_CVS.Forms
                 btnShowRootFolder.Enabled = false;
                 btnPrintPairValidation.Enabled = false;
                 btnExportRevision.Enabled = false;
+
+                txtRevisionNo.Text = string.Empty;
             }
             else
             {
@@ -1102,6 +1106,8 @@ namespace Ceritar.Logirack_CVS.Forms
                 btnShowRootFolder.Enabled = true;
                 btnPrintPairValidation.Enabled = true;
                 btnExportRevision.Enabled = true;
+
+                txtRevisionNo.Text = mintAttributedRevisionNo.ToString();
             }
         }
     }

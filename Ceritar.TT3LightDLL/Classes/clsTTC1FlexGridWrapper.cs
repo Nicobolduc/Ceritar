@@ -396,7 +396,7 @@ namespace Ceritar.TT3LightDLL.Classes
 	    {
 		    bool blnCellIsChecked = false;
 
-		    blnCellIsChecked = this[vintRowIdx, vintColIdx].ToUpper().Equals("TRUE");
+		    blnCellIsChecked = this[vintRowIdx, vintColIdx].ToUpper().Equals("TRUE") || this[vintRowIdx, vintColIdx].ToUpper().Equals("1");
 
 		    return blnCellIsChecked;
 	    }
@@ -788,6 +788,7 @@ namespace Ceritar.TT3LightDLL.Classes
                 !mblnHasNoActionColumn && 
                 mGrdFlex.Rows.Count > 1 &&
                 mGrdFlex.Row > 0 &&
+                mGrdFlex.Row < mGrdFlex.Rows.Count &&
                 mGrdFlex[mGrdFlex.Row, mintDefaultActionCol] != null && 
                 (mGrdFlex[mGrdFlex.Row, mintDefaultActionCol].ToString().Equals(((int)sclsConstants.DML_Mode.NO_MODE).ToString()) || 
                  mGrdFlex[mGrdFlex.Row, mintDefaultActionCol].ToString().Equals((sclsConstants.DML_Mode.NO_MODE).ToString())

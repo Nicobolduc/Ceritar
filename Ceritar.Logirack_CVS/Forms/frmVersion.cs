@@ -58,6 +58,7 @@ namespace Ceritar.Logirack_CVS.Forms
         private const short mintGrdRev_CeritarClientName_col = 5;
         private const short mintGrdRev_Description_col = 6;
         private const short mintGrdRev_CreationDate_col = 7;
+        private const short mintGrdRev_InPreparation_col = 8;
 
         //Tab pages
         private const short mintTab_Version = 0;
@@ -389,7 +390,11 @@ namespace Ceritar.Logirack_CVS.Forms
 
                     for (int intRowIndex = 1; intRowIndex < grdRevisions.Rows.Count; intRowIndex++)
                     {
-                        if (cCtrRevision.blnRevisionPathIsValid(Convert.ToInt32(grdRevisions[intRowIndex, mintGrdRev_Rev_NRI_col])))
+                        if (mcGrdRevisions.CellIsChecked(intRowIndex, mintGrdRev_InPreparation_col))
+                        {
+                            grdRevisions.SetCellImage(intRowIndex, mintGrdRev_Rev_IsValid_col, Properties.Resources.Under_construction);
+                        }
+                        else if (cCtrRevision.blnRevisionPathIsValid(Convert.ToInt32(grdRevisions[intRowIndex, mintGrdRev_Rev_NRI_col])))
                         {
                             grdRevisions.SetCellImage(intRowIndex, mintGrdRev_Rev_IsValid_col, Properties.Resources.valid);
                         }
@@ -820,6 +825,8 @@ namespace Ceritar.Logirack_CVS.Forms
             grdRevisions.Cols[mintGrdRev_Rev_IsValid_col].Width = 45;
             grdRevisions.Cols[mintGrdRev_CeritarClientName_col].Width = 175;
             grdRevisions.Cols[mintGrdRev_Description_col].Width = 600;
+
+            grdRevisions.Cols[mintGrdRev_InPreparation_col].DataType = typeof(bool);
         }
 
         private void formController_LoadData(LoadDataEventArgs eventArgs)

@@ -24,7 +24,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         string GetCreatedBy();
         string GetNote();
         ushort GetVersionNo();
-        byte GetRevisionNo();         
+        sbyte GetRevisionNo();         
         string GetLocation_Release();
         string GetLocation_Scripts();
         string GetLocation_VariousFile();
