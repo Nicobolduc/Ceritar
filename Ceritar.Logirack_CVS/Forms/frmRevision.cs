@@ -556,7 +556,7 @@ namespace Ceritar.Logirack_CVS.Forms
             }
             else
             {
-                ShowOpenFileDialog("Executables (*.exe)|*.exe", grdSatellites, mcGrdSatellites[grdSatellites.Row, mintGrdSat_CSA_ExeLocation_col], true);
+                ShowOpenFileDialog("Executables (exe, apk)|*.exe;*.apk", grdSatellites, mcGrdSatellites[grdSatellites.Row, mintGrdSat_CSA_ExeLocation_col], true);
             }
 
             mcGrdSatellites.GridIsLoading = false;

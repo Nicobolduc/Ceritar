@@ -1664,9 +1664,11 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "     INNER JOIN ClientAppVersion " + Environment.NewLine;
             strSQL = strSQL + "          INNER JOIN CerClient ON CerClient.CeC_NRI = ClientAppVersion.CeC_NRI " + Environment.NewLine;
             strSQL = strSQL + "     ON ClientAppVersion.Ver_NRI = Version.Ver_NRI " + Environment.NewLine;
+            strSQL = strSQL + "     LEFT JOIN Revision ON Revision.Rev_NRI = " + vintRevision_NRI + Environment.NewLine;
 
             strSQL = strSQL + " WHERE Version.Ver_NRI = " + mcView.GetVersion_NRI() + Environment.NewLine;
-            strSQL = strSQL + "   AND NOT EXISTS (SELECT 1 FROM Revision WHERE Revision.Ver_NRI = Version.Ver_NRI AND Revision.Rev_PreparationMode = 1 AND Revision.CeC_NRI = ClientAppVersion.CeC_NRI AND Revision.Rev_NRI <> " + vintRevision_NRI.ToString() + ") " + Environment.NewLine;
+            strSQL = strSQL + "   AND (NOT EXISTS (SELECT 1 FROM Revision WHERE Revision.Ver_NRI = Version.Ver_NRI AND Revision.Rev_PreparationMode = 1 AND Revision.CeC_NRI = ClientAppVersion.CeC_NRI AND Revision.Rev_NRI <> " + vintRevision_NRI.ToString() + ") " + Environment.NewLine;
+            strSQL = strSQL + "        OR Revision.Rev_No IS NOT NULL) " + Environment.NewLine;
             strSQL = strSQL + " ORDER BY CerClient.CeC_Name " + Environment.NewLine;
 
             return strSQL;
