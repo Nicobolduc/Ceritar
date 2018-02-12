@@ -163,7 +163,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "  								 FROM Revision " + Environment.NewLine;
             strSQL = strSQL + "  								 WHERE Revision.Ver_NRI = ClientAppVersion.Ver_NRI " + Environment.NewLine;
             strSQL = strSQL + "  								   AND Revision.CeC_NRI = ClientAppVersion.CeC_NRI " + Environment.NewLine;
-            strSQL = strSQL + "  								   AND (Revision.Rev_Location_Exe IS NOT NULL OR Revision.Rev_ExeIsReport = 1)" + Environment.NewLine;
+            strSQL = strSQL + "  								   AND ((Revision.Rev_Location_Exe IS NOT NULL AND Revision.Rev_ExeWithReport = 1) OR Revision.Rev_ExeIsReport = 1)" + Environment.NewLine;
             strSQL = strSQL + " 								   AND Revision.Rev_PreparationMode = 0 " + Environment.NewLine;
             strSQL = strSQL + "  								 ORDER BY Revision.Rev_No DESC " + Environment.NewLine;
             strSQL = strSQL + "  								) AS TRef " + Environment.NewLine;
