@@ -12,6 +12,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
     {
         int GetCerApp_NRI();
         int GetCerApp_TS();
+        int GetCerApp_NRI_Master();
         int GetDomain_NRI();
         string GetName();
         string GetDescription();

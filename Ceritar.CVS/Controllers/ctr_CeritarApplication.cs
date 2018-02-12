@@ -63,6 +63,7 @@ namespace Ceritar.CVS.Controllers
                 mcModCerApp.Domaine_NRI = (mod_CeA_CeritarApplication.AppDomain)mcView.GetDomain_NRI();
                 mcModCerApp.AutoGenRevisionNoScript = mcView.IsGeneratingRevisionNoScript();
                 mcModCerApp.ManageTTApp = mcView.IsManagingTTApp();
+                mcModCerApp.CeritarApplication_NRI_Master = mcView.GetCerApp_NRI_Master();
 
                 lstSatelliteApps = mcView.GetLstAppSatellites();
 
@@ -149,6 +150,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        CerApp.ApD_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_AutoGenRevisionNoScript, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_ExternalRPTAppName, " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.CeA_NRI_Master, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_ManageTTApp " + Environment.NewLine;
 
             strSQL = strSQL + " FROM CerApp " + Environment.NewLine;
@@ -192,7 +194,7 @@ namespace Ceritar.CVS.Controllers
 
             return strSQL;
         }
-
+        
         public string strGetListe_Domains_SQL()
         {
             string strSQL = string.Empty;
@@ -207,7 +209,24 @@ namespace Ceritar.CVS.Controllers
             return strSQL;
         }
 
-#endregion
+        public string strGetListe_MasterCeritarApplications_SQL(int vintCurrentCeritarApp_NRI)
+        {
+            string strSQL = string.Empty;
+
+            strSQL = strSQL + " SELECT CerApp.CeA_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.CeA_Name " + Environment.NewLine;
+
+            strSQL = strSQL + " FROM CerApp " + Environment.NewLine;
+
+            strSQL = strSQL + " WHERE CerApp.CeA_NRI_Master IS NULL " + Environment.NewLine;
+            strSQL = strSQL + "   AND CerApp.CeA_NRI <> " + vintCurrentCeritarApp_NRI + Environment.NewLine;
+
+            strSQL = strSQL + " ORDER BY CerApp.CeA_Name ASC " + Environment.NewLine;
+
+            return strSQL;
+        }
+
+        #endregion
 
 
     }

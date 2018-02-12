@@ -17,6 +17,7 @@ namespace Ceritar.CVS.Models.Module_Configuration
         //Model attributes
         private int _intCeritarApplication_NRI;
         private int _intCeritarApplication_TS;
+        private int _intCeritarApplication_NRI_Master;
         private string _strName;
         private string _strDescription;
         private string _strExternalReportAppName;
@@ -58,6 +59,12 @@ namespace Ceritar.CVS.Models.Module_Configuration
         {
             get { return _intCeritarApplication_TS; }
             set { _intCeritarApplication_TS = value; }
+        }
+
+        internal int CeritarApplication_NRI_Master
+        {
+            get { return _intCeritarApplication_NRI_Master; }
+            set { _intCeritarApplication_NRI_Master = value; }
         }
 
         internal string Name
@@ -317,6 +324,8 @@ namespace Ceritar.CVS.Models.Module_Configuration
                 else if (!mcSQL.bln_AddField("CeA_ManageTTApp", _blnManageTTApp, clsTTSQL.MySQL_FieldTypes.BIT_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("ApD_NRI", (int)_domain_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
+                { }
+                else if (!mcSQL.bln_AddField("CeA_NRI_Master", _intCeritarApplication_NRI_Master, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("CeA_ExternalRPTAppName", _strExternalReportAppName, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }

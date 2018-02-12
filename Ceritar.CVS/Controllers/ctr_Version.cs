@@ -395,7 +395,8 @@ namespace Ceritar.CVS.Controllers
 
                         case (int)ctr_Template.FolderType.Scripts:
 
-                            blnValidReturn = pfblnCopyAllScriptsForClients(currentFolderInfos.FullName);
+                            if (mcModVersion.CerApplication.CeritarApplication_NRI_Master == 0)
+                                blnValidReturn = pfblnCopyAllScriptsForClients(currentFolderInfos.FullName);
 
                             break;
 
@@ -968,6 +969,7 @@ namespace Ceritar.CVS.Controllers
                 mcModVersion.CerApplication.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
                 mcModVersion.CerApplication.ExternalReportAppName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + mcModVersion.CerApplication.CeritarApplication_NRI);
                 mcModVersion.CerApplication.ManageTTApp = bool.Parse(clsTTSQL.str_ADOSingleLookUp("CeA_ManageTTApp", "CerApp", "CeA_NRI = " + mcModVersion.CerApplication.CeritarApplication_NRI));
+                mcModVersion.CerApplication.CeritarApplication_NRI_Master = mcView.GetCeritarApplication_NRI_Master();
 
                 mcModVersion.TemplateSource = new Models.Module_Template.mod_Tpl_HierarchyTemplate();
                 mcModVersion.TemplateSource.Template_NRI = mcView.GetTemplateSource_NRI();
@@ -1334,7 +1336,7 @@ namespace Ceritar.CVS.Controllers
             return strPath;
         }*/
 
-        public string str_GetVersionFolderPath(int vintTemplate_NRI, string vstrVersion_No)
+        public static string str_GetVersionFolderPath(int vintTemplate_NRI, string vstrVersion_No)
         {
             string strSQL = string.Empty;
             string strPath = string.Empty;
@@ -1434,6 +1436,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        Version.Ver_IsDemo, " + Environment.NewLine;
             strSQL = strSQL + "        Version.Ver_Description, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_ExternalRPTAppName, " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.CeA_NRI_Master, " + Environment.NewLine;
             strSQL = strSQL + "        Version.TTU_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        CreatedByNom = TTUser.TTU_FirstName + ' ' + TTUser.TTU_LastName " + Environment.NewLine;
 

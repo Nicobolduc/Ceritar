@@ -82,6 +82,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
+            this.chkExcludePreviousRevScripts = new System.Windows.Forms.CheckBox();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -708,6 +709,15 @@
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
             // 
+            // chkExcludePreviousRevScripts
+            // 
+            this.chkExcludePreviousRevScripts.Location = new System.Drawing.Point(431, 673);
+            this.chkExcludePreviousRevScripts.Name = "chkExcludePreviousRevScripts";
+            this.chkExcludePreviousRevScripts.Size = new System.Drawing.Size(304, 20);
+            this.chkExcludePreviousRevScripts.TabIndex = 10;
+            this.chkExcludePreviousRevScripts.Text = "Export: Exclure scripts revisions précédentes";
+            this.chkExcludePreviousRevScripts.UseVisualStyleBackColor = true;
+            // 
             // frmRevision
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -724,6 +734,7 @@
             this.Controls.Add(this.formController);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.chkExcludePreviousRevScripts);
             this.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -802,5 +813,6 @@
         private System.Windows.Forms.ToolStripMenuItem mnuiShowInExplorer;
         private System.Windows.Forms.Button btnPrintPairValidation;
         private System.Windows.Forms.CheckBox chkPreparation;
+        private System.Windows.Forms.CheckBox chkExcludePreviousRevScripts;
     }
 }

@@ -143,12 +143,19 @@ namespace Ceritar.Logirack_CVS.Forms
 
         bool ICeritarApp.IsGeneratingRevisionNoScript()
         {
-            return chkGenRevNoScript.Checked;
+            return (chkMasterApp.Checked ? false : chkGenRevNoScript.Checked);
         }
 
         bool ICeritarApp.IsManagingTTApp()
         {
             return chkManageTTApp.Checked;
+        }
+
+        int ICeritarApp.GetCerApp_NRI_Master()
+        {
+            if (chkMasterApp.Checked) return 0;
+
+            return (int)cboMasterApp.SelectedValue;
         }
 
         #endregion
@@ -210,6 +217,17 @@ namespace Ceritar.Logirack_CVS.Forms
 
                     chkGenRevNoScript.Checked = bool.Parse(sqlRecord["CeA_AutoGenRevisionNoScript"].ToString());
                     chkManageTTApp.Checked = bool.Parse(sqlRecord["CeA_ManageTTApp"].ToString());
+                    chkMasterApp.Checked = sqlRecord["CeA_NRI_Master"] == DBNull.Value;
+
+                    cboMasterApp.Enabled = !chkMasterApp.Checked;
+
+                    if (sqlRecord["CeA_NRI_Master"] != DBNull.Value)
+                    {
+                        cboMasterApp.SelectedValue = Int32.Parse(sqlRecord["CeA_NRI_Master"].ToString());
+
+                        chkGenRevNoScript.Enabled = false;
+                    }
+                        
 
                     if (!string.IsNullOrEmpty(txtReportAppExternal.Text))
                     {
@@ -256,6 +274,8 @@ namespace Ceritar.Logirack_CVS.Forms
             { }
             else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrCeritarApp.strGetListe_Domains_SQL(), "ApD_NRI", "ApD_Code", true, ref cboDomain))
             { }
+            else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrCeritarApp.strGetListe_MasterCeritarApplications_SQL(formController.Item_NRI), "CeA_NRI", "CeA_Name", true, ref cboMasterApp))
+            { }
             else if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE)
             { 
                 blnValidReturn = true; 
@@ -284,9 +304,8 @@ namespace Ceritar.Logirack_CVS.Forms
             grdSatApp.Cols[mintGrdSat_CSA_Name_col].Width = 210;
             grdSatApp.Cols[mintGrdSat_CSA_KitFolderName_col].Width = 125;
             grdSatApp.Cols[mintGrdSat_CSA_Exe_IsFolder_col].Width = 120;
-            grdSatApp.Cols[mintGrdSat_CSA_Exe_PerCustomer_col].Width = 1;
 
-            mcGrdSatApp.SetColType_CheckBox(mintGrdSat_CSA_Exe_IsFolder_col);
+            mcGrdSatApp.SetColType_CheckBox(mintGrdSat_CSA_Exe_IsFolder_col, 80);
             mcGrdSatApp.SetColType_CheckBox(mintGrdSat_CSA_Exe_PerCustomer_col);
         }
 
@@ -503,6 +522,42 @@ namespace Ceritar.Logirack_CVS.Forms
         private void mcGrdSatApp_AfterClickAdd()
         {
             mcGrdSatApp[grdSatApp.Row, mintGrdSat_CSA_Exe_IsFolder_col] = "1";
+        }
+
+        private void formController_SetReadRights()
+        {
+            switch ((int)formController.FormMode)
+            {
+                case (int)sclsConstants.DML_Mode.INSERT_MODE:
+
+                    cboMasterApp.Enabled = false;
+
+                    break;
+
+                case (int)sclsConstants.DML_Mode.UPDATE_MODE:
+
+            
+
+                    break;
+            }
+        }
+
+        private void chkMasterApp_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!formController.FormIsLoading)
+            {
+                cboMasterApp.Enabled = !chkMasterApp.Checked;
+
+                formController.ChangeMade = true;
+            }
+        }
+
+        private void cboMasterApp_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!formController.FormIsLoading)
+            {
+                formController.ChangeMade = true;
+            }
         }
     }
 }

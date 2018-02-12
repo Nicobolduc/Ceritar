@@ -41,6 +41,7 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.btnGrdSatDel = new System.Windows.Forms.Button();
             this.btnGrdSatAdd = new System.Windows.Forms.Button();
+            this.chkMasterApp = new System.Windows.Forms.CheckBox();
             this.cboDomain = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
@@ -51,6 +52,8 @@
             this.grdSatApp = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.chkGenRevNoScript = new System.Windows.Forms.CheckBox();
             this.chkManageTTApp = new System.Windows.Forms.CheckBox();
+            this.cboMasterApp = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdModules)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -103,12 +106,12 @@
             this.groupBox1.Controls.Add(this.btnGrdModDel);
             this.groupBox1.Controls.Add(this.btnGrdModAdd);
             this.groupBox1.Controls.Add(this.grdModules);
-            this.groupBox1.Location = new System.Drawing.Point(6, 505);
+            this.groupBox1.Location = new System.Drawing.Point(6, 527);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Size = new System.Drawing.Size(558, 179);
-            this.groupBox1.TabIndex = 6;
+            this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Liste des modules";
             // 
@@ -187,6 +190,19 @@
             this.toolTip1.SetToolTip(this.btnGrdSatAdd, "Ajouter une ligne");
             this.btnGrdSatAdd.UseVisualStyleBackColor = true;
             // 
+            // chkMasterApp
+            // 
+            this.chkMasterApp.Checked = true;
+            this.chkMasterApp.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkMasterApp.Location = new System.Drawing.Point(427, 111);
+            this.chkMasterApp.Name = "chkMasterApp";
+            this.chkMasterApp.Size = new System.Drawing.Size(134, 20);
+            this.chkMasterApp.TabIndex = 4;
+            this.chkMasterApp.Text = "Application maître";
+            this.toolTip1.SetToolTip(this.chkMasterApp, "Applications qui gèrent la BD et ses scripts.");
+            this.chkMasterApp.UseVisualStyleBackColor = true;
+            this.chkMasterApp.CheckedChanged += new System.EventHandler(this.chkMasterApp_CheckedChanged);
+            // 
             // cboDomain
             // 
             this.cboDomain.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -194,7 +210,7 @@
             this.cboDomain.Location = new System.Drawing.Point(82, 80);
             this.cboDomain.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.cboDomain.Name = "cboDomain";
-            this.cboDomain.Size = new System.Drawing.Size(257, 24);
+            this.cboDomain.Size = new System.Drawing.Size(339, 24);
             this.cboDomain.TabIndex = 2;
             this.cboDomain.SelectedIndexChanged += new System.EventHandler(this.cboDomain_SelectedIndexChanged);
             // 
@@ -214,12 +230,13 @@
             this.formController.FormIsLoading = false;
             this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.CONSULT_MODE;
             this.formController.Item_NRI = 0;
-            this.formController.Location = new System.Drawing.Point(-6, 693);
+            this.formController.Location = new System.Drawing.Point(-6, 715);
             this.formController.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
             this.formController.Size = new System.Drawing.Size(572, 34);
-            this.formController.TabIndex = 7;
+            this.formController.TabIndex = 9;
+            this.formController.SetReadRights += new Ceritar.TT3LightDLL.Controls.ctlFormController.SetReadRightsEventHandler(this.formController_SetReadRights);
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
@@ -234,12 +251,12 @@
             this.groupBox2.Controls.Add(this.btnGrdSatDel);
             this.groupBox2.Controls.Add(this.btnGrdSatAdd);
             this.groupBox2.Controls.Add(this.grdSatApp);
-            this.groupBox2.Location = new System.Drawing.Point(6, 168);
+            this.groupBox2.Location = new System.Drawing.Point(6, 190);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox2.Size = new System.Drawing.Size(558, 333);
-            this.groupBox2.TabIndex = 5;
+            this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Liste des applications satellites";
             // 
@@ -301,10 +318,10 @@
             // 
             // chkGenRevNoScript
             // 
-            this.chkGenRevNoScript.Location = new System.Drawing.Point(82, 111);
+            this.chkGenRevNoScript.Location = new System.Drawing.Point(82, 137);
             this.chkGenRevNoScript.Name = "chkGenRevNoScript";
             this.chkGenRevNoScript.Size = new System.Drawing.Size(388, 20);
-            this.chkGenRevNoScript.TabIndex = 3;
+            this.chkGenRevNoScript.TabIndex = 5;
             this.chkGenRevNoScript.Text = "Auto. générer le script de changement de numéro de révision";
             this.chkGenRevNoScript.UseVisualStyleBackColor = true;
             this.chkGenRevNoScript.Click += new System.EventHandler(this.chkGenRevNoScript_Click);
@@ -313,19 +330,41 @@
             // 
             this.chkManageTTApp.Checked = true;
             this.chkManageTTApp.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkManageTTApp.Location = new System.Drawing.Point(82, 137);
+            this.chkManageTTApp.Location = new System.Drawing.Point(82, 163);
             this.chkManageTTApp.Name = "chkManageTTApp";
             this.chkManageTTApp.Size = new System.Drawing.Size(388, 20);
-            this.chkManageTTApp.TabIndex = 4;
+            this.chkManageTTApp.TabIndex = 6;
             this.chkManageTTApp.Text = "Les versions nécessitent un TTApp.mdb";
             this.chkManageTTApp.UseVisualStyleBackColor = true;
             this.chkManageTTApp.CheckedChanged += new System.EventHandler(this.chkTTAppNeeded_CheckedChanged);
+            // 
+            // cboMasterApp
+            // 
+            this.cboMasterApp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboMasterApp.FormattingEnabled = true;
+            this.cboMasterApp.Location = new System.Drawing.Point(82, 108);
+            this.cboMasterApp.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cboMasterApp.Name = "cboMasterApp";
+            this.cboMasterApp.Size = new System.Drawing.Size(339, 24);
+            this.cboMasterApp.TabIndex = 3;
+            this.cboMasterApp.SelectedIndexChanged += new System.EventHandler(this.cboMasterApp_SelectedIndexChanged);
+            // 
+            // label4
+            // 
+            this.label4.Location = new System.Drawing.Point(2, 111);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(100, 21);
+            this.label4.TabIndex = 17;
+            this.label4.Text = "App. maître:";
             // 
             // frmCeritarApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(568, 729);
+            this.ClientSize = new System.Drawing.Size(568, 751);
+            this.Controls.Add(this.chkMasterApp);
+            this.Controls.Add(this.cboMasterApp);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.chkManageTTApp);
             this.Controls.Add(this.chkGenRevNoScript);
             this.Controls.Add(this.groupBox2);
@@ -378,5 +417,8 @@
         private System.Windows.Forms.CheckBox chkReportAppExternal;
         private System.Windows.Forms.CheckBox chkGenRevNoScript;
         private System.Windows.Forms.CheckBox chkManageTTApp;
+        private System.Windows.Forms.ComboBox cboMasterApp;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.CheckBox chkMasterApp;
     }
 }

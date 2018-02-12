@@ -83,8 +83,10 @@ namespace Ceritar.Logirack_CVS.Forms
         private string mstrVariousFolderLocation;
         private int mintGrdClient_SelectedRow = 1;
         private int mintCreatedByUser_NRI;
+        private int mintCeritarApplication_NRI_Master;
         private string mstrLatestFilePathUsed = string.Empty;
         private string mstrLatestFolderPathUsed = string.Empty;
+        
         
 
         public frmVersion()
@@ -122,6 +124,11 @@ namespace Ceritar.Logirack_CVS.Forms
         int IVersion.GetCeritarApplication_NRI()
         {
             return (int)cboApplications.SelectedValue;
+        }
+
+        int IVersion.GetCeritarApplication_NRI_Master()
+        {
+            return mintCeritarApplication_NRI_Master;
         }
 
         string IVersion.GetCeritarApplication_Name()
@@ -475,6 +482,11 @@ namespace Ceritar.Logirack_CVS.Forms
                     chkDemoVersion.Checked = Convert.ToBoolean(sqlRecord["Ver_IsDemo"]);
 
                     mstrExternalReportAppName = sqlRecord["CeA_ExternalRPTAppName"].ToString();
+
+                    if (sqlRecord["CeA_NRI_Master"] != DBNull.Value)
+                        mintCeritarApplication_NRI_Master = Int32.Parse(sqlRecord["CeA_NRI_Master"].ToString());
+
+                    if (mintCeritarApplication_NRI_Master > 0) chkIncludeScripts.Enabled = false;
 
                     blnValidReturn = true;
                 }
@@ -1175,6 +1187,7 @@ namespace Ceritar.Logirack_CVS.Forms
                 sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrVersion.strGetTemplates_SQL(Int32.Parse(cboApplications.SelectedValue.ToString())), "Tpl_NRI", "Tpl_Name", false, ref cboTemplates);
 
                 mstrExternalReportAppName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + Int32.Parse(cboApplications.SelectedValue.ToString()).ToString());
+                Int32.TryParse(clsTTSQL.str_ADOSingleLookUp("CeA_NRI_Master", "CerApp", "CeA_NRI = " + Int32.Parse(cboApplications.SelectedValue.ToString()).ToString()), out mintCeritarApplication_NRI_Master);
 
                 grdClients.Cols[mintGrdClients_LocationReportExe_col].Visible = !string.IsNullOrEmpty(mstrExternalReportAppName);
             }
@@ -1300,7 +1313,6 @@ namespace Ceritar.Logirack_CVS.Forms
 
                     tab.TabPages[mintTab_Revision].Enabled = true;
 
-                    chkIncludeScripts.Enabled = true;
                     chkIncludeScripts.Checked = false;
                     //chkBaseKit.Enabled = false;
 
@@ -1419,6 +1431,7 @@ namespace Ceritar.Logirack_CVS.Forms
                 frmRevision frmVersion = new frmRevision();
 
                 frmVersion.mintVersion_NRI = formController.Item_NRI;
+                frmVersion.mintCeritarApplication_NRI_Master = mintCeritarApplication_NRI_Master;
                 frmVersion.formController.ShowForm(this, sclsConstants.DML_Mode.INSERT_MODE, ref intNewItem_NRI, false, true);
 
                 pfblnGrdRevisions_Load();
@@ -1775,7 +1788,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void btnShowRootFolder_Click(object sender, EventArgs e)
         {
-            string strRootFolder = mcCtrVersion.str_GetVersionFolderPath((int)cboTemplates.SelectedValue, txtVersionNo.Text);
+            string strRootFolder = CVS.Controllers.ctr_Version.str_GetVersionFolderPath((int)cboTemplates.SelectedValue, txtVersionNo.Text);
 
             try
             {
@@ -1801,7 +1814,17 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void btnShowDB_UpgradeScripts_Click(object sender, EventArgs e)
         {
-            string strRootFolder = Path.Combine(CVS.sclsAppConfigs.GetRoot_DB_UPGRADE_SCRIPTS, (cboApplications.SelectedIndex >= 0 ? cboApplications.GetItemText(cboApplications.SelectedItem) : string.Empty));
+            string strCerApplicationName;
+
+            if (mintCeritarApplication_NRI_Master > 0)
+            {
+                strCerApplicationName = clsTTSQL.str_ADOSingleLookUp("CeA_Name", "CerApp", "CeA_NRI = " + mintCeritarApplication_NRI_Master);
+            }
+            else
+            {
+                strCerApplicationName = (cboApplications.SelectedIndex >= 0 ? cboApplications.GetItemText(cboApplications.SelectedItem) : string.Empty);
+            }
+            string strRootFolder = Path.Combine(CVS.sclsAppConfigs.GetRoot_DB_UPGRADE_SCRIPTS, strCerApplicationName);
 
             try
             {

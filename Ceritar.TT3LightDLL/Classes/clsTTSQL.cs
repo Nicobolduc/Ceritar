@@ -3,6 +3,7 @@ using System.Collections;
 using System.Data.SqlClient;
 using Ceritar.TT3LightDLL.Classes;
 using Ceritar.TT3LightDLL.Static_Classes;
+using System.Configuration;
 
 namespace Ceritar.TT3LightDLL.Classes
 {
@@ -534,6 +535,8 @@ namespace Ceritar.TT3LightDLL.Classes
         {
             try
             {
+                string strDatabase = ConfigurationManager.AppSettings["Database"];
+                string strServer = @ConfigurationManager.AppSettings["Server"];
                 //OSQL -S BOLDUC-PC\SVR_SQL -E 
                 //sp_password NULL, '1234', 'sa' GO
                 //rcSQLConnection = new SqlConnection(@"Persist Security Info=true;
@@ -543,13 +546,9 @@ namespace Ceritar.TT3LightDLL.Classes
                 //                                      Data Source=SVR-SQL14;
                 //                                      MultipleActiveResultSets=True");
 
-                rcSQLConnection = new SqlConnection(@"Persist Security Info=true;
-                                                      User ID=sa;
-                                                      Password=*8059%Ce;
-                                                      Initial Catalog=Logirack_CVS;
-                                                      Data Source=localhost\SVR_SQL16;
-                                                      MultipleActiveResultSets=True");
+                rcSQLConnection = new SqlConnection(@"Persist Security Info=true;User ID=sa;Password=*8059%Ce;Initial Catalog=" + strDatabase + @";Data Source=" + strServer + ";MultipleActiveResultSets=True");
 
+                //rcSQLConnection = new SqlConnection(@"Persist Security Info=true;User ID=sa;Password=*8059%Ce;Initial Catalog=Logirack_CVS;Data Source=localhost\SVR_SQL16;MultipleActiveResultSets=True");
                 //                rcSQLConnection = new SqlConnection(@"Persist Security Info=False;
                 //                                                                        User ID=sa;
                 //                                                                        Password=1234;

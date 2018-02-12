@@ -48,7 +48,8 @@ namespace Ceritar.Logirack_CVS.Forms
         public int mintVersion_NRI;
 
         //Working Variables     
-        private int mstrCeritarApplication_NRI;
+        private int mintCeritarApplication_NRI;
+        public int mintCeritarApplication_NRI_Master;
         private string mstrCeritarApplication_Name;
         private string mstrCeritarApplication_RPT_Name;
         private string mstrVariousFileLocation;
@@ -166,7 +167,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
         int IRevision.GetCeritarApplication_NRI()
         {
-            return mstrCeritarApplication_NRI;
+            return mintCeritarApplication_NRI;
         }
 
         string IRevision.GetCeritarApplication_Name()
@@ -242,6 +243,11 @@ namespace Ceritar.Logirack_CVS.Forms
             return chkPreparation.Checked;
         }
 
+        bool IRevision.IsPreviousRevisionScriptsIncluded()
+        {
+            return !chkExcludePreviousRevScripts.Checked;
+        }
+
         #endregion
 
 
@@ -262,7 +268,7 @@ namespace Ceritar.Logirack_CVS.Forms
                     mintAttributedRevisionNo = SByte.Parse(txtRevisionNo.Text);
 
                     txtVersionNo.Text = sqlRecord["Ver_No"].ToString();
-                    mstrCeritarApplication_NRI = Int32.Parse(sqlRecord["CeA_NRI"].ToString());
+                    mintCeritarApplication_NRI = Int32.Parse(sqlRecord["CeA_NRI"].ToString());
                     mstrCeritarApplication_Name = sqlRecord["CeA_Name"].ToString();
                     mstrCeritarApplication_RPT_Name = sqlRecord["CeA_ExternalRPTAppName"].ToString();
 
@@ -289,6 +295,9 @@ namespace Ceritar.Logirack_CVS.Forms
 
                         chkPreparation.Checked = Convert.ToBoolean(sqlRecord["Rev_PreparationMode"].ToString());
                         chkPreparation.Enabled = chkPreparation.Checked;
+
+                        if (sqlRecord["CeA_NRI_Master"] != DBNull.Value)
+                            mintCeritarApplication_NRI_Master = Int32.Parse(sqlRecord["CeA_NRI_Master"].ToString());
 
                         if (optRptOnly.Checked)
                         {
@@ -854,7 +863,13 @@ namespace Ceritar.Logirack_CVS.Forms
                     btnSelectVariousFilePath.Enabled = false;
                     btnSelectVariousFolderPath.Enabled = false;
                     btnShowRootFolder.Enabled = false;
-                    btnExportRevision.Enabled = false;                                      
+                    btnExportRevision.Enabled = false;
+
+                    if (mintCeritarApplication_NRI_Master > 0)
+                    {
+                        gbScripts.Enabled = false;
+                        chkExcludePreviousRevScripts.Enabled = false;
+                    }
 
                     break;
 
@@ -867,6 +882,12 @@ namespace Ceritar.Logirack_CVS.Forms
                     btnSelectVariousFolderPath.Enabled = true;
                     btnShowRootFolder.Enabled = true;
                     btnExportRevision.Enabled = true;
+
+                    if (mintCeritarApplication_NRI_Master > 0)
+                    {
+                        gbScripts.Enabled = false;
+                        chkExcludePreviousRevScripts.Enabled = false;
+                    }
 
                     break;
             }
@@ -1101,7 +1122,7 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 gbExe.Enabled = true;
                 gbSatellites.Enabled = true;
-                gbScripts.Enabled = true;
+                if(mintCeritarApplication_NRI_Master==0) gbScripts.Enabled = true;
 
                 btnShowRootFolder.Enabled = true;
                 btnPrintPairValidation.Enabled = true;

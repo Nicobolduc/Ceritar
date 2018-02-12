@@ -247,6 +247,8 @@ namespace Ceritar.CVS.Controllers
                     {
                         if (cSRe.SatRevision_NRI == vintSRe_NRI)
                         {
+                            pfblnDeleteDirectory(strGetSatelliteFolderPathName(cSRe), true);
+
                             mcModRevision.LstSatelliteRevisions.Remove(cSRe);
 
                             break;
@@ -392,6 +394,20 @@ namespace Ceritar.CVS.Controllers
                             {
                                 blnValidReturn = pfblnDeleteRevisionHierarchy(strRevisionFolderRoot);
 
+                                if (blnValidReturn && mcModRevision.LstSatelliteRevisions.Count > 0)
+                                {
+                                    string strDestinationFolder = string.Empty;
+
+                                    for (int intIndex = 0; intIndex < mcModRevision.LstSatelliteRevisions.Count; intIndex++)
+                                    {
+                                        strDestinationFolder = strGetSatelliteFolderPathName(mcModRevision.LstSatelliteRevisions[intIndex]);
+
+                                        blnValidReturn = pfblnDeleteDirectory(strDestinationFolder, true);
+
+                                        if (!blnValidReturn) break;
+                                    }
+                                }
+
                                 return blnValidReturn;
                             }
 
@@ -494,7 +510,7 @@ namespace Ceritar.CVS.Controllers
                                 {
                                     strDestinationFolder = currentFolderInfos.Parent.FullName;
 
-                                    strDestinationFolder = Path.Combine(strDestinationFolder, mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExportFolderName + @" [" + mcModRevision.CeritarClient.CompanyName + @"]");
+                                    strDestinationFolder = Path.Combine(strDestinationFolder, mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExportFolderName + (mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExePerCustomer ? (@" [" + mcModRevision.CeritarClient.CompanyName + @"]") : ""));
 
                                     blnValidReturn = pfblnCopyAndSaveSatelliteLocation(mcModRevision.LstSatelliteRevisions[intIndex], strDestinationFolder, true);
 
@@ -756,12 +772,7 @@ namespace Ceritar.CVS.Controllers
 
                     for (int intIndex = 0; intIndex < mcModRevision.LstSatelliteRevisions.Count; intIndex++)
                     {
-                        strDestinationFolder = Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES,
-                                                               mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.Name,
-                                                               mcModRevision.CeritarClient.CompanyName,
-                                                               sclsAppConfigs.GetVersionNumberPrefix + mcModRevision.Version.VersionNo.ToString(),
-                                                               sclsAppConfigs.GetRevisionNumberPrefix + mcModRevision.Revision_Number.ToString()
-                                                              );
+                        strDestinationFolder = strGetSatelliteFolderPathName(mcModRevision.LstSatelliteRevisions[intIndex]);
 
                         blnValidReturn = pfblnCopyAndSaveSatelliteLocation(mcModRevision.LstSatelliteRevisions[intIndex], strDestinationFolder, false);
 
@@ -1165,7 +1176,7 @@ namespace Ceritar.CVS.Controllers
                     answer = System.Windows.Forms.DialogResult.Yes;
                 }
 
-                if (answer == System.Windows.Forms.DialogResult.Yes)
+                if (answer == System.Windows.Forms.DialogResult.Yes && Directory.Exists(vstrRevisionFolderPath))
                 {
                     Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(vstrRevisionFolderPath, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
                     //System.Diagnostics.Process process = new System.Diagnostics.Process();
@@ -1344,8 +1355,47 @@ namespace Ceritar.CVS.Controllers
                         }
                     }
 
-                    //Add all scripts folder to the zip archive.
+                    //Scripts management
                     strCurrentScriptFolderLocation = mcView.GetLocation_Scripts();
+
+                    //Add previous scripts folder for current client since last revision
+                    if (mcView.IsPreviousRevisionScriptsIncluded())
+                    {
+                        int intLastRevisionNo = 0;
+                        int intCurrentPreviousRevisionNo = 0;
+                        string strVersionFolderPath = string.Empty;
+                        string strLastRevisionFolderPath = string.Empty;
+                        string[] lstRevisions;
+
+                        intLastRevisionNo = Int32.Parse(clsTTSQL.str_ADOSingleLookUp("ISNULL(MAX(Rev_No), 0)", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Revision.CeC_NRI = " + mcView.GetCeritarClient_NRI() + " AND Revision.Rev_NRI <> " + mcView.GetRevision_NRI() + " GROUP BY Revision.Ver_NRI, Revision.CeC_NRI"));
+
+                        strVersionFolderPath = Controllers.ctr_Version.str_GetVersionFolderPath(Int32.Parse(clsTTSQL.str_ADOSingleLookUp("Tpl_NRI", "Version", "Ver_NRI = " + mcView.GetVersion_NRI())), mcView.GetVersionNo().ToString());
+
+                        lstRevisions = Directory.GetDirectories(strVersionFolderPath, sclsAppConfigs.GetRevisionNumberPrefix + "*", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToArray();
+
+                        foreach (string strRevisionPath in lstRevisions)
+                        {
+                            intCurrentPreviousRevisionNo = Int32.Parse(Regex.Replace(Path.GetFileName(strRevisionPath).Substring(0, Path.GetFileName(strRevisionPath).IndexOf(" ")).ToString(), "[^0-9.]", ""));
+
+                            if (intCurrentPreviousRevisionNo > 0 && intCurrentPreviousRevisionNo < mcView.GetRevisionNo() && intCurrentPreviousRevisionNo > intLastRevisionNo)
+                            {
+                                if (Directory.Exists(Path.Combine(strRevisionPath, sclsAppConfigs.GetScriptsFolderName)))
+                                {
+                                    foreach (string strCurrentFileToCopyPath in Directory.GetFiles(Path.Combine(strRevisionPath, sclsAppConfigs.GetScriptsFolderName), "*.sql", SearchOption.TopDirectoryOnly))
+                                    {
+                                        newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetScriptsFolderName, sclsAppConfigs.GetRevisionNumberPrefix + intCurrentPreviousRevisionNo, Path.GetFileName(strCurrentFileToCopyPath)));
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                //Continue, do nothing
+                            }
+                        }
+                    }
+
+                    //Add all current scripts folder to the zip archive.
+                    string strZipScriptsFolderPathName = (mcView.IsPreviousRevisionScriptsIncluded() ? Path.Combine(sclsAppConfigs.GetScriptsFolderName, sclsAppConfigs.GetRevisionNumberPrefix + mcView.GetRevisionNo()) : sclsAppConfigs.GetScriptsFolderName);
 
                     if (!string.IsNullOrEmpty(strCurrentScriptFolderLocation))
                     {
@@ -1353,12 +1403,12 @@ namespace Ceritar.CVS.Controllers
                         {
                             foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strCurrentScriptFolderLocation, "*.*", SearchOption.TopDirectoryOnly))
                             {
-                                newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetScriptsFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
+                                newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(strZipScriptsFolderPathName, Path.GetFileName(strCurrentFileToCopyPath)));
                             }
                         }
                         else
                         {
-                            newZipFile.CreateEntryFromFile(strCurrentScriptFolderLocation, Path.Combine(sclsAppConfigs.GetScriptsFolderName, Path.GetFileName(strCurrentScriptFolderLocation)), CompressionLevel.NoCompression);
+                            newZipFile.CreateEntryFromFile(strCurrentScriptFolderLocation, Path.Combine(strZipScriptsFolderPathName, Path.GetFileName(strCurrentScriptFolderLocation)), CompressionLevel.NoCompression);
                         }
 
                         //Copy all client's specific scripts at the end of the scripts folder
@@ -1377,7 +1427,7 @@ namespace Ceritar.CVS.Controllers
 
                                 strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
 
-                                newZipFile.CreateEntryFromFile(lstSpecificScripts[intIndex], Path.Combine(sclsAppConfigs.GetScriptsFolderName, strNewScriptName));
+                                newZipFile.CreateEntryFromFile(lstSpecificScripts[intIndex], Path.Combine(strZipScriptsFolderPathName, strNewScriptName));
 
                                 intNewScriptNumber++;
                             }
@@ -1443,6 +1493,20 @@ namespace Ceritar.CVS.Controllers
             }
 
             return scriptsList.ToString();
+        }
+
+        private string strGetSatelliteFolderPathName(mod_SRe_SatelliteRevision rcSRe)
+        {
+            string strDestinationFolder = string.Empty;
+
+            strDestinationFolder = Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES,
+                                                    rcSRe.CeritarSatelliteApp.Name,
+                                                    (rcSRe.CeritarSatelliteApp.ExePerCustomer ? mcModRevision.CeritarClient.CompanyName : ""),
+                                                    sclsAppConfigs.GetVersionNumberPrefix + mcModRevision.Version.VersionNo.ToString(),
+                                                    sclsAppConfigs.GetRevisionNumberPrefix + mcModRevision.Revision_Number.ToString()
+                                                    );
+
+            return strDestinationFolder;
         }
 
         public bool blnRevisionPathIsValid(int vintRev_NRI)
@@ -1600,6 +1664,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        CerApp.CeA_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_Name, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_ExternalRPTAppName, " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.CeA_NRI_Master, " + Environment.NewLine;
             strSQL = strSQL + "        CerClient.CeC_NRI " + Environment.NewLine;
             //strSQL = strSQL + "        CreatedByNom = TTUser.TTU_FirstName + ' ' + TTUser.TTU_LastName " + Environment.NewLine;
                 

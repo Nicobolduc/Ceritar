@@ -14,7 +14,8 @@ namespace Ceritar.CVS.Controllers.Interfaces
         int GetVersion_NRI();
         int GetVersion_TS();
         ushort GetVersionNo();
-        int GetCeritarApplication_NRI();       
+        int GetCeritarApplication_NRI();
+        int GetCeritarApplication_NRI_Master();
         int GetTemplateSource_NRI();
         int GetCreatedByUser_NRI();
         string GetCreationDate();

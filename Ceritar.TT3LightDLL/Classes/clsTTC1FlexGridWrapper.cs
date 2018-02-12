@@ -530,10 +530,10 @@ namespace Ceritar.TT3LightDLL.Classes
             return mGrdFlex.Rows.Count > 1 && mGrdFlex.Row > 0 && mfrmParent.GetFormController().FormMode != sclsConstants.DML_Mode.CONSULT_MODE && mfrmParent.GetFormController().FormMode != sclsConstants.DML_Mode.DELETE_MODE;
         }
 
-	    public void SetColType_CheckBox(int vintColumnIndex)
+	    public void SetColType_CheckBox(int vintColumnIndex, int vintColumnWidth = 20)
 	    {
 		    mGrdFlex.Cols[vintColumnIndex].DataType = typeof(bool);
-            mGrdFlex.Cols[vintColumnIndex].Width = 20;
+            mGrdFlex.Cols[vintColumnIndex].Width = vintColumnWidth;
             mGrdFlex.Cols[vintColumnIndex].Style.TextAlign = TextAlignEnum.CenterCenter;
 	    }
 

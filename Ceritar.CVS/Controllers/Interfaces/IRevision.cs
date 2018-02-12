@@ -33,6 +33,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         bool GetExeWithExternalReport();
         bool GetIfScriptsAreToAppend();
         bool IsPreparationMode();
+        bool IsPreviousRevisionScriptsIncluded();
         List<string> GetModificationsList();
         List<structSatRevision> GetRevisionSatelliteList();
     }

@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.IO.Compression;
-using System.Runtime.InteropServices;
 
 namespace Ceritar.TT3LightDLL.Classes
 {
