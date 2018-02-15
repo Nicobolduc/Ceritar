@@ -1647,7 +1647,7 @@ namespace Ceritar.CVS.Controllers
             string strSQL = string.Empty;
             string strNewRevisionNo = string.Empty;
 
-            strNewRevisionNo = clsTTSQL.str_ADOSingleLookUp("MAX(ISNULL(Revision.Rev_No, 0)) + 1", "Version LEFT JOIN Revision ON Revision.Ver_NRI = Version.Ver_NRI", "Revision.Rev_PreparationMode = 0 AND Version.Ver_NRI = " + vintVersion_NRI);
+            strNewRevisionNo = clsTTSQL.str_ADOSingleLookUp("MAX(ISNULL(Revision.Rev_No, 0)) + 1", "Version LEFT JOIN Revision ON Revision.Ver_NRI = Version.Ver_NRI", "(Revision.Rev_PreparationMode = 0 OR Revision.Rev_NRI IS NULL) AND Version.Ver_NRI = " + vintVersion_NRI);
             
             strSQL = strSQL + " SELECT Version.Ver_No, " + Environment.NewLine;
             strSQL = strSQL + "        Revision.Rev_TS, " + Environment.NewLine;
