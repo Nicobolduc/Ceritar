@@ -303,11 +303,12 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 case sclsGenList.GeneralLists_ID.VERSION_REVISION_LIST_NRI:
 
-                    grdList.AllowMerging = C1.Win.C1FlexGrid.AllowMergingEnum.Free;
-                    crMerged = grdList.GetCellRange(1, 2, grdList.Rows.Count - 1, 2);
+                    grdList.AllowMerging = C1.Win.C1FlexGrid.AllowMergingEnum.RestrictAll;
 
+                    grdList.Cols[1].AllowMerging = true;
                     grdList.Cols[2].AllowMerging = true;
-                    
+                    grdList.Cols[3].AllowMerging = true;
+
                     break;
 
                 case sclsGenList.GeneralLists_ID.TEMPLATE_LIST_NRI:
@@ -315,18 +316,16 @@ namespace Ceritar.Logirack_CVS.Forms
                     grdList.Cols[2].Width = 200;
 
                     grdList.AllowMerging = C1.Win.C1FlexGrid.AllowMergingEnum.RestrictAll;
-                    crMerged = grdList.GetCellRange(1, 2, grdList.Rows.Count - 1, 3);
 
                     grdList.Cols[1].AllowMerging = true;
                     grdList.Cols[2].AllowMerging = true;
-                    //grdList.Cols[3].AllowMerging = true;
 
                     break;
 
                 case sclsGenList.GeneralLists_ID.CERITAR_CLIENT_LIST_NRI:
 
-                    grdList.Cols[3].DataType = typeof(Boolean);
-                    
+                    grdList.Cols[3].DataType = typeof(Boolean);                
+
                     break;
             }
 

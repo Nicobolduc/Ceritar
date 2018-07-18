@@ -143,7 +143,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
         bool ICeritarApp.IsGeneratingRevisionNoScript()
         {
-            return (chkMasterApp.Checked ? false : chkGenRevNoScript.Checked);
+            return (!chkMasterApp.Checked ? false : chkGenRevNoScript.Checked);
         }
 
         bool ICeritarApp.IsManagingTTApp()
@@ -227,7 +227,10 @@ namespace Ceritar.Logirack_CVS.Forms
 
                         chkGenRevNoScript.Enabled = false;
                     }
-                        
+                    else
+                    {
+                        chkGenRevNoScript.Enabled = true;
+                    }
 
                     if (!string.IsNullOrEmpty(txtReportAppExternal.Text))
                     {
@@ -370,7 +373,12 @@ namespace Ceritar.Logirack_CVS.Forms
             }
             else
             {
-                //Do nothing
+                if (!chkMasterApp.Checked && cboMasterApp.SelectedIndex == -1)
+                {
+                    cboMasterApp.Focus();
+                    cboMasterApp.DroppedDown = true;
+                }
+                    
             }    
 
             eventArgs.IsValid = mcActionResults.IsValid;
@@ -536,7 +544,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
                 case (int)sclsConstants.DML_Mode.UPDATE_MODE:
 
-            
+                
 
                     break;
             }
@@ -547,6 +555,7 @@ namespace Ceritar.Logirack_CVS.Forms
             if (!formController.FormIsLoading)
             {
                 cboMasterApp.Enabled = !chkMasterApp.Checked;
+                chkGenRevNoScript.Enabled = chkMasterApp.Checked;
 
                 formController.ChangeMade = true;
             }

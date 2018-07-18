@@ -67,23 +67,24 @@ namespace Ceritar.CVS.Controllers
                 mcModRevision.CreatedBy = mcView.GetCreatedBy();
                 mcModRevision.LstModifications = mcView.GetModificationsList();
                 mcModRevision.Path_Release = mcView.GetLocation_Release();
-
-                mcModRevision.Version = new mod_Ver_Version();
-                mcModRevision.Version.CerApplication = new mod_CeA_CeritarApplication();
-                mcModRevision.Version.CerApplication.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
-                mcModRevision.Version.CerApplication.Name = mcView.GetCeritarApplication_Name();
-                mcModRevision.Version.CerApplication.ExternalReportAppName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + mcModRevision.Version.CerApplication.CeritarApplication_NRI);
-                mcModRevision.Version.CerApplication.AutoGenRevisionNoScript = bool.Parse(clsTTSQL.str_ADOSingleLookUp("CeA_AutoGenRevisionNoScript", "CerApp", "CeA_NRI = " + mcModRevision.Version.CerApplication.CeritarApplication_NRI));
-
-                if (!mcView.IsPreparationMode())
-                    mcModRevision.Path_Scripts = (string.IsNullOrEmpty(mcView.GetLocation_Scripts()) & mcModRevision.Version.CerApplication.AutoGenRevisionNoScript ? "placeHolder" : mcView.GetLocation_Scripts());
-
                 mcModRevision.Revision_NRI = mcView.GetRevision_NRI();
                 mcModRevision.Revision_TS = mcView.GetRevision_TS();
                 mcModRevision.ExeIsExternalReport = mcView.GetExeIsExternalReport();
                 mcModRevision.ExeWithExternalReport = mcView.GetExeWithExternalReport();
                 mcModRevision.PreparationMode = mcView.IsPreparationMode();
                 mcModRevision.Note = mcView.GetNote();
+
+                mcModRevision.Version = new mod_Ver_Version();
+                mcModRevision.Version.CerApplication = new mod_CeA_CeritarApplication();
+                mcModRevision.Version.CerApplication.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
+                mcModRevision.Version.CerApplication.Name = mcView.GetCeritarApplication_Name();
+                mcModRevision.Version.CerApplication.ExternalReportAppName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + mcModRevision.Version.CerApplication.CeritarApplication_NRI);
+                if (!string.IsNullOrEmpty(mcModRevision.Path_Release) && !mcModRevision.ExeIsExternalReport) mcModRevision.Version.CerApplication.AutoGenRevisionNoScript = bool.Parse(clsTTSQL.str_ADOSingleLookUp("CeA_AutoGenRevisionNoScript", "CerApp", "CeA_NRI = " + mcModRevision.Version.CerApplication.CeritarApplication_NRI));
+
+                if (!mcView.IsPreparationMode())
+                    mcModRevision.Path_Scripts = (string.IsNullOrEmpty(mcView.GetLocation_Scripts()) & mcModRevision.Version.CerApplication.AutoGenRevisionNoScript ? "placeHolder" : mcView.GetLocation_Scripts());
+
+               
 
                 mcModRevision.CeritarClient = new Models.Module_Configuration.mod_CeC_CeritarClient();
                 mcModRevision.CeritarClient.CeritarClient_NRI = mcView.GetCeritarClient_NRI();

@@ -83,6 +83,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.chkExcludePreviousRevScripts = new System.Windows.Forms.CheckBox();
+            this.mnuRevModif = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuCopyLines = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -92,6 +94,7 @@
             this.gbScripts.SuspendLayout();
             this.gbExe.SuspendLayout();
             this.groupBox6.SuspendLayout();
+            this.mnuRevModif.SuspendLayout();
             this.SuspendLayout();
             // 
             // dtpCreation
@@ -163,6 +166,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grdRevModifs.AutoSearch = C1.Win.C1FlexGrid.AutoSearchEnum.FromTop;
             this.grdRevModifs.ColumnInfo = resources.GetString("grdRevModifs.ColumnInfo");
+            this.grdRevModifs.ContextMenuStrip = this.mnuRevModif;
             this.grdRevModifs.ExtendLastCol = true;
             this.grdRevModifs.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grdRevModifs.Location = new System.Drawing.Point(7, 22);
@@ -579,7 +583,8 @@
             this.gbScripts.Size = new System.Drawing.Size(966, 102);
             this.gbScripts.TabIndex = 3;
             this.gbScripts.TabStop = false;
-            this.gbScripts.Text = "Scripts";
+            this.gbScripts.Text = "Scripts *** Si spécifique pour client, inclure dans un sous dossier avec le NOM E" +
+    "XACT du client (Même si dossier racine vide)) ***";
             // 
             // txtScriptsPath
             // 
@@ -718,6 +723,20 @@
             this.chkExcludePreviousRevScripts.Text = "Export: Exclure scripts revisions précédentes";
             this.chkExcludePreviousRevScripts.UseVisualStyleBackColor = true;
             // 
+            // mnuRevModif
+            // 
+            this.mnuRevModif.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuCopyLines});
+            this.mnuRevModif.Name = "mnuRevModif";
+            this.mnuRevModif.Size = new System.Drawing.Size(224, 48);
+            // 
+            // mnuCopyLines
+            // 
+            this.mnuCopyLines.Name = "mnuCopyLines";
+            this.mnuCopyLines.Size = new System.Drawing.Size(223, 22);
+            this.mnuCopyLines.Text = "Copier à partir de cette ligne";
+            this.mnuCopyLines.Click += new System.EventHandler(this.mnuCopyLines_Click);
+            // 
             // frmRevision
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -755,6 +774,7 @@
             this.gbExe.ResumeLayout(false);
             this.gbExe.PerformLayout();
             this.groupBox6.ResumeLayout(false);
+            this.mnuRevModif.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -814,5 +834,7 @@
         private System.Windows.Forms.Button btnPrintPairValidation;
         private System.Windows.Forms.CheckBox chkPreparation;
         private System.Windows.Forms.CheckBox chkExcludePreviousRevScripts;
+        private System.Windows.Forms.ContextMenuStrip mnuRevModif;
+        private System.Windows.Forms.ToolStripMenuItem mnuCopyLines;
     }
 }

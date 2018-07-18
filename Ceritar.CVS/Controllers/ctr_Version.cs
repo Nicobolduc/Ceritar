@@ -1153,10 +1153,11 @@ namespace Ceritar.CVS.Controllers
                                 newZipFile.CreateEntryFromFile(strSatelliteExeLocation, Path.Combine(structSat.strKitFolderName, Path.GetFileName(strSatelliteExeLocation)));
                             }
                         }
-                    }          
+                    }
 
                     //Add all scripts folder to the zip archive.
-                    string[] lstScriptsFoldersPath = Directory.GetDirectories(strCurrentScriptFolderLocation);
+                    string[] lstScriptsFoldersPath = new string[0];
+                    if (!string.IsNullOrEmpty(strCurrentScriptFolderLocation)) lstScriptsFoldersPath = Directory.GetDirectories(strCurrentScriptFolderLocation);
 
                     foreach (string strCurrentScriptsFolder in lstScriptsFoldersPath)
                     {
@@ -1173,7 +1174,7 @@ namespace Ceritar.CVS.Controllers
                     {
                         foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strRevAllScripts_Location, "*.*", SearchOption.TopDirectoryOnly))
                         {
-                            newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetScriptsFolderName, sclsAppConfigs.GetRevisionAllScriptFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
+                            newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine( sclsAppConfigs.GetRevisionAllScriptFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
                         }   
                     }
                 }

@@ -89,6 +89,7 @@ namespace Ceritar.Logirack_CVS.Static_Classes
                         strSQL = strGetList_Versions_SQL();
                         
                         frmGenList.Tag = 47;
+                        frmGenList.Item_ID_col = 4;
 
                         strListGenTitle += clsTTApp.GetAppController.str_GetCaption((int)frmGenList.Tag, clsTTApp.GetAppController.cUser.UserLanguage);
 
@@ -197,12 +198,16 @@ namespace Ceritar.Logirack_CVS.Static_Classes
 
             strDefaultApplication = clsTTSQL.str_ADOSingleLookUp("CeA_NRI_Default", "TTUser", "TTU_NRI = " + clsTTApp.GetAppController.cUser.User_NRI);
 
-            strSQL = strSQL + " SELECT Version.Ver_NRI, " + Environment.NewLine;
+            strSQL = strSQL + " SELECT 0 AS PlaceHolder, " + Environment.NewLine;
+            strSQL = strSQL + "        AppDomain.ApD_Code, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_Name, " + Environment.NewLine;
+            strSQL = strSQL + "        Version.Ver_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        Version.Ver_No " + Environment.NewLine;
 
             strSQL = strSQL + " FROM Version " + Environment.NewLine;
-            strSQL = strSQL + "     INNER JOIN CerApp ON CerApp.CeA_NRI = Version.CeA_NRI " + Environment.NewLine;
+            strSQL = strSQL + "     INNER JOIN CerApp " + Environment.NewLine;
+            strSQL = strSQL + "         INNER JOIN AppDomain ON AppDomain.ApD_NRI = CerApp.ApD_NRI " + Environment.NewLine;
+            strSQL = strSQL + "     ON CerApp.CeA_NRI = Version.CeA_NRI " + Environment.NewLine;
             //strSQL = strSQL + "     LEFT JOIN ClientAppVersion ON ClientAppVersion.Ver_NRI = Version.Ver_NRI AND ClientAppVersion.CeA_NRI = Version.CeA_NRI " + Environment.NewLine;
 
             if (vstrWhere != string.Empty)

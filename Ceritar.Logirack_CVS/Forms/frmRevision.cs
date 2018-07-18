@@ -68,12 +68,13 @@ namespace Ceritar.Logirack_CVS.Forms
 
             mcGrdSatellites = new clsTTC1FlexGridWrapper();
             mcGrdSatellites.SetGridDisplay += mcGrdSatellites_SetGridDisplay;
+            mcGrdRevModifs.AfterClickAdd += mcGrdRevModifs_AfterClickAdd;
 
             dtpCreation.Value = DateTime.Now;
         }
+       
 
-
-#region "Interfaces functions"
+        #region "Interfaces functions"
 
         string IRevision.GetCompiledBy()
         {
@@ -753,6 +754,11 @@ namespace Ceritar.Logirack_CVS.Forms
             }
         }
 
+        private void mcGrdRevModifs_AfterClickAdd()
+        {
+            grdRevModifs.StartEditing(grdRevModifs.Row, mintGrdRevMod_RevM_ChangeDesc_col);
+        }
+
         void mcGrdSatellites_SetGridDisplay()
         {
             grdSatellites.Cols[mintGrdSat_CSA_Name_col].Width = 250;
@@ -1129,6 +1135,24 @@ namespace Ceritar.Logirack_CVS.Forms
                 btnExportRevision.Enabled = true;
 
                 txtRevisionNo.Text = mintAttributedRevisionNo.ToString();
+            }
+        }
+
+        private void mnuCopyLines_Click(object sender, EventArgs e)
+        {
+            if (grdRevModifs.Row > 0)
+            {
+                string strToCopy = string.Empty;
+
+                for (int intRowIndex = grdRevModifs.Row; intRowIndex < grdRevModifs.Rows.Count; intRowIndex++)
+                {
+                    strToCopy += mcGrdRevModifs[intRowIndex, mintGrdRevMod_RevM_ChangeDesc_col];
+
+                    if (intRowIndex != grdRevModifs.Rows.Count-1) strToCopy += Environment.NewLine;
+                }
+
+                Clipboard.Clear();
+                Clipboard.SetText(strToCopy);
             }
         }
     }
