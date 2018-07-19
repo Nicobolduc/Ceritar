@@ -8,7 +8,7 @@ namespace Ceritar.CVS
 {
     /// <summary>
     /// Cette classe retourne les résultats d'un traitement (validation, sauvegarde ou autre) effectué dans les modèles ou les controleurs.
-    /// C'est une classe publique qui permet de communiquer de façoon générique avec n'importe quel objets externes à la DLL sans exposer les modèles.
+    /// C'est une classe publique qui permet de communiquer de façoon générique avec n'importe quel objets externes à la DLL sans exposer les modèles..
     /// </summary>
     public class clsActionResults
     {
