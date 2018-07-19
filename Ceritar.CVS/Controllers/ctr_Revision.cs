@@ -505,15 +505,15 @@ namespace Ceritar.CVS.Controllers
                             //Gestion des applications satellites. On les copie ici au même niveau que le Release
                             if (blnValidReturn && mcModRevision.LstSatelliteRevisions.Count > 0)
                             {
-                                string strDestinationFolder = string.Empty;
-
+                                string strNewDestinationFolder = string.Empty;
+                               
                                 for (int intIndex = 0; intIndex < mcModRevision.LstSatelliteRevisions.Count; intIndex++)
                                 {
-                                    strDestinationFolder = currentFolderInfos.Parent.FullName;
+                                    strNewDestinationFolder = currentFolderInfos.Parent.FullName;
+                                                                        
+                                    strNewDestinationFolder = Path.Combine(strNewDestinationFolder, mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExportFolderName + (mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExePerCustomer ? (@" [" + mcModRevision.CeritarClient.CompanyName + @"]") : ""));
 
-                                    strDestinationFolder = Path.Combine(strDestinationFolder, mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExportFolderName + (mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExePerCustomer ? (@" [" + mcModRevision.CeritarClient.CompanyName + @"]") : ""));
-
-                                    blnValidReturn = pfblnCopyAndSaveSatelliteLocation(mcModRevision.LstSatelliteRevisions[intIndex], strDestinationFolder, true);
+                                    blnValidReturn = pfblnCopyAndSaveSatelliteLocation(mcModRevision.LstSatelliteRevisions[intIndex], strNewDestinationFolder, true);
 
                                     if (!blnValidReturn) break;
                                 }
@@ -1044,15 +1044,44 @@ namespace Ceritar.CVS.Controllers
         private bool pfblnCopyAndSaveSatelliteLocation(mod_SRe_SatelliteRevision rcSatRevision, string vstrDestinationFolder, bool vblnSaveLocationToDB = false)
         {
             bool blnValidReturn = true;
+            bool blnOldFolderExists = false;
+            string strOldFolderPath = string.Empty; ;
             DirectoryInfo currentFolderInfos = null;
 
             try
             {
-                if (File.Exists(rcSatRevision.Location_Exe) || Directory.Exists(rcSatRevision.Location_Exe))
+                strOldFolderPath = Path.Combine(Directory.GetParent(vstrDestinationFolder).FullName, new DirectoryInfo(rcSatRevision.Location_Exe).Name);
+                
+                if (strOldFolderPath != vstrDestinationFolder && rcSatRevision.Location_Exe != string.Empty)
+                {
+                    if (!File.Exists(rcSatRevision.Location_Exe) && !Directory.Exists(rcSatRevision.Location_Exe) && (Directory.Exists(strOldFolderPath) || File.Exists(strOldFolderPath)))
+                    {
+                        blnOldFolderExists = true;
+                    }
+
+                    if (rcSatRevision.CeritarSatelliteApp.ExeIsFolder &&
+                        blnOldFolderExists)
+                    {
+                        Directory.Move(strOldFolderPath, vstrDestinationFolder);
+                    }
+                    else if (blnOldFolderExists)
+                    {
+                        File.Move(strOldFolderPath, vstrDestinationFolder);
+                    }
+                }
+
+                if ((File.Exists(rcSatRevision.Location_Exe) || Directory.Exists(rcSatRevision.Location_Exe)) && rcSatRevision.Location_Exe != vstrDestinationFolder)
                 {
                     currentFolderInfos = new DirectoryInfo(vstrDestinationFolder);
 
-                    if (!Directory.Exists(currentFolderInfos.FullName)) currentFolderInfos.Create();
+                    if (Directory.Exists(currentFolderInfos.FullName))
+                    {
+                        blnValidReturn = pfblnDeleteDirectory(currentFolderInfos.FullName, vblnSaveLocationToDB, false);
+
+                        if (!blnValidReturn) return false; //On sort et interrompt la sauvegarde
+
+                        currentFolderInfos.Create();
+                    }
 
                     if ((File.GetAttributes(rcSatRevision.Location_Exe) & FileAttributes.Directory) == FileAttributes.Directory) //Executable is a folder
                     {
@@ -1078,23 +1107,44 @@ namespace Ceritar.CVS.Controllers
                     rcSatRevision.Location_Exe = vstrDestinationFolder;
                 }
 
-                if (vblnSaveLocationToDB)
+                if (blnValidReturn && vblnSaveLocationToDB)
                 {
-                    rcSatRevision.SetcSQL = (mcSQL == null ? new clsTTSQL() : mcSQL);
-                    rcSatRevision.DML_Action = rcSatRevision.SatRevision_NRI == 0 ? sclsConstants.DML_Mode.INSERT_MODE : sclsConstants.DML_Mode.UPDATE_MODE;
-
-                    blnValidReturn = rcSatRevision.blnSave(); //Pour update le chemin ou la sauvegarde est faite
-
-                    if (!blnValidReturn)
-                    {
-                        mcActionResult = mcModRevision.ActionResults;
-                    }
+                    blnValidReturn = pfblnUpdateSatelliteLocationToDB(rcSatRevision);
                 }
             }
             catch (FileNotFoundException exPath)
             {
                 blnValidReturn = false;
                 mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exPath.FileName);
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                if (blnValidReturn) mcActionResult.SetValid();
+            }
+
+            return blnValidReturn;
+        }
+
+        private bool pfblnUpdateSatelliteLocationToDB(mod_SRe_SatelliteRevision rcSatRevision)
+        {
+            bool blnValidReturn = true;
+
+            try
+            {
+                rcSatRevision.SetcSQL = (mcSQL == null ? new clsTTSQL() : mcSQL);
+                rcSatRevision.DML_Action = rcSatRevision.SatRevision_NRI == 0 ? sclsConstants.DML_Mode.INSERT_MODE : sclsConstants.DML_Mode.UPDATE_MODE;
+
+                blnValidReturn = rcSatRevision.blnSave(); //Pour update le chemin ou la sauvegarde est faite
+
+                if (!blnValidReturn)
+                {
+                    mcActionResult = mcModRevision.ActionResults;
+                }
             }
             catch (Exception ex)
             {
@@ -1161,7 +1211,7 @@ namespace Ceritar.CVS.Controllers
         /// </summary>
         /// <param name="vstrRevisionFolderPath">Le chemin du répertoire à supprimer</param>
         /// <returns></returns>
-        private bool pfblnDeleteDirectory(string vstrRevisionFolderPath, bool vblnAskBefore = false)
+        private bool pfblnDeleteDirectory(string vstrRevisionFolderPath, bool vblnAskBefore = false, bool vbnlReturnTrueIfAnsweredNo = true)
         {
             bool blnValidReturn = false;
             System.Windows.Forms.DialogResult answer;
@@ -1195,7 +1245,7 @@ namespace Ceritar.CVS.Controllers
                 }
                 else
                 {
-                    blnValidReturn = true;
+                    blnValidReturn = vbnlReturnTrueIfAnsweredNo;
                 }
             }
             catch (Exception ex)
@@ -1345,9 +1395,16 @@ namespace Ceritar.CVS.Controllers
 
                         if (structSat.blnExeIsFolder && Directory.Exists(strLocationSatelliteExe))
                         {
-                            foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strLocationSatelliteExe, "*.*", SearchOption.AllDirectories))
+                            //Ajoute les fichiers seuls
+                            foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strLocationSatelliteExe, "*.*", SearchOption.TopDirectoryOnly))
                             {
                                 newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(structSat.strExportFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
+                            }
+
+                            //Réplique les structures de répertoire
+                            foreach (string strCurrentFileToCopyPath in Directory.GetDirectories(strLocationSatelliteExe, "*.*", SearchOption.TopDirectoryOnly))
+                            {
+                                blnValidReturn = clsTTApp.GetAppController.blnAddDirectoryStructureToZipFile(newZipFile, strCurrentFileToCopyPath, structSat.strExportFolderName);
                             }
                         }
                         else if (File.Exists(strLocationSatelliteExe))

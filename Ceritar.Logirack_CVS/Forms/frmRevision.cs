@@ -757,6 +757,8 @@ namespace Ceritar.Logirack_CVS.Forms
         private void mcGrdRevModifs_AfterClickAdd()
         {
             grdRevModifs.StartEditing(grdRevModifs.Row, mintGrdRevMod_RevM_ChangeDesc_col);
+
+            formController.ChangeMade = true;
         }
 
         void mcGrdSatellites_SetGridDisplay()
