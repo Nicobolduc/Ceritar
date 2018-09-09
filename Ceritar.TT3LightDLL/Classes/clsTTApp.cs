@@ -55,7 +55,15 @@ namespace Ceritar.TT3LightDLL.Classes
 
         public SqlConnection SQLConnection
         {
-            get { return mcSQLConnection; }
+            get
+            {
+                if (mcSQLConnection is null || mcSQLConnection.State == System.Data.ConnectionState.Closed)
+                {
+                    clsTTSQL.OpenSQLServerConnection(ref mcSQLConnection);
+                }
+
+                return mcSQLConnection;
+            }
         }
 
         public clsTTUser cUser

@@ -306,7 +306,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 {
                     case sclsConstants.DML_Mode.INSERT_MODE:
 
-                        if (!_blnIsDemo && (string.IsNullOrEmpty(_strLocation_APP_CHANGEMENT) || !File.Exists(_strLocation_APP_CHANGEMENT)))
+                        if (!_blnIsDemo && _cCerApplication.CeritarApplication_NRI_Master == 0 && (string.IsNullOrEmpty(_strLocation_APP_CHANGEMENT) || !File.Exists(_strLocation_APP_CHANGEMENT)))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY);
                         }
@@ -345,7 +345,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                     case sclsConstants.DML_Mode.UPDATE_MODE:
 
-                        if (!_blnIsDemo && (string.IsNullOrEmpty(_strLocation_APP_CHANGEMENT) || !File.Exists(_strLocation_APP_CHANGEMENT)))
+                        if (!_blnIsDemo && _cCerApplication.CeritarApplication_NRI_Master == 0 && (string.IsNullOrEmpty(_strLocation_APP_CHANGEMENT) || !File.Exists(_strLocation_APP_CHANGEMENT)))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Version.ErrorCode_Ver.APP_CHANGEMENT_MANDATORY);
                         }

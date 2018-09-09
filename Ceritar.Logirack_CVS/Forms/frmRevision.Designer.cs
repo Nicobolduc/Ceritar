@@ -36,6 +36,8 @@
             this.btnGrdRevDel = new System.Windows.Forms.Button();
             this.btnGrdRevAdd = new System.Windows.Forms.Button();
             this.grdRevModifs = new C1.Win.C1FlexGrid.C1FlexGrid();
+            this.mnuRevModif = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuCopyLines = new System.Windows.Forms.ToolStripMenuItem();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.chkPreparation = new System.Windows.Forms.CheckBox();
@@ -83,10 +85,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.chkExcludePreviousRevScripts = new System.Windows.Forms.CheckBox();
-            this.mnuRevModif = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.mnuCopyLines = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
+            this.mnuRevModif.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.gbSatellites.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdSatellites)).BeginInit();
@@ -94,7 +95,6 @@
             this.gbScripts.SuspendLayout();
             this.gbExe.SuspendLayout();
             this.groupBox6.SuspendLayout();
-            this.mnuRevModif.SuspendLayout();
             this.SuspendLayout();
             // 
             // dtpCreation
@@ -181,6 +181,20 @@
             this.grdRevModifs.Tag = "28";
             this.grdRevModifs.DoubleClick += new System.EventHandler(this.grdRevModifs_DoubleClick);
             // 
+            // mnuRevModif
+            // 
+            this.mnuRevModif.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuCopyLines});
+            this.mnuRevModif.Name = "mnuRevModif";
+            this.mnuRevModif.Size = new System.Drawing.Size(224, 26);
+            // 
+            // mnuCopyLines
+            // 
+            this.mnuCopyLines.Name = "mnuCopyLines";
+            this.mnuCopyLines.Size = new System.Drawing.Size(223, 22);
+            this.mnuCopyLines.Text = "Copier à partir de cette ligne";
+            this.mnuCopyLines.Click += new System.EventHandler(this.mnuCopyLines_Click);
+            // 
             // label2
             // 
             this.label2.Location = new System.Drawing.Point(3, 56);
@@ -230,7 +244,7 @@
             // 
             this.txtNote.Location = new System.Drawing.Point(79, 121);
             this.txtNote.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.txtNote.MaxLength = 65;
+            this.txtNote.MaxLength = 256;
             this.txtNote.Multiline = true;
             this.txtNote.Name = "txtNote";
             this.txtNote.Size = new System.Drawing.Size(537, 38);
@@ -723,20 +737,6 @@
             this.chkExcludePreviousRevScripts.Text = "Export: Exclure scripts revisions précédentes";
             this.chkExcludePreviousRevScripts.UseVisualStyleBackColor = true;
             // 
-            // mnuRevModif
-            // 
-            this.mnuRevModif.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuCopyLines});
-            this.mnuRevModif.Name = "mnuRevModif";
-            this.mnuRevModif.Size = new System.Drawing.Size(224, 48);
-            // 
-            // mnuCopyLines
-            // 
-            this.mnuCopyLines.Name = "mnuCopyLines";
-            this.mnuCopyLines.Size = new System.Drawing.Size(223, 22);
-            this.mnuCopyLines.Text = "Copier à partir de cette ligne";
-            this.mnuCopyLines.Click += new System.EventHandler(this.mnuCopyLines_Click);
-            // 
             // frmRevision
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -764,6 +764,7 @@
             this.Text = "Gestion de révision";
             this.groupBox3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).EndInit();
+            this.mnuRevModif.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.gbSatellites.ResumeLayout(false);
@@ -774,7 +775,6 @@
             this.gbExe.ResumeLayout(false);
             this.gbExe.PerformLayout();
             this.groupBox6.ResumeLayout(false);
-            this.mnuRevModif.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

@@ -302,7 +302,7 @@
             this.btnGrdRevDel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnGrdRevDel.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevDel.Image")));
-            this.btnGrdRevDel.Location = new System.Drawing.Point(1030, 127);
+            this.btnGrdRevDel.Location = new System.Drawing.Point(1039, 127);
             this.btnGrdRevDel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGrdRevDel.Name = "btnGrdRevDel";
             this.btnGrdRevDel.Size = new System.Drawing.Size(41, 43);
@@ -316,7 +316,7 @@
             this.btnGrdRevAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnGrdRevAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevAdd.Image")));
-            this.btnGrdRevAdd.Location = new System.Drawing.Point(1030, 26);
+            this.btnGrdRevAdd.Location = new System.Drawing.Point(1039, 26);
             this.btnGrdRevAdd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGrdRevAdd.Name = "btnGrdRevAdd";
             this.btnGrdRevAdd.Size = new System.Drawing.Size(41, 43);
@@ -358,7 +358,7 @@
             this.btnGrdRevUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevUpdate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnGrdRevUpdate.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevUpdate.Image")));
-            this.btnGrdRevUpdate.Location = new System.Drawing.Point(1030, 76);
+            this.btnGrdRevUpdate.Location = new System.Drawing.Point(1039, 76);
             this.btnGrdRevUpdate.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGrdRevUpdate.Name = "btnGrdRevUpdate";
             this.btnGrdRevUpdate.Size = new System.Drawing.Size(41, 43);
@@ -573,19 +573,17 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.btnRefresh);
             this.groupBox3.Controls.Add(this.btnGrdRevUpdate);
             this.groupBox3.Controls.Add(this.btnGrdRevDel);
             this.groupBox3.Controls.Add(this.btnGrdRevAdd);
             this.groupBox3.Controls.Add(this.grdRevisions);
-            this.groupBox3.Location = new System.Drawing.Point(7, 6);
+            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox3.Location = new System.Drawing.Point(3, 4);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox3.Size = new System.Drawing.Size(1079, 553);
+            this.groupBox3.Size = new System.Drawing.Size(1088, 573);
             this.groupBox3.TabIndex = 15;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Liste des révisions";
@@ -593,7 +591,7 @@
             // btnRefresh
             // 
             this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRefresh.Location = new System.Drawing.Point(1030, 503);
+            this.btnRefresh.Location = new System.Drawing.Point(1039, 523);
             this.btnRefresh.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(41, 43);
@@ -617,7 +615,7 @@
             this.grdRevisions.Rows.DefaultSize = 18;
             this.grdRevisions.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
             this.grdRevisions.ShowSort = false;
-            this.grdRevisions.Size = new System.Drawing.Size(1015, 519);
+            this.grdRevisions.Size = new System.Drawing.Size(1024, 541);
             this.grdRevisions.StyleInfo = resources.GetString("grdRevisions.StyleInfo");
             this.grdRevisions.TabIndex = 14;
             this.grdRevisions.Tag = "20";

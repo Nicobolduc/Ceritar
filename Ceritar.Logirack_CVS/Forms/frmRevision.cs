@@ -884,7 +884,7 @@ namespace Ceritar.Logirack_CVS.Forms
                 case (int)sclsConstants.DML_Mode.UPDATE_MODE:
 
                     cboTemplates.Enabled = false;
-                    cboClients.Enabled = false;
+                    if (!chkPreparation.Checked) cboClients.Enabled = false;
                     txtCreatedBy.ReadOnly = true;
                     btnSelectVariousFilePath.Enabled = true;
                     btnSelectVariousFolderPath.Enabled = true;
