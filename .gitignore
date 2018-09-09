@@ -5,6 +5,7 @@
 *.suo
 *.user
 *.sln.docstates
+*.dtbcache
 
 # Build results
 
@@ -52,7 +53,6 @@ ipch/
 *.ncb
 *.opensdf
 *.sdf
-*.cachefile
 
 # Visual Studio profiler
 *.psess
@@ -156,3 +156,4 @@ $RECYCLE.BIN/
 .DS_Store
 /.vs/Ceritar/v15/Server/sqlite3
 /.vs/Ceritar/DesignTimeBuild/.dtbcache
+/Ceritar.Logirack_CVS/App.config
