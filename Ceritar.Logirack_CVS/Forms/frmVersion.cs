@@ -626,7 +626,7 @@ namespace Ceritar.Logirack_CVS.Forms
             }         
         }
 
-        private void ShowFolderBrowserDialog(ref TextBox rtxtAffected, string vstrDialogDescription = "")
+        private void ShowFolderBrowserDialog(ref TextBox rtxtAffected, Button rbtnSource, string vstrDialogDescription = "")
         {
             DialogResult dialogResult;
 
@@ -637,7 +637,7 @@ namespace Ceritar.Logirack_CVS.Forms
                     folderBrowserDialog.ShowNewFolderButton = false;
                     folderBrowserDialog.Description = vstrDialogDescription;
 
-                    if (!string.IsNullOrEmpty(rtxtAffected.Text))
+                    if (rbtnSource.BackColor == System.Drawing.Color.Yellow && !string.IsNullOrEmpty(rtxtAffected.Text)) //Disabled, c/'est fatiguant et inutile maintenant qu'on a le right click pour ouvrir l'explorer
                     {
                         folderBrowserDialog.SelectedPath = rtxtAffected.Text;
                     }
@@ -706,7 +706,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
             try
             {
-                ShowFolderBrowserDialog(ref txtTemp, "Sélectionnez l'emplacement où sauvegarder l'archive.");
+                ShowFolderBrowserDialog(ref txtTemp, btnExportInstallationKit, "Sélectionnez l'emplacement où sauvegarder l'archive.");
 
                 intSelectedRow = grdClients.Row; //FindRow(true, 1, mintGrdClients_Selection_col, false);
 
@@ -1088,7 +1088,7 @@ namespace Ceritar.Logirack_CVS.Forms
         {
             string strPreviousLocation = txtReleasePath.Text;
 
-            ShowFolderBrowserDialog(ref txtReleasePath);
+            ShowFolderBrowserDialog(ref txtReleasePath, btnReplaceExecutable);
 
             if (!strPreviousLocation.Equals(txtReleasePath.Text)) btnGenerate_Blink(true);
         }
@@ -1531,7 +1531,7 @@ namespace Ceritar.Logirack_CVS.Forms
                 strPreviousLocation = mcGrdSatelliteApps[grdSatellite.Row, mintGrdSat_CSV_LocationExe_col];
                 txtTemp.Text = mcGrdSatelliteApps[grdSatellite.Row, mintGrdSat_CSV_LocationExe_col];
 
-                ShowFolderBrowserDialog(ref txtTemp);
+                ShowFolderBrowserDialog(ref txtTemp, (Button)sender);
 
                 if (!string.IsNullOrEmpty(txtTemp.Text))
                 {
@@ -1759,7 +1759,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
             txtPlaceHolder.Text = mstrVariousFolderLocation;
 
-            ShowFolderBrowserDialog(ref txtPlaceHolder);
+            ShowFolderBrowserDialog(ref txtPlaceHolder, btnSelectVariousFolderPath);
 
             mstrVariousFolderLocation = txtPlaceHolder.Text;
 

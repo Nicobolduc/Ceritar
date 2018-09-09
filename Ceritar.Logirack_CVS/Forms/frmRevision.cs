@@ -405,7 +405,7 @@ namespace Ceritar.Logirack_CVS.Forms
             return blnValidReturn;
         }
 
-        private void ShowFolderBrowserDialog(ref TextBox txtAffected, string vstrDialogDescription = "", bool vblnChangeMade = true)
+        private void ShowFolderBrowserDialog(ref TextBox txtAffected, Button rbtnSource, string vstrDialogDescription = "", bool vblnChangeMade = true)
         {
             DialogResult dialogResult;
 
@@ -414,7 +414,7 @@ namespace Ceritar.Logirack_CVS.Forms
                 folderBrowserDialog.ShowNewFolderButton = false;
                 folderBrowserDialog.Description = vstrDialogDescription;
 
-                if (!string.IsNullOrEmpty(txtAffected.Text))
+                if (rbtnSource.BackColor == Color.Yellow && !string.IsNullOrEmpty(txtAffected.Text)) //Disabled, c/'est fatiguant et inutile maintenant qu'on a le right click pour ouvrir l'explorer
                 {
                     folderBrowserDialog.SelectedPath = txtAffected.Text;
                 }
@@ -544,7 +544,7 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 txtTemp.Text = mcGrdSatellites[grdSatellites.Row, mintGrdSat_CSA_ExeLocation_col];
 
-                ShowFolderBrowserDialog(ref txtTemp);
+                ShowFolderBrowserDialog(ref txtTemp, ((Button)sender));
 
                 if (!string.IsNullOrEmpty(txtTemp.Text))
                 {
@@ -579,7 +579,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
             try
             {
-                ShowFolderBrowserDialog(ref txtTemp, "Sélectionnez l'emplacement où sauvegarder l'archive.", false);
+                ShowFolderBrowserDialog(ref txtTemp, btnExportRevision, "Sélectionnez l'emplacement où sauvegarder l'archive.", false);
 
                 if (!string.IsNullOrEmpty(txtTemp.Text))
                 {
@@ -800,12 +800,12 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void btnSelectScriptsFolderPath_Click(object sender, EventArgs e)
         {
-            ShowFolderBrowserDialog(ref txtScriptsPath);
+            ShowFolderBrowserDialog(ref txtScriptsPath, btnSelectScriptsFolderPath);
         }
 
         private void btnSelectExecutableFolderPath_Click(object sender, EventArgs e)
         {
-            ShowFolderBrowserDialog(ref txtReleasePath);
+            ShowFolderBrowserDialog(ref txtReleasePath, btnSelectExecutableFolderPath);
         }
 
         private void btnSelectScriptsFilePath_Click(object sender, EventArgs e)
@@ -999,7 +999,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
             txtPlaceHolder.Text = mstrVariousFolderLocation;
 
-            ShowFolderBrowserDialog(ref txtPlaceHolder);
+            ShowFolderBrowserDialog(ref txtPlaceHolder, btnSelectVariousFolderPath);
 
             mstrVariousFolderLocation = txtPlaceHolder.Text;
 

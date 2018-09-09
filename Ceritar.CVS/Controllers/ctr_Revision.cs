@@ -1434,7 +1434,7 @@ namespace Ceritar.CVS.Controllers
                     strCurrentScriptFolderLocation = mcView.GetLocation_Scripts();
 
                     //Add previous scripts folder for current client since last revision
-                    if (mcView.IsPreviousRevisionScriptsIncluded())
+                    if (mcView.IsPreviousRevisionScriptsIncluded() & mcView.GetRevisionNo() > 1)
                     {
                         int intLastRevisionNo = 0;
                         int intCurrentPreviousRevisionNo = 0;
@@ -1442,7 +1442,7 @@ namespace Ceritar.CVS.Controllers
                         string strLastRevisionFolderPath = string.Empty;
                         string[] lstRevisions;
 
-                        intLastRevisionNo = Int32.Parse(clsTTSQL.str_ADOSingleLookUp("ISNULL(MAX(Rev_No), 0)", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Revision.CeC_NRI = " + mcView.GetCeritarClient_NRI() + " AND Revision.Rev_NRI <> " + mcView.GetRevision_NRI() + " GROUP BY Revision.Ver_NRI, Revision.CeC_NRI"));
+                        Int32.TryParse(clsTTSQL.str_ADOSingleLookUp("ISNULL(MAX(Rev_No), 0)", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Revision.CeC_NRI = " + mcView.GetCeritarClient_NRI() + " AND Revision.Rev_NRI <> " + mcView.GetRevision_NRI() + " GROUP BY Revision.Ver_NRI, Revision.CeC_NRI"), out intLastRevisionNo);
 
                         strVersionFolderPath = Controllers.ctr_Version.str_GetVersionFolderPath(Int32.Parse(clsTTSQL.str_ADOSingleLookUp("Tpl_NRI", "Version", "Ver_NRI = " + mcView.GetVersion_NRI())), mcView.GetVersionNo().ToString());
 
