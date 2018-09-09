@@ -282,8 +282,6 @@ namespace Ceritar.Logirack_CVS.Forms
 
         void mcGrdList_SetGridDisplay()
         {
-            C1.Win.C1FlexGrid.CellRange crMerged;
-
             foreach (C1.Win.C1FlexGrid.Column cCol in grdList.Cols)
             {
                 if (cCol.IsVisible && cCol.Index > 1)

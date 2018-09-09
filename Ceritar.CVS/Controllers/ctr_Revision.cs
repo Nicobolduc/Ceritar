@@ -107,6 +107,7 @@ namespace Ceritar.CVS.Controllers
                     cSRe.DML_Action = structSRe.Action;
                     cSRe.SatRevision_NRI = structSRe.intSatRevision_NRI;
                     cSRe.Location_Exe = structSRe.strLocationSatelliteExe;
+                    cSRe.DelaySave_Location_Exe = true;
                     cSRe.ClientSatVersion_NRI = structSRe.intClientSatVersion_NRI;
 
                     cSRe.Revision = new mod_Rev_Revision();
@@ -1044,33 +1045,48 @@ namespace Ceritar.CVS.Controllers
         private bool pfblnCopyAndSaveSatelliteLocation(mod_SRe_SatelliteRevision rcSatRevision, string vstrDestinationFolder, bool vblnSaveLocationToDB = false)
         {
             bool blnValidReturn = true;
-            bool blnOldFolderExists = false;
-            string strOldFolderPath = string.Empty; ;
+            string strOldFolderPath = string.Empty;
+            string strOldFolderPathInDB = string.Empty;
             DirectoryInfo currentFolderInfos = null;
 
             try
             {
-                strOldFolderPath = Path.Combine(Directory.GetParent(vstrDestinationFolder).FullName, new DirectoryInfo(rcSatRevision.Location_Exe).Name);
-                
-                if (strOldFolderPath != vstrDestinationFolder && rcSatRevision.Location_Exe != string.Empty)
+                //En premier, on valide si le dossier de destination est différent de l'ancien.
+                //S'il est différent, il faut déterminer si l'ancien existe afin de le déplacer dans le nouveau.
+                //Ensuite, au besoin, les fichiers du Nouveau dossier (contenant potentiellement l'ancien release déplacé) seront supprimés et remplacés par les nouveaux sélectionnés
+                if (vblnSaveLocationToDB)
                 {
-                    if (!File.Exists(rcSatRevision.Location_Exe) && !Directory.Exists(rcSatRevision.Location_Exe) && (Directory.Exists(strOldFolderPath) || File.Exists(strOldFolderPath)))
+                    if (rcSatRevision.CeritarSatelliteApp.ExeIsFolder)
                     {
-                        blnOldFolderExists = true;
+                        //On prend vstrDestinationFolder).fullName, car le répertoire racine à déjà été changé physiquement, mais on veut l'ancien nom du sous dossier
+                        strOldFolderPath = Path.Combine(Directory.GetParent(vstrDestinationFolder).FullName, new DirectoryInfo(rcSatRevision.Location_Exe).Name);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            strOldFolderPath = mcSQL.str_ADOSingleLookUp_Trans("SRe_Exe_Location", "SatRevision", "SRe_NRI = " + rcSatRevision.SatRevision_NRI);
+                            strOldFolderPath = Path.Combine(Directory.GetParent(vstrDestinationFolder).FullName, new DirectoryInfo(strOldFolderPath).Parent.Name);
+                        }
+                        catch (Exception ex)
+                        {
+                            strOldFolderPath = string.Empty;
+                        }
+                        
+                        if (strOldFolderPath == string.Empty) strOldFolderPath = Path.Combine(new DirectoryInfo(vstrDestinationFolder).FullName);
                     }
 
-                    if (rcSatRevision.CeritarSatelliteApp.ExeIsFolder &&
-                        blnOldFolderExists)
+                    if (rcSatRevision.Location_Exe != string.Empty && strOldFolderPath != string.Empty && strOldFolderPath != vstrDestinationFolder)
                     {
-                        Directory.Move(strOldFolderPath, vstrDestinationFolder);
+                        if (Directory.Exists(strOldFolderPath) || File.Exists(strOldFolderPath))
+                        {
+                            Directory.Move(strOldFolderPath, vstrDestinationFolder);
+                        }
                     }
-                    else if (blnOldFolderExists)
-                    {
-                        File.Move(strOldFolderPath, vstrDestinationFolder);
-                    }
-                }
+                }      
+               
 
-                if ((File.Exists(rcSatRevision.Location_Exe) || Directory.Exists(rcSatRevision.Location_Exe)) && rcSatRevision.Location_Exe != vstrDestinationFolder)
+                if ((File.Exists(rcSatRevision.Location_Exe) || Directory.Exists(rcSatRevision.Location_Exe)) && (strOldFolderPath != vstrDestinationFolder || rcSatRevision.Location_Exe != strOldFolderPath))
                 {
                     currentFolderInfos = new DirectoryInfo(vstrDestinationFolder);
 
@@ -1079,9 +1095,9 @@ namespace Ceritar.CVS.Controllers
                         blnValidReturn = pfblnDeleteDirectory(currentFolderInfos.FullName, vblnSaveLocationToDB, false);
 
                         if (!blnValidReturn) return false; //On sort et interrompt la sauvegarde
-
-                        currentFolderInfos.Create();
                     }
+
+                    currentFolderInfos.Create();
 
                     if ((File.GetAttributes(rcSatRevision.Location_Exe) & FileAttributes.Directory) == FileAttributes.Directory) //Executable is a folder
                     {
@@ -1138,6 +1154,7 @@ namespace Ceritar.CVS.Controllers
             {
                 rcSatRevision.SetcSQL = (mcSQL == null ? new clsTTSQL() : mcSQL);
                 rcSatRevision.DML_Action = rcSatRevision.SatRevision_NRI == 0 ? sclsConstants.DML_Mode.INSERT_MODE : sclsConstants.DML_Mode.UPDATE_MODE;
+                rcSatRevision.DelaySave_Location_Exe = false;
 
                 blnValidReturn = rcSatRevision.blnSave(); //Pour update le chemin ou la sauvegarde est faite
 

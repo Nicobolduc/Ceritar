@@ -24,6 +24,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private sclsConstants.DML_Mode mintDML_Action;
         private clsTTSQL mcSQL;
 
+        //Working variables
+        private bool mblnDelaySave_Location_Exe;
 
 #region "Properties"
 
@@ -73,7 +75,13 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             get { return mcActionResults; }
         }
 
-#endregion
+        internal bool DelaySave_Location_Exe
+        {
+            get { return mblnDelaySave_Location_Exe; }
+            set { mblnDelaySave_Location_Exe = value; }
+        }
+
+        #endregion
 
 
         internal clsActionResults Validate()
@@ -212,11 +220,16 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 { }
                 else if (!mcSQL.bln_AddField("CSV_NRI", _intClientSatVersion_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
-                else if (!mcSQL.bln_AddField("SRe_Exe_Location", _strLocation_Exe, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
-                { }
                 else
                 {
-                    blnValidReturn = true;
+                    if (!DelaySave_Location_Exe)
+                    {
+                        blnValidReturn = mcSQL.bln_AddField("SRe_Exe_Location", _strLocation_Exe, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE);
+                    }
+                    else
+                    {
+                        blnValidReturn = true;
+                    }
                 }
             }
             catch (Exception ex)
