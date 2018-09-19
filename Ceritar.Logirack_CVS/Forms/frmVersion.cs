@@ -382,6 +382,8 @@ namespace Ceritar.Logirack_CVS.Forms
 
             try
             {
+                Cursor.Current = Cursors.WaitCursor;
+
                 grdRevisions.BeginUpdate();
 
                 blnValidReturn = mcGrdRevisions.bln_FillData(mcCtrVersion.strGetListe_Revisions_SQL(formController.Item_NRI));

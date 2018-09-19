@@ -1518,7 +1518,7 @@ namespace Ceritar.CVS.Controllers
                                 strNewScriptName = Path.GetFileName(lstSpecificScripts[intIndex]);
                                 strNewScriptName = strNewScriptName.Substring(strNewScriptName.IndexOf("_") + 1);
 
-                                intNewScriptNumber = (intNewScriptNumber == 0 ? Directory.GetFiles(strCurrentScriptFolderLocation).Length : intNewScriptNumber);
+                                intNewScriptNumber = (intNewScriptNumber == 0 ? Directory.GetFiles(strCurrentScriptFolderLocation).Length + 1 : intNewScriptNumber);
 
                                 strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
 
@@ -1639,7 +1639,7 @@ namespace Ceritar.CVS.Controllers
                 strSQL = strSQL + " WHERE Revision.Rev_NRI = " + vintRev_NRI + Environment.NewLine;
                 strSQL = strSQL + "   AND Revision.Rev_PreparationMode = 0 " + Environment.NewLine;
 
-                strSQL = strSQL + " --ORDER BY Ver_NRI, Rev_No ASC " + Environment.NewLine;
+                strSQL = strSQL + " ORDER BY CASE WHEN CerSatApp.CSA_Name IS NULL THEN 0 ELSE 1 END, CerSatApp.CSA_Name " + Environment.NewLine;
 
                 sqlRecord = clsTTSQL.ADOSelect(strSQL);
               
