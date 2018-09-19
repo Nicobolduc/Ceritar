@@ -461,6 +461,11 @@ namespace Ceritar.CVS.Controllers
                 blnValidReturn = false;
                 mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exPath.FileName);
             }
+            catch (System.IO.IOException exUA)
+            {
+                blnValidReturn = false;
+                mcActionResult.SetInvalid(sclsConstants.Validation_Message.PATH_ACCESS_DENIED, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exUA.Message);
+            }
             catch (Exception ex)
             {
                 blnValidReturn = false;
@@ -669,6 +674,11 @@ namespace Ceritar.CVS.Controllers
                 blnValidReturn = false;
                 mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exDir.TargetSite.Name);
             }
+            catch (System.IO.IOException exUA)
+            {
+                blnValidReturn = false;
+                mcActionResult.SetInvalid(sclsConstants.Validation_Message.PATH_ACCESS_DENIED, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exUA.Message);
+            }
             catch (Exception ex)
             {
                 blnValidReturn = false;
@@ -795,6 +805,11 @@ namespace Ceritar.CVS.Controllers
                 blnValidReturn = false;
                 mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exPath.FileName);
             }
+            catch (System.IO.IOException exUA)
+            {
+                blnValidReturn = false;
+                mcActionResult.SetInvalid(sclsConstants.Validation_Message.PATH_ACCESS_DENIED, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exUA.Message);
+            }
             catch (Exception ex)
             {
                 blnValidReturn = false;
@@ -880,6 +895,11 @@ namespace Ceritar.CVS.Controllers
 
                     blnValidReturn = mcActionResult.IsValid;
                 }      
+            }
+            catch (System.IO.IOException exUA)
+            {
+                blnValidReturn = false;
+                mcActionResult.SetInvalid(sclsConstants.Validation_Message.PATH_ACCESS_DENIED, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exUA.Message);
             }
             catch (Exception ex)
             {
@@ -1186,6 +1206,11 @@ namespace Ceritar.CVS.Controllers
                 blnValidReturn = false;
                 mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exPath.FileName);
             }
+            catch (System.IO.IOException exUA)
+            {
+                blnValidReturn = false;
+                mcActionResult.SetInvalid(sclsConstants.Validation_Message.PATH_ACCESS_DENIED, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exUA.Message);
+            }
             catch (Exception ex)
             {
                 blnValidReturn = false;
@@ -1276,6 +1301,11 @@ namespace Ceritar.CVS.Controllers
             {
                 blnValidReturn = false;
                 mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exPath.FileName);
+            }
+            catch (System.IO.IOException exUA)
+            {
+                blnValidReturn = false;
+                mcActionResult.SetInvalid(sclsConstants.Validation_Message.PATH_ACCESS_DENIED, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exUA.Message);
             }
             catch (Exception ex)
             {
@@ -1563,7 +1593,7 @@ namespace Ceritar.CVS.Controllers
 
             strSQL = strSQL + " WHERE Revision.Ver_NRI = " + vintVersion_NRI + Environment.NewLine;
 
-            strSQL = strSQL + " ORDER BY Revision.Rev_PreparationMode ASC, Revision.Rev_No " + Environment.NewLine;
+            strSQL = strSQL + " ORDER BY Revision.Rev_PreparationMode DESC, Revision.Rev_No DESC " + Environment.NewLine;
 
             return strSQL;
         }

@@ -36,7 +36,8 @@ namespace Ceritar.TT3LightDLL.Static_Classes
             INVALID_REFERENCE_INTEGRITY = 7,
             INVALID_TIMESTAMP = 10,
             INVALID_PATH = 17,
-            INVALID_ACTION_IF_CHANGE_MADE = 23
+            INVALID_ACTION_IF_CHANGE_MADE = 23,
+            PATH_ACCESS_DENIED = 57
         }
     }
 }

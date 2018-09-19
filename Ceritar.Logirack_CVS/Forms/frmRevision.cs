@@ -714,7 +714,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
                 if (!mcActionResults.IsValid)
                 {
-                    clsTTApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI);
+                    clsTTApp.GetAppController.ShowMessage(mcActionResults.GetErrorMessage_NRI, MessageBoxButtons.OK, mcActionResults.GetLstParams);
                 }
                 else if (formController.FormMode != sclsConstants.DML_Mode.INSERT_MODE)
                 {

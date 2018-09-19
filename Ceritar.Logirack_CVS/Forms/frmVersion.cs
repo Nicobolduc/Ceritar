@@ -391,7 +391,7 @@ namespace Ceritar.Logirack_CVS.Forms
                     btnGrdRevDel.Enabled = true;
                     btnGrdRevUpdate.Enabled = mcGrdClients.bln_RowEditIsValid();
 
-                    grdRevisions.Row = grdRevisions.Rows.Count - 1;
+                    grdRevisions.Row = 1;
    
                     grdRevisions.Cols[mintGrdRev_Rev_IsValid_col].ImageAlign = ImageAlignEnum.CenterTop;
 

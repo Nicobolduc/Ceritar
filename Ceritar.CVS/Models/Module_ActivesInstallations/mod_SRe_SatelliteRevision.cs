@@ -268,6 +268,11 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             }
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         public bool Equals(mod_SRe_SatelliteRevision other)
         {
             if (other == null) return false;

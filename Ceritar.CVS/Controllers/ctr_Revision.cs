@@ -21,7 +21,6 @@ namespace Ceritar.CVS.Controllers
     {
         private Interfaces.IRevision mcView;
         private mod_Rev_Revision mcModRevision;
-        private clsActionResults mcActionResult;
         private clsTTSQL mcSQL;
 
         //Messages
@@ -47,8 +46,11 @@ namespace Ceritar.CVS.Controllers
             mcModRevision = new mod_Rev_Revision();
             
             mcView = rView;
+        }
 
-            mcActionResult = new clsActionResults();
+        internal clsActionResults mcActionResult
+        {
+            get { return mcModRevision.ActionResults; }
         }
 
         private bool pfblnFeedModelWithView()
@@ -145,7 +147,7 @@ namespace Ceritar.CVS.Controllers
 
                 if (blnValidReturn)
                 {
-                    mcActionResult = mcModRevision.Validate();
+                    mcModRevision.Validate();
                 }
             }
             catch (Exception ex)
@@ -183,8 +185,6 @@ namespace Ceritar.CVS.Controllers
                     }
 
                     intSuccessMessage = mcActionResult.SuccessMessage_NRI;
-
-                    mcActionResult = mcModRevision.ActionResults;
 
                     mcActionResult.SuccessMessage_NRI = intSuccessMessage;
                 }
@@ -280,6 +280,11 @@ namespace Ceritar.CVS.Controllers
             catch (System.OperationCanceledException)
             {
                 blnValidReturn = false;
+            }
+            catch (System.IO.IOException exUA)
+            {
+                blnValidReturn = false;
+                mcActionResult.SetInvalid(sclsConstants.Validation_Message.PATH_ACCESS_DENIED, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exUA.Message);
             }
             catch (Exception ex)
             {
@@ -787,6 +792,11 @@ namespace Ceritar.CVS.Controllers
                 blnValidReturn = false;
                 mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exPath.FileName);
             }
+            catch (System.IO.IOException exUA)
+            {
+                blnValidReturn = false;
+                mcActionResult.SetInvalid(sclsConstants.Validation_Message.PATH_ACCESS_DENIED, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exUA.Message);
+            }
             catch (Exception ex)
             {
                 blnValidReturn = false;
@@ -1068,7 +1078,7 @@ namespace Ceritar.CVS.Controllers
                             strOldFolderPath = mcSQL.str_ADOSingleLookUp_Trans("SRe_Exe_Location", "SatRevision", "SRe_NRI = " + rcSatRevision.SatRevision_NRI);
                             strOldFolderPath = Path.Combine(Directory.GetParent(vstrDestinationFolder).FullName, new DirectoryInfo(strOldFolderPath).Parent.Name);
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             strOldFolderPath = string.Empty;
                         }
@@ -1133,6 +1143,11 @@ namespace Ceritar.CVS.Controllers
                 blnValidReturn = false;
                 mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exPath.FileName);
             }
+            catch (System.IO.IOException exUA)
+            {
+                blnValidReturn = false;
+                mcActionResult.SetInvalid(sclsConstants.Validation_Message.PATH_ACCESS_DENIED, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exUA.Message);
+            }
             catch (Exception ex)
             {
                 blnValidReturn = false;
@@ -1157,11 +1172,6 @@ namespace Ceritar.CVS.Controllers
                 rcSatRevision.DelaySave_Location_Exe = false;
 
                 blnValidReturn = rcSatRevision.blnSave(); //Pour update le chemin ou la sauvegarde est faite
-
-                if (!blnValidReturn)
-                {
-                    mcActionResult = mcModRevision.ActionResults;
-                }
             }
             catch (Exception ex)
             {
@@ -1214,6 +1224,11 @@ namespace Ceritar.CVS.Controllers
                     blnValidReturn = true;
                 }  
             }
+            catch (System.IO.IOException exUA)
+            {
+                blnValidReturn = false;
+                mcActionResult.SetInvalid(sclsConstants.Validation_Message.PATH_ACCESS_DENIED, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exUA.Message);
+            }
             catch (Exception ex)
             {
                 blnValidReturn = false;
@@ -1264,6 +1279,11 @@ namespace Ceritar.CVS.Controllers
                 {
                     blnValidReturn = vbnlReturnTrueIfAnsweredNo;
                 }
+            }
+            catch (System.IO.IOException exUA)
+            {
+                blnValidReturn = false;
+                mcActionResult.SetInvalid(sclsConstants.Validation_Message.PATH_ACCESS_DENIED, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exUA.Message);
             }
             catch (Exception ex)
             {
@@ -1516,6 +1536,11 @@ namespace Ceritar.CVS.Controllers
             {
                 blnValidReturn = false;
                 mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exPath.FileName);
+            }
+            catch (System.IO.IOException exUA)
+            {
+                blnValidReturn = false;
+                mcActionResult.SetInvalid(sclsConstants.Validation_Message.PATH_ACCESS_DENIED, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exUA.Message);
             }
             catch (Exception ex)
             {
