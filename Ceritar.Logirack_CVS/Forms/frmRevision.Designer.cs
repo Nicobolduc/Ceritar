@@ -85,6 +85,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.chkExcludePreviousRevScripts = new System.Windows.Forms.CheckBox();
+            this.chkIncludePreviousRevScripts = new System.Windows.Forms.GroupBox();
+            this.txtRevisionIncluses = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.mnuRevModif.SuspendLayout();
@@ -95,6 +98,7 @@
             this.gbScripts.SuspendLayout();
             this.gbExe.SuspendLayout();
             this.groupBox6.SuspendLayout();
+            this.chkIncludePreviousRevScripts.SuspendLayout();
             this.SuspendLayout();
             // 
             // dtpCreation
@@ -134,7 +138,7 @@
             this.groupBox3.Size = new System.Drawing.Size(966, 256);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Livrables couverts / Modifications incluses";
+            this.groupBox3.Text = "Livrables couverts / Modifications incluses (Shift click pour multi-ligne)";
             // 
             // btnGrdRevDel
             // 
@@ -350,7 +354,7 @@
             this.btnExportRevision.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExportRevision.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnExportRevision.Image = ((System.Drawing.Image)(resources.GetObject("btnExportRevision.Image")));
-            this.btnExportRevision.Location = new System.Drawing.Point(922, 673);
+            this.btnExportRevision.Location = new System.Drawing.Point(280, 13);
             this.btnExportRevision.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnExportRevision.Name = "btnExportRevision";
             this.btnExportRevision.Size = new System.Drawing.Size(47, 49);
@@ -470,10 +474,10 @@
             this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGenerate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGenerate.BackgroundImage")));
             this.btnGenerate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnGenerate.Location = new System.Drawing.Point(864, 673);
+            this.btnGenerate.Location = new System.Drawing.Point(864, 68);
             this.btnGenerate.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGenerate.Name = "btnGenerate";
-            this.btnGenerate.Size = new System.Drawing.Size(47, 49);
+            this.btnGenerate.Size = new System.Drawing.Size(28, 31);
             this.btnGenerate.TabIndex = 7;
             this.toolTips.SetToolTip(this.btnGenerate, "Mettre à jour la version");
             this.btnGenerate.UseVisualStyleBackColor = true;
@@ -485,7 +489,7 @@
             this.btnShowRootFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowRootFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnShowRootFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnShowRootFolder.Image")));
-            this.btnShowRootFolder.Location = new System.Drawing.Point(808, 673);
+            this.btnShowRootFolder.Location = new System.Drawing.Point(925, 673);
             this.btnShowRootFolder.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowRootFolder.Name = "btnShowRootFolder";
             this.btnShowRootFolder.Size = new System.Drawing.Size(47, 49);
@@ -497,6 +501,8 @@
             // chkAddScripts
             // 
             this.chkAddScripts.AutoSize = true;
+            this.chkAddScripts.Checked = true;
+            this.chkAddScripts.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAddScripts.Location = new System.Drawing.Point(10, 73);
             this.chkAddScripts.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.chkAddScripts.Name = "chkAddScripts";
@@ -511,7 +517,7 @@
             // 
             this.btnPrintPairValidation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPrintPairValidation.Image = ((System.Drawing.Image)(resources.GetObject("btnPrintPairValidation.Image")));
-            this.btnPrintPairValidation.Location = new System.Drawing.Point(728, 673);
+            this.btnPrintPairValidation.Location = new System.Drawing.Point(843, 673);
             this.btnPrintPairValidation.Name = "btnPrintPairValidation";
             this.btnPrintPairValidation.Size = new System.Drawing.Size(47, 49);
             this.btnPrintPairValidation.TabIndex = 5;
@@ -619,6 +625,7 @@
             this.gbExe.Controls.Add(this.optExeAndRpt);
             this.gbExe.Controls.Add(this.btnSelectExecutableFilePath);
             this.gbExe.Controls.Add(this.btnSelectExecutableFolderPath);
+            this.gbExe.Controls.Add(this.btnGenerate);
             this.gbExe.Controls.Add(this.txtReleasePath);
             this.gbExe.Controls.Add(this.btnShowExecutableFolder);
             this.gbExe.Controls.Add(this.optRptOnly);
@@ -730,30 +737,62 @@
             // 
             // chkExcludePreviousRevScripts
             // 
-            this.chkExcludePreviousRevScripts.Location = new System.Drawing.Point(431, 673);
+            this.chkExcludePreviousRevScripts.Checked = true;
+            this.chkExcludePreviousRevScripts.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkExcludePreviousRevScripts.Location = new System.Drawing.Point(6, 18);
             this.chkExcludePreviousRevScripts.Name = "chkExcludePreviousRevScripts";
-            this.chkExcludePreviousRevScripts.Size = new System.Drawing.Size(304, 20);
+            this.chkExcludePreviousRevScripts.Size = new System.Drawing.Size(270, 18);
             this.chkExcludePreviousRevScripts.TabIndex = 10;
-            this.chkExcludePreviousRevScripts.Text = "Export: Exclure scripts revisions précédentes";
+            this.chkExcludePreviousRevScripts.Text = "Exclure scripts revisions précédentes";
             this.chkExcludePreviousRevScripts.UseVisualStyleBackColor = true;
+            this.chkExcludePreviousRevScripts.CheckedChanged += new System.EventHandler(this.chkExcludePreviousRevScripts_CheckedChanged);
+            // 
+            // chkIncludePreviousRevScripts
+            // 
+            this.chkIncludePreviousRevScripts.Controls.Add(this.txtRevisionIncluses);
+            this.chkIncludePreviousRevScripts.Controls.Add(this.label10);
+            this.chkIncludePreviousRevScripts.Controls.Add(this.btnExportRevision);
+            this.chkIncludePreviousRevScripts.Controls.Add(this.chkExcludePreviousRevScripts);
+            this.chkIncludePreviousRevScripts.Location = new System.Drawing.Point(373, 662);
+            this.chkIncludePreviousRevScripts.Name = "chkIncludePreviousRevScripts";
+            this.chkIncludePreviousRevScripts.Size = new System.Drawing.Size(333, 68);
+            this.chkIncludePreviousRevScripts.TabIndex = 10;
+            this.chkIncludePreviousRevScripts.TabStop = false;
+            this.chkIncludePreviousRevScripts.Text = "    Export vers fichier Zip";
+            // 
+            // txtRevisionIncluses
+            // 
+            this.txtRevisionIncluses.Enabled = false;
+            this.txtRevisionIncluses.Location = new System.Drawing.Point(129, 38);
+            this.txtRevisionIncluses.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtRevisionIncluses.Name = "txtRevisionIncluses";
+            this.txtRevisionIncluses.Size = new System.Drawing.Size(146, 22);
+            this.txtRevisionIncluses.TabIndex = 76;
+            this.txtRevisionIncluses.Validating += new System.ComponentModel.CancelEventHandler(this.txtRevisionIncluses_Validating);
+            // 
+            // label10
+            // 
+            this.label10.Location = new System.Drawing.Point(3, 41);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(135, 17);
+            this.label10.TabIndex = 75;
+            this.label10.Text = "Révisions à inclures:";
             // 
             // frmRevision
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(976, 770);
+            this.Controls.Add(this.chkIncludePreviousRevScripts);
             this.Controls.Add(this.btnPrintPairValidation);
             this.Controls.Add(this.btnShowRootFolder);
-            this.Controls.Add(this.btnGenerate);
             this.Controls.Add(this.gbExe);
             this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.gbScripts);
-            this.Controls.Add(this.btnExportRevision);
             this.Controls.Add(this.gbSatellites);
             this.Controls.Add(this.formController);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.chkExcludePreviousRevScripts);
             this.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -775,6 +814,8 @@
             this.gbExe.ResumeLayout(false);
             this.gbExe.PerformLayout();
             this.groupBox6.ResumeLayout(false);
+            this.chkIncludePreviousRevScripts.ResumeLayout(false);
+            this.chkIncludePreviousRevScripts.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -836,5 +877,8 @@
         private System.Windows.Forms.CheckBox chkExcludePreviousRevScripts;
         private System.Windows.Forms.ContextMenuStrip mnuRevModif;
         private System.Windows.Forms.ToolStripMenuItem mnuCopyLines;
+        private System.Windows.Forms.GroupBox chkIncludePreviousRevScripts;
+        private System.Windows.Forms.TextBox txtRevisionIncluses;
+        private System.Windows.Forms.Label label10;
     }
 }

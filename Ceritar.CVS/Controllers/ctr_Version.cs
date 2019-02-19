@@ -27,7 +27,7 @@ namespace Ceritar.CVS.Controllers
         //Messages
         private const int mintMSG_BuildSuccess = 37;
         private const int mintMSG_GenerationCanceled = 39;
-        private const int mintMSG_AreYouSureToSendToThrash = 49;
+        private const int mintMSG_AreYouSureToSendToDelete = 49;
         private const int mintMSG_CannotDeleteCSV = 50;
 
         //Working variables
@@ -233,7 +233,7 @@ namespace Ceritar.CVS.Controllers
                         strFolderPath = new FileInfo(strFolderPath).Directory.Parent.FullName;
                     }
 
-                    answer = clsTTApp.GetAppController.ShowMessage(mintMSG_AreYouSureToSendToThrash, System.Windows.Forms.MessageBoxButtons.YesNo, strFolderPath);
+                    answer = clsTTApp.GetAppController.ShowMessage(mintMSG_AreYouSureToSendToDelete, System.Windows.Forms.MessageBoxButtons.YesNo, strFolderPath);
 
                     if (answer == System.Windows.Forms.DialogResult.Yes)
                     {
@@ -834,7 +834,7 @@ namespace Ceritar.CVS.Controllers
             {
                 if (vblnAskIfSureToDelete)
                 {
-                    answer = clsTTApp.GetAppController.ShowMessage(mintMSG_AreYouSureToSendToThrash, System.Windows.Forms.MessageBoxButtons.YesNo, vstrVersionFolderRoot);
+                    answer = clsTTApp.GetAppController.ShowMessage(mintMSG_AreYouSureToSendToDelete, System.Windows.Forms.MessageBoxButtons.YesNo, vstrVersionFolderRoot);
                 }
                 else
                 {
@@ -868,7 +868,7 @@ namespace Ceritar.CVS.Controllers
 
                         if (vblnAskIfSureToDelete)
                         {
-                            answer = clsTTApp.GetAppController.ShowMessage(mintMSG_AreYouSureToSendToThrash, System.Windows.Forms.MessageBoxButtons.YesNo, vstrVersionFolderRoot);
+                            answer = clsTTApp.GetAppController.ShowMessage(mintMSG_AreYouSureToSendToDelete, System.Windows.Forms.MessageBoxButtons.YesNo, vstrVersionFolderRoot);
                         }
                         else
                         {
@@ -1175,7 +1175,7 @@ namespace Ceritar.CVS.Controllers
                         }
                     }
 
-                    //Add all scripts folder to the zip archive.
+                    //Add all APP_COMPIL scripts folders to the zip archive. Already inclure client's specific scripts
                     string[] lstScriptsFoldersPath = new string[0];
                     if (!string.IsNullOrEmpty(strCurrentScriptFolderLocation)) lstScriptsFoldersPath = Directory.GetDirectories(strCurrentScriptFolderLocation);
 
@@ -1186,17 +1186,78 @@ namespace Ceritar.CVS.Controllers
                             newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetScriptsFolderName, new DirectoryInfo(strCurrentScriptsFolder).Name, Path.GetFileName(strCurrentFileToCopyPath)));
                         }
                     }
-                    
-                    //Add the Rev_AllScripts folder if it exists
-                    strRevAllScripts_Location = Path.Combine(str_GetVersionFolderPath(mcView.GetTemplateSource_NRI(), mcView.GetVersionNo().ToString()), sclsAppConfigs.GetRevisionAllScriptFolderName);
 
-                    if (Directory.Exists(strRevAllScripts_Location))
+                    //Add the revisions scripts folders //**Rev_AllScripts DEPRECATED AND HORRIBLE **
+                    int intCurrentPreviousRevisionNo = 0;
+                    int intLastRevisionNo = 0;
+                    int intFileCount = 1;
+                    string strVersionFolderPath = string.Empty;
+                    string strLastRevisionFolderPath = string.Empty;
+                    string[] lstRevisions;
+
+                    //strRevAllScripts_Location = Path.Combine(str_GetVersionFolderPath(mcView.GetTemplateSource_NRI(), mcView.GetVersionNo().ToString()), sclsAppConfigs.GetRevisionAllScriptFolderName);
+
+                    //if (Directory.Exists(strRevAllScripts_Location))
+                    //{
+                    //    foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strRevAllScripts_Location, "*.*", SearchOption.TopDirectoryOnly))
+                    //    {
+                    //        newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine( sclsAppConfigs.GetRevisionAllScriptFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
+                    //    }   
+                    //}
+                    Int32.TryParse(clsTTSQL.str_ADOSingleLookUp("ISNULL(MAX(Rev_No), 0)", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " GROUP BY Revision.Ver_NRI"), out intLastRevisionNo);
+
+                    strVersionFolderPath = Path.Combine(str_GetVersionFolderPath(mcView.GetTemplateSource_NRI(), mcView.GetVersionNo().ToString()));
+
+                    lstRevisions = Directory.GetDirectories(strVersionFolderPath, sclsAppConfigs.GetRevisionNumberPrefix + "*", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToArray();
+
+                    foreach (string strRevisionPath in lstRevisions)
                     {
-                        foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strRevAllScripts_Location, "*.*", SearchOption.TopDirectoryOnly))
+                        intCurrentPreviousRevisionNo = Int32.Parse(Regex.Replace(Path.GetFileName(strRevisionPath).Substring(0, Path.GetFileName(strRevisionPath).IndexOf(" ")).ToString(), "[^0-9.]", ""));
+
+                        if (intCurrentPreviousRevisionNo > 0 && intCurrentPreviousRevisionNo <= intLastRevisionNo)
                         {
-                            newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine( sclsAppConfigs.GetRevisionAllScriptFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
-                        }   
+                            if (Directory.Exists(Path.Combine(strRevisionPath, sclsAppConfigs.GetScriptsFolderName)))
+                            {
+                                foreach (string strCurrentFileToCopyPath in Directory.GetFiles(Path.Combine(strRevisionPath, sclsAppConfigs.GetScriptsFolderName), "*.sql", SearchOption.TopDirectoryOnly))
+                                {
+                                    newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetRevisionAllScriptFolderName, intFileCount.ToString() + "__" + Path.GetFileName(strCurrentFileToCopyPath)));
+
+                                    intFileCount++;
+                                }
+
+                                //Copy all client's specific scripts at the end of the Rev_AllScripts folder
+                                if (Directory.GetDirectories(Path.Combine(strRevisionPath, sclsAppConfigs.GetScriptsFolderName), mcView.GetSelectedClient().strCeritarClient_Name + "*", SearchOption.TopDirectoryOnly).Length > 0)
+                                {
+                                    string[] lstSpecificScripts = Directory.GetFiles(Directory.GetDirectories(Path.Combine(strRevisionPath, sclsAppConfigs.GetScriptsFolderName), mcView.GetSelectedClient().strCeritarClient_Name + "*", SearchOption.TopDirectoryOnly)[0]);
+                                    string strNewScriptName = string.Empty;
+                                    int intIndex = 0;
+                                    int intNewScriptNumber = 0;
+                                    int intTotalScriptsCount = 0;
+
+                                    for (intIndex = 0; intIndex < lstSpecificScripts.Length; intIndex++)
+                                    {
+                                        strNewScriptName = Path.GetFileName(lstSpecificScripts[intIndex]);
+                                        strNewScriptName = strNewScriptName.Substring(strNewScriptName.IndexOf("_") + 1);
+
+                                        intNewScriptNumber = (intNewScriptNumber == 0 ? intTotalScriptsCount : intNewScriptNumber);
+
+                                        strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
+
+                                        newZipFile.CreateEntryFromFile(lstSpecificScripts[intIndex], Path.Combine(sclsAppConfigs.GetRevisionAllScriptFolderName, intFileCount.ToString() + "S__" + Path.GetFileName(lstSpecificScripts[intIndex])));
+
+                                        intNewScriptNumber++;
+                                    }
+
+                                    intTotalScriptsCount += lstSpecificScripts.Count();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            //Continue, do nothing
+                        }
                     }
+
                 }
 
                 blnValidReturn = true;

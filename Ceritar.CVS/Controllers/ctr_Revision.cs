@@ -25,7 +25,7 @@ namespace Ceritar.CVS.Controllers
 
         //Messages
         private const int mintMSG_BuildSuccess = 37;
-        private const int mintMSG_AreYouSureToSendToThrash = 49;
+        private const int mintMSG_AreYouSureToDelete = 49;
         private const int mintMSG_ManyDirectoryFound = 54;
 
         public enum ErrorCode_Rev
@@ -44,7 +44,7 @@ namespace Ceritar.CVS.Controllers
         public ctr_Revision(Interfaces.IRevision rView)
         {
             mcModRevision = new mod_Rev_Revision();
-            
+
             mcView = rView;
         }
 
@@ -86,7 +86,7 @@ namespace Ceritar.CVS.Controllers
                 if (!mcView.IsPreparationMode())
                     mcModRevision.Path_Scripts = (string.IsNullOrEmpty(mcView.GetLocation_Scripts()) & mcModRevision.Version.CerApplication.AutoGenRevisionNoScript ? "placeHolder" : mcView.GetLocation_Scripts());
 
-               
+
 
                 mcModRevision.CeritarClient = new Models.Module_Configuration.mod_CeC_CeritarClient();
                 mcModRevision.CeritarClient.CeritarClient_NRI = mcView.GetCeritarClient_NRI();
@@ -97,7 +97,7 @@ namespace Ceritar.CVS.Controllers
 
                 mcModRevision.TemplateSource = new Models.Module_Template.mod_Tpl_HierarchyTemplate();
                 mcModRevision.TemplateSource.Template_NRI = mcView.GetTemplateSource_NRI();
-            
+
                 mcModRevision.Version.Version_NRI = mcView.GetVersion_NRI();
                 mcModRevision.Version.VersionNo = mcView.GetVersionNo();
 
@@ -140,7 +140,7 @@ namespace Ceritar.CVS.Controllers
         {
             bool blnValidReturn = false;
             mcModRevision = new mod_Rev_Revision();
-            
+
             try
             {
                 blnValidReturn = pfblnFeedModelWithView();
@@ -242,7 +242,7 @@ namespace Ceritar.CVS.Controllers
                         strFolderPath = new FileInfo(strFolderPath).Directory.FullName;
                         strRevisionFolderPath = new FileInfo(strFolderPath).Directory.FullName;
                     }
-                    
+
                     pfblnFeedModelWithView();
 
                     foreach (mod_SRe_SatelliteRevision cSRe in mcModRevision.LstSatelliteRevisions)
@@ -356,7 +356,7 @@ namespace Ceritar.CVS.Controllers
                             strFolderName = sclsAppConfigs.GetVersionNumberPrefix + mcView.GetVersionNo().ToString();
 
                             strRevisionFolderRoot = Path.Combine(currentFolderInfos.FullName, strFolderName);
-                                                        
+
                             break;
 
                         case (int)ctr_Template.FolderType.Revision_Number:
@@ -391,7 +391,7 @@ namespace Ceritar.CVS.Controllers
                                         {
                                             clsTTApp.GetAppController.ShowMessage(mintMSG_ManyDirectoryFound, System.Windows.Forms.MessageBoxButtons.OK, mcModRevision.Revision_Number.ToString());
                                         }
-                                        
+
                                         break;
                                     }
                                 }
@@ -494,7 +494,7 @@ namespace Ceritar.CVS.Controllers
                                         mcModRevision.Path_Release = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Release()));
                                     }
                                 }
-                                else if ((File.Exists(currentFolderInfos.FullName) || Directory.Exists(currentFolderInfos.FullName)) && 
+                                else if ((File.Exists(currentFolderInfos.FullName) || Directory.Exists(currentFolderInfos.FullName)) &&
                                           mcView.GetLocation_Release() != currentFolderInfos.FullName &&
                                           !string.IsNullOrEmpty(mcView.GetLocation_Release()))
                                 {
@@ -507,16 +507,16 @@ namespace Ceritar.CVS.Controllers
                                 if (Directory.Exists(currentFolderInfos.FullName)) Directory.Delete(currentFolderInfos.FullName, true);
                                 //Do nothing, pas de Release de l'application
                             }
-                            
+
                             //Gestion des applications satellites. On les copie ici au même niveau que le Release
                             if (blnValidReturn && mcModRevision.LstSatelliteRevisions.Count > 0)
                             {
                                 string strNewDestinationFolder = string.Empty;
-                               
+
                                 for (int intIndex = 0; intIndex < mcModRevision.LstSatelliteRevisions.Count; intIndex++)
                                 {
                                     strNewDestinationFolder = currentFolderInfos.Parent.FullName;
-                                                                        
+
                                     strNewDestinationFolder = Path.Combine(strNewDestinationFolder, mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExportFolderName + (mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExePerCustomer ? (@" [" + mcModRevision.CeritarClient.CompanyName + @"]") : ""));
 
                                     blnValidReturn = pfblnCopyAndSaveSatelliteLocation(mcModRevision.LstSatelliteRevisions[intIndex], strNewDestinationFolder, true);
@@ -536,6 +536,7 @@ namespace Ceritar.CVS.Controllers
                             bool blnScriptsChanged = false;
                             int intNextScriptNo = 0;
                             int intNbScriptsAlreadyPresent = 0;
+                            System.Windows.Forms.DialogResult answer;
                             string strNewDestinationFileName = string.Empty;
                             List<string> lstScripts;
 
@@ -545,6 +546,8 @@ namespace Ceritar.CVS.Controllers
                                 {
                                     if (mcView.GetLocation_Scripts() != currentFolderInfos.FullName)
                                     {
+                                        blnValidReturn = true;
+
                                         if (!mcView.GetIfScriptsAreToAppend() && Directory.Exists(currentFolderInfos.FullName))
                                         {
                                             clsTTApp.GetAppController.setAttributesToNormal(new DirectoryInfo(currentFolderInfos.FullName));
@@ -554,32 +557,51 @@ namespace Ceritar.CVS.Controllers
                                                 blnValidReturn = pfblnDeleteFrom_Rev_AllScripts(currentFolderInfos.FullName);
                                             }
 
-                                            Directory.Delete(currentFolderInfos.FullName, true);
+                                            if (mcView.GetDML_Action() == sclsConstants.DML_Mode.UPDATE_MODE)
+                                            {
+                                                answer = clsTTApp.GetAppController.ShowMessage(mintMSG_AreYouSureToDelete, System.Windows.Forms.MessageBoxButtons.YesNo, currentFolderInfos.FullName);
+                                            }
+                                            else
+                                            {
+                                                answer = System.Windows.Forms.DialogResult.Yes;
+                                            }
+                                            
+                                            if (answer == System.Windows.Forms.DialogResult.Yes)
+                                            {
+                                                Directory.Delete(currentFolderInfos.FullName, true);
+                                            }
+                                            else
+                                            {
+                                                blnValidReturn = false;
+                                            }
                                         }
                                         else if (Directory.Exists(currentFolderInfos.FullName))
                                         {
                                             intNbScriptsAlreadyPresent = Directory.GetFiles(currentFolderInfos.FullName).Length;
                                         }
 
-                                        currentFolderInfos.Create();
-
-                                        lstScripts = Directory.GetFiles(mcView.GetLocation_Scripts(), "*.sql").OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
-                                        
-                                        for (int intIndex = 0; intIndex < lstScripts.Count; intIndex++)
+                                        if (blnValidReturn)
                                         {
-                                            strNewDestinationFileName = pfstrGetNewFileNameWithNumber(currentFolderInfos.FullName, lstScripts[intIndex], ref intNextScriptNo, mcModRevision.Version.CerApplication.AutoGenRevisionNoScript);
+                                            currentFolderInfos.Create();
 
-                                            strNewDestinationFileName = Path.Combine(currentFolderInfos.FullName, strNewDestinationFileName);
+                                            lstScripts = Directory.GetFiles(mcView.GetLocation_Scripts(), "*.sql").OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
 
-                                            File.Copy(lstScripts[intIndex], strNewDestinationFileName, true);
+                                            for (int intIndex = 0; intIndex < lstScripts.Count; intIndex++)
+                                            {
+                                                strNewDestinationFileName = pfstrGetNewFileNameWithNumber(currentFolderInfos.FullName, lstScripts[intIndex], ref intNextScriptNo, mcModRevision.Version.CerApplication.AutoGenRevisionNoScript);
+
+                                                strNewDestinationFileName = Path.Combine(currentFolderInfos.FullName, strNewDestinationFileName);
+
+                                                File.Copy(lstScripts[intIndex], strNewDestinationFileName, true);
+                                            }
+
+                                            mcModRevision.Path_Scripts = currentFolderInfos.FullName;
+
+                                            blnScriptsChanged = true;
                                         }
 
-                                        mcModRevision.Path_Scripts = currentFolderInfos.FullName;
-
-                                        blnScriptsChanged = true;
-
                                         //Copy all client's specific scripts in the scripts folder
-                                        if (Directory.GetDirectories(mcView.GetLocation_Scripts(), mcModRevision.CeritarClient.CompanyName + "*", SearchOption.TopDirectoryOnly).Length > 0)
+                                        if (blnValidReturn && Directory.GetDirectories(mcView.GetLocation_Scripts(), mcModRevision.CeritarClient.CompanyName + "*", SearchOption.TopDirectoryOnly).Length > 0)
                                         {
                                             string[] lstSpecificScripts = Directory.GetFiles(Directory.GetDirectories(mcView.GetLocation_Scripts(), mcModRevision.CeritarClient.CompanyName + "*", SearchOption.TopDirectoryOnly)[0]);
                                             string strClientSpecificScriptsDestinationPath = System.IO.Path.Combine(currentFolderInfos.FullName, mcModRevision.CeritarClient.CompanyName + @" Only");
@@ -609,7 +631,23 @@ namespace Ceritar.CVS.Controllers
                                             blnValidReturn = pfblnDeleteFrom_Rev_AllScripts(currentFolderInfos.FullName);
                                         }
 
-                                        Directory.Delete(currentFolderInfos.FullName, true);
+                                        if (mcView.GetDML_Action() == sclsConstants.DML_Mode.UPDATE_MODE)
+                                        {
+                                            answer = clsTTApp.GetAppController.ShowMessage(mintMSG_AreYouSureToDelete, System.Windows.Forms.MessageBoxButtons.YesNo, currentFolderInfos.FullName);
+                                        }
+                                        else
+                                        {
+                                            answer = System.Windows.Forms.DialogResult.Yes;
+                                        }
+
+                                        if (answer == System.Windows.Forms.DialogResult.Yes)
+                                        {
+                                            Directory.Delete(currentFolderInfos.FullName, true);
+                                        }
+                                        else
+                                        {
+                                            blnValidReturn = false;
+                                        }                
                                     }
                                     else if (Directory.Exists(currentFolderInfos.FullName))
                                     {
@@ -625,12 +663,12 @@ namespace Ceritar.CVS.Controllers
                                     File.Copy(mcView.GetLocation_Scripts(), strNewDestinationFileName, true);
 
                                     mcModRevision.Path_Scripts = Path.GetDirectoryName(strNewDestinationFileName);
-                                    
+
                                     blnScriptsChanged = true;
                                 }
-                            } 
-                            else if ((File.Exists(currentFolderInfos.FullName) || Directory.Exists(currentFolderInfos.FullName)) && 
-                                      mcView.GetLocation_Scripts() != currentFolderInfos.FullName && 
+                            }
+                            else if ((File.Exists(currentFolderInfos.FullName) || Directory.Exists(currentFolderInfos.FullName)) &&
+                                      mcView.GetLocation_Scripts() != currentFolderInfos.FullName &&
                                       !string.IsNullOrEmpty(mcView.GetLocation_Scripts()))
                             {
                                 //Met a jour le path si le contenu de la revision change, mais pas les scripts
@@ -659,46 +697,46 @@ namespace Ceritar.CVS.Controllers
                             }
 
 
-                            //Ajout dans Rev_AllScripts
-                            List<string> lstScriptsToCopy;
-                            string strNewScriptName = string.Empty;
-                            int intNewScriptNumber = 0;
+                            //Ajout dans Rev_AllScripts             ****Rev_AllScripts DEPRECATED AND HORRIBLE ****
+                            //List<string> lstScriptsToCopy;
+                            //string strNewScriptName = string.Empty;
+                            //int intNewScriptNumber = 0;
 
-                            if (!string.IsNullOrEmpty(mcModRevision.Path_Scripts) & blnScriptsChanged)
-                            {
-                                strRevAllScripts_Location = str_GetRevisionRootFolderPath(mcModRevision.TemplateSource.Template_NRI, mcModRevision.Version.VersionNo.ToString()).Replace(sclsAppConfigs.GetRevisionNumberPrefix + "XX", sclsAppConfigs.GetRevisionAllScriptFolderName);
-                                    
-                                if (!Directory.Exists(strRevAllScripts_Location))
-                                {
-                                    Directory.CreateDirectory(strRevAllScripts_Location);
-                                }
+                            //if (!string.IsNullOrEmpty(mcModRevision.Path_Scripts) & blnScriptsChanged)
+                            //{
+                            //    strRevAllScripts_Location = str_GetRevisionRootFolderPath(mcModRevision.TemplateSource.Template_NRI, mcModRevision.Version.VersionNo.ToString()).Replace(sclsAppConfigs.GetRevisionNumberPrefix + "XX", sclsAppConfigs.GetRevisionAllScriptFolderName);
 
-                                if ((File.GetAttributes(mcModRevision.Path_Scripts) & FileAttributes.Directory) == FileAttributes.Directory)
-                                {
-                                    clsTTApp.GetAppController.setAttributesToNormal(new DirectoryInfo(mcModRevision.Path_Scripts));
+                            //    if (!Directory.Exists(strRevAllScripts_Location))
+                            //    {
+                            //        Directory.CreateDirectory(strRevAllScripts_Location);
+                            //    }
 
-                                    lstScriptsToCopy = Directory.GetFiles(mcModRevision.Path_Scripts, "*.sql", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList(); // OrderBy(f => f).ToList<string>();
-                                }
-                                else
-                                {
-                                    lstScriptsToCopy = Directory.GetFiles(new FileInfo(mcModRevision.Path_Scripts).Directory.FullName, "*.sql", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
-                                }
+                            //    if ((File.GetAttributes(mcModRevision.Path_Scripts) & FileAttributes.Directory) == FileAttributes.Directory)
+                            //    {
+                            //        clsTTApp.GetAppController.setAttributesToNormal(new DirectoryInfo(mcModRevision.Path_Scripts));
 
-                                clsTTApp.GetAppController.setAttributesToNormal(new DirectoryInfo(strRevAllScripts_Location));
+                            //        lstScriptsToCopy = Directory.GetFiles(mcModRevision.Path_Scripts, "*.sql", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList(); // OrderBy(f => f).ToList<string>();
+                            //    }
+                            //    else
+                            //    {
+                            //        lstScriptsToCopy = Directory.GetFiles(new FileInfo(mcModRevision.Path_Scripts).Directory.FullName, "*.sql", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
+                            //    }
 
-                                for (int intIndex = intNbScriptsAlreadyPresent; intIndex < lstScriptsToCopy.Count; intIndex ++)
-                                {
-                                    strNewScriptName = pfstrGetNewFileNameWithNumber(strRevAllScripts_Location, lstScriptsToCopy[intIndex], ref intNewScriptNumber, false);
+                            //    clsTTApp.GetAppController.setAttributesToNormal(new DirectoryInfo(strRevAllScripts_Location));
 
-                                    File.Copy(lstScriptsToCopy[intIndex], Path.Combine(strRevAllScripts_Location, strNewScriptName), true);
-                                }
-                            }
+                            //    for (int intIndex = intNbScriptsAlreadyPresent; intIndex < lstScriptsToCopy.Count; intIndex++)
+                            //    {
+                            //        strNewScriptName = pfstrGetNewFileNameWithNumber(strRevAllScripts_Location, lstScriptsToCopy[intIndex], ref intNewScriptNumber, false);
 
-                            
+                            //        File.Copy(lstScriptsToCopy[intIndex], Path.Combine(strRevAllScripts_Location, strNewScriptName), true);
+                            //    }
+                            //}
+
+
                             break;
 
                         case (int)ctr_Template.FolderType.External_Report:
-                            
+
                             blnValidReturn = true;
 
                             //Gestion du Exe des rapports externes
@@ -730,14 +768,14 @@ namespace Ceritar.CVS.Controllers
                                         mcModRevision.Path_Release = Path.Combine(currentFolderInfos.FullName, Path.GetFileName(mcView.GetLocation_Release()));
                                     }
                                 }
-                                else if ((File.Exists(currentFolderInfos.FullName) || Directory.Exists(currentFolderInfos.FullName)) && 
+                                else if ((File.Exists(currentFolderInfos.FullName) || Directory.Exists(currentFolderInfos.FullName)) &&
                                           mcView.GetLocation_Release() != currentFolderInfos.FullName &&
                                           !string.IsNullOrEmpty(mcView.GetLocation_Release()))
                                 {
                                     //Met a jour le path si le contenu de la revision change, mais pas le release
                                     mcModRevision.Path_Release = currentFolderInfos.FullName;
                                 }
-                            } 
+                            }
                             else
                             {
                                 if (Directory.Exists(currentFolderInfos.FullName)) Directory.Delete(currentFolderInfos.FullName, true);
@@ -859,7 +897,7 @@ namespace Ceritar.CVS.Controllers
                 if (intFirstUnderscoreIndex < 4 && intFirstUnderscoreIndex > -1) //On ne peut jamais avoir un script # en haut de 999
                 {
                     Int32.TryParse(strNewScriptName.Substring(0, intFirstUnderscoreIndex), out intIntendedScriptNumber);
-                    strNewScriptName = strNewScriptName.Substring(intFirstUnderscoreIndex + 1);      
+                    strNewScriptName = strNewScriptName.Substring(intFirstUnderscoreIndex + 1);
                 }
                 else if (intLastDigitCharIndex < 4) //Les premiers caractères pourraient être le numéro de script avec oubli d'ajouter un _
                 {
@@ -880,7 +918,7 @@ namespace Ceritar.CVS.Controllers
             }
             finally
             {
-                rintNextScriptNumber ++;
+                rintNextScriptNumber++;
             }
 
             return strNewScriptName;
@@ -928,7 +966,7 @@ namespace Ceritar.CVS.Controllers
             {
                 mcActionResult.SetInvalid(sclsConstants.Error_Message.ERROR_UNHANDLED, clsActionResults.BaseErrorCode.UNHANDLED_ERROR);
                 sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
-            }      
+            }
 
             return strFolderName;
         }
@@ -1042,7 +1080,7 @@ namespace Ceritar.CVS.Controllers
             {
                 if (sqlRecord != null) sqlRecord.Close();
             }
-            
+
             return strPath;
         }
 
@@ -1082,7 +1120,7 @@ namespace Ceritar.CVS.Controllers
                         {
                             strOldFolderPath = string.Empty;
                         }
-                        
+
                         if (strOldFolderPath == string.Empty) strOldFolderPath = Path.Combine(new DirectoryInfo(vstrDestinationFolder).FullName);
                     }
 
@@ -1093,8 +1131,8 @@ namespace Ceritar.CVS.Controllers
                             Directory.Move(strOldFolderPath, vstrDestinationFolder);
                         }
                     }
-                }      
-               
+                }
+
 
                 if ((File.Exists(rcSatRevision.Location_Exe) || Directory.Exists(rcSatRevision.Location_Exe)) && (strOldFolderPath != vstrDestinationFolder || rcSatRevision.Location_Exe != strOldFolderPath))
                 {
@@ -1198,8 +1236,8 @@ namespace Ceritar.CVS.Controllers
 
             try
             {
-                answer = clsTTApp.GetAppController.ShowMessage(mintMSG_AreYouSureToSendToThrash, System.Windows.Forms.MessageBoxButtons.YesNo, vstrRevisionFolderRoot);
-                
+                answer = clsTTApp.GetAppController.ShowMessage(mintMSG_AreYouSureToDelete, System.Windows.Forms.MessageBoxButtons.YesNo, vstrRevisionFolderRoot);
+
                 if (answer == System.Windows.Forms.DialogResult.Yes)
                 {
                     blnValidReturn = pfblnDeleteFrom_Rev_AllScripts(mcView.GetLocation_Scripts());
@@ -1221,8 +1259,8 @@ namespace Ceritar.CVS.Controllers
                 }
                 else
                 {
-                    blnValidReturn = true;
-                }  
+                    blnValidReturn = false;
+                }
             }
             catch (System.IO.IOException exUA)
             {
@@ -1252,7 +1290,7 @@ namespace Ceritar.CVS.Controllers
             {
                 if (vblnAskBefore)
                 {
-                    answer = clsTTApp.GetAppController.ShowMessage(mintMSG_AreYouSureToSendToThrash, System.Windows.Forms.MessageBoxButtons.YesNo, vstrRevisionFolderPath);
+                    answer = clsTTApp.GetAppController.ShowMessage(mintMSG_AreYouSureToDelete, System.Windows.Forms.MessageBoxButtons.YesNo, vstrRevisionFolderPath);
                 }
                 else
                 {
@@ -1306,7 +1344,7 @@ namespace Ceritar.CVS.Controllers
 
             try
             {
-                if (!string.IsNullOrEmpty(vstrFolderWithFileToFindAndDelete))
+                if (!string.IsNullOrEmpty(vstrFolderWithFileToFindAndDelete) && Directory.Exists(vstrFolderWithFileToFindAndDelete))
                 {
                     if ((File.GetAttributes(vstrFolderWithFileToFindAndDelete) & FileAttributes.Directory) != FileAttributes.Directory)
                     {
@@ -1350,7 +1388,7 @@ namespace Ceritar.CVS.Controllers
                 else
                 {
                     //Do nothing, aucun script
-                }        
+                }
 
                 blnValidReturn = true;
             }
@@ -1365,7 +1403,7 @@ namespace Ceritar.CVS.Controllers
 
         public bool blnExportRevisionKit(string vstrExportFolderLocation)
         {
-            bool blnValidReturn = false;
+            bool blnValidReturn = true;
             string strSQL = string.Empty;
             string strFolderName = string.Empty;
             string strVersionFolderRoot = string.Empty;
@@ -1399,7 +1437,7 @@ namespace Ceritar.CVS.Controllers
                         archiveMode = ZipArchiveMode.Update;
                     }
                 }
-                                               
+
 
                 using (ZipArchive newZipFile = ZipFile.Open(strNewZipFileLocation, archiveMode))
                 {
@@ -1419,7 +1457,7 @@ namespace Ceritar.CVS.Controllers
                             newZipFile.CreateEntryFromFile(strReleaseLocation, Path.Combine(new DirectoryInfo(strReleaseLocation).Parent.Name, Path.GetFileName(strReleaseLocation)), CompressionLevel.NoCompression);
                         }
                     }
-                    
+
                     //Add every satellites applications to the zip archive.
                     List<Interfaces.structSatRevision> lstSatellites = mcView.GetRevisionSatelliteList();
 
@@ -1456,13 +1494,18 @@ namespace Ceritar.CVS.Controllers
                     //Add previous scripts folder for current client since last revision
                     if (mcView.IsPreviousRevisionScriptsIncluded() & mcView.GetRevisionNo() > 1)
                     {
-                        int intLastRevisionNo = 0;
+                        //int intLastRevisionNo = 0;
                         int intCurrentPreviousRevisionNo = 0;
                         string strVersionFolderPath = string.Empty;
                         string strLastRevisionFolderPath = string.Empty;
                         string[] lstRevisions;
+                        List<int> lstRevisionToInclude = new List<int>();
+                        int intCurrentCharIndex = 0;
+                        int intPreviousCharIndex = 0;
 
-                        Int32.TryParse(clsTTSQL.str_ADOSingleLookUp("ISNULL(MAX(Rev_No), 0)", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Revision.CeC_NRI = " + mcView.GetCeritarClient_NRI() + " AND Revision.Rev_NRI <> " + mcView.GetRevision_NRI() + " GROUP BY Revision.Ver_NRI, Revision.CeC_NRI"), out intLastRevisionNo);
+                        blnValidReturn = blnGetOtherRevisionsNumberBetween(lstRevisionToInclude, mcView.GetRevisionsToInclude(), false, ref intCurrentCharIndex, ref intPreviousCharIndex);
+                        
+                        //Int32.TryParse(clsTTSQL.str_ADOSingleLookUp("ISNULL(MAX(Rev_No), 0)", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Revision.CeC_NRI = " + mcView.GetCeritarClient_NRI() + " AND Revision.Rev_NRI <> " + mcView.GetRevision_NRI() + " GROUP BY Revision.Ver_NRI, Revision.CeC_NRI"), out intLastRevisionNo);
 
                         strVersionFolderPath = Controllers.ctr_Version.str_GetVersionFolderPath(Int32.Parse(clsTTSQL.str_ADOSingleLookUp("Tpl_NRI", "Version", "Ver_NRI = " + mcView.GetVersion_NRI())), mcView.GetVersionNo().ToString());
 
@@ -1472,7 +1515,7 @@ namespace Ceritar.CVS.Controllers
                         {
                             intCurrentPreviousRevisionNo = Int32.Parse(Regex.Replace(Path.GetFileName(strRevisionPath).Substring(0, Path.GetFileName(strRevisionPath).IndexOf(" ")).ToString(), "[^0-9.]", ""));
 
-                            if (intCurrentPreviousRevisionNo > 0 && intCurrentPreviousRevisionNo < mcView.GetRevisionNo() && intCurrentPreviousRevisionNo > intLastRevisionNo)
+                            if (intCurrentPreviousRevisionNo > 0 && intCurrentPreviousRevisionNo < mcView.GetRevisionNo() && lstRevisionToInclude.Contains(intCurrentPreviousRevisionNo) /*&& intCurrentPreviousRevisionNo > intLastRevisionNo*/)
                             {
                                 if (Directory.Exists(Path.Combine(strRevisionPath, sclsAppConfigs.GetScriptsFolderName)))
                                 {
@@ -1529,8 +1572,6 @@ namespace Ceritar.CVS.Controllers
                         }
                     }
                 }
-
-                blnValidReturn = true;
             }
             catch (FileNotFoundException exPath)
             {
@@ -1584,7 +1625,7 @@ namespace Ceritar.CVS.Controllers
                 else
                 {
                     scriptsList.AppendFormat("* Aucun scripts présent *", Environment.NewLine);
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -1607,6 +1648,98 @@ namespace Ceritar.CVS.Controllers
                                                     );
 
             return strDestinationFolder;
+        }
+
+        public bool blnGetOtherRevisionsNumberBetween(List<int> rlstRevisionToInclude, string vstrAnalysed, bool vblnAddNumberInBetween, ref int rintCurrentCharIndex, ref int rintPreviousCharIndex)
+        {
+            bool blnValidReturn = true;
+            int intRevisionNo = -1;
+
+            try
+            {
+                while (rintCurrentCharIndex <= vstrAnalysed.Length - 1)
+                {
+                    if (vstrAnalysed.Substring(rintCurrentCharIndex, 1) == ";" || vstrAnalysed.Substring(rintCurrentCharIndex, 1) == ",")
+                    {
+                        int.TryParse(vstrAnalysed.Substring(rintPreviousCharIndex, rintCurrentCharIndex - rintPreviousCharIndex), out intRevisionNo);
+
+                        if (intRevisionNo <= 0) return false;
+
+                        rlstRevisionToInclude.Add(intRevisionNo);
+
+                        if (vblnAddNumberInBetween)
+                        {
+                            blnValidReturn = blnAddNumberInBetweenLast2(rlstRevisionToInclude);
+
+                            vblnAddNumberInBetween = false;
+                        }
+                            
+                        rintPreviousCharIndex = rintCurrentCharIndex + 1;
+                    }
+                    else if (vstrAnalysed.Substring(rintCurrentCharIndex, 1) == "-")
+                    {
+                        int.TryParse(vstrAnalysed.Substring(rintPreviousCharIndex, rintCurrentCharIndex - rintPreviousCharIndex), out intRevisionNo);
+
+                        if (intRevisionNo <= 0) return false;
+
+                        rlstRevisionToInclude.Add(intRevisionNo);
+
+                        if (vblnAddNumberInBetween)
+                        {
+                            blnValidReturn = blnAddNumberInBetweenLast2(rlstRevisionToInclude);
+
+                            vblnAddNumberInBetween = false;
+                        }
+
+                        rintPreviousCharIndex = rintCurrentCharIndex + 1;
+                        rintCurrentCharIndex = rintPreviousCharIndex + 1;
+
+                        blnGetOtherRevisionsNumberBetween(rlstRevisionToInclude, vstrAnalysed, true, ref rintCurrentCharIndex, ref rintPreviousCharIndex);
+                    }
+                    rintCurrentCharIndex += 1;
+
+                    if (!blnValidReturn) break;
+                }
+
+                if (blnValidReturn && rintCurrentCharIndex == vstrAnalysed.Length)
+                {
+                    int.TryParse(vstrAnalysed.Substring(rintPreviousCharIndex, rintCurrentCharIndex - rintPreviousCharIndex), out intRevisionNo);
+
+                    if (intRevisionNo > 0)
+                    {
+                        rlstRevisionToInclude.Add(intRevisionNo);
+
+                        if (vblnAddNumberInBetween) blnValidReturn = blnAddNumberInBetweenLast2(rlstRevisionToInclude);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnValidReturn;
+        }
+
+        private bool blnAddNumberInBetweenLast2(List<int> rlstRevisionToInclude)
+        {
+            int intLastRevisionNo;
+
+            if (rlstRevisionToInclude.Count < 2) return true;
+
+            if (rlstRevisionToInclude[rlstRevisionToInclude.Count - 1] < rlstRevisionToInclude[rlstRevisionToInclude.Count - 2]) return false;
+
+            intLastRevisionNo = rlstRevisionToInclude[rlstRevisionToInclude.Count - 1];
+
+            rlstRevisionToInclude.RemoveAt(rlstRevisionToInclude.Count - 1);
+
+            for (int intIndex = (rlstRevisionToInclude[rlstRevisionToInclude.Count - 1] + 1); intIndex <= intLastRevisionNo; intIndex++)
+            {
+                rlstRevisionToInclude.Add(intIndex);
+            }
+
+            return true;
         }
 
         public bool blnRevisionPathIsValid(int vintRev_NRI)

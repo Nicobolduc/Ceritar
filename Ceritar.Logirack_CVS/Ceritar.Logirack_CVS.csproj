@@ -267,6 +267,7 @@
     <None Include="Resources\invalid.png" />
     <None Include="Resources\preparation.bmp" />
     <None Include="Resources\Under construction revision.png" />
+    <Content Include="CVS Livrables.txt" />
     <Content Include="Test.ico" />
   </ItemGroup>
   <ItemGroup>

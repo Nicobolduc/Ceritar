@@ -29,6 +29,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         string GetLocation_Scripts();
         string GetLocation_VariousFile();
         string GetLocation_VariousFolder();
+        string GetRevisionsToInclude();
         bool GetExeIsExternalReport();
         bool GetExeWithExternalReport();
         bool GetIfScriptsAreToAppend();

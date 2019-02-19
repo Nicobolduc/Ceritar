@@ -47,6 +47,9 @@ namespace Ceritar.Logirack_CVS.Forms
         //Public working variables
         public int mintVersion_NRI;
 
+        //Messages
+        private const int mintMSG_ValidCharacters = 58;
+
         //Working Variables     
         private int mintCeritarApplication_NRI;
         public int mintCeritarApplication_NRI_Master;
@@ -247,6 +250,11 @@ namespace Ceritar.Logirack_CVS.Forms
         bool IRevision.IsPreviousRevisionScriptsIncluded()
         {
             return !chkExcludePreviousRevScripts.Checked;
+        }
+
+        string IRevision.GetRevisionsToInclude()
+        {
+            return System.Text.RegularExpressions.Regex.Replace(txtRevisionIncluses.Text, @"\s+", "");
         }
 
         #endregion
@@ -590,6 +598,10 @@ namespace Ceritar.Logirack_CVS.Forms
                     if (blnValidReturn)
                     {
                         MessageBox.Show("Export effectué avec succès!" + Environment.NewLine + "À l'emplacement suivant : " + txtTemp.Text, "Message", MessageBoxButtons.OK);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Erreur lors de l'export." + Environment.NewLine + "À l'emplacement suivant : " + txtTemp.Text, "Message", MessageBoxButtons.OK);
                     }
 
                     Cursor.Current = Cursors.Default;
@@ -1155,6 +1167,20 @@ namespace Ceritar.Logirack_CVS.Forms
 
                 Clipboard.Clear();
                 Clipboard.SetText(strToCopy);
+            }
+        }
+
+        private void chkExcludePreviousRevScripts_CheckedChanged(object sender, EventArgs e)
+        {
+            txtRevisionIncluses.Enabled = !chkExcludePreviousRevScripts.Checked;
+        }
+
+        private void txtRevisionIncluses_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (!System.Text.RegularExpressions.Regex.IsMatch(txtRevisionIncluses.Text, "^[0-9-;,]"))
+            {
+                clsTTApp.GetAppController.ShowMessage(mintMSG_ValidCharacters);
+                e.Cancel = true;
             }
         }
     }
