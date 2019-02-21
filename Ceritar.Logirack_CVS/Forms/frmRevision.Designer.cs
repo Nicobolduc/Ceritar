@@ -768,6 +768,7 @@
             this.txtRevisionIncluses.Name = "txtRevisionIncluses";
             this.txtRevisionIncluses.Size = new System.Drawing.Size(146, 22);
             this.txtRevisionIncluses.TabIndex = 76;
+            this.toolTips.SetToolTip(this.txtRevisionIncluses, "# de révision(s) séparés par \";\", \",\" ou \"-\" pour un intervalle.");
             this.txtRevisionIncluses.Validating += new System.ComponentModel.CancelEventHandler(this.txtRevisionIncluses_Validating);
             // 
             // label10

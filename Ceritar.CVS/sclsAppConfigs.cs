@@ -13,6 +13,7 @@ namespace Ceritar.CVS
         private static string _strAppRevisionFileName = "00_DB_UpdateRevisionNo";
         private static string _strScriptsFolderName = "Scripts";
         private static string _strRevisionAllScriptFolderName = "Rev_AllScripts";
+        private static string _strPreviousRevisionAllScriptFolderName = "PreviousRev_AllScripts";
         private static string _strCaptionsAndMenusFileName;
         private static string[] _strReleaseInvalidExtensions = { ".xml", ".pdb", ".ini", ".log", ".txt", ".sample", ".scc" };
         private static string[] _strReleaseInvalidFolders = { "zh-CN" };
@@ -108,6 +109,11 @@ namespace Ceritar.CVS
         public static string GetRevisionAllScriptFolderName
         {
             get { return sclsAppConfigs._strRevisionAllScriptFolderName; }
+        }
+
+        public static string GetPreviousRevisionAllScriptFolderName
+        {
+            get { return sclsAppConfigs._strPreviousRevisionAllScriptFolderName; }
         }
 
         public static string GetScriptsFolderName
