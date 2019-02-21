@@ -2,13 +2,13 @@
 ++Version:
 -Le Par Client des appSatellite devrait s'appliquer au version aussi
 -Ajouter dossier divers ne le met pas dans un répertoire configurer
+-Liste revision: identifier les lignes avec Path invalides semble plus fonctionner
 
 ++Revision:
 -avoir un bouton ou autre pour rafraichir les noms de répertoire
 -Lorsqu'on sauvegarde, le path de SRe n'est pas mis à jour comme pour le release ou les scripts POUR LES FICHIER SEULS
 -Bug lorsque j'ajoute une application satellite, ca delete le Exe release ???
 -Message lorsqu'un "Only" folder script detected, mais pas utilisable
-
 
 RELEASE NOTE:
 -Cocher ajouter les scripts par defaut (si new ou vide, gerer) + warning si pas checked

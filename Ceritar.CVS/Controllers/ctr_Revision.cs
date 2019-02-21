@@ -696,41 +696,42 @@ namespace Ceritar.CVS.Controllers
                                 }
                             }
 
+                            if (!Directory.Exists(mcModRevision.Path_Scripts)) mcModRevision.Path_Scripts = string.Empty;
 
                             //Ajout dans Rev_AllScripts             ****Rev_AllScripts DEPRECATED AND HORRIBLE ****
                             //List<string> lstScriptsToCopy;
                             //string strNewScriptName = string.Empty;
                             //int intNewScriptNumber = 0;
 
-                            //if (!string.IsNullOrEmpty(mcModRevision.Path_Scripts) & blnScriptsChanged)
-                            //{
-                            //    strRevAllScripts_Location = str_GetRevisionRootFolderPath(mcModRevision.TemplateSource.Template_NRI, mcModRevision.Version.VersionNo.ToString()).Replace(sclsAppConfigs.GetRevisionNumberPrefix + "XX", sclsAppConfigs.GetRevisionAllScriptFolderName);
+                                //if (!string.IsNullOrEmpty(mcModRevision.Path_Scripts) & blnScriptsChanged)
+                                //{
+                                //    strRevAllScripts_Location = str_GetRevisionRootFolderPath(mcModRevision.TemplateSource.Template_NRI, mcModRevision.Version.VersionNo.ToString()).Replace(sclsAppConfigs.GetRevisionNumberPrefix + "XX", sclsAppConfigs.GetRevisionAllScriptFolderName);
 
-                            //    if (!Directory.Exists(strRevAllScripts_Location))
-                            //    {
-                            //        Directory.CreateDirectory(strRevAllScripts_Location);
-                            //    }
+                                //    if (!Directory.Exists(strRevAllScripts_Location))
+                                //    {
+                                //        Directory.CreateDirectory(strRevAllScripts_Location);
+                                //    }
 
-                            //    if ((File.GetAttributes(mcModRevision.Path_Scripts) & FileAttributes.Directory) == FileAttributes.Directory)
-                            //    {
-                            //        clsTTApp.GetAppController.setAttributesToNormal(new DirectoryInfo(mcModRevision.Path_Scripts));
+                                //    if ((File.GetAttributes(mcModRevision.Path_Scripts) & FileAttributes.Directory) == FileAttributes.Directory)
+                                //    {
+                                //        clsTTApp.GetAppController.setAttributesToNormal(new DirectoryInfo(mcModRevision.Path_Scripts));
 
-                            //        lstScriptsToCopy = Directory.GetFiles(mcModRevision.Path_Scripts, "*.sql", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList(); // OrderBy(f => f).ToList<string>();
-                            //    }
-                            //    else
-                            //    {
-                            //        lstScriptsToCopy = Directory.GetFiles(new FileInfo(mcModRevision.Path_Scripts).Directory.FullName, "*.sql", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
-                            //    }
+                                //        lstScriptsToCopy = Directory.GetFiles(mcModRevision.Path_Scripts, "*.sql", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList(); // OrderBy(f => f).ToList<string>();
+                                //    }
+                                //    else
+                                //    {
+                                //        lstScriptsToCopy = Directory.GetFiles(new FileInfo(mcModRevision.Path_Scripts).Directory.FullName, "*.sql", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
+                                //    }
 
-                            //    clsTTApp.GetAppController.setAttributesToNormal(new DirectoryInfo(strRevAllScripts_Location));
+                                //    clsTTApp.GetAppController.setAttributesToNormal(new DirectoryInfo(strRevAllScripts_Location));
 
-                            //    for (int intIndex = intNbScriptsAlreadyPresent; intIndex < lstScriptsToCopy.Count; intIndex++)
-                            //    {
-                            //        strNewScriptName = pfstrGetNewFileNameWithNumber(strRevAllScripts_Location, lstScriptsToCopy[intIndex], ref intNewScriptNumber, false);
+                                //    for (int intIndex = intNbScriptsAlreadyPresent; intIndex < lstScriptsToCopy.Count; intIndex++)
+                                //    {
+                                //        strNewScriptName = pfstrGetNewFileNameWithNumber(strRevAllScripts_Location, lstScriptsToCopy[intIndex], ref intNewScriptNumber, false);
 
-                            //        File.Copy(lstScriptsToCopy[intIndex], Path.Combine(strRevAllScripts_Location, strNewScriptName), true);
-                            //    }
-                            //}
+                                //        File.Copy(lstScriptsToCopy[intIndex], Path.Combine(strRevAllScripts_Location, strNewScriptName), true);
+                                //    }
+                                //}
 
 
                             break;
@@ -1546,7 +1547,7 @@ namespace Ceritar.CVS.Controllers
 
                                                 strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
 
-                                                newZipFile.CreateEntryFromFile(lstSpecificScripts[intIndex], Path.Combine(sclsAppConfigs.GetRevisionAllScriptFolderName, intFileCount.ToString() + "S__" + Path.GetFileName(lstSpecificScripts[intIndex])));
+                                                newZipFile.CreateEntryFromFile(lstSpecificScripts[intIndex], Path.Combine(sclsAppConfigs.GetPreviousRevisionAllScriptFolderName, intFileCount.ToString() + "S__" + Path.GetFileName(lstSpecificScripts[intIndex])));
 
                                                 intNewScriptNumber++;
                                             }
