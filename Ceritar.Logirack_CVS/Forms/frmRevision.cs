@@ -103,13 +103,19 @@ namespace Ceritar.Logirack_CVS.Forms
             grdRevModifs.Cols[mintGrdRevMod_RevM_DtHr_col].Width = 92;
             grdRevModifs.Cols[mintGrdRevMod_CeC_Name_For_col].Width = 100;
 
-            grdRevModifs.Cols[mintGrdRevMod_RevM_DtHr_col].DataType = typeof(DateTime);
-            grdRevModifs.Cols[mintGrdRevMod_RevM_DtHr_col].Format = (clsTTApp.GetAppController.str_GetServerDateFormat + " HH:mm");
-
             grdRevModifs.AllowMerging = C1.Win.C1FlexGrid.AllowMergingEnum.RestrictAll;
 
             grdRevModifs.Cols[mintGrdRevMod_RevM_DtHr_col].AllowMerging = true;
             grdRevModifs.Cols[mintGrdRevMod_CeC_Name_For_col].AllowMerging = true;
+            
+            if (grdRevModifs.Rows.Count > 1)
+            {
+                cboClientsRevModif.Visible = true;
+                dtpRevModif.Visible = true;
+            }
+
+            mcGrdRevModifs.SetColType_ComboBox(ref cboClientsRevModif, mcCtrRevision.strGetClients_SQL(formController.Item_NRI), mintGrdRevMod_CeC_Name_For_col, "CeC_NRI", "CeC_Name", false);
+            mcGrdRevModifs.SetColType_DateTimePicker(ref dtpRevModif, mintGrdRevMod_RevM_DtHr_col, clsTTApp.GetAppController.str_GetServerDateFormat + " HH:mm");
         }
 
         private void mcGrdClients_BeforeClickAdd(ref bool vblnCancel)
@@ -376,6 +382,11 @@ namespace Ceritar.Logirack_CVS.Forms
             return lstClient;
         }
 
+        bool IRevision.GetScriptsOnly()
+        {
+            return chkScriptOnly.Checked;
+        }
+
         #endregion
 
 
@@ -624,7 +635,11 @@ namespace Ceritar.Logirack_CVS.Forms
                         {
                             ((TextBox)rControl).Text = openFileDialog.FileName;
 
-                            if (((TextBox)rControl).Name == txtScriptsPath.Name) btnShowScriptsFolder.FlatAppearance.BorderColor = Color.Yellow;
+                            if (((TextBox)rControl).Name == txtScriptsPath.Name)
+                            {
+                                btnShowScriptsFolder.FlatAppearance.BorderColor = Color.Yellow;
+                                //if (txtScriptsPath.Text != string.Empty) chkScriptOnly.Enabled = true;
+                            } 
 
                             if (((TextBox)rControl).Name == txtReleasePath.Name) btnShowExecutableFolder.FlatAppearance.BorderColor = Color.Yellow;
                         }
@@ -861,6 +876,8 @@ namespace Ceritar.Logirack_CVS.Forms
             { }
             else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrRevision.strGetClients_SQL(formController.Item_NRI), "CeC_NRI", "CeC_Name", true, ref cboClients))
             { }
+            else if (!sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrRevision.strGetClients_SQL(formController.Item_NRI), "CeC_NRI", "CeC_Name", true, ref cboClientsRevModif))
+            { }
             else if (!pfblnData_Load())
             { }
             else if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE)
@@ -1012,9 +1029,30 @@ namespace Ceritar.Logirack_CVS.Forms
                 {
                     case mintGrdRevMod_RevM_ChangeDesc_col:
 
-                        grdRevModifs.StartEditing();
+                        grdRevModifs.StartEditing(grdRevModifs.Row, mintGrdRevMod_RevM_ChangeDesc_col);
 
                         formController.ChangeMade = true;
+                        break;
+
+                    case mintGrdRevMod_CeC_Name_For_col:
+                        if (formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
+                        {
+                            string strListOfClientSelected = mcGrdRevModifs[grdRevModifs.Row, mintGrdRevMod_CeC_NRI_For_col];
+
+                            sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrRevision.strGetClients_SQL(formController.Item_NRI, strListOfClientSelected), "CeC_NRI", "Cec_Name", false, ref cboClientsRevModif);
+
+                            grdRevModifs.StartEditing();
+                        }
+
+                        break;
+
+                    case mintGrdRevMod_RevM_DtHr_col:
+                        if (formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
+                        {
+
+                            grdRevModifs.StartEditing();
+                        }
+
                         break;
                 }
             }
@@ -1148,6 +1186,7 @@ namespace Ceritar.Logirack_CVS.Forms
                     btnSelectVariousFolderPath.Enabled = false;
                     btnShowRootFolder.Enabled = false;
                     btnExportRevision.Enabled = false;
+                    chkScriptOnly.Enabled = false;
 
                     if (mintCeritarApplication_NRI_Master > 0)
                     {
@@ -1165,7 +1204,8 @@ namespace Ceritar.Logirack_CVS.Forms
                     btnSelectVariousFolderPath.Enabled = true;
                     btnShowRootFolder.Enabled = true;
                     btnExportRevision.Enabled = true;
-                    
+                    if (txtScriptsPath.Text != string.Empty) chkScriptOnly.Enabled = true;
+
                     if (mintCeritarApplication_NRI_Master > 0)
                     {
                         gbScripts.Enabled = false;
@@ -1550,6 +1590,26 @@ namespace Ceritar.Logirack_CVS.Forms
                 }
 
                 if (msgResult == DialogResult.No) e.Cancel = true;
+            }
+        }
+
+        private void cboClientsRevModif_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!formController.FormIsLoading & cboClientsRevModif.SelectedIndex > -1)
+            {
+                grdRevModifs[grdRevModifs.Row, mintGrdRevMod_CeC_NRI_For_col] = cboClientsRevModif.SelectedValue;
+
+                formController.ChangeMade = true;
+            }
+        }
+
+        private void dtpRevModif_ValueChanged(object sender, EventArgs e)
+        {
+            if (!formController.FormIsLoading & cboClientsRevModif.SelectedIndex > -1)
+            {
+                grdRevModifs[grdRevModifs.Row, mintGrdRevMod_RevM_DtHr_col] = dtpRevModif.Value;
+
+                formController.ChangeMade = true;
             }
         }
     }

@@ -1557,66 +1557,71 @@ namespace Ceritar.CVS.Controllers
                 //Create the new archive file and add all the folders to it.
                 if (File.Exists(strNewZipFileLocation)) File.Delete(strNewZipFileLocation);
 
-                //Add the release folder with the report application to the zip archive.
-                if (!string.IsNullOrEmpty(strReleaseLocation))
-                {
-                    clsTTApp.GetAppController.blnDeleteFilesFromFolder(strReleaseLocation, sclsAppConfigs.GetReleaseInvalidExtensions);
-
-                    if ((File.GetAttributes(strReleaseLocation) & FileAttributes.Directory) == FileAttributes.Directory)
-                    {
-                        ZipFile.CreateFromDirectory(strReleaseLocation, strNewZipFileLocation, CompressionLevel.Optimal, true);
-
-                        archiveMode = ZipArchiveMode.Update;
-                    }
-                }
-
-
-                using (ZipArchive newZipFile = ZipFile.Open(strNewZipFileLocation, archiveMode))
+                if (!mcView.GetScriptsOnly())
                 {
                     //Add the release folder with the report application to the zip archive.
                     if (!string.IsNullOrEmpty(strReleaseLocation))
                     {
+                        clsTTApp.GetAppController.blnDeleteFilesFromFolder(strReleaseLocation, sclsAppConfigs.GetReleaseInvalidExtensions);
+
                         if ((File.GetAttributes(strReleaseLocation) & FileAttributes.Directory) == FileAttributes.Directory)
                         {
-                            //foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strReleaseLocation, "*.*", SearchOption.AllDirectories))
-                            //{
-                            //    newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
-                            //}
-                        }
-                        else if (mcView.GetExeIsExternalReport())
-                        {
-                            //Add the external report application to the zip archive
-                            newZipFile.CreateEntryFromFile(strReleaseLocation, Path.Combine(new DirectoryInfo(strReleaseLocation).Parent.Name, Path.GetFileName(strReleaseLocation)), CompressionLevel.NoCompression);
+                            ZipFile.CreateFromDirectory(strReleaseLocation, strNewZipFileLocation, CompressionLevel.Optimal, true);
+
+                            archiveMode = ZipArchiveMode.Update;
                         }
                     }
-
-                    //Add every satellites applications to the zip archive.
-                    List<Interfaces.structSatRevision> lstSatellites = mcView.GetRevisionSatelliteList();
-
-                    foreach (Interfaces.structSatRevision structSat in lstSatellites)
+                }
+                
+                using (ZipArchive newZipFile = ZipFile.Open(strNewZipFileLocation, archiveMode))
+                {
+                    if (!mcView.GetScriptsOnly())
                     {
-                        //Get the executable folder location to copy (from the version kit or from the latest revision)
-                        strLocationSatelliteExe = clsTTSQL.str_ADOSingleLookUp("TOP 1 SatRevision.SRe_Exe_Location", "Revision INNER JOIN SatRevision ON SatRevision.Rev_NRI = Revision.Rev_NRI", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Revision.Rev_PreparationMode = 0 AND SatRevision.SRe_Exe_Location IS NOT NULL AND SatRevision.CSA_NRI = " + structSat.intCeritarSatelliteApp_NRI + " ORDER BY Revision.Rev_No DESC");
-
-                        strLocationSatelliteExe = strLocationSatelliteExe == string.Empty ? structSat.strLocationSatelliteExe : strLocationSatelliteExe;
-
-                        if (structSat.blnExeIsFolder && Directory.Exists(strLocationSatelliteExe))
+                        //Add the release folder with the report application to the zip archive.
+                        if (!string.IsNullOrEmpty(strReleaseLocation))
                         {
-                            //Ajoute les fichiers seuls
-                            foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strLocationSatelliteExe, "*.*", SearchOption.TopDirectoryOnly))
+                            if ((File.GetAttributes(strReleaseLocation) & FileAttributes.Directory) == FileAttributes.Directory)
                             {
-                                newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(structSat.strExportFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
+                                //foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strReleaseLocation, "*.*", SearchOption.AllDirectories))
+                                //{
+                                //    newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetReleaseFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
+                                //}
                             }
-
-                            //Réplique les structures de répertoire
-                            foreach (string strCurrentFileToCopyPath in Directory.GetDirectories(strLocationSatelliteExe, "*.*", SearchOption.TopDirectoryOnly))
+                            else if (mcView.GetExeIsExternalReport())
                             {
-                                blnValidReturn = clsTTApp.GetAppController.blnAddDirectoryStructureToZipFile(newZipFile, strCurrentFileToCopyPath, structSat.strExportFolderName);
+                                //Add the external report application to the zip archive
+                                newZipFile.CreateEntryFromFile(strReleaseLocation, Path.Combine(new DirectoryInfo(strReleaseLocation).Parent.Name, Path.GetFileName(strReleaseLocation)), CompressionLevel.NoCompression);
                             }
                         }
-                        else if (File.Exists(strLocationSatelliteExe))
+
+                        //Add every satellites applications to the zip archive.
+                        List<Interfaces.structSatRevision> lstSatellites = mcView.GetRevisionSatelliteList();
+
+                        foreach (Interfaces.structSatRevision structSat in lstSatellites)
                         {
-                            newZipFile.CreateEntryFromFile(strLocationSatelliteExe, Path.Combine(structSat.strExportFolderName, Path.GetFileName(strLocationSatelliteExe)));
+                            //Get the executable folder location to copy (from the version kit or from the latest revision)
+                            strLocationSatelliteExe = clsTTSQL.str_ADOSingleLookUp("TOP 1 SatRevision.SRe_Exe_Location", "Revision INNER JOIN SatRevision ON SatRevision.Rev_NRI = Revision.Rev_NRI", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Revision.Rev_PreparationMode = 0 AND SatRevision.SRe_Exe_Location IS NOT NULL AND SatRevision.CSA_NRI = " + structSat.intCeritarSatelliteApp_NRI + " ORDER BY Revision.Rev_No DESC");
+
+                            strLocationSatelliteExe = strLocationSatelliteExe == string.Empty ? structSat.strLocationSatelliteExe : strLocationSatelliteExe;
+
+                            if (structSat.blnExeIsFolder && Directory.Exists(strLocationSatelliteExe))
+                            {
+                                //Ajoute les fichiers seuls
+                                foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strLocationSatelliteExe, "*.*", SearchOption.TopDirectoryOnly))
+                                {
+                                    newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(structSat.strExportFolderName, Path.GetFileName(strCurrentFileToCopyPath)));
+                                }
+
+                                //Réplique les structures de répertoire
+                                foreach (string strCurrentFileToCopyPath in Directory.GetDirectories(strLocationSatelliteExe, "*.*", SearchOption.TopDirectoryOnly))
+                                {
+                                    blnValidReturn = clsTTApp.GetAppController.blnAddDirectoryStructureToZipFile(newZipFile, strCurrentFileToCopyPath, structSat.strExportFolderName);
+                                }
+                            }
+                            else if (File.Exists(strLocationSatelliteExe))
+                            {
+                                newZipFile.CreateEntryFromFile(strLocationSatelliteExe, Path.Combine(structSat.strExportFolderName, Path.GetFileName(strLocationSatelliteExe)));
+                            }
                         }
                     }
 
@@ -2111,6 +2116,8 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "     INNER JOIN CerClient ON CerClient.CeC_NRI = RevModifs.CeC_NRI_For " + Environment.NewLine;
 
             strSQL = strSQL + " WHERE RevModifs.Rev_NRI = " + vintRevision_NRI + Environment.NewLine;
+
+            strSQL = strSQL + " ORDER BY CerClient.CeC_NRI, RevModifs.RevM_DtHr " + Environment.NewLine;
 
             return strSQL;
         }

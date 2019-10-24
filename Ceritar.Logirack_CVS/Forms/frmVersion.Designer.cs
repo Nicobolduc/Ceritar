@@ -543,7 +543,7 @@
             // 
             // chkBaseKit
             // 
-            this.chkBaseKit.Location = new System.Drawing.Point(591, 145);
+            this.chkBaseKit.Location = new System.Drawing.Point(675, 145);
             this.chkBaseKit.Name = "chkBaseKit";
             this.chkBaseKit.Size = new System.Drawing.Size(15, 15);
             this.chkBaseKit.TabIndex = 16;
@@ -552,7 +552,7 @@
             // 
             // lblBaseKit
             // 
-            this.lblBaseKit.Location = new System.Drawing.Point(603, 144);
+            this.lblBaseKit.Location = new System.Drawing.Point(687, 144);
             this.lblBaseKit.Name = "lblBaseKit";
             this.lblBaseKit.Size = new System.Drawing.Size(38, 15);
             this.lblBaseKit.TabIndex = 17;

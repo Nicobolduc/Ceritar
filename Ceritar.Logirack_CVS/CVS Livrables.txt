@@ -6,19 +6,19 @@
 -avoir un bouton ou autre pour rafraichir les noms de répertoire
 -Message lorsqu'un "Only" folder script detected, mais pas utilisable
 -Il faudrait pouvoir spécifier une liste de noms valides pour un client (UNIQUE A TOUTE LAPP TMS)
--Il semble y avoir un bug lorsque j'ajoute un fichier unique dans les scripts, le numéro prend le même que le dernier parfois
-*** Mode Export de SCRIPT ONLY ***
 
 ++AppCeritar:
 -Avoir un onglet qui permet de consulter la dernière version/révision déployée pour les app
 
+-Gerer les dates selon le format du PC pour le display et non de la BD....
 
 RELEASE NOTE:
 -Cocher ajouter les scripts par defaut (si new ou vide, gerer) + warning si pas checked
 -Rendre Rev All script obsolete
 -Pouvoir avoir une même révision pour plusieurs clients en même temps
 -Ajout d'un bouton pour ajouter ou mettre a jour une procedure de deploiement de version / revision
-
+-Revision: On peut maintenant savoir quel modification est pour qui et envoyer quand
+-Mode Export de SCRIPT ONLY
 
 ++Nice to have:
 -Avoir des templates par Application satellite.

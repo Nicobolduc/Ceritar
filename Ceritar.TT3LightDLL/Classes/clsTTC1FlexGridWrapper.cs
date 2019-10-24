@@ -545,7 +545,10 @@ namespace Ceritar.TT3LightDLL.Classes
             {
                 sclsWinControls_Utilities.blnComboBox_LoadFromSQL(vstrSQL, vstrValueMember, vstrDisplayMember, vblnAllowEmpty, ref rcboLinked);
 
-                mGrdFlex.Cols[vintColumnIndex].Style = mGrdFlex.Styles.Normal;
+                CellStyle individualColStyle = mGrdFlex.Styles.Add("ComboBox" + vintColumnIndex);
+
+                mGrdFlex.Cols[vintColumnIndex].Style = individualColStyle;
+                //mGrdFlex.Cols[vintColumnIndex].Style = mGrdFlex.Styles.Normal;
                 mGrdFlex.Cols[vintColumnIndex].Style.Editor = rcboLinked;
             }
             catch (Exception ex)
@@ -554,17 +557,18 @@ namespace Ceritar.TT3LightDLL.Classes
             }
 	    }
 
-	    public void SetColType_DateTimePicker(int vintColumnIndex, bool vblnNullable)
+	    public void SetColType_DateTimePicker(ref DateTimePicker rdtpLinked, int vintColumnIndex, string vstrDateFormat)
 	    {
 		    try {
                 CellStyle individualColStyle = mGrdFlex.Styles.Add("DateTime" + vintColumnIndex);
 
                 individualColStyle.DataType = typeof(DateTime);
-                individualColStyle.Format = clsTTApp.GetAppController.str_GetServerDateFormat;
+                individualColStyle.Format = vstrDateFormat;
 
                 mGrdFlex.Cols[vintColumnIndex].Style = individualColStyle;
+                mGrdFlex.Cols[vintColumnIndex].Style.Editor = rdtpLinked;
 
-                mGrdFlex.Cols[vintColumnIndex].Width = 85;
+                if (mGrdFlex.Cols[vintColumnIndex].Width ==0) mGrdFlex.Cols[vintColumnIndex].Width = 92;
 
 		    } catch (Exception ex) {
 			    sclsErrorsLog.WriteToErrorLog(ex, ex.Source + " - " + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);

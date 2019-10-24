@@ -34,6 +34,7 @@ namespace Ceritar.CVS.Controllers.Interfaces
         bool GetIfScriptsAreToAppend();
         bool IsPreparationMode();
         bool IsPreviousRevisionScriptsIncluded();
+        bool GetScriptsOnly();
         List<structRevModifs> GetModificationsList();
         List<structSatRevision> GetRevisionSatelliteList();
         structClientAppRevision GetSelectedClient();

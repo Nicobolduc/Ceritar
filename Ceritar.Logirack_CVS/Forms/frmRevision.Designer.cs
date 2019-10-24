@@ -33,6 +33,8 @@
             this.dtpCreation = new System.Windows.Forms.DateTimePicker();
             this.cboClients = new System.Windows.Forms.ComboBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.dtpRevModif = new System.Windows.Forms.DateTimePicker();
+            this.cboClientsRevModif = new System.Windows.Forms.ComboBox();
             this.btnGrdRevDel = new System.Windows.Forms.Button();
             this.btnGrdRevAdd = new System.Windows.Forms.Button();
             this.grdRevModifs = new C1.Win.C1FlexGrid.C1FlexGrid();
@@ -70,6 +72,7 @@
             this.chkAddScripts = new System.Windows.Forms.CheckBox();
             this.btnPrintPairValidation = new System.Windows.Forms.Button();
             this.txtRevisionIncluses = new System.Windows.Forms.TextBox();
+            this.chkScriptOnly = new System.Windows.Forms.CheckBox();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.gbSatellites = new System.Windows.Forms.GroupBox();
@@ -88,10 +91,10 @@
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.chkExcludePreviousRevScripts = new System.Windows.Forms.CheckBox();
             this.chkIncludePreviousRevScripts = new System.Windows.Forms.GroupBox();
             this.label10 = new System.Windows.Forms.Label();
+            this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.mnuRevModif.SuspendLayout();
@@ -134,6 +137,8 @@
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Controls.Add(this.dtpRevModif);
+            this.groupBox3.Controls.Add(this.cboClientsRevModif);
             this.groupBox3.Controls.Add(this.btnGrdRevDel);
             this.groupBox3.Controls.Add(this.btnGrdRevAdd);
             this.groupBox3.Controls.Add(this.grdRevModifs);
@@ -145,6 +150,31 @@
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Livrables couverts / Modifications incluses (Shift+Enter pour multi-lignes)";
+            // 
+            // dtpRevModif
+            // 
+            this.dtpRevModif.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.dtpRevModif.CustomFormat = "MM-dd-yyyy";
+            this.dtpRevModif.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpRevModif.Location = new System.Drawing.Point(249, 109);
+            this.dtpRevModif.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.dtpRevModif.Name = "dtpRevModif";
+            this.dtpRevModif.Size = new System.Drawing.Size(104, 22);
+            this.dtpRevModif.TabIndex = 5;
+            this.dtpRevModif.Visible = false;
+            this.dtpRevModif.ValueChanged += new System.EventHandler(this.dtpRevModif_ValueChanged);
+            // 
+            // cboClientsRevModif
+            // 
+            this.cboClientsRevModif.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboClientsRevModif.FormattingEnabled = true;
+            this.cboClientsRevModif.Location = new System.Drawing.Point(41, 71);
+            this.cboClientsRevModif.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cboClientsRevModif.Name = "cboClientsRevModif";
+            this.cboClientsRevModif.Size = new System.Drawing.Size(179, 24);
+            this.cboClientsRevModif.TabIndex = 4;
+            this.cboClientsRevModif.Visible = false;
+            this.cboClientsRevModif.SelectedIndexChanged += new System.EventHandler(this.cboClientsRevModif_SelectedIndexChanged);
             // 
             // btnGrdRevDel
             // 
@@ -413,7 +443,7 @@
             this.btnExportRevision.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExportRevision.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnExportRevision.Image = ((System.Drawing.Image)(resources.GetObject("btnExportRevision.Image")));
-            this.btnExportRevision.Location = new System.Drawing.Point(281, 14);
+            this.btnExportRevision.Location = new System.Drawing.Point(337, 14);
             this.btnExportRevision.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnExportRevision.Name = "btnExportRevision";
             this.btnExportRevision.Size = new System.Drawing.Size(47, 49);
@@ -592,10 +622,21 @@
             this.txtRevisionIncluses.Location = new System.Drawing.Point(129, 39);
             this.txtRevisionIncluses.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtRevisionIncluses.Name = "txtRevisionIncluses";
-            this.txtRevisionIncluses.Size = new System.Drawing.Size(146, 22);
+            this.txtRevisionIncluses.Size = new System.Drawing.Size(114, 22);
             this.txtRevisionIncluses.TabIndex = 76;
             this.toolTips.SetToolTip(this.txtRevisionIncluses, "# de révision(s) séparés par \";\", \",\" ou \"-\" pour un intervalle.");
             this.txtRevisionIncluses.Validating += new System.ComponentModel.CancelEventHandler(this.txtRevisionIncluses_Validating);
+            // 
+            // chkScriptOnly
+            // 
+            this.chkScriptOnly.Location = new System.Drawing.Point(247, 39);
+            this.chkScriptOnly.Name = "chkScriptOnly";
+            this.chkScriptOnly.Size = new System.Drawing.Size(102, 20);
+            this.chkScriptOnly.TabIndex = 77;
+            this.chkScriptOnly.Text = "Scripts only";
+            this.toolTips.SetToolTip(this.chkScriptOnly, "Les exécutables ne seront pas exportés. Utile pour mettre à jour seulement les sc" +
+        "ripts.");
+            this.chkScriptOnly.UseVisualStyleBackColor = true;
             // 
             // openFileDialog
             // 
@@ -804,25 +845,6 @@
             this.label4.TabIndex = 77;
             this.label4.Text = "Ajouter un fichier :";
             // 
-            // formController
-            // 
-            this.formController.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.formController.ChangeMade = false;
-            this.formController.FormIsLoading = false;
-            this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.NO_MODE;
-            this.formController.Item_NRI = 0;
-            this.formController.Location = new System.Drawing.Point(1, 734);
-            this.formController.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.formController.Name = "formController";
-            this.formController.ShowButtonQuitOnly = false;
-            this.formController.Size = new System.Drawing.Size(1074, 34);
-            this.formController.TabIndex = 9;
-            this.formController.SetReadRights += new Ceritar.TT3LightDLL.Controls.ctlFormController.SetReadRightsEventHandler(this.formController_SetReadRights);
-            this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
-            this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
-            this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
-            // 
             // chkExcludePreviousRevScripts
             // 
             this.chkExcludePreviousRevScripts.Checked = true;
@@ -841,9 +863,10 @@
             this.chkIncludePreviousRevScripts.Controls.Add(this.label10);
             this.chkIncludePreviousRevScripts.Controls.Add(this.btnExportRevision);
             this.chkIncludePreviousRevScripts.Controls.Add(this.chkExcludePreviousRevScripts);
+            this.chkIncludePreviousRevScripts.Controls.Add(this.chkScriptOnly);
             this.chkIncludePreviousRevScripts.Location = new System.Drawing.Point(373, 664);
             this.chkIncludePreviousRevScripts.Name = "chkIncludePreviousRevScripts";
-            this.chkIncludePreviousRevScripts.Size = new System.Drawing.Size(333, 68);
+            this.chkIncludePreviousRevScripts.Size = new System.Drawing.Size(389, 68);
             this.chkIncludePreviousRevScripts.TabIndex = 10;
             this.chkIncludePreviousRevScripts.TabStop = false;
             this.chkIncludePreviousRevScripts.Text = "    Export vers fichier Zip (Selon client sélectionné)";
@@ -855,6 +878,25 @@
             this.label10.Size = new System.Drawing.Size(135, 17);
             this.label10.TabIndex = 75;
             this.label10.Text = "Révisions à inclures:";
+            // 
+            // formController
+            // 
+            this.formController.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.formController.ChangeMade = false;
+            this.formController.FormIsLoading = false;
+            this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.NO_MODE;
+            this.formController.Item_NRI = 0;
+            this.formController.Location = new System.Drawing.Point(1, 734);
+            this.formController.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.formController.Name = "formController";
+            this.formController.ShowButtonQuitOnly = false;
+            this.formController.Size = new System.Drawing.Size(1074, 34);
+            this.formController.TabIndex = 9;
+            this.formController.SetReadRights += new Ceritar.TT3LightDLL.Controls.ctlFormController.SetReadRightsEventHandler(this.formController_SetReadRights);
+            this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
+            this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
+            this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
             // 
             // frmRevision
             // 
@@ -963,5 +1005,8 @@
         private System.Windows.Forms.Button btnGrdClientsDel;
         private System.Windows.Forms.Button btnGrdClientsAdd;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.CheckBox chkScriptOnly;
+        private System.Windows.Forms.ComboBox cboClientsRevModif;
+        private System.Windows.Forms.DateTimePicker dtpRevModif;
     }
 }
