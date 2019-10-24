@@ -326,7 +326,7 @@
             this.grdClients.Size = new System.Drawing.Size(407, 74);
             this.grdClients.StyleInfo = resources.GetString("grdClients.StyleInfo");
             this.grdClients.TabIndex = 78;
-            this.grdClients.Tag = "58";
+            this.grdClients.Tag = "60";
             this.grdClients.BeforeRowColChange += new C1.Win.C1FlexGrid.RangeEventHandler(this.grdClients_BeforeRowColChange);
             this.grdClients.AfterRowColChange += new C1.Win.C1FlexGrid.RangeEventHandler(this.grdClients_AfterRowColChange);
             this.grdClients.Click += new System.EventHandler(this.grdClients_Click);
@@ -684,19 +684,19 @@
             this.mnuiShowInExplorer,
             this.mnuiDelete});
             this.mnuSatRevision.Name = "mnuSatRevision";
-            this.mnuSatRevision.Size = new System.Drawing.Size(214, 48);
+            this.mnuSatRevision.Size = new System.Drawing.Size(213, 48);
             // 
             // mnuiShowInExplorer
             // 
             this.mnuiShowInExplorer.Name = "mnuiShowInExplorer";
-            this.mnuiShowInExplorer.Size = new System.Drawing.Size(213, 22);
+            this.mnuiShowInExplorer.Size = new System.Drawing.Size(212, 22);
             this.mnuiShowInExplorer.Text = "Afficher dans l\'explorateur";
             this.mnuiShowInExplorer.Click += new System.EventHandler(this.mnuiShowInExplorer_Click);
             // 
             // mnuiDelete
             // 
             this.mnuiDelete.Name = "mnuiDelete";
-            this.mnuiDelete.Size = new System.Drawing.Size(213, 22);
+            this.mnuiDelete.Size = new System.Drawing.Size(212, 22);
             this.mnuiDelete.Text = "Supprimer";
             this.mnuiDelete.Click += new System.EventHandler(this.mnuiDelete_Click);
             // 

@@ -1962,7 +1962,7 @@ namespace Ceritar.CVS.Controllers
                 strSQL = strSQL + " ORDER BY CASE WHEN CerSatApp.CSA_Name IS NULL THEN 0 ELSE 1 END, CerSatApp.CSA_Name " + Environment.NewLine;
 
                 sqlRecord = clsTTSQL.ADOSelect(strSQL);
-              
+
                 while (sqlRecord.Read())
                 {
                     if (intRecordCount == -1)
@@ -1980,14 +1980,17 @@ namespace Ceritar.CVS.Controllers
 
                         intRecordCount = 0;
                     }
-                    
+
                     cRevision.LstSatelliteRevisions.Add(new mod_SRe_SatelliteRevision());
                     cRevision.LstSatelliteRevisions[intRecordCount].Location_Exe = sqlRecord["SRe_Exe_Location"].ToString();
-
                     cRevision.LstSatelliteRevisions[intRecordCount].CeritarSatelliteApp = new mod_CSA_CeritarSatelliteApp();
-                    cRevision.LstSatelliteRevisions[intRecordCount].CeritarSatelliteApp.CeritarSatelliteApp_NRI = Int32.Parse(sqlRecord["CSA_NRI"].ToString());
-                    cRevision.LstSatelliteRevisions[intRecordCount].CeritarSatelliteApp.ExportFolderName = sqlRecord["CSA_KitFolderName"].ToString();
 
+                    if (sqlRecord["CSA_NRI"] != DBNull.Value)
+                    {
+                        cRevision.LstSatelliteRevisions[intRecordCount].CeritarSatelliteApp.CeritarSatelliteApp_NRI = Int32.Parse(sqlRecord["CSA_NRI"].ToString());
+                        cRevision.LstSatelliteRevisions[intRecordCount].CeritarSatelliteApp.ExportFolderName = sqlRecord["CSA_KitFolderName"].ToString();
+                    }
+                    
                     intRecordCount++;
                 }
 
