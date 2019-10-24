@@ -24,7 +24,7 @@ namespace Ceritar.TT3LightDLL.Classes
         //Caption: first col starts before the first pipe. || = 3 cols.
         
 	    //private members
-	    private const short mintDefaultActionCol = 1;
+	    private short mintDefaultActionCol = 1;
 	    private bool mblnHasNoActionColumn;
         private List<HostedCellControl> mlstHostedCellControls;
 
@@ -175,12 +175,14 @@ namespace Ceritar.TT3LightDLL.Classes
             }
         }
 
-#endregion
+        public short DefaultActionCol { get => mintDefaultActionCol; set => mintDefaultActionCol = value; }
+
+        #endregion
 
 
-#region "Functions / Subs"
+        #region "Functions / Subs"
 
-	    public bool bln_Init(ref C1FlexGrid rgrdGrid, ref Button rbtnAddRow, ref Button rbtnRemoveRow, bool vblnIsTree = false)
+        public bool bln_Init(ref C1FlexGrid rgrdGrid, ref Button rbtnAddRow, ref Button rbtnRemoveRow, bool vblnIsTree = false)
 	    {
 		    bool blnValidReturn = true;
             
@@ -708,11 +710,13 @@ namespace Ceritar.TT3LightDLL.Classes
                 }
             }
         }
-     
-#endregion
+
+        
+
+        #endregion
 
 
-	    private void btnAddRow_Click(object sender, EventArgs e)
+        private void btnAddRow_Click(object sender, EventArgs e)
 	    {
             bool blnCancel = false;
 

@@ -126,7 +126,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " 					OUTER APPLY (SELECT TOP 1 Revision.Rev_No " + Environment.NewLine;
             strSQL = strSQL + " 								 FROM Revision " + Environment.NewLine;
             strSQL = strSQL + " 								 WHERE Revision.Ver_NRI = ClientAppVersion.Ver_NRI " + Environment.NewLine;
-            strSQL = strSQL + " 								   AND Revision.CeC_NRI = ClientAppVersion.CeC_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 								   AND EXISTS (SELECT 1 FROM ClientAppRevision CAR WHERE CAR.CeC_NRI = ClientAppVersion.CeC_NRI AND CAR.Rev_NRI = Revision.Rev_NRI) " + Environment.NewLine;
             strSQL = strSQL + " 								   AND Revision.Rev_Location_Exe IS NOT NULL " + Environment.NewLine;
             strSQL = strSQL + " 								   AND Revision.Rev_ExeIsReport = 0 " + Environment.NewLine;
             strSQL = strSQL + " 								   AND Revision.Rev_PreparationMode = 0 " + Environment.NewLine;
@@ -161,7 +161,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "  					OUTER APPLY (SELECT TOP 1 Revision.Rev_No " + Environment.NewLine;
             strSQL = strSQL + "  								 FROM Revision " + Environment.NewLine;
             strSQL = strSQL + "  								 WHERE Revision.Ver_NRI = ClientAppVersion.Ver_NRI " + Environment.NewLine;
-            strSQL = strSQL + "  								   AND Revision.CeC_NRI = ClientAppVersion.CeC_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 								   AND EXISTS (SELECT 1 FROM ClientAppRevision CAR WHERE CAR.CeC_NRI = ClientAppVersion.CeC_NRI AND CAR.Rev_NRI = Revision.Rev_NRI) " + Environment.NewLine;
             strSQL = strSQL + "  								   AND ((Revision.Rev_Location_Exe IS NOT NULL AND Revision.Rev_ExeWithReport = 1) OR Revision.Rev_ExeIsReport = 1)" + Environment.NewLine;
             strSQL = strSQL + " 								   AND Revision.Rev_PreparationMode = 0 " + Environment.NewLine;
             strSQL = strSQL + "  								 ORDER BY Revision.Rev_No DESC " + Environment.NewLine;

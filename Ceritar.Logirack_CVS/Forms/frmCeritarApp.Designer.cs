@@ -42,6 +42,8 @@
             this.btnGrdSatDel = new System.Windows.Forms.Button();
             this.btnGrdSatAdd = new System.Windows.Forms.Button();
             this.chkMasterApp = new System.Windows.Forms.CheckBox();
+            this.btnShowWord = new System.Windows.Forms.Button();
+            this.btnReplaceWordDOC = new System.Windows.Forms.Button();
             this.cboDomain = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
@@ -54,10 +56,13 @@
             this.chkManageTTApp = new System.Windows.Forms.CheckBox();
             this.cboMasterApp = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.fileSystemWatcher1 = new System.IO.FileSystemWatcher();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdModules)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdSatApp)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
             this.SuspendLayout();
             // 
             // lblNom
@@ -203,6 +208,34 @@
             this.chkMasterApp.UseVisualStyleBackColor = true;
             this.chkMasterApp.CheckedChanged += new System.EventHandler(this.chkMasterApp_CheckedChanged);
             // 
+            // btnShowWord
+            // 
+            this.btnShowWord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnShowWord.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowWord.BackgroundImage")));
+            this.btnShowWord.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnShowWord.Location = new System.Drawing.Point(519, 146);
+            this.btnShowWord.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnShowWord.Name = "btnShowWord";
+            this.btnShowWord.Size = new System.Drawing.Size(47, 49);
+            this.btnShowWord.TabIndex = 18;
+            this.btnShowWord.Tag = "0";
+            this.toolTip1.SetToolTip(this.btnShowWord, "Procédure de déploiement de version / révision");
+            this.btnShowWord.UseVisualStyleBackColor = true;
+            this.btnShowWord.Click += new System.EventHandler(this.btnShowWord_Click);
+            // 
+            // btnReplaceWordDOC
+            // 
+            this.btnReplaceWordDOC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnReplaceWordDOC.Image = ((System.Drawing.Image)(resources.GetObject("btnReplaceWordDOC.Image")));
+            this.btnReplaceWordDOC.Location = new System.Drawing.Point(480, 157);
+            this.btnReplaceWordDOC.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnReplaceWordDOC.Name = "btnReplaceWordDOC";
+            this.btnReplaceWordDOC.Size = new System.Drawing.Size(35, 37);
+            this.btnReplaceWordDOC.TabIndex = 19;
+            this.toolTip1.SetToolTip(this.btnReplaceWordDOC, "Sélectionner nouvelle procédure");
+            this.btnReplaceWordDOC.UseVisualStyleBackColor = true;
+            this.btnReplaceWordDOC.Click += new System.EventHandler(this.btnReplaceAppChangeDOC_Click);
+            // 
             // cboDomain
             // 
             this.cboDomain.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -313,6 +346,7 @@
             this.grdSatApp.StyleInfo = resources.GetString("grdSatApp.StyleInfo");
             this.grdSatApp.TabIndex = 2;
             this.grdSatApp.Tag = "25";
+            this.grdSatApp.ValidateEdit += new C1.Win.C1FlexGrid.ValidateEditEventHandler(this.grdSatApp_ValidateEdit);
             this.grdSatApp.DoubleClick += new System.EventHandler(this.grdAppSat_DoubleClick);
             this.grdSatApp.Validated += new System.EventHandler(this.grdAppSat_Validated);
             // 
@@ -357,11 +391,18 @@
             this.label4.TabIndex = 17;
             this.label4.Text = "App. maître:";
             // 
+            // fileSystemWatcher1
+            // 
+            this.fileSystemWatcher1.EnableRaisingEvents = true;
+            this.fileSystemWatcher1.SynchronizingObject = this;
+            // 
             // frmCeritarApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(568, 751);
+            this.Controls.Add(this.btnReplaceWordDOC);
+            this.Controls.Add(this.btnShowWord);
             this.Controls.Add(this.chkMasterApp);
             this.Controls.Add(this.cboMasterApp);
             this.Controls.Add(this.label4);
@@ -389,6 +430,7 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdSatApp)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -420,5 +462,9 @@
         private System.Windows.Forms.ComboBox cboMasterApp;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox chkMasterApp;
+        private System.Windows.Forms.Button btnShowWord;
+        private System.Windows.Forms.Button btnReplaceWordDOC;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.IO.FileSystemWatcher fileSystemWatcher1;
     }
 }

@@ -151,9 +151,11 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        CerApp.CeA_AutoGenRevisionNoScript, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_ExternalRPTAppName, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_NRI_Master, " + Environment.NewLine;
-            strSQL = strSQL + "        CerApp.CeA_ManageTTApp " + Environment.NewLine;
-
+            strSQL = strSQL + "        CerApp.CeA_ManageTTApp, " + Environment.NewLine;
+            strSQL = strSQL + "        ItI_NRI_Procedure = ItI.ItI_NRI " + Environment.NewLine;
+            
             strSQL = strSQL + " FROM CerApp " + Environment.NewLine;
+            strSQL = strSQL + "     LEFT JOIN ItI ON ItI.ItI_ItemNRI = CerApp.CeA_NRI AND ItI.ItI_Table = 'CerApp' " + Environment.NewLine;
 
             strSQL = strSQL + " WHERE CerApp.CeA_NRI = " + vintCeA_NRI + Environment.NewLine;
 

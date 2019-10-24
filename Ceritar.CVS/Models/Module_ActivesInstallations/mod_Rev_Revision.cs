@@ -22,9 +22,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private mod_Tpl_HierarchyTemplate _cTemplateSource;
         private mod_Ver_Version _cVersion;
         private mod_TTU_User _cCreatedByUser;
-        private mod_CeC_CeritarClient _cCeritarClient;
         private List<mod_SRe_SatelliteRevision> _lstSatelliteRevisions;
-        private List<string> _lstModifications;
+        private List<Controllers.Interfaces.structRevModifs> _lstModifications;
         private string _strLocation_Release;
         private string _strLocation_Scripts;
         private string _strCreationDate;
@@ -33,6 +32,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
         private bool _blnExeIsExternalReport;
         private bool _blnExeWithExternalReport;
         private bool _blnPreparationMode;
+        private List<mod_CAR_ClientAppRevision> _lstClientsUsing;
 
         //mod_IBase
         private clsActionResults mcActionResults = new clsActionResults();
@@ -94,12 +94,6 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { _strNote = value; }
         }
 
-        internal mod_CeC_CeritarClient CeritarClient
-        {
-            get { return _cCeritarClient; }
-            set { _cCeritarClient = value; }
-        }
-
         internal List<mod_SRe_SatelliteRevision> LstSatelliteRevisions
         {
             get
@@ -115,7 +109,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { _lstSatelliteRevisions = value; }
         }
 
-        internal List<string> LstModifications
+        internal List<Controllers.Interfaces.structRevModifs> LstModifications
         {
             get { return _lstModifications; }
             set { _lstModifications = value; }
@@ -173,6 +167,21 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             set { _blnPreparationMode = value; }
         }
 
+        internal List<mod_CAR_ClientAppRevision> LstClientsUsing
+        {
+            get
+            {
+                if (_lstClientsUsing == null)
+                {
+
+                    _lstClientsUsing = new List<mod_CAR_ClientAppRevision>();
+                }
+
+                return _lstClientsUsing;
+            }
+            set { _lstClientsUsing = value; }
+        }
+
         #endregion
 
 
@@ -196,6 +205,10 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.MODIFICATION_LIST_MANDATORY);
                         }
+                        else if (_lstClientsUsing == null || _lstClientsUsing.Count == 0)
+                        {
+                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.CLIENTS_LIST_MANDATORY);
+                        }
                         else if (_intRevision_Number == 0)
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.REVISION_NUMBER_MANDATORY);
@@ -207,10 +220,6 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         else if (_cVersion == null || _cVersion.Version_NRI == 0)
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.VERSION_MANDATORY);
-                        }
-                        else if (_cCeritarClient == null || _cCeritarClient.CeritarClient_NRI == 0)
-                        {
-                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.CERITAR_CLIENT_MANDATORY);
                         }
                         else if ((_blnExeIsExternalReport || _blnExeWithExternalReport) && string.IsNullOrEmpty(_strLocation_Release))
                         {
@@ -241,11 +250,11 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.MODIFICATION_LIST_MANDATORY);
                         }
-                        else if (_cCeritarClient == null || _cCeritarClient.CeritarClient_NRI == 0)
+                        if (_lstClientsUsing == null || _lstClientsUsing.Count == 0)
                         {
-                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.CERITAR_CLIENT_MANDATORY);
+                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.MODIFICATION_LIST_MANDATORY);
                         }
-                        else if (string.IsNullOrEmpty(_strLocation_Release) & string.IsNullOrEmpty(_strLocation_Scripts) & LstSatelliteRevisions.Count == 0 & !_blnPreparationMode)
+                        else if (string.IsNullOrEmpty(_strLocation_Release) & string.IsNullOrEmpty(_strLocation_Scripts) & LstSatelliteRevisions.Count == 0 & !_blnPreparationMode & _intRevision_NRI==0)
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.EXE_OR_SCRIPT_MANDATORY);
                         }
@@ -304,7 +313,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
             {
                 for (int intIndex = 0; intIndex < _lstModifications.Count & blnValidReturn; intIndex++)
                 {
-                    if (string.IsNullOrEmpty(_lstModifications[intIndex]))
+                    if (string.IsNullOrEmpty(_lstModifications[intIndex].strDescriptionModif))
                     {
                         mcActionResults.RowInError = intIndex + 1;
                         mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.MODIFICATION_LIST_MANDATORY);
@@ -339,6 +348,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         { }
                         else if (!mcSQL.bln_ADOInsert("Revision", out _intRevision_NRI))
                         { }
+                        else if (!pfblnListClients_Save())
+                        { }
                         else if (!pfblnListModifications_Save())
                         { }
                         else if (!pfblnListSatelliteRevisions_Save())
@@ -358,6 +369,8 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         { }
                         else if (!mcSQL.bln_ADOUpdate("Revision", "Revision.Rev_NRI = " + _intRevision_NRI))
                         { }
+                        else if (!pfblnListClients_Save())
+                        { }
                         else if (!pfblnListModifications_Save())
                         { }
                         else if (!pfblnListSatelliteRevisions_Save())
@@ -371,9 +384,13 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                     case sclsConstants.DML_Mode.DELETE_MODE:
 
+                        if (!pfblnListClients_Save())
+                        { }
                         if (!mcSQL.bln_ADODelete("RevModifs", "RevModifs.Rev_NRI = " + _intRevision_NRI))
                         { }
                         else if (!pfblnListSatelliteRevisions_Save())
+                        { }
+                        if (!mcSQL.bln_ADODelete("ClientAppRevision", "ClientAppRevision.Rev_NRI = " + _intRevision_NRI))
                         { }
                         else if (!mcSQL.bln_ADODelete("Revision", "Revision.Rev_NRI = " + _intRevision_NRI))
                         { }
@@ -421,9 +438,13 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
                     if (!mcSQL.bln_RefreshFields())
                     { }
-                    else if (!mcSQL.bln_AddField("RevM_ChangeDesc", _lstModifications[intIndex], clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                    else if (!mcSQL.bln_AddField("RevM_ChangeDesc", _lstModifications[intIndex].strDescriptionModif, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                     { }
                     else if (!mcSQL.bln_AddField("Rev_NRI", _intRevision_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
+                    { }
+                    else if (!mcSQL.bln_AddField("CeC_NRI_For", _lstModifications[intIndex].intCeritarClient_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
+                    { }
+                    else if (!mcSQL.bln_AddField("RevM_DtHr", _lstModifications[intIndex].dthrSent.ToString(clsTTApp.GetAppController.str_GetServerDateTimeFormat), clsTTSQL.MySQL_FieldTypes.DATETIME_TYPE))
                     { }
                     else if (!mcSQL.bln_ADOInsert("RevModifs", out intDML_OutParam))
                     { }
@@ -431,6 +452,46 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                     {
                         blnValidReturn = true;
                     }
+
+                    if (!blnValidReturn) break;
+                }
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                if (!blnValidReturn & mcActionResults.IsValid)
+                {
+                    mcActionResults.SetInvalid(sclsConstants.Error_Message.ERROR_SAVE_MSG, clsActionResults.BaseErrorCode.ERROR_SAVE);
+                }
+                else if (blnValidReturn & !mcActionResults.IsValid)
+                {
+                    blnValidReturn = false;
+                }
+            }
+
+            return blnValidReturn;
+        }
+
+        private bool pfblnListClients_Save()
+        {
+            bool blnValidReturn = false;
+
+            try
+            {
+                for (int intIndex = 0; intIndex < _lstClientsUsing.Count; intIndex++)
+                {
+                    _lstClientsUsing[intIndex].SetcSQL = mcSQL;
+                    _lstClientsUsing[intIndex].RevisionParent = new mod_Rev_Revision();
+                    _lstClientsUsing[intIndex].RevisionParent.Revision_NRI = _intRevision_NRI;
+                    _lstClientsUsing[intIndex].DML_Action = (mintDML_Action == sclsConstants.DML_Mode.DELETE_MODE ? sclsConstants.DML_Mode.DELETE_MODE : _lstClientsUsing[intIndex].DML_Action);
+
+                    blnValidReturn = _lstClientsUsing[intIndex].blnSave();
+
+                    mcActionResults = _lstClientsUsing[intIndex].ActionResults;
 
                     if (!blnValidReturn) break;
                 }
@@ -518,8 +579,6 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                 else if (!mcSQL.bln_AddField("Rev_DtCreation", _strCreationDate, clsTTSQL.MySQL_FieldTypes.DATETIME_TYPE)) 
                 { }
                 else if (!mcSQL.bln_AddField("TTU_NRI", clsTTApp.GetAppController.cUser.User_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
-                { }
-                else if (!mcSQL.bln_AddField("CeC_NRI", _cCeritarClient.CeritarClient_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("Tpl_NRI", _cTemplateSource.Template_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }

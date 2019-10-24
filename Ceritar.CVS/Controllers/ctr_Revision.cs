@@ -10,6 +10,7 @@ using Ceritar.CVS.Models.Module_ActivesInstallations;
 using Ceritar.CVS.Models.Module_Configuration;
 using System.Text.RegularExpressions;
 using Microsoft.VisualBasic;
+using Ceritar.CVS.Controllers.Interfaces;
 
 namespace Ceritar.CVS.Controllers
 {
@@ -38,7 +39,9 @@ namespace Ceritar.CVS.Controllers
             EXE_OR_SCRIPT_MANDATORY = 6,
             CANT_DELETE_NOT_LAST_REVISION = 7,
             REPORT_EXE_MANDATORY = 8,
-            CREATED_BY_MANDATORY = 9
+            CREATED_BY_MANDATORY = 9,
+            CLIENT_NAME_MANDATORY = 10,
+            CLIENTS_LIST_MANDATORY = 11
         }
 
         public ctr_Revision(Interfaces.IRevision rView)
@@ -58,6 +61,9 @@ namespace Ceritar.CVS.Controllers
             bool blnValidReturn = false;
             List<Interfaces.structSatRevision> lstStructSRe;
             mod_SRe_SatelliteRevision cSRe;
+            List<Interfaces.structClientAppRevision> lstStructCAR;
+            mod_CAR_ClientAppRevision cCAR;
+            List<int> lstSRe_NRI = new List<int>();
 
             try
             {
@@ -86,11 +92,21 @@ namespace Ceritar.CVS.Controllers
                 if (!mcView.IsPreparationMode())
                     mcModRevision.Path_Scripts = (string.IsNullOrEmpty(mcView.GetLocation_Scripts()) & mcModRevision.Version.CerApplication.AutoGenRevisionNoScript ? "placeHolder" : mcView.GetLocation_Scripts());
 
+                lstStructCAR = new List<structClientAppRevision>();
+                lstStructCAR.Add(mcView.GetSelectedClient());
 
+                foreach (structClientAppRevision structCAV in lstStructCAR)
+                {
+                    cCAR = new mod_CAR_ClientAppRevision();
+                    cCAR.DML_Action = structCAV.Action;
+                    cCAR.ClientAppRevision_NRI = structCAV.intClientAppRevision_NRI;
+                    cCAR.ClientAppRevision_TS = structCAV.intClientAppRevision_TS;
 
-                mcModRevision.CeritarClient = new Models.Module_Configuration.mod_CeC_CeritarClient();
-                mcModRevision.CeritarClient.CeritarClient_NRI = mcView.GetCeritarClient_NRI();
-                mcModRevision.CeritarClient.CompanyName = mcView.GetCeritarClient_Name();
+                    cCAR.CeritarClient = new Models.Module_Configuration.mod_CeC_CeritarClient();
+                    cCAR.CeritarClient.CeritarClient_NRI = structCAV.intCeritarClient_NRI;
+
+                    mcModRevision.LstClientsUsing.Add(cCAR);
+                }
 
                 //mcModRevision.CreatedByUser = new mod_TTU_User();
                 //mcModRevision.CreatedByUser.
@@ -111,6 +127,7 @@ namespace Ceritar.CVS.Controllers
                     cSRe.Location_Exe = structSRe.strLocationSatelliteExe;
                     cSRe.DelaySave_Location_Exe = true;
                     cSRe.ClientSatVersion_NRI = structSRe.intClientSatVersion_NRI;
+                    cSRe.CeritarClient_NRI_Spec = structSRe.inCeritarClient_NRI_Specific;
 
                     cSRe.Revision = new mod_Rev_Revision();
                     cSRe.Revision.Revision_NRI = mcView.GetRevision_NRI();
@@ -123,8 +140,39 @@ namespace Ceritar.CVS.Controllers
                     cSRe.CeritarSatelliteApp.ExePerCustomer = structSRe.blnExePerCustomer;
 
                     mcModRevision.LstSatelliteRevisions.Add(cSRe);
+
+                    lstSRe_NRI.Add(cSRe.SatRevision_NRI);
                 }
 
+                if (mcModRevision.DML_Action == sclsConstants.DML_Mode.DELETE_MODE)
+                {
+                    SqlDataReader sqlRecord = null;
+
+                    sqlRecord = clsTTSQL.ADOSelect(this.strGetSatelliteApps_SQL(mcView.GetRevision_NRI(), false));
+
+                    while (sqlRecord.Read())
+                    {
+                        cSRe = new mod_SRe_SatelliteRevision();
+                        cSRe.DML_Action = sclsConstants.DML_Mode.DELETE_MODE;
+                        cSRe.SatRevision_NRI = Int32.Parse(sqlRecord["SRe_NRI"].ToString());
+                        cSRe.Location_Exe = sqlRecord["SRe_Exe_Location"].ToString();
+                        cSRe.DelaySave_Location_Exe = true;
+                        if (sqlRecord["CeC_NRI_Spec"] != DBNull.Value) cSRe.CeritarClient_NRI_Spec = Int32.Parse(sqlRecord["CeC_NRI_Spec"].ToString());
+
+                        cSRe.Revision = new mod_Rev_Revision();
+                        cSRe.Revision.Revision_NRI = mcView.GetRevision_NRI();
+                            
+                        cSRe.CeritarSatelliteApp = new Models.Module_Configuration.mod_CSA_CeritarSatelliteApp();
+                        cSRe.CeritarSatelliteApp.CeritarSatelliteApp_NRI = Int32.Parse(sqlRecord["CSA_NRI"].ToString());
+                        cSRe.CeritarSatelliteApp.Name = sqlRecord["CSA_Name"].ToString();
+                        cSRe.CeritarSatelliteApp.ExePerCustomer = bool.Parse(sqlRecord["CSA_ExePerCustomer"].ToString());
+                        cSRe.CeritarSatelliteApp.ExeIsFolder = Convert.ToBoolean(sqlRecord["CSA_ExeIsFolder"].ToString());
+
+                        if (!lstSRe_NRI.Contains(cSRe.SatRevision_NRI))
+                            mcModRevision.LstSatelliteRevisions.Add(cSRe);
+                    }
+                }
+                
                 blnValidReturn = true;
             }
             catch (Exception ex)
@@ -274,7 +322,8 @@ namespace Ceritar.CVS.Controllers
 
                     Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(strFolderPath, Microsoft.VisualBasic.FileIO.UIOption.AllDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
 
-                    Directory.Move(strRevisionFolderPath, Path.Combine(new DirectoryInfo(strRevisionFolderPath).Parent.FullName, strNewRevisionFolderName));
+                    if (strRevisionFolderPath != Path.Combine(new DirectoryInfo(strRevisionFolderPath).Parent.FullName, strNewRevisionFolderName))
+                        Directory.Move(strRevisionFolderPath, Path.Combine(new DirectoryInfo(strRevisionFolderPath).Parent.FullName, strNewRevisionFolderName));
                 }
             }
             catch (System.OperationCanceledException)
@@ -401,20 +450,18 @@ namespace Ceritar.CVS.Controllers
                             {
                                 blnValidReturn = pfblnDeleteRevisionHierarchy(strRevisionFolderRoot);
 
+                                string strDestinationFolder = string.Empty;
+
                                 if (blnValidReturn && mcModRevision.LstSatelliteRevisions.Count > 0)
                                 {
-                                    string strDestinationFolder = string.Empty;
-
                                     for (int intIndex = 0; intIndex < mcModRevision.LstSatelliteRevisions.Count; intIndex++)
                                     {
                                         strDestinationFolder = strGetSatelliteFolderPathName(mcModRevision.LstSatelliteRevisions[intIndex]);
 
                                         blnValidReturn = pfblnDeleteDirectory(strDestinationFolder, true);
-
-                                        if (!blnValidReturn) break;
                                     }
                                 }
-
+                                                                
                                 return blnValidReturn;
                             }
 
@@ -509,15 +556,18 @@ namespace Ceritar.CVS.Controllers
                             }
 
                             //Gestion des applications satellites. On les copie ici au même niveau que le Release
+                            List<int> lstSRe_NRI = new List<int>();
+                            string strNewDestinationFolder = string.Empty;
+
                             if (blnValidReturn && mcModRevision.LstSatelliteRevisions.Count > 0)
                             {
-                                string strNewDestinationFolder = string.Empty;
-
                                 for (int intIndex = 0; intIndex < mcModRevision.LstSatelliteRevisions.Count; intIndex++)
                                 {
+                                    lstSRe_NRI.Add(mcModRevision.LstSatelliteRevisions[intIndex].SatRevision_NRI);
+
                                     strNewDestinationFolder = currentFolderInfos.Parent.FullName;
 
-                                    strNewDestinationFolder = Path.Combine(strNewDestinationFolder, mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExportFolderName + (mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExePerCustomer ? (@" [" + mcModRevision.CeritarClient.CompanyName + @"]") : ""));
+                                    strNewDestinationFolder = Path.Combine(strNewDestinationFolder, mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExportFolderName + ((mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExePerCustomer | mcModRevision.LstSatelliteRevisions[intIndex].CeritarClient_NRI_Spec > 0) ? (@" [" + mcView.GetCeritarClient_Name() + @"]") : ""));
 
                                     blnValidReturn = pfblnCopyAndSaveSatelliteLocation(mcModRevision.LstSatelliteRevisions[intIndex], strNewDestinationFolder, true);
 
@@ -527,6 +577,50 @@ namespace Ceritar.CVS.Controllers
                             else
                             {
                                 //Do nothing
+                            }
+
+                            if (blnValidReturn)
+                            {
+                                SqlDataReader sqlRecord = null;
+                                mod_SRe_SatelliteRevision cSRe;
+
+                                sqlRecord = clsTTSQL.ADOSelect(this.strGetSatelliteApps_SQL(mcView.GetRevision_NRI(), false));
+
+                                while (sqlRecord.Read())
+                                {
+                                    cSRe = new mod_SRe_SatelliteRevision();
+                                    cSRe.DML_Action = sclsConstants.DML_Mode.DELETE_MODE;
+                                    cSRe.SatRevision_NRI = Int32.Parse(sqlRecord["SRe_NRI"].ToString());
+                                    
+                                    if (!lstSRe_NRI.Contains(cSRe.SatRevision_NRI))
+                                    {
+                                        cSRe.Location_Exe = sqlRecord["SRe_Exe_Location"].ToString();
+                                        cSRe.DelaySave_Location_Exe = true;
+                                        if (sqlRecord["CeC_NRI_Spec"] != DBNull.Value) cSRe.CeritarClient_NRI_Spec = Int32.Parse(sqlRecord["CeC_NRI_Spec"].ToString());
+
+                                        cSRe.Revision = new mod_Rev_Revision();
+                                        cSRe.Revision.Revision_NRI = mcView.GetRevision_NRI();
+
+                                        cSRe.CeritarSatelliteApp = new Models.Module_Configuration.mod_CSA_CeritarSatelliteApp();
+                                        cSRe.CeritarSatelliteApp.CeritarSatelliteApp_NRI = Int32.Parse(sqlRecord["CSA_NRI"].ToString());
+                                        cSRe.CeritarSatelliteApp.Name = sqlRecord["CSA_Name"].ToString();
+                                        cSRe.CeritarSatelliteApp.ExePerCustomer = bool.Parse(sqlRecord["CSA_ExePerCustomer"].ToString());
+                                        cSRe.CeritarSatelliteApp.ExportFolderName = sqlRecord["CSA_KitFolderName"].ToString();
+                                        cSRe.CeritarSatelliteApp.ExeIsFolder = Convert.ToBoolean(sqlRecord["CSA_ExeIsFolder"].ToString());
+
+                                        strNewDestinationFolder = currentFolderInfos.Parent.FullName;
+
+                                        strNewDestinationFolder = Path.Combine(strNewDestinationFolder, cSRe.CeritarSatelliteApp.ExportFolderName + ((cSRe.CeritarSatelliteApp.ExePerCustomer | cSRe.CeritarClient_NRI_Spec > 0) ? (@" [" + sqlRecord["CeC_Name"].ToString() + @"]") : ""));
+
+                                        blnValidReturn = pfblnCopyAndSaveSatelliteLocation(cSRe, strNewDestinationFolder, true);
+                                    }
+                                    else
+                                    {
+                                        blnValidReturn = true;
+                                    }
+
+                                    if (!blnValidReturn) break;
+                                }
                             }
 
                             break;
@@ -601,10 +695,10 @@ namespace Ceritar.CVS.Controllers
                                         }
 
                                         //Copy all client's specific scripts in the scripts folder
-                                        if (blnValidReturn && Directory.GetDirectories(mcView.GetLocation_Scripts(), mcModRevision.CeritarClient.CompanyName + "*", SearchOption.TopDirectoryOnly).Length > 0)
+                                        if (blnValidReturn && Directory.GetDirectories(mcView.GetLocation_Scripts(), mcView.GetCeritarClient_Name() + "*", SearchOption.TopDirectoryOnly).Length > 0)
                                         {
-                                            string[] lstSpecificScripts = Directory.GetFiles(Directory.GetDirectories(mcView.GetLocation_Scripts(), mcModRevision.CeritarClient.CompanyName + "*", SearchOption.TopDirectoryOnly)[0]);
-                                            string strClientSpecificScriptsDestinationPath = System.IO.Path.Combine(currentFolderInfos.FullName, mcModRevision.CeritarClient.CompanyName + @" Only");
+                                            string[] lstSpecificScripts = Directory.GetFiles(Directory.GetDirectories(mcView.GetLocation_Scripts(), mcView.GetCeritarClient_Name() + "*", SearchOption.TopDirectoryOnly)[0]);
+                                            string strClientSpecificScriptsDestinationPath = System.IO.Path.Combine(currentFolderInfos.FullName, mcView.GetCeritarClient_Name() + @" Only");
                                             int intSpecificNextScriptNo = 0;
 
                                             if (!Directory.Exists(strClientSpecificScriptsDestinationPath)) Directory.CreateDirectory(strClientSpecificScriptsDestinationPath);
@@ -931,6 +1025,8 @@ namespace Ceritar.CVS.Controllers
             string strSatelliteExeExportName = string.Empty;
             string strRevisionFolderName_InfosSupp = string.Empty;
             mod_Rev_Revision cRevision = null;
+            SqlDataReader sqlRecord = null;
+            List<int> lstCSA_NRI = new List<int>();
 
             if (rcRevision != null)
             {
@@ -949,9 +1045,22 @@ namespace Ceritar.CVS.Controllers
                 strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (cRevision.ExeIsExternalReport || cRevision.ExeWithExternalReport ? (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " RPT" : string.Empty);
                 strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (string.IsNullOrEmpty(cRevision.Path_Scripts) ? string.Empty : (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " SCRIPTS");
 
+                sqlRecord = clsTTSQL.ADOSelect(this.strGetSatelliteApps_SQL(cRevision.Revision_NRI, true));
+
+                while (sqlRecord.Read())
+                {
+                    lstCSA_NRI.Add(Int32.Parse(sqlRecord["CSA_NRI"].ToString()));
+
+                    strSatelliteExeExportName = sqlRecord["CSA_KitFolderName"].ToString(); //cRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExportFolderName;
+
+                    strRevisionFolderName_InfosSupp = strRevisionFolderName_InfosSupp + (string.IsNullOrEmpty(strSatelliteExeExportName) ? string.Empty : (string.IsNullOrEmpty(strRevisionFolderName_InfosSupp) ? string.Empty : " -") + " " + strSatelliteExeExportName);
+
+                    strSatelliteExeExportName = string.Empty;
+                }
+
                 for (int intIndex = 0; intIndex < cRevision.LstSatelliteRevisions.Count; intIndex++)
                 {
-                    if (!string.IsNullOrEmpty(cRevision.LstSatelliteRevisions[intIndex].Location_Exe))
+                    if (!string.IsNullOrEmpty(cRevision.LstSatelliteRevisions[intIndex].Location_Exe) & !lstCSA_NRI.Contains(cRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.CeritarSatelliteApp_NRI))
                     {
                         strSatelliteExeExportName = cRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExportFolderName;
 
@@ -1095,7 +1204,7 @@ namespace Ceritar.CVS.Controllers
         {
             bool blnValidReturn = true;
             string strOldFolderPath = string.Empty;
-            string strOldFolderPathInDB = string.Empty;
+            string strNewFolderOrFileCompletePath = string.Empty;
             DirectoryInfo currentFolderInfos = null;
 
             try
@@ -1105,28 +1214,30 @@ namespace Ceritar.CVS.Controllers
                 //Ensuite, au besoin, les fichiers du Nouveau dossier (contenant potentiellement l'ancien release déplacé) seront supprimés et remplacés par les nouveaux sélectionnés
                 if (vblnSaveLocationToDB)
                 {
+                    strOldFolderPath = mcSQL.str_ADOSingleLookUp_Trans("SRe_Exe_Location", "SatRevision", "SRe_NRI = " + rcSatRevision.SatRevision_NRI);
+
                     if (rcSatRevision.CeritarSatelliteApp.ExeIsFolder)
                     {
                         //On prend vstrDestinationFolder).fullName, car le répertoire racine à déjà été changé physiquement, mais on veut l'ancien nom du sous dossier
-                        strOldFolderPath = Path.Combine(Directory.GetParent(vstrDestinationFolder).FullName, new DirectoryInfo(rcSatRevision.Location_Exe).Name);
+                        //strOldFolderPath = Path.Combine(Directory.GetParent(vstrDestinationFolder).FullName, new DirectoryInfo(rcSatRevision.Location_Exe).Name);
                     }
                     else
                     {
                         try
                         {
-                            strOldFolderPath = mcSQL.str_ADOSingleLookUp_Trans("SRe_Exe_Location", "SatRevision", "SRe_NRI = " + rcSatRevision.SatRevision_NRI);
-                            strOldFolderPath = Path.Combine(Directory.GetParent(vstrDestinationFolder).FullName, new DirectoryInfo(strOldFolderPath).Parent.Name);
+                            strOldFolderPath = Directory.GetParent(strOldFolderPath).FullName;//Path.Combine(Directory.GetParent(vstrDestinationFolder).FullName, new DirectoryInfo(strOldFolderPathInDB).Parent.Name);
                         }
                         catch (Exception)
                         {
                             strOldFolderPath = string.Empty;
                         }
 
-                        if (strOldFolderPath == string.Empty) strOldFolderPath = Path.Combine(new DirectoryInfo(vstrDestinationFolder).FullName);
+                        //if (strOldFolderPath == string.Empty) strOldFolderPath = Path.Combine(new DirectoryInfo(vstrDestinationFolder).FullName);
                     }
 
                     if (rcSatRevision.Location_Exe != string.Empty && strOldFolderPath != string.Empty && strOldFolderPath != vstrDestinationFolder)
                     {
+                        //Une genre de securite, mais normalement, devrais jamais entrer ici, car gerer avant ca
                         if (Directory.Exists(strOldFolderPath) || File.Exists(strOldFolderPath))
                         {
                             Directory.Move(strOldFolderPath, vstrDestinationFolder);
@@ -1134,8 +1245,18 @@ namespace Ceritar.CVS.Controllers
                     }
                 }
 
+                if (rcSatRevision.CeritarSatelliteApp.ExeIsFolder)
+                {
+                    strNewFolderOrFileCompletePath = vstrDestinationFolder;
+                }
+                else
+                {
+                    strNewFolderOrFileCompletePath = Path.Combine(vstrDestinationFolder, Path.GetFileName(rcSatRevision.Location_Exe));
+                }
+                
 
-                if ((File.Exists(rcSatRevision.Location_Exe) || Directory.Exists(rcSatRevision.Location_Exe)) && (strOldFolderPath != vstrDestinationFolder || rcSatRevision.Location_Exe != strOldFolderPath))
+                //On entre dans ce IF seulement lorsqu'on vient de selectionner un nouvel exec / dossier pour remplacer lancien
+                if ((File.Exists(rcSatRevision.Location_Exe) || Directory.Exists(rcSatRevision.Location_Exe)) && strOldFolderPath != vstrDestinationFolder)
                 {
                     currentFolderInfos = new DirectoryInfo(vstrDestinationFolder);
 
@@ -1152,7 +1273,7 @@ namespace Ceritar.CVS.Controllers
                     {
                         if (rcSatRevision.Location_Exe != currentFolderInfos.FullName)
                         {
-                            clsTTApp.GetAppController.blnCopyFolderContent(rcSatRevision.Location_Exe, currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, true, sclsAppConfigs.GetReleaseInvalidExtensions, sclsAppConfigs.GetReleaseInvalidFolders);
+                            blnValidReturn = clsTTApp.GetAppController.blnCopyFolderContent(rcSatRevision.Location_Exe, currentFolderInfos.FullName, true, true, SearchOption.TopDirectoryOnly, true, sclsAppConfigs.GetReleaseInvalidExtensions, sclsAppConfigs.GetReleaseInvalidFolders);
 
                             rcSatRevision.Location_Exe = currentFolderInfos.FullName;
                         }
@@ -1167,9 +1288,18 @@ namespace Ceritar.CVS.Controllers
                         }
                     }
                 }
-                else if ((File.Exists(vstrDestinationFolder) || Directory.Exists(vstrDestinationFolder)) && rcSatRevision.Location_Exe != vstrDestinationFolder)
+                //Dans ces Else, on va mettre a jour le path des exe qui etaient deja la parce que on a jouter un nouvel element et le path parent a changer
+                else if ((File.GetAttributes(strNewFolderOrFileCompletePath) & FileAttributes.Directory) == FileAttributes.Directory && Directory.Exists(vstrDestinationFolder) && new DirectoryInfo(rcSatRevision.Location_Exe).Parent.FullName != vstrDestinationFolder)
                 {
                     rcSatRevision.Location_Exe = vstrDestinationFolder;
+                }
+                else if (File.Exists(strNewFolderOrFileCompletePath) && rcSatRevision.Location_Exe != strNewFolderOrFileCompletePath)
+                {
+                    rcSatRevision.Location_Exe = Path.Combine(vstrDestinationFolder, Path.GetFileName(rcSatRevision.Location_Exe));
+                }
+                else
+                {
+                    vblnSaveLocationToDB = false;
                 }
 
                 if (blnValidReturn && vblnSaveLocationToDB)
@@ -1341,7 +1471,7 @@ namespace Ceritar.CVS.Controllers
             string strScriptToFindName = string.Empty;
             string strRevAllScripts_Location = str_GetRevisionRootFolderPath(mcModRevision.TemplateSource.Template_NRI, mcModRevision.Version.VersionNo.ToString()).Replace(sclsAppConfigs.GetRevisionNumberPrefix + "XX", sclsAppConfigs.GetRevisionAllScriptFolderName);
             List<string> lstScripts;
-            List<string> lstCorrespondingScriptsFounds;
+            List<string> lstCorrespondingScriptsFounds = new List<string>();
 
             try
             {
@@ -1377,7 +1507,8 @@ namespace Ceritar.CVS.Controllers
                             //Do nothing, le script ne contient pas de numéro au début
                         }
 
-                        lstCorrespondingScriptsFounds = Directory.GetFiles(strRevAllScripts_Location, "*_" + strScriptToFindName, SearchOption.TopDirectoryOnly).ToList();//.Where(s => Regex.IsMatch(s, @"\d+(?:,\d{1,3})?")).ToList();
+                        if (Directory.Exists(strRevAllScripts_Location))
+                            lstCorrespondingScriptsFounds = Directory.GetFiles(strRevAllScripts_Location, "*_" + strScriptToFindName, SearchOption.TopDirectoryOnly).ToList();//.Where(s => Regex.IsMatch(s, @"\d+(?:,\d{1,3})?")).ToList();
 
                         if (lstCorrespondingScriptsFounds.Count > 0)
                         {
@@ -1682,10 +1813,16 @@ namespace Ceritar.CVS.Controllers
         private string strGetSatelliteFolderPathName(mod_SRe_SatelliteRevision rcSRe)
         {
             string strDestinationFolder = string.Empty;
+            string strCeritarClientName = string.Empty;
+
+            if (rcSRe.CeritarClient_NRI_Spec > 0)
+                strCeritarClientName = mcSQL.str_ADOSingleLookUp_Trans("CeC_Name", "CerClient", "CeC_NRI = " + rcSRe.CeritarClient_NRI_Spec.ToString());
+            else
+                strCeritarClientName = mcView.GetCeritarClient_Name();
 
             strDestinationFolder = Path.Combine(sclsAppConfigs.GetRoot_INSTALLATIONS_ACTIVES,
                                                     rcSRe.CeritarSatelliteApp.Name,
-                                                    (rcSRe.CeritarSatelliteApp.ExePerCustomer ? mcModRevision.CeritarClient.CompanyName : ""),
+                                                    (rcSRe.CeritarSatelliteApp.ExePerCustomer | rcSRe.CeritarClient_NRI_Spec > 0) ? strCeritarClientName : "",
                                                     sclsAppConfigs.GetVersionNumberPrefix + mcModRevision.Version.VersionNo.ToString(),
                                                     sclsAppConfigs.GetRevisionNumberPrefix + mcModRevision.Revision_Number.ToString()
                                                     );
@@ -1797,12 +1934,14 @@ namespace Ceritar.CVS.Controllers
             try
             {
                 strSQL = strSQL + " SELECT Revision.Rev_No, " + Environment.NewLine;
+                strSQL = strSQL + "        Revision.Rev_NRI, " + Environment.NewLine;
                 strSQL = strSQL + "        Revision.Rev_Location_Exe, " + Environment.NewLine;
                 strSQL = strSQL + "        Revision.Rev_ExeIsReport, " + Environment.NewLine;
                 strSQL = strSQL + "        Revision.Rev_ExeWithReport, " + Environment.NewLine;
                 strSQL = strSQL + "        Revision.Rev_Location_Scripts, " + Environment.NewLine;
                 strSQL = strSQL + "        Revision.Tpl_NRI, " + Environment.NewLine;
                 strSQL = strSQL + "        SatRevision.SRe_Exe_Location, " + Environment.NewLine;
+                strSQL = strSQL + "        CerSatApp.CSA_NRI, " + Environment.NewLine;
                 strSQL = strSQL + "        CerSatApp.CSA_KitFolderName, " + Environment.NewLine;
                 strSQL = strSQL + "        Version.Ver_No " + Environment.NewLine;
 
@@ -1830,7 +1969,7 @@ namespace Ceritar.CVS.Controllers
                         cRevision.ExeIsExternalReport = Convert.ToBoolean(sqlRecord["Rev_ExeIsReport"].ToString());
                         cRevision.ExeWithExternalReport = Convert.ToBoolean(sqlRecord["Rev_ExeWithReport"].ToString());
                         cRevision.Path_Scripts = sqlRecord["Rev_Location_Scripts"].ToString();
-
+                        cRevision.Revision_NRI = Int32.Parse(sqlRecord["Rev_NRI"].ToString());
                         cRevision.TemplateSource = new Models.Module_Template.mod_Tpl_HierarchyTemplate();
                         cRevision.TemplateSource.Template_NRI = Int32.Parse(sqlRecord["Tpl_NRI"].ToString());
 
@@ -1841,6 +1980,7 @@ namespace Ceritar.CVS.Controllers
                     cRevision.LstSatelliteRevisions[intRecordCount].Location_Exe = sqlRecord["SRe_Exe_Location"].ToString();
 
                     cRevision.LstSatelliteRevisions[intRecordCount].CeritarSatelliteApp = new mod_CSA_CeritarSatelliteApp();
+                    cRevision.LstSatelliteRevisions[intRecordCount].CeritarSatelliteApp.CeritarSatelliteApp_NRI = Int32.Parse(sqlRecord["CSA_NRI"].ToString());
                     cRevision.LstSatelliteRevisions[intRecordCount].CeritarSatelliteApp.ExportFolderName = sqlRecord["CSA_KitFolderName"].ToString();
 
                     intRecordCount++;
@@ -1940,16 +2080,13 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        CerApp.CeA_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_Name, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_ExternalRPTAppName, " + Environment.NewLine;
-            strSQL = strSQL + "        CerApp.CeA_NRI_Master, " + Environment.NewLine;
-            strSQL = strSQL + "        CerClient.CeC_NRI " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.CeA_NRI_Master " + Environment.NewLine;
             //strSQL = strSQL + "        CreatedByNom = TTUser.TTU_FirstName + ' ' + TTUser.TTU_LastName " + Environment.NewLine;
                 
             strSQL = strSQL + " FROM Version " + Environment.NewLine;
 
-            strSQL = strSQL + "     LEFT JOIN Revision " + Environment.NewLine;
-            strSQL = strSQL + "         INNER JOIN CerClient ON CerClient.CeC_NRI = Revision.CeC_NRI " + Environment.NewLine;
-            strSQL = strSQL + "     ON Revision.Ver_NRI = Version.Ver_NRI " + Environment.NewLine;
-            strSQL = strSQL + "     AND Revision.Rev_NRI = " + vintRevision_NRI + Environment.NewLine;
+            strSQL = strSQL + "     LEFT JOIN Revision ON Revision.Ver_NRI = Version.Ver_NRI " + Environment.NewLine;
+            strSQL = strSQL + "                       AND Revision.Rev_NRI = " + vintRevision_NRI + Environment.NewLine;
 
             strSQL = strSQL + "     INNER JOIN CerApp ON CerApp.CeA_NRI = Version.CeA_NRI " + Environment.NewLine;
             //strSQL = strSQL + "     INNER JOIN TTUser ON TTUser.TTU_NRI = Revision.TTU_NRI " + Environment.NewLine;
@@ -1963,11 +2100,15 @@ namespace Ceritar.CVS.Controllers
         {
             string strSQL = string.Empty;
 
-            strSQL = strSQL + " SELECT Action = '" + sclsConstants.DML_Mode.NO_MODE + "', " + Environment.NewLine;
+            strSQL = strSQL + " SELECT CerClient.CeC_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        CerClient.CeC_Name, " + Environment.NewLine;
+            strSQL = strSQL + "        RevModifs.RevM_DtHr, " + Environment.NewLine;
             strSQL = strSQL + "        RevModifs.RevM_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        Action = '" + sclsConstants.DML_Mode.NO_MODE + "', " + Environment.NewLine;
             strSQL = strSQL + "        RevModifs.RevM_ChangeDesc " + Environment.NewLine;
 
             strSQL = strSQL + " FROM RevModifs " + Environment.NewLine;
+            strSQL = strSQL + "     INNER JOIN CerClient ON CerClient.CeC_NRI = RevModifs.CeC_NRI_For " + Environment.NewLine;
 
             strSQL = strSQL + " WHERE RevModifs.Rev_NRI = " + vintRevision_NRI + Environment.NewLine;
 
@@ -1993,9 +2134,11 @@ namespace Ceritar.CVS.Controllers
             return strSQL;
         }
 
-        public string strGetClients_SQL(int vintRevision_NRI)
+        public string strGetClients_SQL(int vintRevision_NRI, string vstrCeritarClientToIgnore = "")
         {
             string strSQL = string.Empty;
+
+            vstrCeritarClientToIgnore = (string.IsNullOrEmpty(vstrCeritarClientToIgnore) ? vstrCeritarClientToIgnore = "0" : vstrCeritarClientToIgnore);
 
             strSQL = strSQL + " SELECT CerClient.CeC_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        CerClient.CeC_Name " + Environment.NewLine;
@@ -2008,14 +2151,39 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "     LEFT JOIN Revision ON Revision.Rev_NRI = " + vintRevision_NRI + Environment.NewLine;
 
             strSQL = strSQL + " WHERE Version.Ver_NRI = " + mcView.GetVersion_NRI() + Environment.NewLine;
-            strSQL = strSQL + "   AND (NOT EXISTS (SELECT 1 FROM Revision WHERE Revision.Ver_NRI = Version.Ver_NRI AND Revision.Rev_PreparationMode = 1 AND Revision.CeC_NRI = ClientAppVersion.CeC_NRI AND Revision.Rev_NRI <> " + vintRevision_NRI.ToString() + ") " + Environment.NewLine;
+            strSQL = strSQL + "   AND (NOT EXISTS (SELECT 1 FROM Revision WHERE Revision.Ver_NRI = Version.Ver_NRI AND Revision.Rev_PreparationMode = 1 AND EXISTS (SELECT 1 FROM ClientAppRevision CAR WHERE CAR.CeC_NRI = ClientAppVersion.CeC_NRI AND CAR.Rev_NRI = Revision.Rev_NRI) AND Revision.Rev_NRI <> " + vintRevision_NRI.ToString() + ") " + Environment.NewLine;
             strSQL = strSQL + "        OR Revision.Rev_No IS NOT NULL) " + Environment.NewLine;
+            strSQL = strSQL + "   AND CerClient.CeC_NRI NOT IN (" + vstrCeritarClientToIgnore + ") AND CerClient.CeC_IsActive = 1 " + Environment.NewLine;
+
             strSQL = strSQL + " ORDER BY CerClient.CeC_Name " + Environment.NewLine;
 
             return strSQL;
         }
 
-        public string strGetListe_SatelliteApps_SQL()
+        public string strGetListe_Clients_SQL(int vintRevision_NRI)
+        {
+            string strSQL = string.Empty;
+
+            strSQL = strSQL + " SELECT Action = CASE WHEN ClientAppRevision.CAR_NRI IS NULL THEN '" + sclsConstants.DML_Mode.NO_MODE + "' ELSE '" + sclsConstants.DML_Mode.UPDATE_MODE + "' END," + Environment.NewLine;
+            strSQL = strSQL + "        ClientAppRevision.CAR_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        ClientAppRevision.CAR_TS, " + Environment.NewLine;
+            strSQL = strSQL + "        CerClient.CeC_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "        CerClient.CeC_Name " + Environment.NewLine;
+
+            strSQL = strSQL + " FROM Revision " + Environment.NewLine;
+        
+            strSQL = strSQL + "     INNER JOIN ClientAppRevision " + Environment.NewLine;
+            strSQL = strSQL + "          INNER JOIN CerClient ON CerClient.CeC_NRI = ClientAppRevision.CeC_NRI " + Environment.NewLine;
+            strSQL = strSQL + "     ON ClientAppRevision.Rev_NRI = Revision.Rev_NRI " + Environment.NewLine;
+            
+            strSQL = strSQL + " WHERE Revision.Rev_NRI = " + vintRevision_NRI + Environment.NewLine;
+
+            strSQL = strSQL + " ORDER BY CerClient.CeC_Name " + Environment.NewLine;
+
+            return strSQL;
+        }
+
+        public string strGetListe_SatelliteApps_SQL(int vintCeritarClient_NRI)
         {
             string strSQL = string.Empty;
 
@@ -2037,9 +2205,10 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "         INNER JOIN CerSatApp ON CerSatApp.CSA_NRI = ClientSatVersion.CSA_NRI  " + Environment.NewLine;
             strSQL = strSQL + " 	ON ClientSatVersion.Ver_NRI = Version.Ver_NRI  " + Environment.NewLine;
             strSQL = strSQL + "    AND ClientSatVersion.CSA_NRI = CerSatApp.CSA_NRI  " + Environment.NewLine;
-            strSQL = strSQL + "    AND ClientSatVersion.CeC_NRI = " + mcView.GetCeritarClient_NRI() + Environment.NewLine;
+            strSQL = strSQL + "    AND ClientSatVersion.CeC_NRI = " + vintCeritarClient_NRI + Environment.NewLine;
 
             strSQL = strSQL + "     LEFT JOIN SatRevision ON SatRevision.Rev_NRI = Revision.Rev_NRI AND SatRevision.CSA_NRI = CerSatApp.CSA_NRI " + Environment.NewLine;
+            strSQL = strSQL + "                          AND (SatRevision.CeC_NRI_Spec IS NULL OR SatRevision.CeC_NRI_Spec = " + vintCeritarClient_NRI + ")" + Environment.NewLine;
 
             strSQL = strSQL + " WHERE Version.Ver_NRI = " + mcView.GetVersion_NRI() + Environment.NewLine;
 
@@ -2048,8 +2217,47 @@ namespace Ceritar.CVS.Controllers
             return strSQL;
         }
 
-#endregion
-        
+        /// <summary>
+        /// Permet d'obtenir la liste des applications satellites distincte impliquees dans la revision par un ou un autre client
+        /// </summary>
+        /// <param name="vintCeritarClient_NRI"></param>
+        /// <returns></returns>
+        public string strGetSatelliteApps_SQL(int rintRevision_NRI, bool vblnDistinctOnly)
+        {
+            string strSQL = string.Empty;
+
+            strSQL = strSQL + " SELECT DISTINCT CerSatApp.CSA_NRI, " + Environment.NewLine;
+            strSQL = strSQL + "                 CerSatApp.CSA_Name, " + Environment.NewLine;
+            strSQL = strSQL + "                 CerSatApp.CSA_ExePerCustomer, " + Environment.NewLine;
+            if (!vblnDistinctOnly)
+            {
+                strSQL = strSQL + "                 SatRevision.CeC_NRI_Spec, " + Environment.NewLine;
+                strSQL = strSQL + "                 SatRevision.SRe_NRI, " + Environment.NewLine;
+                strSQL = strSQL + "                 SatRevision.SRe_Exe_Location, " + Environment.NewLine;
+                strSQL = strSQL + "                 CerClient.CeC_Name, " + Environment.NewLine;
+            }
+                
+            strSQL = strSQL + "                 CerSatApp.CSA_KitFolderName, " + Environment.NewLine;
+            strSQL = strSQL + "                 CerSatApp.CSA_ExeIsFolder " + Environment.NewLine;
+
+            strSQL = strSQL + " FROM Revision (NOLOCK) " + Environment.NewLine;
+
+            strSQL = strSQL + "     INNER JOIN SatRevision (NOLOCK) ON SatRevision.Rev_NRI = Revision.Rev_NRI " + Environment.NewLine;
+            strSQL = strSQL + "     LEFT JOIN CerClient ON CerClient.CeC_NRI = SatRevision.CeC_NRI_Spec " + Environment.NewLine;
+            strSQL = strSQL + "     INNER JOIN CerSatApp ON CerSatApp.CSA_NRI = SatRevision.CSA_NRI " + Environment.NewLine;
+
+            strSQL = strSQL + " WHERE Revision.Rev_NRI = " + rintRevision_NRI + Environment.NewLine;
+
+
+            //else if (!mcSQL.bln_AddField("CSV_NRI", _intClientSatVersion_NRI, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
+            //{ }
+
+
+            return strSQL;
+        }
+
+        #endregion
+
 
     }
 }

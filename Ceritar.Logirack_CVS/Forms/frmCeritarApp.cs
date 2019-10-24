@@ -10,6 +10,9 @@ using Ceritar.TT3LightDLL.Classes;
 using Ceritar.TT3LightDLL.Static_Classes;
 using Ceritar.CVS.Controllers;
 using Ceritar.CVS.Controllers.Interfaces;
+using System.IO;
+using Microsoft.Office.Interop.Word;
+using System.Data;
 
 namespace Ceritar.Logirack_CVS.Forms
 {
@@ -43,6 +46,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
         //Working variables
         private ushort mintCerApp_TS;
+        private string mstrWordProcedurePath = string.Empty;
 
 
         public frmCeritarApp()
@@ -220,6 +224,15 @@ namespace Ceritar.Logirack_CVS.Forms
                     chkMasterApp.Checked = sqlRecord["CeA_NRI_Master"] == DBNull.Value;
 
                     cboMasterApp.Enabled = !chkMasterApp.Checked;
+
+                    if (sqlRecord["ItI_NRI_Procedure"] != DBNull.Value)
+                    {
+                        btnShowWord.Tag = Int32.Parse(sqlRecord["ItI_NRI_Procedure"].ToString());
+                    }
+                    else
+                    {
+                        btnShowWord.Tag = 0;
+                    }
 
                     if (sqlRecord["CeA_NRI_Master"] != DBNull.Value)
                     {
@@ -539,12 +552,14 @@ namespace Ceritar.Logirack_CVS.Forms
                 case (int)sclsConstants.DML_Mode.INSERT_MODE:
 
                     cboMasterApp.Enabled = false;
+                    btnReplaceWordDOC.Enabled = false;
+                    btnShowWord.Enabled = false;
 
                     break;
 
                 case (int)sclsConstants.DML_Mode.UPDATE_MODE:
-
-                
+                    btnReplaceWordDOC.Enabled = true;
+                    btnShowWord.Enabled = true;
 
                     break;
             }
@@ -567,6 +582,85 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 formController.ChangeMade = true;
             }
+        }
+
+        private void grdSatApp_ValidateEdit(object sender, C1.Win.C1FlexGrid.ValidateEditEventArgs e)
+        {
+            if (grdSatApp.Col == mintGrdSat_CSA_KitFolderName_col)
+            {
+                if (grdSatApp.Editor.Text.Length > 25)
+                {
+                    clsTTApp.GetAppController.ShowMessage((int)sclsConstants.Validation_Message.MAXIMUM_NUMBER_CHARACTER, MessageBoxButtons.OK, "25");
+                    e.Cancel = true;
+                }
+                else
+                {
+                    //Do nothing
+                }
+            }
+            else
+            {
+                //Do nothing
+            }
+        }
+
+        private void btnReplaceAppChangeDOC_Click(object sender, EventArgs e)
+        {
+            string strPreviousLocation = mstrWordProcedurePath;
+
+            ShowOpenFileDialog("Word Documents (.docx)|*.docx", mstrWordProcedurePath, true);
+
+            if (mstrWordProcedurePath != string.Empty)
+            {
+                clsTTApp.GetAppController.SaveFileToDB(mstrWordProcedurePath, Path.GetFileNameWithoutExtension(mstrWordProcedurePath), "CerApp", formController.Item_NRI, Int32.Parse(btnShowWord.Tag.ToString()));
+
+                btnShowWord.Tag = clsTTSQL.str_ADOSingleLookUp("ItI_NRI", "ItI", "ItI_ItemNRI = " + formController.Item_NRI + " AND ItI_Table = " + clsTTApp.GetAppController.str_FixStringForSQL("CerApp"));
+            }
+        }
+
+        private void ShowOpenFileDialog(string vstrExtensionsFilter, string vstrInitialDirectory = "", bool vblnShowFile = false)
+        {
+            DialogResult dialogResult;
+
+            try
+            {
+                if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE || formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
+                {
+                    if (vblnShowFile && File.Exists(vstrInitialDirectory))
+                    {
+                        openFileDialog.FileName = vstrInitialDirectory;
+
+                        vstrInitialDirectory = Path.GetDirectoryName(vstrInitialDirectory);
+                    }
+                    else
+                    {
+                        openFileDialog.FileName = string.Empty;
+
+                        vstrInitialDirectory = mstrWordProcedurePath == string.Empty ? System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop) : mstrWordProcedurePath;
+                    }
+
+                    openFileDialog.InitialDirectory = vstrInitialDirectory;
+                    openFileDialog.Multiselect = false;
+                    openFileDialog.Filter = vstrExtensionsFilter;
+
+                    dialogResult = openFileDialog.ShowDialog();
+
+                    if (dialogResult == System.Windows.Forms.DialogResult.OK)
+                    {
+                        mstrWordProcedurePath = openFileDialog.FileName;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+        }
+
+        private void btnShowWord_Click(object sender, EventArgs e)
+        {
+            if (Int32.Parse(btnShowWord.Tag.ToString()) > 0)
+                clsTTApp.GetAppController.LoadFileFromDB(Int32.Parse(btnShowWord.Tag.ToString()));
         }
     }
 }

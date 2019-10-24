@@ -150,7 +150,6 @@ namespace Ceritar.CVS.Controllers
             try
             {
                 mcSQL = new clsTTSQL();
-
                 mcModVersion = new mod_Ver_Version();
 
                 mcModVersion.SetcSQL = mcSQL;
@@ -159,29 +158,6 @@ namespace Ceritar.CVS.Controllers
 
                 if (blnValidReturn)
                 {
-                    //mcModVersion.LstClientsUsing.Clear();
-
-                    //mblnUpdateSelectedClientOnly = true;
-
-                    //structClientAppVersion structCAV = mcView.GetSelectedClient();
-                    //mod_CAV_ClientAppVersion cCAV = new mod_CAV_ClientAppVersion();
-                    //cCAV.DML_Action = structCAV.Action;
-                    //cCAV.ClientAppVersion_NRI = structCAV.intClientAppVersion_NRI;
-                    //cCAV.ClientAppVersion_TS = structCAV.intClientAppVersion_TS;
-                    //cCAV.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
-                    //cCAV.DateInstalled = structCAV.strDateInstalled;
-                    //cCAV.IsCurrentVersion = structCAV.blnIsCurrentVersion;
-                    //cCAV.License = structCAV.strLicense;
-                    //cCAV.Version_NRI = mcView.GetVersion_NRI();
-                    //cCAV.LocationReportExe = structCAV.strLocationReportExe;
-                    //cCAV.LocationScriptsRoot = structCAV.strLocationScriptsRoot;
-
-                    //cCAV.CeritarClient = new Models.Module_Configuration.mod_CeC_CeritarClient();
-                    //cCAV.CeritarClient.CeritarClient_NRI = structCAV.intCeritarClient_NRI;
-                    //cCAV.CeritarClient.CompanyName = structCAV.strCeritarClient_Name;
-
-                    //mcModVersion.LstClientsUsing.Add(cCAV);
-
                     blnValidReturn = mcModVersion.blnValidateHierarchyBuildFiles();
 
                     if (blnValidReturn)
@@ -216,7 +192,7 @@ namespace Ceritar.CVS.Controllers
 
             try
             {
-                strRevision_CSA = clsTTSQL.str_ADOSingleLookUp("SRe_NRI", "ClientSatVersion INNER JOIN SatRevision ON SatRevision.CSA_NRI = ClientSatVersion.CSA_NRI INNER JOIN Revision ON Revision.Rev_NRI = SatRevision.Rev_NRI AND Revision.CeC_NRI = ClientSatVersion.CeC_NRI", "ClientSatVersion.CSV_NRI = " + vintCSV_NRI + " AND Revision.Ver_NRI = " + mcView.GetVersion_NRI());
+                strRevision_CSA = clsTTSQL.str_ADOSingleLookUp("SRe_NRI", "ClientSatVersion INNER JOIN SatRevision ON SatRevision.CSA_NRI = ClientSatVersion.CSA_NRI INNER JOIN Revision ON Revision.Rev_NRI = SatRevision.Rev_NRI AND EXISTS (SELECT 1 FROM ClientAppRevision CAR WHERE CAR.CeC_NRI = ClientSatVersion.CeC_NRI AND CAR.Rev_NRI = Revision.Rev_NRI)", "ClientSatVersion.CSV_NRI = " + vintCSV_NRI + " AND Revision.Ver_NRI = " + mcView.GetVersion_NRI());
 
                 if (string.IsNullOrEmpty(strRevision_CSA))
                 {
@@ -1123,7 +1099,8 @@ namespace Ceritar.CVS.Controllers
                     if (!mcView.GetIsBaseKit())
                     {
                         //Get the report folder location to copy (from the version kit or from the latest revision)
-                        strReportLocation = clsTTSQL.str_ADOSingleLookUp("TOP 1 Rev_Location_Exe", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Revision.Rev_PreparationMode = 0 AND Rev_Location_Exe IS NOT NULL AND Revision.Rev_ExeIsReport = 1 AND Revision.CeC_NRI =" + mcView.GetSelectedClient().intCeritarClient_NRI.ToString() + " ORDER BY Revision.Rev_No DESC");
+                        //ATTENTION' PAS FULL SAFE LE TRUC DE CHOISIR LE CLIENT MAINTENANT QUE MULTI CLIENT PAR REVISION...
+                        strReportLocation = clsTTSQL.str_ADOSingleLookUp("TOP 1 Rev_Location_Exe", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Revision.Rev_PreparationMode = 0 AND Rev_Location_Exe IS NOT NULL AND Revision.Rev_ExeIsReport = 1 AND EXISTS (SELECT 1 FROM ClientAppRevision CAR WHERE CAR.CeC_NRI = " + mcView.GetSelectedClient().intCeritarClient_NRI.ToString() + " AND CAR.Rev_NRI = Revision.Rev_NRI) ORDER BY Revision.Rev_No DESC");
 
                         strReportLocation = strReportLocation == string.Empty ? mcView.GetSelectedClient().strLocationReportExe : strReportLocation;
 
@@ -1554,11 +1531,12 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " FROM ClientAppVersion " + Environment.NewLine;
             strSQL = strSQL + "     INNER JOIN Version ON Version.Ver_NRI = ClientAppVersion.Ver_NRI " + Environment.NewLine;
             strSQL = strSQL + "     INNER JOIN CerClient ON CerClient.CeC_NRI = ClientAppVersion.CeC_NRI AND CerClient.CeC_IsActive = 1 " + Environment.NewLine;
-            strSQL = strSQL + "     LEFT JOIN ( SELECT MAX(Revision.Rev_No) AS Rev_No, Revision.Ver_NRI, Revision.CeC_NRI " + Environment.NewLine;
+            strSQL = strSQL + "     LEFT JOIN ( SELECT MAX(Revision.Rev_No) AS Rev_No, Revision.Ver_NRI, CAR.CeC_NRI " + Environment.NewLine;
             strSQL = strSQL + "                 FROM Revision " + Environment.NewLine;
+            strSQL = strSQL + "                     INNER JOIN ClientAppRevision CAR ON CAR.Rev_NRI = Revision.Rev_NRI " + Environment.NewLine;
             strSQL = strSQL + "                 WHERE Revision.Rev_ExeIsReport = 1 OR Revision.Rev_ExeWithReport = 1 " + Environment.NewLine;
             strSQL = strSQL + " 				  AND Revision.Rev_PreparationMode = 0 " + Environment.NewLine;
-            strSQL = strSQL + "                 GROUP BY Revision.Ver_NRI, Revision.CeC_NRI " + Environment.NewLine;
+            strSQL = strSQL + "                 GROUP BY Revision.Ver_NRI, CAR.CeC_NRI " + Environment.NewLine;
             strSQL = strSQL + "               ) As TRevision ON TRevision.Ver_NRI = ClientAppVersion.Ver_NRI AND TRevision.CeC_NRI = ClientAppVersion.CeC_NRI " + Environment.NewLine;
 
             strSQL = strSQL + " WHERE ClientAppVersion.Ver_NRI = " + vintVersion_NRI + Environment.NewLine;
@@ -1587,11 +1565,12 @@ namespace Ceritar.CVS.Controllers
 
             strSQL = strSQL + "     LEFT JOIN ClientSatVersion  " + Environment.NewLine;
             strSQL = strSQL + " 		INNER JOIN Version ON Version.Ver_NRI = ClientSatVersion.Ver_NRI  " + Environment.NewLine;
-            strSQL = strSQL + " 	        LEFT JOIN ( SELECT MAX(Revision.Rev_No) AS Rev_No, Revision.Ver_NRI, Revision.CeC_NRI, SatRevision.CSA_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 	        LEFT JOIN ( SELECT MAX(Revision.Rev_No) AS Rev_No, Revision.Ver_NRI, CAR.CeC_NRI, SatRevision.CSA_NRI " + Environment.NewLine;
             strSQL = strSQL + " 	                    FROM Revision " + Environment.NewLine;
+            strSQL = strSQL + "                             INNER JOIN ClientAppRevision CAR ON CAR.Rev_NRI = Revision.Rev_NRI " + Environment.NewLine;
             strSQL = strSQL + " 	                        LEFT JOIN SatRevision ON SatRevision.Rev_NRI = Revision.Rev_NRI " + Environment.NewLine;
             strSQL = strSQL + " 						WHERE Revision.Rev_PreparationMode = 0 " + Environment.NewLine;
-            strSQL = strSQL + " 	                    GROUP BY Revision.Ver_NRI, Revision.CeC_NRI, SatRevision.CSA_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 	                    GROUP BY Revision.Ver_NRI, CAR.CeC_NRI, SatRevision.CSA_NRI " + Environment.NewLine;
             strSQL = strSQL + " 	                  ) As TRevision ON TRevision.Ver_NRI = ClientSatVersion.Ver_NRI AND ClientSatVersion.CSA_NRI = TRevision.CSA_NRI AND TRevision.CeC_NRI = ClientSatVersion.CeC_NRI " + Environment.NewLine;
             strSQL = strSQL + " 	ON ClientSatVersion.Ver_NRI = " + vintVersion_NRI + Environment.NewLine;
             strSQL = strSQL + "    AND ClientSatVersion.CSA_NRI = CerSatApp.CSA_NRI  " + Environment.NewLine;
@@ -1612,7 +1591,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        Revision.Rev_TS, " + Environment.NewLine;
             strSQL = strSQL + "        NULL As PathIsValid, " + Environment.NewLine;
             strSQL = strSQL + "        Rev_No = CASE WHEN Revision.Rev_PreparationMode = 1 THEN NULL ELSE Revision.Rev_No END, " + Environment.NewLine;
-            strSQL = strSQL + "        CerClient.CeC_Name, " + Environment.NewLine;
+            strSQL = strSQL + "        CeC_Name = STUFF((SELECT ', ' + CONVERT(VARCHAR(100), CerClient.CeC_Name) FROM ClientAppRevision CAR INNER JOIN CerClient ON CerClient.CeC_NRI = CAR.CeC_NRI WHERE CAR.Rev_NRI = Revision.Rev_NRI FOR XML PATH('')), 1, 1, ''), " + Environment.NewLine;
             strSQL = strSQL + "        AppName = CASE WHEN Revision.Rev_Location_Exe IS NOT NULL AND Revision.Rev_ExeIsReport = 0 THEN CerApp.CeA_Name " + Environment.NewLine;
             strSQL = strSQL + " 					  ELSE '' END + " + Environment.NewLine;
             strSQL = strSQL + " 				 CASE WHEN Revision.Rev_ExeIsReport = 1 OR Revision.Rev_ExeWithReport = 1 " + Environment.NewLine;
@@ -1625,7 +1604,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " 				      THEN CASE WHEN (Revision.Rev_ExeIsReport = 1 OR Revision.Rev_ExeWithReport = 1) OR (Revision.Rev_Location_Exe IS NOT NULL) " + Environment.NewLine;
             strSQL = strSQL + " 								THEN ' + '  " + Environment.NewLine;
             strSQL = strSQL + " 								ELSE ''  " + Environment.NewLine;
-            strSQL = strSQL + " 						   END + STUFF((SELECT ', ' + CONVERT(VARCHAR(100), CSA.CSA_Name) FROM SatRevision INNER JOIN CerSatApp CSA ON CSA.CSA_NRI = SatRevision.CSA_NRI WHERE SatRevision.Rev_NRI = Revision.Rev_NRI FOR XML PATH('')), 1, 1, '') " + Environment.NewLine;
+            strSQL = strSQL + " 						   END + STUFF((SELECT DISTINCT ', ' + CONVERT(VARCHAR(100), CSA.CSA_Name) FROM SatRevision INNER JOIN CerSatApp CSA ON CSA.CSA_NRI = SatRevision.CSA_NRI WHERE SatRevision.Rev_NRI = Revision.Rev_NRI FOR XML PATH('')), 1, 1, '') " + Environment.NewLine;
             strSQL = strSQL + " 					  ELSE '' END + " + Environment.NewLine;
             strSQL = strSQL + " 				 CASE WHEN Revision.Rev_Location_Scripts IS NOT NULL  " + Environment.NewLine;
             strSQL = strSQL + " 				      THEN CASE WHEN EXISTS (SELECT * FROM SatRevision WHERE SatRevision.Rev_NRI = Revision.Rev_NRI) OR (Revision.Rev_ExeIsReport = 1 OR Revision.Rev_ExeWithReport = 1) OR Revision.Rev_Location_Exe IS NOT NULL " + Environment.NewLine;
@@ -1637,8 +1616,6 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "        Revision.Rev_PreparationMode " + Environment.NewLine;
 
             strSQL = strSQL + " FROM Revision " + Environment.NewLine;
-
-            strSQL = strSQL + "     INNER JOIN CerClient ON CerClient.CeC_NRI = Revision.CeC_NRI " + Environment.NewLine;
             strSQL = strSQL + "     INNER JOIN Version " + Environment.NewLine;
             strSQL = strSQL + "         INNER JOIN CerApp ON CerApp.CeA_NRI = Version.CeA_NRI " + Environment.NewLine;
             strSQL = strSQL + "     ON Version.Ver_NRI = Revision.Ver_NRI " + Environment.NewLine;

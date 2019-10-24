@@ -363,6 +363,7 @@ namespace Ceritar.Logirack_CVS.Forms
                 }
                 else
                 {
+                    blnValidReturn = true;
                     mcGrdSatelliteApps.ClearGrid();
                 }
             }
@@ -838,7 +839,7 @@ namespace Ceritar.Logirack_CVS.Forms
             grdRevisions.Cols[mintGrdRev_Number_col].Width = 65;
             grdRevisions.Cols[mintGrdRev_Rev_IsValid_col].Width = 45;
             grdRevisions.Cols[mintGrdRev_CeritarClientName_col].Width = 175;
-            grdRevisions.Cols[mintGrdRev_Description_col].Width = 600;
+            grdRevisions.Cols[mintGrdRev_Description_col].Width = 750;
 
             grdRevisions.Cols[mintGrdRev_InPreparation_col].DataType = typeof(bool);
         }
@@ -981,7 +982,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
                         if (mcActionResults.RowInError > 0 & grdClients.Rows.Count > 1)
                         {
-                            ((HostedCellControl)mcGrdClients.LstHostedCellControls[mcActionResults.RowInError - 1]).GetCellControl.Focus();
+                            ((HostedCellControl)mcGrdClients.LstHostedCellControls[grdClients.Row-1]).GetCellControl.Focus();
                         }
                         
                         break;

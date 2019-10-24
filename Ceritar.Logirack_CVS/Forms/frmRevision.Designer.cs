@@ -40,18 +40,21 @@
             this.mnuCopyLines = new System.Windows.Forms.ToolStripMenuItem();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnGrdClientsDel = new System.Windows.Forms.Button();
+            this.btnGrdClientsAdd = new System.Windows.Forms.Button();
+            this.cboTemplates = new System.Windows.Forms.ComboBox();
+            this.grdClients = new C1.Win.C1FlexGrid.C1FlexGrid();
             this.chkPreparation = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.txtNote = new System.Windows.Forms.TextBox();
             this.txtCreatedBy = new System.Windows.Forms.TextBox();
             this.txtRevisionNo = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.txtVersionNo = new System.Windows.Forms.TextBox();
-            this.cboTemplates = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.toolTips = new System.Windows.Forms.ToolTip(this.components);
             this.btnExportRevision = new System.Windows.Forms.Button();
             this.btnSelectScriptsFilePath = new System.Windows.Forms.Button();
@@ -66,6 +69,7 @@
             this.btnShowRootFolder = new System.Windows.Forms.Button();
             this.chkAddScripts = new System.Windows.Forms.CheckBox();
             this.btnPrintPairValidation = new System.Windows.Forms.Button();
+            this.txtRevisionIncluses = new System.Windows.Forms.TextBox();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.gbSatellites = new System.Windows.Forms.GroupBox();
@@ -76,6 +80,7 @@
             this.gbScripts = new System.Windows.Forms.GroupBox();
             this.txtScriptsPath = new System.Windows.Forms.TextBox();
             this.gbExe = new System.Windows.Forms.GroupBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.optExeOnly = new System.Windows.Forms.RadioButton();
             this.optExeAndRpt = new System.Windows.Forms.RadioButton();
             this.txtReleasePath = new System.Windows.Forms.TextBox();
@@ -86,12 +91,12 @@
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
             this.chkExcludePreviousRevScripts = new System.Windows.Forms.CheckBox();
             this.chkIncludePreviousRevScripts = new System.Windows.Forms.GroupBox();
-            this.txtRevisionIncluses = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.mnuRevModif.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.grdClients)).BeginInit();
             this.gbSatellites.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdSatellites)).BeginInit();
             this.mnuSatRevision.SuspendLayout();
@@ -107,21 +112,22 @@
             this.dtpCreation.CustomFormat = "MM-dd-yyyy hh:mm";
             this.dtpCreation.Enabled = false;
             this.dtpCreation.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpCreation.Location = new System.Drawing.Point(481, 23);
+            this.dtpCreation.Location = new System.Drawing.Point(536, 18);
             this.dtpCreation.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dtpCreation.Name = "dtpCreation";
-            this.dtpCreation.Size = new System.Drawing.Size(135, 22);
+            this.dtpCreation.Size = new System.Drawing.Size(151, 22);
             this.dtpCreation.TabIndex = 2;
             // 
             // cboClients
             // 
             this.cboClients.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboClients.FormattingEnabled = true;
-            this.cboClients.Location = new System.Drawing.Point(79, 53);
+            this.cboClients.Location = new System.Drawing.Point(227, 62);
             this.cboClients.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.cboClients.Name = "cboClients";
-            this.cboClients.Size = new System.Drawing.Size(284, 24);
+            this.cboClients.Size = new System.Drawing.Size(179, 24);
             this.cboClients.TabIndex = 3;
+            this.cboClients.Visible = false;
             this.cboClients.SelectedIndexChanged += new System.EventHandler(this.cboClients_SelectedIndexChanged);
             // 
             // groupBox3
@@ -131,21 +137,21 @@
             this.groupBox3.Controls.Add(this.btnGrdRevDel);
             this.groupBox3.Controls.Add(this.btnGrdRevAdd);
             this.groupBox3.Controls.Add(this.grdRevModifs);
-            this.groupBox3.Location = new System.Drawing.Point(6, 177);
+            this.groupBox3.Location = new System.Drawing.Point(6, 192);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox3.Size = new System.Drawing.Size(966, 256);
+            this.groupBox3.Size = new System.Drawing.Size(1066, 256);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Livrables couverts / Modifications incluses (Shift click pour multi-ligne)";
+            this.groupBox3.Text = "Livrables couverts / Modifications incluses (Shift+Enter pour multi-lignes)";
             // 
             // btnGrdRevDel
             // 
             this.btnGrdRevDel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnGrdRevDel.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevDel.Image")));
-            this.btnGrdRevDel.Location = new System.Drawing.Point(918, 71);
+            this.btnGrdRevDel.Location = new System.Drawing.Point(1018, 71);
             this.btnGrdRevDel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGrdRevDel.Name = "btnGrdRevDel";
             this.btnGrdRevDel.Size = new System.Drawing.Size(41, 43);
@@ -157,7 +163,7 @@
             this.btnGrdRevAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnGrdRevAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevAdd.Image")));
-            this.btnGrdRevAdd.Location = new System.Drawing.Point(918, 21);
+            this.btnGrdRevAdd.Location = new System.Drawing.Point(1018, 21);
             this.btnGrdRevAdd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGrdRevAdd.Name = "btnGrdRevAdd";
             this.btnGrdRevAdd.Size = new System.Drawing.Size(41, 43);
@@ -179,7 +185,7 @@
             this.grdRevModifs.Rows.Count = 1;
             this.grdRevModifs.Rows.DefaultSize = 18;
             this.grdRevModifs.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdRevModifs.Size = new System.Drawing.Size(903, 227);
+            this.grdRevModifs.Size = new System.Drawing.Size(1003, 227);
             this.grdRevModifs.StyleInfo = resources.GetString("grdRevModifs.StyleInfo");
             this.grdRevModifs.TabIndex = 2;
             this.grdRevModifs.Tag = "28";
@@ -201,147 +207,200 @@
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(3, 56);
+            this.label2.Location = new System.Drawing.Point(3, 44);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(72, 21);
+            this.label2.Size = new System.Drawing.Size(91, 21);
             this.label2.TabIndex = 60;
-            this.label2.Text = "Client:";
+            this.label2.Text = "Clients:";
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnGrdClientsDel);
+            this.groupBox1.Controls.Add(this.btnGrdClientsAdd);
+            this.groupBox1.Controls.Add(this.cboClients);
+            this.groupBox1.Controls.Add(this.cboTemplates);
+            this.groupBox1.Controls.Add(this.grdClients);
             this.groupBox1.Controls.Add(this.chkPreparation);
+            this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.txtNote);
             this.groupBox1.Controls.Add(this.txtCreatedBy);
             this.groupBox1.Controls.Add(this.txtRevisionNo);
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.txtVersionNo);
-            this.groupBox1.Controls.Add(this.cboTemplates);
+            this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.dtpCreation);
             this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.cboClients);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.label9);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(6, 6);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox1.Size = new System.Drawing.Size(622, 165);
+            this.groupBox1.Size = new System.Drawing.Size(693, 183);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Informations";
             // 
+            // btnGrdClientsDel
+            // 
+            this.btnGrdClientsDel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnGrdClientsDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnGrdClientsDel.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdClientsDel.Image")));
+            this.btnGrdClientsDel.Location = new System.Drawing.Point(479, 78);
+            this.btnGrdClientsDel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnGrdClientsDel.Name = "btnGrdClientsDel";
+            this.btnGrdClientsDel.Size = new System.Drawing.Size(36, 36);
+            this.btnGrdClientsDel.TabIndex = 80;
+            this.btnGrdClientsDel.UseVisualStyleBackColor = true;
+            this.btnGrdClientsDel.Click += new System.EventHandler(this.btnGrdClientsDel_Click);
+            // 
+            // btnGrdClientsAdd
+            // 
+            this.btnGrdClientsAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnGrdClientsAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnGrdClientsAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdClientsAdd.Image")));
+            this.btnGrdClientsAdd.Location = new System.Drawing.Point(479, 41);
+            this.btnGrdClientsAdd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnGrdClientsAdd.Name = "btnGrdClientsAdd";
+            this.btnGrdClientsAdd.Size = new System.Drawing.Size(36, 36);
+            this.btnGrdClientsAdd.TabIndex = 79;
+            this.btnGrdClientsAdd.UseVisualStyleBackColor = true;
+            // 
+            // cboTemplates
+            // 
+            this.cboTemplates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboTemplates.FormattingEnabled = true;
+            this.cboTemplates.Location = new System.Drawing.Point(72, 116);
+            this.cboTemplates.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cboTemplates.Name = "cboTemplates";
+            this.cboTemplates.Size = new System.Drawing.Size(406, 24);
+            this.cboTemplates.TabIndex = 5;
+            // 
+            // grdClients
+            // 
+            this.grdClients.AllowSorting = C1.Win.C1FlexGrid.AllowSortingEnum.None;
+            this.grdClients.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.grdClients.AutoSearch = C1.Win.C1FlexGrid.AutoSearchEnum.FromTop;
+            this.grdClients.ColumnInfo = "1,1,0,0,0,95,Columns:0{Width:5;}\t";
+            this.grdClients.ExtendLastCol = true;
+            this.grdClients.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grdClients.Location = new System.Drawing.Point(72, 41);
+            this.grdClients.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.grdClients.Name = "grdClients";
+            this.grdClients.Rows.Count = 3;
+            this.grdClients.Rows.DefaultSize = 19;
+            this.grdClients.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
+            this.grdClients.Size = new System.Drawing.Size(407, 74);
+            this.grdClients.StyleInfo = resources.GetString("grdClients.StyleInfo");
+            this.grdClients.TabIndex = 78;
+            this.grdClients.Tag = "58";
+            this.grdClients.BeforeRowColChange += new C1.Win.C1FlexGrid.RangeEventHandler(this.grdClients_BeforeRowColChange);
+            this.grdClients.AfterRowColChange += new C1.Win.C1FlexGrid.RangeEventHandler(this.grdClients_AfterRowColChange);
+            this.grdClients.Click += new System.EventHandler(this.grdClients_Click);
+            this.grdClients.DoubleClick += new System.EventHandler(this.grdClients_DoubleClick);
+            // 
             // chkPreparation
             // 
-            this.chkPreparation.Location = new System.Drawing.Point(447, 88);
+            this.chkPreparation.Location = new System.Drawing.Point(539, 68);
             this.chkPreparation.Name = "chkPreparation";
-            this.chkPreparation.Size = new System.Drawing.Size(169, 21);
+            this.chkPreparation.Size = new System.Drawing.Size(128, 21);
             this.chkPreparation.TabIndex = 77;
             this.chkPreparation.Text = "Mode préparation";
             this.toolTips.SetToolTip(this.chkPreparation, "Permet de préparer la révision sans la générée dans les installations actives");
             this.chkPreparation.UseVisualStyleBackColor = true;
             this.chkPreparation.CheckStateChanged += new System.EventHandler(this.chkPreparation_CheckStateChanged);
             // 
+            // label5
+            // 
+            this.label5.Location = new System.Drawing.Point(3, 119);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(91, 21);
+            this.label5.TabIndex = 51;
+            this.label5.Text = "Gabarit:";
+            // 
             // txtNote
             // 
-            this.txtNote.Location = new System.Drawing.Point(79, 121);
+            this.txtNote.Location = new System.Drawing.Point(72, 142);
             this.txtNote.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtNote.MaxLength = 256;
             this.txtNote.Multiline = true;
             this.txtNote.Name = "txtNote";
-            this.txtNote.Size = new System.Drawing.Size(537, 38);
+            this.txtNote.Size = new System.Drawing.Size(620, 38);
             this.txtNote.TabIndex = 75;
             this.txtNote.TextChanged += new System.EventHandler(this.txtNote_TextChanged);
             // 
             // txtCreatedBy
             // 
-            this.txtCreatedBy.Location = new System.Drawing.Point(447, 53);
+            this.txtCreatedBy.Location = new System.Drawing.Point(313, 18);
             this.txtCreatedBy.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtCreatedBy.Name = "txtCreatedBy";
-            this.txtCreatedBy.Size = new System.Drawing.Size(169, 22);
+            this.txtCreatedBy.Size = new System.Drawing.Size(165, 22);
             this.txtCreatedBy.TabIndex = 4;
             this.txtCreatedBy.TextChanged += new System.EventHandler(this.txtCreatedBy_TextChanged);
             // 
             // txtRevisionNo
             // 
-            this.txtRevisionNo.Location = new System.Drawing.Point(274, 23);
+            this.txtRevisionNo.Location = new System.Drawing.Point(204, 18);
             this.txtRevisionNo.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtRevisionNo.Name = "txtRevisionNo";
             this.txtRevisionNo.ReadOnly = true;
-            this.txtRevisionNo.Size = new System.Drawing.Size(67, 22);
+            this.txtRevisionNo.Size = new System.Drawing.Size(40, 22);
             this.txtRevisionNo.TabIndex = 1;
             this.txtRevisionNo.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
+            // txtVersionNo
+            // 
+            this.txtVersionNo.Location = new System.Drawing.Point(72, 18);
+            this.txtVersionNo.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtVersionNo.Name = "txtVersionNo";
+            this.txtVersionNo.ReadOnly = true;
+            this.txtVersionNo.Size = new System.Drawing.Size(56, 22);
+            this.txtVersionNo.TabIndex = 0;
+            this.txtVersionNo.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // label6
+            // 
+            this.label6.Location = new System.Drawing.Point(3, 21);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(83, 21);
+            this.label6.TabIndex = 64;
+            this.label6.Text = "No version:";
+            // 
+            // label7
+            // 
+            this.label7.Location = new System.Drawing.Point(246, 21);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(77, 21);
+            this.label7.TabIndex = 74;
+            this.label7.Text = "Créée par:";
+            // 
+            // label9
+            // 
+            this.label9.Location = new System.Drawing.Point(3, 145);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(83, 21);
+            this.label9.TabIndex = 76;
+            this.label9.Text = "Note:";
+            // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(183, 27);
+            this.label3.Location = new System.Drawing.Point(131, 21);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(84, 21);
+            this.label3.Size = new System.Drawing.Size(89, 21);
             this.label3.TabIndex = 69;
             this.label3.Text = "No révision:";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(369, 27);
+            this.label1.Location = new System.Drawing.Point(480, 21);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(107, 16);
+            this.label1.Size = new System.Drawing.Size(53, 16);
             this.label1.TabIndex = 68;
-            this.label1.Text = "Date de création:";
-            // 
-            // label5
-            // 
-            this.label5.Location = new System.Drawing.Point(3, 92);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(72, 21);
-            this.label5.TabIndex = 51;
-            this.label5.Text = "Gabarit:";
-            // 
-            // txtVersionNo
-            // 
-            this.txtVersionNo.Location = new System.Drawing.Point(79, 23);
-            this.txtVersionNo.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.txtVersionNo.Name = "txtVersionNo";
-            this.txtVersionNo.ReadOnly = true;
-            this.txtVersionNo.Size = new System.Drawing.Size(96, 22);
-            this.txtVersionNo.TabIndex = 0;
-            this.txtVersionNo.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // cboTemplates
-            // 
-            this.cboTemplates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboTemplates.FormattingEnabled = true;
-            this.cboTemplates.Location = new System.Drawing.Point(79, 86);
-            this.cboTemplates.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.cboTemplates.Name = "cboTemplates";
-            this.cboTemplates.Size = new System.Drawing.Size(360, 24);
-            this.cboTemplates.TabIndex = 5;
-            // 
-            // label6
-            // 
-            this.label6.Location = new System.Drawing.Point(3, 27);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(72, 21);
-            this.label6.TabIndex = 64;
-            this.label6.Text = "No version:";
-            // 
-            // label7
-            // 
-            this.label7.Location = new System.Drawing.Point(369, 56);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(70, 21);
-            this.label7.TabIndex = 74;
-            this.label7.Text = "Créée par:";
-            // 
-            // label9
-            // 
-            this.label9.Location = new System.Drawing.Point(3, 124);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(83, 21);
-            this.label9.TabIndex = 76;
-            this.label9.Text = "Note:";
+            this.label1.Text = "Créé le:";
             // 
             // toolTips
             // 
@@ -354,7 +413,7 @@
             this.btnExportRevision.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExportRevision.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnExportRevision.Image = ((System.Drawing.Image)(resources.GetObject("btnExportRevision.Image")));
-            this.btnExportRevision.Location = new System.Drawing.Point(280, 13);
+            this.btnExportRevision.Location = new System.Drawing.Point(281, 14);
             this.btnExportRevision.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnExportRevision.Name = "btnExportRevision";
             this.btnExportRevision.Size = new System.Drawing.Size(47, 49);
@@ -391,10 +450,11 @@
             // 
             // btnShowScriptsFolder
             // 
+            this.btnShowScriptsFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowScriptsFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowScriptsFolder.BackgroundImage")));
             this.btnShowScriptsFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnShowScriptsFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowScriptsFolder.Location = new System.Drawing.Point(910, 17);
+            this.btnShowScriptsFolder.Location = new System.Drawing.Point(1014, 17);
             this.btnShowScriptsFolder.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowScriptsFolder.Name = "btnShowScriptsFolder";
             this.btnShowScriptsFolder.Size = new System.Drawing.Size(47, 49);
@@ -431,10 +491,11 @@
             // 
             // btnShowExecutableFolder
             // 
+            this.btnShowExecutableFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowExecutableFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowExecutableFolder.BackgroundImage")));
             this.btnShowExecutableFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnShowExecutableFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowExecutableFolder.Location = new System.Drawing.Point(910, 17);
+            this.btnShowExecutableFolder.Location = new System.Drawing.Point(1014, 17);
             this.btnShowExecutableFolder.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowExecutableFolder.Name = "btnShowExecutableFolder";
             this.btnShowExecutableFolder.Size = new System.Drawing.Size(47, 49);
@@ -474,7 +535,7 @@
             this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGenerate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGenerate.BackgroundImage")));
             this.btnGenerate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnGenerate.Location = new System.Drawing.Point(864, 68);
+            this.btnGenerate.Location = new System.Drawing.Point(964, 68);
             this.btnGenerate.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(28, 31);
@@ -489,7 +550,7 @@
             this.btnShowRootFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowRootFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnShowRootFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnShowRootFolder.Image")));
-            this.btnShowRootFolder.Location = new System.Drawing.Point(925, 673);
+            this.btnShowRootFolder.Location = new System.Drawing.Point(1025, 675);
             this.btnShowRootFolder.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowRootFolder.Name = "btnShowRootFolder";
             this.btnShowRootFolder.Size = new System.Drawing.Size(47, 49);
@@ -517,13 +578,24 @@
             // 
             this.btnPrintPairValidation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPrintPairValidation.Image = ((System.Drawing.Image)(resources.GetObject("btnPrintPairValidation.Image")));
-            this.btnPrintPairValidation.Location = new System.Drawing.Point(843, 673);
+            this.btnPrintPairValidation.Location = new System.Drawing.Point(943, 675);
             this.btnPrintPairValidation.Name = "btnPrintPairValidation";
             this.btnPrintPairValidation.Size = new System.Drawing.Size(47, 49);
             this.btnPrintPairValidation.TabIndex = 5;
             this.toolTips.SetToolTip(this.btnPrintPairValidation, "Imprimer pour signature");
             this.btnPrintPairValidation.UseVisualStyleBackColor = true;
             this.btnPrintPairValidation.Click += new System.EventHandler(this.btnPrintPairValidation_Click);
+            // 
+            // txtRevisionIncluses
+            // 
+            this.txtRevisionIncluses.Enabled = false;
+            this.txtRevisionIncluses.Location = new System.Drawing.Point(129, 39);
+            this.txtRevisionIncluses.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtRevisionIncluses.Name = "txtRevisionIncluses";
+            this.txtRevisionIncluses.Size = new System.Drawing.Size(146, 22);
+            this.txtRevisionIncluses.TabIndex = 76;
+            this.toolTips.SetToolTip(this.txtRevisionIncluses, "# de révision(s) séparés par \";\", \",\" ou \"-\" pour un intervalle.");
+            this.txtRevisionIncluses.Validating += new System.ComponentModel.CancelEventHandler(this.txtRevisionIncluses_Validating);
             // 
             // openFileDialog
             // 
@@ -534,11 +606,11 @@
             this.gbSatellites.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbSatellites.Controls.Add(this.grdSatellites);
-            this.gbSatellites.Location = new System.Drawing.Point(635, 6);
+            this.gbSatellites.Location = new System.Drawing.Point(700, 6);
             this.gbSatellites.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.gbSatellites.Name = "gbSatellites";
             this.gbSatellites.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.gbSatellites.Size = new System.Drawing.Size(337, 165);
+            this.gbSatellites.Size = new System.Drawing.Size(372, 183);
             this.gbSatellites.TabIndex = 1;
             this.gbSatellites.TabStop = false;
             this.gbSatellites.Text = "La révision est pour l\'application sattellite suivante:";
@@ -560,7 +632,7 @@
             this.grdSatellites.Rows.Count = 1;
             this.grdSatellites.Rows.DefaultSize = 18;
             this.grdSatellites.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdSatellites.Size = new System.Drawing.Size(330, 144);
+            this.grdSatellites.Size = new System.Drawing.Size(365, 162);
             this.grdSatellites.StyleInfo = resources.GetString("grdSatellites.StyleInfo");
             this.grdSatellites.TabIndex = 0;
             this.grdSatellites.Tag = "35";
@@ -571,19 +643,19 @@
             this.mnuiShowInExplorer,
             this.mnuiDelete});
             this.mnuSatRevision.Name = "mnuSatRevision";
-            this.mnuSatRevision.Size = new System.Drawing.Size(213, 48);
+            this.mnuSatRevision.Size = new System.Drawing.Size(214, 48);
             // 
             // mnuiShowInExplorer
             // 
             this.mnuiShowInExplorer.Name = "mnuiShowInExplorer";
-            this.mnuiShowInExplorer.Size = new System.Drawing.Size(212, 22);
+            this.mnuiShowInExplorer.Size = new System.Drawing.Size(213, 22);
             this.mnuiShowInExplorer.Text = "Afficher dans l\'explorateur";
             this.mnuiShowInExplorer.Click += new System.EventHandler(this.mnuiShowInExplorer_Click);
             // 
             // mnuiDelete
             // 
             this.mnuiDelete.Name = "mnuiDelete";
-            this.mnuiDelete.Size = new System.Drawing.Size(212, 22);
+            this.mnuiDelete.Size = new System.Drawing.Size(213, 22);
             this.mnuiDelete.Text = "Supprimer";
             this.mnuiDelete.Click += new System.EventHandler(this.mnuiDelete_Click);
             // 
@@ -596,11 +668,11 @@
             this.gbScripts.Controls.Add(this.btnSelectScriptsFolderPath);
             this.gbScripts.Controls.Add(this.txtScriptsPath);
             this.gbScripts.Controls.Add(this.btnShowScriptsFolder);
-            this.gbScripts.Location = new System.Drawing.Point(6, 440);
+            this.gbScripts.Location = new System.Drawing.Point(6, 452);
             this.gbScripts.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.gbScripts.Name = "gbScripts";
             this.gbScripts.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.gbScripts.Size = new System.Drawing.Size(966, 102);
+            this.gbScripts.Size = new System.Drawing.Size(1066, 102);
             this.gbScripts.TabIndex = 3;
             this.gbScripts.TabStop = false;
             this.gbScripts.Text = "Scripts *** Si spécifique pour client, inclure dans un sous dossier avec le NOM E" +
@@ -608,19 +680,22 @@
             // 
             // txtScriptsPath
             // 
+            this.txtScriptsPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtScriptsPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtScriptsPath.Location = new System.Drawing.Point(93, 22);
             this.txtScriptsPath.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtScriptsPath.Multiline = true;
             this.txtScriptsPath.Name = "txtScriptsPath";
             this.txtScriptsPath.ReadOnly = true;
-            this.txtScriptsPath.Size = new System.Drawing.Size(809, 40);
+            this.txtScriptsPath.Size = new System.Drawing.Size(913, 40);
             this.txtScriptsPath.TabIndex = 2;
             // 
             // gbExe
             // 
             this.gbExe.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbExe.Controls.Add(this.label11);
             this.gbExe.Controls.Add(this.optExeOnly);
             this.gbExe.Controls.Add(this.optExeAndRpt);
             this.gbExe.Controls.Add(this.btnSelectExecutableFilePath);
@@ -629,14 +704,25 @@
             this.gbExe.Controls.Add(this.txtReleasePath);
             this.gbExe.Controls.Add(this.btnShowExecutableFolder);
             this.gbExe.Controls.Add(this.optRptOnly);
-            this.gbExe.Location = new System.Drawing.Point(6, 550);
+            this.gbExe.Location = new System.Drawing.Point(6, 556);
             this.gbExe.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.gbExe.Name = "gbExe";
             this.gbExe.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.gbExe.Size = new System.Drawing.Size(966, 105);
+            this.gbExe.Size = new System.Drawing.Size(1066, 105);
             this.gbExe.TabIndex = 4;
             this.gbExe.TabStop = false;
             this.gbExe.Text = "Exécutable";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Arial", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.ForeColor = System.Drawing.Color.Red;
+            this.label11.Location = new System.Drawing.Point(545, 77);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(345, 16);
+            this.label11.TabIndex = 8;
+            this.label11.Text = "ATTENTION: le rapport n\'est pas gérable ici par client..";
             // 
             // optExeOnly
             // 
@@ -664,13 +750,15 @@
             // 
             // txtReleasePath
             // 
+            this.txtReleasePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtReleasePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtReleasePath.Location = new System.Drawing.Point(93, 22);
             this.txtReleasePath.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtReleasePath.Multiline = true;
             this.txtReleasePath.Name = "txtReleasePath";
             this.txtReleasePath.ReadOnly = true;
-            this.txtReleasePath.Size = new System.Drawing.Size(809, 40);
+            this.txtReleasePath.Size = new System.Drawing.Size(913, 40);
             this.txtReleasePath.TabIndex = 2;
             // 
             // optRptOnly
@@ -691,7 +779,7 @@
             this.groupBox6.Controls.Add(this.label8);
             this.groupBox6.Controls.Add(this.label4);
             this.groupBox6.Controls.Add(this.btnSelectVariousFolderPath);
-            this.groupBox6.Location = new System.Drawing.Point(6, 662);
+            this.groupBox6.Location = new System.Drawing.Point(6, 664);
             this.groupBox6.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -728,7 +816,7 @@
             this.formController.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
-            this.formController.Size = new System.Drawing.Size(974, 34);
+            this.formController.Size = new System.Drawing.Size(1074, 34);
             this.formController.TabIndex = 9;
             this.formController.SetReadRights += new Ceritar.TT3LightDLL.Controls.ctlFormController.SetReadRightsEventHandler(this.formController_SetReadRights);
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
@@ -753,27 +841,16 @@
             this.chkIncludePreviousRevScripts.Controls.Add(this.label10);
             this.chkIncludePreviousRevScripts.Controls.Add(this.btnExportRevision);
             this.chkIncludePreviousRevScripts.Controls.Add(this.chkExcludePreviousRevScripts);
-            this.chkIncludePreviousRevScripts.Location = new System.Drawing.Point(373, 662);
+            this.chkIncludePreviousRevScripts.Location = new System.Drawing.Point(373, 664);
             this.chkIncludePreviousRevScripts.Name = "chkIncludePreviousRevScripts";
             this.chkIncludePreviousRevScripts.Size = new System.Drawing.Size(333, 68);
             this.chkIncludePreviousRevScripts.TabIndex = 10;
             this.chkIncludePreviousRevScripts.TabStop = false;
-            this.chkIncludePreviousRevScripts.Text = "    Export vers fichier Zip";
-            // 
-            // txtRevisionIncluses
-            // 
-            this.txtRevisionIncluses.Enabled = false;
-            this.txtRevisionIncluses.Location = new System.Drawing.Point(129, 38);
-            this.txtRevisionIncluses.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.txtRevisionIncluses.Name = "txtRevisionIncluses";
-            this.txtRevisionIncluses.Size = new System.Drawing.Size(146, 22);
-            this.txtRevisionIncluses.TabIndex = 76;
-            this.toolTips.SetToolTip(this.txtRevisionIncluses, "# de révision(s) séparés par \";\", \",\" ou \"-\" pour un intervalle.");
-            this.txtRevisionIncluses.Validating += new System.ComponentModel.CancelEventHandler(this.txtRevisionIncluses_Validating);
+            this.chkIncludePreviousRevScripts.Text = "    Export vers fichier Zip (Selon client sélectionné)";
             // 
             // label10
             // 
-            this.label10.Location = new System.Drawing.Point(3, 41);
+            this.label10.Location = new System.Drawing.Point(3, 42);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(135, 17);
             this.label10.TabIndex = 75;
@@ -783,7 +860,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(976, 770);
+            this.ClientSize = new System.Drawing.Size(1076, 770);
             this.Controls.Add(this.chkIncludePreviousRevScripts);
             this.Controls.Add(this.btnPrintPairValidation);
             this.Controls.Add(this.btnShowRootFolder);
@@ -807,6 +884,7 @@
             this.mnuRevModif.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.grdClients)).EndInit();
             this.gbSatellites.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdSatellites)).EndInit();
             this.mnuSatRevision.ResumeLayout(false);
@@ -881,5 +959,9 @@
         private System.Windows.Forms.GroupBox chkIncludePreviousRevScripts;
         private System.Windows.Forms.TextBox txtRevisionIncluses;
         private System.Windows.Forms.Label label10;
+        public C1.Win.C1FlexGrid.C1FlexGrid grdClients;
+        private System.Windows.Forms.Button btnGrdClientsDel;
+        private System.Windows.Forms.Button btnGrdClientsAdd;
+        private System.Windows.Forms.Label label11;
     }
 }

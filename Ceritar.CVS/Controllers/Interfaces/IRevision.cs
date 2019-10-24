@@ -18,7 +18,6 @@ namespace Ceritar.CVS.Controllers.Interfaces
         int GetCeritarApplication_NRI();
         string GetCeritarApplication_Name();
         string GetCeritarClient_Name();
-        int GetCeritarClient_NRI();
         string GetCreationDate();
         string GetCompiledBy();
         string GetCreatedBy();
@@ -35,8 +34,21 @@ namespace Ceritar.CVS.Controllers.Interfaces
         bool GetIfScriptsAreToAppend();
         bool IsPreparationMode();
         bool IsPreviousRevisionScriptsIncluded();
-        List<string> GetModificationsList();
+        List<structRevModifs> GetModificationsList();
         List<structSatRevision> GetRevisionSatelliteList();
+        structClientAppRevision GetSelectedClient();
+        List<structClientAppRevision> GetClientsList();
+    }
+
+    /// <summary>
+    /// Cette structure représente les informations contenues dans une grille qui fait le lien entre un Client et une Revision.
+    /// </summary>
+    public struct structClientAppRevision
+    {
+        public sclsConstants.DML_Mode Action;
+        public int intClientAppRevision_NRI;
+        public int intClientAppRevision_TS;
+        public int intCeritarClient_NRI;
     }
 
     /// <summary>
@@ -53,5 +65,17 @@ namespace Ceritar.CVS.Controllers.Interfaces
         public string strExportFolderName;
         public bool blnExeIsFolder;
         public bool blnExePerCustomer;
+        public int inCeritarClient_NRI_Specific;
+    }
+
+    /// <summary>
+    /// Cette structure représente les informations contenues dans une grille contenant les modifications d'une revision.
+    /// </summary>
+    public struct structRevModifs
+    {
+        public sclsConstants.DML_Mode Action;
+        public string strDescriptionModif;
+        public int intCeritarClient_NRI;
+        public DateTime dthrSent;
     }
 }

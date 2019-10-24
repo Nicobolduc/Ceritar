@@ -23,10 +23,20 @@ namespace Ceritar.Logirack_CVS.Forms
         //Controller
         private ctr_Revision mcCtrRevision;
 
+        //Columns grdClients
+        private const short mintGrdClients_Action_col = 1;
+        private const short mintGrdClients_CAR_NRI_col = 2;
+        private const short mintGrdClients_CAR_TS_col = 3;
+        private const short mintGrdClients_CeC_NRI_col = 4;
+        private const short mintGrdClients_CeC_Name_col = 5;
+
         //Columns grdRevModifs
-        private const short mintGrdRevMod_Action_col = 1;
-        private const short mintGrdRevMod_RevM_NRI_col = 2;
-        private const short mintGrdRevMod_RevM_ChangeDesc_col = 3;
+        private const short mintGrdRevMod_CeC_NRI_For_col = 1;
+        private const short mintGrdRevMod_CeC_Name_For_col = 2;
+        private const short mintGrdRevMod_RevM_DtHr_col = 3;
+        private const short mintGrdRevMod_RevM_NRI_col = 4;
+        private const short mintGrdRevMod_Action_col = 5;
+        private const short mintGrdRevMod_RevM_ChangeDesc_col = 6;
 
         //Columns grdSatellites
         private const short mintGrdSat_Action_col = 1;
@@ -40,6 +50,7 @@ namespace Ceritar.Logirack_CVS.Forms
         private const short mintGrdSat_CSV_ExePerCustomer_col = 9;
 
         //Classes
+        public clsTTC1FlexGridWrapper mcGrdClients;
         private clsTTC1FlexGridWrapper mcGrdRevModifs;
         private clsTTC1FlexGridWrapper mcGrdSatellites;
         private Ceritar.CVS.clsActionResults mcActionResults;
@@ -49,6 +60,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
         //Messages
         private const int mintMSG_ValidCharacters = 58;
+        private const int mintMSG_ChangesWillBeLostOnRowChange = 27;
 
         //Working Variables     
         private int mintCeritarApplication_NRI;
@@ -60,6 +72,9 @@ namespace Ceritar.Logirack_CVS.Forms
         private ushort mintRevision_TS;
         private bool mblnAppExeLocationExistsOnLoad;
         private sbyte mintAttributedRevisionNo;
+        private int mintGrdClient_SelectedRow = 1;
+        private bool mblnGrdSatellitesChangeMade;
+
 
         public frmRevision()
         {
@@ -71,11 +86,72 @@ namespace Ceritar.Logirack_CVS.Forms
 
             mcGrdSatellites = new clsTTC1FlexGridWrapper();
             mcGrdSatellites.SetGridDisplay += mcGrdSatellites_SetGridDisplay;
+
             mcGrdRevModifs.AfterClickAdd += mcGrdRevModifs_AfterClickAdd;
+            mcGrdRevModifs.SetGridDisplay += McGrdRevModifs_SetGridDisplay;
+
+            mcGrdClients = new clsTTC1FlexGridWrapper();
+            mcGrdClients.SetGridDisplay += mcGrdClients_SetGridDisplay;
+            mcGrdClients.AfterClickAdd += mcGrdClients_AfterClickAdd;
+            mcGrdClients.BeforeClickAdd += mcGrdClients_BeforeClickAdd;
 
             dtpCreation.Value = DateTime.Now;
         }
-       
+
+        private void McGrdRevModifs_SetGridDisplay()
+        {
+            grdRevModifs.Cols[mintGrdRevMod_RevM_DtHr_col].Width = 92;
+            grdRevModifs.Cols[mintGrdRevMod_CeC_Name_For_col].Width = 100;
+
+            grdRevModifs.Cols[mintGrdRevMod_RevM_DtHr_col].DataType = typeof(DateTime);
+            grdRevModifs.Cols[mintGrdRevMod_RevM_DtHr_col].Format = (clsTTApp.GetAppController.str_GetServerDateFormat + " HH:mm");
+
+            grdRevModifs.AllowMerging = C1.Win.C1FlexGrid.AllowMergingEnum.RestrictAll;
+
+            grdRevModifs.Cols[mintGrdRevMod_RevM_DtHr_col].AllowMerging = true;
+            grdRevModifs.Cols[mintGrdRevMod_CeC_Name_For_col].AllowMerging = true;
+        }
+
+        private void mcGrdClients_BeforeClickAdd(ref bool vblnCancel)
+        {
+            if (mblnGrdSatellitesChangeMade || mcGrdClients[grdClients.Row, mintGrdClients_Action_col] == sclsConstants.DML_Mode.INSERT_MODE.ToString())
+            {
+                DialogResult msgResult = clsTTApp.GetAppController.ShowMessage(mintMSG_ChangesWillBeLostOnRowChange, MessageBoxButtons.YesNo);
+
+                mblnGrdSatellitesChangeMade = msgResult == DialogResult.No;
+
+                if (msgResult == System.Windows.Forms.DialogResult.Yes)
+                {
+                    formController.FormIsLoading = true;
+                    pfblnGrdClients_Load();
+                    pfblnGrdSatellites_Load();
+                    formController.FormIsLoading = false;
+                }
+            }
+
+            vblnCancel = mblnGrdSatellitesChangeMade;
+        }
+
+        private void mcGrdClients_AfterClickAdd()
+        {
+            grdClients[grdClients.Row, mintGrdClients_CAR_NRI_col] = 0;
+            grdClients[grdClients.Row, mintGrdClients_CAR_TS_col] = 0;
+
+            mcGrdSatellites.ClearGrid();
+        }
+
+        private void mcGrdClients_SetGridDisplay()
+        {
+            grdClients.Cols[mintGrdClients_CeC_Name_col].Width = 220;
+
+            if (grdClients.Rows.Count > 1)
+            {
+                cboClients.Visible = true;
+            }
+
+            mcGrdClients.SetColType_ComboBox(ref cboClients, mcCtrRevision.strGetClients_SQL(formController.Item_NRI), mintGrdClients_CeC_Name_col, "CeC_NRI", "CeC_Name", false);
+        }
+
 
         #region "Interfaces functions"
 
@@ -139,25 +215,31 @@ namespace Ceritar.Logirack_CVS.Forms
             return formController;
         }
 
-        int IRevision.GetCeritarClient_NRI()
-        {
-            return (int)(cboClients.SelectedValue == null ? 0 : cboClients.SelectedValue);
-        }
-
         string IRevision.GetCeritarClient_Name()
         {
-            return cboClients.GetItemText(cboClients.SelectedItem);
+            if (grdClients.Rows.Count <= 1)
+                throw new InvalidArgumentException("Erreur invalide non gerer",0);
+
+            return mcGrdClients[grdClients.Row, mintGrdClients_CeC_Name_col];
         }
 
-        System.Collections.Generic.List<string> IRevision.GetModificationsList()
+        System.Collections.Generic.List<structRevModifs> IRevision.GetModificationsList()
         {
-            List<string> lstModifications = new List<string>();
+            List<structRevModifs> lstModifications = new List<structRevModifs>();
+            structRevModifs strcutRevModifs;
 
             for (int intRowIndex = 1; intRowIndex < grdRevModifs.Rows.Count; intRowIndex++)
             {
                 if (mcGrdRevModifs[intRowIndex, mintGrdRevMod_Action_col] != sclsConstants.DML_Mode.DELETE_MODE.ToString())
                 {
-                    lstModifications.Add(mcGrdRevModifs[intRowIndex, mintGrdRevMod_RevM_ChangeDesc_col]);
+                    strcutRevModifs = new structRevModifs();
+
+                    strcutRevModifs.Action = clsTTApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(mcGrdRevModifs[intRowIndex, mintGrdRevMod_Action_col]);
+                    strcutRevModifs.dthrSent = DateTime.Parse(mcGrdRevModifs[intRowIndex, mintGrdRevMod_RevM_DtHr_col]);
+                    strcutRevModifs.intCeritarClient_NRI = Int32.Parse(mcGrdRevModifs[intRowIndex, mintGrdRevMod_CeC_NRI_For_col]);
+                    strcutRevModifs.strDescriptionModif = mcGrdRevModifs[intRowIndex, mintGrdRevMod_RevM_ChangeDesc_col].ToString();
+
+                    lstModifications.Add(strcutRevModifs);
                 }
             }
 
@@ -196,7 +278,7 @@ namespace Ceritar.Logirack_CVS.Forms
                     structSRe.strLocationSatelliteExe = mcGrdSatellites[intRowIndex, mintGrdSat_CSA_ExeLocation_col];
                     structSRe.strCeritarSatelliteApp_Name = mcGrdSatellites[intRowIndex, mintGrdSat_CSA_Name_col];
                     structSRe.blnExeIsFolder = Convert.ToBoolean(mcGrdSatellites[intRowIndex, mintGrdSat_CSA_ExeIsFolder_col]);
-                    structSRe.blnExePerCustomer = Convert.ToBoolean(mcGrdSatellites[intRowIndex, mintGrdSat_CSV_ExePerCustomer_col]);
+                    structSRe.blnExePerCustomer = Convert.ToBoolean(Int32.Parse(mcGrdSatellites[intRowIndex, mintGrdSat_CSV_ExePerCustomer_col]));
                     structSRe.strExportFolderName = mcGrdSatellites[intRowIndex, mintGrdSat_CSA_ExportFolderName_col];
                     Int32.TryParse(mcGrdSatellites[intRowIndex, mintGrdSat_CSV_NRI_col], out structSRe.intClientSatVersion_NRI);
 
@@ -204,7 +286,12 @@ namespace Ceritar.Logirack_CVS.Forms
                     {
                         structSRe.intSatRevision_NRI = Int32.Parse(mcGrdSatellites[intRowIndex, mintGrdSat_SRe_NRI_col]);
                     }
-                    
+
+                    if (structSRe.blnExePerCustomer | structSRe.inCeritarClient_NRI_Specific > 0)
+                    {
+                        structSRe.inCeritarClient_NRI_Specific = Int32.Parse(mcGrdClients[grdClients.Row, mintGrdClients_CeC_NRI_col]);
+                    }
+
                     lstSatelliteApps.Add(structSRe);
                 }
             }
@@ -257,6 +344,38 @@ namespace Ceritar.Logirack_CVS.Forms
             return System.Text.RegularExpressions.Regex.Replace(txtRevisionIncluses.Text, @"\s+", "");
         }
 
+        structClientAppRevision IRevision.GetSelectedClient()
+        {
+            structClientAppRevision structCAR = new structClientAppRevision();
+
+            structCAR.Action = clsTTApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdClients[grdClients.Row, mintGrdClients_Action_col]);
+            Int32.TryParse(mcGrdClients[grdClients.Row, mintGrdClients_CeC_NRI_col], out structCAR.intCeritarClient_NRI);
+            Int32.TryParse(mcGrdClients[grdClients.Row, mintGrdClients_CAR_NRI_col], out structCAR.intClientAppRevision_NRI);
+            structCAR.intClientAppRevision_TS = Int32.Parse(mcGrdClients[grdClients.Row, mintGrdClients_CAR_TS_col]);
+
+            return structCAR;
+        }
+
+        List<structClientAppRevision> IRevision.GetClientsList()
+        {
+            List<structClientAppRevision> lstClient = new List<structClientAppRevision>();
+            structClientAppRevision structCAR;
+
+            for (int intRowIndex = 1; intRowIndex < grdClients.Rows.Count; intRowIndex++)
+            {
+                structCAR = new structClientAppRevision();
+
+                structCAR.Action = clsTTApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdClients[intRowIndex, mintGrdClients_Action_col]);
+                Int32.TryParse(mcGrdClients[intRowIndex, mintGrdClients_CeC_NRI_col], out structCAR.intCeritarClient_NRI);
+                Int32.TryParse(mcGrdClients[intRowIndex, mintGrdClients_CAR_NRI_col], out structCAR.intClientAppRevision_NRI);
+                structCAR.intClientAppRevision_TS = Int32.Parse(mcGrdClients[intRowIndex, mintGrdClients_CAR_TS_col]);
+
+                lstClient.Add(structCAR);
+            }
+
+            return lstClient;
+        }
+
         #endregion
 
 
@@ -294,7 +413,6 @@ namespace Ceritar.Logirack_CVS.Forms
 
                         mblnAppExeLocationExistsOnLoad = !string.IsNullOrEmpty(txtReleasePath.Text);
 
-                        cboClients.SelectedValue = Int32.Parse(sqlRecord["CeC_NRI"].ToString());
                         cboTemplates.SelectedValue = Int32.Parse(sqlRecord["Tpl_NRI"].ToString());
 
                         dtpCreation.Value = DateTime.Parse(sqlRecord["Rev_DtCreation"].ToString());
@@ -396,13 +514,39 @@ namespace Ceritar.Logirack_CVS.Forms
             return blnValidReturn;
         }
 
-        private bool pfblnGrdSatellites_Load()
-        {
+        private bool pfblnGrdSatellites_Load(int vintGrdClient_RowToLoad = 0)
+        { 
             bool blnValidReturn = false;
+            int intRowToLoad = 0;
 
             try
             {
-                blnValidReturn = mcGrdSatellites.bln_FillData(mcCtrRevision.strGetListe_SatelliteApps_SQL());
+                if (vintGrdClient_RowToLoad > 0)
+                {
+                    intRowToLoad = vintGrdClient_RowToLoad;
+                }
+                else if (grdClients.Rows.Count > 1)
+                {
+                    intRowToLoad = grdClients.Row;
+                }
+
+                if (intRowToLoad >= 1 && !mcGrdClients.bln_CellIsEmpty(intRowToLoad, mintGrdClients_CeC_NRI_col))
+                {
+                    Cursor.Current = Cursors.WaitCursor;
+
+                    mcGrdSatellites.LstHostedCellControls = new List<HostedCellControl>();
+
+                    blnValidReturn = mcGrdSatellites.bln_FillData(mcCtrRevision.strGetListe_SatelliteApps_SQL(Int32.Parse(mcGrdClients[intRowToLoad, mintGrdClients_CeC_NRI_col])));
+
+                    mblnGrdSatellitesChangeMade = false;
+
+                    Cursor.Current = Cursors.Default;
+                }
+                else
+                {
+                    mcGrdSatellites.ClearGrid();
+                    blnValidReturn = true;
+                }
             }
             catch (Exception ex)
             {
@@ -616,7 +760,80 @@ namespace Ceritar.Logirack_CVS.Forms
             return blnValidReturn;
         }
 
-#endregion
+        private bool pfblnGrdClients_Load()
+        {
+            bool blnValidReturn = false;
+
+            try
+            {
+                blnValidReturn = mcGrdClients.bln_FillData(mcCtrRevision.strGetListe_Clients_SQL(formController.Item_NRI));
+
+                if (blnValidReturn)
+                {
+                    pfblnEnableDisable_btnGrdClientsDelete(1);
+                }
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnValidReturn;
+        }
+
+        private bool pfblnEnableDisable_btnGrdClientsDelete(int vintCurrentRow)
+        {
+            bool blnValidReturn = true;
+
+            try
+            {
+                if (mcGrdClients.bln_RowEditIsValid())
+                {
+                    if (string.IsNullOrEmpty(mcGrdClients[vintCurrentRow, mintGrdClients_Action_col]) || mcGrdClients[vintCurrentRow, mintGrdClients_Action_col] == sclsConstants.DML_Mode.INSERT_MODE.ToString())
+                    {
+                        btnGrdClientsDel.Enabled = true;
+                    }
+                    else
+                    {
+                        btnGrdClientsDel.Enabled = true;
+
+                        for (int intIdx = 1; intIdx < grdSatellites.Rows.Count; intIdx++)
+                        {
+                                if (!mcGrdSatellites.bln_CellIsEmpty(intIdx, mintGrdSat_SRe_NRI_col) & (mcGrdSatellites[intIdx, mintGrdSat_CSV_ExePerCustomer_col] == "1" | grdClients.Rows.Count <= 2))
+                            {
+                                btnGrdClientsDel.Enabled = false;
+                                break;
+                            }
+                        }
+
+                        if (btnGrdClientsDel.Enabled)
+                        {
+                            int intNbRowRestant = 0;
+
+                            for (int intIdx = 1; intIdx < grdClients.Rows.Count; intIdx++)
+                            {
+                                if (mcGrdClients[intIdx, mintGrdClients_Action_col] != sclsConstants.DML_Mode.DELETE_MODE.ToString())
+                                {
+                                    intNbRowRestant ++;
+                                }
+                            }
+
+                            btnGrdClientsDel.Enabled = (intNbRowRestant > 1);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                blnValidReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+
+            return blnValidReturn;
+        }
+
+        #endregion
 
 
         private void formController_LoadData(LoadDataEventArgs eventArgs)
@@ -627,12 +844,15 @@ namespace Ceritar.Logirack_CVS.Forms
             mblnAppExeLocationExistsOnLoad = false;
 
             mcGrdSatellites.LstHostedCellControls = new List<HostedCellControl>();
+            mcGrdRevModifs.DefaultActionCol = mintGrdRevMod_Action_col;
 
             mstrVariousFileLocation = string.Empty;
             mstrVariousFolderLocation = string.Empty;
             btnSelectVariousFilePath.BackColor = System.Drawing.SystemColors.Control;
             btnSelectVariousFolderPath.BackColor = System.Drawing.SystemColors.Control;
 
+            if (!mcGrdClients.bln_Init(ref grdClients, ref btnGrdClientsAdd, ref btnGrdClientsDel))
+            { }
             if (!mcGrdRevModifs.bln_Init(ref grdRevModifs, ref btnGrdRevAdd, ref btnGrdRevDel))
             { }
             if (!mcGrdSatellites.bln_Init(ref grdSatellites, ref btnPlaceHolder, ref btnPlaceHolder))
@@ -643,12 +863,20 @@ namespace Ceritar.Logirack_CVS.Forms
             { }
             else if (!pfblnData_Load())
             { }
+            else if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE)
+            {
+                blnValidReturn = true;
+            }
+            else if (!pfblnGrdClients_Load())
+            { }       
             else if (!pfblnGrdRevModifs_Load())
             { }
-            else if (!pfblnGrdSatellites_Load())
+            else if (!pfblnGrdSatellites_Load(mintGrdClient_SelectedRow))
             { }
             else
             {
+                grdClients.Row = (mintGrdClient_SelectedRow >= grdClients.Rows.Count ? 1 : mintGrdClient_SelectedRow);
+
                 blnValidReturn = true;
             }
 
@@ -667,8 +895,9 @@ namespace Ceritar.Logirack_CVS.Forms
                 {
                     case ctr_Revision.ErrorCode_Rev.CERITAR_CLIENT_MANDATORY:
 
-                        cboClients.Focus();
-                        cboClients.DroppedDown = true;
+                        btnGrdClientsAdd.Focus();
+                        //cboClients.Focus();
+                        //cboClients.DroppedDown = true;
                         break;
 
                     case ctr_Revision.ErrorCode_Rev.EXE_OR_SCRIPT_MANDATORY:
@@ -697,6 +926,22 @@ namespace Ceritar.Logirack_CVS.Forms
 
                         txtCreatedBy.Focus();
                         break;
+
+                    case ctr_Revision.ErrorCode_Rev.CLIENT_NAME_MANDATORY:
+
+                        string strListOfClientSelected = string.Empty;
+
+                        for (int intRowIdx = 1; intRowIdx < grdClients.Rows.Count; intRowIdx++)
+                        {
+                            strListOfClientSelected = strListOfClientSelected + (strListOfClientSelected == string.Empty ? mcGrdClients[intRowIdx, mintGrdClients_CeC_NRI_col] : "," + Microsoft.VisualBasic.Conversion.Val(mcGrdClients[intRowIdx, mintGrdClients_CeC_NRI_col]));
+                        }
+
+                        sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrRevision.strGetClients_SQL(formController.Item_NRI, strListOfClientSelected), "CeC_NRI", "Cec_Name", false, ref cboClients);
+
+                        grdClients.Row = mcActionResults.RowInError;
+                        grdClients.StartEditing();
+
+                        break;
                 }
             }
             else
@@ -714,11 +959,20 @@ namespace Ceritar.Logirack_CVS.Forms
 
             try
             {
-                //if (formController.FormMode == sclsConstants.DML_Mode.INSERT_MODE)
-                //{
-                    newThread = new Thread(() => frmWorking.ShowDialog());
-                    newThread.Start();
-                //}
+#if DEBUG
+                Console.WriteLine("Mode=Debug");
+#else
+                newThread = new Thread(() => frmWorking.ShowDialog());
+                newThread.Start();
+#endif
+                if (mcGrdClients[grdClients.Row, mintGrdClients_Action_col] == sclsConstants.DML_Mode.DELETE_MODE.ToString())
+                {
+                    mintGrdClient_SelectedRow = 1;
+                }
+                else
+                {
+                    mintGrdClient_SelectedRow = grdClients.Row;
+                }
 
                 mcActionResults = mcCtrRevision.Save();
 
@@ -770,6 +1024,11 @@ namespace Ceritar.Logirack_CVS.Forms
         {
             grdRevModifs.StartEditing(grdRevModifs.Row, mintGrdRevMod_RevM_ChangeDesc_col);
 
+            grdRevModifs[grdRevModifs.Row, mintGrdRevMod_Action_col] = sclsConstants.DML_Mode.INSERT_MODE.ToString();
+            grdRevModifs[grdRevModifs.Row, mintGrdRevMod_RevM_DtHr_col] = DateTime.Now;
+            grdRevModifs[grdRevModifs.Row, mintGrdRevMod_CeC_NRI_For_col] = grdClients[grdClients.Row, mintGrdClients_CeC_NRI_col];
+            grdRevModifs[grdRevModifs.Row, mintGrdRevMod_CeC_Name_For_col] = grdClients[grdClients.Row, mintGrdClients_CeC_Name_col];
+
             formController.ChangeMade = true;
         }
 
@@ -777,6 +1036,8 @@ namespace Ceritar.Logirack_CVS.Forms
         {
             grdSatellites.Cols[mintGrdSat_CSA_Name_col].Width = 250;
             grdSatellites.Cols[mintGrdSat_CSA_ExeLocation_col].Width = 30;
+
+            grdSatellites.Cols[mintGrdSat_CSV_ExePerCustomer_col].DataType = typeof(bool);
 
             if (grdSatellites.Rows.Count > 1)
             {
@@ -866,11 +1127,14 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void cboClients_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!formController.FormIsLoading)
+            if (!formController.FormIsLoading & cboClients.SelectedIndex > -1)
             {
-                formController.ChangeMade = true;
+                grdClients[grdClients.Row, mintGrdClients_CeC_NRI_col] = cboClients.SelectedValue;
 
-                pfblnGrdSatellites_Load();
+                if (grdSatellites.Rows.Count <= 1)
+                    pfblnGrdSatellites_Load();
+
+                formController.ChangeMade = true;
             }
         }
 
@@ -896,18 +1160,23 @@ namespace Ceritar.Logirack_CVS.Forms
                 case (int)sclsConstants.DML_Mode.UPDATE_MODE:
 
                     cboTemplates.Enabled = false;
-                    if (!chkPreparation.Checked) cboClients.Enabled = false;
                     txtCreatedBy.ReadOnly = true;
                     btnSelectVariousFilePath.Enabled = true;
                     btnSelectVariousFolderPath.Enabled = true;
                     btnShowRootFolder.Enabled = true;
                     btnExportRevision.Enabled = true;
-
+                    
                     if (mintCeritarApplication_NRI_Master > 0)
                     {
                         gbScripts.Enabled = false;
                         chkExcludePreviousRevScripts.Enabled = false;
                     }
+
+                    break;
+
+                case (int)sclsConstants.DML_Mode.DELETE_MODE: case (int)sclsConstants.DML_Mode.CONSULT_MODE:
+                    btnGrdClientsAdd.Enabled = false;
+                    btnGrdClientsDel.Enabled = false;
 
                     break;
             }
@@ -1181,6 +1450,106 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 clsTTApp.GetAppController.ShowMessage(mintMSG_ValidCharacters);
                 e.Cancel = true;
+            }
+        }
+
+        private void grdClients_Click(object sender, EventArgs e)
+        {
+            if (!formController.FormIsLoading)
+            {
+                mintGrdClient_SelectedRow = grdClients.Row;
+            }
+        }
+
+        private void grdClients_DoubleClick(object sender, EventArgs e)
+        {
+            if (grdClients.Rows.Count > 1 & grdClients.Row > 0)
+            {
+                switch (grdClients.Col)
+                {
+                    case mintGrdClients_CeC_Name_col:
+
+                        if (mcGrdClients[grdClients.Row, mintGrdClients_Action_col] == sclsConstants.DML_Mode.INSERT_MODE.ToString() || chkPreparation.Checked)
+                        {
+                            string strListOfClientSelected = string.Empty;
+
+                            for (int intRowIdx = 1; intRowIdx < grdClients.Rows.Count; intRowIdx++)
+                            {
+                                strListOfClientSelected = strListOfClientSelected + (strListOfClientSelected == string.Empty ? mcGrdClients[intRowIdx, mintGrdClients_CeC_NRI_col] : "," + Microsoft.VisualBasic.Conversion.Val(mcGrdClients[intRowIdx, mintGrdClients_CeC_NRI_col]));
+                            }
+
+                            sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrRevision.strGetClients_SQL(formController.Item_NRI, strListOfClientSelected), "CeC_NRI", "Cec_Name", false, ref cboClients);
+
+                            grdClients.StartEditing();
+                        }
+
+                        break;
+                }
+            }
+        }
+
+        private void btnGrdClientsDel_Click(object sender, EventArgs e)
+        {
+            if (mcGrdClients.bln_RowEditIsValid() && mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.DELETE_MODE.ToString())
+            {
+                mcGrdSatellites.ClearGrid();
+            }
+        }
+
+        private void grdClients_AfterRowColChange(object sender, RangeEventArgs e)
+        {
+            if (grdClients.Rows.Count > 1 && grdClients.Row > 0 && e.OldRange.r1 != e.NewRange.r2)
+            {
+                GrdClientRowColChangeActions();
+            }
+            else
+            {
+                //Do nothing
+            }
+
+            pfblnEnableDisable_btnGrdClientsDelete(e.NewRange.r1);
+        }
+
+        private void GrdClientRowColChangeActions()
+        {
+            bool blnEnableControls = false;
+
+            if (!formController.FormIsLoading)
+            {
+                pfblnGrdSatellites_Load();
+
+                btnGenerate.Enabled = mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.INSERT_MODE.ToString() && mcGrdClients.bln_RowEditIsValid() && formController.FormMode != sclsConstants.DML_Mode.INSERT_MODE;
+            }
+
+            if (mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.INSERT_MODE.ToString())
+            {
+                blnEnableControls = true;
+            }
+            else
+            {
+                blnEnableControls = false;
+            }      
+
+            btnExportRevision.Enabled = blnEnableControls;
+        }
+
+        private void grdClients_BeforeRowColChange(object sender, RangeEventArgs e)
+        {
+            if (!formController.FormIsLoading && (mblnGrdSatellitesChangeMade || mcGrdClients[e.OldRange.r1, mintGrdClients_Action_col] == sclsConstants.DML_Mode.DELETE_MODE.ToString() || mcGrdClients[e.OldRange.r1, mintGrdClients_Action_col] == sclsConstants.DML_Mode.INSERT_MODE.ToString()) & e.NewRange.r1 != e.OldRange.r1)
+            {
+                DialogResult msgResult = clsTTApp.GetAppController.ShowMessage(mintMSG_ChangesWillBeLostOnRowChange, MessageBoxButtons.YesNo);
+
+                if (msgResult == System.Windows.Forms.DialogResult.Yes)
+                {
+                    formController.FormIsLoading = true;
+                    pfblnGrdClients_Load();
+                    pfblnGrdSatellites_Load(e.NewRange.r1);
+                    formController.FormIsLoading = false;
+
+                    btnGenerate.Enabled = true;
+                }
+
+                if (msgResult == DialogResult.No) e.Cancel = true;
             }
         }
     }

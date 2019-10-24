@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.IO.Compression;
+using System.Data;
 
 namespace Ceritar.TT3LightDLL.Classes
 {
@@ -478,6 +479,113 @@ namespace Ceritar.TT3LightDLL.Classes
             System.Text.StringBuilder builder = new System.Text.StringBuilder(1024);
             bool result = PathRelativePathTo(builder, vstrPath1, 0, vstrPath2, 0);
             return builder.ToString();
+        }
+
+        /// <summary>
+        /// Permet de sauvegarder un document de tout type dans la BD. Table ItI
+        /// </summary>
+        /// <param name="vstrFilePath"></param>
+        /// <param name="vstrItemName"></param>
+        /// <param name="vstrTableRef"></param>
+        /// <param name="vintTableItem_NRI"></param>
+        public void SaveFileToDB(string vstrFilePath, string vstrItemName, string vstrTableRef, int vintTableItem_NRI, int vintPrevious_ItI_NRI)
+        {
+            FileStream fs = null;
+            BinaryReader br = null;
+            byte[] bytes;
+            string strQuery;
+            SqlCommand cmd = null;
+            string strSQL = string.Empty;
+            string strFile = string.Empty;
+            string strExtension = string.Empty;
+
+            try
+            {
+                if (vstrFilePath != string.Empty)
+                {
+                    fs = new FileStream(vstrFilePath, FileMode.Open, FileAccess.Read);
+                    strExtension = Path.GetExtension(vstrFilePath);
+
+                    strQuery = "INSERT INTO ItI(ItI_Table, ItI_ItemNRI, ItI_Reference, ItI_ItemType, ItI_Extension, ItI_Image, ItI_IndexID) values (@Table, @ItemNRI, @Ref, @ItemType, @Extension, @Data, @ItI_IndexID)";
+
+                    br = new BinaryReader(fs);
+                    bytes = br.ReadBytes(Convert.ToInt32(fs.Length));
+                    cmd = new SqlCommand(strQuery, clsTTApp.GetAppController.SQLConnection, null);
+                    cmd.Parameters.Add("@Table", SqlDbType.Text).Value = vstrTableRef;
+                    cmd.Parameters.Add("@ItemNRI", SqlDbType.Int).Value = vintTableItem_NRI;
+                    cmd.Parameters.Add("@Ref", SqlDbType.Text).Value = vstrItemName;
+                    cmd.Parameters.Add("@ItemType", SqlDbType.Int).Value = 0;
+                    cmd.Parameters.Add("@Extension", SqlDbType.Text).Value = strExtension;
+                    cmd.Parameters.Add("@Data", SqlDbType.Image).Value = bytes;
+                    cmd.Parameters.Add("@ItI_IndexID", SqlDbType.Int).Value = 0;
+                    cmd.ExecuteNonQuery();
+
+                    if (vintPrevious_ItI_NRI > 0)
+                    {
+                        cmd = new SqlCommand("DELETE FROM ItI WHERE ItI_NRI = " + vintPrevious_ItI_NRI, clsTTApp.GetAppController.SQLConnection, null);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                if (br != null)
+                    br.Dispose();
+
+                if (fs != null)
+                    fs.Dispose();
+
+                if (cmd != null)
+                    cmd.Dispose();
+            }
+        }
+
+        public void LoadFileFromDB(int vintItI_NRI)
+        {
+            SqlDataReader sqlRecord = null;
+            string strSQL = string.Empty;
+            string strFile = string.Empty;
+            System.Diagnostics.ProcessStartInfo prcProcessStartInfos = new System.Diagnostics.ProcessStartInfo();
+
+            try
+            {
+                strSQL = " SELECT ItI_Image, ItI_Table, ItI_ItemNRI, ItI_Extension, ITI_Reference FROM ItI WHERE ItI_NRI = " + vintItI_NRI;
+
+                sqlRecord = clsTTSQL.ADOSelect(strSQL);
+
+                if (sqlRecord.Read())
+                {
+                    if (!System.IO.Directory.Exists(Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "Document")))
+                    {
+                        System.IO.Directory.CreateDirectory(Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "Document"));
+                    }
+
+                    strFile = Path.Combine(Directory.GetParent(Application.ExecutablePath).FullName, "Document", (sqlRecord["ITI_Reference"] + ("." + sqlRecord["ItI_Extension"])));
+
+                    if (File.Exists(strFile))
+                    {
+                        Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(strFile, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
+                    }
+
+                    File.WriteAllBytes(strFile, (byte[])sqlRecord["ItI_Image"]);
+
+                    prcProcessStartInfos.WindowStyle = System.Diagnostics.ProcessWindowStyle.Maximized;
+                    prcProcessStartInfos.FileName = strFile;
+                    System.Diagnostics.Process.Start(prcProcessStartInfos);
+                }
+            }
+            catch (Exception ex)
+            {
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+
+            }
         }
 
         #endregion
