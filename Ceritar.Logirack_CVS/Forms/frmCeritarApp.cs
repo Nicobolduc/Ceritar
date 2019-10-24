@@ -11,7 +11,6 @@ using Ceritar.TT3LightDLL.Static_Classes;
 using Ceritar.CVS.Controllers;
 using Ceritar.CVS.Controllers.Interfaces;
 using System.IO;
-using Microsoft.Office.Interop.Word;
 using System.Data;
 
 namespace Ceritar.Logirack_CVS.Forms
