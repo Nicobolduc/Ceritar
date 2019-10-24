@@ -1564,7 +1564,7 @@ namespace Ceritar.CVS.Controllers
                                         //Continue, do nothing
                                     }
                                 }
-                                else
+                                else if (!Directory.Exists(strRevisionPath))
                                 {
                                     blnValidReturn = false;
                                 }
@@ -2019,7 +2019,7 @@ namespace Ceritar.CVS.Controllers
         {
             string strSQL = string.Empty;
 
-            strSQL = strSQL + " SELECT Action = CASE WHEN SatRevision.SRe_NRI IS NULL THEN '" + sclsConstants.DML_Mode.NO_MODE + "' ELSE '" + sclsConstants.DML_Mode.UPDATE_MODE + "' END," + Environment.NewLine;
+            strSQL = strSQL + " SELECT Action = CASE WHEN SatRevision.SRe_NRI IS NULL THEN '" + sclsConstants.DML_Mode.NO_MODE + "' ELSE '" + sclsConstants.DML_Mode.NO_MODE + "' END," + Environment.NewLine;
             strSQL = strSQL + "        CerSatApp.CSA_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        CerSatApp.CSA_Name, " + Environment.NewLine;
             strSQL = strSQL + "        SatRevision.SRe_NRI, " + Environment.NewLine;
