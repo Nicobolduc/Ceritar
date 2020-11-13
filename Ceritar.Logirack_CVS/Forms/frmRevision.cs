@@ -104,7 +104,7 @@ namespace Ceritar.Logirack_CVS.Forms
             grdRevModifs.Cols[mintGrdRevMod_CeC_Name_For_col].Width = 100;
 
             grdRevModifs.AllowMerging = C1.Win.C1FlexGrid.AllowMergingEnum.RestrictAll;
-
+            grdRevModifs.Cols[mintGrdRevMod_CeC_NRI_For_col].AllowMerging = true;
             grdRevModifs.Cols[mintGrdRevMod_RevM_DtHr_col].AllowMerging = true;
             grdRevModifs.Cols[mintGrdRevMod_CeC_Name_For_col].AllowMerging = true;
             

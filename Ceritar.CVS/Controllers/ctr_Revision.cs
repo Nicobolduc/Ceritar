@@ -2120,7 +2120,7 @@ namespace Ceritar.CVS.Controllers
 
             strSQL = strSQL + " WHERE RevModifs.Rev_NRI = " + vintRevision_NRI + Environment.NewLine;
 
-            strSQL = strSQL + " ORDER BY CerClient.CeC_NRI, RevModifs.RevM_DtHr " + Environment.NewLine;
+            strSQL = strSQL + " ORDER BY CerClient.CeC_NRI, RevModifs.RevM_DtHr DESC " + Environment.NewLine;
 
             return strSQL;
         }
