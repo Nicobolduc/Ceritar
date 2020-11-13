@@ -11,6 +11,9 @@ namespace Ceritar.Logirack_CVS.Forms
 {
     partial class frmAbout : Form
     {
+        /// <summary>
+        /// Test comment to push
+        /// </summary>
         public frmAbout()
         {
             InitializeComponent();
