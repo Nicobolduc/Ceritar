@@ -348,7 +348,8 @@ namespace Ceritar.TT3LightDLL.Classes
                                          bool vblnIncludeSubFolders = false,
                                          string[] vlstExtensionsToAvoid = null,
                                          string[] vlstFoldersToAvoid = null,
-                                         string vstrSearchPattern = "*.*")
+                                         string vstrSearchPattern = "*.*",
+                                         string[] vlstFileNameToAvoid = null)
         {
             bool blnValidReturn = true;
             string strFileDestinationPath = string.Empty;
@@ -360,9 +361,13 @@ namespace Ceritar.TT3LightDLL.Classes
                 if (!Directory.Exists(vstrDestinationFolderPath)) Directory.CreateDirectory(vstrDestinationFolderPath);
 
                 //Copie des fichiers
-                if (vlstExtensionsToAvoid != null && vlstExtensionsToAvoid.Length > 0)
+                if ((vlstExtensionsToAvoid != null && vlstExtensionsToAvoid.Length > 0) || (vlstFileNameToAvoid != null && vlstFileNameToAvoid.Length > 0))
                 {
-                    var lstFilesWithFilters = Directory.GetFiles(vstrSourceFolderPath, vstrSearchPattern, vSearchOption).Where(f => !vlstExtensionsToAvoid.Contains(System.IO.Path.GetExtension(f).ToLower())).ToArray();
+                    if (vlstFileNameToAvoid == null) vlstFileNameToAvoid = new string[] { };
+                    if (vlstExtensionsToAvoid == null) vlstExtensionsToAvoid = new string[] { };
+
+                    var lstFilesWithFilters = Directory.GetFiles(vstrSourceFolderPath, vstrSearchPattern, vSearchOption).Where(f => !vlstExtensionsToAvoid.Contains(Path.GetExtension(f).ToLower()) &&
+                                                                                                                                    !vlstFileNameToAvoid.Contains(Path.GetFileNameWithoutExtension(f).Substring(Path.GetFileNameWithoutExtension(f).IndexOf("_") + 1).ToLower())).ToArray();
 
                     lstFilesToCopy = lstFilesWithFilters;
                 }
@@ -379,7 +384,14 @@ namespace Ceritar.TT3LightDLL.Classes
 
                     strFileDestinationPath = Path.Combine(vstrDestinationFolderPath, Path.GetFileName(strCurrentFile));
 
-                    File.Copy(strCurrentFile, strFileDestinationPath, vblnOverwrite);
+                    if (strCurrentFile.Length<260)
+                    {
+                        File.Copy(strCurrentFile, strFileDestinationPath, vblnOverwrite);
+                    }
+                    else
+                    {
+                        sclsWindowsNativeMethods.CopyFileW(sclsWindowsNativeMethods.GetWin32LongPath(strCurrentFile), sclsWindowsNativeMethods.GetWin32LongPath(strFileDestinationPath), false);
+                    }
                 }
 
                 //Copie des sous-dossiers, recursivement
@@ -393,7 +405,7 @@ namespace Ceritar.TT3LightDLL.Classes
                         {
                             if (!Directory.Exists(Path.Combine(vstrDestinationFolderPath, new DirectoryInfo(strFolder).Name))) Directory.CreateDirectory(Path.Combine(vstrDestinationFolderPath, new DirectoryInfo(strFolder).Name));
 
-                            blnValidReturn = blnCopyFolderContent(strFolder, Path.Combine(vstrDestinationFolderPath, new DirectoryInfo(strFolder).Name), vblnOverwrite, vblnCreateFolderIfNotExist, vSearchOption, true, vlstExtensionsToAvoid);
+                            blnValidReturn = blnCopyFolderContent(strFolder, Path.Combine(vstrDestinationFolderPath, new DirectoryInfo(strFolder).Name), vblnOverwrite, vblnCreateFolderIfNotExist, vSearchOption, true, vlstExtensionsToAvoid, vlstFileNameToAvoid);
                         }
                     }
                 }
@@ -427,7 +439,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
             try
             {
-                if (File.GetAttributes(vstrSourceFolderPath) == FileAttributes.Directory)
+                if ((File.GetAttributes(vstrSourceFolderPath) & FileAttributes.Directory) == FileAttributes.Directory)//File.GetAttributes(vstrSourceFolderPath).HasFlag(FileAttributes.Directory))
                 {
                     lstDirectories = Directory.GetDirectories(vstrSourceFolderPath); //Va chercher les répertoires
 

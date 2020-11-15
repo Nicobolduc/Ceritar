@@ -58,6 +58,10 @@
             this.label4 = new System.Windows.Forms.Label();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.fileSystemWatcher1 = new System.IO.FileSystemWatcher();
+            this.txtServeurDev = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtBDDev = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdModules)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -69,7 +73,7 @@
             // 
             this.lblNom.Location = new System.Drawing.Point(2, 8);
             this.lblNom.Name = "lblNom";
-            this.lblNom.Size = new System.Drawing.Size(59, 21);
+            this.lblNom.Size = new System.Drawing.Size(100, 21);
             this.lblNom.TabIndex = 0;
             this.lblNom.Text = "Nom:";
             // 
@@ -80,7 +84,7 @@
             this.txtName.Location = new System.Drawing.Point(82, 5);
             this.txtName.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(482, 22);
+            this.txtName.Size = new System.Drawing.Size(563, 22);
             this.txtName.TabIndex = 0;
             this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
             // 
@@ -88,7 +92,7 @@
             // 
             this.label1.Location = new System.Drawing.Point(2, 32);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(83, 21);
+            this.label1.Size = new System.Drawing.Size(100, 21);
             this.label1.TabIndex = 2;
             this.label1.Text = "Description:";
             // 
@@ -100,7 +104,7 @@
             this.txtDescription.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
-            this.txtDescription.Size = new System.Drawing.Size(482, 48);
+            this.txtDescription.Size = new System.Drawing.Size(563, 24);
             this.txtDescription.TabIndex = 1;
             this.txtDescription.TextChanged += new System.EventHandler(this.txtDescription_TextChanged);
             // 
@@ -111,11 +115,11 @@
             this.groupBox1.Controls.Add(this.btnGrdModDel);
             this.groupBox1.Controls.Add(this.btnGrdModAdd);
             this.groupBox1.Controls.Add(this.grdModules);
-            this.groupBox1.Location = new System.Drawing.Point(6, 527);
+            this.groupBox1.Location = new System.Drawing.Point(6, 587);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox1.Size = new System.Drawing.Size(558, 179);
+            this.groupBox1.Size = new System.Drawing.Size(639, 179);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Liste des modules";
@@ -125,7 +129,7 @@
             this.btnGrdModDel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdModDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnGrdModDel.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdModDel.Image")));
-            this.btnGrdModDel.Location = new System.Drawing.Point(513, 73);
+            this.btnGrdModDel.Location = new System.Drawing.Point(594, 73);
             this.btnGrdModDel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGrdModDel.Name = "btnGrdModDel";
             this.btnGrdModDel.Size = new System.Drawing.Size(41, 43);
@@ -139,7 +143,7 @@
             this.btnGrdModAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdModAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnGrdModAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdModAdd.Image")));
-            this.btnGrdModAdd.Location = new System.Drawing.Point(513, 22);
+            this.btnGrdModAdd.Location = new System.Drawing.Point(594, 22);
             this.btnGrdModAdd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGrdModAdd.Name = "btnGrdModAdd";
             this.btnGrdModAdd.Size = new System.Drawing.Size(41, 43);
@@ -162,7 +166,7 @@
             this.grdModules.Rows.Count = 8;
             this.grdModules.Rows.DefaultSize = 18;
             this.grdModules.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdModules.Size = new System.Drawing.Size(506, 149);
+            this.grdModules.Size = new System.Drawing.Size(587, 149);
             this.grdModules.StyleInfo = resources.GetString("grdModules.StyleInfo");
             this.grdModules.TabIndex = 2;
             this.grdModules.Tag = "1";
@@ -174,7 +178,7 @@
             this.btnGrdSatDel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdSatDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnGrdSatDel.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdSatDel.Image")));
-            this.btnGrdSatDel.Location = new System.Drawing.Point(513, 73);
+            this.btnGrdSatDel.Location = new System.Drawing.Point(594, 73);
             this.btnGrdSatDel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGrdSatDel.Name = "btnGrdSatDel";
             this.btnGrdSatDel.Size = new System.Drawing.Size(41, 43);
@@ -187,7 +191,7 @@
             this.btnGrdSatAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdSatAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnGrdSatAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdSatAdd.Image")));
-            this.btnGrdSatAdd.Location = new System.Drawing.Point(513, 22);
+            this.btnGrdSatAdd.Location = new System.Drawing.Point(594, 22);
             this.btnGrdSatAdd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGrdSatAdd.Name = "btnGrdSatAdd";
             this.btnGrdSatAdd.Size = new System.Drawing.Size(41, 43);
@@ -213,7 +217,7 @@
             this.btnShowWord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowWord.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowWord.BackgroundImage")));
             this.btnShowWord.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowWord.Location = new System.Drawing.Point(519, 146);
+            this.btnShowWord.Location = new System.Drawing.Point(600, 146);
             this.btnShowWord.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowWord.Name = "btnShowWord";
             this.btnShowWord.Size = new System.Drawing.Size(47, 49);
@@ -225,9 +229,10 @@
             // 
             // btnReplaceWordDOC
             // 
+            this.btnReplaceWordDOC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnReplaceWordDOC.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnReplaceWordDOC.Image = ((System.Drawing.Image)(resources.GetObject("btnReplaceWordDOC.Image")));
-            this.btnReplaceWordDOC.Location = new System.Drawing.Point(480, 157);
+            this.btnReplaceWordDOC.Location = new System.Drawing.Point(561, 157);
             this.btnReplaceWordDOC.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnReplaceWordDOC.Name = "btnReplaceWordDOC";
             this.btnReplaceWordDOC.Size = new System.Drawing.Size(35, 37);
@@ -263,11 +268,11 @@
             this.formController.FormIsLoading = false;
             this.formController.FormMode = Ceritar.TT3LightDLL.Static_Classes.sclsConstants.DML_Mode.CONSULT_MODE;
             this.formController.Item_NRI = 0;
-            this.formController.Location = new System.Drawing.Point(-6, 715);
+            this.formController.Location = new System.Drawing.Point(-6, 775);
             this.formController.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
-            this.formController.Size = new System.Drawing.Size(572, 34);
+            this.formController.Size = new System.Drawing.Size(653, 34);
             this.formController.TabIndex = 9;
             this.formController.SetReadRights += new Ceritar.TT3LightDLL.Controls.ctlFormController.SetReadRightsEventHandler(this.formController_SetReadRights);
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
@@ -276,7 +281,8 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.chkReportAppExternal);
             this.groupBox2.Controls.Add(this.txtReportAppExternal);
@@ -288,7 +294,7 @@
             this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox2.Size = new System.Drawing.Size(558, 333);
+            this.groupBox2.Size = new System.Drawing.Size(639, 393);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Liste des applications satellites";
@@ -296,7 +302,7 @@
             // chkReportAppExternal
             // 
             this.chkReportAppExternal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.chkReportAppExternal.Location = new System.Drawing.Point(206, 303);
+            this.chkReportAppExternal.Location = new System.Drawing.Point(206, 363);
             this.chkReportAppExternal.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.chkReportAppExternal.Name = "chkReportAppExternal";
             this.chkReportAppExternal.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -308,20 +314,20 @@
             // 
             // txtReportAppExternal
             // 
-            this.txtReportAppExternal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtReportAppExternal.Location = new System.Drawing.Point(259, 301);
+            this.txtReportAppExternal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.txtReportAppExternal.Location = new System.Drawing.Point(231, 361);
             this.txtReportAppExternal.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtReportAppExternal.MaxLength = 75;
             this.txtReportAppExternal.Name = "txtReportAppExternal";
             this.txtReportAppExternal.ReadOnly = true;
-            this.txtReportAppExternal.Size = new System.Drawing.Size(253, 22);
+            this.txtReportAppExternal.Size = new System.Drawing.Size(363, 22);
             this.txtReportAppExternal.TabIndex = 4;
             this.txtReportAppExternal.TextChanged += new System.EventHandler(this.txtReportAppExternal_TextChanged);
             // 
             // label3
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label3.Location = new System.Drawing.Point(3, 304);
+            this.label3.Location = new System.Drawing.Point(3, 364);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(214, 21);
             this.label3.TabIndex = 4;
@@ -342,7 +348,7 @@
             this.grdSatApp.Rows.Count = 2;
             this.grdSatApp.Rows.DefaultSize = 18;
             this.grdSatApp.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdSatApp.Size = new System.Drawing.Size(506, 271);
+            this.grdSatApp.Size = new System.Drawing.Size(587, 331);
             this.grdSatApp.StyleInfo = resources.GetString("grdSatApp.StyleInfo");
             this.grdSatApp.TabIndex = 2;
             this.grdSatApp.Tag = "25";
@@ -396,11 +402,53 @@
             this.fileSystemWatcher1.EnableRaisingEvents = true;
             this.fileSystemWatcher1.SynchronizingObject = this;
             // 
+            // txtServeurDev
+            // 
+            this.txtServeurDev.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtServeurDev.Location = new System.Drawing.Point(82, 55);
+            this.txtServeurDev.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtServeurDev.Name = "txtServeurDev";
+            this.txtServeurDev.Size = new System.Drawing.Size(238, 22);
+            this.txtServeurDev.TabIndex = 20;
+            this.txtServeurDev.TextChanged += new System.EventHandler(this.txtServeurDev_TextChanged);
+            // 
+            // label5
+            // 
+            this.label5.Location = new System.Drawing.Point(2, 58);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(100, 21);
+            this.label5.TabIndex = 21;
+            this.label5.Text = "Serveur Dev:";
+            // 
+            // txtBDDev
+            // 
+            this.txtBDDev.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtBDDev.Location = new System.Drawing.Point(387, 55);
+            this.txtBDDev.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtBDDev.Name = "txtBDDev";
+            this.txtBDDev.Size = new System.Drawing.Size(258, 22);
+            this.txtBDDev.TabIndex = 22;
+            this.txtBDDev.TextChanged += new System.EventHandler(this.txtBDDev_TextChanged);
+            // 
+            // label6
+            // 
+            this.label6.Location = new System.Drawing.Point(321, 58);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(100, 21);
+            this.label6.TabIndex = 23;
+            this.label6.Text = "BD Dev:";
+            // 
             // frmCeritarApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(568, 751);
+            this.ClientSize = new System.Drawing.Size(649, 811);
+            this.Controls.Add(this.txtBDDev);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.txtServeurDev);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.btnReplaceWordDOC);
             this.Controls.Add(this.btnShowWord);
             this.Controls.Add(this.chkMasterApp);
@@ -422,6 +470,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(584, 790);
             this.Name = "frmCeritarApp";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Solution logiciel de Ceritar";
@@ -466,5 +515,9 @@
         private System.Windows.Forms.Button btnReplaceWordDOC;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.IO.FileSystemWatcher fileSystemWatcher1;
+        private System.Windows.Forms.TextBox txtBDDev;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtServeurDev;
+        private System.Windows.Forms.Label label5;
     }
 }

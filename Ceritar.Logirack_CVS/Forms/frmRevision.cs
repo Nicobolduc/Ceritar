@@ -754,6 +754,8 @@ namespace Ceritar.Logirack_CVS.Forms
 
                     blnValidReturn = mcCtrRevision.blnExportRevisionKit(txtTemp.Text);
 
+                    Cursor.Current = Cursors.Default;
+
                     if (blnValidReturn)
                     {
                         MessageBox.Show("Export effectué avec SUCCÈS!" + Environment.NewLine + "À l'emplacement suivant : " + txtTemp.Text, "Message", MessageBoxButtons.OK);
@@ -762,8 +764,6 @@ namespace Ceritar.Logirack_CVS.Forms
                     {
                         MessageBox.Show("ERREUR lors de l'export." + Environment.NewLine, "Message", MessageBoxButtons.OK);
                     }
-
-                    Cursor.Current = Cursors.Default;
                 }
             }
             catch (Exception ex)
@@ -1486,7 +1486,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void txtRevisionIncluses_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (!System.Text.RegularExpressions.Regex.IsMatch(txtRevisionIncluses.Text, "^[1-9-;,]"))
+            if (txtRevisionIncluses.Text != string.Empty && !System.Text.RegularExpressions.Regex.IsMatch(txtRevisionIncluses.Text, "^[1-9-;,]"))
             {
                 clsTTApp.GetAppController.ShowMessage(mintMSG_ValidCharacters);
                 e.Cancel = true;

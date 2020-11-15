@@ -17,6 +17,8 @@ namespace Ceritar.CVS.Controllers.Interfaces
         string GetName();
         string GetDescription();
         string GetExternalReportAppName();
+        string GetServeurDevName();
+        string GetDatabaseDevName();
         bool IsGeneratingRevisionNoScript();
         bool IsManagingTTApp();
         List<string> GetLstModules();

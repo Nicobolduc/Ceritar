@@ -558,6 +558,7 @@ namespace Ceritar.CVS.Controllers
                             //Gestion des applications satellites. On les copie ici au même niveau que le Release
                             List<int> lstSRe_NRI = new List<int>();
                             string strNewDestinationFolder = string.Empty;
+                            bool blnDirectoryChanged = false;
 
                             if (blnValidReturn && mcModRevision.LstSatelliteRevisions.Count > 0)
                             {
@@ -569,7 +570,15 @@ namespace Ceritar.CVS.Controllers
 
                                     strNewDestinationFolder = Path.Combine(strNewDestinationFolder, mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExportFolderName + ((mcModRevision.LstSatelliteRevisions[intIndex].CeritarSatelliteApp.ExePerCustomer | mcModRevision.LstSatelliteRevisions[intIndex].CeritarClient_NRI_Spec > 0) ? (@" [" + mcView.GetCeritarClient_Name() + @"]") : ""));
 
-                                    blnValidReturn = pfblnCopyAndSaveSatelliteLocation(mcModRevision.LstSatelliteRevisions[intIndex], strNewDestinationFolder, true);
+                                    blnValidReturn = pfblnCopyAndSaveSatelliteLocation(mcModRevision.LstSatelliteRevisions[intIndex], strNewDestinationFolder, ref blnDirectoryChanged, true);
+
+                                    if (blnValidReturn && blnDirectoryChanged)
+                                    {
+                                        //Copie des applications satellites dans leur répertoire spécifique dans les installations actives
+                                        strNewDestinationFolder = strGetSatelliteFolderPathName(mcModRevision.LstSatelliteRevisions[intIndex]);
+
+                                        blnValidReturn = pfblnCopyAndSaveSatelliteLocation(mcModRevision.LstSatelliteRevisions[intIndex], strNewDestinationFolder, ref blnDirectoryChanged, false);
+                                    }
 
                                     if (!blnValidReturn) break;
                                 }
@@ -583,6 +592,7 @@ namespace Ceritar.CVS.Controllers
                             {
                                 SqlDataReader sqlRecord = null;
                                 mod_SRe_SatelliteRevision cSRe;
+                                bool blnSReDirectoryChanged = false;
 
                                 sqlRecord = clsTTSQL.ADOSelect(this.strGetSatelliteApps_SQL(mcView.GetRevision_NRI(), false));
 
@@ -612,7 +622,7 @@ namespace Ceritar.CVS.Controllers
 
                                         strNewDestinationFolder = Path.Combine(strNewDestinationFolder, cSRe.CeritarSatelliteApp.ExportFolderName + ((cSRe.CeritarSatelliteApp.ExePerCustomer | cSRe.CeritarClient_NRI_Spec > 0) ? (@" [" + sqlRecord["CeC_Name"].ToString() + @"]") : ""));
 
-                                        blnValidReturn = pfblnCopyAndSaveSatelliteLocation(cSRe, strNewDestinationFolder, true);
+                                        blnValidReturn = pfblnCopyAndSaveSatelliteLocation(cSRe, strNewDestinationFolder, ref blnSReDirectoryChanged, true);
                                     }
                                     else
                                     {
@@ -905,20 +915,21 @@ namespace Ceritar.CVS.Controllers
                     if (!blnValidReturn) break;
                 }
 
-                //Copie des applications satellites dans leur répertoire spécifique dans les installations actives
-                if (blnValidReturn && mcModRevision.LstSatelliteRevisions.Count > 0)
-                {
-                    string strDestinationFolder = string.Empty;
+                
+                //DEPLACER PLUS HAUT EN MEME TEMPS QUE CEUX AU NIVEAU DU RELEASE, comprend pas pk fait ici?
+                //if (blnValidReturn && mcModRevision.LstSatelliteRevisions.Count > 0)
+                //{
+                //    string strDestinationFolder = string.Empty;
 
-                    for (int intIndex = 0; intIndex < mcModRevision.LstSatelliteRevisions.Count; intIndex++)
-                    {
-                        strDestinationFolder = strGetSatelliteFolderPathName(mcModRevision.LstSatelliteRevisions[intIndex]);
+                //    for (int intIndex = 0; intIndex < mcModRevision.LstSatelliteRevisions.Count; intIndex++)
+                //    {
+                //        strDestinationFolder = strGetSatelliteFolderPathName(mcModRevision.LstSatelliteRevisions[intIndex]);
 
-                        blnValidReturn = pfblnCopyAndSaveSatelliteLocation(mcModRevision.LstSatelliteRevisions[intIndex], strDestinationFolder, false);
+                //        blnValidReturn = pfblnCopyAndSaveSatelliteLocation(mcModRevision.LstSatelliteRevisions[intIndex], strDestinationFolder, false);
 
-                        if (!blnValidReturn) break;
-                    }
-                }
+                //        if (!blnValidReturn) break;
+                //    }
+                //}
             }
             catch (FileNotFoundException exPath)
             {
@@ -1200,7 +1211,7 @@ namespace Ceritar.CVS.Controllers
         /// <param name="rcSatRevision">La classe qui représente l'application satellite à copier.
         ///                             Passer par référence, car on veut mettre à jour la location choisie par l'utilisateur avec celle sauvegardée.</param>
         /// <returns>Vrai si tout s'est bien passé.</returns>
-        private bool pfblnCopyAndSaveSatelliteLocation(mod_SRe_SatelliteRevision rcSatRevision, string vstrDestinationFolder, bool vblnSaveLocationToDB = false)
+        private bool pfblnCopyAndSaveSatelliteLocation(mod_SRe_SatelliteRevision rcSatRevision, string vstrDestinationFolder, ref bool rblnDirectoryChanged, bool vblnSaveLocationToDB = false)
         {
             bool blnValidReturn = true;
             string strOldFolderPath = string.Empty;
@@ -1256,8 +1267,10 @@ namespace Ceritar.CVS.Controllers
                 
 
                 //On entre dans ce IF seulement lorsqu'on vient de selectionner un nouvel exec / dossier pour remplacer lancien
-                if ((File.Exists(rcSatRevision.Location_Exe) || Directory.Exists(rcSatRevision.Location_Exe)) && strOldFolderPath != vstrDestinationFolder)
+                if ((File.Exists(rcSatRevision.Location_Exe) || Directory.Exists(rcSatRevision.Location_Exe)) && (strOldFolderPath != vstrDestinationFolder || rcSatRevision.DML_Action == sclsConstants.DML_Mode.UPDATE_MODE))
                 {
+                    rblnDirectoryChanged = true;
+
                     currentFolderInfos = new DirectoryInfo(vstrDestinationFolder);
 
                     if (Directory.Exists(currentFolderInfos.FullName))

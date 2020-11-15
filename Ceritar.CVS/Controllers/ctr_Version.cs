@@ -512,6 +512,8 @@ namespace Ceritar.CVS.Controllers
 
                         if (blnValidReturn)
                         {
+                            string[] lstFileNameToExclude = new string[] { sclsAppConfigs.GetMissingCeritarSecurityFileName(true).ToLower(), sclsAppConfigs.GetTTAppDataFileName(true).ToLower() };
+
                             intPreviousFolder_VersionNo = 0;
 
                             lstVersionsFolders = Directory.GetDirectories(Path.Combine(sclsAppConfigs.GetRoot_DB_UPGRADE_SCRIPTS, mcView.GetCeritarApplication_Name()));
@@ -543,7 +545,8 @@ namespace Ceritar.CVS.Controllers
                                                                                    false,
                                                                                    new string[] {".doc", ".docx"},
                                                                                    null,
-                                                                                   "*.sql");
+                                                                                   "*.sql",
+                                                                                   (intCurrentFolder_VersionNo != mcView.GetVersionNo()? lstFileNameToExclude : new string[] {}));
                                     }
                                     else //On a 2 dossiers (ou plus) pour la meme version. On les ajoutes dans le dossier courant.
                                     {
@@ -566,7 +569,7 @@ namespace Ceritar.CVS.Controllers
                                     }
 
                                     intNewScriptNumber = 0;
-                                    List<string> lstTempScripts = Directory.GetFiles(strCurrentVersionFolderToCopy_Path, "*.sql", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
+                                    List<string> lstTempScripts = Directory.GetFiles(strCurrentVersionFolderToCopy_Path, "*.sql", SearchOption.TopDirectoryOnly).Where(f => !lstFileNameToExclude.Contains(Path.GetFileNameWithoutExtension(f).Substring(Path.GetFileNameWithoutExtension(f).IndexOf("_") + 1).ToLower())).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToList();
 
                                     if (lstTempScripts.Count >0) Int32.TryParse(new string(Path.GetFileName(lstTempScripts[lstTempScripts.Count() - 1]).TakeWhile(Char.IsDigit).ToArray()), out intNewScriptNumber);
 
@@ -1152,7 +1155,7 @@ namespace Ceritar.CVS.Controllers
                         }
                     }
 
-                    //Add all APP_COMPIL scripts folders to the zip archive. Already inclure client's specific scripts
+                    //Add all APP_COMPIL scripts folders to the zip archive. Already include client's specific scripts
                     string[] lstScriptsFoldersPath = new string[0];
                     if (!string.IsNullOrEmpty(strCurrentScriptFolderLocation)) lstScriptsFoldersPath = Directory.GetDirectories(strCurrentScriptFolderLocation);
 
@@ -1164,7 +1167,7 @@ namespace Ceritar.CVS.Controllers
                         }
                     }
 
-                    //Add the revisions scripts folders //**Rev_AllScripts DEPRECATED AND HORRIBLE **
+                    //Add the current version's revisions scripts folders //**Rev_AllScripts DEPRECATED AND HORRIBLE **
                     int intCurrentPreviousRevisionNo = 0;
                     int intLastRevisionNo = 0;
                     int intFileCount = 1;

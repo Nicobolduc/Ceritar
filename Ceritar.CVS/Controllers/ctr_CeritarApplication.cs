@@ -57,6 +57,8 @@ namespace Ceritar.CVS.Controllers
                 mcModCerApp.CeritarApplication_NRI = mcView.GetCerApp_NRI();
                 mcModCerApp.Name = mcView.GetName();
                 mcModCerApp.Description = mcView.GetDescription();
+                mcModCerApp.DevServer = mcView.GetServeurDevName();
+                mcModCerApp.DevDatabase = mcView.GetDatabaseDevName();
                 mcModCerApp.ExternalReportAppName = mcView.GetExternalReportAppName();
                 mcModCerApp.LstModules = mcView.GetLstModules();
                 mcModCerApp.DML_Action = mcView.GetDML_Mode();
@@ -147,6 +149,8 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " SELECT CerApp.CeA_TS, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_Name, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_Desc, " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.CeA_DevServer, " + Environment.NewLine;
+            strSQL = strSQL + "        CerApp.CeA_DevDatabase, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.ApD_NRI, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_AutoGenRevisionNoScript, " + Environment.NewLine;
             strSQL = strSQL + "        CerApp.CeA_ExternalRPTAppName, " + Environment.NewLine;

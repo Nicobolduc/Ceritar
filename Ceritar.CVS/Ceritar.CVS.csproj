@@ -67,6 +67,7 @@
     <Compile Include="clsActionResults.cs" />
     <Compile Include="Controllers\ctr_CeritarClient.cs" />
     <Compile Include="Controllers\ctr_CeritarApplication.cs" />
+    <Compile Include="Controllers\ctr_OutilCeritar.cs" />
     <Compile Include="Controllers\ctr_Revision.cs" />
     <Compile Include="Controllers\ctr_Template.cs" />
     <Compile Include="Controllers\ctr_Version.cs" />

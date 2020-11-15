@@ -36,6 +36,7 @@
             this.mnuLogOut = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuManagement = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuVersion = new System.Windows.Forms.ToolStripMenuItem();
+            this.gestionDeDBUpgradeScriptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuConfiguration = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuCerApp = new System.Windows.Forms.ToolStripMenuItem();
             this.clientCeritarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,7 +54,8 @@
             this.lblStatus_Space = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatus_BD = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.gestionDeDBUpgradeScriptsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuOutils = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuGenererTTApp = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMain.SuspendLayout();
             this.statusBar.SuspendLayout();
             this.SuspendLayout();
@@ -66,6 +68,7 @@
             this.mnuManagement,
             this.mnuConfiguration,
             this.mnuWindows,
+            this.mnuOutils,
             this.helpMenu});
             this.mnuMain.Location = new System.Drawing.Point(0, 0);
             this.mnuMain.MdiWindowListItem = this.mnuWindows;
@@ -115,6 +118,12 @@
             this.mnuVersion.Size = new System.Drawing.Size(307, 22);
             this.mnuVersion.Text = "&Gestion de version et révision";
             this.mnuVersion.Click += new System.EventHandler(this.mnuVersion_Click);
+            // 
+            // gestionDeDBUpgradeScriptsToolStripMenuItem
+            // 
+            this.gestionDeDBUpgradeScriptsToolStripMenuItem.Name = "gestionDeDBUpgradeScriptsToolStripMenuItem";
+            this.gestionDeDBUpgradeScriptsToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
+            this.gestionDeDBUpgradeScriptsToolStripMenuItem.Text = "A venir - Gestion de DB_UpgradeScripts";
             // 
             // mnuConfiguration
             // 
@@ -241,11 +250,20 @@
             this.lblStatus_BD.Spring = true;
             this.lblStatus_BD.Text = "Base de données: ";
             // 
-            // gestionDeDBUpgradeScriptsToolStripMenuItem
+            // mnuOutils
             // 
-            this.gestionDeDBUpgradeScriptsToolStripMenuItem.Name = "gestionDeDBUpgradeScriptsToolStripMenuItem";
-            this.gestionDeDBUpgradeScriptsToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
-            this.gestionDeDBUpgradeScriptsToolStripMenuItem.Text = "A venir - Gestion de DB_UpgradeScripts";
+            this.mnuOutils.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuGenererTTApp});
+            this.mnuOutils.Name = "mnuOutils";
+            this.mnuOutils.Size = new System.Drawing.Size(54, 20);
+            this.mnuOutils.Text = "&Outils";
+            // 
+            // mnuGenererTTApp
+            // 
+            this.mnuGenererTTApp.Name = "mnuGenererTTApp";
+            this.mnuGenererTTApp.Size = new System.Drawing.Size(198, 22);
+            this.mnuGenererTTApp.Text = "Générer TTApp script";
+            this.mnuGenererTTApp.Click += new System.EventHandler(this.mnuGenererTTApp_Click);
             // 
             // mdiGeneral
             // 
@@ -298,6 +316,8 @@
         public System.Windows.Forms.ToolStripStatusLabel lblStatus_User;
         private System.Windows.Forms.ToolStripMenuItem mnuConfigurations;
         private System.Windows.Forms.ToolStripMenuItem gestionDeDBUpgradeScriptsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mnuOutils;
+        private System.Windows.Forms.ToolStripMenuItem mnuGenererTTApp;
     }
 }
 

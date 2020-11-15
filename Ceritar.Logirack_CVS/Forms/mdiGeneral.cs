@@ -321,5 +321,14 @@ namespace Ceritar.Logirack_CVS.Forms
 
             frmConfig.Show();
         }
+
+        private void mnuGenererTTApp_Click(object sender, EventArgs e)
+        {
+            frmGenererTTApp frmGenererTTApp = new frmGenererTTApp();
+            int intItem_NRI = 0;
+            frmGenererTTApp.MdiParent = this;
+
+            ((TT3LightDLL.Controls.IFormController)frmGenererTTApp).GetFormController().ShowForm(this, sclsConstants.DML_Mode.UPDATE_MODE, ref intItem_NRI);
+        }
     }
 }

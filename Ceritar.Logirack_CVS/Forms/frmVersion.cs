@@ -1858,8 +1858,9 @@ namespace Ceritar.Logirack_CVS.Forms
 
                     pfblnGrdRevisions_Load();
 
-                    grdRevisions.Row = (intGrdRev_RowSelected >= grdRevisions.Rows.Count ? grdRevisions.Rows.Count - 1 : intGrdRev_RowSelected);
-
+                    grdRevisions.Row = (intGrdRev_RowSelected >= grdRevisions.Rows.Count || intGrdRev_RowSelected == 1 ? grdRevisions.Rows.Count - 1 : intGrdRev_RowSelected);
+                    grdRevisions.Select(grdRevisions.Row, 1,true);
+                   
                     break;
             }
         }

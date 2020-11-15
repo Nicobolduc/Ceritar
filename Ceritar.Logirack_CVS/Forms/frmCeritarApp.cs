@@ -161,6 +161,21 @@ namespace Ceritar.Logirack_CVS.Forms
             return (int)cboMasterApp.SelectedValue;
         }
 
+
+        string ICeritarApp.GetServeurDevName()
+        {
+            if (!chkMasterApp.Checked) return string.Empty;
+
+            return txtServeurDev.Text;
+        }
+
+        string ICeritarApp.GetDatabaseDevName()
+        {
+            if (!chkMasterApp.Checked) return string.Empty;
+
+            return txtBDDev.Text;
+        }
+
         #endregion
 
 
@@ -215,6 +230,8 @@ namespace Ceritar.Logirack_CVS.Forms
                     txtName.Text = sqlRecord["CeA_Name"].ToString();
                     txtDescription.Text = sqlRecord["CeA_Desc"].ToString();
                     txtReportAppExternal.Text = sqlRecord["CeA_ExternalRPTAppName"].ToString();
+                    txtServeurDev.Text = sqlRecord["CeA_DevServer"].ToString();
+                    txtBDDev.Text = sqlRecord["CeA_DevDatabase"].ToString();
 
                     cboDomain.SelectedValue = Int32.Parse(sqlRecord["ApD_NRI"].ToString());
 
@@ -223,6 +240,17 @@ namespace Ceritar.Logirack_CVS.Forms
                     chkMasterApp.Checked = sqlRecord["CeA_NRI_Master"] == DBNull.Value;
 
                     cboMasterApp.Enabled = !chkMasterApp.Checked;
+
+                    if (chkMasterApp.Checked)
+                    {
+                        txtServeurDev.Enabled = true;
+                        txtBDDev.Enabled = true;
+                    }
+                    else
+                    {
+                        txtServeurDev.Enabled = false;
+                        txtBDDev.Enabled = false;
+                    }
 
                     if (sqlRecord["ItI_NRI_Procedure"] != DBNull.Value)
                     {
@@ -316,8 +344,8 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void mcGrdAppSat_SetGridDisplay()
         {
-            grdSatApp.Cols[mintGrdSat_CSA_Name_col].Width = 210;
-            grdSatApp.Cols[mintGrdSat_CSA_KitFolderName_col].Width = 125;
+            grdSatApp.Cols[mintGrdSat_CSA_Name_col].Width = 250;
+            grdSatApp.Cols[mintGrdSat_CSA_KitFolderName_col].Width = 135;
             grdSatApp.Cols[mintGrdSat_CSA_Exe_IsFolder_col].Width = 120;
 
             mcGrdSatApp.SetColType_CheckBox(mintGrdSat_CSA_Exe_IsFolder_col, 80);
@@ -571,6 +599,17 @@ namespace Ceritar.Logirack_CVS.Forms
                 cboMasterApp.Enabled = !chkMasterApp.Checked;
                 chkGenRevNoScript.Enabled = chkMasterApp.Checked;
 
+                if (chkMasterApp.Checked)
+                {
+                    txtServeurDev.Enabled = true;
+                    txtBDDev.Enabled = true;
+                }
+                else
+                {
+                    txtServeurDev.Enabled = false;
+                    txtBDDev.Enabled = false;
+                }
+
                 formController.ChangeMade = true;
             }
         }
@@ -660,6 +699,16 @@ namespace Ceritar.Logirack_CVS.Forms
         {
             if (Int32.Parse(btnShowWord.Tag.ToString()) > 0)
                 clsTTApp.GetAppController.LoadFileFromDB(Int32.Parse(btnShowWord.Tag.ToString()));
+        }
+
+        private void txtServeurDev_TextChanged(object sender, EventArgs e)
+        {
+            formController.ChangeMade = true;
+        }
+
+        private void txtBDDev_TextChanged(object sender, EventArgs e)
+        {
+            formController.ChangeMade = true;
         }
     }
 }

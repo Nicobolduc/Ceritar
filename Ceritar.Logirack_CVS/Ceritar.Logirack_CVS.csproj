@@ -142,6 +142,12 @@
     <Compile Include="Forms\frmCrystalReportViewer.Designer.cs">
       <DependentUpon>frmCrystalReportViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmGenererTTApp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmGenererTTApp.Designer.cs">
+      <DependentUpon>frmGenererTTApp.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmGenericList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -215,9 +221,13 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmConfigurations.resx">
       <DependentUpon>frmConfigurations.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmCrystalReportViewer.resx">
       <DependentUpon>frmCrystalReportViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmGenererTTApp.resx">
+      <DependentUpon>frmGenererTTApp.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmGenericList.resx">
       <DependentUpon>frmGenericList.cs</DependentUpon>
@@ -271,6 +281,9 @@
     <None Include="Resources\preparation.bmp" />
     <None Include="Resources\Under construction revision.png" />
     <Content Include="CVS Livrables.txt" />
+    <Content Include="Scripts\Missing_Ceritar_Security_Permissions_AUTO.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Test.ico" />
   </ItemGroup>
   <ItemGroup>

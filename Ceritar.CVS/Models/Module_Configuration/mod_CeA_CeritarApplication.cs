@@ -21,6 +21,8 @@ namespace Ceritar.CVS.Models.Module_Configuration
         private string _strName;
         private string _strDescription;
         private string _strExternalReportAppName;
+        private string _strDevServer;
+        private string _strDevDatabase;
         private bool _blnAutoGenRevisionNoScript;
         private bool _blnManageTTApp;
         private AppDomain _domain_NRI;
@@ -77,6 +79,18 @@ namespace Ceritar.CVS.Models.Module_Configuration
         {
             get { return _strDescription; }
             set { _strDescription = value; }
+        }
+
+        internal string DevServer
+        {
+            get { return _strDevServer; }
+            set { _strDevServer = value; }
+        }
+
+        internal string DevDatabase
+        {
+            get { return _strDevDatabase; }
+            set { _strDevDatabase = value; }
         }
 
         internal AppDomain Domaine_NRI
@@ -328,6 +342,10 @@ namespace Ceritar.CVS.Models.Module_Configuration
                 else if (!mcSQL.bln_AddField("CeA_NRI_Master", _intCeritarApplication_NRI_Master, clsTTSQL.MySQL_FieldTypes.NRI_TYPE))
                 { }
                 else if (!mcSQL.bln_AddField("CeA_ExternalRPTAppName", _strExternalReportAppName, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                { }
+                else if (!mcSQL.bln_AddField("CeA_DevServer", _strDevServer, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
+                { }
+                else if (!mcSQL.bln_AddField("CeA_DevDatabase", _strDevDatabase, clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE))
                 { }
                 else {
                     blnValidReturn = true;

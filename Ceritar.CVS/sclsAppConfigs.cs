@@ -10,13 +10,15 @@ namespace Ceritar.CVS
     {
         private static string _strRoot_DB_UPGRADE_SCRIPTS_Dir;
         private static string _strRoot_INSTALLATIONS_ACTIVES_Dir;
-        private static string _strAppRevisionFileName = "00_DB_UpdateRevisionNo";
+        private static string _strAppRevisionFileName = "DB_UpdateRevisionNo";
+        private static string _strMissingCeritarSecurityFileName = "Missing_Ceritar_Security";
+        private static string _strTTAppDataFileName = "TTAppData";
         private static string _strScriptsFolderName = "Scripts";
         private static string _strRevisionAllScriptFolderName = "Rev_AllScripts";
         private static string _strPreviousRevisionAllScriptFolderName = "PreviousRev_AllScripts";
         private static string _strCaptionsAndMenusFileName;
-        private static string[] _strReleaseInvalidExtensions = { ".xml", ".pdb", ".ini", ".log", ".txt", ".sample", ".scc" };
-        private static string[] _strReleaseInvalidFolders = { "zh-CN" };
+        private static readonly string[] _strReleaseInvalidExtensions = { ".xml", ".pdb", ".ini", ".log", ".txt", ".sample", ".scc" };
+        private static readonly string[] _strReleaseInvalidFolders = { "zh-CN", "Document", "Document_RPT" };
         private const string _strVersionNumberPrefix = "V_";
         private const string _strRevisionNumberPrefix = "R_";
 
@@ -133,20 +135,44 @@ namespace Ceritar.CVS
 
         public static string[] GetReleaseInvalidExtensions
         {
-            get { return sclsAppConfigs._strReleaseInvalidExtensions; }
+            get { return _strReleaseInvalidExtensions; }
         }
 
         public static string[] GetReleaseInvalidFolders
         {
-            get { return sclsAppConfigs._strReleaseInvalidFolders; }
+            get { return _strReleaseInvalidFolders; }
         }
 
-#endregion
+        #endregion
 
 
         public static string GetAppRevisionFileName(string vstrRevisionNo)
         {
-            return sclsAppConfigs._strAppRevisionFileName + vstrRevisionNo + ".sql";
+            return "00_" + _strAppRevisionFileName + vstrRevisionNo + ".sql";
+        }
+
+        public static string GetTTAppDataFileName(bool vblnWithoutNoAndExt = false)
+        {
+            if (vblnWithoutNoAndExt)
+            {
+                return _strTTAppDataFileName;
+            }
+            else
+            {
+                return "999_" + _strTTAppDataFileName + ".sql";
+            }
+        }
+
+        public static string GetMissingCeritarSecurityFileName(bool vblnWithoutNoAndExt = false)
+        {
+            if (vblnWithoutNoAndExt)
+            {
+                return _strMissingCeritarSecurityFileName;
+            }
+            else
+            {
+                return "998_" + _strMissingCeritarSecurityFileName + ".sql";
+            }
         }
     }
 }

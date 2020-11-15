@@ -1,26 +1,22 @@
-++Version:
--Le Par Client des appSatellite devrait s'appliquer au version aussi
--Erreur étrange lors de la création d'une nouvelle version
+#BUGS:
+-Revision: Que fait la notion "Par client" ? Ex. SVR NET  
 
-++Revision:
+
+#Version:
+-Le Par Client des appSatellite devrait s'appliquer au version aussi
+-***Il faudrait être en mesure de ramasser TOUS les scripts des révisions d'une version***
+
+#Revision:
 -avoir un bouton ou autre pour rafraichir les noms de répertoire
 -Message lorsqu'un "Only" folder script detected, mais pas utilisable
 -Il faudrait pouvoir spécifier une liste de noms valides pour un client (UNIQUE A TOUTE LAPP TMS)
--MERGE CELLS
--AJOUTER une repertoire direct nommer Client_Only, va ajotuer le script avec les autres aussi...
 -AVOIR un concept de client principale, ou par défaut, utile pour ex les rapports
--R35: Export du service Web fonctionne pas bien
--Que fait la notion "Par client" ? Ex. SVR NET  
--DANS la R43, si je save pour ajouter le service web mobile sur mettons HSP, ca work pas a cause du Path??
 
-++AppCeritar:
+#AppCeritar:
 -Avoir un onglet qui permet de consulter la dernière version/révision déployée pour les app
-
 -Gerer les dates selon le format du PC pour le display et non de la BD....
--Lorsqu'on ajoute un release, enlever le dossier "Document"
 
-RELEASE NOTE:
 
-++Nice to have:
+#Nice to have:
 -Avoir des templates par Application satellite.
 -Pouvoir Détecter que d'autre révision existe dans le dossier
