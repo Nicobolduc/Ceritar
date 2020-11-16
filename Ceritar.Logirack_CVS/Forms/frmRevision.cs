@@ -115,7 +115,7 @@ namespace Ceritar.Logirack_CVS.Forms
             }
 
             mcGrdRevModifs.SetColType_ComboBox(ref cboClientsRevModif, mcCtrRevision.strGetClients_SQL(formController.Item_NRI), mintGrdRevMod_CeC_Name_For_col, "CeC_NRI", "CeC_Name", false);
-            mcGrdRevModifs.SetColType_DateTimePicker(ref dtpRevModif, mintGrdRevMod_RevM_DtHr_col, clsTTApp.GetAppController.str_GetServerDateFormat + " HH:mm");
+            mcGrdRevModifs.SetColType_DateTimePicker(ref dtpRevModif, mintGrdRevMod_RevM_DtHr_col, clsTTApp.GetAppController.str_Get_FRQC_DateTimeFormat);
         }
 
         private void mcGrdClients_BeforeClickAdd(ref bool vblnCancel)
@@ -491,7 +491,7 @@ namespace Ceritar.Logirack_CVS.Forms
                     blnValidReturn = true;
                 }
 
-                dtpCreation.CustomFormat = clsTTApp.GetAppController.str_GetServerDateTimeFormat;
+                dtpCreation.CustomFormat = clsTTApp.GetAppController.str_Get_FRQC_DateTimeFormat;
 
                 return blnValidReturn;
             }
@@ -815,7 +815,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
                         for (int intIdx = 1; intIdx < grdSatellites.Rows.Count; intIdx++)
                         {
-                                if (!mcGrdSatellites.bln_CellIsEmpty(intIdx, mintGrdSat_SRe_NRI_col) & (mcGrdSatellites[intIdx, mintGrdSat_CSV_ExePerCustomer_col] == "1" | grdClients.Rows.Count <= 2))
+                            if (!mcGrdSatellites.bln_CellIsEmpty(intIdx, mintGrdSat_SRe_NRI_col) & (mcGrdSatellites[intIdx, mintGrdSat_CSV_ExePerCustomer_col] == "1" | grdClients.Rows.Count <= 2))
                             {
                                 btnGrdClientsDel.Enabled = false;
                                 break;

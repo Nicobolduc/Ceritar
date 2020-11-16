@@ -129,6 +129,16 @@ namespace Ceritar.TT3LightDLL.Classes
             get { return "MM-dd-yyyy"; }
         }
 
+        public string str_Get_FRQC_DateFormat
+        {
+            get { return "dd-MM-yyyy"; }
+        }
+
+        public string str_Get_FRQC_DateTimeFormat
+        {
+            get { return "dd-MM-yyyy HH:mm"; }
+        }
+
         public string str_GetServerDateTimeFormat
         {
             get 
@@ -240,6 +250,16 @@ namespace Ceritar.TT3LightDLL.Classes
         public string str_GetServerFormatedDate(string vstrDateToFormat)
         {
             return String.Format("{0:" + str_GetServerDateFormat + "}", DateTime.Parse(vstrDateToFormat));
+        }
+
+        public string str_Get_FRQC_FormatedDateTime(string vstrDateToFormat)
+        {
+            return String.Format("{0:" + str_Get_FRQC_DateTimeFormat + "}", DateTime.Parse(vstrDateToFormat));
+        }
+
+        public string str_Get_FRQC_FormatedDate(string vstrDateToFormat)
+        {
+            return String.Format("{0:" + str_Get_FRQC_DateFormat + "}", DateTime.Parse(vstrDateToFormat));
         }
 
         public DialogResult ShowMessage(int vintCaption_NRI, MessageBoxButtons vmsgType = MessageBoxButtons.OK, params string[] vlstMsgParam)
@@ -384,7 +404,7 @@ namespace Ceritar.TT3LightDLL.Classes
 
                     strFileDestinationPath = Path.Combine(vstrDestinationFolderPath, Path.GetFileName(strCurrentFile));
 
-                    if (strCurrentFile.Length<260)
+                    if (strCurrentFile.Length < 260 && strFileDestinationPath.Length < 260)
                     {
                         File.Copy(strCurrentFile, strFileDestinationPath, vblnOverwrite);
                     }

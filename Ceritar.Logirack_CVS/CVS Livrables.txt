@@ -1,21 +1,20 @@
 #BUGS:
--Revision: Que fait la notion "Par client" ? Ex. SVR NET  
 
 
 #Version:
--Le Par Client des appSatellite devrait s'appliquer au version aussi
+-Puet-être? Le Par Client des appSatellite devrait s'appliquer au version aussi
 -***Il faudrait être en mesure de ramasser TOUS les scripts des révisions d'une version***
 
 #Revision:
 -avoir un bouton ou autre pour rafraichir les noms de répertoire
 -Message lorsqu'un "Only" folder script detected, mais pas utilisable
 -Il faudrait pouvoir spécifier une liste de noms valides pour un client (UNIQUE A TOUTE LAPP TMS)
--AVOIR un concept de client principale, ou par défaut, utile pour ex les rapports
+
+-Permettre de savoir pour quel client le rapport externe a été défini en coloriant la ligne du client via ClientAppRevision
 
 #AppCeritar:
 -Avoir un onglet qui permet de consulter la dernière version/révision déployée pour les app
--Gerer les dates selon le format du PC pour le display et non de la BD....
-
+-Pouvoir rendre desuet des applications satellites pour plus pouvoir les choisirs
 
 #Nice to have:
 -Avoir des templates par Application satellite.

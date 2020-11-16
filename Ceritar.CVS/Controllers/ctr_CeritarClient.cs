@@ -173,7 +173,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + "  				   AND ClientAppVersion.CAV_ReportExe_Location IS NOT NULL " + Environment.NewLine;
             strSQL = strSQL + " 				 ORDER BY Version.Ver_No DESC " + Environment.NewLine;
             strSQL = strSQL + "  				) AS TVer " + Environment.NewLine;
-
+            strSQL = strSQL + "  WHERE CerApp.CeA_ExternalRPTAppName IS NOT NULL " + Environment.NewLine;
             strSQL = strSQL + "  GROUP BY CerApp.CeA_NRI, CerApp.CeA_ExternalRPTAppName " + Environment.NewLine;
 
             strSQL = strSQL + " UNION ALL " + Environment.NewLine;
@@ -196,6 +196,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " 					OUTER APPLY (SELECT TOP 1 Revision.Rev_No " + Environment.NewLine;
             strSQL = strSQL + " 								 FROM Revision " + Environment.NewLine;
             strSQL = strSQL + " 									INNER JOIN SatRevision ON SatRevision.Rev_NRI = Revision.Rev_NRI " + Environment.NewLine;
+            strSQL = strSQL + " 									INNER JOIN ClientAppRevision ON ClientAppRevision.Rev_NRI = Revision.Rev_NRI AND ClientAppRevision.CeC_NRI = ClientSatVersion.CeC_NRI " + Environment.NewLine;
             strSQL = strSQL + " 								 WHERE SatRevision.CSA_NRI = ClientSatVersion.CSA_NRI " + Environment.NewLine;
             strSQL = strSQL + " 								   AND Revision.Ver_NRI = Version.Ver_NRI " + Environment.NewLine;
             strSQL = strSQL + " 								   AND Revision.Rev_PreparationMode = 0 " + Environment.NewLine;
@@ -206,7 +207,7 @@ namespace Ceritar.CVS.Controllers
             strSQL = strSQL + " 				   AND ClientSatVersion.CeC_NRI = @CerClient_NRI " + Environment.NewLine;
             strSQL = strSQL + " 				   AND TCAV.DtInstalled IS NOT NULL " + Environment.NewLine;
 
-            //strSQL = strSQL + " 				 ORDER BY ClientSatVersion.CSA_NRI DESC, Version.Ver_No DESC " + Environment.NewLine;
+            strSQL = strSQL + " 				 ORDER BY /*ClientSatVersion.CSA_NRI DESC,*/ Version.Ver_No DESC " + Environment.NewLine;
             strSQL = strSQL + " 				) AS TVer " + Environment.NewLine;
 				
             strSQL = strSQL + " GROUP BY CerSatApp.CSA_NRI, CerSatApp.CSA_Name " + Environment.NewLine;

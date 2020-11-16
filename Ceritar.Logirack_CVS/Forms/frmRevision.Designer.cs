@@ -112,7 +112,7 @@
             // dtpCreation
             // 
             this.dtpCreation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.dtpCreation.CustomFormat = "MM-dd-yyyy hh:mm";
+            this.dtpCreation.CustomFormat = "dd-MM-yyyy HH:mm";
             this.dtpCreation.Enabled = false;
             this.dtpCreation.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpCreation.Location = new System.Drawing.Point(536, 18);
@@ -154,7 +154,7 @@
             // dtpRevModif
             // 
             this.dtpRevModif.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.dtpRevModif.CustomFormat = "MM-dd-yyyy";
+            this.dtpRevModif.CustomFormat = "dd-MM-yyyy";
             this.dtpRevModif.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpRevModif.Location = new System.Drawing.Point(249, 109);
             this.dtpRevModif.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -684,19 +684,19 @@
             this.mnuiShowInExplorer,
             this.mnuiDelete});
             this.mnuSatRevision.Name = "mnuSatRevision";
-            this.mnuSatRevision.Size = new System.Drawing.Size(213, 48);
+            this.mnuSatRevision.Size = new System.Drawing.Size(214, 48);
             // 
             // mnuiShowInExplorer
             // 
             this.mnuiShowInExplorer.Name = "mnuiShowInExplorer";
-            this.mnuiShowInExplorer.Size = new System.Drawing.Size(212, 22);
+            this.mnuiShowInExplorer.Size = new System.Drawing.Size(213, 22);
             this.mnuiShowInExplorer.Text = "Afficher dans l\'explorateur";
             this.mnuiShowInExplorer.Click += new System.EventHandler(this.mnuiShowInExplorer_Click);
             // 
             // mnuiDelete
             // 
             this.mnuiDelete.Name = "mnuiDelete";
-            this.mnuiDelete.Size = new System.Drawing.Size(212, 22);
+            this.mnuiDelete.Size = new System.Drawing.Size(213, 22);
             this.mnuiDelete.Text = "Supprimer";
             this.mnuiDelete.Click += new System.EventHandler(this.mnuiDelete_Click);
             // 

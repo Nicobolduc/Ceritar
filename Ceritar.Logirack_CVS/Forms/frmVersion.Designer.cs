@@ -207,7 +207,7 @@
             // dtpCreation
             // 
             this.dtpCreation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.dtpCreation.CustomFormat = "MM-dd-yyyy hh:mm";
+            this.dtpCreation.CustomFormat = "dd-MM-yyyy HH:mm";
             this.dtpCreation.Enabled = false;
             this.dtpCreation.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpCreation.Location = new System.Drawing.Point(1101, 24);

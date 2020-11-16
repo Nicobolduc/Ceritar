@@ -257,16 +257,19 @@ namespace Ceritar.Logirack_CVS.Forms
         {
             structClientAppVersion structCAV = new structClientAppVersion();
 
-            structCAV.Action = clsTTApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdClients[grdClients.Row, mintGrdClients_Action_col]);
-            structCAV.strDateInstalled = (Convert.ToBoolean(grdClients[grdClients.Row, mintGrdClients_Installed_col]) ? DateTime.Now.ToString() : string.Empty);
-            structCAV.blnIsCurrentVersion = Convert.ToBoolean(grdClients[grdClients.Row, mintGrdClients_IsCurrentVersion_col]);
-            structCAV.strCeritarClient_Name = mcGrdClients[grdClients.Row, mintGrdClients_CeC_Name_col];
-            Int32.TryParse(mcGrdClients[grdClients.Row, mintGrdClients_CeC_NRI_col], out structCAV.intCeritarClient_NRI);
-            Int32.TryParse(mcGrdClients[grdClients.Row, mintGrdClients_CAV_NRI_col], out structCAV.intClientAppVersion_NRI);
-            structCAV.intClientAppVersion_TS = Int32.Parse(mcGrdClients[grdClients.Row, mintGrdClients_CAV_TS_col]);
-            structCAV.strLicense = grdClients[grdClients.Row, mintGrdClients_License_col].ToString();
-            structCAV.strLocationReportExe = mcGrdClients[grdClients.Row, mintGrdClients_LocationReportExe_col];
-            structCAV.strLocationScriptsRoot = mcGrdClients[grdClients.Row, mintGrdClients_LocationScriptsRoot_col];
+            if (grdClients.Rows.Count > 1)
+            {
+                structCAV.Action = clsTTApp.GetAppController.ConvertToEnum<sclsConstants.DML_Mode>(grdClients[grdClients.Row, mintGrdClients_Action_col]);
+                structCAV.strDateInstalled = (Convert.ToBoolean(grdClients[grdClients.Row, mintGrdClients_Installed_col]) ? DateTime.Now.ToString() : string.Empty);
+                structCAV.blnIsCurrentVersion = Convert.ToBoolean(grdClients[grdClients.Row, mintGrdClients_IsCurrentVersion_col]);
+                structCAV.strCeritarClient_Name = mcGrdClients[grdClients.Row, mintGrdClients_CeC_Name_col];
+                Int32.TryParse(mcGrdClients[grdClients.Row, mintGrdClients_CeC_NRI_col], out structCAV.intCeritarClient_NRI);
+                Int32.TryParse(mcGrdClients[grdClients.Row, mintGrdClients_CAV_NRI_col], out structCAV.intClientAppVersion_NRI);
+                structCAV.intClientAppVersion_TS = Int32.Parse(mcGrdClients[grdClients.Row, mintGrdClients_CAV_TS_col]);
+                structCAV.strLicense = grdClients[grdClients.Row, mintGrdClients_License_col].ToString();
+                structCAV.strLocationReportExe = mcGrdClients[grdClients.Row, mintGrdClients_LocationReportExe_col];
+                structCAV.strLocationScriptsRoot = mcGrdClients[grdClients.Row, mintGrdClients_LocationScriptsRoot_col];
+            }
 
             return structCAV;
         }
@@ -836,12 +839,17 @@ namespace Ceritar.Logirack_CVS.Forms
 
         void mcGrdRevisions_SetGridDisplay()
         {
+            DateTimePicker dtpPlaceHolder = null;
+
             grdRevisions.Cols[mintGrdRev_Number_col].Width = 65;
             grdRevisions.Cols[mintGrdRev_Rev_IsValid_col].Width = 45;
             grdRevisions.Cols[mintGrdRev_CeritarClientName_col].Width = 175;
             grdRevisions.Cols[mintGrdRev_Description_col].Width = 750;
 
             grdRevisions.Cols[mintGrdRev_InPreparation_col].DataType = typeof(bool);
+            //grdRevisions.Cols[mintGrdRev_CreationDate_col].DataType = typeof(DateAndTime);
+            //grdRevisions.Cols[mintGrdRev_CreationDate_col].Format = clsTTApp.GetAppController.str_Get_FRQC_DateTimeFormat;
+            mcGrdRevisions.SetColType_DateTimePicker(ref dtpPlaceHolder, mintGrdRev_CreationDate_col, clsTTApp.GetAppController.str_Get_FRQC_DateTimeFormat);
         }
 
         private void formController_LoadData(LoadDataEventArgs eventArgs)
@@ -1781,7 +1789,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
                         if (!string.IsNullOrEmpty(mcGrdClients[grdClients.MouseRow, mintGrdClients_DateInstalled_col]))
                         {
-                            toolTip.Show(clsTTApp.GetAppController.str_GetServerFormatedDate(mcGrdClients[grdClients.MouseRow, mintGrdClients_DateInstalled_col]), grdClients, e.Location.X + 5, e.Location.Y - 10, 1000);
+                            toolTip.Show(clsTTApp.GetAppController.str_Get_FRQC_FormatedDate(mcGrdClients[grdClients.MouseRow, mintGrdClients_DateInstalled_col]), grdClients, e.Location.X + 5, e.Location.Y - 10, 1000);
                         }
                            
                         break;
