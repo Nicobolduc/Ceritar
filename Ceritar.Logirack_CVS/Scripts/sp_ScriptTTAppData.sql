@@ -193,6 +193,10 @@ SELECT 'INSERT INTO TTScript (TTScr_Version,TTScr_Path,TTScr_Nom,TTScr_DtExecuti
 UNION ALL
 SELECT 'END'
 
+INSERT INTO #TTAppObjects
+SELECT 'EXEC usp_ResetTTApp;'
+
+
 SELECT InsertStatement FROM #TTAppObjects ORDER BY LineID ASC
 
 SET NOCOUNT OFF;

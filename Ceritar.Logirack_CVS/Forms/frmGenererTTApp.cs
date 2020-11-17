@@ -156,6 +156,9 @@ namespace Ceritar.Logirack_CVS.Forms
                 if (chkDroitsApp_Table.Checked)
                 {
                     string localFilePath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), @"Scripts\Missing_Ceritar_Security_Permissions_AUTO.sql");
+
+                    if (File.Exists(System.IO.Path.Combine(txtTTAppScriptFolderPath.Text, CVS.sclsAppConfigs.GetMissingCeritarSecurityFileName()))) File.Delete(System.IO.Path.Combine(txtTTAppScriptFolderPath.Text, CVS.sclsAppConfigs.GetMissingCeritarSecurityFileName()));
+
                     File.Copy(localFilePath, System.IO.Path.Combine(txtTTAppScriptFolderPath.Text, CVS.sclsAppConfigs.GetMissingCeritarSecurityFileName()));
                 }
 

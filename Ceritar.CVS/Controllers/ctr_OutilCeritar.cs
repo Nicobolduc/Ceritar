@@ -41,6 +41,8 @@ namespace Ceritar.CVS.Controllers
                         {
                             sqlRecord = cSqlCmd.ExecuteReader();
 
+                            if (File.Exists(vstrExportLocation)) File.Delete(vstrExportLocation);
+
                             using (StreamWriter writer = new StreamWriter(vstrExportLocation, false, System.Text.Encoding.Unicode))
                             {
                                 while (sqlRecord.Read())
