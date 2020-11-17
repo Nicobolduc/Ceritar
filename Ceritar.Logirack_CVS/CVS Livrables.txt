@@ -4,6 +4,7 @@
 #Version:
 -Puet-être? Le Par Client des appSatellite devrait s'appliquer au version aussi
 -***Il faudrait être en mesure de ramasser TOUS les scripts des révisions d'une version***
+-Dans la liste gen, on voudrait voir les clients qui use cette version et ne pas voir les versions sans client actif
 
 #Revision:
 -avoir un bouton ou autre pour rafraichir les noms de répertoire

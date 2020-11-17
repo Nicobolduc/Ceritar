@@ -1,5 +1,5 @@
 DECLARE @securedSchema VARCHAR(50)
-SET @securedSchema = 'App_Table' /* TRANSPORT */ --'Logirack_Security' /* PUBLIC */
+SET @securedSchema = CASE WHEN (SELECT TTL_APP_Name FROM TTLogIn WHERE TTL_APP_Principale = 1) = 'LogirackPublic' THEN 'Logirack_Security' ELSE 'App_Table' END
 
 DECLARE CUR CURSOR LOCAL FAST_FORWARD FOR
 SELECT  SSU.[name] AS "Schema",
