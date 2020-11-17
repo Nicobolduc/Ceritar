@@ -37,7 +37,7 @@ namespace Ceritar.CVS.Controllers
                     {
                         cSQLDev.Open();
 
-                        using (SqlCommand cSqlCmd = new SqlCommand("EXEC usp_ScriptTTAppData", cSQLDev))
+                        using (SqlCommand cSqlCmd = new SqlCommand("EXEC sp_ScriptTTAppData", cSQLDev))
                         {
                             sqlRecord = cSqlCmd.ExecuteReader();
 
