@@ -1,3 +1,5 @@
+USE MASTER
+GO
 --if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[sp_ScriptTTAppData]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
 --drop procedure dbo.sp_ScriptTTAppData
 --GO
@@ -35,8 +37,12 @@ SELECT 'EXEC usp_EmptyTTApp;'
 
 --*** TTAppCaption ***
 INSERT INTO #TTAppObjects
-SELECT 'ALTER INDEX ' + ind.Name + ' ON dbo.TTAppCaption DISABLE;' 
-FROM sys.indexes ind INNER JOIN Sys.tables t ON ind.object_id = t.object_id WHERE t.Name = 'TTAppCaption' AND ind.is_primary_key = 0 AND t.is_ms_shipped = 0 AND ind.Name IS NOT NULL
+SELECT 'DECLARE @AlterCmd VARCHAR(512);'
+UNION ALL
+SELECT 'SELECT @AlterCmd = ''ALTER INDEX '' + ind.Name + '' ON dbo.TTAppCaption DISABLE;'' 
+FROM sys.indexes ind INNER JOIN Sys.tables t ON ind.object_id = t.object_id WHERE t.Name = ''TTAppCaption'' AND ind.is_primary_key = 0 AND t.is_ms_shipped = 0 AND ind.Name IS NOT NULL'
+UNION ALL
+SELECT 'EXEC (@AlterCmd);'
 UNION ALL
 SELECT 'ALTER TABLE dbo.[TTAPPCaption] NOCHECK CONSTRAINT ' + obj.name
 FROM sys.foreign_key_columns fkc
@@ -50,8 +56,10 @@ EXEC sp_generate_inserts @table_name='TTAppCaption', @from='FROM TTAppCaption OR
 UPDATE #TTAppObjects SET InsertStatement = REPLACE(InsertStatement, 'INSERT INTO [TTAppCaption] (','INSERT INTO [TTAppCaption] WITH (TABLOCKX)(')
 
 INSERT INTO #TTAppObjects
-SELECT 'ALTER INDEX ' + ind.Name + ' ON dbo.TTAppCaption REBUILD;' 
-FROM sys.indexes ind INNER JOIN Sys.tables t ON ind.object_id = t.object_id WHERE t.Name = 'TTAppCaption' AND ind.is_primary_key = 0 AND t.is_ms_shipped = 0 AND ind.Name IS NOT NULL
+SELECT 'SELECT @AlterCmd = ''ALTER INDEX '' + ind.Name + '' ON dbo.TTAppCaption REBUILD;'' 
+FROM sys.indexes ind INNER JOIN Sys.tables t ON ind.object_id = t.object_id WHERE t.Name = ''TTAppCaption'' AND ind.is_primary_key = 0 AND t.is_ms_shipped = 0 AND ind.Name IS NOT NULL'
+UNION ALL
+SELECT 'EXEC (@AlterCmd);'
 UNION ALL
 SELECT 'ALTER TABLE dbo.[TTAPPCaption] CHECK CONSTRAINT ' + obj.name
 FROM sys.foreign_key_columns fkc
@@ -112,7 +120,7 @@ BEGIN
 	DECLARE @TTCR_TS INT
 	DECLARE @TmpTTCABRight TABLE ([TTCG_NRI] INT,[TTCM_NRI] INT,[TTCR_Right] INT,[TTCR_TS] INT)
 	INSERT INTO @TmpTTCABRight
-	SELECT TTCG_NRI,TTCM_NRI,TTCR_Right,TTCR_TS FROM TTCABRight WHERE TTCG_NRI = 1
+	SELECT TTCG_NRI,TTCM_NRI,TTCR_Right,TTCR_TS FROM TTCABRight WHERE TTCG_NRI = @TTCG_NRI
 
 	DECLARE rsTTCABRight CURSOR LOCAL FORWARD_ONLY READ_ONLY FOR
 	SELECT * FROM @TmpTTCABRight
@@ -189,6 +197,8 @@ EXEC sp_generate_inserts @table_name='TTMenuRight', @from='FROM TTMenuRight WHER
 
 
 INSERT INTO #TTAppObjects
+SELECT 'IF EXISTS (SELECT * FROM dbo.sysobjects where id = object_id(N''[dbo].[TTScript]'') and OBJECTPROPERTY(id, N''IsTable'') = 1)'
+UNION ALL
 SELECT 'INSERT INTO TTScript (TTScr_Version,TTScr_Path,TTScr_Nom,TTScr_DtExecution,TTScr_User) VALUES ((SELECT TTP_Value FROM TTParam WHERE TTP_Name = ''AppVersion''), ''Like others'', ''TTApp.sql'',GETDATE(),(select SUSER_SNAME()))'
 UNION ALL
 SELECT 'END'

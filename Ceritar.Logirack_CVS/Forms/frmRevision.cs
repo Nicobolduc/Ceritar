@@ -387,6 +387,11 @@ namespace Ceritar.Logirack_CVS.Forms
             return chkScriptOnly.Checked;
         }
 
+        bool IRevision.GetScriptsMerged()
+        {
+            return chkScriptMerged.Checked;
+        }
+
         #endregion
 
 
@@ -1187,6 +1192,7 @@ namespace Ceritar.Logirack_CVS.Forms
                     btnShowRootFolder.Enabled = false;
                     btnExportRevision.Enabled = false;
                     chkScriptOnly.Enabled = false;
+                    chkScriptMerged.Enabled = false;
 
                     if (mintCeritarApplication_NRI_Master > 0)
                     {
@@ -1204,7 +1210,13 @@ namespace Ceritar.Logirack_CVS.Forms
                     btnSelectVariousFolderPath.Enabled = true;
                     btnShowRootFolder.Enabled = true;
                     btnExportRevision.Enabled = true;
-                    if (txtScriptsPath.Text != string.Empty) chkScriptOnly.Enabled = true;
+
+                    chkScriptMerged.Enabled = false;
+
+                    if (txtScriptsPath.Text != string.Empty)
+                    {
+                        chkScriptOnly.Enabled = true;
+                    }
 
                     if (mintCeritarApplication_NRI_Master > 0)
                     {
@@ -1482,6 +1494,8 @@ namespace Ceritar.Logirack_CVS.Forms
         private void chkExcludePreviousRevScripts_CheckedChanged(object sender, EventArgs e)
         {
             txtRevisionIncluses.Enabled = !chkExcludePreviousRevScripts.Checked;
+
+            chkScriptMerged.Enabled = !chkExcludePreviousRevScripts.Checked;
         }
 
         private void txtRevisionIncluses_Validating(object sender, System.ComponentModel.CancelEventArgs e)

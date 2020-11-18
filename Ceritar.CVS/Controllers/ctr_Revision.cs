@@ -1669,11 +1669,13 @@ namespace Ceritar.CVS.Controllers
                                 {
                                     intCurrentPreviousRevisionNo = Int32.Parse(Regex.Replace(Path.GetFileName(strRevisionPath).Substring(0, Path.GetFileName(strRevisionPath).IndexOf(" ")).ToString(), "[^0-9.]", ""));
 
-                                    if (intCurrentPreviousRevisionNo > 0 && intCurrentPreviousRevisionNo < mcView.GetRevisionNo() && lstRevisionToInclude.Contains(intCurrentPreviousRevisionNo))
+                                    if (intCurrentPreviousRevisionNo > 0 && 
+                                        (intCurrentPreviousRevisionNo < mcView.GetRevisionNo() || mcView.GetScriptsMerged()) && 
+                                        lstRevisionToInclude.Contains(intCurrentPreviousRevisionNo))
                                     {
                                         foreach (string strCurrentFileToCopyPath in Directory.GetFiles(Path.Combine(strRevisionPath, sclsAppConfigs.GetScriptsFolderName), "*.sql", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToArray())
                                         {
-                                            newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine(sclsAppConfigs.GetPreviousRevisionAllScriptFolderName, intFileCount.ToString() + "__" + Path.GetFileName(strCurrentFileToCopyPath)));
+                                            newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine((mcView.GetScriptsMerged() ? sclsAppConfigs .GetRevisionAllScriptFolderName: sclsAppConfigs.GetPreviousRevisionAllScriptFolderName), intFileCount.ToString() + "__" + Path.GetFileName(strCurrentFileToCopyPath)));
 
                                             intFileCount++;
                                         }
@@ -1696,10 +1698,12 @@ namespace Ceritar.CVS.Controllers
 
                                                 strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
 
-                                                newZipFile.CreateEntryFromFile(lstSpecificScripts[intIndex], Path.Combine(sclsAppConfigs.GetPreviousRevisionAllScriptFolderName, intFileCount.ToString() + "S__" + Path.GetFileName(lstSpecificScripts[intIndex])));
+                                                newZipFile.CreateEntryFromFile(lstSpecificScripts[intIndex], Path.Combine((mcView.GetScriptsMerged() ? sclsAppConfigs.GetRevisionAllScriptFolderName : sclsAppConfigs.GetPreviousRevisionAllScriptFolderName), intFileCount.ToString() + "S__" + Path.GetFileName(lstSpecificScripts[intIndex])));
 
                                                 intNewScriptNumber++;
                                             }
+
+                                            if (lstSpecificScripts.Length>0) intFileCount++;
 
                                             intTotalScriptsCount += lstSpecificScripts.Count();
                                         }
@@ -1725,10 +1729,10 @@ namespace Ceritar.CVS.Controllers
                     }
 
                     //Add all current scripts folder to the zip archive.
-                    string strZipScriptsFolderPathName = (mcView.IsPreviousRevisionScriptsIncluded() ? Path.Combine(sclsAppConfigs.GetScriptsFolderName, sclsAppConfigs.GetRevisionNumberPrefix + mcView.GetRevisionNo()) : sclsAppConfigs.GetScriptsFolderName);
-
-                    if (!string.IsNullOrEmpty(strCurrentScriptFolderLocation))
+                    if (!string.IsNullOrEmpty(strCurrentScriptFolderLocation) && (!mcView.GetScriptsMerged() || !mcView.IsPreviousRevisionScriptsIncluded()))
                     {
+                        string strZipScriptsFolderPathName = (mcView.IsPreviousRevisionScriptsIncluded() ? sclsAppConfigs.GetRevisionNumberPrefix + mcView.GetRevisionNo() : sclsAppConfigs.GetScriptsFolderName);
+
                         if ((File.GetAttributes(strCurrentScriptFolderLocation) & FileAttributes.Directory) == FileAttributes.Directory)
                         {
                             foreach (string strCurrentFileToCopyPath in Directory.GetFiles(strCurrentScriptFolderLocation, "*.*", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToArray())
@@ -1755,7 +1759,7 @@ namespace Ceritar.CVS.Controllers
 
                                 intNewScriptNumber = (intNewScriptNumber == 0 ? Directory.GetFiles(strCurrentScriptFolderLocation).Length + 1 : intNewScriptNumber);
 
-                                strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
+                                strNewScriptName = intNewScriptNumber.ToString("00") + "S__" + strNewScriptName;
 
                                 newZipFile.CreateEntryFromFile(lstSpecificScripts[intIndex], Path.Combine(strZipScriptsFolderPathName, strNewScriptName));
 

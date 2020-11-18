@@ -95,6 +95,7 @@
             this.chkIncludePreviousRevScripts = new System.Windows.Forms.GroupBox();
             this.label10 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
+            this.chkScriptMerged = new System.Windows.Forms.CheckBox();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.mnuRevModif.SuspendLayout();
@@ -859,6 +860,7 @@
             // 
             // chkIncludePreviousRevScripts
             // 
+            this.chkIncludePreviousRevScripts.Controls.Add(this.chkScriptMerged);
             this.chkIncludePreviousRevScripts.Controls.Add(this.txtRevisionIncluses);
             this.chkIncludePreviousRevScripts.Controls.Add(this.label10);
             this.chkIncludePreviousRevScripts.Controls.Add(this.btnExportRevision);
@@ -897,6 +899,19 @@
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
+            // 
+            // chkScriptMerged
+            // 
+            this.chkScriptMerged.Checked = true;
+            this.chkScriptMerged.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkScriptMerged.Location = new System.Drawing.Point(247, 20);
+            this.chkScriptMerged.Name = "chkScriptMerged";
+            this.chkScriptMerged.Size = new System.Drawing.Size(84, 20);
+            this.chkScriptMerged.TabIndex = 78;
+            this.chkScriptMerged.Text = "Combinés";
+            this.toolTips.SetToolTip(this.chkScriptMerged, "Les scripts de la révision courantes sont mergés dans le même dossier que ceux de" +
+        "s révisions précédentes");
+            this.chkScriptMerged.UseVisualStyleBackColor = true;
             // 
             // frmRevision
             // 
@@ -1008,5 +1023,6 @@
         private System.Windows.Forms.CheckBox chkScriptOnly;
         private System.Windows.Forms.ComboBox cboClientsRevModif;
         private System.Windows.Forms.DateTimePicker dtpRevModif;
+        private System.Windows.Forms.CheckBox chkScriptMerged;
     }
 }
