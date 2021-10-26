@@ -229,7 +229,7 @@ namespace Ceritar.CVS.Controllers
                 {
                     clsTTApp.GetAppController.ShowMessage(mintMSG_CannotDeleteCSV);
                 }
-            }
+
             catch (System.OperationCanceledException)
             {
                 blnValidReturn = false;
@@ -905,7 +905,6 @@ namespace Ceritar.CVS.Controllers
 
                 //strCommands = @"/C SET folder=""" + vstrReleaseFolderLocation + @"""";
                 //strCommands = strCommands + @" & del /s /f /q %folder%\*.xml";
-                //strCommands = strCommands + @" & del /s /f /q %folder%\*.pdb";
                 //strCommands = strCommands + @" & del /s /f /q %folder%\*.ini";
                 //strCommands = strCommands + @" & del /s /f /q %folder%\*.LOG";
                 //strCommands = strCommands + @" & rmdir /s /q %folder%\zh-CN";

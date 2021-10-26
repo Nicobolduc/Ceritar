@@ -48,7 +48,7 @@
             this.btnGenererTTApp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnGenererTTApp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnGenererTTApp.Image = ((System.Drawing.Image)(resources.GetObject("btnGenererTTApp.Image")));
-            this.btnGenererTTApp.Location = new System.Drawing.Point(254, 133);
+            this.btnGenererTTApp.Location = new System.Drawing.Point(210, 133);
             this.btnGenererTTApp.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.btnGenererTTApp.Name = "btnGenererTTApp";
             this.btnGenererTTApp.Size = new System.Drawing.Size(50, 50);
@@ -134,11 +134,11 @@
             // chkDroitsApp_Table
             // 
             this.chkDroitsApp_Table.AutoSize = true;
-            this.chkDroitsApp_Table.Location = new System.Drawing.Point(310, 149);
+            this.chkDroitsApp_Table.Location = new System.Drawing.Point(266, 149);
             this.chkDroitsApp_Table.Name = "chkDroitsApp_Table";
-            this.chkDroitsApp_Table.Size = new System.Drawing.Size(298, 20);
+            this.chkDroitsApp_Table.Size = new System.Drawing.Size(406, 20);
             this.chkDroitsApp_Table.TabIndex = 46;
-            this.chkDroitsApp_Table.Text = "Generer script pour droits App_Table manquant";
+            this.chkDroitsApp_Table.Text = "Générer script pour droits App_Table/Logirack_Security manquant";
             this.chkDroitsApp_Table.UseVisualStyleBackColor = true;
             // 
             // btnShowLocation

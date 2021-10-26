@@ -1,17 +1,16 @@
-﻿using System;
-using System.IO;
-using System.Data;
-using Microsoft.VisualBasic;
-using C1.Win.C1FlexGrid;
-using System.Data.SqlClient;
-using System.Windows.Forms;
+﻿using C1.Win.C1FlexGrid;
+using Ceritar.CVS.Controllers;
+using Ceritar.CVS.Controllers.Interfaces;
 using Ceritar.TT3LightDLL.Classes;
 using Ceritar.TT3LightDLL.Controls;
 using Ceritar.TT3LightDLL.Static_Classes;
-using Ceritar.CVS.Controllers.Interfaces;
-using Ceritar.CVS.Controllers;
+using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.IO;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace Ceritar.Logirack_CVS.Forms
 {

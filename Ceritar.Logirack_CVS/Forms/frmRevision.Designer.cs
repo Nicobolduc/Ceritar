@@ -73,6 +73,7 @@
             this.btnPrintPairValidation = new System.Windows.Forms.Button();
             this.txtRevisionIncluses = new System.Windows.Forms.TextBox();
             this.chkScriptOnly = new System.Windows.Forms.CheckBox();
+            this.chkScriptMerged = new System.Windows.Forms.CheckBox();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.gbSatellites = new System.Windows.Forms.GroupBox();
@@ -95,7 +96,6 @@
             this.chkIncludePreviousRevScripts = new System.Windows.Forms.GroupBox();
             this.label10 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
-            this.chkScriptMerged = new System.Windows.Forms.CheckBox();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.mnuRevModif.SuspendLayout();
@@ -639,6 +639,19 @@
         "ripts.");
             this.chkScriptOnly.UseVisualStyleBackColor = true;
             // 
+            // chkScriptMerged
+            // 
+            this.chkScriptMerged.Checked = true;
+            this.chkScriptMerged.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkScriptMerged.Location = new System.Drawing.Point(247, 20);
+            this.chkScriptMerged.Name = "chkScriptMerged";
+            this.chkScriptMerged.Size = new System.Drawing.Size(84, 20);
+            this.chkScriptMerged.TabIndex = 78;
+            this.chkScriptMerged.Text = "Combinés";
+            this.toolTips.SetToolTip(this.chkScriptMerged, "Les scripts de la révision courantes sont mergés dans le même dossier que ceux de" +
+        "s révisions précédentes");
+            this.chkScriptMerged.UseVisualStyleBackColor = true;
+            // 
             // openFileDialog
             // 
             this.openFileDialog.FileName = "openFileDialog1";
@@ -854,7 +867,7 @@
             this.chkExcludePreviousRevScripts.Name = "chkExcludePreviousRevScripts";
             this.chkExcludePreviousRevScripts.Size = new System.Drawing.Size(270, 18);
             this.chkExcludePreviousRevScripts.TabIndex = 10;
-            this.chkExcludePreviousRevScripts.Text = "Exclure scripts revisions précédentes";
+            this.chkExcludePreviousRevScripts.Text = "Exclure scripts révisions précédentes";
             this.chkExcludePreviousRevScripts.UseVisualStyleBackColor = true;
             this.chkExcludePreviousRevScripts.CheckedChanged += new System.EventHandler(this.chkExcludePreviousRevScripts_CheckedChanged);
             // 
@@ -899,19 +912,6 @@
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
-            // 
-            // chkScriptMerged
-            // 
-            this.chkScriptMerged.Checked = true;
-            this.chkScriptMerged.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkScriptMerged.Location = new System.Drawing.Point(247, 20);
-            this.chkScriptMerged.Name = "chkScriptMerged";
-            this.chkScriptMerged.Size = new System.Drawing.Size(84, 20);
-            this.chkScriptMerged.TabIndex = 78;
-            this.chkScriptMerged.Text = "Combinés";
-            this.toolTips.SetToolTip(this.chkScriptMerged, "Les scripts de la révision courantes sont mergés dans le même dossier que ceux de" +
-        "s révisions précédentes");
-            this.chkScriptMerged.UseVisualStyleBackColor = true;
             // 
             // frmRevision
             // 

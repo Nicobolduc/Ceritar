@@ -51,7 +51,7 @@ namespace Ceritar.CVS.Controllers
             mcView = rView;
         }
 
-        internal clsActionResults mcActionResult
+        public clsActionResults mcActionResult
         {
             get { return mcModRevision.ActionResults; }
         }
@@ -1546,6 +1546,37 @@ namespace Ceritar.CVS.Controllers
             return blnValidReturn;
         }
 
+        /// <summary>
+        /// Envoie dans un fichier Zip le Release, les rapports, les applications satellites et les scripts dans des dossiers séparés.
+        /// </summary>
+        /// <param name="vstrExportFolderLocation">Le chemin ou le fichier zip sera créé.</param>
+        /// <returns>True si l'export s'effectue correctement, sinon False.</returns>
+        public bool blnExportRevisionKit(string vstrExportFolderLocation)
+        {
+            bool blnReturn = false;
+
+            try
+            {
+                //Traitement
+            }
+            catch (Exception ex)
+            {
+                blnReturn = false;
+                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                //Code à toujours exécuter
+            }
+
+            return blnReturn;
+        }
+
+        /// <summary>
+        /// Envoie dans un fichier Zip le Release, les rapports, les applications satellites et les scripts dans des dossiers séparés.
+        /// </summary>
+        /// <param name="vstrExportFolderLocation">Le chemin ou le fichier zip sera créé.</param>
+        /// <returns>True si l'export s'effectue correctement, sinon False.</returns>
         public bool blnExportRevisionKit(string vstrExportFolderLocation)
         {
             bool blnValidReturn = true;

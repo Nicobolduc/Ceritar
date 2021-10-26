@@ -2,20 +2,27 @@ DECLARE @securedSchema VARCHAR(50)
 SET @securedSchema = CASE WHEN (SELECT TTL_APP_Name FROM TTLogIn WHERE TTL_APP_Principale = 1) = 'LogirackPublic' THEN 'Logirack_Security' ELSE 'App_Table' END
 
 DECLARE CUR CURSOR LOCAL FAST_FORWARD FOR
-SELECT  SSU.[name] AS "Schema",
-		SSO.[name],
-		SSO.[type]
-FROM sys.sysobjects as SSO 
-	LEFT JOIN sys.database_permissions as SDP ON SSO.id = SDP.major_id  
-	INNER JOIN sys.sysusers as SSU ON SSO.uid = SSU.uid 
-WHERE sdp.state_desc is null
-	AND SSO.[type] not in ('D', 'SQ', 'F', 'K', 'TR', 'R')
-	AND SSU.[name] not in ('sys')
-	AND sso.name not in ('sysdiagrams')
-	AND sso.name not like 'syncobj_0x%'
-	AND sso.name not like 'sys%'
-	AND sso.name not like 'VTC%'
-ORDER BY SSU.[name], sso.type, SSO.[name]
+SELECT DISTINCT SU.[name] AS "Schema",
+				SO.[name],
+				SO.[type]--,SDP.*,DP.*
+FROM sys.sysobjects as SO 
+	INNER JOIN sys.sysusers as SU ON SO.uid = SU.uid 
+	--LEFT JOIN sys.database_permissions as SDP 
+	--	INNER JOIN sys.database_principals DP ON DP.principal_id = SDP.grantee_principal_id
+	--ON SO.id = SDP.major_id 
+WHERE SO.[type] not in ('D', 'SQ', 'F', 'K', 'TR', 'R', 'C')
+AND SU.name = 'dbo'
+AND SO.name not in ('sysdiagrams')
+AND SO.name not like 'syncobj_0x%'
+AND SO.name not like 'sys%'
+AND SO.name not like 'VTC%'
+AND SO.name not like 'dt_%'
+--AND So.name = 'Alo'
+AND NOT EXISTS (SELECT 1 FROM sys.database_permissions as SDP 
+					INNER JOIN sys.database_principals DP ON DP.principal_id = SDP.grantee_principal_id
+				WHERE SO.id = SDP.major_id 
+					AND DP.name in ('Logirack_Security','App_Table'))
+ORDER BY SU.[name], SO.type, SO.[name]
 
 OPEN cur
 

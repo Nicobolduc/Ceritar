@@ -767,7 +767,11 @@ namespace Ceritar.Logirack_CVS.Forms
                     }
                     else
                     {
-                        MessageBox.Show("ERREUR lors de l'export." + Environment.NewLine, "Message", MessageBoxButtons.OK);
+                        string errMsg = "";
+                        if (mcCtrRevision.mcActionResult.GetLstParams.Length > 0)
+                            errMsg = mcCtrRevision.mcActionResult.GetLstParams[0];
+
+                        MessageBox.Show("ERREUR lors de l'export." + Environment.NewLine + errMsg +  mcCtrRevision.mcActionResult.GetErrorCode + Environment.NewLine, "Message", MessageBoxButtons.OK);
                     }
                 }
             }

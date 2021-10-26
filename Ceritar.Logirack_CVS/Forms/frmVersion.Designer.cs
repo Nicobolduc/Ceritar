@@ -147,7 +147,7 @@
             // 
             this.txtDescription.Location = new System.Drawing.Point(673, 24);
             this.txtDescription.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.txtDescription.MaxLength = 65;
+            this.txtDescription.MaxLength = 128;
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.Size = new System.Drawing.Size(314, 55);
@@ -330,7 +330,7 @@
             this.btnGenerate.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnGenerate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnGenerate.Image = ((System.Drawing.Image)(resources.GetObject("btnGenerate.Image")));
-            this.btnGenerate.Location = new System.Drawing.Point(33, 20);
+            this.btnGenerate.Location = new System.Drawing.Point(6, 18);
             this.btnGenerate.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(47, 49);
@@ -344,7 +344,7 @@
             this.btnExportInstallationKit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExportInstallationKit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnExportInstallationKit.Image = ((System.Drawing.Image)(resources.GetObject("btnExportInstallationKit.Image")));
-            this.btnExportInstallationKit.Location = new System.Drawing.Point(676, 162);
+            this.btnExportInstallationKit.Location = new System.Drawing.Point(676, 189);
             this.btnExportInstallationKit.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnExportInstallationKit.Name = "btnExportInstallationKit";
             this.btnExportInstallationKit.Size = new System.Drawing.Size(41, 43);
@@ -370,7 +370,7 @@
             // chkIncludeScripts
             // 
             this.chkIncludeScripts.AutoSize = true;
-            this.chkIncludeScripts.Location = new System.Drawing.Point(5, 73);
+            this.chkIncludeScripts.Location = new System.Drawing.Point(69, 33);
             this.chkIncludeScripts.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.chkIncludeScripts.Name = "chkIncludeScripts";
             this.chkIncludeScripts.Size = new System.Drawing.Size(108, 20);
@@ -491,7 +491,7 @@
             // 
             this.btnSelectVariousFilePath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnSelectVariousFilePath.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectVariousFilePath.Image")));
-            this.btnSelectVariousFilePath.Location = new System.Drawing.Point(120, 20);
+            this.btnSelectVariousFilePath.Location = new System.Drawing.Point(120, 24);
             this.btnSelectVariousFilePath.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnSelectVariousFilePath.Name = "btnSelectVariousFilePath";
             this.btnSelectVariousFilePath.Size = new System.Drawing.Size(35, 37);
@@ -504,7 +504,7 @@
             // 
             this.btnSelectVariousFolderPath.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnSelectVariousFolderPath.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectVariousFolderPath.Image")));
-            this.btnSelectVariousFolderPath.Location = new System.Drawing.Point(307, 18);
+            this.btnSelectVariousFolderPath.Location = new System.Drawing.Point(307, 22);
             this.btnSelectVariousFolderPath.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnSelectVariousFolderPath.Name = "btnSelectVariousFolderPath";
             this.btnSelectVariousFolderPath.Size = new System.Drawing.Size(35, 37);
@@ -518,7 +518,7 @@
             this.btnShowRootFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowRootFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnShowRootFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnShowRootFolder.Image")));
-            this.btnShowRootFolder.Location = new System.Drawing.Point(1041, 492);
+            this.btnShowRootFolder.Location = new System.Drawing.Point(920, 525);
             this.btnShowRootFolder.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowRootFolder.Name = "btnShowRootFolder";
             this.btnShowRootFolder.Size = new System.Drawing.Size(47, 49);
@@ -532,7 +532,7 @@
             this.btnShowDB_UpgradeScripts.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowDB_UpgradeScripts.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowDB_UpgradeScripts.BackgroundImage")));
             this.btnShowDB_UpgradeScripts.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowDB_UpgradeScripts.Location = new System.Drawing.Point(987, 492);
+            this.btnShowDB_UpgradeScripts.Location = new System.Drawing.Point(866, 525);
             this.btnShowDB_UpgradeScripts.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowDB_UpgradeScripts.Name = "btnShowDB_UpgradeScripts";
             this.btnShowDB_UpgradeScripts.Size = new System.Drawing.Size(47, 49);
@@ -543,7 +543,7 @@
             // 
             // chkBaseKit
             // 
-            this.chkBaseKit.Location = new System.Drawing.Point(675, 145);
+            this.chkBaseKit.Location = new System.Drawing.Point(675, 172);
             this.chkBaseKit.Name = "chkBaseKit";
             this.chkBaseKit.Size = new System.Drawing.Size(15, 15);
             this.chkBaseKit.TabIndex = 16;
@@ -552,7 +552,7 @@
             // 
             // lblBaseKit
             // 
-            this.lblBaseKit.Location = new System.Drawing.Point(687, 144);
+            this.lblBaseKit.Location = new System.Drawing.Point(687, 171);
             this.lblBaseKit.Name = "lblBaseKit";
             this.lblBaseKit.Size = new System.Drawing.Size(38, 15);
             this.lblBaseKit.TabIndex = 17;
@@ -633,7 +633,7 @@
             this.tabVersion.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabVersion.Name = "tabVersion";
             this.tabVersion.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabVersion.Size = new System.Drawing.Size(1239, 581);
+            this.tabVersion.Size = new System.Drawing.Size(1239, 586);
             this.tabVersion.TabIndex = 0;
             this.tabVersion.Text = "Version";
             this.tabVersion.UseVisualStyleBackColor = true;
@@ -653,7 +653,7 @@
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1238, 219);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1238, 251);
             this.tableLayoutPanel1.TabIndex = 85;
             // 
             // groupBox2
@@ -672,7 +672,7 @@
             this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox2.Size = new System.Drawing.Size(724, 211);
+            this.groupBox2.Size = new System.Drawing.Size(724, 243);
             this.groupBox2.TabIndex = 14;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Clients à qui la version est destinée";
@@ -730,7 +730,7 @@
             this.grdClients.Rows.Count = 1;
             this.grdClients.Rows.DefaultSize = 18;
             this.grdClients.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdClients.Size = new System.Drawing.Size(664, 184);
+            this.grdClients.Size = new System.Drawing.Size(664, 216);
             this.grdClients.StyleInfo = resources.GetString("grdClients.StyleInfo");
             this.grdClients.TabIndex = 1;
             this.grdClients.Tag = "15";
@@ -750,7 +750,7 @@
             this.groupBox4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox4.Size = new System.Drawing.Size(502, 211);
+            this.groupBox4.Size = new System.Drawing.Size(502, 243);
             this.groupBox4.TabIndex = 62;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Applications satellites pour le client";
@@ -772,7 +772,7 @@
             this.grdSatellite.Rows.Count = 1;
             this.grdSatellite.Rows.DefaultSize = 18;
             this.grdSatellite.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdSatellite.Size = new System.Drawing.Size(489, 184);
+            this.grdSatellite.Size = new System.Drawing.Size(489, 216);
             this.grdSatellite.StyleInfo = resources.GetString("grdSatellite.StyleInfo");
             this.grdSatellite.TabIndex = 0;
             this.grdSatellite.Tag = "26";
@@ -815,7 +815,7 @@
             this.groupBox7.Controls.Add(this.btnShowAccess);
             this.groupBox7.Controls.Add(this.btnShowWord);
             this.groupBox7.Controls.Add(this.btnShowExcel);
-            this.groupBox7.Location = new System.Drawing.Point(7, 226);
+            this.groupBox7.Location = new System.Drawing.Point(7, 259);
             this.groupBox7.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -887,18 +887,18 @@
             this.groupBox6.Controls.Add(this.label8);
             this.groupBox6.Controls.Add(this.label9);
             this.groupBox6.Controls.Add(this.btnSelectVariousFolderPath);
-            this.groupBox6.Location = new System.Drawing.Point(3, 503);
+            this.groupBox6.Location = new System.Drawing.Point(3, 507);
             this.groupBox6.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox6.Size = new System.Drawing.Size(353, 68);
+            this.groupBox6.Size = new System.Drawing.Size(353, 74);
             this.groupBox6.TabIndex = 1;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Documents divers";
             // 
             // label8
             // 
-            this.label8.Location = new System.Drawing.Point(183, 30);
+            this.label8.Location = new System.Drawing.Point(183, 34);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(117, 21);
             this.label8.TabIndex = 78;
@@ -906,7 +906,7 @@
             // 
             // label9
             // 
-            this.label9.Location = new System.Drawing.Point(7, 30);
+            this.label9.Location = new System.Drawing.Point(7, 34);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(108, 21);
             this.label9.TabIndex = 77;
@@ -917,11 +917,11 @@
             this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox5.Controls.Add(this.btnGenerate);
             this.groupBox5.Controls.Add(this.chkIncludeScripts);
-            this.groupBox5.Location = new System.Drawing.Point(1118, 472);
+            this.groupBox5.Location = new System.Drawing.Point(1028, 507);
             this.groupBox5.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox5.Size = new System.Drawing.Size(113, 97);
+            this.groupBox5.Size = new System.Drawing.Size(203, 74);
             this.groupBox5.TabIndex = 4;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Actions";
@@ -933,11 +933,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tab.Controls.Add(this.tabVersion);
             this.tab.Controls.Add(this.tabRevision);
-            this.tab.Location = new System.Drawing.Point(6, 105);
+            this.tab.Location = new System.Drawing.Point(6, 101);
             this.tab.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tab.Name = "tab";
             this.tab.SelectedIndex = 0;
-            this.tab.Size = new System.Drawing.Size(1247, 610);
+            this.tab.Size = new System.Drawing.Size(1247, 615);
             this.tab.TabIndex = 1;
             // 
             // label7
