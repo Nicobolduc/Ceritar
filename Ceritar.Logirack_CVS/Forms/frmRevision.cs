@@ -74,6 +74,7 @@ namespace Ceritar.Logirack_CVS.Forms
         private sbyte mintAttributedRevisionNo;
         private int mintGrdClient_SelectedRow = 1;
         private bool mblnGrdSatellitesChangeMade;
+        private bool mblnLoadingComboBox;
 
 
         public frmRevision()
@@ -100,7 +101,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void McGrdRevModifs_SetGridDisplay()
         {
-            grdRevModifs.Cols[mintGrdRevMod_RevM_DtHr_col].Width = 92;
+            grdRevModifs.Cols[mintGrdRevMod_RevM_DtHr_col].Width = 100;
             grdRevModifs.Cols[mintGrdRevMod_CeC_Name_For_col].Width = 100;
 
             grdRevModifs.AllowMerging = C1.Win.C1FlexGrid.AllowMergingEnum.RestrictAll;
@@ -806,12 +807,28 @@ namespace Ceritar.Logirack_CVS.Forms
             return blnValidReturn;
         }
 
+        private void pfblnEnableDisable_btnGrdClientAddDel()
+        {
+            if (grdClients.Rows.Count > 1 && mcGrdClients[1, mintGrdClients_CeC_NRI_col] != string.Empty)
+            {
+                btnGrdRevAdd.Enabled = true;
+                btnGrdRevDel.Enabled = true;
+            }
+            else
+            {
+                btnGrdRevAdd.Enabled = false;
+                btnGrdRevDel.Enabled = false;
+            }
+        }
+
         private bool pfblnEnableDisable_btnGrdClientsDelete(int vintCurrentRow)
         {
             bool blnValidReturn = true;
 
             try
             {
+                pfblnEnableDisable_btnGrdClientAddDel();
+
                 if (mcGrdClients.bln_RowEditIsValid())
                 {
                     if (string.IsNullOrEmpty(mcGrdClients[vintCurrentRow, mintGrdClients_Action_col]) || mcGrdClients[vintCurrentRow, mintGrdClients_Action_col] == sclsConstants.DML_Mode.INSERT_MODE.ToString())
@@ -1058,7 +1075,6 @@ namespace Ceritar.Logirack_CVS.Forms
                     case mintGrdRevMod_RevM_DtHr_col:
                         if (formController.FormMode == sclsConstants.DML_Mode.UPDATE_MODE)
                         {
-
                             grdRevModifs.StartEditing();
                         }
 
@@ -1174,7 +1190,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void cboClients_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!formController.FormIsLoading & cboClients.SelectedIndex > -1)
+            if (!formController.FormIsLoading & cboClients.SelectedIndex > -1 & !mblnLoadingComboBox)
             {
                 grdClients[grdClients.Row, mintGrdClients_CeC_NRI_col] = cboClients.SelectedValue;
 
@@ -1182,6 +1198,17 @@ namespace Ceritar.Logirack_CVS.Forms
                     pfblnGrdSatellites_Load();
 
                 formController.ChangeMade = true;
+
+                pfblnEnableDisable_btnGrdClientsDelete(grdClients.Row);
+
+                if (mcGrdClients[grdClients.Row, mintGrdClients_CeC_NRI_col] != string.Empty)
+                {
+                    btnExportRevision.Enabled = true;
+                }
+                else
+                {
+                    btnExportRevision.Enabled = false;
+                }
             }
         }
 
@@ -1197,6 +1224,8 @@ namespace Ceritar.Logirack_CVS.Forms
                     btnExportRevision.Enabled = false;
                     chkScriptOnly.Enabled = false;
                     chkScriptMerged.Enabled = false;
+                    btnGrdRevAdd.Enabled = false;
+                    btnGrdRevDel.Enabled = false;
 
                     if (mintCeritarApplication_NRI_Master > 0)
                     {
@@ -1214,6 +1243,8 @@ namespace Ceritar.Logirack_CVS.Forms
                     btnSelectVariousFolderPath.Enabled = true;
                     btnShowRootFolder.Enabled = true;
                     btnExportRevision.Enabled = true;
+                    btnGrdRevAdd.Enabled = true;
+                    btnGrdRevDel.Enabled = true;
 
                     chkScriptMerged.Enabled = false;
 
@@ -1233,11 +1264,14 @@ namespace Ceritar.Logirack_CVS.Forms
                 case (int)sclsConstants.DML_Mode.DELETE_MODE: case (int)sclsConstants.DML_Mode.CONSULT_MODE:
                     btnGrdClientsAdd.Enabled = false;
                     btnGrdClientsDel.Enabled = false;
+                    btnGrdRevAdd.Enabled = false;
+                    btnGrdRevDel.Enabled = false;
 
                     break;
             }
 
             ChkPreparationControlsActivation();
+            chkUnmerge.Checked = false;
         }
 
         //private void grdSatellites_DoubleClick(object sender, EventArgs e)
@@ -1349,7 +1383,8 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 string strRootFolder = mcCtrRevision.str_GetRevisionFolderPath((int)cboTemplates.SelectedValue, txtVersionNo.Text);
 
-                System.Diagnostics.Process.Start(@strRootFolder);
+                if (Directory.Exists(strRootFolder))
+                    System.Diagnostics.Process.Start(@strRootFolder);
             }
             catch (Exception ex)
             {
@@ -1535,9 +1570,9 @@ namespace Ceritar.Logirack_CVS.Forms
                             {
                                 strListOfClientSelected = strListOfClientSelected + (strListOfClientSelected == string.Empty ? mcGrdClients[intRowIdx, mintGrdClients_CeC_NRI_col] : "," + Microsoft.VisualBasic.Conversion.Val(mcGrdClients[intRowIdx, mintGrdClients_CeC_NRI_col]));
                             }
-
+                            mblnLoadingComboBox = true;
                             sclsWinControls_Utilities.blnComboBox_LoadFromSQL(mcCtrRevision.strGetClients_SQL(formController.Item_NRI, strListOfClientSelected), "CeC_NRI", "Cec_Name", false, ref cboClients);
-
+                            mblnLoadingComboBox = false;
                             grdClients.StartEditing();
                         }
 
@@ -1552,6 +1587,8 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 mcGrdSatellites.ClearGrid();
             }
+
+            
         }
 
         private void grdClients_AfterRowColChange(object sender, RangeEventArgs e)
@@ -1564,7 +1601,7 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 //Do nothing
             }
-
+            
             pfblnEnableDisable_btnGrdClientsDelete(e.NewRange.r1);
         }
 
@@ -1579,7 +1616,7 @@ namespace Ceritar.Logirack_CVS.Forms
                 btnGenerate.Enabled = mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.INSERT_MODE.ToString() && mcGrdClients.bln_RowEditIsValid() && formController.FormMode != sclsConstants.DML_Mode.INSERT_MODE;
             }
 
-            if (mcGrdClients[grdClients.Row, mintGrdClients_Action_col] != sclsConstants.DML_Mode.INSERT_MODE.ToString())
+            if (mcGrdClients[grdClients.Row, mintGrdClients_CeC_NRI_col] != string.Empty)
             {
                 blnEnableControls = true;
             }
@@ -1625,9 +1662,21 @@ namespace Ceritar.Logirack_CVS.Forms
         {
             if (!formController.FormIsLoading & cboClientsRevModif.SelectedIndex > -1)
             {
-                grdRevModifs[grdRevModifs.Row, mintGrdRevMod_RevM_DtHr_col] = dtpRevModif.Value;
+                //mcGrdRevModifs[grdRevModifs.Row, mintGrdRevMod_RevM_DtHr_col] = dtpRevModif.Value.ToString(clsTTApp.GetAppController.str_Get_FRQC_DateTimeFormat);
+                //grdRevModifs[grdRevModifs.Row, mintGrdRevMod_RevM_DtHr_col] = dtpRevModif.Value;
 
                 formController.ChangeMade = true;
+            }
+        }
+
+        private void chkUnmerge_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!formController.FormIsLoading)
+            {
+                if (chkUnmerge.Checked)
+                    grdRevModifs.AllowMerging = AllowMergingEnum.None;
+                else
+                    grdRevModifs.AllowMerging = AllowMergingEnum.RestrictAll;
             }
         }
     }

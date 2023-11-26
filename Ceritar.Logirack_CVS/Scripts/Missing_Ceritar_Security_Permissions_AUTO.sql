@@ -11,17 +11,17 @@ FROM sys.sysobjects as SO
 	--	INNER JOIN sys.database_principals DP ON DP.principal_id = SDP.grantee_principal_id
 	--ON SO.id = SDP.major_id 
 WHERE SO.[type] not in ('D', 'SQ', 'F', 'K', 'TR', 'R', 'C')
-AND SU.name = 'dbo'
-AND SO.name not in ('sysdiagrams')
-AND SO.name not like 'syncobj_0x%'
-AND SO.name not like 'sys%'
-AND SO.name not like 'VTC%'
-AND SO.name not like 'dt_%'
---AND So.name = 'Alo'
-AND NOT EXISTS (SELECT 1 FROM sys.database_permissions as SDP 
-					INNER JOIN sys.database_principals DP ON DP.principal_id = SDP.grantee_principal_id
-				WHERE SO.id = SDP.major_id 
-					AND DP.name in ('Logirack_Security','App_Table'))
+	AND SU.name = 'dbo'
+	AND SO.name not in ('sysdiagrams')
+	AND SO.name not like 'syncobj_0x%'
+	AND SO.name not like 'sys%'
+	AND SO.name not like 'VTC%'
+	AND SO.name not like 'dt_%'
+	--AND So.name = 'Alo'
+	AND NOT EXISTS (SELECT 1 FROM sys.database_permissions as SDP 
+						INNER JOIN sys.database_principals DP ON DP.principal_id = SDP.grantee_principal_id
+					WHERE SO.id = SDP.major_id 
+					  AND DP.name in ('Logirack_Security','App_Table'))
 ORDER BY SU.[name], SO.type, SO.[name]
 
 OPEN cur
@@ -50,7 +50,7 @@ BEGIN
 	  end
 	  
 	-- Tables
-	if @type in ('U') /*Table (user-defined)*/
+	if @type in ('U', 'SN') /*Table (user-defined)*/
 	begin
 		SET @StrSQL_3 = @StrSQL_3 + 'GRANT  SELECT  ON [' + @schema + '].[' + @name + '] TO [' + @securedSchema + ']' + CHAR(13)
 		SET @StrSQL_3 = @StrSQL_3 + 'GRANT  INSERT  ON [' + @schema + '].[' + @name + '] TO [' + @securedSchema + ']' + CHAR(13)
@@ -61,9 +61,13 @@ BEGIN
 	FETCH NEXT FROM cur into @schema, @name, @type
 END
   
-   --PRINT @StrSQL_1 + @StrSQL_2 + @StrSQL_3
+   PRINT @StrSQL_1 + @StrSQL_2 + @StrSQL_3
+   /*
+	DECLARE @FULL_SQL VARCHAR(max)= @StrSQL_1 + @StrSQL_2 + @StrSQL_3
+	EXEC TMS_RDL.dbo.usp_TTLongPrint @FULL_SQL
+   */
   
-   EXEC (@StrSQL_1 + @StrSQL_2 + @StrSQL_3)
+   --EXEC (@StrSQL_1 + @StrSQL_2 + @StrSQL_3)
 
 close cur
 deallocate cur  

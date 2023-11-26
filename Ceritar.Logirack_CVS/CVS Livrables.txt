@@ -1,22 +1,18 @@
-Rendre TTApp optionnel dans la structure des gabarits
 #BUGS:
-RevisionL: je ne dois pas pouvoir ajouter des ligne de desc sans client sel
-changer de date dans la grille ne fonctionne pas
-
-pouvoir changer LogirackTransport pour Ceritar.TMS?
 
 #Version:
--Puet-être? Le Par Client des appSatellite devrait s'appliquer au version aussi
+-Puet-être? Le Par Client des appSatellite devrait s'appliquer au version aussi 
 -***Il faudrait être en mesure de ramasser TOUS les scripts des révisions d'une version***
+  +append le Rev_AllScripts dans le dossier des scripts de la version elle même
 -Dans la liste gen, on voudrait voir les clients qui use cette version et ne pas voir les versions sans client actif
 -Afficher quand meme un client inactif sil existe (ex. guilb dans 381)
+
 
 #Revision:
 -avoir un bouton ou autre pour rafraichir les noms de répertoire
 -Message lorsqu'un "Only" folder script detected, mais pas utilisable
 -Il faudrait pouvoir spécifier une liste de noms valides pour un client (UNIQUE A TOUTE LAPP TMS)
 -Si on switch du mode preparation, le 00_DB_UpdateRevisionNo0.sql contient 0 au lieu de 1 (ca bug aussi la sauvegarde)  
-
 _Ne pas mettre dans un Zip le REv_AlLScripts si "script only" checked
 -Permettre de savoir pour quel client le rapport externe a été défini en coloriant la ligne du client via ClientAppRevision
 
@@ -27,3 +23,5 @@ _Ne pas mettre dans un Zip le REv_AlLScripts si "script only" checked
 #Nice to have:
 -Avoir des templates par Application satellite.
 -Pouvoir Détecter que d'autre révision existe dans le dossier
+
+Access Tok: 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

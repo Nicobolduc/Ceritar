@@ -96,6 +96,7 @@
             this.chkIncludePreviousRevScripts = new System.Windows.Forms.GroupBox();
             this.label10 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
+            this.chkUnmerge = new System.Windows.Forms.CheckBox();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.mnuRevModif.SuspendLayout();
@@ -138,6 +139,7 @@
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Controls.Add(this.chkUnmerge);
             this.groupBox3.Controls.Add(this.dtpRevModif);
             this.groupBox3.Controls.Add(this.cboClientsRevModif);
             this.groupBox3.Controls.Add(this.btnGrdRevDel);
@@ -147,7 +149,7 @@
             this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox3.Size = new System.Drawing.Size(1066, 256);
+            this.groupBox3.Size = new System.Drawing.Size(1142, 256);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Livrables couverts / Modifications incluses (Shift+Enter pour multi-lignes)";
@@ -157,7 +159,7 @@
             this.dtpRevModif.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.dtpRevModif.CustomFormat = "dd-MM-yyyy";
             this.dtpRevModif.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpRevModif.Location = new System.Drawing.Point(249, 109);
+            this.dtpRevModif.Location = new System.Drawing.Point(325, 109);
             this.dtpRevModif.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dtpRevModif.Name = "dtpRevModif";
             this.dtpRevModif.Size = new System.Drawing.Size(104, 22);
@@ -182,7 +184,7 @@
             this.btnGrdRevDel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnGrdRevDel.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevDel.Image")));
-            this.btnGrdRevDel.Location = new System.Drawing.Point(1018, 71);
+            this.btnGrdRevDel.Location = new System.Drawing.Point(1094, 71);
             this.btnGrdRevDel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGrdRevDel.Name = "btnGrdRevDel";
             this.btnGrdRevDel.Size = new System.Drawing.Size(41, 43);
@@ -194,7 +196,7 @@
             this.btnGrdRevAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnGrdRevAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevAdd.Image")));
-            this.btnGrdRevAdd.Location = new System.Drawing.Point(1018, 21);
+            this.btnGrdRevAdd.Location = new System.Drawing.Point(1094, 21);
             this.btnGrdRevAdd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGrdRevAdd.Name = "btnGrdRevAdd";
             this.btnGrdRevAdd.Size = new System.Drawing.Size(41, 43);
@@ -203,8 +205,10 @@
             // 
             // grdRevModifs
             // 
+            this.grdRevModifs.AllowFiltering = true;
             this.grdRevModifs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.grdRevModifs.AutoClipboard = true;
             this.grdRevModifs.AutoSearch = C1.Win.C1FlexGrid.AutoSearchEnum.FromTop;
             this.grdRevModifs.ColumnInfo = resources.GetString("grdRevModifs.ColumnInfo");
             this.grdRevModifs.ContextMenuStrip = this.mnuRevModif;
@@ -215,8 +219,8 @@
             this.grdRevModifs.Name = "grdRevModifs";
             this.grdRevModifs.Rows.Count = 1;
             this.grdRevModifs.Rows.DefaultSize = 18;
-            this.grdRevModifs.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdRevModifs.Size = new System.Drawing.Size(1003, 227);
+            this.grdRevModifs.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.Row;
+            this.grdRevModifs.Size = new System.Drawing.Size(1079, 227);
             this.grdRevModifs.StyleInfo = resources.GetString("grdRevModifs.StyleInfo");
             this.grdRevModifs.TabIndex = 2;
             this.grdRevModifs.Tag = "28";
@@ -485,7 +489,7 @@
             this.btnShowScriptsFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowScriptsFolder.BackgroundImage")));
             this.btnShowScriptsFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnShowScriptsFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowScriptsFolder.Location = new System.Drawing.Point(1014, 17);
+            this.btnShowScriptsFolder.Location = new System.Drawing.Point(1090, 17);
             this.btnShowScriptsFolder.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowScriptsFolder.Name = "btnShowScriptsFolder";
             this.btnShowScriptsFolder.Size = new System.Drawing.Size(47, 49);
@@ -526,7 +530,7 @@
             this.btnShowExecutableFolder.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowExecutableFolder.BackgroundImage")));
             this.btnShowExecutableFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnShowExecutableFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnShowExecutableFolder.Location = new System.Drawing.Point(1014, 17);
+            this.btnShowExecutableFolder.Location = new System.Drawing.Point(1090, 17);
             this.btnShowExecutableFolder.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowExecutableFolder.Name = "btnShowExecutableFolder";
             this.btnShowExecutableFolder.Size = new System.Drawing.Size(47, 49);
@@ -566,7 +570,7 @@
             this.btnGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGenerate.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnGenerate.BackgroundImage")));
             this.btnGenerate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnGenerate.Location = new System.Drawing.Point(964, 68);
+            this.btnGenerate.Location = new System.Drawing.Point(1040, 68);
             this.btnGenerate.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGenerate.Name = "btnGenerate";
             this.btnGenerate.Size = new System.Drawing.Size(28, 31);
@@ -581,7 +585,7 @@
             this.btnShowRootFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowRootFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnShowRootFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnShowRootFolder.Image")));
-            this.btnShowRootFolder.Location = new System.Drawing.Point(1025, 675);
+            this.btnShowRootFolder.Location = new System.Drawing.Point(1101, 675);
             this.btnShowRootFolder.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowRootFolder.Name = "btnShowRootFolder";
             this.btnShowRootFolder.Size = new System.Drawing.Size(47, 49);
@@ -609,7 +613,7 @@
             // 
             this.btnPrintPairValidation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPrintPairValidation.Image = ((System.Drawing.Image)(resources.GetObject("btnPrintPairValidation.Image")));
-            this.btnPrintPairValidation.Location = new System.Drawing.Point(943, 675);
+            this.btnPrintPairValidation.Location = new System.Drawing.Point(1019, 675);
             this.btnPrintPairValidation.Name = "btnPrintPairValidation";
             this.btnPrintPairValidation.Size = new System.Drawing.Size(47, 49);
             this.btnPrintPairValidation.TabIndex = 5;
@@ -665,7 +669,7 @@
             this.gbSatellites.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.gbSatellites.Name = "gbSatellites";
             this.gbSatellites.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.gbSatellites.Size = new System.Drawing.Size(372, 183);
+            this.gbSatellites.Size = new System.Drawing.Size(448, 183);
             this.gbSatellites.TabIndex = 1;
             this.gbSatellites.TabStop = false;
             this.gbSatellites.Text = "La révision est pour l\'application sattellite suivante:";
@@ -687,7 +691,7 @@
             this.grdSatellites.Rows.Count = 1;
             this.grdSatellites.Rows.DefaultSize = 18;
             this.grdSatellites.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdSatellites.Size = new System.Drawing.Size(365, 162);
+            this.grdSatellites.Size = new System.Drawing.Size(441, 162);
             this.grdSatellites.StyleInfo = resources.GetString("grdSatellites.StyleInfo");
             this.grdSatellites.TabIndex = 0;
             this.grdSatellites.Tag = "35";
@@ -727,7 +731,7 @@
             this.gbScripts.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.gbScripts.Name = "gbScripts";
             this.gbScripts.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.gbScripts.Size = new System.Drawing.Size(1066, 102);
+            this.gbScripts.Size = new System.Drawing.Size(1142, 102);
             this.gbScripts.TabIndex = 3;
             this.gbScripts.TabStop = false;
             this.gbScripts.Text = "Scripts *** Si spécifique pour client, inclure dans un sous dossier avec le NOM E" +
@@ -743,7 +747,7 @@
             this.txtScriptsPath.Multiline = true;
             this.txtScriptsPath.Name = "txtScriptsPath";
             this.txtScriptsPath.ReadOnly = true;
-            this.txtScriptsPath.Size = new System.Drawing.Size(913, 40);
+            this.txtScriptsPath.Size = new System.Drawing.Size(989, 40);
             this.txtScriptsPath.TabIndex = 2;
             // 
             // gbExe
@@ -763,7 +767,7 @@
             this.gbExe.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.gbExe.Name = "gbExe";
             this.gbExe.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.gbExe.Size = new System.Drawing.Size(1066, 105);
+            this.gbExe.Size = new System.Drawing.Size(1142, 105);
             this.gbExe.TabIndex = 4;
             this.gbExe.TabStop = false;
             this.gbExe.Text = "Exécutable";
@@ -813,7 +817,7 @@
             this.txtReleasePath.Multiline = true;
             this.txtReleasePath.Name = "txtReleasePath";
             this.txtReleasePath.ReadOnly = true;
-            this.txtReleasePath.Size = new System.Drawing.Size(913, 40);
+            this.txtReleasePath.Size = new System.Drawing.Size(989, 40);
             this.txtReleasePath.TabIndex = 2;
             // 
             // optRptOnly
@@ -906,18 +910,33 @@
             this.formController.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
-            this.formController.Size = new System.Drawing.Size(1074, 34);
+            this.formController.Size = new System.Drawing.Size(1150, 34);
             this.formController.TabIndex = 9;
             this.formController.SetReadRights += new Ceritar.TT3LightDLL.Controls.ctlFormController.SetReadRightsEventHandler(this.formController_SetReadRights);
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
             // 
+            // chkUnmerge
+            // 
+            this.chkUnmerge.AutoSize = true;
+            this.chkUnmerge.Checked = true;
+            this.chkUnmerge.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkUnmerge.Location = new System.Drawing.Point(1055, 0);
+            this.chkUnmerge.Name = "chkUnmerge";
+            this.chkUnmerge.Size = new System.Drawing.Size(79, 20);
+            this.chkUnmerge.TabIndex = 79;
+            this.chkUnmerge.Text = "Unmerge";
+            this.toolTips.SetToolTip(this.chkUnmerge, "Les scripts de la révision courantes sont mergés dans le même dossier que ceux de" +
+        "s révisions précédentes");
+            this.chkUnmerge.UseVisualStyleBackColor = true;
+            this.chkUnmerge.CheckedChanged += new System.EventHandler(this.chkUnmerge_CheckedChanged);
+            // 
             // frmRevision
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1076, 770);
+            this.ClientSize = new System.Drawing.Size(1152, 770);
             this.Controls.Add(this.chkIncludePreviousRevScripts);
             this.Controls.Add(this.btnPrintPairValidation);
             this.Controls.Add(this.btnShowRootFolder);
@@ -933,10 +952,12 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(800, 600);
             this.Name = "frmRevision";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Gestion de révision";
             this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).EndInit();
             this.mnuRevModif.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
@@ -1024,5 +1045,6 @@
         private System.Windows.Forms.ComboBox cboClientsRevModif;
         private System.Windows.Forms.DateTimePicker dtpRevModif;
         private System.Windows.Forms.CheckBox chkScriptMerged;
+        private System.Windows.Forms.CheckBox chkUnmerge;
     }
 }

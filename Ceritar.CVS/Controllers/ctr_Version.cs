@@ -229,7 +229,7 @@ namespace Ceritar.CVS.Controllers
                 {
                     clsTTApp.GetAppController.ShowMessage(mintMSG_CannotDeleteCSV);
                 }
-
+            }
             catch (System.OperationCanceledException)
             {
                 blnValidReturn = false;

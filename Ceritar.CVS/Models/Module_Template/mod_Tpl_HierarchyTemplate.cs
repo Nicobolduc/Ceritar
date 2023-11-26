@@ -46,7 +46,7 @@ namespace Ceritar.CVS.Models.Module_Template
         private int mintScriptsFolderCount = 0;
         private int mintVersionNoFolderCount = 0;
         private int mintReportFolderCount = 0;
-        private int mintMinMaxFolderType = 5; //Release, CaptionsAndMenus, Report (if not external), Scripts, Version No
+        private int mintMinMaxFolderType = 4; //Release, CaptionsAndMenus, Report (if not external), Scripts, Version No
 
 
 #region "Properties"

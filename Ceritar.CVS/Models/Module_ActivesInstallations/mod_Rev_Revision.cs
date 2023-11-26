@@ -225,10 +225,11 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.REPORT_EXE_MANDATORY);
                         }
-                        else if (string.IsNullOrEmpty(_strLocation_Release) & string.IsNullOrEmpty(_strLocation_Scripts) & LstSatelliteRevisions.Count == 0 & !_blnPreparationMode)
-                        {
-                            mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.EXE_OR_SCRIPT_MANDATORY);
-                        }
+                        //Permettre des revisions de scripts seulement
+                        //else if (string.IsNullOrEmpty(_strLocation_Release) & string.IsNullOrEmpty(_strLocation_Scripts) & LstSatelliteRevisions.Count == 0 & !_blnPreparationMode)
+                        //{
+                        //    mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.EXE_OR_SCRIPT_MANDATORY);
+                        //}
                         else if (string.IsNullOrEmpty(_strCreatedBy) & string.IsNullOrEmpty(_strCreatedBy))
                         {
                             mcActionResults.SetInvalid(sclsConstants.Validation_Message.MANDATORY_VALUE, ctr_Revision.ErrorCode_Rev.CREATED_BY_MANDATORY);
@@ -522,7 +523,7 @@ namespace Ceritar.CVS.Models.Module_ActivesInstallations
 
             try
             {
-                if (mintDML_Action != sclsConstants.DML_Mode.DELETE_MODE)
+                if (mintDML_Action != sclsConstants.DML_Mode.DELETE_MODE & _lstSatelliteRevisions != null)
                 {
                     for (int intIndex = 0; intIndex < _lstSatelliteRevisions.Count; intIndex++)
                     {

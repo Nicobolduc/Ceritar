@@ -190,8 +190,9 @@ namespace Ceritar.TT3LightDLL.Classes
                 mblnGridIsLoading = true;
 
 			    mfrmParent = (Ceritar.TT3LightDLL.Controls.IFormController) rgrdGrid.FindForm();
-
-			    SetGrdFlexEvents = rgrdGrid;
+                rgrdGrid.SelectionMode = SelectionModeEnum.Row;
+                
+                SetGrdFlexEvents = rgrdGrid;
 
                 SetBtnAddRowEvents = rbtnAddRow;
 			    SetBtnDeleteRowEvents = rbtnRemoveRow;
@@ -346,7 +347,9 @@ namespace Ceritar.TT3LightDLL.Classes
 		    bool blnIsEmpty = true;
 
 		    try {
-                if (!Information.IsDBNull(mGrdFlex[vintRow, vintCol]) && mGrdFlex[vintRow, vintCol] != null && !string.IsNullOrEmpty(Strings.Trim(mGrdFlex[vintRow, vintCol].ToString())))
+                if ((vintRow < mGrdFlex.Rows.Count & vintRow > 0) &&
+                    !Information.IsDBNull(mGrdFlex[vintRow, vintCol]) && mGrdFlex[vintRow, vintCol] != null && 
+                    !string.IsNullOrEmpty(Strings.Trim(mGrdFlex[vintRow, vintCol].ToString())))
                 {
                     blnIsEmpty = false;
                 }
@@ -564,9 +567,18 @@ namespace Ceritar.TT3LightDLL.Classes
 
                 individualColStyle.DataType = typeof(DateTime);
                 individualColStyle.Format = vstrDateFormat;
-
-                mGrdFlex.Cols[vintColumnIndex].Style = individualColStyle;
-                mGrdFlex.Cols[vintColumnIndex].Style.Editor = rdtpLinked;
+                if (rdtpLinked != null)
+                {
+                    rdtpLinked.Format = DateTimePickerFormat.Custom;
+                    rdtpLinked.CustomFormat = vstrDateFormat;
+                    //Il y a un built in DAtepicker qui work mieux et cause moins de bug
+                    rdtpLinked.Visible = false;
+                }
+            
+                //mGrdFlex.Cols[vintColumnIndex].Style = individualColStyle;
+                //mGrdFlex.Cols[vintColumnIndex].Style.Editor = rdtpLinked;
+                mGrdFlex.Cols[vintColumnIndex].DataType = typeof(DateTime);
+                mGrdFlex.Cols[vintColumnIndex].Format = vstrDateFormat;
 
                 if (mGrdFlex.Cols[vintColumnIndex].Width ==0) mGrdFlex.Cols[vintColumnIndex].Width = 92;
 

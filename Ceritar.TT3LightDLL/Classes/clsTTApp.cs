@@ -12,6 +12,12 @@ using System.Data;
 
 namespace Ceritar.TT3LightDLL.Classes
 {
+    public static class mSharedDelegate
+    {
+        public delegate void TTMenuButtonsApplicationFilerHandler();
+        public static TTMenuButtonsApplicationFilerHandler fblnTTMenuButtonsApplicationFilter;
+    }
+
     /// <summary>
     /// Cette classe est un genre de controleur des propriétés de l'application. Par exemple, elle gère la connexion au server de base de données et offre des fonctionnalités 
     /// communes et utilisables par tous les écrans de l'application.
@@ -28,18 +34,119 @@ namespace Ceritar.TT3LightDLL.Classes
         private string mstrServerDateFormat = string.Empty;
         private Form mfrmMdi = null;
         private static clsTTApp _myUniqueInstance;
+
+
+
+        #region "Constructors"
         
 
-#region "Constructors"
+        public class Other { public string strValue = "ASD"; }
+        public class baseC
+        {
+            public void lol(string vstrMemberName)
+            {
+                object oValue = null;
+                GetValueFromFieldName(vstrMemberName, out oValue);
+                System.Reflection.MemberInfo[] cFieldInfo = this.GetType().GetMember(vstrMemberName);
+                //int result = (string)((System.Reflection.PropertyInfo)cFieldInfo[0]).GetValue(this);
+            }
+
+            public bool GetValueFromFieldName(string vstrFieldPathName, out object rcFieldValue)
+            {
+                object cCurrentObject = this;
+                string[] lstFieldPathNames = vstrFieldPathName.Split('.'); 
+                var bindingFlags = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public;
+                System.Reflection.MemberInfo[] cMemberInfo;
+                System.Reflection.PropertyInfo cPropertyInfo = null;
+                System.Reflection.FieldInfo cFieldInfo = null;
+
+                foreach (string strFieldPathName in lstFieldPathNames)
+                {
+                    cMemberInfo = cCurrentObject.GetType().GetMember(strFieldPathName, bindingFlags);
+                    cPropertyInfo = null;
+                    cFieldInfo = null;
+
+                    if (cMemberInfo.Length == 1)
+                    {
+                        if (cMemberInfo[0].MemberType == System.Reflection.MemberTypes.Field)
+                        {
+                            cFieldInfo = cCurrentObject.GetType().GetField(strFieldPathName);
+                        }
+                        else if (cMemberInfo[0].MemberType == System.Reflection.MemberTypes.Property)
+                        {
+                            cPropertyInfo = cCurrentObject.GetType().GetProperty(strFieldPathName);
+                        }
+                        
+                        if (cPropertyInfo != null)
+                        {
+                            cCurrentObject = cPropertyInfo.GetValue(cCurrentObject);
+                        }
+                        else if (cFieldInfo != null)
+                        {
+                            cCurrentObject = cFieldInfo.GetValue(cCurrentObject);
+                        }
+                        else
+                        {
+                            rcFieldValue = null;
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        break; //TODO FALSE
+                    }
+                }
+
+                rcFieldValue = cCurrentObject;
+                return true;
+            }
+        }
+        public class derived : baseC
+        {
+            public Other cOther { get; } = new Other();
+            public int intValue { get; set; } = 5;
+        }
+        public bool IsTrue(){ return false;}
+        public void func1()
+        {
+            try
+            {
+                func2();
+            }
+            catch  (Exception)
+            {
+            }
+        }
+        public void func2()
+        {
+            func3();
+        }
+        public void func3()
+        {
+            int lol = 4;
+            int lol2 = 0;
+            int xD = lol / lol2;
+        }
 
         private clsTTApp(Form rfrmMDI)
         {
+            func1();
+            derived cDerived = new derived();
+            cDerived.lol(nameof(cDerived.cOther) + "." + nameof(cDerived.cOther.strValue));
+            //switch (false)
+            //{
+            //    case false when 1 == 0 || !IsTrue():
+            //        int lol = 3;
+            //        break;
+            //}
+
             mcTTUser = new clsTTUser();
 
             mfrmMdi = rfrmMDI;
 
             clsTTSQL.OpenSQLServerConnection(ref mcSQLConnection);
         }
+
 
 #endregion
 

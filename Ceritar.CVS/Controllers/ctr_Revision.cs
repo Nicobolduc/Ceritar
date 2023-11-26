@@ -87,7 +87,7 @@ namespace Ceritar.CVS.Controllers
                 mcModRevision.Version.CerApplication.CeritarApplication_NRI = mcView.GetCeritarApplication_NRI();
                 mcModRevision.Version.CerApplication.Name = mcView.GetCeritarApplication_Name();
                 mcModRevision.Version.CerApplication.ExternalReportAppName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + mcModRevision.Version.CerApplication.CeritarApplication_NRI);
-                if (!string.IsNullOrEmpty(mcModRevision.Path_Release) && !mcModRevision.ExeIsExternalReport) mcModRevision.Version.CerApplication.AutoGenRevisionNoScript = bool.Parse(clsTTSQL.str_ADOSingleLookUp("CeA_AutoGenRevisionNoScript", "CerApp", "CeA_NRI = " + mcModRevision.Version.CerApplication.CeritarApplication_NRI));
+                mcModRevision.Version.CerApplication.AutoGenRevisionNoScript = bool.Parse(clsTTSQL.str_ADOSingleLookUp("CeA_AutoGenRevisionNoScript", "CerApp", "CeA_NRI = " + mcModRevision.Version.CerApplication.CeritarApplication_NRI));
 
                 if (!mcView.IsPreparationMode())
                     mcModRevision.Path_Scripts = (string.IsNullOrEmpty(mcView.GetLocation_Scripts()) & mcModRevision.Version.CerApplication.AutoGenRevisionNoScript ? "placeHolder" : mcView.GetLocation_Scripts());
@@ -351,6 +351,7 @@ namespace Ceritar.CVS.Controllers
         public bool blnBuildRevisionHierarchy(int vintTemplate_NRI)
         {
             bool blnValidReturn = false;
+            bool blnScriptsChanged = false;
             string strSQL = string.Empty;
             string strFolderName = string.Empty;
             string strRevisionFolderRoot = string.Empty;
@@ -637,7 +638,6 @@ namespace Ceritar.CVS.Controllers
 
                         case (int)ctr_Template.FolderType.Scripts:
 
-                            bool blnScriptsChanged = false;
                             int intNextScriptNo = 0;
                             int intNbScriptsAlreadyPresent = 0;
                             System.Windows.Forms.DialogResult answer;
@@ -1388,7 +1388,8 @@ namespace Ceritar.CVS.Controllers
 
                     if (blnValidReturn)
                     {
-                        Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(vstrRevisionFolderRoot, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
+                        if (Directory.Exists(vstrRevisionFolderRoot))
+                            Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(vstrRevisionFolderRoot, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin, Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException);
                         //System.Diagnostics.Process process = new System.Diagnostics.Process();
                         //System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
 
@@ -1546,31 +1547,6 @@ namespace Ceritar.CVS.Controllers
             return blnValidReturn;
         }
 
-        /// <summary>
-        /// Envoie dans un fichier Zip le Release, les rapports, les applications satellites et les scripts dans des dossiers séparés.
-        /// </summary>
-        /// <param name="vstrExportFolderLocation">Le chemin ou le fichier zip sera créé.</param>
-        /// <returns>True si l'export s'effectue correctement, sinon False.</returns>
-        public bool blnExportRevisionKit(string vstrExportFolderLocation)
-        {
-            bool blnReturn = false;
-
-            try
-            {
-                //Traitement
-            }
-            catch (Exception ex)
-            {
-                blnReturn = false;
-                sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
-            }
-            finally
-            {
-                //Code à toujours exécuter
-            }
-
-            return blnReturn;
-        }
 
         /// <summary>
         /// Envoie dans un fichier Zip le Release, les rapports, les applications satellites et les scripts dans des dossiers séparés.
@@ -2042,9 +2018,14 @@ namespace Ceritar.CVS.Controllers
                     intRecordCount++;
                 }
 
-                if (sqlRecord.HasRows) strRevisionFolderPath = str_GetRevisionFolderPath(cRevision);
+                if (sqlRecord.HasRows & (!string.IsNullOrEmpty(cRevision.Path_Release) || !string.IsNullOrEmpty(cRevision.Path_Scripts)))
+                {
+                    strRevisionFolderPath = str_GetRevisionFolderPath(cRevision);
 
-                blnIsValid = Directory.Exists(strRevisionFolderPath);
+                    blnIsValid = Directory.Exists(strRevisionFolderPath);
+                }
+                else   
+                    blnIsValid = true;
             }
             catch (FileNotFoundException exPath)
             {

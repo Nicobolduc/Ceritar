@@ -138,7 +138,7 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox1.Size = new System.Drawing.Size(1247, 91);
+            this.groupBox1.Size = new System.Drawing.Size(1310, 91);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Informations";
@@ -165,7 +165,7 @@
             // txtCreatedBy
             // 
             this.txtCreatedBy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCreatedBy.Location = new System.Drawing.Point(1052, 57);
+            this.txtCreatedBy.Location = new System.Drawing.Point(1115, 57);
             this.txtCreatedBy.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtCreatedBy.Name = "txtCreatedBy";
             this.txtCreatedBy.ReadOnly = true;
@@ -176,7 +176,7 @@
             // 
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(993, 60);
+            this.label6.Location = new System.Drawing.Point(1056, 60);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(53, 16);
             this.label6.TabIndex = 73;
@@ -198,7 +198,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(993, 27);
+            this.label2.Location = new System.Drawing.Point(1056, 27);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(107, 16);
             this.label2.TabIndex = 69;
@@ -210,7 +210,7 @@
             this.dtpCreation.CustomFormat = "dd-MM-yyyy HH:mm";
             this.dtpCreation.Enabled = false;
             this.dtpCreation.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpCreation.Location = new System.Drawing.Point(1101, 24);
+            this.dtpCreation.Location = new System.Drawing.Point(1164, 24);
             this.dtpCreation.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dtpCreation.Name = "dtpCreation";
             this.dtpCreation.Size = new System.Drawing.Size(137, 22);
@@ -302,7 +302,7 @@
             this.btnGrdRevDel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnGrdRevDel.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevDel.Image")));
-            this.btnGrdRevDel.Location = new System.Drawing.Point(1184, 119);
+            this.btnGrdRevDel.Location = new System.Drawing.Point(1247, 119);
             this.btnGrdRevDel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGrdRevDel.Name = "btnGrdRevDel";
             this.btnGrdRevDel.Size = new System.Drawing.Size(41, 43);
@@ -316,7 +316,7 @@
             this.btnGrdRevAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnGrdRevAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevAdd.Image")));
-            this.btnGrdRevAdd.Location = new System.Drawing.Point(1184, 18);
+            this.btnGrdRevAdd.Location = new System.Drawing.Point(1247, 18);
             this.btnGrdRevAdd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGrdRevAdd.Name = "btnGrdRevAdd";
             this.btnGrdRevAdd.Size = new System.Drawing.Size(41, 43);
@@ -344,7 +344,7 @@
             this.btnExportInstallationKit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExportInstallationKit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnExportInstallationKit.Image = ((System.Drawing.Image)(resources.GetObject("btnExportInstallationKit.Image")));
-            this.btnExportInstallationKit.Location = new System.Drawing.Point(676, 189);
+            this.btnExportInstallationKit.Location = new System.Drawing.Point(713, 192);
             this.btnExportInstallationKit.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnExportInstallationKit.Name = "btnExportInstallationKit";
             this.btnExportInstallationKit.Size = new System.Drawing.Size(41, 43);
@@ -358,7 +358,7 @@
             this.btnGrdRevUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdRevUpdate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnGrdRevUpdate.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdRevUpdate.Image")));
-            this.btnGrdRevUpdate.Location = new System.Drawing.Point(1184, 68);
+            this.btnGrdRevUpdate.Location = new System.Drawing.Point(1247, 68);
             this.btnGrdRevUpdate.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGrdRevUpdate.Name = "btnGrdRevUpdate";
             this.btnGrdRevUpdate.Size = new System.Drawing.Size(41, 43);
@@ -436,7 +436,7 @@
             this.btnShowExecutable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowExecutable.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowExecutable.BackgroundImage")));
             this.btnShowExecutable.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowExecutable.Location = new System.Drawing.Point(1169, 185);
+            this.btnShowExecutable.Location = new System.Drawing.Point(1232, 185);
             this.btnShowExecutable.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowExecutable.Name = "btnShowExecutable";
             this.btnShowExecutable.Size = new System.Drawing.Size(47, 49);
@@ -450,7 +450,7 @@
             this.btnShowAccess.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowAccess.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowAccess.BackgroundImage")));
             this.btnShowAccess.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowAccess.Location = new System.Drawing.Point(1169, 129);
+            this.btnShowAccess.Location = new System.Drawing.Point(1232, 129);
             this.btnShowAccess.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowAccess.Name = "btnShowAccess";
             this.btnShowAccess.Size = new System.Drawing.Size(47, 49);
@@ -464,7 +464,7 @@
             this.btnShowWord.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowWord.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowWord.BackgroundImage")));
             this.btnShowWord.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowWord.Location = new System.Drawing.Point(1169, 73);
+            this.btnShowWord.Location = new System.Drawing.Point(1232, 73);
             this.btnShowWord.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowWord.Name = "btnShowWord";
             this.btnShowWord.Size = new System.Drawing.Size(47, 49);
@@ -478,7 +478,7 @@
             this.btnShowExcel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowExcel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowExcel.BackgroundImage")));
             this.btnShowExcel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowExcel.Location = new System.Drawing.Point(1169, 16);
+            this.btnShowExcel.Location = new System.Drawing.Point(1232, 16);
             this.btnShowExcel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowExcel.Name = "btnShowExcel";
             this.btnShowExcel.Size = new System.Drawing.Size(47, 49);
@@ -518,7 +518,7 @@
             this.btnShowRootFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowRootFolder.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnShowRootFolder.Image = ((System.Drawing.Image)(resources.GetObject("btnShowRootFolder.Image")));
-            this.btnShowRootFolder.Location = new System.Drawing.Point(920, 525);
+            this.btnShowRootFolder.Location = new System.Drawing.Point(983, 525);
             this.btnShowRootFolder.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowRootFolder.Name = "btnShowRootFolder";
             this.btnShowRootFolder.Size = new System.Drawing.Size(47, 49);
@@ -532,7 +532,7 @@
             this.btnShowDB_UpgradeScripts.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnShowDB_UpgradeScripts.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnShowDB_UpgradeScripts.BackgroundImage")));
             this.btnShowDB_UpgradeScripts.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnShowDB_UpgradeScripts.Location = new System.Drawing.Point(866, 525);
+            this.btnShowDB_UpgradeScripts.Location = new System.Drawing.Point(929, 525);
             this.btnShowDB_UpgradeScripts.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnShowDB_UpgradeScripts.Name = "btnShowDB_UpgradeScripts";
             this.btnShowDB_UpgradeScripts.Size = new System.Drawing.Size(47, 49);
@@ -543,7 +543,8 @@
             // 
             // chkBaseKit
             // 
-            this.chkBaseKit.Location = new System.Drawing.Point(675, 172);
+            this.chkBaseKit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkBaseKit.Location = new System.Drawing.Point(709, 175);
             this.chkBaseKit.Name = "chkBaseKit";
             this.chkBaseKit.Size = new System.Drawing.Size(15, 15);
             this.chkBaseKit.TabIndex = 16;
@@ -552,7 +553,8 @@
             // 
             // lblBaseKit
             // 
-            this.lblBaseKit.Location = new System.Drawing.Point(687, 171);
+            this.lblBaseKit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblBaseKit.Location = new System.Drawing.Point(723, 174);
             this.lblBaseKit.Name = "lblBaseKit";
             this.lblBaseKit.Size = new System.Drawing.Size(38, 15);
             this.lblBaseKit.TabIndex = 17;
@@ -566,7 +568,7 @@
             this.tabRevision.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabRevision.Name = "tabRevision";
             this.tabRevision.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabRevision.Size = new System.Drawing.Size(1239, 581);
+            this.tabRevision.Size = new System.Drawing.Size(1302, 586);
             this.tabRevision.TabIndex = 1;
             this.tabRevision.Text = "Révisions";
             this.tabRevision.UseVisualStyleBackColor = true;
@@ -583,7 +585,7 @@
             this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox3.Size = new System.Drawing.Size(1233, 573);
+            this.groupBox3.Size = new System.Drawing.Size(1296, 578);
             this.groupBox3.TabIndex = 15;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Liste des révisions";
@@ -591,7 +593,7 @@
             // btnRefresh
             // 
             this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRefresh.Location = new System.Drawing.Point(1184, 524);
+            this.btnRefresh.Location = new System.Drawing.Point(1247, 529);
             this.btnRefresh.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(41, 43);
@@ -615,7 +617,7 @@
             this.grdRevisions.Rows.DefaultSize = 18;
             this.grdRevisions.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
             this.grdRevisions.ShowSort = false;
-            this.grdRevisions.Size = new System.Drawing.Size(1169, 550);
+            this.grdRevisions.Size = new System.Drawing.Size(1232, 555);
             this.grdRevisions.StyleInfo = resources.GetString("grdRevisions.StyleInfo");
             this.grdRevisions.TabIndex = 14;
             this.grdRevisions.Tag = "20";
@@ -633,7 +635,7 @@
             this.tabVersion.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabVersion.Name = "tabVersion";
             this.tabVersion.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabVersion.Size = new System.Drawing.Size(1239, 586);
+            this.tabVersion.Size = new System.Drawing.Size(1302, 586);
             this.tabVersion.TabIndex = 0;
             this.tabVersion.Text = "Version";
             this.tabVersion.UseVisualStyleBackColor = true;
@@ -653,7 +655,7 @@
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1238, 251);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1301, 251);
             this.tableLayoutPanel1.TabIndex = 85;
             // 
             // groupBox2
@@ -672,7 +674,7 @@
             this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox2.Size = new System.Drawing.Size(724, 243);
+            this.groupBox2.Size = new System.Drawing.Size(761, 243);
             this.groupBox2.TabIndex = 14;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Clients à qui la version est destinée";
@@ -694,7 +696,7 @@
             this.btnGrdClientsDel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdClientsDel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnGrdClientsDel.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdClientsDel.Image")));
-            this.btnGrdClientsDel.Location = new System.Drawing.Point(676, 71);
+            this.btnGrdClientsDel.Location = new System.Drawing.Point(713, 71);
             this.btnGrdClientsDel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGrdClientsDel.Name = "btnGrdClientsDel";
             this.btnGrdClientsDel.Size = new System.Drawing.Size(41, 43);
@@ -707,7 +709,7 @@
             this.btnGrdClientsAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGrdClientsAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnGrdClientsAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnGrdClientsAdd.Image")));
-            this.btnGrdClientsAdd.Location = new System.Drawing.Point(676, 21);
+            this.btnGrdClientsAdd.Location = new System.Drawing.Point(713, 21);
             this.btnGrdClientsAdd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnGrdClientsAdd.Name = "btnGrdClientsAdd";
             this.btnGrdClientsAdd.Size = new System.Drawing.Size(41, 43);
@@ -730,7 +732,7 @@
             this.grdClients.Rows.Count = 1;
             this.grdClients.Rows.DefaultSize = 18;
             this.grdClients.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdClients.Size = new System.Drawing.Size(664, 216);
+            this.grdClients.Size = new System.Drawing.Size(701, 216);
             this.grdClients.StyleInfo = resources.GetString("grdClients.StyleInfo");
             this.grdClients.TabIndex = 1;
             this.grdClients.Tag = "15";
@@ -746,11 +748,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox4.Controls.Add(this.grdSatellite);
-            this.groupBox4.Location = new System.Drawing.Point(733, 4);
+            this.groupBox4.Location = new System.Drawing.Point(770, 4);
             this.groupBox4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox4.Size = new System.Drawing.Size(502, 243);
+            this.groupBox4.Size = new System.Drawing.Size(528, 243);
             this.groupBox4.TabIndex = 62;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Applications satellites pour le client";
@@ -772,7 +774,7 @@
             this.grdSatellite.Rows.Count = 1;
             this.grdSatellite.Rows.DefaultSize = 18;
             this.grdSatellite.SelectionMode = C1.Win.C1FlexGrid.SelectionModeEnum.ListBox;
-            this.grdSatellite.Size = new System.Drawing.Size(489, 216);
+            this.grdSatellite.Size = new System.Drawing.Size(515, 216);
             this.grdSatellite.StyleInfo = resources.GetString("grdSatellite.StyleInfo");
             this.grdSatellite.TabIndex = 0;
             this.grdSatellite.Tag = "26";
@@ -819,7 +821,7 @@
             this.groupBox7.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox7.Size = new System.Drawing.Size(1224, 240);
+            this.groupBox7.Size = new System.Drawing.Size(1287, 240);
             this.groupBox7.TabIndex = 82;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Fichiers et documents obligatoires de l\'application principale";
@@ -835,7 +837,7 @@
             this.txtReleasePath.Name = "txtReleasePath";
             this.txtReleasePath.ReadOnly = true;
             this.txtReleasePath.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.txtReleasePath.Size = new System.Drawing.Size(1113, 44);
+            this.txtReleasePath.Size = new System.Drawing.Size(1176, 44);
             this.txtReleasePath.TabIndex = 7;
             // 
             // txtTTAppPath
@@ -849,7 +851,7 @@
             this.txtTTAppPath.Name = "txtTTAppPath";
             this.txtTTAppPath.ReadOnly = true;
             this.txtTTAppPath.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.txtTTAppPath.Size = new System.Drawing.Size(1113, 44);
+            this.txtTTAppPath.Size = new System.Drawing.Size(1176, 44);
             this.txtTTAppPath.TabIndex = 6;
             // 
             // txtWordAppChangePath
@@ -863,7 +865,7 @@
             this.txtWordAppChangePath.Name = "txtWordAppChangePath";
             this.txtWordAppChangePath.ReadOnly = true;
             this.txtWordAppChangePath.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.txtWordAppChangePath.Size = new System.Drawing.Size(1113, 44);
+            this.txtWordAppChangePath.Size = new System.Drawing.Size(1176, 44);
             this.txtWordAppChangePath.TabIndex = 5;
             // 
             // txtExcelAppChangePath
@@ -877,7 +879,7 @@
             this.txtExcelAppChangePath.Name = "txtExcelAppChangePath";
             this.txtExcelAppChangePath.ReadOnly = true;
             this.txtExcelAppChangePath.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.txtExcelAppChangePath.Size = new System.Drawing.Size(1113, 44);
+            this.txtExcelAppChangePath.Size = new System.Drawing.Size(1176, 44);
             this.txtExcelAppChangePath.TabIndex = 4;
             // 
             // groupBox6
@@ -917,7 +919,7 @@
             this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox5.Controls.Add(this.btnGenerate);
             this.groupBox5.Controls.Add(this.chkIncludeScripts);
-            this.groupBox5.Location = new System.Drawing.Point(1028, 507);
+            this.groupBox5.Location = new System.Drawing.Point(1091, 507);
             this.groupBox5.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -937,7 +939,7 @@
             this.tab.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tab.Name = "tab";
             this.tab.SelectedIndex = 0;
-            this.tab.Size = new System.Drawing.Size(1247, 615);
+            this.tab.Size = new System.Drawing.Size(1310, 615);
             this.tab.TabIndex = 1;
             // 
             // label7
@@ -971,7 +973,7 @@
             this.formController.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.formController.Name = "formController";
             this.formController.ShowButtonQuitOnly = false;
-            this.formController.Size = new System.Drawing.Size(1257, 34);
+            this.formController.Size = new System.Drawing.Size(1320, 34);
             this.formController.TabIndex = 2;
             this.formController.BeNotify += new Ceritar.TT3LightDLL.Controls.ctlFormController.BeNotifyEventHandler(this.formController_BeNotify);
             this.formController.SetReadRights += new Ceritar.TT3LightDLL.Controls.ctlFormController.SetReadRightsEventHandler(this.formController_SetReadRights);
@@ -983,7 +985,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1256, 759);
+            this.ClientSize = new System.Drawing.Size(1319, 766);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.formController);
@@ -992,7 +994,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(1127, 797);
+            this.MinimumSize = new System.Drawing.Size(1280, 797);
             this.Name = "frmVersion";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Gestion de version";
