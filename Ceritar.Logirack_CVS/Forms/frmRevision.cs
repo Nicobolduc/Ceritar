@@ -11,7 +11,7 @@ using Ceritar.CVS.Controllers.Interfaces;
 using C1.Win.C1FlexGrid;
 using System.Threading;
 using System.Drawing;
-using CrystalDecisions.CrystalReports.Engine;
+//using CrystalDecisions.CrystalReports.Engine;
 
 namespace Ceritar.Logirack_CVS.Forms
 {
@@ -225,7 +225,7 @@ namespace Ceritar.Logirack_CVS.Forms
         string IRevision.GetCeritarClient_Name()
         {
             if (grdClients.Rows.Count <= 1)
-                throw new InvalidArgumentException("Erreur invalide non gerer",0);
+                throw new Exception("Erreur invalide non gerer");
 
             return mcGrdClients[grdClients.Row, mintGrdClients_CeC_Name_col];
         }
@@ -1439,7 +1439,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void btnPrintPairValidation_Click(object sender, EventArgs e)
         {
-            ReportDocument rptDoc = new ReportDocument();
+           /* ReportDocument rptDoc = new ReportDocument();
             frmCrystalReportViewer frmReportViewer = new frmCrystalReportViewer();
 
             CrystalDecisions.Shared.TableLogOnInfo tableLogoninfo = new CrystalDecisions.Shared.TableLogOnInfo();
@@ -1474,7 +1474,7 @@ namespace Ceritar.Logirack_CVS.Forms
             frmReportViewer.crystalReportViewer1.ReportSource = rptDoc;
             frmReportViewer.crystalReportViewer1.Refresh();
 
-            frmReportViewer.Show();
+            frmReportViewer.Show();*/
         }
 
         private void chkPreparation_CheckStateChanged(object sender, EventArgs e)

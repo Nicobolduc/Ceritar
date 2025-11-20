@@ -546,7 +546,7 @@ namespace Ceritar.TT3LightDLL.Classes
                 //                                      Data Source=SVR-SQL14;
                 //                                      MultipleActiveResultSets=True");
 
-                rcSQLConnection = new SqlConnection(@"Persist Security Info=true;User ID=sa;Password=*8059%Ce;Initial Catalog=" + strDatabase + @";Data Source=" + strServer + ";MultipleActiveResultSets=True");
+                rcSQLConnection = new SqlConnection(@"Persist Security Info=true;User ID=sa;Password=Ce*8059%Ce;Initial Catalog=" + strDatabase + @";Data Source=" + strServer + ";MultipleActiveResultSets=True");
 
                 //rcSQLConnection = new SqlConnection(@"Persist Security Info=true;User ID=sa;Password=*8059%Ce;Initial Catalog=Logirack_CVS;Data Source=localhost\SVR_SQL16;MultipleActiveResultSets=True");
                 //                rcSQLConnection = new SqlConnection(@"Persist Security Info=False;

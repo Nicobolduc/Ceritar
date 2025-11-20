@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Ceritar.TT3LightDLL</RootNamespace>
     <AssemblyName>Ceritar.TT3LightDLL_2</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -72,7 +72,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\clsCrystalReportHelper.cs" />
     <Compile Include="Classes\clsTTApp.cs" />
     <Compile Include="Classes\clsTTC1FlexGridWrapper.cs" />
     <Compile Include="Classes\clsTTForms.cs" />
