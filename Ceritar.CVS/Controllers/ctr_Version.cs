@@ -1351,53 +1351,6 @@ namespace Ceritar.CVS.Controllers
             return blnValidReturn;
         }
 
-        /*public string str_GetVersionFolderPath(int vintTemplate_NRI, string vstrVersion_No)
-        {
-            string strSQL = string.Empty;
-            string strPath = string.Empty;
-            SqlDataReader sqlRecord = null;
-
-            strSQL = strSQL + " WITH LstHierarchyComp " + Environment.NewLine;
-            strSQL = strSQL + " AS " + Environment.NewLine;
-            strSQL = strSQL + " ( " + Environment.NewLine;
-            strSQL = strSQL + "     SELECT *, " + Environment.NewLine;
-            strSQL = strSQL + " 		   CAST(0 AS varbinary(max)) AS Level " + Environment.NewLine;
-            strSQL = strSQL + " 	FROM HierarchyComp  " + Environment.NewLine;
-            strSQL = strSQL + " 	WHERE HiCo_Parent_NRI IS NULL " + Environment.NewLine;
-
-            strSQL = strSQL + "     UNION ALL " + Environment.NewLine;
-
-            strSQL = strSQL + "     SELECT HiCo_Childrens.*, " + Environment.NewLine;
-            strSQL = strSQL + " 		   Level + CAST(HiCo_Childrens.HiCo_NRI AS varbinary(max)) AS Level " + Environment.NewLine;
-            strSQL = strSQL + " 	FROM HierarchyComp HiCo_Childrens  " + Environment.NewLine;
-            strSQL = strSQL + " 		INNER JOIN LstHierarchyComp on HiCo_Childrens.HiCo_Parent_NRI = LstHierarchyComp.HiCo_NRI " + Environment.NewLine;
-            strSQL = strSQL + " 	WHERE HiCo_Childrens.HiCo_Parent_NRI IS NOT NULL " + Environment.NewLine;
-            strSQL = strSQL + " ) " + Environment.NewLine;
-
-            strSQL = strSQL + " SELECT Path = TTParam.TTP_Value + " + Environment.NewLine;
-            strSQL = strSQL + "               (SELECT '/' + CONVERT(VARCHAR(300), REPLACE(LstHierarchyComp.HiCo_Name, '_XXX', " + clsTTApp.GetAppController.str_FixStringForSQL("_" + vstrVersion_No) + ")) " + Environment.NewLine;
-            strSQL = strSQL + "                FROM LstHierarchyComp " + Environment.NewLine;
-            strSQL = strSQL + "                    INNER JOIN FolderType ON FolderType.FoT_NRI = LstHierarchyComp.FoT_NRI " + Environment.NewLine;
-
-            strSQL = strSQL + "                WHERE LstHierarchyComp.Tpl_NRI = " + vintTemplate_NRI + Environment.NewLine;
-            strSQL = strSQL + "                  AND FolderType.FoT_Modifiable = 0 " + Environment.NewLine;
-
-            strSQL = strSQL + "                ORDER BY Level FOR XML PATH('') ) " + Environment.NewLine;
-
-            strSQL = strSQL + " FROM TTParam " + Environment.NewLine;
-
-            strSQL = strSQL + " WHERE TTParam.TTP_Name = 'InstallationsActives' " + Environment.NewLine;
-
-            sqlRecord = clsTTSQL.ADOSelect(strSQL);
-
-            if (sqlRecord.Read())
-            {
-                strPath = sqlRecord["Path"].ToString();
-            }
-
-            return strPath;
-        }*/
-
         public static string str_GetVersionFolderPath(int vintTemplate_NRI, string vstrVersion_No)
         {
             string strSQL = string.Empty;
@@ -1435,7 +1388,9 @@ namespace Ceritar.CVS.Controllers
 
             while (sqlRecord.Read())
             {
-                strPath = Path.Combine(strPath, sqlRecord["FolderName"].ToString());
+                if (string.IsNullOrEmpty(strPath))
+                    strPath = sclsAppConfigs.GetOneDriveRoot;
+                strPath = System.IO.Path.Combine(strPath, sqlRecord["FolderName"].ToString());
 
                 if (sqlRecord["FoT_NRI"].ToString() == ((int)ctr_Template.FolderType.Version_Number).ToString()) break;
             }

@@ -147,7 +147,7 @@
             // 
             this.txtDescription.Location = new System.Drawing.Point(673, 24);
             this.txtDescription.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.txtDescription.MaxLength = 128;
+            this.txtDescription.MaxLength = 250;
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.Size = new System.Drawing.Size(314, 55);
@@ -178,7 +178,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(1056, 60);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(53, 16);
+            this.label6.Size = new System.Drawing.Size(52, 16);
             this.label6.TabIndex = 73;
             this.label6.Text = "Usager:";
             // 
@@ -188,7 +188,7 @@
             this.chkDemoVersion.Location = new System.Drawing.Point(523, 25);
             this.chkDemoVersion.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.chkDemoVersion.Name = "chkDemoVersion";
-            this.chkDemoVersion.Size = new System.Drawing.Size(61, 20);
+            this.chkDemoVersion.Size = new System.Drawing.Size(60, 20);
             this.chkDemoVersion.TabIndex = 3;
             this.chkDemoVersion.Text = "Démo";
             this.chkDemoVersion.UseVisualStyleBackColor = true;
@@ -200,7 +200,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(1056, 27);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(107, 16);
+            this.label2.Size = new System.Drawing.Size(106, 16);
             this.label2.TabIndex = 69;
             this.label2.Text = "Date de création:";
             // 
@@ -373,7 +373,7 @@
             this.chkIncludeScripts.Location = new System.Drawing.Point(69, 33);
             this.chkIncludeScripts.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.chkIncludeScripts.Name = "chkIncludeScripts";
-            this.chkIncludeScripts.Size = new System.Drawing.Size(108, 20);
+            this.chkIncludeScripts.Size = new System.Drawing.Size(107, 20);
             this.chkIncludeScripts.TabIndex = 1;
             this.chkIncludeScripts.Text = "Inclure scripts";
             this.toolTip.SetToolTip(this.chkIncludeScripts, "Reconstruit la structures des scripts à partir de DB_UPGRADE_SCRIPTS");

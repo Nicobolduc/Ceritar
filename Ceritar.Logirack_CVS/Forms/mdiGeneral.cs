@@ -62,10 +62,10 @@ namespace Ceritar.Logirack_CVS.Forms
 
                 Application.ApplicationExit += new EventHandler(ApplicationExit);
 
-                if (!IsUserAdministrator())
+                /*if (!IsUserAdministrator())
                 {
                     clsTTApp.GetAppController.ShowMessage(mintMSG_AdminRightWarning);
-                }
+                }*/
 
                 blnLoadSuccess = pfblnAutoLogInUser();
             }       

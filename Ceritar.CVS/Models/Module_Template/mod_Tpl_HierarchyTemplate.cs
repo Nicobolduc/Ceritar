@@ -46,7 +46,7 @@ namespace Ceritar.CVS.Models.Module_Template
         private int mintScriptsFolderCount = 0;
         private int mintVersionNoFolderCount = 0;
         private int mintReportFolderCount = 0;
-        private int mintMinMaxFolderType = 4; //Release, CaptionsAndMenus, Report (if not external), Scripts, Version No
+        private int mintMinMaxFolderType = 5; //Release, CaptionsAndMenus, Report (if not external), Scripts, Version No
 
 
 #region "Properties"
@@ -146,6 +146,10 @@ namespace Ceritar.CVS.Models.Module_Template
                         string strExternalReportAppName = clsTTSQL.str_ADOSingleLookUp("CeA_ExternalRPTAppName", "CerApp", "CeA_NRI = " + _intCeritarApplication_NRI);
 
                         mintMinMaxFolderType -= (int)(string.IsNullOrEmpty(strExternalReportAppName) ? 1 : 0);
+
+                        string strUseTTAppFile = clsTTSQL.str_ADOSingleLookUp("CeA_ManageTTApp", "CerApp", "CeA_NRI = " + _intCeritarApplication_NRI);
+
+                        mintMinMaxFolderType -= (int)(strUseTTAppFile=="False" ? 1 : 0);
 
                         if (string.IsNullOrEmpty(_strTemplateName))
                         {
@@ -289,7 +293,7 @@ namespace Ceritar.CVS.Models.Module_Template
                                     break;
                             }
 
-                            if (mintReleaseFolderCount > 1 || mintReportFolderCount > 1 || mintScriptsFolderCount > 1 || mintCaptionsAndMenusFolderCount > 1 || mintVersionNoFolderCount > 1)
+                            if (mintReleaseFolderCount > 1 || (mintReportFolderCount > 1 && mintMinMaxFolderType == mintMinMaxFolderType) || mintScriptsFolderCount > 1 || mintCaptionsAndMenusFolderCount > 1 || mintVersionNoFolderCount > 1)
                             {
                                 blnValidReturn = false;
                             }

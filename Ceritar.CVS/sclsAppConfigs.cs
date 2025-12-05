@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Ceritar.TT3LightDLL.Classes;
 
 namespace Ceritar.CVS
@@ -31,11 +32,25 @@ namespace Ceritar.CVS
 
 #region "Properties"
 
+        public static string GetOneDriveRoot
+        {
+            get
+            {
+                return Environment.GetEnvironmentVariable("OneDriveCommercial");/*
+                       ?? Environment.GetEnvironmentVariable("OneDrive")
+                       ?? Environment.GetEnvironmentVariable("OneDriveConsumer");*/
+            }
+        }
         public static string GetRoot_DB_UPGRADE_SCRIPTS
         {
             get
             {
-                if (string.IsNullOrEmpty(_strRoot_DB_UPGRADE_SCRIPTS_Dir) || !System.IO.Directory.Exists(_strRoot_DB_UPGRADE_SCRIPTS_Dir))
+                if (!string.IsNullOrEmpty(GetOneDriveRoot))
+                {
+                    _strRoot_DB_UPGRADE_SCRIPTS_Dir = GetOneDriveRoot;
+                    _strRoot_DB_UPGRADE_SCRIPTS_Dir = Path.Combine(_strRoot_DB_UPGRADE_SCRIPTS_Dir, clsTTSQL.str_ADOSingleLookUp("TTP_Value", "TTParam", "TTP_NRI = " + (int)CONFIG_TYPE_NRI.PATH_DB_UPGRADE_SCRIPTS));
+                }
+                else if (string.IsNullOrEmpty(_strRoot_DB_UPGRADE_SCRIPTS_Dir) || !System.IO.Directory.Exists(_strRoot_DB_UPGRADE_SCRIPTS_Dir))
                 {
                     _strRoot_DB_UPGRADE_SCRIPTS_Dir = clsTTSQL.str_ADOSingleLookUp("TTP_Value", "TTParam", "TTP_NRI = " + (int)CONFIG_TYPE_NRI.PATH_DB_UPGRADE_SCRIPTS);
                 }
@@ -85,6 +100,8 @@ namespace Ceritar.CVS
 
                     while (sqlRecord.Read())
                     {
+                        if (string.IsNullOrEmpty(_strRoot_INSTALLATIONS_ACTIVES_Dir))
+                            _strRoot_INSTALLATIONS_ACTIVES_Dir = GetOneDriveRoot;
                         _strRoot_INSTALLATIONS_ACTIVES_Dir = System.IO.Path.Combine(_strRoot_INSTALLATIONS_ACTIVES_Dir, sqlRecord["HiCo_Name"].ToString());
                     }
 
