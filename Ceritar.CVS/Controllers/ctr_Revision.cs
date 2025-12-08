@@ -351,6 +351,7 @@ namespace Ceritar.CVS.Controllers
         public bool blnBuildRevisionHierarchy(int vintTemplate_NRI)
         {
             bool blnValidReturn = false;
+            bool blnScriptsChanged = false;
             string strSQL = string.Empty;
             string strFolderName = string.Empty;
             string strRevisionFolderRoot = string.Empty;

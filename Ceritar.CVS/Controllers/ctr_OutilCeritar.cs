@@ -26,7 +26,7 @@ namespace Ceritar.CVS.Controllers
 
                 if (sqlRecord.Read())
                 {
-                    connectionString = "Persist Security Info=true;User ID=sa;Password=*8059%Ce;Initial Catalog=" + sqlRecord["CeA_DevDatabase"].ToString() + @";Data Source=" + sqlRecord["CeA_DevServer"].ToString();
+                    connectionString = "Persist Security Info=true;User ID=sa;Password=Ce*8059%Ce;Initial Catalog=" + sqlRecord["CeA_DevDatabase"].ToString() + @";Data Source=" + sqlRecord["CeA_DevServer"].ToString();
                 }
 
                 if (connectionString != string.Empty)

@@ -149,14 +149,16 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void mcGrdClients_SetGridDisplay()
         {
-            grdClients.Cols[mintGrdClients_CeC_Name_col].Width = 220;
+            if (grdClients.Cols.Count > 2)
+            {
+                grdClients.Cols[mintGrdClients_CeC_Name_col].Width = 220;
+                mcGrdClients.SetColType_ComboBox(ref cboClients, mcCtrRevision.strGetClients_SQL(formController.Item_NRI), mintGrdClients_CeC_Name_col, "CeC_NRI", "CeC_Name", false);
+            }
 
             if (grdClients.Rows.Count > 1)
             {
                 cboClients.Visible = true;
-            }
-
-            mcGrdClients.SetColType_ComboBox(ref cboClients, mcCtrRevision.strGetClients_SQL(formController.Item_NRI), mintGrdClients_CeC_Name_col, "CeC_NRI", "CeC_Name", false);
+            }            
         }
 
 

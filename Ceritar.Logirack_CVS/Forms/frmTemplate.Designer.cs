@@ -93,10 +93,12 @@
             // 
             this.chkByDefault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkByDefault.AutoSize = true;
-            this.chkByDefault.Location = new System.Drawing.Point(686, 17);
+            this.chkByDefault.Checked = true;
+            this.chkByDefault.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkByDefault.Location = new System.Drawing.Point(687, 17);
             this.chkByDefault.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.chkByDefault.Name = "chkByDefault";
-            this.chkByDefault.Size = new System.Drawing.Size(86, 20);
+            this.chkByDefault.Size = new System.Drawing.Size(85, 20);
             this.chkByDefault.TabIndex = 4;
             this.chkByDefault.Text = "Par défaut";
             this.chkByDefault.UseVisualStyleBackColor = true;
@@ -262,7 +264,7 @@
             // 
             // lblTemplate
             // 
-            this.lblTemplate.Location = new System.Drawing.Point(325, 50);
+            this.lblTemplate.Location = new System.Drawing.Point(325, 84);
             this.lblTemplate.Name = "lblTemplate";
             this.lblTemplate.Size = new System.Drawing.Size(136, 21);
             this.lblTemplate.TabIndex = 30;
@@ -272,7 +274,7 @@
             // 
             this.cboTemplate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboTemplate.FormattingEnabled = true;
-            this.cboTemplate.Location = new System.Drawing.Point(439, 47);
+            this.cboTemplate.Location = new System.Drawing.Point(439, 80);
             this.cboTemplate.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.cboTemplate.Name = "cboTemplate";
             this.cboTemplate.Size = new System.Drawing.Size(299, 24);
