@@ -839,6 +839,7 @@
             this.txtReleasePath.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtReleasePath.Size = new System.Drawing.Size(1176, 44);
             this.txtReleasePath.TabIndex = 7;
+            this.txtReleasePath.TextChanged += new System.EventHandler(this.txtReleasePath_TextChanged);
             // 
             // txtTTAppPath
             // 
@@ -853,6 +854,7 @@
             this.txtTTAppPath.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtTTAppPath.Size = new System.Drawing.Size(1176, 44);
             this.txtTTAppPath.TabIndex = 6;
+            this.txtTTAppPath.TextChanged += new System.EventHandler(this.txtTTAppPath_TextChanged);
             // 
             // txtWordAppChangePath
             // 
@@ -867,6 +869,7 @@
             this.txtWordAppChangePath.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtWordAppChangePath.Size = new System.Drawing.Size(1176, 44);
             this.txtWordAppChangePath.TabIndex = 5;
+            this.txtWordAppChangePath.TextChanged += new System.EventHandler(this.txtWordAppChangePath_TextChanged);
             // 
             // txtExcelAppChangePath
             // 
@@ -881,6 +884,7 @@
             this.txtExcelAppChangePath.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtExcelAppChangePath.Size = new System.Drawing.Size(1176, 44);
             this.txtExcelAppChangePath.TabIndex = 4;
+            this.txtExcelAppChangePath.TextChanged += new System.EventHandler(this.txtExcelAppChangePath_TextChanged);
             // 
             // groupBox6
             // 
@@ -972,6 +976,7 @@
             this.formController.Location = new System.Drawing.Point(-3, 723);
             this.formController.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.formController.Name = "formController";
+            this.formController.PreventControlRecursion = false;
             this.formController.ShowButtonQuitOnly = false;
             this.formController.Size = new System.Drawing.Size(1320, 34);
             this.formController.TabIndex = 2;

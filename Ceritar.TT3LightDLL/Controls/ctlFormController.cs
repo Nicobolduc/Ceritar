@@ -111,6 +111,9 @@ namespace Ceritar.TT3LightDLL.Controls
         }
 
         [Browsable(false)]
+        public bool PreventControlRecursion { get; set; }
+
+        [Browsable(false)]
         public bool FormIsLoading
         {
             get

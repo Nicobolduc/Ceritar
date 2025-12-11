@@ -256,10 +256,48 @@ namespace Ceritar.TT3LightDLL.Classes
             }
         }
 
-#endregion
+        #endregion
 
 
-#region "Functions / Subs"
+        #region "Functions / Subs"
+
+        public static string ToOneDriveCommercialPath(string vstrFullPath)
+        {
+            if (string.IsNullOrWhiteSpace(vstrFullPath))
+                return vstrFullPath;
+
+            string oneDrive = Environment.ExpandEnvironmentVariables("%OneDriveCommercial%");
+            if (string.IsNullOrWhiteSpace(oneDrive))
+                return vstrFullPath; 
+
+            bool hasOuterQuotes = (vstrFullPath.StartsWith("'") && vstrFullPath.EndsWith("'"));
+
+            // Remove ONLY the outer quotes; keep doubled quotes inside
+            string strUnescapedPath = hasOuterQuotes ? vstrFullPath.Substring(1, vstrFullPath.Length - 2) : vstrFullPath;
+
+            if (!Directory.Exists(strUnescapedPath) && !File.Exists(strUnescapedPath))
+                return vstrFullPath;
+            else
+                vstrFullPath = strUnescapedPath;
+
+            // Normalize
+            oneDrive = Path.GetFullPath(oneDrive).TrimEnd('\\') + "\\";
+            vstrFullPath = Path.GetFullPath(vstrFullPath);
+
+            // Replace prefix
+            string replaced;
+            if (vstrFullPath.StartsWith(oneDrive, StringComparison.OrdinalIgnoreCase))
+            {
+                replaced = Path.Combine("%OneDriveCommercial%", vstrFullPath.Substring(oneDrive.Length));
+            }
+            else
+            {
+                replaced = vstrFullPath; // no change
+            }
+
+            return hasOuterQuotes ? $"'{replaced}'" : replaced;
+        }
+
 
         public static void Instanciate(Form rfrmMDI)
         {

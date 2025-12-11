@@ -33,6 +33,7 @@
             this.dtpCreation = new System.Windows.Forms.DateTimePicker();
             this.cboClients = new System.Windows.Forms.ComboBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.chkUnmerge = new System.Windows.Forms.CheckBox();
             this.dtpRevModif = new System.Windows.Forms.DateTimePicker();
             this.cboClientsRevModif = new System.Windows.Forms.ComboBox();
             this.btnGrdRevDel = new System.Windows.Forms.Button();
@@ -96,7 +97,6 @@
             this.chkIncludePreviousRevScripts = new System.Windows.Forms.GroupBox();
             this.label10 = new System.Windows.Forms.Label();
             this.formController = new Ceritar.TT3LightDLL.Controls.ctlFormController();
-            this.chkUnmerge = new System.Windows.Forms.CheckBox();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdRevModifs)).BeginInit();
             this.mnuRevModif.SuspendLayout();
@@ -153,6 +153,21 @@
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Livrables couverts / Modifications incluses (Shift+Enter pour multi-lignes)";
+            // 
+            // chkUnmerge
+            // 
+            this.chkUnmerge.AutoSize = true;
+            this.chkUnmerge.Checked = true;
+            this.chkUnmerge.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkUnmerge.Location = new System.Drawing.Point(1055, 0);
+            this.chkUnmerge.Name = "chkUnmerge";
+            this.chkUnmerge.Size = new System.Drawing.Size(78, 20);
+            this.chkUnmerge.TabIndex = 79;
+            this.chkUnmerge.Text = "Unmerge";
+            this.toolTips.SetToolTip(this.chkUnmerge, "Les scripts de la révision courantes sont mergés dans le même dossier que ceux de" +
+        "s révisions précédentes");
+            this.chkUnmerge.UseVisualStyleBackColor = true;
+            this.chkUnmerge.CheckedChanged += new System.EventHandler(this.chkUnmerge_CheckedChanged);
             // 
             // dtpRevModif
             // 
@@ -433,7 +448,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(480, 21);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(53, 16);
+            this.label1.Size = new System.Drawing.Size(52, 16);
             this.label1.TabIndex = 68;
             this.label1.Text = "Créé le:";
             // 
@@ -602,7 +617,7 @@
             this.chkAddScripts.Location = new System.Drawing.Point(10, 73);
             this.chkAddScripts.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.chkAddScripts.Name = "chkAddScripts";
-            this.chkAddScripts.Size = new System.Drawing.Size(271, 20);
+            this.chkAddScripts.Size = new System.Drawing.Size(270, 20);
             this.chkAddScripts.TabIndex = 4;
             this.chkAddScripts.Text = "Ajouter le(s) script(s) au répertoire courant";
             this.toolTips.SetToolTip(this.chkAddScripts, "Le(s) script(s) du dossier, sélectionné(s) seront ajoutés à la suite des scripts " +
@@ -749,6 +764,7 @@
             this.txtScriptsPath.ReadOnly = true;
             this.txtScriptsPath.Size = new System.Drawing.Size(989, 40);
             this.txtScriptsPath.TabIndex = 2;
+            this.txtScriptsPath.TextChanged += new System.EventHandler(this.txtScriptsPath_TextChanged);
             // 
             // gbExe
             // 
@@ -779,7 +795,7 @@
             this.label11.ForeColor = System.Drawing.Color.Red;
             this.label11.Location = new System.Drawing.Point(545, 77);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(345, 16);
+            this.label11.Size = new System.Drawing.Size(344, 16);
             this.label11.TabIndex = 8;
             this.label11.Text = "ATTENTION: le rapport n\'est pas gérable ici par client..";
             // 
@@ -819,6 +835,7 @@
             this.txtReleasePath.ReadOnly = true;
             this.txtReleasePath.Size = new System.Drawing.Size(989, 40);
             this.txtReleasePath.TabIndex = 2;
+            this.txtReleasePath.TextChanged += new System.EventHandler(this.txtReleasePath_TextChanged);
             // 
             // optRptOnly
             // 
@@ -909,6 +926,7 @@
             this.formController.Location = new System.Drawing.Point(1, 734);
             this.formController.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.formController.Name = "formController";
+            this.formController.PreventControlRecursion = false;
             this.formController.ShowButtonQuitOnly = false;
             this.formController.Size = new System.Drawing.Size(1150, 34);
             this.formController.TabIndex = 9;
@@ -916,21 +934,6 @@
             this.formController.LoadData += new Ceritar.TT3LightDLL.Controls.ctlFormController.LoadDataEventHandler(this.formController_LoadData);
             this.formController.ValidateForm += new Ceritar.TT3LightDLL.Controls.ctlFormController.ValidateFormEventHandler(this.formController_ValidateForm);
             this.formController.SaveData += new Ceritar.TT3LightDLL.Controls.ctlFormController.SaveDataEventHandler(this.formController_SaveData);
-            // 
-            // chkUnmerge
-            // 
-            this.chkUnmerge.AutoSize = true;
-            this.chkUnmerge.Checked = true;
-            this.chkUnmerge.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkUnmerge.Location = new System.Drawing.Point(1055, 0);
-            this.chkUnmerge.Name = "chkUnmerge";
-            this.chkUnmerge.Size = new System.Drawing.Size(79, 20);
-            this.chkUnmerge.TabIndex = 79;
-            this.chkUnmerge.Text = "Unmerge";
-            this.toolTips.SetToolTip(this.chkUnmerge, "Les scripts de la révision courantes sont mergés dans le même dossier que ceux de" +
-        "s révisions précédentes");
-            this.chkUnmerge.UseVisualStyleBackColor = true;
-            this.chkUnmerge.CheckedChanged += new System.EventHandler(this.chkUnmerge_CheckedChanged);
             // 
             // frmRevision
             // 

@@ -254,7 +254,7 @@ namespace Ceritar.TT3LightDLL.Classes
                     {
                         case clsTTSQL.MySQL_FieldTypes.VARCHAR_TYPE:
                             vstrValue = clsTTApp.GetAppController.str_FixStringForSQL(vstrValue);
-
+                            vstrValue = clsTTApp.ToOneDriveCommercialPath(vstrValue);
                             break;
 
                         case clsTTSQL.MySQL_FieldTypes.DATETIME_TYPE:
@@ -310,7 +310,7 @@ namespace Ceritar.TT3LightDLL.Classes
             }
 
             return blnValidReturn;
-        }
+        }       
 
         public bool bln_ADOInsert(string vstrTable, out int rintNewItem_ID)
         {

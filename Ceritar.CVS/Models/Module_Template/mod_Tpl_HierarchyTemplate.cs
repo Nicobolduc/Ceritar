@@ -293,7 +293,7 @@ namespace Ceritar.CVS.Models.Module_Template
                                     break;
                             }
 
-                            if (mintReleaseFolderCount > 1 || (mintReportFolderCount > 1 && mintMinMaxFolderType == mintMinMaxFolderType) || mintScriptsFolderCount > 1 || mintCaptionsAndMenusFolderCount > 1 || mintVersionNoFolderCount > 1)
+                            if (mintReleaseFolderCount > 1 || (mintReportFolderCount > 1 && mintMinMaxFolderType == 5) || mintScriptsFolderCount > 1 || mintCaptionsAndMenusFolderCount > 1 || mintVersionNoFolderCount > 1)
                             {
                                 blnValidReturn = false;
                             }

@@ -11,6 +11,7 @@ using Ceritar.CVS.Controllers.Interfaces;
 using C1.Win.C1FlexGrid;
 using System.Threading;
 using System.Drawing;
+using Ceritar.CVS;
 //using CrystalDecisions.CrystalReports.Engine;
 
 namespace Ceritar.Logirack_CVS.Forms
@@ -155,10 +156,10 @@ namespace Ceritar.Logirack_CVS.Forms
                 mcGrdClients.SetColType_ComboBox(ref cboClients, mcCtrRevision.strGetClients_SQL(formController.Item_NRI), mintGrdClients_CeC_Name_col, "CeC_NRI", "CeC_Name", false);
             }
 
-            if (grdClients.Rows.Count > 1)
-            {
-                cboClients.Visible = true;
-            }            
+            //if (grdClients.Rows.Count > 1)
+            //{
+            //    cboClients.Visible = true;
+            //}            
         }
 
 
@@ -1162,15 +1163,17 @@ namespace Ceritar.Logirack_CVS.Forms
 
         private void btnShowScriptsFolder_Click(object sender, EventArgs e)
         {
-            if (File.Exists(txtScriptsPath.Text) || Directory.Exists(txtScriptsPath.Text))
+            string strFileName = txtScriptsPath.Text;
+            
+            if (File.Exists(strFileName) || Directory.Exists(strFileName))
             {
-                if ((File.GetAttributes(txtScriptsPath.Text) & FileAttributes.Directory) == FileAttributes.Directory)
+                if ((File.GetAttributes(strFileName) & FileAttributes.Directory) == FileAttributes.Directory)
                 {
-                    System.Diagnostics.Process.Start(txtScriptsPath.Text);
+                    System.Diagnostics.Process.Start(strFileName);
                 }
                 else
                 {
-                    System.Diagnostics.Process.Start("explorer.exe", "/select, " + txtScriptsPath.Text);
+                    System.Diagnostics.Process.Start("explorer.exe", "/select, " + strFileName);
                 }
             }
         }
@@ -1680,6 +1683,26 @@ namespace Ceritar.Logirack_CVS.Forms
                 else
                     grdRevModifs.AllowMerging = AllowMergingEnum.RestrictAll;
             }
+        }
+
+        private void txtScriptsPath_TextChanged(object sender, EventArgs e)
+        {
+            if (!formController.PreventControlRecursion && !string.IsNullOrEmpty(sclsAppConfigs.GetOneDriveRoot))
+            {
+                formController.PreventControlRecursion = true;  
+                ((TextBox)sender).Text = Environment.ExpandEnvironmentVariables(((TextBox)sender).Text);
+            }
+            formController.PreventControlRecursion = false;
+        }
+
+        private void txtReleasePath_TextChanged(object sender, EventArgs e)
+        {
+            if (!formController.PreventControlRecursion && !string.IsNullOrEmpty(sclsAppConfigs.GetOneDriveRoot))
+            {
+                formController.PreventControlRecursion = true;
+                ((TextBox)sender).Text = Environment.ExpandEnvironmentVariables(((TextBox)sender).Text);
+            }
+            formController.PreventControlRecursion = false;
         }
     }
 }

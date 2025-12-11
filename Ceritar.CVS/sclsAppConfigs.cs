@@ -30,8 +30,9 @@ namespace Ceritar.CVS
         }
 
 
-#region "Properties"
+        #region "Properties"
 
+        public static string GetOneDriveRootName = "OneDriveCommercial";
         public static string GetOneDriveRoot
         {
             get

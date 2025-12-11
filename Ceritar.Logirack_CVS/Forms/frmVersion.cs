@@ -1,4 +1,5 @@
 ﻿using C1.Win.C1FlexGrid;
+using Ceritar.CVS;
 using Ceritar.CVS.Controllers;
 using Ceritar.CVS.Controllers.Interfaces;
 using Ceritar.TT3LightDLL.Classes;
@@ -1927,6 +1928,46 @@ namespace Ceritar.Logirack_CVS.Forms
                 mcGrdSatelliteApps[grdSatellite.Row, mintGrdSat_CSV_LocationExe_col] = string.Empty;
                 ((HostedCellControl)mcGrdSatelliteApps.LstHostedCellControls[grdSatellite.Row - 1]).GetCellControl.BackColor = System.Drawing.SystemColors.Control;
             }
+        }
+
+        private void txtExcelAppChangePath_TextChanged(object sender, EventArgs e)
+        {
+            if (!formController.PreventControlRecursion && !string.IsNullOrEmpty(sclsAppConfigs.GetOneDriveRoot))
+            {
+                formController.PreventControlRecursion = true;
+                ((TextBox)sender).Text = Environment.ExpandEnvironmentVariables(((TextBox)sender).Text);
+            }
+            formController.PreventControlRecursion = false;
+        }
+
+        private void txtWordAppChangePath_TextChanged(object sender, EventArgs e)
+        {
+            if (!formController.PreventControlRecursion && !string.IsNullOrEmpty(sclsAppConfigs.GetOneDriveRoot))
+            {
+                formController.PreventControlRecursion = true;
+                ((TextBox)sender).Text = Environment.ExpandEnvironmentVariables(((TextBox)sender).Text);
+            }
+            formController.PreventControlRecursion = false;
+        }
+
+        private void txtTTAppPath_TextChanged(object sender, EventArgs e)
+        {
+            if (!formController.PreventControlRecursion && !string.IsNullOrEmpty(sclsAppConfigs.GetOneDriveRoot))
+            {
+                formController.PreventControlRecursion = true;
+                ((TextBox)sender).Text = Environment.ExpandEnvironmentVariables(((TextBox)sender).Text);
+            }
+            formController.PreventControlRecursion = false;
+        }
+
+        private void txtReleasePath_TextChanged(object sender, EventArgs e)
+        {
+            if (!formController.PreventControlRecursion && !string.IsNullOrEmpty(sclsAppConfigs.GetOneDriveRoot))
+            {
+                formController.PreventControlRecursion = true;
+                ((TextBox)sender).Text = Environment.ExpandEnvironmentVariables(((TextBox)sender).Text);
+            }
+            formController.PreventControlRecursion = false;
         }
     }
 }
