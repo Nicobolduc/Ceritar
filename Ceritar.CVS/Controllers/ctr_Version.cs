@@ -1236,11 +1236,13 @@ namespace Ceritar.CVS.Controllers
             {
                 blnValidReturn = false;
                 mcActionResult.SetInvalid(sclsConstants.Validation_Message.INVALID_PATH, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exPath.FileName);
+                sclsErrorsLog.WriteToErrorLog(exPath, exPath.Source);
             }
             catch (System.IO.IOException exUA)
             {
                 blnValidReturn = false;
                 mcActionResult.SetInvalid(sclsConstants.Validation_Message.PATH_ACCESS_DENIED, clsActionResults.BaseErrorCode.UNHANDLED_VALIDATION, exUA.Message);
+                sclsErrorsLog.WriteToErrorLog(exUA, exUA.Source);
             }
             catch (Exception ex)
             {

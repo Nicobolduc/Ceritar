@@ -322,8 +322,20 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 blnValidReturn = mcGrdClients.bln_FillData(mcCtrVersion.strGetListe_Clients_SQL(formController.Item_NRI));
 
+                mcGrdClients.GridIsLoading = true;
+
                 if (blnValidReturn)
                 {
+                    if (!string.IsNullOrEmpty(sclsAppConfigs.GetOneDriveRoot))
+                    {
+                        for (int idx = 1; idx < grdClients.Rows.Count; idx++)
+                        {
+                            if (!string.IsNullOrEmpty(mcGrdClients[idx, mintGrdClients_LocationReportExe_col]))
+                                mcGrdClients[idx, mintGrdClients_LocationReportExe_col] = Environment.ExpandEnvironmentVariables(mcGrdClients[idx, mintGrdClients_LocationReportExe_col]);
+                            if (!string.IsNullOrEmpty(mcGrdClients[idx, mintGrdClients_LocationScriptsRoot_col]))
+                                mcGrdClients[idx, mintGrdClients_LocationScriptsRoot_col] = Environment.ExpandEnvironmentVariables(mcGrdClients[idx, mintGrdClients_LocationScriptsRoot_col]);
+                        }
+                    }
                     pfblnEnableDisable_btnGrdClientsDelete(1);
                 }
             }
@@ -331,6 +343,10 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 blnValidReturn = false;
                 sclsErrorsLog.WriteToErrorLog(ex, ex.Source);
+            }
+            finally
+            {
+                mcGrdClients.GridIsLoading = false;
             }
 
             return blnValidReturn;

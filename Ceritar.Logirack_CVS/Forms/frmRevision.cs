@@ -558,6 +558,15 @@ namespace Ceritar.Logirack_CVS.Forms
 
                     blnValidReturn = mcGrdSatellites.bln_FillData(mcCtrRevision.strGetListe_SatelliteApps_SQL(Int32.Parse(mcGrdClients[intRowToLoad, mintGrdClients_CeC_NRI_col])));
 
+                    if (!string.IsNullOrEmpty(sclsAppConfigs.GetOneDriveRoot))
+                    {
+                        for (int idx = 1; idx < grdSatellites.Rows.Count; idx++)
+                        {
+                            if (!string.IsNullOrEmpty(mcGrdSatellites[idx, mintGrdSat_CSA_ExeLocation_col]))
+                                mcGrdSatellites[idx, mintGrdSat_CSA_ExeLocation_col] = Environment.ExpandEnvironmentVariables(mcGrdSatellites[idx, mintGrdSat_CSA_ExeLocation_col]);
+                        }
+                    }
+
                     mblnGrdSatellitesChangeMade = false;
 
                     Cursor.Current = Cursors.Default;
