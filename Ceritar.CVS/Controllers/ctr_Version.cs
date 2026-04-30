@@ -200,6 +200,9 @@ namespace Ceritar.CVS.Controllers
 
                     strFolderPath = mcSQL.str_ADOSingleLookUp_Trans("CSV_Exe_Location", "ClientSatVersion", "CSV_NRI = " + vintCSV_NRI);
 
+                    if (!string.IsNullOrEmpty(sclsAppConfigs.GetOneDriveRoot))
+                        strFolderPath = Environment.ExpandEnvironmentVariables(strFolderPath);
+
                     if ((File.GetAttributes(strFolderPath) & FileAttributes.Directory) == FileAttributes.Directory)
                     {
                         strFolderPath = new DirectoryInfo(strFolderPath).Parent.FullName;
@@ -1080,6 +1083,11 @@ namespace Ceritar.CVS.Controllers
                 //Get the release folder location to copy (from the version kit or from the latest revision)
                 strReleaseLocation = clsTTSQL.str_ADOSingleLookUp("TOP 1 Rev_Location_Exe", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Revision.Rev_PreparationMode = 0 AND Rev_Location_Exe IS NOT NULL AND Revision.Rev_ExeIsReport = 0 ORDER BY Revision.Rev_No DESC");
 
+                if (!string.IsNullOrEmpty(sclsAppConfigs.GetOneDriveRoot))
+                {
+                    if (!string.IsNullOrEmpty(strReleaseLocation))
+                        strReleaseLocation = Environment.ExpandEnvironmentVariables(strReleaseLocation);
+                }
                 strReleaseLocation = strReleaseLocation == string.Empty ? mcView.GetLocation_Release() : strReleaseLocation;
 
                 //Create the new archive file and add all the folders to it.

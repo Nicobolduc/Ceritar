@@ -558,15 +558,6 @@ namespace Ceritar.Logirack_CVS.Forms
 
                     blnValidReturn = mcGrdSatellites.bln_FillData(mcCtrRevision.strGetListe_SatelliteApps_SQL(Int32.Parse(mcGrdClients[intRowToLoad, mintGrdClients_CeC_NRI_col])));
 
-                    if (!string.IsNullOrEmpty(sclsAppConfigs.GetOneDriveRoot))
-                    {
-                        for (int idx = 1; idx < grdSatellites.Rows.Count; idx++)
-                        {
-                            if (!string.IsNullOrEmpty(mcGrdSatellites[idx, mintGrdSat_CSA_ExeLocation_col]))
-                                mcGrdSatellites[idx, mintGrdSat_CSA_ExeLocation_col] = Environment.ExpandEnvironmentVariables(mcGrdSatellites[idx, mintGrdSat_CSA_ExeLocation_col]);
-                        }
-                    }
-
                     mblnGrdSatellitesChangeMade = false;
 
                     Cursor.Current = Cursors.Default;
@@ -1118,6 +1109,11 @@ namespace Ceritar.Logirack_CVS.Forms
             {
                 for (int intRowIndex = 1; intRowIndex < grdSatellites.Rows.Count; intRowIndex++)
                 {
+                    if (!string.IsNullOrEmpty(sclsAppConfigs.GetOneDriveRoot))
+                    {
+                        if (!string.IsNullOrEmpty(mcGrdSatellites[intRowIndex, mintGrdSat_CSA_ExeLocation_col]))
+                            mcGrdSatellites[intRowIndex, mintGrdSat_CSA_ExeLocation_col] = Environment.ExpandEnvironmentVariables(mcGrdSatellites[intRowIndex, mintGrdSat_CSA_ExeLocation_col]);
+                    }
                     mcGrdSatellites.LstHostedCellControls.Add(new HostedCellControl(grdSatellites, pfblnGetNewLocationSatelliteExeButton(), intRowIndex, mintGrdSat_CSA_ExeLocation_col));
                     
                     if (!mcGrdSatellites.bln_CellIsEmpty(intRowIndex, mintGrdSat_CSA_ExeLocation_col))

@@ -280,6 +280,9 @@ namespace Ceritar.CVS.Controllers
                 { }
                 else
                 {
+                    if (!string.IsNullOrEmpty(sclsAppConfigs.GetOneDriveRoot))
+                        strFolderPath = Environment.ExpandEnvironmentVariables(strFolderPath);
+
                     if ((File.GetAttributes(strFolderPath) & FileAttributes.Directory) == FileAttributes.Directory)
                     {
                         strFolderPath = new DirectoryInfo(strFolderPath).FullName;
