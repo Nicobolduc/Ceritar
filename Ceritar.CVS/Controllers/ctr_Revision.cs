@@ -1200,6 +1200,11 @@ namespace Ceritar.CVS.Controllers
                 {
                     strOldFolderPath = mcSQL.str_ADOSingleLookUp_Trans("SRe_Exe_Location", "SatRevision", "SRe_NRI = " + rcSatRevision.SatRevision_NRI);
 
+                    if (!string.IsNullOrEmpty(sclsAppConfigs.GetOneDriveRoot) && !string.IsNullOrEmpty(strOldFolderPath))
+                    {
+                        strOldFolderPath = Environment.ExpandEnvironmentVariables(strOldFolderPath);
+                    }
+
                     if (rcSatRevision.CeritarSatelliteApp.ExeIsFolder)
                     {
                         //On prend vstrDestinationFolder).fullName, car le répertoire racine à déjà été changé physiquement, mais on veut l'ancien nom du sous dossier
@@ -1595,6 +1600,10 @@ namespace Ceritar.CVS.Controllers
                             //Get the executable folder location to copy (from the version kit or from the latest revision)
                             strLocationSatelliteExe = clsTTSQL.str_ADOSingleLookUp("TOP 1 SatRevision.SRe_Exe_Location", "Revision INNER JOIN SatRevision ON SatRevision.Rev_NRI = Revision.Rev_NRI", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Revision.Rev_PreparationMode = 0 AND SatRevision.SRe_Exe_Location IS NOT NULL AND SatRevision.CSA_NRI = " + structSat.intCeritarSatelliteApp_NRI + " ORDER BY Revision.Rev_No DESC");
 
+                            if (!string.IsNullOrEmpty(sclsAppConfigs.GetOneDriveRoot) && !string.IsNullOrEmpty(strLocationSatelliteExe))
+                            {
+                                strLocationSatelliteExe = Environment.ExpandEnvironmentVariables(strLocationSatelliteExe);
+                            }
                             strLocationSatelliteExe = strLocationSatelliteExe == string.Empty ? structSat.strLocationSatelliteExe : strLocationSatelliteExe;
 
                             if (structSat.blnExeIsFolder && Directory.Exists(strLocationSatelliteExe))

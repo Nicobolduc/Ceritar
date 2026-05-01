@@ -1110,7 +1110,6 @@ namespace Ceritar.CVS.Controllers
                     {
                         //Get the report folder location to copy (from the version kit or from the latest revision)
                         //ATTENTION' PAS FULL SAFE LE TRUC DE CHOISIR LE CLIENT MAINTENANT QUE MULTI CLIENT PAR REVISION...
-                        strReportLocation = clsTTSQL.str_ADOSingleLookUp("TOP 1 Rev_Location_Exe", "Revision", "Revision.Ver_NRI = " + mcView.GetVersion_NRI() + " AND Revision.Rev_PreparationMode = 0 AND Rev_Location_Exe IS NOT NULL AND Revision.Rev_ExeIsReport = 1 AND EXISTS (SELECT 1 FROM ClientAppRevision CAR WHERE CAR.CeC_NRI = " + mcView.GetSelectedClient().intCeritarClient_NRI.ToString() + " AND CAR.Rev_NRI = Revision.Rev_NRI) ORDER BY Revision.Rev_No DESC");
 
                         strReportLocation = strReportLocation == string.Empty ? mcView.GetSelectedClient().strLocationReportExe : strReportLocation;
 
