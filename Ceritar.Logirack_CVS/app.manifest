@@ -25,6 +25,9 @@
     <application ShutdownMode="OnExplicitShutdown">
       <!-- A list of all Windows versions that this application is designed to work with. 
       Windows will automatically select the most compatible environment.-->
+		<windowsSettings xmlns:ws2="http://schemas.microsoft.com/SMI/2016/WindowsSettings">
+			<ws2:longPathAware>true</ws2:longPathAware>
+		</windowsSettings>
 
       <!-- If your application is designed to work with Windows Vista, uncomment the following supportedOS node-->
       <!--<supportedOS Id="{e2011457-1546-43c5-a5fe-008deee3d3f0}"></supportedOS>-->

@@ -1525,7 +1525,6 @@ namespace Ceritar.CVS.Controllers
             return blnValidReturn;
         }
 
-
         /// <summary>
         /// Envoie dans un fichier Zip le Release, les rapports, les applications satellites et les scripts dans des dossiers séparés.
         /// </summary>
@@ -1543,7 +1542,7 @@ namespace Ceritar.CVS.Controllers
             string strLocationSatelliteExe = string.Empty;
             string strCurrentScriptFolderLocation = string.Empty;
             ZipArchiveMode archiveMode = ZipArchiveMode.Create;
-
+            int intFileCount = 1;
             try
             {
                 strCeritarClientName = mcView.GetCeritarClient_Name();
@@ -1588,7 +1587,9 @@ namespace Ceritar.CVS.Controllers
                             else if (mcView.GetExeIsExternalReport())
                             {
                                 //Add the external report application to the zip archive
-                                newZipFile.CreateEntryFromFile(strReleaseLocation, Path.Combine(new DirectoryInfo(strReleaseLocation).Parent.Name, Path.GetFileName(strReleaseLocation)), CompressionLevel.NoCompression);
+                                string strCurrentFile = clsTTApp.ToLongPath(strReleaseLocation);
+
+                                newZipFile.CreateEntryFromFile(strCurrentFile, Path.Combine(new DirectoryInfo(strReleaseLocation).Parent.Name, Path.GetFileName(strReleaseLocation)), CompressionLevel.NoCompression);
                             }
                         }
 
@@ -1622,7 +1623,9 @@ namespace Ceritar.CVS.Controllers
                             }
                             else if (File.Exists(strLocationSatelliteExe))
                             {
-                                newZipFile.CreateEntryFromFile(strLocationSatelliteExe, Path.Combine(structSat.strExportFolderName, Path.GetFileName(strLocationSatelliteExe)));
+                                string strCurrentFile = clsTTApp.ToLongPath(strLocationSatelliteExe);
+
+                                newZipFile.CreateEntryFromFile(strCurrentFile, Path.Combine(structSat.strExportFolderName, Path.GetFileName(strLocationSatelliteExe)));
                             }
                         }
                     }
@@ -1634,7 +1637,7 @@ namespace Ceritar.CVS.Controllers
                     if (mcView.IsPreviousRevisionScriptsIncluded() & mcView.GetRevisionNo() > 1)
                     {
                         int intCurrentPreviousRevisionNo = 0;
-                        int intFileCount = 1;
+                        
                         string strVersionFolderPath = string.Empty;
                         string strLastRevisionFolderPath = string.Empty;
                         string[] lstRevisions;
@@ -1664,7 +1667,9 @@ namespace Ceritar.CVS.Controllers
                                     {
                                         foreach (string strCurrentFileToCopyPath in Directory.GetFiles(Path.Combine(strRevisionPath, sclsAppConfigs.GetScriptsFolderName), "*.sql", SearchOption.TopDirectoryOnly).OrderBy(i => i, new TT3LightDLL.Classes.NaturalStringComparer()).ToArray())
                                         {
-                                            newZipFile.CreateEntryFromFile(strCurrentFileToCopyPath, Path.Combine((mcView.GetScriptsMerged() ? sclsAppConfigs .GetRevisionAllScriptFolderName: sclsAppConfigs.GetPreviousRevisionAllScriptFolderName), intFileCount.ToString() + "__" + Path.GetFileName(strCurrentFileToCopyPath)));
+                                            string strCurrentFile = clsTTApp.ToLongPath(strCurrentFileToCopyPath);
+                                            
+                                            newZipFile.CreateEntryFromFile(strCurrentFile, Path.Combine((mcView.GetScriptsMerged() ? sclsAppConfigs .GetRevisionAllScriptFolderName: sclsAppConfigs.GetPreviousRevisionAllScriptFolderName), intFileCount.ToString() + "__" + Path.GetFileName(strCurrentFileToCopyPath)));
 
                                             intFileCount++;
                                         }
@@ -1687,7 +1692,9 @@ namespace Ceritar.CVS.Controllers
 
                                                 strNewScriptName = intNewScriptNumber.ToString("00") + "_" + strNewScriptName;
 
-                                                newZipFile.CreateEntryFromFile(lstSpecificScripts[intIndex], Path.Combine((mcView.GetScriptsMerged() ? sclsAppConfigs.GetRevisionAllScriptFolderName : sclsAppConfigs.GetPreviousRevisionAllScriptFolderName), intFileCount.ToString() + "S__" + Path.GetFileName(lstSpecificScripts[intIndex])));
+                                                string strCurrentFile = clsTTApp.ToLongPath(lstSpecificScripts[intIndex]);
+
+                                                newZipFile.CreateEntryFromFile(strCurrentFile, Path.Combine((mcView.GetScriptsMerged() ? sclsAppConfigs.GetRevisionAllScriptFolderName : sclsAppConfigs.GetPreviousRevisionAllScriptFolderName), intFileCount.ToString() + "S__" + Path.GetFileName(lstSpecificScripts[intIndex])));
 
                                                 intNewScriptNumber++;
                                             }

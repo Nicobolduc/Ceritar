@@ -261,6 +261,22 @@ namespace Ceritar.TT3LightDLL.Classes
 
         #region "Functions / Subs"
 
+        public static string ToLongPath(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Le chemin est vide.", nameof(path));
+
+            path = Path.GetFullPath(path);
+
+            if (path.StartsWith(@"\\?\", StringComparison.Ordinal))
+                return path;
+
+            if (path.StartsWith(@"\\", StringComparison.Ordinal))
+                return @"\\?\UNC\" + path.Substring(2);
+
+            return @"\\?\" + path;
+        }
+
         public static string ToOneDriveCommercialPath(string vstrFullPath)
         {
             if (string.IsNullOrWhiteSpace(vstrFullPath))
