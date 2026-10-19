@@ -277,6 +277,14 @@ namespace Ceritar.TT3LightDLL.Classes
             return @"\\?\" + path;
         }
 
+        public static bool IsPath(string value)
+        {
+            return !string.IsNullOrWhiteSpace(value) &&
+                   (Path.IsPathRooted(value) ||
+                    value.Contains('\\') ||
+                    value.Contains('/'));
+        }
+
         public static string ToOneDriveCommercialPath(string vstrFullPath)
         {
             if (string.IsNullOrWhiteSpace(vstrFullPath))
@@ -291,7 +299,7 @@ namespace Ceritar.TT3LightDLL.Classes
             // Remove ONLY the outer quotes; keep doubled quotes inside
             string strUnescapedPath = hasOuterQuotes ? vstrFullPath.Substring(1, vstrFullPath.Length - 2) : vstrFullPath;
 
-            if (!Directory.Exists(strUnescapedPath) && !File.Exists(strUnescapedPath))
+            if ((!Directory.Exists(strUnescapedPath) && !File.Exists(strUnescapedPath)) || !IsPath(strUnescapedPath))
                 return vstrFullPath;
             else
                 vstrFullPath = strUnescapedPath;

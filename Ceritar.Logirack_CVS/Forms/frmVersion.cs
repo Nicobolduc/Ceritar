@@ -1888,7 +1888,7 @@ namespace Ceritar.Logirack_CVS.Forms
 
                     pfblnGrdRevisions_Load();
 
-                    if (intGrdRev_RowSelected > 0)
+                    if (intGrdRev_RowSelected > 0 && grdRevisions.Rows.Count > 1)
                     {
                         grdRevisions.Row = (intGrdRev_RowSelected >= grdRevisions.Rows.Count || intGrdRev_RowSelected < 1 ? 1 : intGrdRev_RowSelected);
                         grdRevisions.Select(grdRevisions.Row, 1,true);
